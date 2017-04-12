@@ -26,4 +26,3 @@ private:
 	static CComQIPtr<IWebBrowser2> AttachDesktopShellWindow();
 	static void vectorFromDataObject(CComPtr<IDataObject> dao);
 };
-

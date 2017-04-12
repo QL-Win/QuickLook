@@ -3,7 +3,7 @@
 namespace QuickLook.Plugin
 {
     /// <summary>
-    /// Interaction logic for ViewContentContainer.xaml
+    ///     Interaction logic for ViewContentContainer.xaml
     /// </summary>
     public partial class ViewContentContainer : UserControl
     {

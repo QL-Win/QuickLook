@@ -47,17 +47,19 @@ void Shell32::GetCurrentSelectionBuffer(PWCHAR buffer)
 	wcscpy_s(pos - 1, 1, L"");
 }
 
-void Shell32::SaveSelectedFromExplorer() {
+void Shell32::SaveSelectedFromExplorer()
+{
 	CoInitialize(nullptr);
 
 	CComPtr<IShellWindows> psw;
-	HRESULT ret=psw.CoCreateInstance(CLSID_ShellWindows);
+	HRESULT ret = psw.CoCreateInstance(CLSID_ShellWindows);
 
 	auto hwndFGW = GetForegroundWindow();
 
 	auto fFound = FALSE;
 
-	for (int i = 0; !fFound; i++) {
+	for (int i = 0; !fFound; i++)
+	{
 		VARIANT vi;
 		V_VT(&vi) = VT_I4;
 		V_I4(&vi) = i;
@@ -67,13 +69,16 @@ void Shell32::SaveSelectedFromExplorer() {
 		if (SUCCEEDED(psw->Item(vi, &pdisp)))
 		{
 			CComPtr<IWebBrowserApp> pwba;
-			if (SUCCEEDED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba)))) {
+			if (SUCCEEDED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
+			{
 				HWND hwndWBA;
-				if (SUCCEEDED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))) && hwndWBA == hwndFGW) {
+				if (SUCCEEDED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))) && hwndWBA == hwndFGW)
+				{
 					fFound = TRUE;
 
 					CComPtr<IDispatch> ppdisp;
-					if (SUCCEEDED(pwba->get_Document(&ppdisp))) {
+					if (SUCCEEDED(pwba->get_Document(&ppdisp)))
+					{
 						CComPtr<IShellFolderViewDual2> pshvd;
 						if (SUCCEEDED(ppdisp->QueryInterface(IID_IShellFolderViewDual2, reinterpret_cast<void**>(&pshvd))))
 						{
@@ -120,7 +125,7 @@ CComQIPtr<IWebBrowser2> Shell32::AttachDesktopShellWindow()
 
 	if (SUCCEEDED(psw.CoCreateInstance(CLSID_ShellWindows)))
 	{
-		VARIANT pvarLoc = { VT_EMPTY };
+		VARIANT pvarLoc = {VT_EMPTY};
 		long phwnd;
 		psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pdispOut));
 	}
@@ -135,10 +140,10 @@ void Shell32::SaveSelectedFromDesktop()
 		return;
 
 	CComQIPtr<IServiceProvider> psp(pWebBrowser2);
-	CComPtr<IShellBrowser>      psb;
-	CComPtr<IShellView>         psv;
-	CComPtr<IFolderView>        pfv;
-	CComPtr<IPersistFolder2>    ppf2;
+	CComPtr<IShellBrowser> psb;
+	CComPtr<IShellView> psv;
+	CComPtr<IFolderView> pfv;
+	CComPtr<IPersistFolder2> ppf2;
 
 	if (!psp) return;
 
@@ -164,7 +169,8 @@ void Shell32::SaveSelectedFromDesktop()
 	}
 }
 
-void Shell32::vectorFromDataObject(CComPtr<IDataObject> dao) {
+void Shell32::vectorFromDataObject(CComPtr<IDataObject> dao)
+{
 	FORMATETC formatetc;
 	STGMEDIUM medium;
 

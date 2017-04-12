@@ -76,6 +76,7 @@
     <Compile Include="PathToPluginMatcher.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\IViewer.cs" />
+    <Compile Include="Plugin\PluginPriority.cs" />
     <Compile Include="Plugin\ViewContentContainer.xaml.cs">
       <DependentUpon>ViewContentContainer.xaml</DependentUpon>
     </Compile>

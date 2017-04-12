@@ -4,7 +4,7 @@ using System.Windows.Threading;
 
 namespace QuickLook.ExtensionMethods
 {
-    internal static class DispatcherExtensions
+    public static class DispatcherExtensions
     {
         public static void Delay(this Dispatcher disp, int delayMs,
             Action<object> action, object parm = null)

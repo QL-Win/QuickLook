@@ -17,7 +17,7 @@ namespace QuickLook.Utilities
         {
             Hook();
         }
-        
+
         internal event KeyEventHandler KeyDown;
         internal event KeyEventHandler KeyUp;
 

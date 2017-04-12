@@ -9,21 +9,61 @@
     xmlns:plugin="clr-namespace:QuickLook.Plugin"
     mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow" AllowsTransparency="True" WindowStyle="None"
     UseLayoutRounding="True"
-    Topmost="True" d:DesignWidth="624" d:DesignHeight="700" Width="624" Height="700" WindowStartupLocation="CenterScreen"
+    Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
+    WindowStartupLocation="CenterScreen"
     x:ClassModifier="internal">
     <Window.Background>
         <SolidColorBrush Color="#00FFFFFF" />
     </Window.Background>
     <Grid Name="WindowContainer">
         <Grid.Background>
-            <SolidColorBrush Color="#AAB0B0B0" />
+            <SolidColorBrush Color="#FFFFFFFF" />
         </Grid.Background>
-        <Grid Name="LoadingIcon" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" >
-            <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="2" />
+        <Grid>
+            <Grid>
+                <plugin:ViewContentContainer x:Name="ViewContentContainer" Width="624" Height="700" />
+            </Grid>
+            <DockPanel Name="Titlebar" Height="40" VerticalAlignment="Top" Opacity="0">
+                <DockPanel.Background>
+                    <SolidColorBrush Color="#FFFFFFFF" />
+                </DockPanel.Background>
+                <DockPanel.Style>
+                    <Style TargetType="{x:Type DockPanel}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity"
+                                                             To="1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.6" Storyboard.TargetProperty="Opacity"
+                                                             To="0" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
+                <fa:ImageAwesome DockPanel.Dock="Right" Name="Close" Icon="WindowClose" Height="20" Margin="10,0"
+                                 Cursor="Hand" MouseLeftButtonUp="Close_MouseLeftButtonUp" />
+                <Label Content="Filename placeholder" FontSize="16" HorizontalContentAlignment="Center"
+                       VerticalContentAlignment="Center" />
+            </DockPanel>
         </Grid>
-        <Grid Name="ContentContainer" Width="624" Height="700">
-            <plugin:ViewContentContainer x:Name="ViewContentContainer"/>
+        <Grid Name="LoadingIconLayer">
+            <Grid.Background>
+                <SolidColorBrush Color="#FFFFFFFF" />
+            </Grid.Background>
+            <Grid Name="LoadingIcon" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="2" />
+            </Grid>
         </Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" />
     </Grid>
 </Window>

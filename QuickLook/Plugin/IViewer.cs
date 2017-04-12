@@ -2,7 +2,9 @@
 {
     public interface IViewer
     {
-        bool CanView(string path, byte[] sample);
+        PluginType Type { get; }
+        string[] SupportExtensions { get; }
+        bool CheckSupportByContent(byte[] sample);
         void View(string path, ViewContentContainer container);
         void Close();
     }

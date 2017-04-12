@@ -1,5 +1,6 @@
-﻿using System.Text;
-using System.Threading;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuickLook.Utilities;
 
@@ -18,16 +19,20 @@ namespace QuickLook
 
         private void HotkeyEventHandler(object sender, KeyEventArgs e)
         {
-            string[] paths;
+            var paths = new string[0];
 
             // communicate with COM in a separate thread
-            var tCom = new Thread(() => paths = GetCurrentSelection());
+            Task.Run(() => paths = GetCurrentSelection()).Wait();
 
-            tCom.Start();
-            tCom.Join();
+            var ddd = PathToPluginMatcher.FindMatch(paths);
 
             var mw = new MainWindow();
+
+            ddd.View(paths[0], mw.ViewContentContainer);
+
             mw.Show();
+
+            mw.ShowFinishLoadingAnimation(TimeSpan.FromMilliseconds(200));
         }
 
         private void InstallHook(KeyEventHandler handler)

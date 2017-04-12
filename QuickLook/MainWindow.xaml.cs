@@ -1,35 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using QuickLook.ExtensionMethods;
-using QuickLook.Plugin;
-using QuickLook.Utilities;
-using MessageBox = System.Windows.MessageBox;
-using Path = System.IO.Path;
 
 namespace QuickLook
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     internal partial class MainWindow : Window
     {
@@ -39,46 +18,83 @@ namespace QuickLook
 
             WindowContainer.Width = LoadingIcon.Width;
             WindowContainer.Height = LoadingIcon.Height;
-            ContentContainer.Visibility = Visibility.Hidden;
+            ViewContentContainer.Opacity = 0;
         }
-        
-        private void ZoomToPreferedSize()
-        {
-            Storyboard sb = new Storyboard { };
-            ParallelTimeline ptl = new ParallelTimeline();
 
-            DoubleAnimation animationWidth = new DoubleAnimation
+        internal new void Show()
+        {
+            Height = ViewContentContainer.Height;
+            Width = ViewContentContainer.Width;
+
+            base.Show();
+        }
+
+        internal void ShowFinishLoadingAnimation(TimeSpan delay = new TimeSpan())
+        {
+            var speed = 200;
+
+            var sb = new Storyboard();
+            var ptl = new ParallelTimeline {BeginTime = delay};
+
+            var aWidth = new DoubleAnimation
             {
                 From = WindowContainer.Width,
-                To = ContentContainer.Width,
-                Duration = TimeSpan.FromSeconds(0.2),
+                To = ViewContentContainer.Width,
+                Duration = TimeSpan.FromMilliseconds(speed),
                 DecelerationRatio = 0.3
             };
 
-            DoubleAnimation animationHeight = new DoubleAnimation
+            var aHeight = new DoubleAnimation
             {
                 From = WindowContainer.Height,
-                To = ContentContainer.Height,
-                Duration = TimeSpan.FromSeconds(0.2),
+                To = ViewContentContainer.Height,
+                Duration = TimeSpan.FromMilliseconds(speed),
                 DecelerationRatio = 0.3
             };
 
-            Storyboard.SetTarget(animationWidth, WindowContainer);
-            Storyboard.SetTarget(animationHeight, WindowContainer);
-            Storyboard.SetTargetProperty(animationWidth, new PropertyPath(WidthProperty));
-            Storyboard.SetTargetProperty(animationHeight, new PropertyPath(HeightProperty));
+            var aOpacity = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                BeginTime = TimeSpan.FromMilliseconds(speed * 0.25),
+                Duration = TimeSpan.FromMilliseconds(speed * 0.75)
+            };
 
-            ptl.Children.Add(animationWidth);
-            ptl.Children.Add(animationHeight);
+            var aOpacityR = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(speed * 2)
+            };
+
+            Storyboard.SetTarget(aWidth, WindowContainer);
+            Storyboard.SetTarget(aHeight, WindowContainer);
+            Storyboard.SetTarget(aOpacity, ViewContentContainer);
+            Storyboard.SetTarget(aOpacityR, LoadingIconLayer);
+            Storyboard.SetTargetProperty(aWidth, new PropertyPath(WidthProperty));
+            Storyboard.SetTargetProperty(aHeight, new PropertyPath(HeightProperty));
+            Storyboard.SetTargetProperty(aOpacity, new PropertyPath(OpacityProperty));
+            Storyboard.SetTargetProperty(aOpacityR, new PropertyPath(OpacityProperty));
+
+            ptl.Children.Add(aWidth);
+            ptl.Children.Add(aHeight);
+            ptl.Children.Add(aOpacity);
+            ptl.Children.Add(aOpacityR);
 
             sb.Children.Add(ptl);
 
             sb.Begin();
+
+            Dispatcher.DelayWithPriority(speed * 2, o => LoadingIconLayer.Visibility = Visibility.Hidden, null,
+                DispatcherPriority.Render);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Close_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ZoomToPreferedSize();
+            Close();
+
+            // useless code to make everyone happy
+            GC.Collect();
         }
     }
 }
