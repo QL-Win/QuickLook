@@ -16,31 +16,29 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\Plugins\PDFViewer\</OutputPath>
+    <OutputPath>..\Build\Debug\Plugins\QuickLook.Plugin.PDFViewer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\Plugins\PDFViewer\</OutputPath>
+    <OutputPath>..\Build\Release\Plugins\QuickLook.Plugin.PDFViewer\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoonPdfLib, Version=0.3.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\MoonPdfLib-x86.0.3.0\lib\MoonPdfLib.dll</HintPath>
-    </Reference>
-    <Reference Include="MouseKeyboardActivityMonitor, Version=3.0.1.29653, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\MoonPdfLib-x86.0.3.0\lib\MouseKeyboardActivityMonitor.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,7 +49,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="PdfViewerControl.xaml.cs">
+      <DependentUpon>PdfViewerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Plugin.cs" />
+    <Compile Include="DpiHelpers.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="LibMuPdf.cs" />
+    <Compile Include="MouseWheelMonitor.cs" />
+    <Compile Include="PageIdToImageConverter.cs" />
+    <Compile Include="PdfFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,13 +69,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MoonPdfLib\README" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="libmupdf.dll">
+    <Content Include="LibMuPdf.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="PdfViewerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

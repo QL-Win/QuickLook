@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="QuickLook.Plugin.PDFViewer.PdfViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuickLook.Plugin.PDFViewer"
+             mc:Ignorable="d"
+             x:Name="thisPdfViewer"
+             UseLayoutRounding="True"
+             d:DesignHeight="476.974"
+             d:DesignWidth="720.29">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:PageIdToImageConverter x:Key="PageIdToImageConverter" />
+            <Style x:Key="ListBoxItemStyleNoFocusedBorder" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="listThumbnails" Grid.Column="0" VirtualizingPanel.ScrollUnit="Item"
+                 ScrollViewer.IsDeferredScrollingEnabled="False"
+                 SelectedIndex="0"
+                 Focusable="False"
+                 Background="#9FFFFFFF"
+                 ItemsSource="{Binding PageIds, ElementName=thisPdfViewer}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
+                 ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid MaxHeight="150" 
+                          MaxWidth="{Binding ViewportWidth, Mode=Default, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FFE1E1E1">
+                            <Image>
+                                <Image.Source>
+                                    <MultiBinding Converter="{StaticResource PageIdToImageConverter}">
+                                        <Binding Path="PdfHandleForThumbnails" ElementName="thisPdfViewer" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                        <!--
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Mode=OneWay, Converter={StaticResource MathConverter}, ConverterParameter=@VALUE+1}" FontSize="14" />
+                        -->
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Column="1" Background="#DFEFEFEF">
+            <ScrollViewer x:Name="pageViewPanel" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False">
+                <Image x:Name="pageViewPanelImage" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                </Image>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

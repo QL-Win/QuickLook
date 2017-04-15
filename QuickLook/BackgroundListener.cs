@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,8 @@ namespace QuickLook
 
         private GlobalKeyboardHook _hook;
 
+        private MainWindow _showingWindow;
+
         protected BackgroundListener()
         {
             InstallHook(HotkeyEventHandler);
@@ -19,20 +22,46 @@ namespace QuickLook
 
         private void HotkeyEventHandler(object sender, KeyEventArgs e)
         {
-            var paths = new string[0];
+            if (_showingWindow != null)
+            {
+                _showingWindow.Close();
+                _showingWindow = null;
+
+                GC.Collect();
+
+                return;
+            }
+
+            var path = String.Empty;
 
             // communicate with COM in a separate thread
-            Task.Run(() => paths = GetCurrentSelection()).Wait();
+            Task.Run(() =>
+            {
+                var paths = GetCurrentSelection();
 
-            var ddd = PathToPluginMatcher.FindMatch(paths);
+                if (paths.Any())
+                    path = paths.First();
 
-            var mw = new MainWindow();
+            }).Wait();
 
-            ddd.View(paths[0], mw.ViewContentContainer);
+            if (String.IsNullOrEmpty(path))
+                return;
 
-            mw.Show();
+            var matched = PluginManager.FindMatch(path);
 
-            mw.ShowFinishLoadingAnimation(TimeSpan.FromMilliseconds(200));
+            if (matched == null)
+                return;
+
+            _showingWindow = new MainWindow();
+
+            _showingWindow.Closed += (sender2, e2) => { _showingWindow = null; };
+
+            _showingWindow.viewContentContainer.ViewerPlugin = matched;
+            matched.View(path, _showingWindow.viewContentContainer);
+
+            _showingWindow.Show();
+
+            _showingWindow.ShowFinishLoadingAnimation();
         }
 
         private void InstallHook(KeyEventHandler handler)

@@ -11,16 +11,25 @@ namespace QuickLook
     {
         private static PluginManager _instance;
 
-        internal PluginManager()
+        private PluginManager()
         {
             LoadPlugins();
         }
 
-        internal List<IViewer> LoadedPlugins { get; } = new List<IViewer>();
+        internal List<IViewer> LoadedPlugins { get; private set; } = new List<IViewer>();
 
         internal static PluginManager GetInstance()
         {
             return _instance ?? (_instance = new PluginManager());
+        }
+
+        internal static IViewer FindMatch(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            return GetInstance()
+                .LoadedPlugins.FirstOrDefault(plugin => plugin.CanHandle(path));
         }
 
         private void LoadPlugins()
@@ -37,6 +46,8 @@ namespace QuickLook
                                 select t).ToList()
                             .ForEach(type => LoadedPlugins.Add((IViewer) Activator.CreateInstance(type)));
                     });
+
+            LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
         }
     }
 }

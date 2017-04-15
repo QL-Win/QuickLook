@@ -2,9 +2,8 @@
 {
     public interface IViewer
     {
-        PluginType Type { get; }
-        string[] SupportExtensions { get; }
-        bool CheckSupportByContent(byte[] sample);
+        int Priority { get; }
+        bool CanHandle(string sample);
         void View(string path, ViewContentContainer container);
         void Close();
     }

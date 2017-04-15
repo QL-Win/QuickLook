@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ContentControl Name="Container">
+        <ContentControl x:Name="container">
             <Label Content="ContentControl Placeholder" VerticalContentAlignment="Center"
                    HorizontalContentAlignment="Center" Background="LightGray" />
         </ContentControl>

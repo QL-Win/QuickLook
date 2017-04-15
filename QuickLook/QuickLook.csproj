@@ -73,13 +73,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PathToPluginMatcher.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="Plugin\PluginPriority.cs" />
     <Compile Include="Plugin\ViewContentContainer.xaml.cs">
       <DependentUpon>ViewContentContainer.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\ScrollBarStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -92,6 +95,8 @@
     <Compile Include="BackgroundListener.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\User32.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Utilities\AeroGlass.cs" />
     <Compile Include="Utilities\GlobalKeyboardHook.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

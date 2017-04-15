@@ -11,23 +11,19 @@
     UseLayoutRounding="True"
     Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="CanResizeWithGrip"
     x:ClassModifier="internal">
     <Window.Background>
-        <SolidColorBrush Color="#00FFFFFF" />
+        <SolidColorBrush Color="#7FFFFFFF" />
     </Window.Background>
-    <Grid Name="WindowContainer">
-        <Grid.Background>
-            <SolidColorBrush Color="#FFFFFFFF" />
-        </Grid.Background>
+    <Border BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
-            <Grid>
-                <plugin:ViewContentContainer x:Name="ViewContentContainer" Width="624" Height="700" />
-            </Grid>
-            <DockPanel Name="Titlebar" Height="40" VerticalAlignment="Top" Opacity="0">
-                <DockPanel.Background>
-                    <SolidColorBrush Color="#FFFFFFFF" />
-                </DockPanel.Background>
-                <DockPanel.Style>
+            <DockPanel Opacity="1">
+                <DockPanel x:Name="titlebar" Height="28" Dock="Top">
+                    <DockPanel.Background>
+                        <SolidColorBrush Color="#FFB8B8B8" />
+                    </DockPanel.Background>
+                    <!--<DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -50,20 +46,24 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </DockPanel.Style>
-                <fa:ImageAwesome DockPanel.Dock="Right" Name="Close" Icon="WindowClose" Height="20" Margin="10,0"
-                                 Cursor="Hand" MouseLeftButtonUp="Close_MouseLeftButtonUp" />
-                <Label Content="Filename placeholder" FontSize="16" HorizontalContentAlignment="Center"
-                       VerticalContentAlignment="Center" />
+                </DockPanel.Style>-->
+                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="WindowClose" Height="15" Margin="10,0"
+                                     Cursor="Hand" />
+                    <Label x:Name="titlebarTitleArea" Content="{Binding Title, ElementName=viewContentContainer}" FontSize="14" HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center" />
+                </DockPanel>
+                <Grid>
+                    <plugin:ViewContentContainer x:Name="viewContentContainer"/>
+                </Grid>
             </DockPanel>
-        </Grid>
-        <Grid Name="LoadingIconLayer">
-            <Grid.Background>
-                <SolidColorBrush Color="#FFFFFFFF" />
-            </Grid.Background>
-            <Grid Name="LoadingIcon" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="2" />
+            <Grid x:Name="loadingIconLayer" Opacity="0.3">
+                <Grid.Background>
+                    <SolidColorBrush Color="#FFFFFFFF" />
+                </Grid.Background>
+                <Grid x:Name="loadingIcon" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="1" />
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>
