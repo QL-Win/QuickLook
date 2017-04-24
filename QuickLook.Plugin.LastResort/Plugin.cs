@@ -6,29 +6,34 @@ namespace QuickLook.Plugin.LastResort
 {
     public class Plugin : IViewer
     {
-        private InfoPanel ip;
-        private bool stop;
-        public int Priority => -9999;
+        private InfoPanel _ip;
+        private bool _stop;
+
+        public int Priority => int.MinValue;
 
         public bool CanHandle(string sample)
         {
             return true;
         }
 
+        public void BoundSize(string path, ViewContentContainer container)
+        {
+            _ip = new InfoPanel();
+
+            container.CanResize = false;
+            container.PreferedSize = new Size {Width = _ip.Width, Height = _ip.Height};
+        }
+
         public void View(string path, ViewContentContainer container)
         {
-            ip = new InfoPanel(path);
-
             DisplayInfo(path);
 
-            container.SetContent(ip);
-            container.CanResize = false;
-            container.PreferedSize = new Size {Width = ip.Width, Height = ip.Height};
+            container.SetContent(_ip);
         }
 
         public void Close()
         {
-            stop = true;
+            _stop = true;
         }
 
 
@@ -36,15 +41,15 @@ namespace QuickLook.Plugin.LastResort
         {
             var icon = IconHelper.GetBitmapFromPath(path, IconHelper.IconSizeEnum.ExtraLargeIcon).ToBitmapSource();
 
-            ip.image.Source = icon;
+            _ip.image.Source = icon;
 
             var name = Path.GetFileName(path);
-            ip.filename.Content = string.IsNullOrEmpty(name) ? path : name;
+            _ip.filename.Content = string.IsNullOrEmpty(name) ? path : name;
 
             var last = File.GetLastWriteTime(path);
-            ip.modDate.Content = $"{last.ToLongDateString()} {last.ToLongTimeString()}";
+            _ip.modDate.Content = $"{last.ToLongDateString()} {last.ToLongTimeString()}";
 
-            stop = false;
+            _stop = false;
 
             Task.Run(() =>
             {
@@ -52,7 +57,7 @@ namespace QuickLook.Plugin.LastResort
                 {
                     var size = new FileInfo(path).Length;
 
-                    ip.Dispatcher.Invoke(() => { ip.totalSize.Content = size.ToPrettySize(2); });
+                    _ip.Dispatcher.Invoke(() => { _ip.totalSize.Content = size.ToPrettySize(2); });
                 }
                 else if (Directory.Exists(path))
                 {
@@ -60,12 +65,12 @@ namespace QuickLook.Plugin.LastResort
                     long totalFiles;
                     long totalSize;
 
-                    FileHelper.CountFolder(path, ref stop, out totalDirs, out totalFiles, out totalSize);
+                    FileHelper.CountFolder(path, ref _stop, out totalDirs, out totalFiles, out totalSize);
 
-                    if (!stop)
-                        ip.Dispatcher.Invoke(() =>
+                    if (!_stop)
+                        _ip.Dispatcher.Invoke(() =>
                         {
-                            ip.totalSize.Content =
+                            _ip.totalSize.Content =
                                 $"{totalSize.ToPrettySize(2)} ({totalDirs} folders and {totalFiles} files.)";
                         });
                 }

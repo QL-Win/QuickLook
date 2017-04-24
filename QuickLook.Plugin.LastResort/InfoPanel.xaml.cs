@@ -7,7 +7,7 @@ namespace QuickLook.Plugin.LastResort
     /// </summary>
     public partial class InfoPanel : UserControl
     {
-        public InfoPanel(string path)
+        public InfoPanel()
         {
             InitializeComponent();
         }

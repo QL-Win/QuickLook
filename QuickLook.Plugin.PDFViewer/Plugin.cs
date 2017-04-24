@@ -6,7 +6,7 @@ namespace QuickLook.Plugin.PDFViewer
     public class Plugin : IViewer
     {
         private PdfViewerControl _pdfControl;
-        public int Priority => 9999;
+        public int Priority => int.MaxValue;
 
         public bool CanHandle(string path)
         {
@@ -22,7 +22,7 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void BoundSize(string path, ViewContentContainer container)
         {
             _pdfControl = new PdfViewerControl();
 
@@ -31,7 +31,10 @@ namespace QuickLook.Plugin.PDFViewer
             desiredSize.Width += 150; // add thumbnails column
 
             container.SetPreferedSizeFit(desiredSize, 0.7);
+        }
 
+        public void View(string path, ViewContentContainer container)
+        {
             container.SetContent(_pdfControl);
 
             _pdfControl.Loaded += (sender, e) =>

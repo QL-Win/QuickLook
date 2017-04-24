@@ -53,13 +53,16 @@ namespace QuickLook
                 return;
 
             _showingWindow = new MainWindow();
-
             _showingWindow.Closed += (sender2, e2) => { _showingWindow = null; };
 
             _showingWindow.viewContentContainer.ViewerPlugin = matched;
-            matched.View(path, _showingWindow.viewContentContainer);
+
+            // get window size before showing it
+            matched.BoundSize(path, _showingWindow.viewContentContainer);
 
             _showingWindow.Show();
+
+            matched.View(path, _showingWindow.viewContentContainer);
 
             _showingWindow.ShowFinishLoadingAnimation();
         }

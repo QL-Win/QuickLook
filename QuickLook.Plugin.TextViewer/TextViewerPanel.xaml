@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="QuickLook.Plugin.TextViewer.TextViewerPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:local="clr-namespace:QuickLook.Plugin.TextViewer"
+             mc:Ignorable="d"
+             d:DesignHeight="317.974"
+             d:DesignWidth="448.79"
+             UseLayoutRounding="True">
+    <Grid>
+        <avalonEdit:TextEditor x:Name="viewer" Background="#00FFFFFF" FontFamily="Consolas" ShowLineNumbers="True"
+                               WordWrap="True" IsReadOnly="True" />
+    </Grid>
+</UserControl>
