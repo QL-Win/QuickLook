@@ -1,12 +1,35 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.LastResort.InfoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.LastResort"
-             
-             mc:Ignorable="d" Width="450" Height="250" UseLayoutRounding="True">
+             mc:Ignorable="d" Width="484.5" Height="172" UseLayoutRounding="True">
     <Grid>
-        <Image x:Name="image" Width="128" Height="128"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="65*" />
+        </Grid.ColumnDefinitions>
+        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" />
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="80*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="1" VerticalContentAlignment="Center" Grid.Column="0">Name:</Label>
+            <Label Grid.Row="2" VerticalContentAlignment="Center" Grid.Column="0">Modified:</Label>
+            <Label Grid.Row="3" VerticalContentAlignment="Center" Grid.Column="0">Size:</Label>
+            <Label x:Name="filename" Grid.Row="1" VerticalContentAlignment="Center" Grid.Column="1">Filename.ext</Label>
+            <Label x:Name="modDate" Grid.Row="2" VerticalContentAlignment="Center" Grid.Column="1">01/01/2017 00:00:00</Label>
+            <Label x:Name="totalSize" Grid.Row="3" VerticalContentAlignment="Center" Grid.Column="1">Calculating...</Label>
+        </Grid>
     </Grid>
 </UserControl>

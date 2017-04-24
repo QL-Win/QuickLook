@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Channels;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -30,6 +29,8 @@ namespace QuickLook
             titlebarTitleArea.MouseDown += (sender, e) => DragMove();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             viewContentContainer.ViewerPlugin.Close();
@@ -42,6 +43,8 @@ namespace QuickLook
             Height = viewContentContainer.PreferedSize.Height + titlebar.Height;
             Width = viewContentContainer.PreferedSize.Width;
 
+            ResizeMode = viewContentContainer.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
+
             base.Show();
         }
 
@@ -51,17 +54,17 @@ namespace QuickLook
 
             var sb = new Storyboard();
             var ptl = new ParallelTimeline();
-            
+
             var aOpacityR = new DoubleAnimation
             {
                 From = 1,
                 To = 0,
                 Duration = TimeSpan.FromMilliseconds(speed)
             };
-            
+
             Storyboard.SetTarget(aOpacityR, loadingIconLayer);
             Storyboard.SetTargetProperty(aOpacityR, new PropertyPath(OpacityProperty));
-            
+
             ptl.Children.Add(aOpacityR);
 
             sb.Children.Add(ptl);
@@ -76,8 +79,6 @@ namespace QuickLook
         {
             Close();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

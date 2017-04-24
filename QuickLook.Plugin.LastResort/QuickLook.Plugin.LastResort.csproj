@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="FileHelper.cs" />
     <Compile Include="InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>

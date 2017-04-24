@@ -13,7 +13,7 @@
         <ResourceDictionary>
             <local:PageIdToImageConverter x:Key="PageIdToImageConverter" />
             <Style x:Key="ListBoxItemStyleNoFocusedBorder" TargetType="{x:Type ListBoxItem}">
-                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -26,13 +26,13 @@
                  ScrollViewer.IsDeferredScrollingEnabled="False"
                  SelectedIndex="0"
                  Focusable="False"
-                 Background="#9FFFFFFF"
+                 Background="#00FFFFFF"
                  ItemsSource="{Binding PageIds, ElementName=thisPdfViewer}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
                  ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid MaxHeight="150" 
+                    <Grid MaxHeight="150"
                           MaxWidth="{Binding ViewportWidth, Mode=Default, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10" />
@@ -61,10 +61,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Column="1" Background="#DFEFEFEF">
-            <ScrollViewer x:Name="pageViewPanel" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False">
-                <Image x:Name="pageViewPanelImage" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                </Image>
+        <Grid Grid.Column="1" Background="#00EFEFEF">
+            <ScrollViewer x:Name="pageViewPanel" HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto" Focusable="False">
+                <Image x:Name="pageViewPanelImage" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" />
             </ScrollViewer>
         </Grid>
     </Grid>

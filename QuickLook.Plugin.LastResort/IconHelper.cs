@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+
 // ReSharper disable InconsistentNaming
 
 namespace QuickLook.Plugin.LastResort
@@ -211,8 +212,8 @@ namespace QuickLook.Plugin.LastResort
     [StructLayout(LayoutKind.Sequential)]
     public struct POINT
     {
-        private int X;
-        private int Y;
+        private readonly int X;
+        private readonly int Y;
 
         public POINT(int x, int y)
         {

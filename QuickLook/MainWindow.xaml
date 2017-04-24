@@ -14,14 +14,14 @@
     ResizeMode="CanResizeWithGrip"
     x:ClassModifier="internal">
     <Window.Background>
-        <SolidColorBrush Color="#7FFFFFFF" />
+        <SolidColorBrush Color="#BFFFFFFF" />
     </Window.Background>
     <Border BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
             <DockPanel Opacity="1">
                 <DockPanel x:Name="titlebar" Height="28" Dock="Top">
                     <DockPanel.Background>
-                        <SolidColorBrush Color="#FFB8B8B8" />
+                        <SolidColorBrush Color="#00B8B8B8" />
                     </DockPanel.Background>
                     <!--<DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
@@ -47,20 +47,23 @@
                         </Style.Triggers>
                     </Style>
                 </DockPanel.Style>-->
-                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="WindowClose" Height="15" Margin="10,0"
+                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="WindowClose" Height="15"
+                                     Margin="10,0"
                                      Cursor="Hand" />
-                    <Label x:Name="titlebarTitleArea" Content="{Binding Title, ElementName=viewContentContainer}" FontSize="14" HorizontalContentAlignment="Center"
+                    <Label x:Name="titlebarTitleArea" Content="{Binding Title, ElementName=viewContentContainer}"
+                           FontSize="14" HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center" />
                 </DockPanel>
                 <Grid>
-                    <plugin:ViewContentContainer x:Name="viewContentContainer"/>
+                    <plugin:ViewContentContainer x:Name="viewContentContainer" />
                 </Grid>
             </DockPanel>
             <Grid x:Name="loadingIconLayer" Opacity="0.3">
                 <Grid.Background>
                     <SolidColorBrush Color="#FFFFFFFF" />
                 </Grid.Background>
-                <Grid x:Name="loadingIcon" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid x:Name="loadingIcon" Height="50" Width="50" HorizontalAlignment="Center"
+                      VerticalAlignment="Center">
                     <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="1" />
                 </Grid>
             </Grid>

@@ -10,9 +10,9 @@ namespace QuickLook.Plugin
     /// <summary>
     ///     Interaction logic for ViewContentContainer.xaml
     /// </summary>
-    public partial class ViewContentContainer : UserControl,INotifyPropertyChanged
+    public partial class ViewContentContainer : UserControl, INotifyPropertyChanged
     {
-        private string _title = String.Empty;
+        private string _title = string.Empty;
 
         public ViewContentContainer()
         {
@@ -29,6 +29,14 @@ namespace QuickLook.Plugin
             get => _title;
         }
 
+        public IViewer ViewerPlugin { get; set; }
+
+        public Size PreferedSize { get; set; }
+
+        public bool CanResize { get; set; } = true;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void SetContent(object content)
         {
             container.Content = content;
@@ -41,8 +49,8 @@ namespace QuickLook.Plugin
 
             var max = GetMaximumDisplayBound();
 
-            var widthRatio = (max.Width * maxRatio) / size.Width;
-            var heightRatio = (max.Height * maxRatio) / size.Height;
+            var widthRatio = max.Width * maxRatio / size.Width;
+            var heightRatio = max.Height * maxRatio / size.Height;
 
             var ratio = Math.Min(widthRatio, heightRatio);
 
@@ -51,16 +59,10 @@ namespace QuickLook.Plugin
             return ratio;
         }
 
-        public IViewer ViewerPlugin { get; set; }
-
-        public Size PreferedSize { get; set; }
-
         public Size GetMaximumDisplayBound()
         {
             return new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

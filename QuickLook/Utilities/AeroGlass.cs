@@ -59,9 +59,9 @@ namespace QuickLook.Utilities
         private struct AccentPolicy
         {
             public AccentState AccentState;
-            public int AccentFlags;
-            public int GradientColor;
-            public int AnimationId;
+            public readonly int AccentFlags;
+            public readonly int GradientColor;
+            public readonly int AnimationId;
         }
     }
 }

@@ -26,8 +26,8 @@ namespace QuickLook.Plugin.PDFViewer
             var height = (int) (pageBound.Height * zoomY);
 
             // sets the matrix as a scaling matrix (zoomX,0,0,zoomY,0,0)
-            ctm.A = (float)zoomX;
-            ctm.D = (float)zoomY;
+            ctm.A = (float) zoomX;
+            ctm.D = (float) zoomY;
 
             // creates a pixmap the same size as the width and height of the page
             pix = NativeMethods.NewPixmap(context, NativeMethods.LookupDeviceColorSpace(context, "DeviceRGB"), width,

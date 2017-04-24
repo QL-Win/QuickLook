@@ -32,19 +32,19 @@ namespace QuickLook
                 return;
             }
 
-            var path = String.Empty;
+            var path = string.Empty;
 
             // communicate with COM in a separate thread
             Task.Run(() =>
-            {
-                var paths = GetCurrentSelection();
+                {
+                    var paths = GetCurrentSelection();
 
-                if (paths.Any())
-                    path = paths.First();
+                    if (paths.Any())
+                        path = paths.First();
+                })
+                .Wait();
 
-            }).Wait();
-
-            if (String.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 return;
 
             var matched = PluginManager.FindMatch(path);
