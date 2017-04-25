@@ -54,6 +54,8 @@ namespace QuickLook.Plugin
 
             var ratio = Math.Min(widthRatio, heightRatio);
 
+            if (ratio > 1) ratio = 1;
+
             PreferedSize = new Size {Width = size.Width * ratio, Height = size.Height * ratio};
 
             return ratio;

@@ -58,7 +58,7 @@ namespace QuickLook
             _showingWindow.viewContentContainer.ViewerPlugin = matched;
 
             // get window size before showing it
-            matched.BoundSize(path, _showingWindow.viewContentContainer);
+            matched.Prepare(path, _showingWindow.viewContentContainer);
 
             _showingWindow.Show();
 

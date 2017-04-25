@@ -22,13 +22,11 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        public void BoundSize(string path, ViewContentContainer container)
+        public void Prepare(string path, ViewContentContainer container)
         {
             _pdfControl = new PdfViewerControl();
 
             var desiredSize = _pdfControl.GetDesiredControlSizeByFirstPage(path);
-
-            desiredSize.Width += 150; // add thumbnails column
 
             container.SetPreferedSizeFit(desiredSize, 0.7);
         }

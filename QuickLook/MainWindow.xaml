@@ -10,13 +10,14 @@
     mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow" AllowsTransparency="True" WindowStyle="None"
     UseLayoutRounding="True"
     Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
+    MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
     ResizeMode="CanResizeWithGrip"
-    x:ClassModifier="internal">
+    x:ClassModifier="internal" Focusable="False" ShowActivated="False" ShowInTaskbar="False">
     <Window.Background>
         <SolidColorBrush Color="#BFFFFFFF" />
     </Window.Background>
-    <Border BorderThickness="1" BorderBrush="#FF7B7B7B">
+    <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
             <DockPanel Opacity="1">
                 <DockPanel x:Name="titlebar" Height="28" Dock="Top">

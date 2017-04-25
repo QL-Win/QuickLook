@@ -15,6 +15,7 @@ namespace QuickLook.Plugin.PDFViewer
     /// </summary>
     public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDisposable
     {
+        private Point? _dragInitPos;
         private PreviewMouseWheelMonitor _whellMonitor;
 
         public PdfViewerControl()
@@ -35,6 +36,8 @@ namespace QuickLook.Plugin.PDFViewer
         public bool PdfLoaded { get; private set; }
 
         public double ZoomFactor { get; set; }
+
+        public double MinZoomFactor { get; set; }
 
         public int TotalPages => PdfHandle.TotalPages;
 
@@ -114,6 +117,8 @@ namespace QuickLook.Plugin.PDFViewer
 
             pageViewPanelImage.LayoutTransform = new ScaleTransform(viewZoom, viewZoom);
 
+            pageViewPanel.InvalidateMeasure();
+
             // critical for calcuating offset
             pageViewPanel.ScrollToHorizontalOffset(0);
             pageViewPanel.ScrollToVerticalOffset(0);
@@ -140,6 +145,8 @@ namespace QuickLook.Plugin.PDFViewer
             // reset view zoom factor
             pageViewPanelImage.LayoutTransform = new ScaleTransform();
 
+            pageViewPanel.InvalidateMeasure();
+
             GC.Collect();
         }
 
@@ -164,6 +171,7 @@ namespace QuickLook.Plugin.PDFViewer
             var factor = Math.Min(pageViewPanel.ActualWidth / size.Width, pageViewPanel.ActualHeight / size.Height);
 
             ZoomFactor = factor;
+            MinZoomFactor = factor;
 
             ReRenderCurrentPage();
         }
@@ -175,7 +183,7 @@ namespace QuickLook.Plugin.PDFViewer
             var size = tempHandle.GetPageSize(0, 1d);
             tempHandle.Dispose();
 
-            size.Width += /*listThumbnails.ActualWidth*/ 150 + 1;
+            size.Width += /*listThumbnails.ActualWidth*/ 150;
 
             return size;
         }
@@ -201,8 +209,39 @@ namespace QuickLook.Plugin.PDFViewer
             // register events
             listThumbnails.SelectionChanged += UpdatePageViewWhenSelectionChanged;
             //pageViewPanel.SizeChanged += ReRenderCurrentPageWhenSizeChanged;
+
             pageViewPanel.PreviewMouseWheel += NavigatePage;
             StartMouseWhellDelayedZoomMonitor(pageViewPanel);
+
+            pageViewPanel.PreviewMouseLeftButtonDown += DragScrollStart;
+            pageViewPanel.PreviewMouseMove += DragScrolling;
+        }
+
+        private void DragScrolling(object sender, MouseEventArgs e)
+        {
+            if (!_dragInitPos.HasValue)
+                return;
+
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                _dragInitPos = null;
+                return;
+            }
+
+            e.Handled = true;
+
+            var delta = _dragInitPos.Value - e.GetPosition(pageViewPanel);
+
+            pageViewPanel.ScrollToHorizontalOffset(delta.X);
+            pageViewPanel.ScrollToVerticalOffset(delta.Y);
+        }
+
+        private void DragScrollStart(object sender, MouseButtonEventArgs e)
+        {
+            _dragInitPos = e.GetPosition(pageViewPanel);
+            var temp = _dragInitPos.Value; // Point is a type value
+            temp.Offset(pageViewPanel.HorizontalOffset, pageViewPanel.VerticalOffset);
+            _dragInitPos = temp;
         }
 
         private void StartMouseWhellDelayedZoomMonitor(UIElement ui)
@@ -230,7 +269,7 @@ namespace QuickLook.Plugin.PDFViewer
 
                 newZoom = newZoom + e.Delta / 120 * 0.1;
 
-                newZoom = Math.Max(newZoom, 0.2);
+                newZoom = Math.Max(newZoom, MinZoomFactor);
                 newZoom = Math.Min(newZoom, 3);
 
                 ReRenderCurrentPageLowQuality(newZoom / ZoomFactor, false);

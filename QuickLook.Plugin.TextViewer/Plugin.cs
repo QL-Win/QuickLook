@@ -41,7 +41,7 @@ namespace QuickLook.Plugin.TextViewer
             }
         }
 
-        public void BoundSize(string path, ViewContentContainer container)
+        public void Prepare(string path, ViewContentContainer container)
         {
             container.PreferedSize = new Size {Width = 800, Height = 600};
         }

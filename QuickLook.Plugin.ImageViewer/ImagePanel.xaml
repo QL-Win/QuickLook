@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="QuickLook.Plugin.ImageViewer.ImagePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuickLook.Plugin.ImageViewer"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto" Focusable="False">
+            <Image x:Name="viewPanelImage" Stretch="None" RenderOptions.BitmapScalingMode="HighQuality" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

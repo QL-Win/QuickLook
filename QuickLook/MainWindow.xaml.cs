@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using QuickLook.Annotations;
@@ -34,18 +35,25 @@ namespace QuickLook
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             viewContentContainer.ViewerPlugin.Close();
+            viewContentContainer.ViewerPlugin = null;
+
+            GC.Collect();
         }
 
         internal new void Show()
         {
             loadingIconLayer.Opacity = 1;
 
-            Height = viewContentContainer.PreferedSize.Height + titlebar.Height;
-            Width = viewContentContainer.PreferedSize.Width;
+            Height = viewContentContainer.PreferedSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
+                     windowBorder.BorderThickness.Bottom;
+            Width = viewContentContainer.PreferedSize.Width + windowBorder.BorderThickness.Left +
+                    windowBorder.BorderThickness.Right;
 
             ResizeMode = viewContentContainer.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
 
             base.Show();
+
+            NoactivateWindowHelper.SetNoactivate(new WindowInteropHelper(this));
         }
 
         internal void ShowFinishLoadingAnimation()
