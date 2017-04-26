@@ -74,6 +74,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ListBoxItemStyleNoFocusedBorder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PdfViewerControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

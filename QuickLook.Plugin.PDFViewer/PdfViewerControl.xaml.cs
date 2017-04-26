@@ -281,6 +281,7 @@ namespace QuickLook.Plugin.PDFViewer
 
                 ZoomFactor = newZoom;
                 ReRenderCurrentPage();
+                scrolling = false;
             };
         }
 

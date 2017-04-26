@@ -11,6 +11,7 @@ public:
 		DESKTOP = 1,
 		EXPLORER = 2,
 	};
+
 	static FocusedWindowType GetFocusedWindowType();
 	static void SaveCurrentSelection();
 	static UINT GetCurrentSelectionCount();

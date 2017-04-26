@@ -7,15 +7,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:plugin="clr-namespace:QuickLook.Plugin"
-    mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow" AllowsTransparency="True" WindowStyle="None"
+    mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow"
     UseLayoutRounding="True"
     Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
-    ResizeMode="CanResizeWithGrip"
-    x:ClassModifier="internal" Focusable="False" ShowActivated="False" ShowInTaskbar="False">
+    x:ClassModifier="internal" Focusable="False" 
+    ShowActivated="False" ShowInTaskbar="False" WindowStyle="None" 
+    ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
     <Window.Background>
-        <SolidColorBrush Color="#BFFFFFFF" />
+        <SolidColorBrush Color="#DFFFFFFF" />
     </Window.Background>
     <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
