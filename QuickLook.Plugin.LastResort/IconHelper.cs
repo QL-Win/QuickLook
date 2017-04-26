@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace QuickLook.Plugin.LastResort
 {
-    public class IconHelper
+    public static class IconHelper
     {
         public enum IconSizeEnum
         {

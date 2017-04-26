@@ -79,7 +79,8 @@
     <Compile Include="Plugin\ViewContentContainer.xaml.cs">
       <DependentUpon>ViewContentContainer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\NoactivateWindowHelper.cs" />
+    <Compile Include="Utilities\WindowHelper.cs" />
+    <Compile Include="ViewWindowManager.cs" />
     <Page Include="Styles\ScrollBarStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

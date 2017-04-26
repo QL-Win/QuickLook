@@ -5,7 +5,7 @@ using System.Windows.Interop;
 
 namespace QuickLook.Utilities
 {
-    internal class AeroGlass
+    internal static class AeroGlass
     {
         internal static void EnableBlur(Window window)
         {

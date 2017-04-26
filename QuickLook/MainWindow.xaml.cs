@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using QuickLook.Annotations;
 using QuickLook.ExtensionMethods;
+using QuickLook.Plugin;
 using QuickLook.Utilities;
 
 namespace QuickLook
@@ -53,10 +54,24 @@ namespace QuickLook
 
             base.Show();
 
-            NoactivateWindowHelper.SetNoactivate(new WindowInteropHelper(this));
+            WindowHelper.SetNoactivate(new WindowInteropHelper(this));
         }
 
-        internal void ShowFinishLoadingAnimation()
+        internal void BeginShow(IViewer matchedPlugin, string path)
+        {
+            viewContentContainer.ViewerPlugin = matchedPlugin;
+
+            // get window size before showing it
+            matchedPlugin.Prepare(path, viewContentContainer);
+
+            Show();
+
+            matchedPlugin.View(path, viewContentContainer);
+
+            ShowFinishLoadingAnimation();
+        }
+
+        private void ShowFinishLoadingAnimation()
         {
             var speed = 100;
 

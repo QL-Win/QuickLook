@@ -5,6 +5,11 @@
 
 #define EXPORT extern "C" __declspec(dllexport)
 
+EXPORT int GetFocusedWindowType()
+{
+	return Shell32::GetFocusedWindowType();
+}
+
 EXPORT void SaveCurrentSelection()
 {
 	Shell32::SaveCurrentSelection();

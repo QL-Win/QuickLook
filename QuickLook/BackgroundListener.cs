@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using QuickLook.Utilities;
 
 namespace QuickLook
@@ -13,8 +9,6 @@ namespace QuickLook
 
         private GlobalKeyboardHook _hook;
 
-        private MainWindow _showingWindow;
-
         protected BackgroundListener()
         {
             InstallHook(HotkeyEventHandler);
@@ -22,49 +16,7 @@ namespace QuickLook
 
         private void HotkeyEventHandler(object sender, KeyEventArgs e)
         {
-            if (_showingWindow != null)
-            {
-                _showingWindow.Close();
-                _showingWindow = null;
-
-                GC.Collect();
-
-                return;
-            }
-
-            var path = string.Empty;
-
-            // communicate with COM in a separate thread
-            Task.Run(() =>
-                {
-                    var paths = GetCurrentSelection();
-
-                    if (paths.Any())
-                        path = paths.First();
-                })
-                .Wait();
-
-            if (string.IsNullOrEmpty(path))
-                return;
-
-            var matched = PluginManager.FindMatch(path);
-
-            if (matched == null)
-                return;
-
-            _showingWindow = new MainWindow();
-            _showingWindow.Closed += (sender2, e2) => { _showingWindow = null; };
-
-            _showingWindow.viewContentContainer.ViewerPlugin = matched;
-
-            // get window size before showing it
-            matched.Prepare(path, _showingWindow.viewContentContainer);
-
-            _showingWindow.Show();
-
-            matched.View(path, _showingWindow.viewContentContainer);
-
-            _showingWindow.ShowFinishLoadingAnimation();
+            ViewWindowManager.GetInstance().InvokeRoutine();
         }
 
         private void InstallHook(KeyEventHandler handler)
@@ -74,19 +26,6 @@ namespace QuickLook
             _hook.HookedKeys.Add(Keys.Space);
 
             _hook.KeyUp += handler;
-        }
-
-        private string[] GetCurrentSelection()
-        {
-            NativeMethods.QuickLook.SaveCurrentSelection();
-
-            var n = NativeMethods.QuickLook.GetCurrentSelectionCount();
-
-            var sb = new StringBuilder(n * 261); // MAX_PATH + NULL = 261
-
-            NativeMethods.QuickLook.GetCurrentSelectionBuffer(sb);
-
-            return sb.Length == 0 ? new string[0] : sb.ToString().Split('|');
         }
 
         internal static BackgroundListener GetInstance()
