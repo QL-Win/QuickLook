@@ -24,9 +24,13 @@ namespace QuickLook.Plugin.LastResort
 
         public void DisplayInfo(string path)
         {
-            var icon = IconHelper.GetBitmapFromPath(path, IconHelper.IconSizeEnum.ExtraLargeIcon).ToBitmapSource();
+            var icon =
+                WindowsThumbnailProvider.GetThumbnail(path, 256, 256,
+                    ThumbnailOptions.ScaleUp);
 
-            image.Source = icon;
+            image.Source = icon.ToBitmapSource();
+
+            icon.Dispose();
 
             var name = Path.GetFileName(path);
             filename.Content = string.IsNullOrEmpty(name) ? path : name;

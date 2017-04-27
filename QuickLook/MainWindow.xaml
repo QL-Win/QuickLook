@@ -12,8 +12,8 @@
     Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
-    x:ClassModifier="internal" Focusable="False" 
-    ShowActivated="False" ShowInTaskbar="False" WindowStyle="None" 
+    x:ClassModifier="internal" Focusable="False"
+    ShowActivated="False" ShowInTaskbar="False" WindowStyle="None"
     ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
     <Window.Background>
         <SolidColorBrush Color="#DFFFFFFF" />

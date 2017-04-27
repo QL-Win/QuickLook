@@ -14,6 +14,10 @@ namespace QuickLook.Plugin.LastResort
 
         public static BitmapSource ToBitmapSource(this Bitmap source)
         {
+            // BitmapSource.Create throws an exception when the image is scanned backward.
+            // The Clone() will make it back scanning forward.
+            source = (Bitmap) source.Clone();
+
             var ip = source.GetHbitmap();
             BitmapSource bs = null;
             try

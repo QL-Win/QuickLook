@@ -1,16 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ImageViewer
 {
     public class Plugin : IViewer
     {
+        private Size _imageSize;
         private ImagePanel _ip;
-        private BitmapDecoder decoder;
 
-        public int Priority { get; }
+        public int Priority => 9999;
 
         public bool CanHandle(string path)
         {
@@ -37,10 +35,9 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Prepare(string path, ViewContentContainer container)
         {
-            decoder = BitmapDecoder.Create(new Uri(path), BitmapCreateOptions.None, BitmapCacheOption.None);
-            var frame = decoder.Frames[0];
+            _imageSize = ImageFileHelper.GetImageSize(path);
 
-            container.SetPreferedSizeFit(new Size {Width = frame.Width, Height = frame.Height}, 0.6);
+            container.SetPreferedSizeFit(_imageSize, 0.8);
         }
 
         public void View(string path, ViewContentContainer container)
@@ -48,7 +45,7 @@ namespace QuickLook.Plugin.ImageViewer
             _ip = new ImagePanel(path);
 
             container.SetContent(_ip);
-            container.Title = $"{Path.GetFileName(path)}";
+            container.Title = $"{Path.GetFileName(path)} ({_imageSize.Width} × {_imageSize.Height})";
         }
 
         public void Close()

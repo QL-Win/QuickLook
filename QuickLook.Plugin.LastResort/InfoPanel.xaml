@@ -10,7 +10,7 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" />
+        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="None" />
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*" />

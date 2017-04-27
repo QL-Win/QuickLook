@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.TextViewer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.ImageViewer", "QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj", "{FE5A5111-9607-4721-A7BE-422754002ED8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.ArchiveViewer", "QuickLook.Plugin.ArchiveViewer\QuickLook.Plugin.ArchiveViewer.csproj", "{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,14 @@ Global
 		{FE5A5111-9607-4721-A7BE-422754002ED8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE5A5111-9607-4721-A7BE-422754002ED8}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE5A5111-9607-4721-A7BE-422754002ED8}.Release|x86.Build.0 = Release|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Debug|x86.Build.0 = Debug|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

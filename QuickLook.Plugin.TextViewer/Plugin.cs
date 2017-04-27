@@ -15,7 +15,6 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            // ReSharper disable once InconsistentNaming
             const long MAX_SIZE = 20 * 1024 * 1024;
 
             // if there is a possible highlighting scheme (by file extension), treat it as a plain text file

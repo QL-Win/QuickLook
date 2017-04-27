@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,7 +21,22 @@ namespace QuickLook.Plugin.ImageViewer
         {
             InitializeComponent();
 
-            viewPanelImage.Source = new BitmapImage(new Uri(path));
+            var ori = ImageFileHelper.GetOrientationFromExif(path);
+
+            var bitmap = new BitmapImage();
+            using (var fs = File.OpenRead(path))
+            {
+                bitmap.BeginInit();
+                bitmap.StreamSource = fs;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.Rotation = ori == ImageFileHelper.ExifOrientation.Rotate90CW
+                    ? Rotation.Rotate90
+                    : ori == ImageFileHelper.ExifOrientation.Rotate270CW
+                        ? Rotation.Rotate270
+                        : Rotation.Rotate0;
+                bitmap.EndInit();
+            }
+            viewPanelImage.Source = bitmap;
 
             Loaded += (sender, e) => { ZoomToFit(); };
 
