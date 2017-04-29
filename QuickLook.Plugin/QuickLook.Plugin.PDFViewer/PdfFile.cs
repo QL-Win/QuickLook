@@ -23,9 +23,16 @@ namespace QuickLook.Plugin.PDFViewer
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
+
             LibMuPdf.NativeMethods.CloseDocument(_doc);
             LibMuPdf.NativeMethods.CloseStream(_stm);
             LibMuPdf.NativeMethods.FreeContext(_ctx);
+        }
+
+        ~PdfFile()
+        {
+            Dispose();
         }
 
         public bool IsLastPage(int pageId)

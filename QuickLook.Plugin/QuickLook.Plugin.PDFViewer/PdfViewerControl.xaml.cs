@@ -55,12 +55,19 @@ namespace QuickLook.Plugin.PDFViewer
 
         public void Dispose()
         {
-            _whellMonitor.Dispose();
+            GC.SuppressFinalize(this);
+
+            _whellMonitor?.Dispose();
             PdfHandleForThumbnails?.Dispose();
             PdfHandle?.Dispose();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        ~PdfViewerControl()
+        {
+            Dispose();
+        }
 
         public event EventHandler CurrentPageChanged;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using QuickLook.ExtensionMethods;
 using QuickLook.Plugin;
 using QuickLook.Plugin.InfoPanel;
 
@@ -17,9 +18,9 @@ namespace QuickLook
             LoadPlugins();
         }
 
-        internal IViewer DefaultPlugin { get; set; } = new PluginInterface();
+        internal Type DefaultPlugin { get; } = typeof(PluginInterface);
 
-        internal List<IViewer> LoadedPlugins { get; private set; } = new List<IViewer>();
+        internal List<Type> LoadedPlugins { get; private set; } = new List<Type>();
 
         internal static PluginManager GetInstance()
         {
@@ -32,9 +33,10 @@ namespace QuickLook
                 return null;
 
             var matched = GetInstance()
-                .LoadedPlugins.FirstOrDefault(plugin => plugin.CanHandle(path));
+                .LoadedPlugins.FirstOrDefault(plugin => plugin.CreateInstance<IViewer>().CanHandle(path))
+                ?.CreateInstance<IViewer>();
 
-            return matched ?? DefaultPlugin;
+            return matched ?? DefaultPlugin.CreateInstance<IViewer>();
         }
 
         private void LoadPlugins()
@@ -49,10 +51,10 @@ namespace QuickLook
                                 where !t.IsInterface && !t.IsAbstract
                                 where typeof(IViewer).IsAssignableFrom(t)
                                 select t).ToList()
-                            .ForEach(type => LoadedPlugins.Add((IViewer) Activator.CreateInstance(type)));
+                            .ForEach(type => LoadedPlugins.Add(type));
                     });
 
-            LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
+            LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.CreateInstance<IViewer>().Priority).ToList();
         }
     }
 }

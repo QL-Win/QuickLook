@@ -16,10 +16,9 @@ namespace QuickLook.Plugin.ArchiveViewer
             if (Directory.Exists(path))
                 return false;
 
-            SevenZipExtractor archive = null;
             try
             {
-                using (archive = new SevenZipExtractor(path))
+                using (var archive = new SevenZipExtractor(path))
                 {
                     // dummy access to the data. If it throws exception, return false
                     if (archive.ArchiveFileData == null)
@@ -42,10 +41,6 @@ namespace QuickLook.Plugin.ArchiveViewer
             {
                 return false;
             }
-            finally
-            {
-                archive?.Dispose();
-            }
 
             return true;
         }
@@ -63,9 +58,16 @@ namespace QuickLook.Plugin.ArchiveViewer
             container.Title = $"{Path.GetFileName(path)}";
         }
 
-        public void Close()
+        public void Dispose()
         {
-            _panel.Dispose();
+            GC.SuppressFinalize(this);
+
+            _panel?.Dispose();
+        }
+
+        ~Plugin()
+        {
+            Dispose();
         }
     }
 }

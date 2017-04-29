@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using QuickLook.NativeMethods;
 
-namespace QuickLook.Utilities
+namespace QuickLook
 {
-    internal class GlobalKeyboardHook
+    internal class GlobalKeyboardHook : IDisposable
     {
         private static GlobalKeyboardHook _instance;
 
@@ -18,12 +18,19 @@ namespace QuickLook.Utilities
             Hook();
         }
 
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            Unhook();
+        }
+
         internal event KeyEventHandler KeyDown;
         internal event KeyEventHandler KeyUp;
 
         ~GlobalKeyboardHook()
         {
-            Unhook();
+            Dispose();
         }
 
         internal static GlobalKeyboardHook GetInstance()

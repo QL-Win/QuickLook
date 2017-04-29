@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -45,10 +46,17 @@ namespace QuickLook.Plugin.PDFViewer
             };
         }
 
-        public void Close()
+        public void Dispose()
         {
-            _pdfControl.Dispose();
+            GC.SuppressFinalize(this);
+
+            _pdfControl?.Dispose();
             _pdfControl = null;
+        }
+
+        ~Plugin()
+        {
+            Dispose();
         }
     }
 }

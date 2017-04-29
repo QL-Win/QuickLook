@@ -15,7 +15,14 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
+
             IconManager.ClearCache();
+        }
+
+        ~ArchiveFileListView()
+        {
+            Dispose();
         }
 
         public void SetDataContext(object context)

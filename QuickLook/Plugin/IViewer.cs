@@ -6,6 +6,6 @@
         bool CanHandle(string path);
         void Prepare(string path, ViewContentContainer container);
         void View(string path, ViewContentContainer container);
-        void Close();
+        void Dispose();
     }
 }

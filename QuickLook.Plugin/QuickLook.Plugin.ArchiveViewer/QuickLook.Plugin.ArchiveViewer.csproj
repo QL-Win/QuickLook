@@ -36,6 +36,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="SevenZipSharp">
       <HintPath>References\SevenZipSharp.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

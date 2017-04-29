@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuickLook.ExtensionMethods;
 using QuickLook.Plugin;
 using QuickLook.Utilities;
 
@@ -33,16 +35,24 @@ namespace QuickLook
         private void BeginShowNewWindow(IViewer matchedPlugin, string path)
         {
             _viewWindow = new MainWindow();
-            _viewWindow.Closed += (sender2, e2) => { _viewWindow = null; };
+            _viewWindow.Closed += (sender2, e2) =>
+            {
+                _viewWindow.Dispose();
+                _viewWindow = null;
+                GC.Collect();
+            };
 
             try
             {
                 _viewWindow.BeginShow(matchedPlugin, path);
             }
-            catch (Exception) // if current plugin failed, switch to default one
+            catch (Exception e) // if current plugin failed, switch to default one
             {
-                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin.GetType())
-                    _viewWindow.BeginShow(PluginManager.GetInstance().DefaultPlugin, path);
+                Debug.WriteLine(e.ToString());
+                Debug.WriteLine(e.StackTrace);
+
+                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
+                    _viewWindow.BeginShow(PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>(), path);
             }
         }
 
@@ -51,9 +61,6 @@ namespace QuickLook
             if (_viewWindow != null)
             {
                 _viewWindow.Close();
-                _viewWindow = null;
-
-                GC.Collect();
 
                 return true;
             }

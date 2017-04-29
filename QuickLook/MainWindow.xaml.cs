@@ -16,7 +16,7 @@ namespace QuickLook
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    internal partial class MainWindow : Window, INotifyPropertyChanged
+    internal partial class MainWindow : Window, INotifyPropertyChanged, IDisposable
     {
         internal MainWindow()
         {
@@ -25,21 +25,12 @@ namespace QuickLook
             DataContext = this;
 
             ContentRendered += (sender, e) => AeroGlass.EnableBlur(this);
-            Closed += MainWindow_Closed;
 
             buttonCloseWindow.MouseLeftButtonUp += CloseCurrentWindow;
             titlebarTitleArea.MouseLeftButtonDown += (sender, e) => DragMove();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void MainWindow_Closed(object sender, EventArgs e)
-        {
-            viewContentContainer.ViewerPlugin.Close();
-            viewContentContainer.ViewerPlugin = null;
-
-            GC.Collect();
-        }
 
         internal new void Show()
         {
@@ -107,6 +98,18 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            viewContentContainer?.Dispose();
+        }
+
+        ~MainWindow()
+        {
+            Dispose();
         }
     }
 }

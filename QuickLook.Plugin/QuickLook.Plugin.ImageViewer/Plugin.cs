@@ -48,7 +48,7 @@ namespace QuickLook.Plugin.ImageViewer
             container.Title = $"{Path.GetFileName(path)} ({_imageSize.Width} × {_imageSize.Height})";
         }
 
-        public void Close()
+        public void Dispose()
         {
         }
     }

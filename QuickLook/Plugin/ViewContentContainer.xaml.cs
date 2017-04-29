@@ -10,7 +10,7 @@ namespace QuickLook.Plugin
     /// <summary>
     ///     Interaction logic for ViewContentContainer.xaml
     /// </summary>
-    public partial class ViewContentContainer : UserControl, INotifyPropertyChanged
+    public partial class ViewContentContainer : UserControl, INotifyPropertyChanged, IDisposable
     {
         private string _title = string.Empty;
 
@@ -34,6 +34,13 @@ namespace QuickLook.Plugin
         public Size PreferedSize { get; set; }
 
         public bool CanResize { get; set; } = true;
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            ViewerPlugin?.Dispose();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -70,6 +77,11 @@ namespace QuickLook.Plugin
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        ~ViewContentContainer()
+        {
+            Dispose();
         }
     }
 }

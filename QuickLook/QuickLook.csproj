@@ -51,6 +51,7 @@
   <ItemGroup>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -74,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
@@ -110,7 +112,7 @@
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utilities\AeroGlass.cs" />
-    <Compile Include="Utilities\GlobalKeyboardHook.cs" />
+    <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

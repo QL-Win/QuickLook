@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace QuickLook.Plugin.InfoPanel
 {
-    public class PluginInterface : IViewer
+    public class PluginInterface : IViewer, IDisposable
     {
         private InfoPanel _ip;
 
@@ -28,9 +29,14 @@ namespace QuickLook.Plugin.InfoPanel
             container.SetContent(_ip);
         }
 
-        public void Close()
+        public void Dispose()
         {
             _ip.Stop = true;
+        }
+
+        ~PluginInterface()
+        {
+            Dispose();
         }
     }
 }

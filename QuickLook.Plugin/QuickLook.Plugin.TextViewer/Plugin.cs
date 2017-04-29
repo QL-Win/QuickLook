@@ -53,7 +53,7 @@ namespace QuickLook.Plugin.TextViewer
             container.Title = $"{Path.GetFileName(path)}";
         }
 
-        public void Close()
+        public void Dispose()
         {
         }
     }

@@ -28,7 +28,14 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
+
             fileListView.Dispose();
+        }
+
+        ~ArchiveInfoPanel()
+        {
+            Dispose();
         }
 
         private void LoadArchive(string path)
