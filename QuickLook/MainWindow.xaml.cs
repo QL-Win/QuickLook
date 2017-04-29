@@ -30,6 +30,13 @@ namespace QuickLook
             titlebarTitleArea.MouseLeftButtonDown += (sender, e) => DragMove();
         }
 
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            viewContentContainer?.Dispose();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         internal new void Show()
@@ -98,13 +105,6 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-
-            viewContentContainer?.Dispose();
         }
 
         ~MainWindow()
