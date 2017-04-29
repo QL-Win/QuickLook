@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace QuickLook.Plugin.LastResort
+namespace QuickLook.Plugin.InfoPanel
 {
     public static class FileHelper
     {

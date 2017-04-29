@@ -25,9 +25,7 @@ namespace QuickLook
             if (string.IsNullOrEmpty(path))
                 return;
 
-            var matchedPlugin = PluginManager.FindMatch(path);
-            if (matchedPlugin == null)
-                return;
+            var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
 
             BeginShowNewWindow(matchedPlugin, path);
         }
@@ -37,7 +35,15 @@ namespace QuickLook
             _viewWindow = new MainWindow();
             _viewWindow.Closed += (sender2, e2) => { _viewWindow = null; };
 
-            _viewWindow.BeginShow(matchedPlugin, path);
+            try
+            {
+                _viewWindow.BeginShow(matchedPlugin, path);
+            }
+            catch (Exception) // if current plugin failed, switch to default one
+            {
+                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin.GetType())
+                    _viewWindow.BeginShow(PluginManager.GetInstance().DefaultPlugin, path);
+            }
         }
 
         private bool CloseCurrentWindow()

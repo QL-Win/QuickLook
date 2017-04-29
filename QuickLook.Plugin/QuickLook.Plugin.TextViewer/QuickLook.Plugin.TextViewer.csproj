@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A82AC69C-EDF5-4F0D-8CBD-8E5E3C06E64D}</ProjectGuid>
+    <ProjectGuid>{AE041682-E3A1-44F6-8BB4-916A98D89FBE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuickLook.Plugin.PDFViewer</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.PDFViewer</AssemblyName>
+    <RootNamespace>QuickLook.Plugin.TextViewer</RootNamespace>
+    <AssemblyName>QuickLook.Plugin.TextViewer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,72 +16,57 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\Plugins\QuickLook.Plugin.PDFViewer\</OutputPath>
+    <OutputPath>..\..\Build\Debug\Plugins\QuickLook.Plugin.TextViewer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\Plugins\QuickLook.Plugin.PDFViewer\</OutputPath>
+    <OutputPath>..\..\Build\Release\Plugins\QuickLook.Plugin.TextViewer\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PdfViewerControl.xaml.cs">
-      <DependentUpon>PdfViewerControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Plugin.cs" />
-    <Compile Include="DpiHelpers.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="LibMuPdf.cs" />
-    <Compile Include="MouseWheelMonitor.cs" />
-    <Compile Include="PageIdToImageConverter.cs" />
-    <Compile Include="PdfFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextViewerPanel.xaml.cs">
+      <DependentUpon>TextViewerPanel.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QuickLook\QuickLook.csproj">
+    <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
       <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
       <Name>QuickLook</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LibMuPdf.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Page Include="TextViewerPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ListBoxItemStyleNoFocusedBorder.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PdfViewerControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

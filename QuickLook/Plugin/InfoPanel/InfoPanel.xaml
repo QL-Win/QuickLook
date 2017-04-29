@@ -1,20 +1,20 @@
-﻿<UserControl x:Class="QuickLook.Plugin.LastResort.InfoPanel"
+﻿<UserControl x:Class="QuickLook.Plugin.InfoPanel.InfoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:QuickLook.Plugin.LastResort"
-             mc:Ignorable="d" Width="484.5" Height="172" UseLayoutRounding="True">
+             xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
+             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="None" />
+        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="None" Margin="0,-20,0,0" />
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*" />
-                <ColumnDefinition Width="80*" />
+                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />

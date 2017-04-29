@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace QuickLook.Plugin.LastResort
+namespace QuickLook.Plugin.InfoPanel
 {
     /// <summary>
     ///     Interaction logic for InfoPanel.xaml
@@ -36,7 +37,7 @@ namespace QuickLook.Plugin.LastResort
             filename.Content = string.IsNullOrEmpty(name) ? path : name;
 
             var last = File.GetLastWriteTime(path);
-            modDate.Content = $"{last.ToLongDateString()} {last.ToLongTimeString()}";
+            modDate.Content = last.ToString(CultureInfo.CurrentCulture);
 
             Stop = false;
 

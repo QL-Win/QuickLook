@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace QuickLook.Plugin.LastResort
+namespace QuickLook.Plugin.InfoPanel
 {
     public static class Extensions
     {

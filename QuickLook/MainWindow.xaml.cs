@@ -28,7 +28,7 @@ namespace QuickLook
             Closed += MainWindow_Closed;
 
             buttonCloseWindow.MouseLeftButtonUp += CloseCurrentWindow;
-            titlebarTitleArea.MouseDown += (sender, e) => DragMove();
+            titlebarTitleArea.MouseLeftButtonDown += (sender, e) => DragMove();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

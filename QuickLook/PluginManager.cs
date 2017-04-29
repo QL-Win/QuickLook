@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using QuickLook.Plugin;
+using QuickLook.Plugin.InfoPanel;
 
 namespace QuickLook
 {
@@ -16,6 +17,8 @@ namespace QuickLook
             LoadPlugins();
         }
 
+        internal IViewer DefaultPlugin { get; set; } = new PluginInterface();
+
         internal List<IViewer> LoadedPlugins { get; private set; } = new List<IViewer>();
 
         internal static PluginManager GetInstance()
@@ -23,13 +26,15 @@ namespace QuickLook
             return _instance ?? (_instance = new PluginManager());
         }
 
-        internal static IViewer FindMatch(string path)
+        internal IViewer FindMatch(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return null;
 
-            return GetInstance()
+            var matched = GetInstance()
                 .LoadedPlugins.FirstOrDefault(plugin => plugin.CanHandle(path));
+
+            return matched ?? DefaultPlugin;
         }
 
         private void LoadPlugins()

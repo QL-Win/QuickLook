@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace QuickLook.Plugin.LastResort
+namespace QuickLook.Plugin.InfoPanel
 {
-    public class Plugin : IViewer
+    public class PluginInterface : IViewer
     {
         private InfoPanel _ip;
 
