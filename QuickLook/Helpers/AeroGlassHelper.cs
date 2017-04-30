@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace QuickLook.Utilities
+namespace QuickLook.Helpers
 {
-    internal static class AeroGlass
+    internal static class AeroGlassHelper
     {
         internal static void EnableBlur(Window window)
         {

@@ -45,17 +45,19 @@ namespace QuickLook.Plugin.ArchiveViewer
             return true;
         }
 
-        public void Prepare(string path, ViewContentContainer container)
+        public void BoundViewSize(string path, ViewerObject context)
         {
-            container.PreferedSize = new Size {Width = 800, Height = 600};
+            context.PreferredSize = new Size {Width = 800, Height = 600};
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void View(string path, ViewerObject context)
         {
             _panel = new ArchiveInfoPanel(path);
 
-            container.SetContent(_panel);
-            container.Title = $"{Path.GetFileName(path)}";
+            context.ViewerContent = _panel;
+            context.Title = $"{Path.GetFileName(path)}";
+
+            context.IsBusy = false;
         }
 
         public void Dispose()

@@ -2,72 +2,84 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fa="http://schemas.fontawesome.io/icons/"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:local="clr-namespace:QuickLook"
+    xmlns:control="clr-namespace:QuickLook.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:plugin="clr-namespace:QuickLook.Plugin"
     mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow"
     UseLayoutRounding="True"
-    Topmost="True" d:DesignWidth="624" d:DesignHeight="700"
+    d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
     x:ClassModifier="internal" Focusable="False"
     ShowActivated="False" ShowInTaskbar="False" WindowStyle="None"
     ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
     <Window.Background>
-        <SolidColorBrush Color="#DFFFFFFF" />
+        <SolidColorBrush Color="#E5FAFAFA" />
     </Window.Background>
     <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
-            <DockPanel Opacity="1">
-                <DockPanel x:Name="titlebar" Height="28" Dock="Top">
-                    <DockPanel.Background>
-                        <SolidColorBrush Color="#00B8B8B8" />
-                    </DockPanel.Background>
-                    <!--<DockPanel.Style>
+            <DockPanel x:Name="windowPanel" Opacity="1">
+                <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
+                            <DataTrigger Binding="{Binding ViewerObject.IsBusy, ElementName=mainWindow}" Value="False">
+                                <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity"
-                                                             To="1" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             BeginTime="0:0:0.1"
+                                                             Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Duration="0:0:0.6" Storyboard.TargetProperty="Opacity"
-                                                             To="0" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DockPanel.Style>-->
-                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="WindowClose" Height="15"
-                                     Margin="10,0"
+                </DockPanel.Style>
+                <DockPanel x:Name="titlebar" Height="28" Dock="Top">
+                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
+                                     Height="15" Margin="10,0" Foreground="Gray"
                                      Cursor="Hand" />
-                    <Label x:Name="titlebarTitleArea" Content="{Binding Title, ElementName=viewContentContainer}"
+                    <Label x:Name="titlebarTitleArea" Content="{Binding ViewerObject.Title, ElementName=mainWindow}"
                            FontSize="14" HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center" />
                 </DockPanel>
                 <Grid>
-                    <plugin:ViewContentContainer x:Name="viewContentContainer" />
+                    <local:ViewContentContainer x:Name="viewContentContainer" />
                 </Grid>
             </DockPanel>
-            <Grid x:Name="loadingIconLayer" Opacity="0.3">
-                <Grid.Background>
-                    <SolidColorBrush Color="#FFFFFFFF" />
-                </Grid.Background>
-                <Grid x:Name="loadingIcon" Height="50" Width="50" HorizontalAlignment="Center"
-                      VerticalAlignment="Center">
-                    <fa:ImageAwesome Icon="CircleOutlineNotch" Spin="True" SpinDuration="1" />
-                </Grid>
+            <Grid x:Name="busyIndicatorLayer" Visibility="Hidden">
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ViewerObject.IsBusy, ElementName=mainWindow}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ParallelTimeline>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 From="1"
+                                                                 To="0"
+                                                                 BeginTime="0:0:0.1"
+                                                                 Duration="0:0:0.2" />
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.4"
+                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </ParallelTimeline>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <control:BusyDecorator IsBusyIndicatorShowing="True" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" />
             </Grid>
         </Grid>
     </Border>

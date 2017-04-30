@@ -1,54 +1,74 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-using QuickLook.Annotations;
-using QuickLook.ExtensionMethods;
+using QuickLook.Helpers;
 using QuickLook.Plugin;
-using QuickLook.Utilities;
 
 namespace QuickLook
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    internal partial class MainWindow : Window, INotifyPropertyChanged, IDisposable
+    internal partial class MainWindow : Window, IDisposable
     {
         internal MainWindow()
         {
+            // this object should be initialized before loading UI components, because many of which are binding to it.
+            ViewerObject = new ViewerObject();
+
             InitializeComponent();
 
-            DataContext = this;
+            // do not set TopMost property if we are now debugging. it makes debugging painful...
+            if (!Debugger.IsAttached)
+                Topmost = true;
 
-            ContentRendered += (sender, e) => AeroGlass.EnableBlur(this);
+            // restore changes by Designer
+            windowPanel.Opacity = 0d;
+            busyIndicatorLayer.Visibility = Visibility.Visible;
 
-            buttonCloseWindow.MouseLeftButtonUp += CloseCurrentWindow;
-            titlebarTitleArea.MouseLeftButtonDown += (sender, e) => DragMove();
+            Loaded += (sender, e) => AeroGlassHelper.EnableBlur(this);
+
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => Close();
+            titlebarTitleArea.MouseLeftButtonDown += DragMoveCurrentWindow;
         }
+
+        public ViewerObject ViewerObject { get; }
 
         public void Dispose()
         {
             GC.SuppressFinalize(this);
 
-            viewContentContainer?.Dispose();
+            ViewerObject?.Dispose();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal new void Show()
+        private void DragMoveCurrentWindow(object sender, MouseButtonEventArgs e)
         {
-            loadingIconLayer.Opacity = 1;
+            if (WindowState == WindowState.Maximized)
+            {
+                var dpi = DpiHelper.GetCurrentDpi();
 
-            Height = viewContentContainer.PreferedSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
+                // MouseDevice.GetPosition() returns device-dependent coordinate, however WPF is not like that
+                var point = PointToScreen(e.MouseDevice.GetPosition(this));
+
+                Left = point.X / (dpi.HorizontalDpi / DpiHelper.DEFAULT_DPI) - RestoreBounds.Width * 0.5;
+                Top = point.Y / (dpi.VerticalDpi / DpiHelper.DEFAULT_DPI);
+
+                WindowState = WindowState.Normal;
+            }
+
+            DragMove();
+        }
+
+        private new void Show()
+        {
+            Height = ViewerObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
                      windowBorder.BorderThickness.Bottom;
-            Width = viewContentContainer.PreferedSize.Width + windowBorder.BorderThickness.Left +
+            Width = ViewerObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
                     windowBorder.BorderThickness.Right;
 
-            ResizeMode = viewContentContainer.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
+            ResizeMode = ViewerObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
 
             base.Show();
 
@@ -57,54 +77,15 @@ namespace QuickLook
 
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
-            viewContentContainer.ViewerPlugin = matchedPlugin;
+            ViewerObject.CurrentContentContainer = viewContentContainer;
+            ViewerObject.ViewerPlugin = matchedPlugin;
 
             // get window size before showing it
-            matchedPlugin.Prepare(path, viewContentContainer);
+            matchedPlugin.BoundViewSize(path, ViewerObject);
 
             Show();
 
-            matchedPlugin.View(path, viewContentContainer);
-
-            ShowFinishLoadingAnimation();
-        }
-
-        private void ShowFinishLoadingAnimation()
-        {
-            var speed = 100;
-
-            var sb = new Storyboard();
-            var ptl = new ParallelTimeline();
-
-            var aOpacityR = new DoubleAnimation
-            {
-                From = 1,
-                To = 0,
-                Duration = TimeSpan.FromMilliseconds(speed)
-            };
-
-            Storyboard.SetTarget(aOpacityR, loadingIconLayer);
-            Storyboard.SetTargetProperty(aOpacityR, new PropertyPath(OpacityProperty));
-
-            ptl.Children.Add(aOpacityR);
-
-            sb.Children.Add(ptl);
-
-            sb.Begin();
-
-            Dispatcher.DelayWithPriority(speed, o => loadingIconLayer.Visibility = Visibility.Hidden, null,
-                DispatcherPriority.Render);
-        }
-
-        private void CloseCurrentWindow(object sender, MouseButtonEventArgs e)
-        {
-            Close();
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            matchedPlugin.View(path, ViewerObject);
         }
 
         ~MainWindow()

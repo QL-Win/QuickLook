@@ -3,7 +3,7 @@ using System.Text;
 using System.Windows.Interop;
 using QuickLook.NativeMethods;
 
-namespace QuickLook.Utilities
+namespace QuickLook.Helpers
 {
     internal static class WindowHelper
     {

@@ -33,19 +33,21 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        public void Prepare(string path, ViewContentContainer container)
+        public void BoundViewSize(string path, ViewerObject context)
         {
             _imageSize = ImageFileHelper.GetImageSize(path);
 
-            container.SetPreferedSizeFit(_imageSize, 0.8);
+            context.SetPreferredSizeFit(_imageSize, 0.8);
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void View(string path, ViewerObject context)
         {
             _ip = new ImagePanel(path);
 
-            container.SetContent(_ip);
-            container.Title = $"{Path.GetFileName(path)} ({_imageSize.Width} × {_imageSize.Height})";
+            context.ViewerContent = _ip;
+            context.Title = $"{Path.GetFileName(path)} ({_imageSize.Width} × {_imageSize.Height})";
+
+            context.IsBusy = false;
         }
 
         public void Dispose()

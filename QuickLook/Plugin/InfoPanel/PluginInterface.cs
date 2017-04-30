@@ -14,19 +14,21 @@ namespace QuickLook.Plugin.InfoPanel
             return true;
         }
 
-        public void Prepare(string path, ViewContentContainer container)
+        public void BoundViewSize(string path, ViewerObject context)
         {
             _ip = new InfoPanel();
 
-            container.CanResize = false;
-            container.PreferedSize = new Size {Width = _ip.Width, Height = _ip.Height};
+            context.CanResize = false;
+            context.PreferredSize = new Size {Width = _ip.Width, Height = _ip.Height};
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void View(string path, ViewerObject context)
         {
             _ip.DisplayInfo(path);
 
-            container.SetContent(_ip);
+            context.ViewerContent = _ip;
+
+            context.IsBusy = false;
         }
 
         public void Dispose()

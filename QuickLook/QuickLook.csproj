@@ -75,6 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\BackgroundVisualHost.cs" />
+    <Compile Include="Controls\BusyDecorator.cs" />
+    <Compile Include="Controls\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />
@@ -85,10 +88,12 @@
     <Compile Include="Plugin\InfoPanel\PluginInterface.cs" />
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
     <Compile Include="Plugin\IViewer.cs" />
-    <Compile Include="Plugin\ViewContentContainer.xaml.cs">
+    <Compile Include="Helpers\DpiHelpers.cs" />
+    <Compile Include="ViewContentContainer.xaml.cs">
       <DependentUpon>ViewContentContainer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\WindowHelper.cs" />
+    <Compile Include="Plugin\ViewerObject.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewWindowManager.cs" />
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -111,15 +116,19 @@
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Utilities\AeroGlass.cs" />
+    <Compile Include="Helpers\AeroGlassHelper.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Plugin\ViewContentContainer.xaml">
+    <Page Include="ViewContentContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\BusyDecorator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

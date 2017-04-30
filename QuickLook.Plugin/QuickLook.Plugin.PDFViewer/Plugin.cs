@@ -7,6 +7,7 @@ namespace QuickLook.Plugin.PDFViewer
     public class Plugin : IViewer
     {
         private PdfViewerControl _pdfControl;
+
         public int Priority => int.MaxValue;
 
         public bool CanHandle(string path)
@@ -23,26 +24,28 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        public void Prepare(string path, ViewContentContainer container)
+        public void BoundViewSize(string path, ViewerObject context)
         {
             _pdfControl = new PdfViewerControl();
 
             var desiredSize = _pdfControl.GetDesiredControlSizeByFirstPage(path);
 
-            container.SetPreferedSizeFit(desiredSize, 0.8);
+            context.SetPreferredSizeFit(desiredSize, 0.8);
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void View(string path, ViewerObject context)
         {
-            container.SetContent(_pdfControl);
+            context.ViewerContent = _pdfControl;
 
             _pdfControl.Loaded += (sender, e) =>
             {
                 _pdfControl.LoadPdf(path);
 
-                container.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
-                _pdfControl.CurrentPageChanged += (sender2, e2) => container.Title =
+                context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
+                _pdfControl.CurrentPageChanged += (sender2, e2) => context.Title =
                     $"{Path.GetFileName(path)} ({_pdfControl.CurrectPage + 1} / {_pdfControl.TotalPages})";
+
+                context.IsBusy = false;
             };
         }
 

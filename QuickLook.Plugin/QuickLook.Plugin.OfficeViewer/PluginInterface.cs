@@ -31,12 +31,12 @@ namespace QuickLook.Plugin.OfficeViewer
             return false;
         }
 
-        public void Prepare(string path, ViewContentContainer container)
+        public void BoundViewSize(string path, ViewerObject context)
         {
-            container.SetPreferedSizeFit(new Size {Width = 800, Height = 600}, 0.8);
+            context.SetPreferredSizeFit(new Size {Width = 800, Height = 600}, 0.8);
         }
 
-        public void View(string path, ViewContentContainer container)
+        public void View(string path, ViewerObject context)
         {
             using (var officeApp = new OfficeInteropWrapper(path))
             {
@@ -59,12 +59,14 @@ namespace QuickLook.Plugin.OfficeViewer
                     throw ex;
                 }
 
-                container.Title = $"{Path.GetFileName(path)} (1 / {_pdfViewer.TotalPages})";
+                context.Title = $"{Path.GetFileName(path)} (1 / {_pdfViewer.TotalPages})";
             };
-            _pdfViewer.CurrentPageChanged += (sender, e) => container.Title =
+            _pdfViewer.CurrentPageChanged += (sender, e) => context.Title =
                 $"{Path.GetFileName(path)} ({_pdfViewer.CurrectPage + 1} / {_pdfViewer.TotalPages})";
 
-            container.SetContent(_pdfViewer);
+            context.ViewerContent = _pdfViewer;
+
+            context.IsBusy = false;
         }
 
         public void Dispose()

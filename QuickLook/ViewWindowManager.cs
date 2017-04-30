@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuickLook.ExtensionMethods;
+using QuickLook.Helpers;
 using QuickLook.Plugin;
-using QuickLook.Utilities;
 
 namespace QuickLook
 {
