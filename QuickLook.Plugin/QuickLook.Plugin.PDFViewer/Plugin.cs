@@ -43,7 +43,7 @@ namespace QuickLook.Plugin.PDFViewer
 
                 context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
                 _pdfControl.CurrentPageChanged += (sender2, e2) => context.Title =
-                    $"{Path.GetFileName(path)} ({_pdfControl.CurrectPage + 1} / {_pdfControl.TotalPages})";
+                    $"{Path.GetFileName(path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
 
                 context.IsBusy = false;
             };

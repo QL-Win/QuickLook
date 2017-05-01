@@ -41,7 +41,7 @@ namespace QuickLook.Plugin.PDFViewer
 
         public int TotalPages => PdfHandle.TotalPages;
 
-        public int CurrectPage
+        public int CurrentPage
         {
             get => listThumbnails.SelectedIndex;
             set
@@ -97,18 +97,18 @@ namespace QuickLook.Plugin.PDFViewer
 
         private void NextPage()
         {
-            if (CurrectPage < PdfHandle.TotalPages - 1)
+            if (CurrentPage < PdfHandle.TotalPages - 1)
             {
-                CurrectPage++;
+                CurrentPage++;
                 pageViewPanel.ScrollToTop();
             }
         }
 
         private void PrevPage()
         {
-            if (CurrectPage > 0)
+            if (CurrentPage > 0)
             {
-                CurrectPage--;
+                CurrentPage--;
                 pageViewPanel.ScrollToBottom();
             }
         }
@@ -143,7 +143,7 @@ namespace QuickLook.Plugin.PDFViewer
             if (!PdfLoaded)
                 return;
 
-            var image = PdfHandle.GetPage(CurrectPage, ZoomFactor).ToBitmapSource();
+            var image = PdfHandle.GetPage(CurrentPage, ZoomFactor).ToBitmapSource();
 
             pageViewPanelImage.Source = image;
             pageViewPanelImage.Width = pageViewPanelImage.Source.Width;
@@ -162,8 +162,10 @@ namespace QuickLook.Plugin.PDFViewer
             if (!PdfLoaded)
                 return;
 
-            if (CurrectPage == -1)
+            if (CurrentPage == -1)
                 return;
+
+            CurrentPageChanged?.Invoke(this, new EventArgs());
 
             ReRenderCurrentPage();
         }
@@ -173,7 +175,7 @@ namespace QuickLook.Plugin.PDFViewer
             if (!PdfLoaded)
                 return;
 
-            var size = PdfHandle.GetPageSize(CurrectPage, 1d);
+            var size = PdfHandle.GetPageSize(CurrentPage, 1d);
 
             var factor = Math.Min(pageViewPanel.ActualWidth / size.Width, pageViewPanel.ActualHeight / size.Height);
 
@@ -208,7 +210,7 @@ namespace QuickLook.Plugin.PDFViewer
             Enumerable.Range(0, PdfHandle.TotalPages).ForEach(PageIds.Add);
             OnPropertyChanged(nameof(PageIds));
 
-            CurrectPage = 0;
+            CurrentPage = 0;
 
             // calculate zoom factor for first page
             ZoomToFit();

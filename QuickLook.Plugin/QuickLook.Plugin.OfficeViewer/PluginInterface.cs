@@ -62,7 +62,7 @@ namespace QuickLook.Plugin.OfficeViewer
                 context.Title = $"{Path.GetFileName(path)} (1 / {_pdfViewer.TotalPages})";
             };
             _pdfViewer.CurrentPageChanged += (sender, e) => context.Title =
-                $"{Path.GetFileName(path)} ({_pdfViewer.CurrectPage + 1} / {_pdfViewer.TotalPages})";
+                $"{Path.GetFileName(path)} ({_pdfViewer.CurrentPage + 1} / {_pdfViewer.TotalPages})";
 
             context.ViewerContent = _pdfViewer;
 
