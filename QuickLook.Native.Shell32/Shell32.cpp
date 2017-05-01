@@ -140,30 +140,21 @@ void Shell32::SaveSelectedFromDesktop()
 		return;
 
 	CComQIPtr<IServiceProvider> psp(pWebBrowser2);
-	CComPtr<IShellBrowser> psb;
-	CComPtr<IShellView> psv;
-	CComPtr<IFolderView> pfv;
-	CComPtr<IPersistFolder2> ppf2;
 
 	if (!psp) return;
 
+	CComPtr<IShellBrowser> psb;
 	if (SUCCEEDED(psp->QueryService(SID_STopLevelBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
 	{
+		CComPtr<IShellView> psv;
 		if (SUCCEEDED(psb->QueryActiveShellView(&psv)))
 		{
+			CComPtr<IFolderView> pfv;
 			if (SUCCEEDED(psv->QueryInterface(IID_IFolderView, reinterpret_cast<void**>(&pfv))))
 			{
-				if (SUCCEEDED(pfv->GetFolder(IID_IPersistFolder2, reinterpret_cast<void**>(&ppf2))))
-				{
-					LPITEMIDLIST pidlFolder;
-					if (SUCCEEDED(ppf2->GetCurFolder(&pidlFolder)))
-					{
-						CComPtr<IDataObject> dao;
-						if (SUCCEEDED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
-							vectorFromDataObject(dao);
-					}
-					CoTaskMemFree(pidlFolder);
-				}
+				CComPtr<IDataObject> dao;
+				if (SUCCEEDED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
+					vectorFromDataObject(dao);
 			}
 		}
 	}
