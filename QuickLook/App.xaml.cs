@@ -15,7 +15,8 @@ namespace QuickLook
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException +=
-                (sender, args) => MessageBox.Show(((Exception) args.ExceptionObject).Message);
+                (sender, args) => MessageBox.Show(((Exception) args.ExceptionObject).Message + Environment.NewLine +
+                                                  ((Exception) args.ExceptionObject).StackTrace);
 
             base.OnStartup(e);
         }

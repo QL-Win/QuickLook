@@ -8,7 +8,7 @@ using System.Windows.Media;
 namespace QuickLook.Controls
 {
     [StyleTypedProperty(Property = "BusyStyle", StyleTargetType = typeof(Control))]
-    public class BusyDecorator : Decorator
+    public class BusyDecorator : Decorator, IDisposable
     {
         private readonly BackgroundVisualHost _busyHost = new BackgroundVisualHost();
 
@@ -40,6 +40,13 @@ namespace QuickLook.Controls
 
                 yield return _busyHost;
             }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            _busyHost.ThreadedHelper.Exit();
         }
 
         protected override Visual GetVisualChild(int index)
@@ -95,6 +102,11 @@ namespace QuickLook.Controls
 
             return new Size(Math.Max(ret.Width, _busyHost.RenderSize.Width),
                 Math.Max(ret.Height, _busyHost.RenderSize.Height));
+        }
+
+        ~BusyDecorator()
+        {
+            Dispose();
         }
 
         #region IsBusyIndicatorShowing Property

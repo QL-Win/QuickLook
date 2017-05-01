@@ -32,8 +32,8 @@ namespace QuickLook.Controls
 
         private void CreateContentHelper()
         {
-            _threadedHelper = new ThreadedVisualHelper(CreateContent, SafeInvalidateMeasure);
-            _hostVisual = _threadedHelper.HostVisual;
+            ThreadedHelper = new ThreadedVisualHelper(CreateContent, SafeInvalidateMeasure);
+            _hostVisual = ThreadedHelper.HostVisual;
         }
 
         private void SafeInvalidateMeasure()
@@ -43,23 +43,23 @@ namespace QuickLook.Controls
 
         private void HideContentHelper()
         {
-            if (_threadedHelper != null)
+            if (ThreadedHelper != null)
             {
-                _threadedHelper.Exit();
-                _threadedHelper = null;
+                ThreadedHelper.Exit();
+                ThreadedHelper = null;
                 InvalidateMeasure();
             }
         }
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            if (_threadedHelper != null)
-                return _threadedHelper.DesiredSize;
+            if (ThreadedHelper != null)
+                return ThreadedHelper.DesiredSize;
 
             return base.MeasureOverride(availableSize);
         }
 
-        private class ThreadedVisualHelper
+        public class ThreadedVisualHelper
         {
             private readonly CreateContentFunction _createContent;
             private readonly Action _invalidateMeasure;
@@ -109,7 +109,7 @@ namespace QuickLook.Controls
 
         #region Private Fields
 
-        private ThreadedVisualHelper _threadedHelper;
+        public ThreadedVisualHelper ThreadedHelper;
         private HostVisual _hostVisual;
 
         #endregion

@@ -44,8 +44,8 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WpfAnimatedGif, Version=1.4.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\WpfAnimatedGif.1.4.14\lib\net\WpfAnimatedGif.dll</HintPath>
+    <Reference Include="XamlAnimatedGif, Version=1.1.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\XamlAnimatedGif.1.1.9\lib\net45\XamlAnimatedGif.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using XamlAnimatedGif;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -21,6 +22,18 @@ namespace QuickLook.Plugin.ImageViewer
         {
             InitializeComponent();
 
+            LoadImage(path);
+
+            Loaded += (sender, e) => { ZoomToFit(); };
+
+            viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
+
+            viewPanel.PreviewMouseLeftButtonDown += ViewPanel_PreviewMouseLeftButtonDown;
+            viewPanel.PreviewMouseMove += ViewPanel_PreviewMouseMove;
+        }
+
+        private void LoadImage(string path)
+        {
             var ori = ImageFileHelper.GetOrientationFromExif(path);
 
             var bitmap = new BitmapImage();
@@ -36,14 +49,11 @@ namespace QuickLook.Plugin.ImageViewer
                         : Rotation.Rotate0;
                 bitmap.EndInit();
             }
+
             viewPanelImage.Source = bitmap;
 
-            Loaded += (sender, e) => { ZoomToFit(); };
-
-            viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
-
-            viewPanel.PreviewMouseLeftButtonDown += ViewPanel_PreviewMouseLeftButtonDown;
-            viewPanel.PreviewMouseMove += ViewPanel_PreviewMouseMove;
+            if (Path.GetExtension(path).ToLower() == ".gif")
+                AnimationBehavior.SetSourceUri(viewPanelImage, new Uri(path));
         }
 
         private void ViewPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

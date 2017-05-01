@@ -78,7 +78,7 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <control:BusyDecorator IsBusyIndicatorShowing="True" VerticalAlignment="Center"
+                <control:BusyDecorator x:Name="busyDecorator" IsBusyIndicatorShowing="True" VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
             </Grid>
         </Grid>

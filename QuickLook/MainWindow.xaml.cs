@@ -41,6 +41,9 @@ namespace QuickLook
             GC.SuppressFinalize(this);
 
             ContextObject?.Dispose();
+
+            // stop the background thread
+            busyDecorator?.Dispose();
         }
 
         private void DragMoveCurrentWindow(object sender, MouseButtonEventArgs e)
