@@ -55,10 +55,10 @@ namespace QuickLook.Plugin.ArchiveViewer
                 sizeU += e.Value.Size;
             });
 
-            var s = _solid ? "solid" : "not solid";
+            var s = _solid ? " solid," : "";
 
             archiveCount.Content =
-                $"{_type} archive, {s}, {folder - 1} folders and {files} files"; // do not count root node
+                $"{_type} archive,{s} {folder - 1} folders and {files} files"; // do not count root node
             archiveSizeC.Content = $"Compressed size {_totalZippedSize.ToPrettySize(2)}";
             archiveSizeU.Content = $"Uncompressed size {sizeU.ToPrettySize(2)}";
         }
