@@ -14,7 +14,7 @@ namespace QuickLook.Plugin.InfoPanel
             return true;
         }
 
-        public void BoundViewSize(string path, ViewerObject context)
+        public void BoundViewSize(string path, ContextObject context)
         {
             _ip = new InfoPanel();
 
@@ -22,7 +22,7 @@ namespace QuickLook.Plugin.InfoPanel
             context.PreferredSize = new Size {Width = _ip.Width, Height = _ip.Height};
         }
 
-        public void View(string path, ViewerObject context)
+        public void View(string path, ContextObject context)
         {
             _ip.DisplayInfo(path);
 

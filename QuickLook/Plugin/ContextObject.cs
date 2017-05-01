@@ -9,7 +9,7 @@ namespace QuickLook.Plugin
     /// <summary>
     ///     A runtime object which allows interaction between this plugin and QuickLook.
     /// </summary>
-    public class ViewerObject : INotifyPropertyChanged, IDisposable
+    public class ContextObject : INotifyPropertyChanged, IDisposable
     {
         private bool _isBusy = true;
 
@@ -111,7 +111,7 @@ namespace QuickLook.Plugin
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        ~ViewerObject()
+        ~ContextObject()
         {
             Dispose();
         }

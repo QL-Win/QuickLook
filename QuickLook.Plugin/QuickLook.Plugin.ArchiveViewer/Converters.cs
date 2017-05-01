@@ -9,6 +9,9 @@ namespace QuickLook.Plugin.ArchiveViewer
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values[0] == DependencyProperty.UnsetValue)
+                values[0] = 1;
+
             var level = (int) values[0];
             var indent = (double) values[1];
             return indent * level;

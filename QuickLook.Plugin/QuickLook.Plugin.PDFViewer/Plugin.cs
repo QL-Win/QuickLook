@@ -24,7 +24,7 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        public void BoundViewSize(string path, ViewerObject context)
+        public void BoundViewSize(string path, ContextObject context)
         {
             _pdfControl = new PdfViewerControl();
 
@@ -33,7 +33,7 @@ namespace QuickLook.Plugin.PDFViewer
             context.SetPreferredSizeFit(desiredSize, 0.8);
         }
 
-        public void View(string path, ViewerObject context)
+        public void View(string path, ContextObject context)
         {
             context.ViewerContent = _pdfControl;
 

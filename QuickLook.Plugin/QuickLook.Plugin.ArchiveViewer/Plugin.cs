@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Windows;
-using SevenZip;
+using SharpCompress.Archives;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
@@ -16,41 +16,26 @@ namespace QuickLook.Plugin.ArchiveViewer
             if (Directory.Exists(path))
                 return false;
 
-            try
+            using (var stream = File.OpenRead(path))
             {
-                using (var archive = new SevenZipExtractor(path))
+                try
                 {
-                    // dummy access to the data. If it throws exception, return false
-                    if (archive.ArchiveFileData == null)
-                        return false;
-
-                    // ignore some formats
-                    switch (archive.Format)
-                    {
-                        case InArchiveFormat.Chm:
-                        case InArchiveFormat.Flv:
-                        case InArchiveFormat.Elf:
-                        case InArchiveFormat.Msi:
-                        case InArchiveFormat.PE:
-                        case InArchiveFormat.Swf:
-                            return false;
-                    }
+                    ArchiveFactory.Open(stream);
+                }
+                catch (Exception)
+                {
+                    return false;
                 }
             }
-            catch (Exception)
-            {
-                return false;
-            }
-
             return true;
         }
 
-        public void BoundViewSize(string path, ViewerObject context)
+        public void BoundViewSize(string path, ContextObject context)
         {
             context.PreferredSize = new Size {Width = 800, Height = 600};
         }
 
-        public void View(string path, ViewerObject context)
+        public void View(string path, ContextObject context)
         {
             _panel = new ArchiveInfoPanel(path);
 

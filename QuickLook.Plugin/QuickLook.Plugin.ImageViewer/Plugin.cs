@@ -33,14 +33,14 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        public void BoundViewSize(string path, ViewerObject context)
+        public void BoundViewSize(string path, ContextObject context)
         {
             _imageSize = ImageFileHelper.GetImageSize(path);
 
             context.SetPreferredSizeFit(_imageSize, 0.8);
         }
 
-        public void View(string path, ViewerObject context)
+        public void View(string path, ContextObject context)
         {
             _ip = new ImagePanel(path);
 

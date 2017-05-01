@@ -52,7 +52,10 @@ namespace QuickLook
                 Debug.WriteLine(e.StackTrace);
 
                 if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
+                {
+                    matchedPlugin.Dispose();
                     _viewWindow.BeginShow(PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>(), path);
+                }
             }
         }
 

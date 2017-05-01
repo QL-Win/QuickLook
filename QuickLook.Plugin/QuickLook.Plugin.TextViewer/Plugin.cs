@@ -40,12 +40,12 @@ namespace QuickLook.Plugin.TextViewer
             }
         }
 
-        public void BoundViewSize(string path, ViewerObject context)
+        public void BoundViewSize(string path, ContextObject context)
         {
             context.PreferredSize = new Size {Width = 800, Height = 600};
         }
 
-        public void View(string path, ViewerObject context)
+        public void View(string path, ContextObject context)
         {
             _tvp = new TextViewerPanel(path);
 

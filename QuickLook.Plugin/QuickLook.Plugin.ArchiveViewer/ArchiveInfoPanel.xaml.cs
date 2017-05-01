@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
-using SevenZip;
+using SharpCompress.Archives;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
@@ -65,23 +65,25 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         private void LoadItemsFromArchive(string path)
         {
-            using (var reader = new SevenZipExtractor(path))
+            using (var stream = File.OpenRead(path))
             {
-                _totalZippedSize = (ulong) reader.PackedSize;
-                _solid = reader.IsSolid;
-                _type = reader.Format.ToString();
+                var archive = ArchiveFactory.Open(stream);
+
+                _totalZippedSize = (ulong) archive.TotalSize;
+                _solid = archive.IsSolid;
+                _type = archive.Type.ToString();
 
                 var root = new ArchiveFileEntry(Path.GetFileName(path), true);
                 _fileEntries.Add("", root);
 
-                foreach (var entry in reader.ArchiveFileData)
+                foreach (var entry in archive.Entries)
                     ProcessByLevel(entry);
             }
         }
 
-        private void ProcessByLevel(ArchiveFileInfo entry)
+        private void ProcessByLevel(IArchiveEntry entry)
         {
-            var pf = GetPathFragments(entry.FileName);
+            var pf = GetPathFragments(entry.Key);
 
             // process folders. When entry is a directory, all fragments are folders.
             pf.Take(entry.IsDirectory ? pf.Length : pf.Length - 1)
@@ -107,11 +109,11 @@ namespace QuickLook.Plugin.ArchiveViewer
                 ArchiveFileEntry parent;
                 _fileEntries.TryGetValue(GetDirectoryName(file), out parent);
 
-                _fileEntries.Add(file, new ArchiveFileEntry(Path.GetFileName(entry.FileName), false, parent)
+                _fileEntries.Add(file, new ArchiveFileEntry(Path.GetFileName(entry.Key), false, parent)
                 {
-                    Encrypted = entry.Encrypted,
-                    Size = entry.Size,
-                    ModifiedDate = entry.LastWriteTime
+                    Encrypted = entry.IsEncrypted,
+                    Size = (ulong) entry.Size,
+                    ModifiedDate = entry.LastModifiedTime ?? new DateTime()
                 });
             }
         }
@@ -125,7 +127,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         private string[] GetPathFragments(string path)
         {
-            var frags = path.Split('\\');
+            var frags = path.Split('\\', '/').Where(f => !string.IsNullOrEmpty(f)).ToArray();
 
             return frags.Select((s, i) => frags.Take(i + 1).Aggregate((a, b) => a + "\\" + b)).ToArray();
         }

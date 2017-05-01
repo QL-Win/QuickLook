@@ -23,7 +23,7 @@
                 <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ViewerObject.IsBusy, ElementName=mainWindow}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -43,7 +43,7 @@
                     <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
                                      Height="15" Margin="10,0" Foreground="Gray"
                                      Cursor="Hand" />
-                    <Label x:Name="titlebarTitleArea" Content="{Binding ViewerObject.Title, ElementName=mainWindow}"
+                    <Label x:Name="titlebarTitleArea" Content="{Binding ContextObject.Title, ElementName=mainWindow}"
                            FontSize="14" HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center" />
                 </DockPanel>
@@ -55,7 +55,7 @@
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ViewerObject.IsBusy, ElementName=mainWindow}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>

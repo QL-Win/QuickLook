@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 
@@ -10,6 +11,14 @@ namespace QuickLook
     public partial class App : Application
     {
         public static string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            AppDomain.CurrentDomain.UnhandledException +=
+                (sender, args) => MessageBox.Show(((Exception) args.ExceptionObject).Message);
+
+            base.OnStartup(e);
+        }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {

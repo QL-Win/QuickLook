@@ -16,7 +16,7 @@ namespace QuickLook
         internal MainWindow()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
-            ViewerObject = new ViewerObject();
+            ContextObject = new ContextObject();
 
             InitializeComponent();
 
@@ -34,13 +34,13 @@ namespace QuickLook
             titlebarTitleArea.MouseLeftButtonDown += DragMoveCurrentWindow;
         }
 
-        public ViewerObject ViewerObject { get; }
+        public ContextObject ContextObject { get; }
 
         public void Dispose()
         {
             GC.SuppressFinalize(this);
 
-            ViewerObject?.Dispose();
+            ContextObject?.Dispose();
         }
 
         private void DragMoveCurrentWindow(object sender, MouseButtonEventArgs e)
@@ -63,12 +63,12 @@ namespace QuickLook
 
         private new void Show()
         {
-            Height = ViewerObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
+            Height = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
                      windowBorder.BorderThickness.Bottom;
-            Width = ViewerObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
+            Width = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
                     windowBorder.BorderThickness.Right;
 
-            ResizeMode = ViewerObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
+            ResizeMode = ContextObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
 
             base.Show();
 
@@ -77,15 +77,15 @@ namespace QuickLook
 
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
-            ViewerObject.CurrentContentContainer = viewContentContainer;
-            ViewerObject.ViewerPlugin = matchedPlugin;
+            ContextObject.CurrentContentContainer = viewContentContainer;
+            ContextObject.ViewerPlugin = matchedPlugin;
 
             // get window size before showing it
-            matchedPlugin.BoundViewSize(path, ViewerObject);
+            matchedPlugin.BoundViewSize(path, ContextObject);
 
             Show();
 
-            matchedPlugin.View(path, ViewerObject);
+            matchedPlugin.View(path, ContextObject);
         }
 
         ~MainWindow()
