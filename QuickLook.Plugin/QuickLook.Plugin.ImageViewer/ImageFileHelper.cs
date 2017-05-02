@@ -29,7 +29,7 @@ namespace QuickLook.Plugin.ImageViewer
                 var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.None);
                 var frame = decoder.Frames[0];
 
-                var orientation = ((BitmapMetadata) frame.Metadata).GetQuery(@"/app1/{ushort=0}/{ushort=274}");
+                var orientation = ((BitmapMetadata) frame.Metadata)?.GetQuery(@"/app1/{ushort=0}/{ushort=274}");
 
                 if (orientation == null)
                     return ExifOrientation.Horizontal;
