@@ -80,6 +80,7 @@
     <Compile Include="Controls\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="PluginManager.cs" />
+    <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
     <Compile Include="Plugin\InfoPanel\InfoPanel.xaml.cs">

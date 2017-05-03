@@ -26,7 +26,9 @@ namespace QuickLook.Plugin.InfoPanel
         public void DisplayInfo(string path)
         {
             var icon =
-                WindowsThumbnailProvider.GetThumbnail(path, 256, 256,
+                WindowsThumbnailProvider.GetThumbnail(path,
+                    (int) (128 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI),
+                    (int) (128 * DpiHelper.GetCurrentDpi().VerticalDpi / DpiHelper.DEFAULT_DPI),
                     ThumbnailOptions.ScaleUp);
 
             image.Source = icon.ToBitmapSource();
