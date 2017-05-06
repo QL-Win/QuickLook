@@ -30,6 +30,13 @@ namespace QuickLook.Plugin.ImageViewer
 
             viewPanel.PreviewMouseLeftButtonDown += ViewPanel_PreviewMouseLeftButtonDown;
             viewPanel.PreviewMouseMove += ViewPanel_PreviewMouseMove;
+
+            viewPanel.TouchDown += ViewPanel_TouchDown;
+        }
+
+        private void ViewPanel_TouchDown(object sender, TouchEventArgs e)
+        {
+            // TODO: touch support
         }
 
         private void LoadImage(string path)
