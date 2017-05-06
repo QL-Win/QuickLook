@@ -31,7 +31,7 @@ namespace QuickLook.Plugin.OfficeViewer
             return false;
         }
 
-        public void BoundViewSize(string path, ContextObject context)
+        public void Prepare(string path, ContextObject context)
         {
             context.SetPreferredSizeFit(new Size {Width = 800, Height = 600}, 0.8);
         }

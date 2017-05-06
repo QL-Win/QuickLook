@@ -14,7 +14,7 @@ namespace QuickLook.Plugin.InfoPanel
             return true;
         }
 
-        public void BoundViewSize(string path, ContextObject context)
+        public void Prepare(string path, ContextObject context)
         {
             _ip = new InfoPanel();
 

@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.ArchiveViewer
             return true;
         }
 
-        public void BoundViewSize(string path, ContextObject context)
+        public void Prepare(string path, ContextObject context)
         {
             context.PreferredSize = new Size {Width = 800, Height = 600};
         }

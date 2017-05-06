@@ -62,6 +62,11 @@ namespace QuickLook.Plugin
         /// </summary>
         public bool CanResize { get; set; } = true;
 
+        /// <summary>
+        ///     Set whether user are allowed to set focus at the viewer window.
+        /// </summary>
+        public bool Focusable { get; set; } = false;
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);

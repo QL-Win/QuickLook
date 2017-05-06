@@ -18,11 +18,11 @@
         bool CanHandle(string path);
 
         /// <summary>
-        ///     Tell QuickLook the desired window size. Please not do any work that costs a lot of time.
+        ///     Do some preparation stuff before the window is showing. Please not do any work that costs a lot of time.
         /// </summary>
         /// <param name="path">The full path of the target file.</param>
         /// <param name="context">A runtime object which allows interaction between this plugin and QuickLook.</param>
-        void BoundViewSize(string path, ContextObject context);
+        void Prepare(string path, ContextObject context);
 
         /// <summary>
         ///     Start the loading process. During the process a busy indicator will be shown. Finish by setting context.IsBusy to

@@ -33,7 +33,7 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        public void BoundViewSize(string path, ContextObject context)
+        public void Prepare(string path, ContextObject context)
         {
             _imageSize = ImageFileHelper.GetImageSize(path);
 

@@ -24,7 +24,7 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        public void BoundViewSize(string path, ContextObject context)
+        public void Prepare(string path, ContextObject context)
         {
             _pdfControl = new PdfViewerControl();
 

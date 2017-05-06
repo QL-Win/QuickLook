@@ -33,7 +33,19 @@ namespace QuickLook
                 return null;
 
             var matched = GetInstance()
-                .LoadedPlugins.FirstOrDefault(plugin => plugin.CreateInstance<IViewer>().CanHandle(path))
+                .LoadedPlugins.FirstOrDefault(plugin =>
+                {
+                    bool can = false;
+                    try
+                    {
+                        can = plugin.CreateInstance<IViewer>().CanHandle(path);
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                    return can;
+                })
                 ?.CreateInstance<IViewer>();
 
             return matched ?? DefaultPlugin.CreateInstance<IViewer>();
