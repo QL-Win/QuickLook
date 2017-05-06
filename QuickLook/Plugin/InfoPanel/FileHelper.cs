@@ -14,7 +14,7 @@ namespace QuickLook.Plugin.InfoPanel
             var stack = new Stack<DirectoryInfo>();
             stack.Push(new DirectoryInfo(root));
 
-            totalDirs++; // self
+            //totalDirs++; // self
 
             do
             {
