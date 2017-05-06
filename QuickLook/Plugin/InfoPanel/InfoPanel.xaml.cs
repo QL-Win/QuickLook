@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace QuickLook.Plugin.InfoPanel
 {
@@ -36,10 +37,10 @@ namespace QuickLook.Plugin.InfoPanel
             icon.Dispose();
 
             var name = Path.GetFileName(path);
-            filename.Content = string.IsNullOrEmpty(name) ? path : name;
+            filename.Text = string.IsNullOrEmpty(name) ? path : name;
 
             var last = File.GetLastWriteTime(path);
-            modDate.Content = last.ToString(CultureInfo.CurrentCulture);
+            modDate.Text = $"Last modified at {last.ToString(CultureInfo.CurrentCulture)}";
 
             Stop = false;
 
@@ -49,7 +50,7 @@ namespace QuickLook.Plugin.InfoPanel
                 {
                     var size = new FileInfo(path).Length;
 
-                    Dispatcher.Invoke(() => { totalSize.Content = size.ToPrettySize(2); });
+                    Dispatcher.Invoke(() => { totalSize.Text = size.ToPrettySize(2); });
                 }
                 else if (Directory.Exists(path))
                 {
@@ -62,7 +63,7 @@ namespace QuickLook.Plugin.InfoPanel
                     if (!Stop)
                         Dispatcher.Invoke(() =>
                         {
-                            totalSize.Content =
+                            totalSize.Text =
                                 $"{totalSizeL.ToPrettySize(2)} ({totalDirsL} folders and {totalFilesL} files)";
                         });
                 }

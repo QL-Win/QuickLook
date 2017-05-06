@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
+             FontSize="14"
              mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,23 +14,20 @@
         <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Margin="0,-20,0,0" />
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="1" VerticalContentAlignment="Center" Grid.Column="0">Name:</Label>
-            <Label Grid.Row="2" VerticalContentAlignment="Center" Grid.Column="0">Modified:</Label>
-            <Label Grid.Row="3" VerticalContentAlignment="Center" Grid.Column="0">Size:</Label>
-            <Label x:Name="filename" Grid.Row="1" VerticalContentAlignment="Center" Grid.Column="1">Filename.ext</Label>
-            <Label x:Name="modDate" Grid.Row="2" VerticalContentAlignment="Center" Grid.Column="1">01/01/2017 00:00:00</Label>
-            <Label x:Name="totalSize" Grid.Row="3" VerticalContentAlignment="Center" Grid.Column="1">Calculating...</Label>
+            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" FontWeight="SemiBold" Padding="3">Filename.ext</TextBlock>
+            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3">Last modified at 01/01/2017 00:00:00</TextBlock>
+            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3">Calculating size...</TextBlock>
         </Grid>
     </Grid>
 </UserControl>
