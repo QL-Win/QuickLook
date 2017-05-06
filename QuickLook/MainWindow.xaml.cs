@@ -31,7 +31,7 @@ namespace QuickLook
             Loaded += (sender, e) => AeroGlassHelper.EnableBlur(this);
 
             buttonCloseWindow.MouseLeftButtonUp += (sender, e) => Close();
-            titlebarTitleArea.MouseLeftButtonDown += DragMoveCurrentWindow;
+            titleBarArea.PreviewMouseLeftButtonDown += DragMoveCurrentWindow;
         }
 
         public ContextObject ContextObject { get; }
@@ -75,7 +75,8 @@ namespace QuickLook
 
             base.Show();
 
-            WindowHelper.SetNoactivate(new WindowInteropHelper(this));
+            if (!ContextObject.Focusable)
+                WindowHelper.SetNoactivate(new WindowInteropHelper(this));
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path)
@@ -84,7 +85,7 @@ namespace QuickLook
             ContextObject.ViewerPlugin = matchedPlugin;
 
             // get window size before showing it
-            matchedPlugin.BoundViewSize(path, ContextObject);
+            matchedPlugin.Prepare(path, ContextObject);
 
             Show();
 

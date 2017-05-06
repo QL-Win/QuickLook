@@ -13,6 +13,7 @@
     WindowStartupLocation="CenterScreen"
     x:ClassModifier="internal" Focusable="False"
     ShowActivated="False" ShowInTaskbar="False" WindowStyle="None"
+    FontFamily="Segoe UI,Microsoft Yahei UI"
     ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
     <Window.Background>
         <SolidColorBrush Color="#E5FAFAFA" />
@@ -30,8 +31,8 @@
                                             <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                              From="0"
                                                              To="1"
-                                                             BeginTime="0:0:0.1"
-                                                             Duration="0:0:0.2" />
+                                                             BeginTime="0:0:0"
+                                                             Duration="0:0:0.1" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
@@ -43,9 +44,12 @@
                     <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
                                      Height="15" Margin="10,0" Foreground="Gray"
                                      Cursor="Hand" />
-                    <Label x:Name="titlebarTitleArea" Content="{Binding ContextObject.Title, ElementName=mainWindow}"
-                           FontSize="14" HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Center" />
+                    <!-- set grid.background colour makes it clickable -->
+                    <Grid x:Name="titleBarArea" Background="Transparent">
+                        <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
                 </DockPanel>
                 <Grid>
                     <local:ViewContentContainer x:Name="viewContentContainer" />
@@ -63,11 +67,11 @@
                                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                                  From="1"
                                                                  To="0"
-                                                                 BeginTime="0:0:0.1"
-                                                                 Duration="0:0:0.2" />
+                                                                 BeginTime="0:0:0"
+                                                                 Duration="0:0:0.1" />
                                                 <ObjectAnimationUsingKeyFrames
                                                     Storyboard.TargetProperty="(UIElement.Visibility)">
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.4"
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1"
                                                                             Value="{x:Static Visibility.Collapsed}" />
                                                 </ObjectAnimationUsingKeyFrames>
                                             </ParallelTimeline>

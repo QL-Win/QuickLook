@@ -44,16 +44,16 @@ namespace QuickLook.Helpers
         internal static bool IsFocusedControlExplorerItem()
         {
             if (NativeMethods.QuickLook.GetFocusedWindowType() == 0)
-                return false;
+                   return false;
 
             var focusedWindowClass = GetWindowClassName(GetFocusedWindow());
             var focusedWindowParentClass =
                 GetWindowClassName(GetParentWindow(GetFocusedWindow()));
 
-            if (focusedWindowParentClass != "SHELLDLL_DefView")
+            if (focusedWindowClass != "SysListView32" && focusedWindowClass != "DirectUIHWND")
                 return false;
 
-            if (focusedWindowClass != "SysListView32" && focusedWindowClass != "DirectUIHWND")
+            if (focusedWindowParentClass != "SHELLDLL_DefView")
                 return false;
 
             return true;

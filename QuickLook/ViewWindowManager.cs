@@ -17,10 +17,10 @@ namespace QuickLook
 
         internal void InvokeRoutine()
         {
-            if (CloseCurrentWindow())
+            if (!WindowHelper.IsFocusedControlExplorerItem())
                 return;
 
-            if (!WindowHelper.IsFocusedControlExplorerItem())
+            if (CloseCurrentWindow())
                 return;
 
             var path = GetCurrentSelection();
