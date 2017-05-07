@@ -18,7 +18,8 @@ namespace QuickLook
         internal void InvokeRoutine()
         {
             if (!WindowHelper.IsFocusedControlExplorerItem())
-                return;
+                if (!WindowHelper.IsFocusedWindowSelf())
+                    return;
 
             if (CloseCurrentWindow())
                 return;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows.Interop;
 using QuickLook.NativeMethods;
@@ -41,10 +42,17 @@ namespace QuickLook.Helpers
             return focusedControlHandle;
         }
 
+        internal static bool IsFocusedWindowSelf()
+        {
+            var focusedWindowClass = GetWindowClassName(GetFocusedWindow());
+
+            return focusedWindowClass.StartsWith($"HwndWrapper[{Path.GetFileName(App.AppFullPath)};;");
+        }
+
         internal static bool IsFocusedControlExplorerItem()
         {
             if (NativeMethods.QuickLook.GetFocusedWindowType() == 0)
-                   return false;
+                return false;
 
             var focusedWindowClass = GetWindowClassName(GetFocusedWindow());
             var focusedWindowParentClass =

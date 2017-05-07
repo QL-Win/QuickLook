@@ -10,7 +10,8 @@ namespace QuickLook
     /// </summary>
     public partial class App : Application
     {
-        public static string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
+        public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
 
         protected override void OnStartup(StartupEventArgs e)
         {
