@@ -34,6 +34,8 @@ namespace QuickLook.Plugin.VideoViewer
             using (var element = new MediaElement {Source = new Uri(path)})
             {
                 context.SetPreferredSizeFit(new Size(element.NaturalVideoWidth, element.NaturalVideoHeight), 0.6);
+                context.PreferredSize = new Size(context.PreferredSize.Width,
+                    context.PreferredSize.Height + 26); // add control bar
             }
         }
 
@@ -45,7 +47,8 @@ namespace QuickLook.Plugin.VideoViewer
 
             _vp.LoadAndPlay(path);
 
-            context.Title = $"{Path.GetFileName(path)} ({TimeSpan.FromSeconds(_vp.mediaElement.NaturalDuration).ToString(@"hh\:mm\:ss")}, {_vp.mediaElement.NaturalVideoWidth} × {_vp.mediaElement.NaturalVideoHeight} )";
+            context.Title =
+                $"{Path.GetFileName(path)} ({_vp.mediaElement.NaturalVideoWidth}×{_vp.mediaElement.NaturalVideoHeight})";
             context.IsBusy = false;
         }
 
