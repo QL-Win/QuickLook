@@ -34,4 +34,10 @@ Note that any plugin must be under the `QuickLook.Plugin` namespace, has the fil
 
 ## Licenses
 
+![LGPL-v3](http://www.gnu.org/graphics/lgplv3-147x51.png)
+
 Application icons made by Freepik from www.flaticon.com. Used under the [Flaticon Basic License](http://file000.flaticon.com/downloads/license/license.pdf).
+
+All source codes, if not specially excluded, are licensed under [LGPL-3.0](https://opensource.org/licenses/LGPL-3.0).
+
+If you want make any modification on these source codes while keeping new codes not protected by LGPL-3.0, please contact me for a sublicense instead.
