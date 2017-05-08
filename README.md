@@ -1,3 +1,5 @@
+![QuickLook icon](https://cloud.githubusercontent.com/assets/1687847/25826439/8970e36a-344f-11e7-8118-9783c7739862.png)
+
 # QuickLook
 
 [![Build status](https://ci.appveyor.com/api/projects/status/w5lx1mlq8b0mb8fo?svg=true)](https://ci.appveyor.com/project/xupefei/quicklook)
