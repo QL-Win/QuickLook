@@ -45,7 +45,7 @@ namespace QuickLook.Plugin.ImageViewer
             _ip = new ImagePanel(path);
 
             context.ViewerContent = _ip;
-            context.Title = $"{Path.GetFileName(path)} ({_imageSize.Width} × {_imageSize.Height})";
+            context.Title = $"{Path.GetFileName(path)} ({_imageSize.Width}×{_imageSize.Height})";
 
             context.IsBusy = false;
         }
