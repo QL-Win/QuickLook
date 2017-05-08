@@ -19,6 +19,7 @@ Till now, QuickLook supports the preview of
  - Pdf file
  - All kinds of text files (determined by file content)
  - Microsoft Word (`.doc`, `.docx`), Excel (`.xls`, `.xlsx`) and PowerPoint (`.ppt`, `.pptx`) files (requires MS Office installation)
+ - Video files (`.mp4`, `.mkv`, `.m2ts` etc.)
  - Other files and folders will be shown in a information box
 
 Hotkeys in preview window:
