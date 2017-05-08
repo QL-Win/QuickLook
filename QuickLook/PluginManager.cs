@@ -35,7 +35,7 @@ namespace QuickLook
             var matched = GetInstance()
                 .LoadedPlugins.FirstOrDefault(plugin =>
                 {
-                    bool can = false;
+                    var can = false;
                     try
                     {
                         can = plugin.CreateInstance<IViewer>().CanHandle(path);

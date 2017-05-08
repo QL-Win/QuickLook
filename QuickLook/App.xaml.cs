@@ -15,7 +15,7 @@ namespace QuickLook
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
 
-        private Mutex isRunning;
+        private Mutex _isRunning;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -30,6 +30,7 @@ namespace QuickLook
         {
             EnsureSingleInstance();
 
+            TrayIcon.GetInstance();
             if (!e.Args.Contains("/autorun"))
                 TrayIcon.GetInstance().ShowNotification("", "QuickLook is running in the background.");
 
@@ -40,8 +41,8 @@ namespace QuickLook
 
         private void EnsureSingleInstance()
         {
-            bool isNew = false;
-            isRunning = new Mutex(true, "QuickLook.App", out isNew);
+            var isNew = false;
+            _isRunning = new Mutex(true, "QuickLook.App", out isNew);
             if (!isNew)
             {
                 MessageBox.Show("QuickLook is already running in the background.");

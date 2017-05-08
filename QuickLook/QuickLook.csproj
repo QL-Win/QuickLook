@@ -78,10 +78,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BackgroundVisualHost.cs" />
     <Compile Include="Controls\BusyDecorator.cs" />
     <Compile Include="Controls\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
+    <Compile Include="NativeMethods\ShellLink.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />
