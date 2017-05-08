@@ -41,7 +41,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void View(string path, ContextObject context)
         {
-            _vp = new ViewerPanel();
+            _vp = new ViewerPanel(context);
 
             context.ViewerContent = _vp;
 

@@ -48,6 +48,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
@@ -90,6 +93,7 @@
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="Helpers\DpiHelpers.cs" />
+    <Compile Include="TrayIcon.cs" />
     <Compile Include="ViewContentContainer.xaml.cs">
       <DependentUpon>ViewContentContainer.xaml</DependentUpon>
     </Compile>
@@ -171,6 +175,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app_white.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

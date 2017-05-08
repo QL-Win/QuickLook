@@ -29,5 +29,9 @@ Hotkeys in preview window:
 
 ## Development
 
-The previewing ability can be extended by new plugins. Read the  [plugin interface](https://github.com/xupefei/QuickLook/blob/master/QuickLook/Plugin/IViewer.cs), [context object](https://github.com/xupefei/QuickLook/blob/master/QuickLook/Plugin/ContextObject.cs) for more information. [Pre-shipped plugins](https://github.com/xupefei/QuickLook/tree/master/QuickLook.Plugin) contains more detailed implementation.
+The previewing ability can be extended by new plugins. Read the [plugin interface](https://github.com/xupefei/QuickLook/blob/master/QuickLook/Plugin/IViewer.cs), [context object](https://github.com/xupefei/QuickLook/blob/master/QuickLook/Plugin/ContextObject.cs) for more information. [Pre-shipped plugins](https://github.com/xupefei/QuickLook/tree/master/QuickLook.Plugin) contains more detailed implementation.
 Note that any plugin must be under the `QuickLook.Plugin` namespace, has the filename similar to `QuickLook.Plugin.YourPlugin.dll` and placed under `<Application>\Plugins\QuickLook.Plugin.YourPlugin\` subfolder.
+
+## Licenses
+
+Application icons made by Freepik from www.flaticon.com. Used under the [Flaticon Basic License](http://file000.flaticon.com/downloads/license/license.pdf).

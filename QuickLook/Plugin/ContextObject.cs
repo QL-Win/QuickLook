@@ -31,6 +31,17 @@ namespace QuickLook.Plugin
         }
 
         /// <summary>
+        /// Show a notification balloon.
+        /// </summary>
+        /// <param name="title">Title of the notification.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="isError">Is this indicates a error?</param>
+        public void ShowNotification(string title, string content, bool isError = false)
+        {
+            TrayIcon.GetInstance().ShowNotification(title, content, isError);
+        }
+
+        /// <summary>
         ///     Get or set the viewer content control.
         /// </summary>
         public object ViewerContent

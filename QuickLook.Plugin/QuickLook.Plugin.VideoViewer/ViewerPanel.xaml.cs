@@ -13,7 +13,9 @@ namespace QuickLook.Plugin.VideoViewer
     /// </summary>
     public partial class ViewerPanel : UserControl, IDisposable
     {
-        public ViewerPanel()
+        private ContextObject _context;
+
+        public ViewerPanel(ContextObject context)
         {
             InitializeComponent();
 
@@ -21,8 +23,8 @@ namespace QuickLook.Plugin.VideoViewer
 
             mediaElement.PropertyChanged += ChangePlayPauseButton;
             mediaElement.MouseLeftButtonUp += TogglePlayPause;
-            mediaElement.MediaErrored += ShowErrorOverlay;
-            mediaElement.MediaFailed += ShowErrorOverlay;
+            mediaElement.MediaErrored += ShowErrorNotification;
+            mediaElement.MediaFailed += ShowErrorNotification;
         }
 
         public void Dispose()
@@ -48,10 +50,11 @@ namespace QuickLook.Plugin.VideoViewer
                 : FontAwesomeIcon.PlayCircleOutline;
         }
 
-        private void ShowErrorOverlay(object sender, MediaErrorRoutedEventArgs e)
+        private void ShowErrorNotification(object sender, MediaErrorRoutedEventArgs e)
         {
             mediaElement.Stop();
-            errorOverlay.Visibility = Visibility.Visible;
+
+            _context.ShowNotification("", "An error occurred while loading the video.");
         }
 
         public void LoadAndPlay(string path)
