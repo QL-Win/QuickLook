@@ -51,6 +51,19 @@ namespace QuickLook.Plugin.InfoPanel
 
                     Dispatcher.Invoke(() => { totalSize.Text = size.ToPrettySize(2); });
                 }
+                else if (Path.GetPathRoot(path) == path) // is this a drive?
+                {
+                    long totalSpace;
+                    long totalFreeSpace;
+
+                    FileHelper.GetDriveSpace(path, out totalSpace, out totalFreeSpace);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        totalSize.Text =
+                            $"Capacity {totalSpace.ToPrettySize(2)}, {totalFreeSpace.ToPrettySize(2)} available";
+                    });
+                }
                 else if (Directory.Exists(path))
                 {
                     long totalDirsL;

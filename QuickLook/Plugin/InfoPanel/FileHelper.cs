@@ -6,6 +6,16 @@ namespace QuickLook.Plugin.InfoPanel
 {
     public static class FileHelper
     {
+        public static void GetDriveSpace(string path, out long totalSpace, out long totalFreeSpace)
+        {
+            totalSpace = totalFreeSpace = 0L;
+
+            var root = new DriveInfo(Path.GetPathRoot(path));
+
+            totalSpace = root.TotalSize;
+            totalFreeSpace = root.AvailableFreeSpace;
+        }
+
         public static void CountFolder(string root, ref bool stop, out long totalDirs, out long totalFiles,
             out long totalSize)
         {
