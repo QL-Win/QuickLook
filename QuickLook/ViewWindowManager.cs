@@ -47,15 +47,37 @@ namespace QuickLook
             {
                 _viewWindow.BeginShow(matchedPlugin, path);
             }
-            catch (Exception e) // if current plugin failed, switch to default one
+            catch (Exception e) // if current plugin failed, switch to default one.
             {
+                _viewWindow.Close();
+
                 Debug.WriteLine(e.ToString());
                 Debug.WriteLine(e.StackTrace);
 
                 if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
                 {
                     matchedPlugin.Dispose();
-                    _viewWindow.BeginShow(PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>(), path);
+                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>();
+                    BeginShowNewWindow(matchedPlugin, path);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch // Catch SEH exceptions here.
+            {
+                _viewWindow.Close();
+
+                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
+                {
+                    matchedPlugin.Dispose();
+                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>();
+                    BeginShowNewWindow(matchedPlugin, path);
+                }
+                else
+                {
+                    throw;
                 }
             }
         }
