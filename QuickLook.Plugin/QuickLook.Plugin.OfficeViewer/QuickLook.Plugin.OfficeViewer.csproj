@@ -67,6 +67,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="OfficeInteropWrapper.cs" />
     <Compile Include="PluginInterface.cs">
       <SubType>Code</SubType>

@@ -78,6 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BackgroundVisualHost.cs" />
     <Compile Include="Controls\BusyDecorator.cs" />
@@ -185,4 +188,7 @@
     <None Include="Resources\app_white.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)update-version.cmd" "$(SolutionDir)" "$(SolutionDir)GitVersion.cs"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

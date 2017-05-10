@@ -50,6 +50,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="ArchiveInfoPanel.xaml.cs">
       <DependentUpon>ArchiveInfoPanel.xaml</DependentUpon>
     </Compile>

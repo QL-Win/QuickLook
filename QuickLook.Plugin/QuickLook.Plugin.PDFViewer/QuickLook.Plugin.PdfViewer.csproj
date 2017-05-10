@@ -49,6 +49,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="PdfViewerControl.xaml.cs">
       <DependentUpon>PdfViewerControl.xaml</DependentUpon>
     </Compile>

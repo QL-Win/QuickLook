@@ -60,6 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="DoubleToHMSConverter.cs" />
     <Compile Include="PluginInterface.cs" />
     <Compile Include="ViewerPanel.xaml.cs">

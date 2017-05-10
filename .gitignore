@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 
 /QuickLook.Plugin.PDFViewer/MoonPdfLib
+/GitVersion.cs
