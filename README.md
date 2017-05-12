@@ -24,6 +24,10 @@ Till now, QuickLook supports the preview of
  - Video files (`.mp4`, `.mkv`, `.m2ts` etc.)
  - Other files and folders will be shown in a information box
 
+## Usages
+In-place preview / Integrate with 3rd-party file manager
+ - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. Press your hotkey for the 2nd time will close the existing preview window.
+ 
 Hotkeys in preview window:
 
  - <kbd>Space</kbd> Show/Hide the preview window
