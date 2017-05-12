@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
@@ -16,16 +17,8 @@ namespace QuickLook
 
         private MainWindow _viewWindow;
 
-        internal void InvokeRoutine()
+        internal void InvokeViewer(string path)
         {
-            if (!WindowHelper.IsFocusedControlExplorerItem())
-                if (!WindowHelper.IsFocusedWindowSelf())
-                    return;
-
-            if (CloseCurrentWindow())
-                return;
-
-            var path = GetCurrentSelection();
             if (string.IsNullOrEmpty(path))
                 return;
             if (!Directory.Exists(path) && !File.Exists(path))
@@ -36,11 +29,31 @@ namespace QuickLook
             BeginShowNewWindow(matchedPlugin, path);
         }
 
+        internal void InvokeRoutine()
+        {
+            if (!WindowHelper.IsFocusedControlExplorerItem())
+                if (!WindowHelper.IsFocusedWindowSelf())
+                    return;
+
+            if (CloseCurrentWindow())
+                return;
+
+            var path = GetCurrentSelection();
+
+            InvokeViewer(path);
+        }
+
         private void BeginShowNewWindow(IViewer matchedPlugin, string path)
         {
             _viewWindow = new MainWindow();
             _viewWindow.Closed += (sender2, e2) =>
             {
+                if (App.RunningAsViewer)
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
+
                 _viewWindow.Dispose();
                 _viewWindow = null;
                 GC.Collect();

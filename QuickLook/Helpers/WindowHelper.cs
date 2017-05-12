@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Interop;
 using QuickLook.NativeMethods;
@@ -44,9 +44,11 @@ namespace QuickLook.Helpers
 
         internal static bool IsFocusedWindowSelf()
         {
-            var focusedWindowClass = GetWindowClassName(GetFocusedWindow());
+            var procId = Process.GetCurrentProcess().Id;
+            uint activeProcId;
+            User32.GetWindowThreadProcessId(GetFocusedWindow(), out activeProcId);
 
-            return focusedWindowClass.StartsWith($"HwndWrapper[{Path.GetFileName(App.AppFullPath)};;");
+            return activeProcId == procId;
         }
 
         internal static bool IsFocusedControlExplorerItem()

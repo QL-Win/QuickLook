@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 
 namespace QuickLook
@@ -14,8 +14,7 @@ namespace QuickLook
     {
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
-
-        private Mutex _isRunning;
+        public static bool RunningAsViewer;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -28,7 +27,46 @@ namespace QuickLook
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            EnsureSingleInstance();
+            if (e.Args.Any())
+                if (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First()))
+                    RunAsViewer(e);
+                else
+                    RunAsListener(e);
+            else
+                RunAsListener(e);
+        }
+
+        private void RunAsViewer(StartupEventArgs e)
+        {
+            RunningAsViewer = true;
+
+            var runningPid = PidHelper.GetRunningInstance();
+            if (runningPid != -1)
+            {
+                Process.GetProcessById(runningPid).Kill();
+
+                Current.Shutdown();
+                return;
+            }
+
+            PidHelper.WritePid();
+
+            ViewWindowManager.GetInstance().InvokeViewer(e.Args.First());
+        }
+
+        private void RunAsListener(StartupEventArgs e)
+        {
+            RunningAsViewer = false;
+
+            if (PidHelper.GetRunningInstance() != -1)
+            {
+                MessageBox.Show("QuickLook is already running in the background.");
+
+                Current.Shutdown();
+                return;
+            }
+
+            PidHelper.WritePid();
 
             TrayIcon.GetInstance();
             if (!e.Args.Contains("/autorun"))
@@ -39,15 +77,12 @@ namespace QuickLook
             BackgroundListener.GetInstance();
         }
 
-        private void EnsureSingleInstance()
+        private void App_OnExit(object sender, ExitEventArgs e)
         {
-            var isNew = false;
-            _isRunning = new Mutex(true, "QuickLook.App", out isNew);
-            if (!isNew)
-            {
-                MessageBox.Show("QuickLook is already running in the background.");
-                Current.Shutdown();
-            }
+            TrayIcon.GetInstance().Dispose();
+            BackgroundListener.GetInstance().Dispose();
+
+            PidHelper.DeletePid();
         }
     }
 }

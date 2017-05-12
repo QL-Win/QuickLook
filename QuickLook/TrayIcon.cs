@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using QuickLook.Helpers;
 using QuickLook.Properties;
@@ -6,7 +7,7 @@ using Application = System.Windows.Application;
 
 namespace QuickLook
 {
-    public class TrayIcon
+    public class TrayIcon : IDisposable
     {
         private static TrayIcon _instance;
 
@@ -37,6 +38,11 @@ namespace QuickLook
             };
 
             _icon.ContextMenu.Popup += (sender, e) => { _itemAutorun.Checked = AutoStartupHelper.IsAutorun(); };
+        }
+
+        public void Dispose()
+        {
+            _icon.Visible = false;
         }
 
         public void ShowNotification(string title, string content, bool isError = false)

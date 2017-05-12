@@ -1,8 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace QuickLook
 {
-    internal class BackgroundListener
+    internal class BackgroundListener : IDisposable
     {
         private static BackgroundListener _instance;
 
@@ -13,8 +14,16 @@ namespace QuickLook
             InstallHook(HotkeyEventHandler);
         }
 
+        public void Dispose()
+        {
+            _hook?.Dispose();
+        }
+
         private void HotkeyEventHandler(object sender, KeyEventArgs e)
         {
+            if (e.Modifiers != Keys.None)
+                return;
+
             ViewWindowManager.GetInstance().InvokeRoutine();
         }
 

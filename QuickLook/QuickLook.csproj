@@ -87,6 +87,7 @@
     <Compile Include="Controls\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="NativeMethods\ShellLink.cs" />
+    <Compile Include="PidHelper.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />

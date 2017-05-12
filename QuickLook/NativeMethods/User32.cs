@@ -27,7 +27,10 @@ namespace QuickLook.NativeMethods
         internal static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr processId);
+
+        [DllImport("user32.dll")]
+        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
