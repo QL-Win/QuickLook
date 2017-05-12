@@ -1,4 +1,4 @@
-![QuickLook icon](https://cloud.githubusercontent.com/assets/1687847/25826439/8970e36a-344f-11e7-8118-9783c7739862.png)
+![QuickLook icon](https://cloud.githubusercontent.com/assets/1687847/26008086/060d9cca-374c-11e7-9345-7f0f0f91a421.png)
 
 # QuickLook
 
