@@ -1,27 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
+using CefSharp;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
     /// <summary>
     ///     Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class WebkitPanel : UserControl
+    public partial class WebkitPanel : UserControl,IDisposable
     {
+        private string _cefPath =
+            Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+
         public WebkitPanel()
         {
+            var libraryLoader = new CefLibraryHandle(Path.Combine(_cefPath, "libcef.dll"));
+
+            if (!Cef.IsInitialized)
+                Cef.Initialize(new CefSettings
+                {
+                    BrowserSubprocessPath = Path.Combine(_cefPath, "CefSharp.BrowserSubprocess.exe"),
+                    LocalesDirPath = Path.Combine(_cefPath, "locales"),
+                    ResourcesDirPath = _cefPath,
+                    LogSeverity = LogSeverity.Disable,
+                    CefCommandLineArgs = {new KeyValuePair<string, string>("disable-gpu", "1")},
+                });
+
             InitializeComponent();
+
+            Application.Current.Exit += (sender, e) => Cef.Shutdown();
         }
 
         public void Navigate(string path)
         {
-            //path = "http://pooi.moe/QuickLook";
             if (Path.IsPathRooted(path))
                 path = FilePathToFileUrl(path);
 
-            browser.Loaded += (sender, e) => browser.Navigate(path);
+            browser.IsBrowserInitializedChanged += (sender, e) => browser.Load(path);
         }
 
         private static string FilePathToFileUrl(string filePath)
@@ -49,6 +69,11 @@ namespace QuickLook.Plugin.HtmlViewer
             else
                 uri.Insert(0, "file:///");
             return uri.ToString();
+        }
+        
+        public void Dispose()
+        {
+            browser?.Dispose();
         }
     }
 }

@@ -28,7 +28,9 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            context.PreferredSize = new Size(600, 800);
+            context.PreferredSize = new Size(800, 800);
+
+            context.Focusable = true;
         }
 
         public void View(string path, ContextObject context)
@@ -42,6 +44,9 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
+
+            _panel?.Dispose();
         }
 
         ~Plugin()

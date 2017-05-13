@@ -34,8 +34,17 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AirspaceFixer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AirspaceFixer.1.0.2\lib\AirspaceFixer.dll</HintPath>
+    <Reference Include="CefSharp, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\CefSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Core, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\CefSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Wpf, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\CefSharp.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -81,7 +90,38 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <ContentWithTargetPath Include="CefSharp\cef.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>cef.pak</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\cef_100_percent.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>cef_100_percent.pak</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\cef_200_percent.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>cef_200_percent.pak</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\cef_extensions.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>cef_extensions.pak</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\icudtl.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>icudtl.dat</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\locales\en-US.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>locales\en-US.pak</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\natives_blob.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>natives_blob.bin</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\snapshot_blob.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>snapshot_blob.bin</TargetPath>
+    </ContentWithTargetPath>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,6 +133,40 @@
       <Name>QuickLook</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ContentWithTargetPath Include="CefSharp\CefSharp.BrowserSubprocess.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>CefSharp.BrowserSubprocess.Core.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\CefSharp.BrowserSubprocess.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>CefSharp.BrowserSubprocess.exe</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\chrome_elf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>chrome_elf.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\d3dcompiler_47.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>d3dcompiler_47.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\libcef.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>libcef.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\libEGL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>libEGL.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\libGLESv2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>libGLESv2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CefSharp\widevinecdmadapter.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>widevinecdmadapter.dll</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
