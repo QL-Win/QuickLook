@@ -53,7 +53,7 @@ namespace QuickLook
 
         private void LoadPlugins()
         {
-            Directory.GetFiles(Path.Combine(App.AppPath, "Plugins\\"), "QuickLook.Plugin.*.dll",
+            Directory.GetFiles(Path.Combine(App.AppPath, "QuickLook.Plugin\\"), "QuickLook.Plugin.*.dll",
                     SearchOption.AllDirectories)
                 .ToList()
                 .ForEach(

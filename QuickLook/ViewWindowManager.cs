@@ -56,7 +56,7 @@ namespace QuickLook
 
                 _viewWindow.Dispose();
                 _viewWindow = null;
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             };
 
             try
