@@ -12,11 +12,13 @@ namespace QuickLook.Plugin.VideoViewer
     /// </summary>
     public partial class ViewerPanel : UserControl, IDisposable
     {
-        private ContextObject _context;
+        private readonly ContextObject _context;
 
         public ViewerPanel(ContextObject context)
         {
             InitializeComponent();
+
+            _context = context;
 
             buttonPlayPause.MouseLeftButtonUp += TogglePlayPause;
 

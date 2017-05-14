@@ -81,7 +81,9 @@ namespace QuickLook
                     throw;
                 }
             }
+#pragma warning disable 1058
             catch // Catch SEH exceptions here.
+#pragma warning restore 1058
             {
                 _viewWindow.Close();
 

@@ -102,14 +102,6 @@ namespace QuickLook.Plugin.PDFViewer
             }
         }
 
-        internal struct NativePage
-        {
-            public Matrix Ctm;
-            public Rectangle MediaBox;
-            public int Rotate;
-        }
-
-
         internal class NativeMethods
         {
             private const uint FZ_STORE_DEFAULT = 256 << 20;
