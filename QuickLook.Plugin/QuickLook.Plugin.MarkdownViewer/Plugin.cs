@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using QuickLook.Plugin.HtmlViewer;
 
-namespace QuickLook.Plugin.HtmlViewer
+namespace QuickLook.Plugin.MarkdownViewer
 {
     public class Plugin : IViewer
     {
@@ -17,8 +18,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
             switch (Path.GetExtension(path).ToLower())
             {
-                case ".html":
-                case ".htm":
+                case ".md":
                     return true;
 
                 default:
@@ -39,7 +39,8 @@ namespace QuickLook.Plugin.HtmlViewer
             context.ViewerContent = _panel;
             context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
 
-            _panel.Navigate(path);
+            _panel.LoadHtml(GenerateMarkdownHtml(path), path);
+
             context.IsBusy = false;
         }
 
@@ -53,6 +54,14 @@ namespace QuickLook.Plugin.HtmlViewer
         ~Plugin()
         {
             Dispose();
+        }
+
+        private string GenerateMarkdownHtml(string path)
+        {
+            var md = File.ReadAllText(path);
+            var html = Resources.md2html.Replace("{{content}}", md);
+
+            return html;
         }
     }
 }

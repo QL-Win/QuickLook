@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using CefSharp;
@@ -12,10 +11,10 @@ namespace QuickLook.Plugin.HtmlViewer
     /// <summary>
     ///     Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class WebkitPanel : UserControl,IDisposable
+    public partial class WebkitPanel : UserControl, IDisposable
     {
-        private string _cefPath =
-            Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+        private readonly string _cefPath =
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
         public WebkitPanel()
         {
@@ -28,52 +27,36 @@ namespace QuickLook.Plugin.HtmlViewer
                     LocalesDirPath = Path.Combine(_cefPath, "locales"),
                     ResourcesDirPath = _cefPath,
                     LogSeverity = LogSeverity.Disable,
-                    CefCommandLineArgs = {new KeyValuePair<string, string>("disable-gpu", "1")},
+                    CefCommandLineArgs = {new KeyValuePair<string, string>("disable-gpu", "1")}
                 });
 
             InitializeComponent();
 
             Application.Current.Exit += (sender, e) => Cef.Shutdown();
+
+            browser.RequestHandler = new RequestHandler();
+            browser.MenuHandler = new MenuHandler();
+        }
+
+        public void Dispose()
+        {
+            browser?.Dispose();
         }
 
         public void Navigate(string path)
         {
             if (Path.IsPathRooted(path))
-                path = FilePathToFileUrl(path);
+                path = UrlHelper.FilePathToFileUrl(path);
 
             browser.IsBrowserInitializedChanged += (sender, e) => browser.Load(path);
         }
 
-        private static string FilePathToFileUrl(string filePath)
+        public void LoadHtml(string html, string path)
         {
-            StringBuilder uri = new StringBuilder();
-            foreach (char v in filePath)
-            {
-                if ((v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z') || (v >= '0' && v <= '9') ||
-                    v == '+' || v == '/' || v == ':' || v == '.' || v == '-' || v == '_' || v == '~' ||
-                    v > '\xFF')
-                {
-                    uri.Append(v);
-                }
-                else if (v == Path.DirectorySeparatorChar || v == Path.AltDirectorySeparatorChar)
-                {
-                    uri.Append('/');
-                }
-                else
-                {
-                    uri.Append($"%{(int) v:X2}");
-                }
-            }
-            if (uri.Length >= 2 && uri[0] == '/' && uri[1] == '/') // UNC path
-                uri.Insert(0, "file:");
-            else
-                uri.Insert(0, "file:///");
-            return uri.ToString();
-        }
-        
-        public void Dispose()
-        {
-            browser?.Dispose();
+            if (Path.IsPathRooted(path))
+                path = UrlHelper.FilePathToFileUrl(path);
+
+            browser.IsBrowserInitializedChanged += (sender, e) => browser.LoadHtml(html, path);
         }
     }
 }

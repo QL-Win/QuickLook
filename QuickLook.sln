@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.HtmlViewer", "QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.csproj", "{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.MarkdownViewer", "QuickLook.Plugin\QuickLook.Plugin.MarkdownViewer\QuickLook.Plugin.MarkdownViewer.csproj", "{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,12 @@ Global
 		{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}.Release|Any CPU.ActiveCfg = Release|x86
 		{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}.Release|x86.ActiveCfg = Release|x86
 		{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}.Release|x86.Build.0 = Release|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Debug|x86.ActiveCfg = Debug|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Debug|x86.Build.0 = Debug|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|Any CPU.ActiveCfg = Release|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|x86.ActiveCfg = Release|x86
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +113,6 @@ Global
 		{E37675EA-D957-4495-8655-2609BF86756C} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 		{1B746D92-49A5-4A37-9D75-DCC490393290} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 		{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
+		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 	EndGlobalSection
 EndGlobal
