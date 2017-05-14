@@ -37,7 +37,7 @@ namespace QuickLook.Plugin.MarkdownViewer
         {
             _panel = new WebkitPanel();
             context.ViewerContent = _panel;
-            context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
+            context.Title = Path.GetFileName(path);
 
             _panel.LoadHtml(GenerateMarkdownHtml(path), path);
 
