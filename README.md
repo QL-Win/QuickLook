@@ -4,7 +4,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/w5lx1mlq8b0mb8fo?svg=true)](https://ci.appveyor.com/project/xupefei/quicklook)
 
-*This project is currently under heavy development. Always come back to see what's new.*
+*This project is currently under heavy development. Come back often to see what's new.*
 
 <img src="http://pooi.moe/QuickLook/sample.gif" width="400">
 
