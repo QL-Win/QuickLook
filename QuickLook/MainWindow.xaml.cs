@@ -83,7 +83,7 @@ namespace QuickLook
             ContextObject.ViewerPlugin?.Dispose();
             ContextObject.Reset();
 
-            GC.Collect();
+            //GC.Collect();
 
             // revert UI changes
             ContextObject.IsBusy = true;
