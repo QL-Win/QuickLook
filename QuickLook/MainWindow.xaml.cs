@@ -2,7 +2,8 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
+using System.Windows.Threading;
+using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -11,7 +12,7 @@ namespace QuickLook
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    internal partial class MainWindow : Window, IDisposable
+    internal partial class MainWindow : Window
     {
         internal MainWindow()
         {
@@ -20,31 +21,23 @@ namespace QuickLook
 
             InitializeComponent();
 
+            // revert designer changes
+            windowPanel.Opacity = 0d;
+            busyIndicatorLayer.Visibility = Visibility.Visible;
+            busyIndicatorLayer.Opacity = 1d;
+
             // do not set TopMost property if we are now debugging. it makes debugging painful...
             if (!Debugger.IsAttached)
                 Topmost = true;
 
-            // restore changes by Designer
-            windowPanel.Opacity = 0d;
-            busyIndicatorLayer.Visibility = Visibility.Visible;
-
             Loaded += (sender, e) => AeroGlassHelper.EnableBlur(this);
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => Close();
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => { Hide(); };
+
             titleBarArea.PreviewMouseLeftButtonDown += DragMoveCurrentWindow;
         }
 
-        public ContextObject ContextObject { get; }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-
-            ContextObject?.Dispose();
-
-            // stop the background thread
-            busyDecorator?.Dispose();
-        }
+        public ContextObject ContextObject { get; private set; }
 
         private void DragMoveCurrentWindow(object sender, MouseButtonEventArgs e)
         {
@@ -71,17 +64,37 @@ namespace QuickLook
             Width = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
                     windowBorder.BorderThickness.Right;
 
+            Left = (SystemParameters.VirtualScreenWidth - Width) / 2;
+            Top = (SystemParameters.VirtualScreenHeight - Height) / 2;
+
             ResizeMode = ContextObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
 
             base.Show();
 
-            if (!ContextObject.Focusable)
-                WindowHelper.SetNoactivate(new WindowInteropHelper(this));
+            //if (!ContextObject.Focusable)
+            //    WindowHelper.SetNoactivate(new WindowInteropHelper(this));
+        }
+
+        private new void Hide()
+        {
+            container.Content = null;
+
+            // clean up plugin and refresh ContextObject for next use
+            ContextObject.ViewerPlugin?.Dispose();
+            ContextObject.Reset();
+
+            GC.Collect();
+
+            // revert UI changes
+            ContextObject.IsBusy = true;
+
+            Left -= 10000;
+            Dispatcher.Delay(100, _ => base.Hide());
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
-            ContextObject.CurrentContentContainer = viewContentContainer;
+            ContextObject.CurrentContentContainer = container;
             ContextObject.ViewerPlugin = matchedPlugin;
 
             // get window size before showing it
@@ -89,12 +102,19 @@ namespace QuickLook
 
             Show();
 
-            matchedPlugin.View(path, ContextObject);
+            // load plugin, do not block UI
+            Dispatcher.BeginInvoke(new Action(() => matchedPlugin.View(path, ContextObject)),
+                DispatcherPriority.Render);
         }
 
-        ~MainWindow()
+        internal bool BeginHide()
         {
-            Dispose();
+            if (Visibility != Visibility.Visible)
+                return false;
+
+            Hide();
+
+            return true;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using QuickLook.Annotations;
 
 namespace QuickLook.Plugin
@@ -9,12 +10,12 @@ namespace QuickLook.Plugin
     /// <summary>
     ///     A runtime object which allows interaction between this plugin and QuickLook.
     /// </summary>
-    public class ContextObject : INotifyPropertyChanged, IDisposable
+    public class ContextObject : INotifyPropertyChanged
     {
         private bool _isBusy = true;
 
         private string _title = "";
-        internal ViewContentContainer CurrentContentContainer;
+        internal ContentControl CurrentContentContainer;
         internal IViewer ViewerPlugin;
 
         /// <summary>
@@ -35,8 +36,8 @@ namespace QuickLook.Plugin
         /// </summary>
         public object ViewerContent
         {
-            get => CurrentContentContainer.container.Content;
-            set => CurrentContentContainer.container.Content = value;
+            get => CurrentContentContainer.Content;
+            set => CurrentContentContainer.Content = value;
         }
 
         /// <summary>
@@ -67,10 +68,8 @@ namespace QuickLook.Plugin
         /// </summary>
         public bool Focusable { get; set; } = false;
 
-        public void Dispose()
+        public void DisposePlugin()
         {
-            GC.SuppressFinalize(this);
-
             ViewerPlugin?.Dispose();
             ViewerPlugin = null;
         }
@@ -105,7 +104,6 @@ namespace QuickLook.Plugin
             var heightRatio = max.Height * maxRatio / size.Height;
 
             var ratio = Math.Min(widthRatio, heightRatio);
-
             if (ratio > 1) ratio = 1;
 
             PreferredSize = new Size {Width = size.Width * ratio, Height = size.Height * ratio};
@@ -121,15 +119,20 @@ namespace QuickLook.Plugin
             return new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
         }
 
+        internal void Reset()
+        {
+            Title = "";
+            ViewerContent = null;
+            IsBusy = true;
+            PreferredSize = new Size();
+            CanResize = true;
+            Focusable = false;
+        }
+
         [NotifyPropertyChangedInvocator]
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        ~ContextObject()
-        {
-            Dispose();
         }
     }
 }

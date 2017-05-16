@@ -20,22 +20,27 @@
     </Window.Background>
     <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
-            <DockPanel x:Name="windowPanel" Opacity="1">
+            <DockPanel x:Name="windowPanel">
                 <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                             From="0"
-                                                             To="1"
-                                                             BeginTime="0:0:0"
-                                                             Duration="0:0:0.1" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
+                                                             BeginTime="0:0:0" Duration="0:0:0.05" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0"
+                                                             BeginTime="0:0:0" Duration="0:0:0" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -52,37 +57,52 @@
                     </Grid>
                 </DockPanel>
                 <Grid>
-                    <local:ViewContentContainer x:Name="viewContentContainer" />
+                    <ContentControl x:Name="container" />
                 </Grid>
             </DockPanel>
-            <Grid x:Name="busyIndicatorLayer" Visibility="Hidden">
+            <Grid x:Name="busyIndicatorLayer">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <ParallelTimeline>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                 From="1"
-                                                                 To="0"
-                                                                 BeginTime="0:0:0"
-                                                                 Duration="0:0:0.1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0"
+                                                                 BeginTime="0:0:0" Duration="0:0:0.05" />
                                                 <ObjectAnimationUsingKeyFrames
                                                     Storyboard.TargetProperty="(UIElement.Visibility)">
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.1"
-                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.05"
+                                                                            Value="{x:Static Visibility.Hidden}" />
                                                 </ObjectAnimationUsingKeyFrames>
                                             </ParallelTimeline>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ParallelTimeline>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
+                                                                 BeginTime="0:0:0" Duration="0:0:0" />
+                                                <ObjectAnimationUsingKeyFrames
+                                                    Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </ParallelTimeline>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <control:BusyDecorator x:Name="busyDecorator" IsBusyIndicatorShowing="True" VerticalAlignment="Center"
+                <!--IsBusyIndicatorShowing="{Binding IsVisible, ElementName=busyIndicatorLayer}"-->
+                <control:BusyDecorator x:Name="busyDecorator"
+                                       IsBusyIndicatorShowing="True"
+                                       VerticalAlignment="Center"
                                        HorizontalAlignment="Center" />
             </Grid>
         </Grid>

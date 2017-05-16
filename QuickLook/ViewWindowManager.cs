@@ -15,7 +15,31 @@ namespace QuickLook
     {
         private static ViewWindowManager _instance;
 
-        private MainWindow _viewWindow;
+        private readonly MainWindow _viewWindow;
+
+        internal ViewWindowManager()
+        {
+            _viewWindow = new MainWindow();
+            _viewWindow.Closed += (sender, e) =>
+            {
+                if (App.RunningAsViewer)
+                    Application.Current.Shutdown();
+            };
+        }
+
+        internal void InvokeRoutine()
+        {
+            if (!WindowHelper.IsFocusedControlExplorerItem())
+                if (!WindowHelper.IsFocusedWindowSelf())
+                    return;
+
+            if (_viewWindow.BeginHide())
+                return;
+
+            var path = GetCurrentSelection();
+
+            InvokeViewer(path);
+        }
 
         internal void InvokeViewer(string path)
         {
@@ -29,43 +53,15 @@ namespace QuickLook
             BeginShowNewWindow(matchedPlugin, path);
         }
 
-        internal void InvokeRoutine()
-        {
-            if (!WindowHelper.IsFocusedControlExplorerItem())
-                if (!WindowHelper.IsFocusedWindowSelf())
-                    return;
-
-            if (CloseCurrentWindow())
-                return;
-
-            var path = GetCurrentSelection();
-
-            InvokeViewer(path);
-        }
-
         private void BeginShowNewWindow(IViewer matchedPlugin, string path)
         {
-            _viewWindow = new MainWindow();
-            _viewWindow.Closed += (sender2, e2) =>
-            {
-                if (App.RunningAsViewer)
-                {
-                    Application.Current.Shutdown();
-                    return;
-                }
-
-                _viewWindow.Dispose();
-                _viewWindow = null;
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            };
-
             try
             {
                 _viewWindow.BeginShow(matchedPlugin, path);
             }
             catch (Exception e) // if current plugin failed, switch to default one.
             {
-                _viewWindow.Close();
+                _viewWindow.BeginHide();
 
                 Debug.WriteLine(e.ToString());
                 Debug.WriteLine(e.StackTrace);
@@ -81,34 +77,6 @@ namespace QuickLook
                     throw;
                 }
             }
-#pragma warning disable 1058
-            catch // Catch SEH exceptions here.
-#pragma warning restore 1058
-            {
-                _viewWindow.Close();
-
-                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
-                {
-                    matchedPlugin.Dispose();
-                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>();
-                    BeginShowNewWindow(matchedPlugin, path);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        private bool CloseCurrentWindow()
-        {
-            if (_viewWindow != null)
-            {
-                _viewWindow.Close();
-
-                return true;
-            }
-            return false;
         }
 
         private string GetCurrentSelection()

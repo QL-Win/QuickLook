@@ -101,9 +101,6 @@
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="Helpers\DpiHelpers.cs" />
     <Compile Include="TrayIcon.cs" />
-    <Compile Include="ViewContentContainer.xaml.cs">
-      <DependentUpon>ViewContentContainer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewWindowManager.cs" />
@@ -134,10 +131,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ViewContentContainer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\BusyDecorator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
