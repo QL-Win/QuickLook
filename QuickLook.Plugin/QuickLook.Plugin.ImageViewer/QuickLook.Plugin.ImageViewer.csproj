@@ -36,12 +36,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="XamlAnimatedGif, Version=1.1.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\XamlAnimatedGif.1.1.9\lib\net45\XamlAnimatedGif.dll</HintPath>
