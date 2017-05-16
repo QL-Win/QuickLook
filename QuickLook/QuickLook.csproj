@@ -52,6 +52,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
@@ -87,6 +90,24 @@
     <Compile Include="Controls\BusyDecorator.cs" />
     <Compile Include="Controls\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
+    <Compile Include="Helpers\BlurLibrary\BlurWindow.cs" />
+    <Compile Include="Helpers\BlurLibrary\Helpers.cs" />
+    <Compile Include="Helpers\BlurLibrary\IWindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\NativeMethods.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentPolicy.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentState.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\NativeMethods.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttribute.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttributeData.cs" />
+    <Compile Include="Helpers\BlurLibrary\NativeThings\WindowsVistaAnd7\NativeMethods.cs" />
+    <Compile Include="Helpers\BlurLibrary\OsHelper.cs" />
+    <Compile Include="Helpers\BlurLibrary\OsType.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\OsNotSupportedWindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows10WindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows7WindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows81WindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
+    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="NativeMethods\ShellLink.cs" />
     <Compile Include="PidHelper.cs" />
     <Compile Include="PluginManager.cs" />
@@ -125,7 +146,6 @@
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Helpers\AeroGlassHelper.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -155,6 +175,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="NativeMethods\QuickLook.cs" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

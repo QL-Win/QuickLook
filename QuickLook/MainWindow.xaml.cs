@@ -30,7 +30,7 @@ namespace QuickLook
             if (!Debugger.IsAttached)
                 Topmost = true;
 
-            Loaded += (sender, e) => AeroGlassHelper.EnableBlur(this);
+            Loaded += (sender, e) => Helpers.BlurLibrary.BlurWindow.EnableWindowBlur(this);
 
             buttonCloseWindow.MouseLeftButtonUp += (sender, e) => { Hide(); };
 
