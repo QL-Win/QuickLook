@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.InfoPanel
 {
-    public class PluginInterface : IViewer, IDisposable
+    public class PluginInterface : IViewer
     {
         private InfoPanel _ip;
 
@@ -31,14 +31,9 @@ namespace QuickLook.Plugin.InfoPanel
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             _ip.Stop = true;
-        }
-
-        ~PluginInterface()
-        {
-            Dispose();
         }
     }
 }

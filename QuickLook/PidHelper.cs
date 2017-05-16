@@ -5,6 +5,8 @@ namespace QuickLook
 {
     internal static class PidHelper
     {
+        private static FileStream _pidLocker;
+
         private static readonly string PidListener =
             Path.Combine(Path.GetTempPath(), "QuickLook.App.Listener.D6EC3F8DDF6B.pid");
 
@@ -35,11 +37,18 @@ namespace QuickLook
 
         internal static void WritePid()
         {
-            File.WriteAllText(App.RunningAsViewer ? PidViewer : PidListener, Process.GetCurrentProcess().Id.ToString());
+            var pidFile = App.RunningAsViewer ? PidViewer : PidListener;
+
+            File.WriteAllText(pidFile, Process.GetCurrentProcess().Id.ToString());
+
+            _pidLocker = File.Open(pidFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
         }
 
         internal static void DeletePid()
         {
+            _pidLocker?.Close();
+            _pidLocker = null;
+
             File.Delete(App.RunningAsViewer ? PidViewer : PidListener);
         }
     }

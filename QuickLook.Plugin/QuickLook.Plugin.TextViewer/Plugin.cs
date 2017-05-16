@@ -56,7 +56,7 @@ namespace QuickLook.Plugin.TextViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
         }
     }

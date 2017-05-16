@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.VideoViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             _vp?.Dispose();
         }

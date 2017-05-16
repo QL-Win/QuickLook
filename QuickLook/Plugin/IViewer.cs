@@ -35,6 +35,6 @@
         /// <summary>
         ///     Release any unmanaged resource here.
         /// </summary>
-        void Dispose();
+        void Cleanup();
     }
 }

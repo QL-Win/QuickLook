@@ -11,7 +11,24 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Margin="0,-20,0,0" />
+        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0" Margin="0,-20,0,0">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source, ElementName=image}" Value="{x:Null}">
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
+                                                         BeginTime="0:0:0" Duration="0:0:0.05" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />

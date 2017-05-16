@@ -49,7 +49,7 @@ namespace QuickLook.Plugin.PDFViewer
             };
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             GC.SuppressFinalize(this);
 
@@ -59,7 +59,7 @@ namespace QuickLook.Plugin.PDFViewer
 
         ~Plugin()
         {
-            Dispose();
+            Cleanup();
         }
     }
 }

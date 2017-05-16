@@ -77,13 +77,16 @@ namespace QuickLook
 
         private new void Hide()
         {
+            if (App.RunningAsViewer)
+                Application.Current.Shutdown();
+
             container.Content = null;
 
             // clean up plugin and refresh ContextObject for next use
-            ContextObject.ViewerPlugin?.Dispose();
+            ContextObject.ViewerPlugin?.Cleanup();
             ContextObject.Reset();
 
-            //GC.Collect();
+            GC.Collect();
 
             // revert UI changes
             ContextObject.IsBusy = true;

@@ -44,7 +44,7 @@ namespace QuickLook.Plugin.MarkdownViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             GC.SuppressFinalize(this);
 
@@ -53,7 +53,7 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         ~Plugin()
         {
-            Dispose();
+            Cleanup();
         }
 
         private string GenerateMarkdownHtml(string path)

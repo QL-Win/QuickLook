@@ -50,7 +50,7 @@ namespace QuickLook.Plugin.ImageViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
         }
     }

@@ -43,7 +43,7 @@ namespace QuickLook.Plugin.HtmlViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             GC.SuppressFinalize(this);
 
@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
         ~Plugin()
         {
-            Dispose();
+            Cleanup();
         }
     }
 }

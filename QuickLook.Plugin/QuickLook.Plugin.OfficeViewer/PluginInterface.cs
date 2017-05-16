@@ -69,7 +69,7 @@ namespace QuickLook.Plugin.OfficeViewer
             context.IsBusy = false;
         }
 
-        public void Dispose()
+        public void Cleanup()
         {
             GC.SuppressFinalize(this);
 
@@ -89,7 +89,7 @@ namespace QuickLook.Plugin.OfficeViewer
 
         ~PluginInterface()
         {
-            Dispose();
+            Cleanup();
         }
     }
 }

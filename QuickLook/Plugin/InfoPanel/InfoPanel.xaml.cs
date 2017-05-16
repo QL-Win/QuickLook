@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -25,15 +26,19 @@ namespace QuickLook.Plugin.InfoPanel
 
         public void DisplayInfo(string path)
         {
-            var icon =
-                WindowsThumbnailProvider.GetThumbnail(path,
-                    (int) (128 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI),
-                    (int) (128 * DpiHelper.GetCurrentDpi().VerticalDpi / DpiHelper.DEFAULT_DPI),
-                    ThumbnailOptions.ScaleUp);
+            Task.Run(() =>
+            {
+                var icon =
+                    WindowsThumbnailProvider.GetThumbnail(path,
+                        (int) (128 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI),
+                        (int) (128 * DpiHelper.GetCurrentDpi().VerticalDpi / DpiHelper.DEFAULT_DPI),
+                        ThumbnailOptions.ScaleUp);
 
-            image.Source = icon.ToBitmapSource();
+                var source = icon.ToBitmapSource();
+                icon.Dispose();
 
-            icon.Dispose();
+                Dispatcher.BeginInvoke(new Action(() => image.Source = source));
+            });
 
             var name = Path.GetFileName(path);
             filename.Text = string.IsNullOrEmpty(name) ? path : name;

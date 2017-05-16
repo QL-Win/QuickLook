@@ -20,11 +20,6 @@ namespace QuickLook
         internal ViewWindowManager()
         {
             _viewWindow = new MainWindow();
-            _viewWindow.Closed += (sender, e) =>
-            {
-                if (App.RunningAsViewer)
-                    Application.Current.Shutdown();
-            };
         }
 
         internal void InvokeRoutine()
@@ -66,10 +61,10 @@ namespace QuickLook
                 Debug.WriteLine(e.ToString());
                 Debug.WriteLine(e.StackTrace);
 
-                if (matchedPlugin.GetType() != PluginManager.GetInstance().DefaultPlugin)
+                if (matchedPlugin != PluginManager.GetInstance().DefaultPlugin)
                 {
-                    matchedPlugin.Dispose();
-                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin.CreateInstance<IViewer>();
+                    matchedPlugin.Cleanup();
+                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin;
                     BeginShowNewWindow(matchedPlugin, path);
                 }
                 else

@@ -70,7 +70,7 @@ namespace QuickLook.Plugin
 
         public void DisposePlugin()
         {
-            ViewerPlugin?.Dispose();
+            ViewerPlugin?.Cleanup();
             ViewerPlugin = null;
         }
 
