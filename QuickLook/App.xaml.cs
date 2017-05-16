@@ -18,9 +18,13 @@ namespace QuickLook
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException +=
-                (sender, args) => MessageBox.Show(((Exception) args.ExceptionObject).Message + Environment.NewLine +
-                                                  ((Exception) args.ExceptionObject).StackTrace);
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                MessageBox.Show(((Exception) args.ExceptionObject).Message + Environment.NewLine +
+                                ((Exception) args.ExceptionObject).StackTrace);
+
+                Current.Shutdown();
+            };
 
             base.OnStartup(e);
         }
@@ -68,9 +72,9 @@ namespace QuickLook
 
             PidHelper.WritePid();
 
-            TrayIcon.GetInstance();
+            TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun"))
-                TrayIcon.GetInstance().ShowNotification("", "QuickLook is running in the background.");
+                TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
 
             PluginManager.GetInstance();
 
@@ -79,7 +83,7 @@ namespace QuickLook
 
         private void App_OnExit(object sender, ExitEventArgs e)
         {
-            TrayIcon.GetInstance().Dispose();
+            TrayIconManager.GetInstance().Dispose();
             BackgroundListener.GetInstance().Dispose();
 
             PidHelper.DeletePid();

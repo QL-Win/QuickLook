@@ -56,8 +56,6 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement.Stop();
 
             _context.ShowNotification("", "An error occurred while loading the video.");
-
-            throw new Exception();
         }
 
         public void LoadAndPlay(string path)

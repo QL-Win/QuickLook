@@ -28,7 +28,7 @@ namespace QuickLook.Helpers
             }
             catch (Exception)
             {
-                TrayIcon.GetInstance().ShowNotification("", "Failed to add QuickLook to Startup folder.");
+                TrayIconManager.GetInstance().ShowNotification("", "Failed to add QuickLook to Startup folder.");
             }
         }
 

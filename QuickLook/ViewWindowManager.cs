@@ -22,13 +22,13 @@ namespace QuickLook
             _viewWindow = new MainWindow();
         }
 
-        internal void InvokeRoutine()
+        internal void InvokeRoutine(bool replaceView = false)
         {
             if (!WindowHelper.IsFocusedControlExplorerItem())
                 if (!WindowHelper.IsFocusedWindowSelf())
                     return;
 
-            if (_viewWindow.BeginHide())
+            if (!replaceView && _viewWindow.BeginHide())
                 return;
 
             var path = GetCurrentSelection();

@@ -121,7 +121,7 @@
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="Helpers\DpiHelpers.cs" />
-    <Compile Include="TrayIcon.cs" />
+    <Compile Include="TrayIconManager.cs" />
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewWindowManager.cs" />

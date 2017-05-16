@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Input;
 using QuickLook.NativeMethods;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
+using KeyEventHandler = System.Windows.Forms.KeyEventHandler;
 
 namespace QuickLook
 {
@@ -62,6 +65,8 @@ namespace QuickLook
                 var key = (Keys) lParam.vkCode;
                 if (HookedKeys.Contains(key))
                 {
+                    key = AddModifiers(key);
+
                     var kea = new KeyEventArgs(key);
                     if (wParam == User32.WM_KEYDOWN || wParam == User32.WM_SYSKEYDOWN)
                         KeyDown?.Invoke(this, kea);
@@ -72,6 +77,20 @@ namespace QuickLook
                 }
             }
             return User32.CallNextHookEx(_hhook, code, wParam, ref lParam);
+        }
+
+        private Keys AddModifiers(Keys key)
+        {
+            //Ctrl
+            if ((Keyboard.Modifiers & ModifierKeys.Control) != 0) key = key | Keys.Control;
+
+            //Shift
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0) key = key | Keys.Shift;
+
+            //Alt
+            if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0) key = key | Keys.Alt;
+
+            return key;
         }
     }
 }

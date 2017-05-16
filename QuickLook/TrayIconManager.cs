@@ -7,9 +7,9 @@ using Application = System.Windows.Application;
 
 namespace QuickLook
 {
-    public class TrayIcon : IDisposable
+    public class TrayIconManager : IDisposable
     {
-        private static TrayIcon _instance;
+        private static TrayIconManager _instance;
 
         private readonly NotifyIcon _icon;
 
@@ -22,11 +22,11 @@ namespace QuickLook
                     AutoStartupHelper.CreateAutorunShortcut();
             });
 
-        private TrayIcon()
+        private TrayIconManager()
         {
             _icon = new NotifyIcon
             {
-                Icon = Resources.app_white,
+                Icon = Resources.app,
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
@@ -50,9 +50,9 @@ namespace QuickLook
             _icon.ShowBalloonTip(5000, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
         }
 
-        internal static TrayIcon GetInstance()
+        internal static TrayIconManager GetInstance()
         {
-            return _instance ?? (_instance = new TrayIcon());
+            return _instance ?? (_instance = new TrayIconManager());
         }
     }
 }

@@ -84,7 +84,7 @@ namespace QuickLook.Plugin
         /// <param name="isError">Is this indicates a error?</param>
         public void ShowNotification(string title, string content, bool isError = false)
         {
-            TrayIcon.GetInstance().ShowNotification(title, content, isError);
+            TrayIconManager.GetInstance().ShowNotification(title, content, isError);
         }
 
         /// <summary>

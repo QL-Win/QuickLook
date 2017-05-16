@@ -21,11 +21,6 @@ namespace QuickLook
 
             InitializeComponent();
 
-            // revert designer changes
-            windowPanel.Opacity = 0d;
-            busyIndicatorLayer.Visibility = Visibility.Visible;
-            busyIndicatorLayer.Opacity = 1d;
-
             // do not set TopMost property if we are now debugging. it makes debugging painful...
             if (!Debugger.IsAttached)
                 Topmost = true;
@@ -59,6 +54,9 @@ namespace QuickLook
 
         private new void Show()
         {
+            // revert UI changes
+            ContextObject.IsBusy = true;
+            
             Height = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
                      windowBorder.BorderThickness.Bottom;
             Width = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
