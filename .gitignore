@@ -289,4 +289,5 @@ __pycache__/
 
 /QuickLook.Plugin.PDFViewer/MoonPdfLib
 /GitVersion.cs
+/QuickLook.Installer/C_QuickLookComponents.wxs
 /Build/
