@@ -22,6 +22,7 @@ namespace QuickLook.Plugin.InfoPanel
         {
             _ip = new InfoPanel();
 
+            context.Title = "";
             context.ViewerContent = _ip;
             context.CanResize = false;
 
