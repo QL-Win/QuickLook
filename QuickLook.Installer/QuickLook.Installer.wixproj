@@ -120,7 +120,7 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>robocopy "$(SolutionDir)Build\$(Configuration)" "$(SolutionDir)Build\Package" %2a.%2a /e /xf %2a.pdb /xf %2a.obj /xf %2a.ipdb /xf %2a.iobj /xf %2a.exp /xf %2a.lib /xf %2a.ilk /xf %2a.xml
+    <PreBuildEvent>robocopy "$(SolutionDir)Build\$(Configuration)" "$(SolutionDir)Build\Package" %2a.%2a /e /njh /njs /ndl /nc /ns /xf %2a.pdb /xf %2a.obj /xf %2a.ipdb /xf %2a.iobj /xf %2a.exp /xf %2a.lib /xf %2a.ilk /xf %2a.xml
 
 "$(WIX)bin\heat" dir "$(SolutionDir)Build\Package" -dr INSTALLFOLDER -cg QuickLookComponents -gg -g1 -sf -srd -sreg -var "var.QuickLook.TargetDir" -out "$(ProjectDir)C_QuickLookComponents.wxs"</PreBuildEvent>
   </PropertyGroup>
