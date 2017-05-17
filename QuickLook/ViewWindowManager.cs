@@ -22,6 +22,9 @@ namespace QuickLook
 
         internal void InvokeRoutine(bool replaceView = false)
         {
+            if (replaceView && _viewWindow.IsLoaded && _viewWindow.Visibility != System.Windows.Visibility.Visible)
+                return;
+
             if (!WindowHelper.IsFocusedControlExplorerItem())
                 if (!WindowHelper.IsFocusedWindowSelf())
                     return;
