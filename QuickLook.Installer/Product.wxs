@@ -24,7 +24,7 @@
         <Component Id="ApplicationShortcutProgramMenu" Guid="4F3E84DA-0E8B-44E9-B59D-B3AFAE70519E">
           <Shortcut Id="ApplicationProgramMenuShortcut"
                     Name="QuickLook"
-                    Description="QuickLook lets you preview any file by pressing space bar."
+                    Description="QuickLook lets you preview any file by pressing the space bar."
                     Target="[INSTALLFOLDER]QuickLook.exe"
                     WorkingDirectory="INSTALLFOLDER" />
           <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
@@ -41,7 +41,7 @@
         <Component Id="ApplicationShortcutDesktop" Guid="9ECBF18A-F3C7-495A-9327-02A2E79ABBD7">
           <Shortcut Id="ApplicationDesktopShortcut"
                     Name="QuickLook"
-                    Description="QuickLook lets you preview any file by pressing space bar."
+                    Description="QuickLook lets you preview any file by pressing the space bar."
                     Target="[INSTALLFOLDER]QuickLook.exe"
                     WorkingDirectory="INSTALLFOLDER" />
           <RemoveFolder Id="DesktopFolder" On="uninstall" />
