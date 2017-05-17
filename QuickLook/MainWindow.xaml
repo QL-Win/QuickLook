@@ -30,7 +30,7 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
-                                                             BeginTime="0:0:0" Duration="0:0:0.05" />
+                                                             BeginTime="0:0:0" Duration="0:0:0" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
