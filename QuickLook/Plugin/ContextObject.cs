@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using QuickLook.Annotations;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin
 {
@@ -66,15 +67,15 @@ namespace QuickLook.Plugin
         /// <summary>
         ///     Set whether user are allowed to set focus at the viewer window.
         /// </summary>
-        public bool Focusable { get; set; } = false;
+        public bool Focusable { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void DisposePlugin()
         {
             ViewerPlugin?.Cleanup();
             ViewerPlugin = null;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         ///     Show a notification balloon.
@@ -114,9 +115,9 @@ namespace QuickLook.Plugin
         /// <summary>
         ///     Get the device-independent resolution.
         /// </summary>
-        public Size GetMaximumDisplayBound()
+        public Rect GetMaximumDisplayBound()
         {
-            return new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
+            return WindowHelper.GetCurrentWindowRect();
         }
 
         internal void Reset()

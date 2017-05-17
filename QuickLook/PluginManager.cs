@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using QuickLook.ExtensionMethods;
 using QuickLook.Plugin;
+using QuickLook.Plugin.InfoPanel;
 
 namespace QuickLook
 {
@@ -17,7 +18,7 @@ namespace QuickLook
             LoadPlugins();
         }
 
-        internal IViewer DefaultPlugin { get; } = new Plugin.InfoPanel.PluginInterface();
+        internal IViewer DefaultPlugin { get; } = new PluginInterface();
 
         internal List<IViewer> LoadedPlugins { get; private set; } = new List<IViewer>();
 

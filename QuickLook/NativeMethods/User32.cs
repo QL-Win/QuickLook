@@ -8,6 +8,10 @@ namespace QuickLook.NativeMethods
     internal static class User32
     {
         [DllImport("user32.dll")]
+        public static extern int MoveWindow(IntPtr hWnd, int x, int y, int nWidth, int nHeight,
+            [MarshalAs(UnmanagedType.Bool)] bool bRepaint);
+
+        [DllImport("user32.dll")]
         internal static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance,
             uint threadId);
 

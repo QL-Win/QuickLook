@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
+using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
 
 namespace QuickLook
@@ -25,7 +26,7 @@ namespace QuickLook
             if (!Debugger.IsAttached)
                 Topmost = true;
 
-            Loaded += (sender, e) => Helpers.BlurLibrary.BlurWindow.EnableWindowBlur(this);
+            Loaded += (sender, e) => BlurWindow.EnableWindowBlur(this);
 
             buttonCloseWindow.MouseLeftButtonUp += (sender, e) => { Hide(); };
 
@@ -56,14 +57,13 @@ namespace QuickLook
         {
             // revert UI changes
             ContextObject.IsBusy = true;
-            
-            Height = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
-                     windowBorder.BorderThickness.Bottom;
-            Width = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
-                    windowBorder.BorderThickness.Right;
 
-            Left = (SystemParameters.VirtualScreenWidth - Width) / 2;
-            Top = (SystemParameters.VirtualScreenHeight - Height) / 2;
+            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
+                            windowBorder.BorderThickness.Bottom;
+            var newWidth = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
+                           windowBorder.BorderThickness.Right;
+
+            ResizeAndCenter(new Size(newWidth, newHeight));
 
             ResizeMode = ContextObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
 
@@ -71,6 +71,28 @@ namespace QuickLook
 
             //if (!ContextObject.Focusable)
             //    WindowHelper.SetNoactivate(new WindowInteropHelper(this));
+        }
+
+        private void ResizeAndCenter(Size size)
+        {
+            if (!IsLoaded)
+            {
+                // if the window is not loaded yet, just leave the problem to WPF
+                Width = size.Width;
+                Height = size.Height;
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                return;
+            }
+
+            // System.Windows.Forms does not consider DPI, so we need to do it maunally
+
+            var screen = WindowHelper.GetCurrentWindowRect();
+
+            var newLeft = screen.Left + (screen.Width - size.Width) / 2;
+            var newTop = screen.Top + (screen.Height - size.Height) / 2;
+
+            this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
 
         private new void Hide()

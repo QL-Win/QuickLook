@@ -24,7 +24,8 @@
                 <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
+                                         Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -64,7 +65,8 @@
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}" Value="False">
+                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
+                                         Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
