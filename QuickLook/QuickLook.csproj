@@ -170,6 +170,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="NativeMethods\QuickLook.cs" />
+    <None Include="..\README.md">
+      <Link>README.md</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -197,6 +201,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\app_white.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE-GPL.txt">
+      <Link>LICENSE-GPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\LICENSE-LGPL.txt">
+      <Link>LICENSE-LGPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

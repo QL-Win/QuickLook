@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.HtmlViewer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.MarkdownViewer", "QuickLook.Plugin\QuickLook.Plugin.MarkdownViewer\QuickLook.Plugin.MarkdownViewer.csproj", "{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "QuickLook.Installer", "QuickLook.Installer\QuickLook.Installer.wixproj", "{F0214FC2-EFBE-426C-842D-B42BC37D9525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,11 @@ Global
 		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|Any CPU.ActiveCfg = Release|x86
 		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|x86.ActiveCfg = Release|x86
 		{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}.Release|x86.Build.0 = Release|x86
+		{F0214FC2-EFBE-426C-842D-B42BC37D9525}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F0214FC2-EFBE-426C-842D-B42BC37D9525}.Debug|x86.ActiveCfg = Debug|x86
+		{F0214FC2-EFBE-426C-842D-B42BC37D9525}.Release|Any CPU.ActiveCfg = Release|x86
+		{F0214FC2-EFBE-426C-842D-B42BC37D9525}.Release|x86.ActiveCfg = Release|x86
+		{F0214FC2-EFBE-426C-842D-B42BC37D9525}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

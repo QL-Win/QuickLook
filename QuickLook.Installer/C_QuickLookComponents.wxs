@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLFOLDER">
+            <Directory Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0" Name="QuickLook.Plugin" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="QuickLookComponents">
+            <Component Id="cmpDFB92546A2FC87C7E90F8066645A2A5B" Directory="INSTALLFOLDER" Guid="66BFD685-D1DC-47F7-9A0E-FF065368695A">
+                <File Id="fil60DF65A77AEAEA499C29B03C6E04FBD3" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\FontAwesome.WPF.dll" />
+            </Component>
+            <Component Id="cmp675B5546DD9C62DB1C345F69DAECC02A" Directory="INSTALLFOLDER" Guid="3C08AFD1-317F-426C-8480-1FAB509822A3">
+                <File Id="fil4D4AA876BAEA822B9D9EE22C4FEA12AB" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\LICENSE-GPL.txt" />
+            </Component>
+            <Component Id="cmp90F56724D882DA851265E946E78827E0" Directory="INSTALLFOLDER" Guid="689ED67E-7F29-4C39-92D3-D4C507FA32FB">
+                <File Id="fil721316C385C585168CDD3AEFCDAE0364" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\LICENSE-LGPL.txt" />
+            </Component>
+            <Component Id="cmpAA254D786536A8A5BBAC8D3727CE2F1B" Directory="INSTALLFOLDER" Guid="0D437DD2-2629-4969-980D-FDABA68AD5E4">
+                <File Id="fil22F7B7F07E63622AD2451459086A3CF2" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.exe" />
+            </Component>
+            <Component Id="cmpFEF6CE80B3F56D64482F1989935FD61F" Directory="INSTALLFOLDER" Guid="3BFA61C1-7208-46FC-8FB9-EB0401876044">
+                <File Id="filB390783292252315FB6C9722D6099EAD" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.exe.config" />
+            </Component>
+            <Component Id="cmp488959AAEF89AA59D8AAA71AE64BB66A" Directory="INSTALLFOLDER" Guid="83729347-F418-4312-81E3-B9639FFD0BCF">
+                <File Id="filB613C262DC776ED9E06B2D9EC1D515E2" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Native.Shell32.dll" />
+            </Component>
+            <Component Id="cmp99E5A3095A4E4B12E569BC18E0A6566E" Directory="INSTALLFOLDER" Guid="A5151E32-D9E8-4638-9AD1-7C21A734FF30">
+                <File Id="fil9571ECD74A9FBA9631D1B980920C7FBC" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\README.md" />
+            </Component>
+            <Component Id="cmp4C2E086C9A6D99927BABE1A2E3EE11CC" Directory="dir6DD37DD3ABF75A4B9A192449F034AD67" Guid="B37306AD-D9F7-4898-B4B1-070F76649505">
+                <File Id="fil2091A8ABDFC0596A43356CE1282DA225" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\QuickLook.Plugin.ArchiveViewer.dll" />
+            </Component>
+            <Component Id="cmpC16D291955DF1E6D04954A8A42B2696D" Directory="dir6DD37DD3ABF75A4B9A192449F034AD67" Guid="94F171A7-164C-4257-8839-FF5577950E5F">
+                <File Id="fil3EF8A64209D5F05E67DA9B2A4484132E" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\SharpCompress.dll" />
+            </Component>
+            <Component Id="cmpEA0614F2AB161EF8BB95DF1DEDDD37F4" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="F0D67140-B675-4309-992A-D1A48AE81A2F">
+                <File Id="fil3FF9038FB8A21BBBA52C96558DAD8544" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\cef.pak" />
+            </Component>
+            <Component Id="cmpA8A1EFBC05A7E29E035038D6B95DD404" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="6684EAC2-0586-4B99-A716-3B801C3338F0">
+                <File Id="filF0B495D14AB1582148F7C58D9B4F4351" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\CefSharp.BrowserSubprocess.Core.dll" />
+            </Component>
+            <Component Id="cmpF6EB72225588774259E0ADCB53E20C62" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="91623F2D-FF34-4E45-B68A-8FA39183159C">
+                <File Id="filB18136C91C246A4B009540A56459C145" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\CefSharp.BrowserSubprocess.exe" />
+            </Component>
+            <Component Id="cmpA06F3BD0BE0354C86B4983D6BDDF0E88" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="16CD9DE1-84CA-4DF2-A05E-FC97203F39F5">
+                <File Id="filC641942F7706DE6E0DF384B02E9B52F1" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\CefSharp.Core.dll" />
+            </Component>
+            <Component Id="cmpF3CE8B71D0DB172AC5AC5ACD84B882A3" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="5519ED26-9EC8-487A-A843-24A956C00C40">
+                <File Id="fil3DA2377AE79B246ED96A922C1C78AC1A" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\CefSharp.dll" />
+            </Component>
+            <Component Id="cmp821E5B3F210F73016E9100677B7C93E3" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="09CE7839-BE08-4573-91B1-03D36BCF8488">
+                <File Id="fil2575C58197965E4E84AC859216B0A67D" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\CefSharp.Wpf.dll" />
+            </Component>
+            <Component Id="cmpB79BCB349121504F3119CAD05808FDC0" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="4B1530A4-4D8D-4824-9FFF-8589117A84CF">
+                <File Id="fil77FE9F0655C9370C323B891336A639F8" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\cef_100_percent.pak" />
+            </Component>
+            <Component Id="cmp6264BFD3D8F31552D77FD1AD412F15D5" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="AAC06668-AC2D-4272-9B7E-C41A42CD7754">
+                <File Id="fil2B124F472970A63DC632503025141DD1" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\cef_200_percent.pak" />
+            </Component>
+            <Component Id="cmpAB62CE9FC4169906C0047ACC8D82210F" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="42435D4A-9069-4441-B030-D9F8D5EAC38B">
+                <File Id="fil72E5D493C850B1836F28E1074B31D0E2" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\cef_extensions.pak" />
+            </Component>
+            <Component Id="cmp9A407093A9A2416EA68AAD5BB1F2B879" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="6AC6ED4E-3749-4095-8B14-8DF595595F27">
+                <File Id="filA2A45B17365B7954588B13B67B266943" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\chrome_elf.dll" />
+            </Component>
+            <Component Id="cmpF3820396F1B50CF9DA86F8937E18C429" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="296A2EBD-8EAB-441A-AE12-0217AF7E1EFA">
+                <File Id="fil1FD1E5AED18C9D965A9B06E96816ED76" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\d3dcompiler_47.dll" />
+            </Component>
+            <Component Id="cmpAF85842A7C2F111B56DA9DD34E222F0E" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="1FD11292-62FB-4779-AC58-742AE52ADC90">
+                <File Id="fil05D702232CFB56F9321390D4E9D437F3" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\icudtl.dat" />
+            </Component>
+            <Component Id="cmpBFD17D0B53C92F98C498385CAE047291" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="149E1875-77F9-4C47-A1EA-E4761EC97CC5">
+                <File Id="filA916E23192851A195D95488B6F7879B8" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\libcef.dll" />
+            </Component>
+            <Component Id="cmp914223E693A498A7439DFE9237CFFB05" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="98F5A92B-9E08-4B27-B51C-9EFC2955D502">
+                <File Id="filA97614492854C8C5E38AEB867A1A0073" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\libEGL.dll" />
+            </Component>
+            <Component Id="cmp341DE382E96911A6CC68773ED57A31E0" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="92E3AEFE-678E-4462-9979-A8AF09F35AE8">
+                <File Id="fil342890F362CDDDDD85846CA2E3202C96" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\libGLESv2.dll" />
+            </Component>
+            <Component Id="cmpB850704A48E79522707661E800F953A6" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="740F674C-2F2D-434C-86A7-25F2564025F9">
+                <File Id="fil8C1BFAE2C12BE53BDDFFF624490974F0" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\natives_blob.bin" />
+            </Component>
+            <Component Id="cmp004267844D3EB341795457E2CDB2F1A2" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="7BFA609C-5EBA-4F1E-BB0C-A97125D4F850">
+                <File Id="fil2B68D006C5A777B2FAD864BFC402D407" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.dll" />
+            </Component>
+            <Component Id="cmp5BBB810139389E307B35436872531BD4" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="806B8B68-98B3-4334-8D39-47D976682CE7">
+                <File Id="filC14B68824CED9A5FB6D34EED60F694EC" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\snapshot_blob.bin" />
+            </Component>
+            <Component Id="cmp8BC7858A974A882DF8D53E16EEB74D28" Directory="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Guid="F7B4459B-26A1-4C32-B8EE-22B7CC7E456C">
+                <File Id="fil6A8043294DB77B978D0A8C477053312D" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\widevinecdmadapter.dll" />
+            </Component>
+            <Component Id="cmp78F6AC463E5316F1E215A193398B68FC" Directory="dir4CE9D6E8433E9B0A9D44C5D33DAA5D50" Guid="04C3C9BF-9F8A-47DB-8789-8DBF5A4090FB">
+                <File Id="filFB395F37E39D6C68D2E4EBC4CA53963D" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\locales\en-US.pak" />
+            </Component>
+            <Component Id="cmp23FAF29059945AA8C1FBCA650C372773" Directory="dir7ED0E51AB1C0551B42ABECADB7F6CBC0" Guid="A05C4588-A171-4BBC-97FC-A549E403F692">
+                <File Id="fil7B6533F93741DA2A63D743FEFB871D36" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.dll" />
+            </Component>
+            <Component Id="cmp7EBD3EA19033F38E9BB0ECAF797DF167" Directory="dir7ED0E51AB1C0551B42ABECADB7F6CBC0" Guid="E13233F1-B22F-4C9D-8B0C-E8A2F17A7F67">
+                <File Id="fil329FA5620807AA649BF1D33A8D558CFF" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\XamlAnimatedGif.dll" />
+            </Component>
+            <Component Id="cmpF5A7615956FCA62B398AAB8C3CC4AB49" Directory="dir01A4C9DED4B2C965D209DFDBDA013700" Guid="2A7257DA-4A61-4DFD-B840-AEE410F746D6">
+                <File Id="filAEA40393815E564FE4CE77F3DD463399" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.MarkdownViewer\CefSharp.dll" />
+            </Component>
+            <Component Id="cmp5B315E73354A6FB76D16D5A2C922036F" Directory="dir01A4C9DED4B2C965D209DFDBDA013700" Guid="DA57BC0B-588F-4A1E-99A2-DC69ED2D8083">
+                <File Id="fil78A60CCEB62B5A8341EABC8BB3BA7F6B" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.MarkdownViewer\QuickLook.Plugin.MarkdownViewer.dll" />
+            </Component>
+            <Component Id="cmp10B70B85ABD7FD76273AA4603C55ACD0" Directory="dirAFF930DCB543390A91F852A70FB27707" Guid="D1EF2B54-91E0-46F1-9121-B20DD787FB88">
+                <File Id="fil98C456B858AEFBD721DCE03455F7FBD3" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.OfficeViewer\QuickLook.Plugin.OfficeViewer.dll" />
+            </Component>
+            <Component Id="cmp1DBFEDA8D13B740315735399B3AE2F90" Directory="dir9EA51357EFDA146964AD6B4556601576" Guid="05D8E0C5-1229-43F6-BB4C-FE19F79EE1A9">
+                <File Id="filA9D22B09714E5C23B1FD1EC7A8AD8EA7" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.PDFViewer\LibMuPdf.dll" />
+            </Component>
+            <Component Id="cmp11F0E994D8002282D65FFE0115528325" Directory="dir9EA51357EFDA146964AD6B4556601576" Guid="9E967759-D1AF-49BF-AD20-D98695C437B3">
+                <File Id="filBC26A81803C906487DF17DC04D78E1BE" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.PDFViewer\QuickLook.Plugin.PDFViewer.dll" />
+            </Component>
+            <Component Id="cmpB3296688C76656B4ADD9C614EFFEB48B" Directory="dir28437950476479582E94A8F63B8E25F5" Guid="938EC01A-B057-44DD-9795-E09073EC37BC">
+                <File Id="fil0B21A325DB99A42CEAC4FCA3EA0ABE19" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.TextViewer\ICSharpCode.AvalonEdit.dll" />
+            </Component>
+            <Component Id="cmp504CA49CDAC0D7C478B188F5FAEAD67E" Directory="dir28437950476479582E94A8F63B8E25F5" Guid="C54FE8C9-CC13-4FDD-AF59-AC5D6865CA7F">
+                <File Id="fil3D95DA697F0288127C97595FE1F6BB71" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.TextViewer\QuickLook.Plugin.TextViewer.dll" />
+            </Component>
+            <Component Id="cmp8FB06C9A5F37BCEB016162774FC0F3A3" Directory="dirE1CF57F7A3C1B75BF1DE66C7D3F809D4" Guid="D76D7E66-BA96-45E3-9281-83C773584D34">
+                <File Id="filBF1BD0AFA07DCD39CB96482B6B8FD768" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\FontAwesome.WPF.dll" />
+            </Component>
+            <Component Id="cmpB2E96CA6E92228879EB3F826D9A95B16" Directory="dirE1CF57F7A3C1B75BF1DE66C7D3F809D4" Guid="F5FBA4CF-2349-44FB-B28E-468CF8A13DB1">
+                <File Id="filC13326B020DE299822DA66616B94C6A4" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\QuickLook.Plugin.VideoViewer.dll" />
+            </Component>
+            <Component Id="cmp3021197AE31E6792931B0BC1D0EB46FD" Directory="dirE1CF57F7A3C1B75BF1DE66C7D3F809D4" Guid="882015E4-C8E6-4235-8252-9459E20CE537">
+                <File Id="filA13890F9B5B35AB662E50DF7837A0292" KeyPath="yes" Source="$(var.QuickLook.TargetDir)\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\Unosquare.FFmpegMediaElement.dll" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir01A4C9DED4B2C965D209DFDBDA013700" Name="QuickLook.Plugin.MarkdownViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir0CEBBC9E5D69A148F7A7475F43AEE42D" Name="QuickLook.Plugin.HtmlViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir28437950476479582E94A8F63B8E25F5" Name="QuickLook.Plugin.TextViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir0CEBBC9E5D69A148F7A7475F43AEE42D">
+            <Directory Id="dir4CE9D6E8433E9B0A9D44C5D33DAA5D50" Name="locales" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir6DD37DD3ABF75A4B9A192449F034AD67" Name="QuickLook.Plugin.ArchiveViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir7ED0E51AB1C0551B42ABECADB7F6CBC0" Name="QuickLook.Plugin.ImageViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dir9EA51357EFDA146964AD6B4556601576" Name="QuickLook.Plugin.PDFViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dirAFF930DCB543390A91F852A70FB27707" Name="QuickLook.Plugin.OfficeViewer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir768681B1AB9B7A8E7BA41EE4C29E28D0">
+            <Directory Id="dirE1CF57F7A3C1B75BF1DE66C7D3F809D4" Name="QuickLook.Plugin.VideoViewer" />
+        </DirectoryRef>
+    </Fragment>
+</Wix>
