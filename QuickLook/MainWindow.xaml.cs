@@ -95,15 +95,20 @@ namespace QuickLook
             this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
 
+        internal void UnloadPlugin()
+        {
+            container.Content = null;
+
+            // clean up plugin and refresh ContextObject for next use
+            ContextObject.ViewerPlugin?.Cleanup();
+        }
+
         private new void Hide()
         {
             if (App.RunningAsViewer)
                 Application.Current.Shutdown();
 
-            container.Content = null;
-
-            // clean up plugin and refresh ContextObject for next use
-            ContextObject.ViewerPlugin?.Cleanup();
+            UnloadPlugin();
             ContextObject.Reset();
 
             GC.Collect();
@@ -111,8 +116,9 @@ namespace QuickLook
             // revert UI changes
             ContextObject.IsBusy = true;
 
-            Left -= 10000;
-            Dispatcher.Delay(100, _ => base.Hide());
+            base.Hide();
+            //Left -= 10000;
+            //Dispatcher.Delay(100, _ => base.Hide());
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path)
@@ -121,13 +127,27 @@ namespace QuickLook
             ContextObject.ViewerPlugin = matchedPlugin;
 
             // get window size before showing it
-            matchedPlugin.Prepare(path, ContextObject);
+            ContextObject.ViewerPlugin.Prepare(path, ContextObject);
 
             Show();
 
             // load plugin, do not block UI
-            Dispatcher.BeginInvoke(new Action(() => matchedPlugin.View(path, ContextObject)),
-                DispatcherPriority.Render);
+            Exception thrown = null;
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    try
+                    {
+                        ContextObject.ViewerPlugin.View(path, ContextObject);
+                    }
+                    catch (Exception e)
+                    {
+                        thrown = e;
+                    }
+                }),
+                DispatcherPriority.Render).Wait();
+
+            if (thrown != null)
+                throw thrown;
         }
 
         internal bool BeginHide()

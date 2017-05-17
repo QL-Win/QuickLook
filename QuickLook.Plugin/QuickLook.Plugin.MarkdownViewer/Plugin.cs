@@ -49,6 +49,7 @@ namespace QuickLook.Plugin.MarkdownViewer
             GC.SuppressFinalize(this);
 
             _panel?.Dispose();
+            _panel = null;
         }
 
         ~Plugin()

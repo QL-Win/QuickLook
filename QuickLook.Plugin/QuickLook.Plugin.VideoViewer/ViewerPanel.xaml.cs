@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FontAwesome.WPF;
@@ -51,11 +52,16 @@ namespace QuickLook.Plugin.VideoViewer
                 : FontAwesomeIcon.PlayCircleOutline;
         }
 
+        [DebuggerNonUserCode]
         private void ShowErrorNotification(object sender, MediaErrorRoutedEventArgs e)
         {
+            _context.ShowNotification("", "An error occurred while loading the video.");
             mediaElement.Stop();
 
-            _context.ShowNotification("", "An error occurred while loading the video.");
+            Dispose();
+
+
+            throw new Exception("fallback to default viewer.");
         }
 
         public void LoadAndPlay(string path)

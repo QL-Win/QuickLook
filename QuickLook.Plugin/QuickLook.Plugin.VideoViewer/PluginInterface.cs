@@ -55,6 +55,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void Cleanup()
         {
             _vp?.Dispose();
+            _vp = null;
         }
     }
 }

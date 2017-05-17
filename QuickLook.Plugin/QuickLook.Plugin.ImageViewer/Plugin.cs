@@ -52,6 +52,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Cleanup()
         {
+            _ip = null;
         }
     }
 }

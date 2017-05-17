@@ -127,6 +127,9 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         private string[] GetPathFragments(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                return new string[0];
+
             var frags = path.Split('\\', '/').Where(f => !string.IsNullOrEmpty(f)).ToArray();
 
             return frags.Select((s, i) => frags.Take(i + 1).Aggregate((a, b) => a + "\\" + b)).ToArray();

@@ -53,11 +53,14 @@ namespace QuickLook
         {
             try
             {
+                _viewWindow.UnloadPlugin();
                 _viewWindow.BeginShow(matchedPlugin, path);
             }
             catch (Exception e) // if current plugin failed, switch to default one.
             {
                 _viewWindow.BeginHide();
+
+                TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
 
                 Debug.WriteLine(e.ToString());
                 Debug.WriteLine(e.StackTrace);

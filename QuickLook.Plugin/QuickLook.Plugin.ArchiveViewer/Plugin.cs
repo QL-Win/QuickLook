@@ -16,18 +16,18 @@ namespace QuickLook.Plugin.ArchiveViewer
             if (Directory.Exists(path))
                 return false;
 
-            using (var stream = File.OpenRead(path))
+            switch (Path.GetExtension(path).ToLower())
             {
-                try
-                {
-                    ArchiveFactory.Open(stream);
-                }
-                catch (Exception)
-                {
+                case ".zip":
+                case ".rar":
+                case ".7z":
+                case ".gz":
+                case ".tar":
+                    return true;
+
+                default:
                     return false;
-                }
             }
-            return true;
         }
 
         public void Prepare(string path, ContextObject context)
@@ -50,6 +50,7 @@ namespace QuickLook.Plugin.ArchiveViewer
             GC.SuppressFinalize(this);
 
             _panel?.Dispose();
+            _panel = null;
         }
 
         ~Plugin()

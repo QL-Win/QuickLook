@@ -58,6 +58,7 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Cleanup()
         {
+            _tvp = null;
         }
     }
 }
