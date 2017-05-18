@@ -33,6 +33,7 @@ In-place preview / Integrate with 3rd-party file manager
 Hotkeys in preview window:
 
  - <kbd>Space</kbd> Show/Hide the preview window
+ - <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
  - <kbd>Ctrl+Wheel</kbd> Zoom in/out
 
 ## Development
