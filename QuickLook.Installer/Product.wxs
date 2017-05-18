@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="QuickLook" Language="1033" Version="0.0.0.0" Manufacturer="Paddy Xu"
+  <Product Id="*" Name="QuickLook" Language="1033" 
+           Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="Paddy Xu"
            UpgradeCode="c83b9c02-87d6-494e-9f5f-cf4c3900a54d">
     <Package InstallerVersion="500" Compressed="yes" Platform="x86" InstallScope="perUser" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MajorUpgrade Schedule="afterInstallValidate" AllowDowngrades="yes" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Property Id='ALLUSERS' Value='2' />
     <Property Id='MSIINSTALLPERUSER' Value='1' />
 
     <WixVariable Id="WixUILicenseRtf" Value="lgpl.rtf" />
-
+    
     <Feature Id="ProductFeature" Title="QuickLook.Installer" Level="1">
       <ComponentGroupRef Id="QuickLookComponents" />
       <ComponentRef Id="ApplicationShortcutDesktop" />
