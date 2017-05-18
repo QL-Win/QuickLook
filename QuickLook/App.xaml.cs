@@ -16,6 +16,8 @@ namespace QuickLook
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
         public static bool RunningAsViewer;
 
+        private static bool _duplicated;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
@@ -64,6 +66,8 @@ namespace QuickLook
 
             if (PidHelper.GetRunningInstance() != -1)
             {
+                _duplicated = true;
+
                 MessageBox.Show("QuickLook is already running in the background.");
 
                 Current.Shutdown();
@@ -86,7 +90,8 @@ namespace QuickLook
             TrayIconManager.GetInstance().Dispose();
             BackgroundListener.GetInstance().Dispose();
 
-            PidHelper.DeletePid();
+            if (!_duplicated)
+                PidHelper.DeletePid();
         }
     }
 }
