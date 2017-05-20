@@ -146,13 +146,13 @@ namespace QuickLook.Plugin.OfficeViewer
                             case FileTypeEnum.Word:
                                 _wordApp = new Microsoft.Office.Interop.Word.Application();
                                 _wordApp.DisplayAlerts = WdAlertLevel.wdAlertsNone;
-                                _wordApp.Documents.Add(_path);
+                                _wordApp.Documents.Open(_path);
                                 succeeded = true;
                                 break;
                             case FileTypeEnum.Excel:
                                 _excelApp = new Application();
                                 _excelApp.DisplayAlerts = false;
-                                _excelApp.Workbooks.Add(_path);
+                                _excelApp.Workbooks.Open(_path);
                                 var worksheets = _excelApp.ActiveWorkbook.Sheets;
                                 if (worksheets != null)
                                     foreach (Worksheet sheet in worksheets)
