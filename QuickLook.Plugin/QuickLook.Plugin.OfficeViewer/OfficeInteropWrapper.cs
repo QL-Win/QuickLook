@@ -37,6 +37,7 @@ namespace QuickLook.Plugin.OfficeViewer
                     break;
                 case ".xls":
                 case ".xlsx":
+                case ".xlsm":
                     FileType = FileTypeEnum.Excel;
                     break;
                 case ".ppt":
@@ -144,16 +145,23 @@ namespace QuickLook.Plugin.OfficeViewer
                         {
                             case FileTypeEnum.Word:
                                 _wordApp = new Microsoft.Office.Interop.Word.Application();
+                                _wordApp.DisplayAlerts = WdAlertLevel.wdAlertsNone;
                                 _wordApp.Documents.Add(_path);
                                 succeeded = true;
                                 break;
                             case FileTypeEnum.Excel:
                                 _excelApp = new Application();
+                                _excelApp.DisplayAlerts = false;
                                 _excelApp.Workbooks.Add(_path);
+                                var worksheets = _excelApp.ActiveWorkbook.Sheets;
+                                if (worksheets != null)
+                                    foreach (Worksheet sheet in worksheets)
+                                        sheet.PageSetup.PrintGridlines = true;
                                 succeeded = true;
                                 break;
                             case FileTypeEnum.PowerPoint:
                                 _powerpointApp = new Microsoft.Office.Interop.PowerPoint.Application();
+                                _powerpointApp.DisplayAlerts = PpAlertLevel.ppAlertsNone;
                                 _powerpointApp.Presentations.Open(_path);
                                 succeeded = true;
                                 break;

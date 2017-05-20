@@ -23,6 +23,7 @@ namespace QuickLook.Plugin.OfficeViewer
                 case ".docx":
                 case ".xls":
                 case ".xlsx":
+                case ".xlsm":
                 case ".ppt":
                 case ".pptx":
                     return true;
