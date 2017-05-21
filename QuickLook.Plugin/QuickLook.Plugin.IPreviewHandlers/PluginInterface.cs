@@ -24,13 +24,14 @@ namespace QuickLook.Plugin.IPreviewHandlers
                 case ".docx":
                 case ".xls":
                 case ".xlsx":
+                case ".bbb":
                 case ".xlsm":
                 // Visio Viewer will not quit after preview, which cause serious memory issue
                 //case ".vsd":
                 //case ".vsdx":
                 case ".ppt":
                 case ".pptx":
-                    return true;
+                    return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
             }
 
             return false;
@@ -47,11 +48,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
 
-            _panel.Loaded += (sender, e) =>
-            {
-                _panel.PreviewFile(path);
-                SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
-            };
+            _panel.PreviewFile(path, context);
 
             context.IsBusy = false;
         }
@@ -63,12 +60,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _panel?.Dispose();
             _panel = null;
         }
-
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
+        
         ~PluginInterface()
         {
             Cleanup();

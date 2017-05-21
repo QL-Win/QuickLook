@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Threading;
 
 namespace QuickLook.Plugin.IPreviewHandlers
 {
@@ -9,7 +11,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
     /// </summary>
     public partial class PreviewPanel : UserControl, IDisposable
     {
-        private PreviewHandlerHost _control = new PreviewHandlerHost();
+        private PreviewHandlerHost _control;
 
         public PreviewPanel()
         {
@@ -25,16 +27,22 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _control = null;
         }
 
-        public void PreviewFile(string file)
+        public void PreviewFile(string file, ContextObject context)
         {
-            _control = new PreviewHandlerHost();
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                _control = new PreviewHandlerHost();
+                presenter.Child = _control;
+                _control.Open(file);
+            }), DispatcherPriority.Render);
 
-            presenter.Child = _control;
-
-            _control.Open(file);
-
-            SetActiveWindow(presenter.Handle);
+            //SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
+            //SetActiveWindow(presenter.Handle);
         }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]

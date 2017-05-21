@@ -61,7 +61,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        private Guid GetPreviewHandlerGUID(string filename)
+        public static Guid GetPreviewHandlerGUID(string filename)
         {
             // open the registry key corresponding to the file extension
             var ext = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(filename));
@@ -150,8 +150,4 @@ namespace QuickLook.Plugin.IPreviewHandlers
             }
         }
     }
-
-    #region COM Interop
-
-    #endregion
 }
