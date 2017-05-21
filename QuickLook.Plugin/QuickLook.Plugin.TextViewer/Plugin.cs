@@ -9,6 +9,7 @@ namespace QuickLook.Plugin.TextViewer
         private TextViewerPanel _tvp;
 
         public int Priority => 0;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {
@@ -43,7 +44,7 @@ namespace QuickLook.Plugin.TextViewer
         public void Prepare(string path, ContextObject context)
         {
             context.PreferredSize = new Size {Width = 800, Height = 600};
-            context.Focusable = true;
+            context.CanFocus = true;
         }
 
         public void View(string path, ContextObject context)

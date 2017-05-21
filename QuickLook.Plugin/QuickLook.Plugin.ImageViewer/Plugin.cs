@@ -8,7 +8,8 @@ namespace QuickLook.Plugin.ImageViewer
         private Size _imageSize;
         private ImagePanel _ip;
 
-        public int Priority => 9999;
+        public int Priority => int.MaxValue;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {

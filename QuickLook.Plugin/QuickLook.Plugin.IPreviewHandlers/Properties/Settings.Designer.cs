@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QuickLook.Plugin.OfficeViewer.Properties {
+namespace QuickLook.Plugin.IPreviewHandlers.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

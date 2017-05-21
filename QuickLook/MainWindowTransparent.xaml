@@ -6,18 +6,24 @@
     xmlns:control="clr-namespace:QuickLook.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" x:Class="QuickLook.MainWindow" x:Name="mainWindow"
+    xmlns:converters="clr-namespace:QuickLook.Converters"
+    mc:Ignorable="d" x:Class="QuickLook.MainWindowTransparent" x:Name="mainWindow"
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
-    x:ClassModifier="internal" Focusable="False"
-    ShowActivated="False" ShowInTaskbar="False" WindowStyle="None"
-    FontFamily="Segoe UI,Microsoft Yahei UI"
-    ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
-    <Window.Background>
-        <SolidColorBrush Color="#E5FAFAFA" />
-    </Window.Background>
+    Focusable="False" WindowStyle="None"
+    Background="#E5FAFAFA" AllowsTransparency="True"
+    ShowActivated="False" ShowInTaskbar="False"
+    FontFamily="Segoe UI,Microsoft Yahei UI">
+    <Window.Resources>
+        <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding Height, ElementName=titlebar}"
+                      ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
     <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
         <Grid>
             <DockPanel x:Name="windowPanel">
@@ -48,10 +54,11 @@
                 </DockPanel.Style>
                 <DockPanel x:Name="titlebar" Height="28" Dock="Top">
                     <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
+                                     WindowChrome.IsHitTestVisibleInChrome="True"
                                      Height="15" Margin="10,0" Foreground="Gray"
                                      Cursor="Hand" />
                     <!-- set grid.background colour makes it clickable -->
-                    <Grid x:Name="titleBarArea" Background="Transparent">
+                    <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />

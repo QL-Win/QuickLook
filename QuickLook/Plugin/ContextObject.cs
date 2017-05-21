@@ -13,11 +13,18 @@ namespace QuickLook.Plugin
     /// </summary>
     public class ContextObject : INotifyPropertyChanged
     {
-        private bool _isBusy = true;
+        private bool _canFocus;
+        private bool _canResize = true;
 
+        private bool _isBusy = true;
         private string _title = "";
         internal ContentControl CurrentContentContainer;
         internal IViewer ViewerPlugin;
+
+        /// <summary>
+        ///     Get the viewer window.
+        /// </summary>
+        public MainWindowTransparent ViewerWindow { get; internal set; }
 
         /// <summary>
         ///     Get or set the title of Viewer window.
@@ -62,12 +69,28 @@ namespace QuickLook.Plugin
         /// <summary>
         ///     Set whether user are allowed to resize the viewer window.
         /// </summary>
-        public bool CanResize { get; set; } = true;
+        public bool CanResize
+        {
+            get => _canResize;
+            set
+            {
+                _canResize = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         ///     Set whether user are allowed to set focus at the viewer window.
         /// </summary>
-        public bool Focusable { get; set; }
+        public bool CanFocus
+        {
+            get => _canFocus;
+            set
+            {
+                _canFocus = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -122,12 +145,13 @@ namespace QuickLook.Plugin
 
         internal void Reset()
         {
+            ViewerWindow = null;
             Title = "";
             ViewerContent = null;
             IsBusy = true;
             PreferredSize = new Size();
             CanResize = true;
-            Focusable = false;
+            CanFocus = false;
         }
 
         [NotifyPropertyChangedInvocator]

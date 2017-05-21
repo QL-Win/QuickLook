@@ -7,6 +7,7 @@ namespace QuickLook.Plugin.InfoPanel
         private InfoPanel _ip;
 
         public int Priority => int.MinValue;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string sample)
         {
@@ -16,15 +17,15 @@ namespace QuickLook.Plugin.InfoPanel
         public void Prepare(string path, ContextObject context)
         {
             context.PreferredSize = new Size {Width = 453, Height = 172};
+
+            context.Title = "";
+            context.CanResize = false;
         }
 
         public void View(string path, ContextObject context)
         {
             _ip = new InfoPanel();
-
-            context.Title = "";
             context.ViewerContent = _ip;
-            context.CanResize = false;
 
             _ip.DisplayInfo(path);
 

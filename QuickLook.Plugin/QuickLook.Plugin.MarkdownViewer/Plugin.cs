@@ -10,6 +10,7 @@ namespace QuickLook.Plugin.MarkdownViewer
         private WebkitPanel _panel;
 
         public int Priority => int.MaxValue;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {
@@ -30,7 +31,7 @@ namespace QuickLook.Plugin.MarkdownViewer
         {
             context.PreferredSize = new Size(800, 800);
 
-            context.Focusable = true;
+            context.CanFocus = true;
         }
 
         public void View(string path, ContextObject context)

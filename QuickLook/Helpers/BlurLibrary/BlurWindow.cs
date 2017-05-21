@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace QuickLook.Helpers.BlurLibrary
 {
@@ -36,7 +37,7 @@ namespace QuickLook.Helpers.BlurLibrary
         /// <param name="window">Window object</param>
         public static void EnableWindowBlur(Window window)
         {
-            EnableWindowBlur(Helpers.GetWindowHandle(window));
+            EnableWindowBlur(new WindowInteropHelper(window).Handle);
         }
 
         private static void DisableWindowBlur(IntPtr hwnd)
@@ -53,7 +54,7 @@ namespace QuickLook.Helpers.BlurLibrary
         /// <param name="window">Window object</param>
         public static void DisableWindowBlur(Window window)
         {
-            DisableWindowBlur(Helpers.GetWindowHandle(window));
+            DisableWindowBlur(new WindowInteropHelper(window).Handle);
         }
     }
 }

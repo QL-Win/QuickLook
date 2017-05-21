@@ -11,6 +11,7 @@ namespace QuickLook.Plugin.VideoViewer
         private ViewerPanel _vp;
 
         public int Priority => int.MaxValue;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {

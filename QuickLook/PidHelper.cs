@@ -21,9 +21,11 @@ namespace QuickLook
                 return -1;
 
             var ppid = -1;
-            using (var file = File.Open(pid, FileMode.Open, FileAccess.Read,FileShare.ReadWrite))
+            using (var file = File.Open(pid, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var sr = new StreamReader(file))
+            {
                 int.TryParse(sr.ReadToEnd(), out ppid);
+            }
 
             try
             {

@@ -12,6 +12,11 @@
         int Priority { get; }
 
         /// <summary>
+        ///     Set whether the viewer window has blur effect.
+        /// </summary>
+        bool AllowsTransparency { get; }
+
+        /// <summary>
         ///     Determine whether this plugin can open this file. Please also check the file header, if applicable.
         /// </summary>
         /// <param name="path">The full path of the target file.</param>

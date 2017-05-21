@@ -80,6 +80,8 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BackgroundVisualHost.cs" />
     <Compile Include="Controls\BusyDecorator.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows81WindowBlurController.cs" />
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
+    <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="NativeMethods\ShellLink.cs" />
     <Compile Include="PidHelper.cs" />
     <Compile Include="PluginManager.cs" />
@@ -128,7 +131,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainWindowTransparent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -142,8 +145,8 @@
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainWindowTransparent.xaml.cs">
+      <DependentUpon>MainWindowTransparent.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Styles\BusyDecorator.xaml">

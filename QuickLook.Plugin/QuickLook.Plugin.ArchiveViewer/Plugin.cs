@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows;
-using SharpCompress.Archives;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
@@ -10,6 +9,7 @@ namespace QuickLook.Plugin.ArchiveViewer
         private ArchiveInfoPanel _panel;
 
         public int Priority => 0;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {

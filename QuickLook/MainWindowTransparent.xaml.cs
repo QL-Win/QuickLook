@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
-using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
@@ -11,11 +9,11 @@ using QuickLook.Plugin;
 namespace QuickLook
 {
     /// <summary>
-    ///     Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindowTransparent.xaml
     /// </summary>
-    internal partial class MainWindow : Window
+    public partial class MainWindowTransparent : Window
     {
-        internal MainWindow()
+        internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
             ContextObject = new ContextObject();
@@ -26,32 +24,16 @@ namespace QuickLook
             if (!Debugger.IsAttached)
                 Topmost = true;
 
-            Loaded += (sender, e) => BlurWindow.EnableWindowBlur(this);
+            SourceInitialized += (sender, e) =>
+            {
+                if (AllowsTransparency)
+                    BlurWindow.EnableWindowBlur(this);
+            };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => { Hide(); };
-
-            titleBarArea.PreviewMouseLeftButtonDown += DragMoveCurrentWindow;
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => Hide();
         }
 
         public ContextObject ContextObject { get; private set; }
-
-        private void DragMoveCurrentWindow(object sender, MouseButtonEventArgs e)
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                var dpi = DpiHelper.GetCurrentDpi();
-
-                // MouseDevice.GetPosition() returns device-dependent coordinate, however WPF is not like that
-                var point = PointToScreen(e.MouseDevice.GetPosition(this));
-
-                Left = point.X / (dpi.HorizontalDpi / DpiHelper.DEFAULT_DPI) - RestoreBounds.Width * 0.5;
-                Top = point.Y / (dpi.VerticalDpi / DpiHelper.DEFAULT_DPI);
-
-                WindowState = WindowState.Normal;
-            }
-
-            DragMove();
-        }
 
         private new void Show()
         {
@@ -65,11 +47,9 @@ namespace QuickLook
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 
-            ResizeMode = ContextObject.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
-
             base.Show();
 
-            //if (!ContextObject.Focusable)
+            //if (!ContextObject.CanFocus)
             //    WindowHelper.SetNoactivate(new WindowInteropHelper(this));
         }
 
@@ -125,6 +105,7 @@ namespace QuickLook
         {
             ContextObject.CurrentContentContainer = container;
             ContextObject.ViewerPlugin = matchedPlugin;
+            ContextObject.ViewerWindow = this;
 
             // get window size before showing it
             ContextObject.ViewerPlugin.Prepare(path, ContextObject);

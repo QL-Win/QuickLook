@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -12,24 +13,29 @@ namespace QuickLook
     internal class ViewWindowManager
     {
         private static ViewWindowManager _instance;
+        private readonly MainWindowNoTransparent _viewWindowNoTransparent;
+        private readonly MainWindowTransparent _viewWindowTransparentTransparent;
 
-        private readonly MainWindow _viewWindow;
+        private MainWindowTransparent _currentMainWindow;
 
         internal ViewWindowManager()
         {
-            _viewWindow = new MainWindow();
+            _viewWindowTransparentTransparent = new MainWindowTransparent();
+            _viewWindowNoTransparent = new MainWindowNoTransparent();
+
+            _currentMainWindow = _viewWindowTransparentTransparent;
         }
 
         internal void InvokeRoutine(bool replaceView = false)
         {
-            if (replaceView && _viewWindow.IsLoaded && _viewWindow.Visibility != System.Windows.Visibility.Visible)
+            if (replaceView && _currentMainWindow.IsLoaded && _currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
             if (!WindowHelper.IsFocusedControlExplorerItem())
                 if (!WindowHelper.IsFocusedWindowSelf())
                     return;
 
-            if (!replaceView && _viewWindow.BeginHide())
+            if (!replaceView && _currentMainWindow.BeginHide())
                 return;
 
             var path = GetCurrentSelection();
@@ -53,12 +59,21 @@ namespace QuickLook
         {
             try
             {
-                _viewWindow.UnloadPlugin();
-                _viewWindow.BeginShow(matchedPlugin, path);
+                _currentMainWindow.UnloadPlugin();
+
+                // switch window
+                var oldWindow = _currentMainWindow;
+                _currentMainWindow = matchedPlugin.AllowsTransparency
+                    ? _viewWindowTransparentTransparent
+                    : _viewWindowNoTransparent;
+                if (!ReferenceEquals(oldWindow, _currentMainWindow))
+                    oldWindow.BeginHide();
+
+                _currentMainWindow.BeginShow(matchedPlugin, path);
             }
             catch (Exception e) // if current plugin failed, switch to default one.
             {
-                _viewWindow.BeginHide();
+                _currentMainWindow.BeginHide();
 
                 TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
 
