@@ -30,7 +30,7 @@ namespace QuickLook
                     BlurWindow.EnableWindowBlur(this);
             };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => Hide();
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => BeginHide(true);
         }
 
         public ContextObject ContextObject { get; private set; }
@@ -85,9 +85,6 @@ namespace QuickLook
 
         private new void Hide()
         {
-            if (App.RunningAsViewer)
-                Application.Current.Shutdown();
-
             UnloadPlugin();
             ContextObject.Reset();
 
@@ -131,8 +128,14 @@ namespace QuickLook
                 throw thrown;
         }
 
-        internal bool BeginHide()
+        internal bool BeginHide(bool quit = false)
         {
+            if (quit && App.RunningAsViewer)
+            {
+                Application.Current.Shutdown();
+                return true;
+            }
+
             if (Visibility != Visibility.Visible)
                 return false;
 
