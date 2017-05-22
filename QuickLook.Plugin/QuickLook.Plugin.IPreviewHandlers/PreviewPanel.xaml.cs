@@ -36,8 +36,8 @@ namespace QuickLook.Plugin.IPreviewHandlers
                 _control.Open(file);
             }), DispatcherPriority.Render);
 
-            //SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
-            //SetActiveWindow(presenter.Handle);
+            SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
+            SetActiveWindow(presenter.Handle);
         }
 
         [DllImport("user32.dll")]

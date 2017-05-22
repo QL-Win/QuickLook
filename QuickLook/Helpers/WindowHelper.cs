@@ -37,8 +37,6 @@ namespace QuickLook.Helpers
             window.TransformToPixels(width, height,
                 out pxWidth, out pxHeight);
 
-            Debug.WriteLine($"{pxLeft},{pxTop},{pxWidth},{pxHeight}");
-
             var helper = new WindowInteropHelper(window);
             User32.MoveWindow(helper.Handle, pxLeft, pxTop, pxWidth, pxHeight, true);
         }
