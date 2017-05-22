@@ -56,6 +56,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\QuickLook.Plugin\QuickLook.Plugin.IPreviewHandlers\QuickLook.Plugin.IPreviewHandlers.csproj">
+      <Name>QuickLook.Plugin.IPreviewHandlers</Name>
+      <Project>{e37675ea-d957-4495-8655-2609bf86756c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\QuickLook.Plugin\QuickLook.Plugin.MarkdownViewer\QuickLook.Plugin.MarkdownViewer.csproj">
       <Name>QuickLook.Plugin.MarkdownViewer</Name>
       <Project>{ab1270af-7eb4-4b4f-9e09-6404f1a28ea0}</Project>
