@@ -35,6 +35,7 @@ namespace QuickLook.Plugin.PDFViewer
 
         public void View(string path, ContextObject context)
         {
+            _pdfControl = new PdfViewerControl();
             context.ViewerContent = _pdfControl;
 
             _pdfControl.Loaded += (sender, e) =>
