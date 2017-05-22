@@ -24,6 +24,7 @@ namespace QuickLook.Plugin.ImageViewer
                 case ".gif":
                 case ".ico":
                 case ".jpg":
+                case ".jpeg":
                 case ".png":
                 case ".wdp":
                 case ".tiff":
