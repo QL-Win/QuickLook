@@ -60,6 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
     <Compile Include="MenuHandler.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="RequestHandler.cs" />
@@ -73,20 +76,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <ContentWithTargetPath Include="CefSharp\cef.pak">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>cef.pak</TargetPath>
@@ -119,10 +108,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>snapshot_blob.bin</TargetPath>
     </ContentWithTargetPath>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
