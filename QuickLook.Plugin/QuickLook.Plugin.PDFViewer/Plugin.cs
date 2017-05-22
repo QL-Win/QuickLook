@@ -19,17 +19,16 @@ namespace QuickLook.Plugin.PDFViewer
             if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".pdf")
                 return true;
 
-            using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            {
-                return Encoding.ASCII.GetString(br.ReadBytes(4)) == "%PDF";
-            }
+            //using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            //{
+            //    return Encoding.ASCII.GetString(br.ReadBytes(4)) == "%PDF";
+            //}
+            return false;
         }
 
         public void Prepare(string path, ContextObject context)
         {
-            _pdfControl = new PdfViewerControl();
-
-            var desiredSize = _pdfControl.GetDesiredControlSizeByFirstPage(path);
+            var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
 
             context.SetPreferredSizeFit(desiredSize, 0.8);
         }

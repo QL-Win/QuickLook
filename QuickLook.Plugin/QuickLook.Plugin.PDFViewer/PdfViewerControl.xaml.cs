@@ -185,7 +185,7 @@ namespace QuickLook.Plugin.PDFViewer
             ReRenderCurrentPage();
         }
 
-        public Size GetDesiredControlSizeByFirstPage(string path)
+        public static Size GetDesiredControlSizeByFirstPage(string path)
         {
             var tempHandle = new PdfFile(path);
 
