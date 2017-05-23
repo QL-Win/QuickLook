@@ -20,11 +20,14 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
         public void Dispose()
         {
-            presenter.Child = null;
-            presenter?.Dispose();
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                presenter.Child = null;
+                presenter?.Dispose();
 
-            _control?.Dispose();
-            _control = null;
+                _control?.Dispose();
+                _control = null;
+            }));
         }
 
         public void PreviewFile(string file, ContextObject context)
