@@ -105,6 +105,7 @@
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows81WindowBlurController.cs" />
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="NativeMethods\ShellLink.cs" />
     <Compile Include="PidHelper.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Plugin\InfoPanel\PluginInterface.cs" />
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
     <Compile Include="Plugin\IViewer.cs" />
-    <Compile Include="Helpers\DpiHelpers.cs" />
+    <Compile Include="Helpers\DpiHelper.cs" />
     <Compile Include="TrayIconManager.cs" />
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />

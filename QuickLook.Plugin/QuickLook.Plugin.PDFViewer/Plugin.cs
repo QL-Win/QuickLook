@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace QuickLook.Plugin.PDFViewer
 {

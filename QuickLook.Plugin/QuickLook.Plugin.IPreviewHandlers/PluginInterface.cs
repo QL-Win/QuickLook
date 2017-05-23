@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Interop;
 
 namespace QuickLook.Plugin.IPreviewHandlers
 {
@@ -60,7 +58,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _panel?.Dispose();
             _panel = null;
         }
-        
+
         ~PluginInterface()
         {
             Cleanup();

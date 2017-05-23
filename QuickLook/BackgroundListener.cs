@@ -24,7 +24,7 @@ namespace QuickLook
             if (e.Modifiers != Keys.None)
                 return;
 
-            ViewWindowManager.GetInstance().InvokeRoutine(e.KeyCode != Keys.Space);
+            ViewWindowManager.GetInstance().InvokeRoutine(e.KeyCode);
         }
 
         private void InstallHook(KeyEventHandler handler)
@@ -32,6 +32,8 @@ namespace QuickLook
             _hook = GlobalKeyboardHook.GetInstance();
 
             _hook.HookedKeys.Add(Keys.Space);
+            //_hook.HookedKeys.Add(Keys.Enter);
+
             _hook.HookedKeys.Add(Keys.Up);
             _hook.HookedKeys.Add(Keys.Down);
             _hook.HookedKeys.Add(Keys.Left);

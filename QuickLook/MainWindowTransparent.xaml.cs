@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using QuickLook.Helpers;
@@ -13,6 +14,8 @@ namespace QuickLook
     /// </summary>
     public partial class MainWindowTransparent : Window
     {
+        private string _path = string.Empty;
+
         internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
@@ -31,9 +34,26 @@ namespace QuickLook
             };
 
             buttonCloseWindow.MouseLeftButtonUp += (sender, e) => BeginHide(true);
+
+            /*PreviewKeyUp += (sender, e) =>
+            {
+                if (e.Key == Key.Enter)
+                    OpenWithAssocApp();
+            };*/
+
+            buttonOpenWith.Click += (sender, e) => OpenWithAssocApp();
         }
 
         public ContextObject ContextObject { get; private set; }
+
+        private void OpenWithAssocApp()
+        {
+            if (string.IsNullOrEmpty(_path))
+                return;
+
+            Process.Start(new ProcessStartInfo(_path) {WorkingDirectory = Path.GetDirectoryName(_path)});
+            BeginHide(true);
+        }
 
         private new void Show()
         {
@@ -107,6 +127,8 @@ namespace QuickLook
             // get window size before showing it
             ContextObject.ViewerPlugin.Prepare(path, ContextObject);
 
+            SetOpenWithButtonAndPath(path);
+
             Show();
 
             // load plugin, do not block UI
@@ -126,6 +148,15 @@ namespace QuickLook
 
             if (thrown != null)
                 throw thrown;
+        }
+
+        private void SetOpenWithButtonAndPath(string path)
+        {
+            var isExe = FileHelper.GetAssocApplication(path, out string executePath, out string appFriendlyName);
+
+            _path = executePath;
+            buttonOpenWith.Visibility = isExe == null ? Visibility.Collapsed : Visibility.Visible;
+            buttonOpenWith.Content = isExe == true ? $"Run {appFriendlyName}" : $"Open with {appFriendlyName}";
         }
 
         internal bool BeginHide(bool quit = false)

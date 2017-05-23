@@ -57,6 +57,11 @@
                                      WindowChrome.IsHitTestVisibleInChrome="True"
                                      Height="15" Margin="10,0" Foreground="Gray"
                                      Cursor="Hand" />
+                    <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" Content="Open with ..." Height="20"
+                            Margin="10,0,0,0" Padding="5,0"
+                            Focusable="False" Cursor="Hand"
+                            Background="#E5EEEEEE" BorderBrush="#E59A9A9A"
+                            WindowChrome.IsHitTestVisibleInChrome="True" Foreground="#FF404040" />
                     <!-- set grid.background colour makes it clickable -->
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"

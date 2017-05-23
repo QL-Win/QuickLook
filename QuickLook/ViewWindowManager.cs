@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -26,8 +27,11 @@ namespace QuickLook
             _currentMainWindow = _viewWindowTransparentTransparent;
         }
 
-        internal void InvokeRoutine(bool replaceView = false)
+        internal void InvokeRoutine(Keys key)
         {
+            // do we need switch to another file?
+            var replaceView = key == Keys.Up || key == Keys.Down || key == Keys.Left || key == Keys.Right;
+
             if (replaceView && _currentMainWindow.IsLoaded && _currentMainWindow.Visibility != Visibility.Visible)
                 return;
 

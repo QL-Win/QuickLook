@@ -42,4 +42,36 @@ namespace QuickLook.NativeMethods
         void Resolve(IntPtr hwnd, int fFlags);
         void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
+
+    [ComImport]
+    [Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")]
+    internal class WshShell
+    {
+    }
+
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
+    [Guid("F935DC21-1CF0-11D0-ADB9-00C04FD58A0B")]
+    internal interface IWshShell
+    {
+        IWshShortcut CreateShortcut(string pathLink);
+    }
+
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
+    [Guid("F935DC23-1CF0-11D0-ADB9-00C04FD58A0B")]
+    internal interface IWshShortcut
+    {
+        string FullName { get; }
+        string Arguments { get; set; }
+        string Description { get; set; }
+        string Hotkey { get; set; }
+        string IconLocation { get; set; }
+        string RelativePath { set; }
+        string TargetPath { get; set; }
+        int WindowStyle { get; set; }
+        string WorkingDirectory { get; set; }
+        void Load([In] string pathLink);
+        void Save();
+    }
 }
