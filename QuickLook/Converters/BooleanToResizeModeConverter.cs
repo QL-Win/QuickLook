@@ -5,16 +5,16 @@ using System.Windows.Data;
 
 namespace QuickLook.Converters
 {
-    public sealed class BooleanToResizeBorderThicknessConverter : DependencyObject, IValueConverter
+    public sealed class BooleanToResizeModeConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return 0;
+                return ResizeMode.CanResize;
 
             var v = (bool) value;
 
-            return v ? 6 : 0;
+            return v ? ResizeMode.CanResize : ResizeMode.NoResize;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

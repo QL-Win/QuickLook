@@ -32,14 +32,15 @@ namespace QuickLook
             // do we need switch to another file?
             var replaceView = key == Keys.Up || key == Keys.Down || key == Keys.Left || key == Keys.Right;
 
-            if (replaceView && _currentMainWindow.IsLoaded && _currentMainWindow.Visibility != Visibility.Visible)
+            if (replaceView && _currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
             if (!WindowHelper.IsFocusedControlExplorerItem())
-                if (!WindowHelper.IsFocusedWindowSelf())
+                if (replaceView || !WindowHelper.IsFocusedWindowSelf())
                     return;
 
-            if (!replaceView && _currentMainWindow.BeginHide())
+            // should the window be closed (replaceView == false), return without showing new one
+            if (_currentMainWindow.BeginHide(disposePluginOnly: replaceView))
                 return;
 
             var path = GetCurrentSelection();

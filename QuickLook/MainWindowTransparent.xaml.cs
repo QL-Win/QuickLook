@@ -55,24 +55,6 @@ namespace QuickLook
             BeginHide(true);
         }
 
-        private new void Show()
-        {
-            // revert UI changes
-            ContextObject.IsBusy = true;
-
-            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
-                            windowBorder.BorderThickness.Bottom;
-            var newWidth = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
-                           windowBorder.BorderThickness.Right;
-
-            ResizeAndCenter(new Size(newWidth, newHeight));
-
-            base.Show();
-
-            //if (!ContextObject.CanFocus)
-            //    WindowHelper.SetNoactivate(new WindowInteropHelper(this));
-        }
-
         private void ResizeAndCenter(Size size)
         {
             if (!IsLoaded)
@@ -103,21 +85,6 @@ namespace QuickLook
             ContextObject.ViewerPlugin?.Cleanup();
         }
 
-        private new void Hide()
-        {
-            UnloadPlugin();
-            ContextObject.Reset();
-
-            GC.Collect();
-
-            // revert UI changes
-            ContextObject.IsBusy = true;
-
-            base.Hide();
-            //Left -= 10000;
-            //Dispatcher.Delay(100, _ => base.Hide());
-        }
-
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
             ContextObject.CurrentContentContainer = container;
@@ -129,7 +96,19 @@ namespace QuickLook
 
             SetOpenWithButtonAndPath(path);
 
+            // revert UI changes
+            ContextObject.IsBusy = true;
+
+            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
+                            windowBorder.BorderThickness.Bottom;
+            var newWidth = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
+                           windowBorder.BorderThickness.Right;
+
+            ResizeAndCenter(new Size(newWidth, newHeight));
+
             Show();
+
+            //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
             // load plugin, do not block UI
             Exception thrown = null;
@@ -159,9 +138,9 @@ namespace QuickLook
             buttonOpenWith.Content = isExe == true ? $"Run {appFriendlyName}" : $"Open with {appFriendlyName}";
         }
 
-        internal bool BeginHide(bool quit = false)
+        internal bool BeginHide(bool quitIfViewer = false, bool disposePluginOnly = false)
         {
-            if (quit && App.RunningAsViewer)
+            if (quitIfViewer && App.RunningAsViewer)
             {
                 Application.Current.Shutdown();
                 return true;
@@ -170,9 +149,20 @@ namespace QuickLook
             if (Visibility != Visibility.Visible)
                 return false;
 
-            Hide();
+            UnloadPlugin();
+            ContextObject.Reset();
+            GC.Collect();
 
-            return true;
+            // revert UI changes
+            ContextObject.IsBusy = true;
+
+            if (!disposePluginOnly)
+            {
+                Hide();
+                return true;
+            }
+
+            return false;
         }
     }
 }

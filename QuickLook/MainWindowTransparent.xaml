@@ -17,8 +17,13 @@
     ShowActivated="False" ShowInTaskbar="False"
     FontFamily="Segoe UI,Microsoft Yahei UI">
     <Window.Resources>
+        <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
         <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
     </Window.Resources>
+    <Window.ResizeMode>
+        <Binding Converter="{StaticResource BooleanToResizeModeConverter}" ElementName="mainWindow"
+                 Path="ContextObject.CanResize" />
+    </Window.ResizeMode>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="{Binding Height, ElementName=titlebar}"
                       ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
