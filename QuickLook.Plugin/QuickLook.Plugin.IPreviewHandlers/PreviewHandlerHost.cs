@@ -127,6 +127,9 @@ namespace QuickLook.Plugin.IPreviewHandlers
             if (_mCurrentPreviewHandler == null)
                 return false;
 
+            if (IsDisposed)
+                return false;
+
             // bind the preview handler to the control's bounds and preview the content
             var r = ClientRectangle;
             _mCurrentPreviewHandler.SetWindow(Handle, ref r);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
-using System.Windows.Interop;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.IPreviewHandlers
@@ -37,10 +36,10 @@ namespace QuickLook.Plugin.IPreviewHandlers
                 _control = new PreviewHandlerHost();
                 presenter.Child = _control;
                 _control.Open(file);
-            }), DispatcherPriority.Render);
+            }), DispatcherPriority.Loaded);
 
-            SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
-            SetActiveWindow(presenter.Handle);
+            //SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
+            //SetActiveWindow(presenter.Handle);
         }
 
         [DllImport("user32.dll")]
