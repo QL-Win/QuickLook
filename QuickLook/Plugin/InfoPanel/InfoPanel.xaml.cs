@@ -71,17 +71,24 @@ namespace QuickLook.Plugin.InfoPanel
                 }
                 else if (Directory.Exists(path))
                 {
-                    long totalDirsL;
-                    long totalFilesL;
-                    long totalSizeL;
-
-                    FileHelper.CountFolder(path, ref _stop, out totalDirsL, out totalFilesL, out totalSizeL);
+                    FileHelper.CountFolder(path, ref _stop,
+                        out long totalDirsL, out long totalFilesL, out long totalSizeL);
 
                     if (!Stop)
                         Dispatcher.Invoke(() =>
                         {
+                            string t;
+                            var d = totalDirsL != 0 ? $"{totalDirsL} folders" : string.Empty;
+                            var f = totalFilesL != 0 ? $"{totalFilesL} files" : string.Empty;
+                            if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
+                                t = $"({d} and {f})";
+                            else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
+                                t = string.Empty;
+                            else
+                                t = $"({d}{f})";
+
                             totalSize.Text =
-                                $"{totalSizeL.ToPrettySize(2)} ({totalDirsL} folders and {totalFilesL} files)";
+                                $"{totalSizeL.ToPrettySize(2)} {t}";
                         });
                 }
             });

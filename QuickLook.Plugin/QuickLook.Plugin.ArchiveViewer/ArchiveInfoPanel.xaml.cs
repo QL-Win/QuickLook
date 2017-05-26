@@ -42,23 +42,33 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             LoadItemsFromArchive(path);
 
-            var folder = 0;
+            var folders = -1; // do not count root node
             var files = 0;
             ulong sizeU = 0L;
             _fileEntries.ForEach(e =>
             {
                 if (e.Value.IsFolder)
-                    folder++;
+                    folders++;
                 else
                     files++;
 
                 sizeU += e.Value.Size;
             });
 
-            var s = _solid ? " solid," : "";
+            var s = _solid ? ", solid" : "";
+
+            string t;
+            var d = folders != 0 ? $"{folders} folders" : string.Empty;
+            var f = files != 0 ? $"{files} files" : string.Empty;
+            if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
+                t = $", {d} and {f}";
+            else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
+                t = string.Empty;
+            else
+                t = $", {d}{f}";
 
             archiveCount.Content =
-                $"{_type} archive,{s} {folder - 1} folders and {files} files"; // do not count root node
+                $"{_type} archive{s}{t}";
             archiveSizeC.Content = $"Compressed size {_totalZippedSize.ToPrettySize(2)}";
             archiveSizeU.Content = $"Uncompressed size {sizeU.ToPrettySize(2)}";
         }
