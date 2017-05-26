@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using QuickLook.NativeMethods;
@@ -20,9 +21,8 @@ namespace QuickLook.Helpers
             return ret[0];
         }
 
-        public static bool? GetAssocApplication(string path, out string executePath, out string appFriendlyName)
+        public static bool? GetAssocApplication(string path, out string appFriendlyName)
         {
-            executePath = string.Empty;
             appFriendlyName = string.Empty;
 
             if (string.IsNullOrEmpty(path))
@@ -42,14 +42,13 @@ namespace QuickLook.Helpers
             }
 
             var ext = Path.GetExtension(path).ToLower();
-            var isExe = ext.ToLower() == ".exe";
+            var isExe = new[] {".cmd", ".bat", ".pif", ".scf", ".exe", ".com", ".scr"}.Contains(ext.ToLower());
 
             // no assoc. app. found
             if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.Command)))
                 if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.AppId))) // UWP
                     return null;
 
-            executePath = path;
             appFriendlyName = isExe
                 ? FileVersionInfo.GetVersionInfo(path).FileDescription
                 : GetAssocApplicationNative(ext, AssocStr.FriendlyAppName);

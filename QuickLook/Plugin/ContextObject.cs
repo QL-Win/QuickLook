@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using QuickLook.Annotations;
 using QuickLook.Helpers;
 
@@ -18,8 +17,7 @@ namespace QuickLook.Plugin
 
         private bool _isBusy = true;
         private string _title = "";
-        internal ContentControl CurrentContentContainer;
-        internal IViewer ViewerPlugin;
+        private object _viewerContent;
 
         /// <summary>
         ///     Get the viewer window.
@@ -44,8 +42,12 @@ namespace QuickLook.Plugin
         /// </summary>
         public object ViewerContent
         {
-            get => CurrentContentContainer.Content;
-            set => CurrentContentContainer.Content = value;
+            get => _viewerContent;
+            set
+            {
+                _viewerContent = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -93,12 +95,6 @@ namespace QuickLook.Plugin
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public void DisposePlugin()
-        {
-            ViewerPlugin?.Cleanup();
-            ViewerPlugin = null;
-        }
 
         /// <summary>
         ///     Show a notification balloon.

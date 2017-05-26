@@ -11,7 +11,7 @@ namespace QuickLook
 
         protected BackgroundListener()
         {
-            InstallHook(HotkeyEventHandler);
+            InstallKeyHook(HotkeyEventHandler);
         }
 
         public void Dispose()
@@ -27,18 +27,19 @@ namespace QuickLook
             ViewWindowManager.GetInstance().InvokeRoutine(e.KeyCode);
         }
 
-        private void InstallHook(KeyEventHandler handler)
+        private void InstallKeyHook(KeyEventHandler handler)
         {
             _hook = GlobalKeyboardHook.GetInstance();
 
-            _hook.HookedKeys.Add(Keys.Space);
-            //_hook.HookedKeys.Add(Keys.Enter);
+            _hook.HookedDownKeys.Add(Keys.Enter);
+            _hook.KeyDown += handler;
 
-            _hook.HookedKeys.Add(Keys.Up);
-            _hook.HookedKeys.Add(Keys.Down);
-            _hook.HookedKeys.Add(Keys.Left);
-            _hook.HookedKeys.Add(Keys.Right);
-
+            _hook.HookedUpKeys.Add(Keys.Space);
+            _hook.HookedUpKeys.Add(Keys.Escape);
+            _hook.HookedUpKeys.Add(Keys.Up);
+            _hook.HookedUpKeys.Add(Keys.Down);
+            _hook.HookedUpKeys.Add(Keys.Left);
+            _hook.HookedUpKeys.Add(Keys.Right);
             _hook.KeyUp += handler;
         }
 

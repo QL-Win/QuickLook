@@ -75,7 +75,8 @@
                     </Grid>
                 </DockPanel>
                 <Grid>
-                    <ContentControl x:Name="container" />
+                    <ContentControl x:Name="container"
+                                    Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
                 </Grid>
             </DockPanel>
             <Grid x:Name="busyIndicatorLayer">

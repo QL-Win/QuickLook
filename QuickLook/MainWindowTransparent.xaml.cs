@@ -15,6 +15,7 @@ namespace QuickLook
     public partial class MainWindowTransparent : Window
     {
         private string _path = string.Empty;
+        private IViewer _plugin;
 
         internal MainWindowTransparent()
         {
@@ -33,7 +34,7 @@ namespace QuickLook
                     BlurWindow.EnableWindowBlur(this);
             };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => BeginHide(true);
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => BeginHide();
 
             /*PreviewKeyUp += (sender, e) =>
             {
@@ -46,13 +47,16 @@ namespace QuickLook
 
         public ContextObject ContextObject { get; private set; }
 
-        private void OpenWithAssocApp()
+        internal void OpenWithAssocApp()
         {
             if (string.IsNullOrEmpty(_path))
                 return;
 
-            Process.Start(new ProcessStartInfo(_path) {WorkingDirectory = Path.GetDirectoryName(_path)});
-            BeginHide(true);
+            Process.Start(new ProcessStartInfo(_path)
+            {
+                WorkingDirectory = Path.GetDirectoryName(_path)
+            });
+            BeginHide();
         }
 
         private void ResizeAndCenter(Size size)
@@ -79,22 +83,26 @@ namespace QuickLook
 
         internal void UnloadPlugin()
         {
-            container.Content = null;
+            // clear ref to control
+            //container.Content = null;
 
-            // clean up plugin and refresh ContextObject for next use
-            ContextObject.ViewerPlugin?.Cleanup();
+            ContextObject.Reset();
+
+            _plugin?.Cleanup();
+            _plugin = null;
+
+            GC.Collect();
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
-            ContextObject.CurrentContentContainer = container;
-            ContextObject.ViewerPlugin = matchedPlugin;
-            ContextObject.ViewerWindow = this;
+            _path = path;
+            _plugin = matchedPlugin;
 
             // get window size before showing it
-            ContextObject.ViewerPlugin.Prepare(path, ContextObject);
+            _plugin.Prepare(path, ContextObject);
 
-            SetOpenWithButtonAndPath(path);
+            SetOpenWithButtonAndPath();
 
             // revert UI changes
             ContextObject.IsBusy = true;
@@ -116,7 +124,7 @@ namespace QuickLook
                 {
                     try
                     {
-                        ContextObject.ViewerPlugin.View(path, ContextObject);
+                        _plugin.View(path, ContextObject);
                     }
                     catch (Exception e)
                     {
@@ -129,40 +137,23 @@ namespace QuickLook
                 throw thrown;
         }
 
-        private void SetOpenWithButtonAndPath(string path)
+        private void SetOpenWithButtonAndPath()
         {
-            var isExe = FileHelper.GetAssocApplication(path, out string executePath, out string appFriendlyName);
+            var isExe = FileHelper.GetAssocApplication(_path, out string appFriendlyName);
 
-            _path = executePath;
-            buttonOpenWith.Visibility = isExe == null ? Visibility.Collapsed : Visibility.Visible;
-            buttonOpenWith.Content = isExe == true ? $"Run {appFriendlyName}" : $"Open with {appFriendlyName}";
+            buttonOpenWith.Content = isExe == null
+                ? Directory.Exists(_path)
+                    ? $"Browse “{Path.GetFileName(_path)}”"
+                    : "Select ..."
+                : isExe == true
+                    ? $"Run “{appFriendlyName}”"
+                    : $"Open with “{appFriendlyName}”";
         }
 
-        internal bool BeginHide(bool quitIfViewer = false, bool disposePluginOnly = false)
+        internal void BeginHide()
         {
-            if (quitIfViewer && App.RunningAsViewer)
-            {
-                Application.Current.Shutdown();
-                return true;
-            }
-
-            if (Visibility != Visibility.Visible)
-                return false;
-
             UnloadPlugin();
-            ContextObject.Reset();
-            GC.Collect();
-
-            // revert UI changes
-            ContextObject.IsBusy = true;
-
-            if (!disposePluginOnly)
-            {
-                Hide();
-                return true;
-            }
-
-            return false;
+            Hide();
         }
     }
 }

@@ -29,23 +29,58 @@ namespace QuickLook
 
         internal void InvokeRoutine(Keys key)
         {
-            // do we need switch to another file?
-            var replaceView = key == Keys.Up || key == Keys.Down || key == Keys.Left || key == Keys.Right;
+            Debug.WriteLine(key);
 
-            if (replaceView && _currentMainWindow.Visibility != Visibility.Visible)
+            switch (key)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Right:
+                    SwitchPreviewToAnotherFile();
+                    break;
+                case Keys.Space:
+                    TogglePreview();
+                    break;
+                case Keys.Escape:
+                case Keys.Enter:
+                    ClosePreview();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void ClosePreview()
+        {
+            if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
+                return;
+
+            if (_currentMainWindow.Visibility == Visibility.Visible)
+                _currentMainWindow.BeginHide();
+        }
+
+        private void TogglePreview()
+        {
+            if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
+                return;
+
+            if (_currentMainWindow.Visibility == Visibility.Visible)
+                _currentMainWindow.BeginHide();
+            else
+                InvokeViewer(GetCurrentSelection());
+        }
+
+        private void SwitchPreviewToAnotherFile()
+        {
+            if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
             if (!WindowHelper.IsFocusedControlExplorerItem())
-                if (replaceView || !WindowHelper.IsFocusedWindowSelf())
-                    return;
-
-            // should the window be closed (replaceView == false), return without showing new one
-            if (_currentMainWindow.BeginHide(disposePluginOnly: replaceView))
                 return;
 
-            var path = GetCurrentSelection();
-
-            InvokeViewer(path);
+            _currentMainWindow.UnloadPlugin();
+            InvokeViewer(GetCurrentSelection());
         }
 
         internal void InvokeViewer(string path)
