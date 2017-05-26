@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer
 {
@@ -37,16 +38,27 @@ namespace QuickLook.Plugin.PDFViewer
             _pdfControl = new PdfViewerControl();
             context.ViewerContent = _pdfControl;
 
-            _pdfControl.Loaded += (sender, e) =>
+            Exception exception = null;
+
+            _pdfControl.Dispatcher.BeginInvoke(new Action(() =>
             {
-                _pdfControl.LoadPdf(path);
+                try
+                {
+                    _pdfControl.LoadPdf(path);
 
-                context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
-                _pdfControl.CurrentPageChanged += (sender2, e2) => context.Title =
-                    $"{Path.GetFileName(path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
+                    context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
+                    _pdfControl.CurrentPageChanged += (sender2, e2) => context.Title =
+                        $"{Path.GetFileName(path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
+                    context.IsBusy = false;
+                }
+                catch (Exception e)
+                {
+                    exception = e;
+                }
+            }), DispatcherPriority.Loaded).Wait();
 
-                context.IsBusy = false;
-            };
+            if (exception != null)
+                throw exception;
         }
 
         public void Cleanup()
