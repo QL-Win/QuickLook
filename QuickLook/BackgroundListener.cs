@@ -24,7 +24,7 @@ namespace QuickLook
             if (e.Modifiers != Keys.None)
                 return;
 
-            ViewWindowManager.GetInstance().InvokeRoutine(e.KeyCode);
+            ViewWindowManager.GetInstance().InvokeRoutine(e);
         }
 
         private void InstallKeyHook(KeyEventHandler handler)

@@ -27,40 +27,48 @@ namespace QuickLook
             _currentMainWindow = _viewWindowTransparentTransparent;
         }
 
-        internal void InvokeRoutine(Keys key)
+        internal void InvokeRoutine(KeyEventArgs kea)
         {
-            Debug.WriteLine(key);
+            Debug.WriteLine(kea.KeyCode);
 
-            switch (key)
+            switch (kea.KeyCode)
             {
                 case Keys.Up:
                 case Keys.Down:
                 case Keys.Left:
                 case Keys.Right:
-                    SwitchPreviewToAnotherFile();
+                    SwitchPreview(kea);
                     break;
                 case Keys.Space:
-                    TogglePreview();
+                    TogglePreview(kea);
                     break;
                 case Keys.Escape:
+                    ClosePreview(kea, false);
+                    break;
                 case Keys.Enter:
-                    ClosePreview();
+                    ClosePreview(kea, true);
                     break;
                 default:
                     break;
             }
         }
 
-        private void ClosePreview()
+        private void ClosePreview(KeyEventArgs kea, bool runBeforeClose)
         {
             if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
                 return;
 
-            if (_currentMainWindow.Visibility == Visibility.Visible)
+            if (_currentMainWindow.Visibility != Visibility.Visible)
+                return;
+
+            if (runBeforeClose)
+                _currentMainWindow.RunAndClose();
+            else
                 _currentMainWindow.BeginHide();
+            kea.Handled = true;
         }
 
-        private void TogglePreview()
+        private void TogglePreview(KeyEventArgs kea)
         {
             if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
                 return;
@@ -69,9 +77,10 @@ namespace QuickLook
                 _currentMainWindow.BeginHide();
             else
                 InvokeViewer(GetCurrentSelection());
+            kea.Handled = true;
         }
 
-        private void SwitchPreviewToAnotherFile()
+        private void SwitchPreview(KeyEventArgs kea)
         {
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
@@ -81,6 +90,7 @@ namespace QuickLook
 
             _currentMainWindow.UnloadPlugin();
             InvokeViewer(GetCurrentSelection());
+            kea.Handled = false;
         }
 
         internal void InvokeViewer(string path)

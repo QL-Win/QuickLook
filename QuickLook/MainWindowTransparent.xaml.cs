@@ -42,12 +42,12 @@ namespace QuickLook
                     OpenWithAssocApp();
             };*/
 
-            buttonOpenWith.Click += (sender, e) => OpenWithAssocApp();
+            buttonOpenWith.Click += (sender, e) => RunAndClose();
         }
 
         public ContextObject ContextObject { get; private set; }
 
-        internal void OpenWithAssocApp()
+        internal void RunAndClose()
         {
             if (string.IsNullOrEmpty(_path))
                 return;
