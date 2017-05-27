@@ -35,16 +35,11 @@ namespace QuickLook
                     BlurWindow.EnableWindowBlur(this);
             };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => BeginHide();
-
-            /*PreviewKeyUp += (sender, e) =>
-            {
-                if (e.Key == Key.Enter)
-                    OpenWithAssocApp();
-            };*/
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => ViewWindowManager.GetInstance()
+                .InvokeRoutine(new KeyEventArgs(Keys.Escape));
 
             buttonOpenWith.Click += (sender, e) => ViewWindowManager.GetInstance()
-                .InvokeRoutine(new KeyEventArgs(Keys.Escape));
+                .InvokeRoutine(new KeyEventArgs(Keys.Enter));
         }
 
         public ContextObject ContextObject { get; private set; }
