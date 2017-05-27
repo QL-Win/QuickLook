@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -131,7 +132,7 @@ namespace QuickLook
                 DispatcherPriority.Render).Wait();
 
             if (thrown != null)
-                throw thrown;
+                ExceptionDispatchInfo.Capture(thrown).Throw();
         }
 
         private void SetOpenWithButtonAndPath()

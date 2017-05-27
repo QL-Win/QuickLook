@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -58,7 +59,7 @@ namespace QuickLook.Plugin.PDFViewer
             }), DispatcherPriority.Loaded).Wait();
 
             if (exception != null)
-                throw exception;
+                ExceptionDispatchInfo.Capture(exception).Throw();
         }
 
         public void Cleanup()

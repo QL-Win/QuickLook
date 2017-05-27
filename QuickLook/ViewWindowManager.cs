@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Forms;
 using QuickLook.Helpers;
@@ -202,7 +203,7 @@ namespace QuickLook
                 }
                 else
                 {
-                    throw;
+                    ExceptionDispatchInfo.Capture(e).Throw();
                 }
             }
         }
