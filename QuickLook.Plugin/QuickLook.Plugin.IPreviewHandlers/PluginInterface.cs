@@ -18,17 +18,26 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
             switch (Path.GetExtension(path).ToLower())
             {
+                // Word
                 case ".doc":
                 case ".docx":
+                case ".docm":
+                // Excel
                 case ".xls":
                 case ".xlsx":
-                case ".bbb":
                 case ".xlsm":
+                case ".xlsb":
                 // Visio Viewer will not quit after preview, which cause serious memory issue
                 //case ".vsd":
                 //case ".vsdx":
+                // PowerPoint
                 case ".ppt":
                 case ".pptx":
+                // OpenDocument
+                case ".odt":
+                case ".ott":
+                case ".ods":
+                case ".odp":
                     return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
             }
 
