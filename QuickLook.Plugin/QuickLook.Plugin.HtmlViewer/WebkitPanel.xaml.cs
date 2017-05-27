@@ -36,6 +36,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
             browser.RequestHandler = new RequestHandler();
             browser.MenuHandler = new MenuHandler();
+            browser.JsDialogHandler = new JsDialogHandler();
         }
 
         public void Dispose()

@@ -63,6 +63,7 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="JsDialogHandler.cs" />
     <Compile Include="MenuHandler.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="RequestHandler.cs" />
