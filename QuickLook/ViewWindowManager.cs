@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using QuickLook.Helpers;
@@ -14,10 +11,12 @@ namespace QuickLook
     internal class ViewWindowManager
     {
         private static ViewWindowManager _instance;
+
         private readonly MainWindowNoTransparent _viewWindowNoTransparent;
         private readonly MainWindowTransparent _viewWindowTransparentTransparent;
-
         private MainWindowTransparent _currentMainWindow;
+
+        private string _path = string.Empty;
 
         internal ViewWindowManager()
         {
@@ -43,17 +42,17 @@ namespace QuickLook
                     TogglePreview(kea);
                     break;
                 case Keys.Escape:
-                    ClosePreview(kea, false);
+                    ClosePreview(kea);
                     break;
                 case Keys.Enter:
-                    ClosePreview(kea, true);
+                    RunAndClosePreview(kea);
                     break;
                 default:
                     break;
             }
         }
 
-        private void ClosePreview(KeyEventArgs kea, bool runBeforeClose)
+        private void RunAndClosePreview(KeyEventArgs kea = null)
         {
             if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
                 return;
@@ -61,26 +60,40 @@ namespace QuickLook
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
-            if (runBeforeClose)
-                _currentMainWindow.RunAndClose();
-            else
-                _currentMainWindow.BeginHide();
-            kea.Handled = true;
+            StopFocusMonitor();
+            _currentMainWindow.RunAndClose();
+            if (kea != null)
+                kea.Handled = true;
         }
 
-        private void TogglePreview(KeyEventArgs kea)
+        internal void ClosePreview(KeyEventArgs kea = null)
+        {
+            StopFocusMonitor();
+            _currentMainWindow.BeginHide();
+
+            if (kea != null)
+                kea.Handled = true;
+        }
+
+        private void TogglePreview(KeyEventArgs kea = null)
         {
             if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
                 return;
 
             if (_currentMainWindow.Visibility == Visibility.Visible)
-                _currentMainWindow.BeginHide();
+            {
+                ClosePreview();
+            }
             else
-                InvokeViewer(GetCurrentSelection());
-            kea.Handled = true;
+            {
+                _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
+                InvokeViewer();
+            }
+            if (kea != null)
+                kea.Handled = true;
         }
 
-        private void SwitchPreview(KeyEventArgs kea)
+        private void SwitchPreview(KeyEventArgs kea = null)
         {
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
@@ -88,21 +101,72 @@ namespace QuickLook
             if (!WindowHelper.IsFocusedControlExplorerItem())
                 return;
 
-            _currentMainWindow.UnloadPlugin();
-            InvokeViewer(GetCurrentSelection());
-            kea.Handled = false;
+            _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
+
+            InvokeViewer();
+            if (kea != null)
+                kea.Handled = false;
         }
 
-        internal void InvokeViewer(string path)
+        private void SwitchPreviewRemoteInvoke(FocusedItemChangedEventArgs e)
         {
+            Debug.WriteLine("SwitchPreviewRemoteInvoke");
+
+            if (e.FocusedFile == _path)
+                return;
+
+            if (string.IsNullOrEmpty(e.FocusedFile))
+                return;
+
+            _currentMainWindow?.Dispatcher.Invoke(() =>
+            {
+                if (_currentMainWindow.Visibility != Visibility.Visible)
+                    return;
+
+                if (!WindowHelper.IsFocusedControlExplorerItem())
+                    return;
+
+                _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
+
+                InvokeViewer();
+            });
+        }
+
+        private void RunFocusMonitor()
+        {
+            if (!FocusMonitor.GetInstance().IsRunning)
+            {
+                FocusMonitor.GetInstance().Start();
+                FocusMonitor.GetInstance().FocusedItemChanged += SwitchPreviewRemoteInvoke;
+            }
+        }
+
+        private void StopFocusMonitor()
+        {
+            if (FocusMonitor.GetInstance().IsRunning)
+            {
+                FocusMonitor.GetInstance().Stop();
+                FocusMonitor.GetInstance().FocusedItemChanged -= SwitchPreviewRemoteInvoke;
+            }
+        }
+
+        internal bool InvokeViewer(string path = null)
+        {
+            if (path == null)
+                path = _path;
+
             if (string.IsNullOrEmpty(path))
-                return;
+                return false;
             if (!Directory.Exists(path) && !File.Exists(path))
-                return;
+                return false;
+
+            RunFocusMonitor();
 
             var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
 
             BeginShowNewWindow(matchedPlugin, path);
+
+            return true;
         }
 
         private void BeginShowNewWindow(IViewer matchedPlugin, string path)
@@ -141,34 +205,6 @@ namespace QuickLook
                     throw;
                 }
             }
-        }
-
-        private string GetCurrentSelection()
-        {
-            var path = string.Empty;
-
-            // communicate with COM in a separate thread
-            Task.Run(() =>
-                {
-                    var paths = GetCurrentSelectionNative();
-
-                    if (paths.Any())
-                        path = paths.First();
-                })
-                .Wait();
-
-            return string.IsNullOrEmpty(path) ? string.Empty : path;
-        }
-
-        private string[] GetCurrentSelectionNative()
-        {
-            NativeMethods.QuickLook.SaveCurrentSelection();
-
-            var n = NativeMethods.QuickLook.GetCurrentSelectionCount();
-            var sb = new StringBuilder(n * 261); // MAX_PATH + NULL = 261
-            NativeMethods.QuickLook.GetCurrentSelectionBuffer(sb);
-
-            return sb.Length == 0 ? new string[0] : sb.ToString().Split('|');
         }
 
         internal static ViewWindowManager GetInstance()

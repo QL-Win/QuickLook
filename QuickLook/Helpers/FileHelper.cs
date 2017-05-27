@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using QuickLook.NativeMethods;
+using QuickLook.NativeMethods.Shell32;
 
 namespace QuickLook.Helpers
 {

@@ -83,6 +83,7 @@
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
+    <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BackgroundVisualHost.cs" />
     <Compile Include="Controls\BusyDecorator.cs" />
@@ -108,7 +109,11 @@
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
-    <Compile Include="NativeMethods\ShellLink.cs" />
+    <Compile Include="NativeMethods\Shell32\IShellLink.cs" />
+    <Compile Include="NativeMethods\Shell32\IWshShell.cs" />
+    <Compile Include="NativeMethods\Shell32\IWshShortcut.cs" />
+    <Compile Include="NativeMethods\Shell32\ShellLink.cs" />
+    <Compile Include="NativeMethods\Shell32\WshShell.cs" />
     <Compile Include="PidHelper.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />

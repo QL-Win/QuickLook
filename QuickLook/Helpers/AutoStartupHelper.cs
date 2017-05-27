@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
-using QuickLook.NativeMethods;
+using QuickLook.NativeMethods.Shell32;
 
 namespace QuickLook.Helpers
 {

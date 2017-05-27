@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
@@ -42,7 +43,8 @@ namespace QuickLook
                     OpenWithAssocApp();
             };*/
 
-            buttonOpenWith.Click += (sender, e) => RunAndClose();
+            buttonOpenWith.Click += (sender, e) => ViewWindowManager.GetInstance()
+                .InvokeRoutine(new KeyEventArgs(Keys.Escape));
         }
 
         public ContextObject ContextObject { get; private set; }
