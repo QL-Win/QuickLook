@@ -30,7 +30,7 @@ namespace QuickLook
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem("Check for &Updates...",
+                    new MenuItem($"Check for &Updates ({System.Windows.Forms.Application.ProductVersion})",
                         (sender, e) => Process.Start(@"http://pooi.moe/QuickLook/")),
                     _itemAutorun,
                     new MenuItem("&Quit", (sender, e) => Application.Current.Shutdown())
