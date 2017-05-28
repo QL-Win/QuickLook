@@ -21,6 +21,7 @@ Till now, QuickLook supports the preview of
  - Pdf file
  - All kinds of text files (determined by file content)
  - Microsoft Word (`.doc`, `.docx`), Excel (`.xls`, `.xlsx`) and PowerPoint (`.ppt`, `.pptx`) files (requires MS Office installation)
+ - OpenDocument (`odt`, `.ods` and `.odp`) files (requires MS Office installation)
  - Video files (`.mp4`, `.mkv`, `.m2ts` etc.)
  - HTML files (`.htm`, `.html`)
  - Markdown file (`.md`)
@@ -33,8 +34,10 @@ In-place preview / Integrate with 3rd-party file manager
 Hotkeys in preview window:
 
  - <kbd>Space</kbd> Show/Hide the preview window
- - <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
- - <kbd>Ctrl+Wheel</kbd> Zoom in/out
+ - <kbd>Esc</kbd> Hide the preview window
+ - <kbd>Enter</kbd> Open/Execute current file
+ - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
+ - <kbd>Ctrl-Wheel</kbd> Zoom in/out
 
 ## Development
 
