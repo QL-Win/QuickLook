@@ -1,200 +1,18 @@
 #include "stdafx.h"
 
 #include "Shell32.h"
+#include <atlcomcli.h>
 
 using namespace std;
-
-vector<wstring> Shell32::vector_items;
-
-void Shell32::SaveCurrentSelection()
-{
-	vector_items.clear();
-
-	switch (GetFocusedWindowType())
-	{
-	case EXPLORER:
-		SaveSelectedFromExplorer();
-		break;
-	case DESKTOP:
-		SaveSelectedFromDesktop();
-		break;
-	default:
-		break;
-	}
-}
-
-UINT Shell32::GetCurrentSelectionCount()
-{
-	return vector_items.size();
-}
-
-void Shell32::GetCurrentSelectionBuffer(PWCHAR buffer)
-{
-	PWCHAR pos = buffer;
-
-	for (vector<wstring>::iterator it = vector_items.begin(); it < vector_items.end(); ++it)
-	{
-		int l = it->length();
-		wcscpy_s(pos, l + 1, it->c_str());
-
-		pos += l;
-
-		// overwrite NULL
-		wcscpy_s(pos++, 2, L"|");
-	}
-
-	// remove last "|"
-	wcscpy_s(pos - 1, 1, L"");
-}
-
-void Shell32::SaveSelectedFromExplorer()
-{
-	CoInitialize(nullptr);
-
-	CComPtr<IShellWindows> psw;
-	HRESULT ret = psw.CoCreateInstance(CLSID_ShellWindows);
-
-	auto hwndFGW = GetForegroundWindow();
-
-	auto fFound = FALSE;
-
-	for (int i = 0; !fFound; i++)
-	{
-		VARIANT vi;
-		V_VT(&vi) = VT_I4;
-		V_I4(&vi) = i;
-
-		CComPtr<IDispatch> pdisp;
-		// ReSharper disable once CppSomeObjectMembersMightNotBeInitialized
-		if (SUCCEEDED(psw->Item(vi, &pdisp)))
-		{
-			CComPtr<IWebBrowserApp> pwba;
-			if (SUCCEEDED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
-			{
-				HWND hwndWBA;
-				if (SUCCEEDED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))) && hwndWBA == hwndFGW)
-				{
-					fFound = TRUE;
-
-					CComPtr<IDispatch> ppdisp;
-					if (SUCCEEDED(pwba->get_Document(&ppdisp)))
-					{
-						CComPtr<IShellFolderViewDual2> pshvd;
-						if (SUCCEEDED(ppdisp->QueryInterface(IID_IShellFolderViewDual2, reinterpret_cast<void**>(&pshvd))))
-						{
-							CComPtr<FolderItems> pfis;
-							if (SUCCEEDED(pshvd->SelectedItems(&pfis)))
-							{
-								LONG pCount = 0L;
-								pfis->get_Count(&pCount);
-
-								for (int ii = 0; ii < pCount; ii++)
-								{
-									VARIANT vii;
-									V_VT(&vii) = VT_I4;
-									V_I4(&vii) = ii;
-
-									CComPtr<FolderItem> pfi;
-									// ReSharper disable once CppSomeObjectMembersMightNotBeInitialized
-									if (SUCCEEDED(pfis->Item(vii, &pfi)))
-									{
-										CComBSTR pbs = SysAllocStringLen(L"", MAX_PATH);
-										pfi->get_Path(&pbs);
-
-										wstring ws = wstring(pbs);
-										ws.shrink_to_fit();
-
-										vector_items.push_back(ws);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-CComQIPtr<IWebBrowser2> Shell32::AttachDesktopShellWindow()
-{
-	CoInitialize(nullptr);
-
-	CComPtr<IShellWindows> psw;
-	CComQIPtr<IWebBrowser2> pdispOut;
-
-	if (SUCCEEDED(psw.CoCreateInstance(CLSID_ShellWindows)))
-	{
-		VARIANT pvarLoc = {VT_EMPTY};
-		long phwnd;
-		psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pdispOut));
-	}
-	return pdispOut;
-}
-
-void Shell32::SaveSelectedFromDesktop()
-{
-	auto pWebBrowser2 = AttachDesktopShellWindow();
-
-	if (!pWebBrowser2)
-		return;
-
-	CComQIPtr<IServiceProvider> psp(pWebBrowser2);
-
-	if (!psp) return;
-
-	CComPtr<IShellBrowser> psb;
-	if (SUCCEEDED(psp->QueryService(SID_STopLevelBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
-	{
-		CComPtr<IShellView> psv;
-		if (SUCCEEDED(psb->QueryActiveShellView(&psv)))
-		{
-			CComPtr<IFolderView> pfv;
-			if (SUCCEEDED(psv->QueryInterface(IID_IFolderView, reinterpret_cast<void**>(&pfv))))
-			{
-				CComPtr<IDataObject> dao;
-				if (SUCCEEDED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
-					vectorFromDataObject(dao);
-			}
-		}
-	}
-}
-
-void Shell32::vectorFromDataObject(CComPtr<IDataObject> dao)
-{
-	FORMATETC formatetc;
-	STGMEDIUM medium;
-
-	formatetc.cfFormat = CF_HDROP;
-	formatetc.ptd = nullptr;
-	formatetc.dwAspect = DVASPECT_CONTENT;
-	formatetc.lindex = -1;
-	formatetc.tymed = TYMED_HGLOBAL;
-
-	medium.tymed = TYMED_HGLOBAL;
-
-	if (SUCCEEDED(dao->GetData(&formatetc, &medium)))
-	{
-		int n = DragQueryFile(HDROP(medium.hGlobal), 0xFFFFFFFF, nullptr, 0);
-
-		for (int i = 0; i < n; i++)
-		{
-			WCHAR buffer[MAX_PATH];
-			DragQueryFile(HDROP(medium.hGlobal), i, buffer, MAX_PATH - 1);
-
-			wstring ws = wstring(buffer);
-			ws.shrink_to_fit();
-
-			vector_items.push_back(ws);
-		}
-	}
-}
 
 Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 {
 	auto type = INVALID;
 
 	auto hwndfg = GetForegroundWindow();
+
+	if (isCursorActivated(hwndfg))
+		return INVALID;
 
 	auto classBuffer = new WCHAR[MAX_PATH];
 	if (SUCCEEDED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
@@ -214,4 +32,133 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 	delete[] classBuffer;
 
 	return type;
+}
+
+void Shell32::GetCurrentSelection(PWCHAR buffer)
+{
+	switch (GetFocusedWindowType())
+	{
+	case EXPLORER:
+		getSelectedFromExplorer(buffer);
+		break;
+	case DESKTOP:
+		getSelectedFromDesktop(buffer);
+		break;
+	default:
+		break;
+	}
+}
+
+void Shell32::getSelectedFromExplorer(PWCHAR buffer)
+{
+	CoInitialize(nullptr);
+
+	CComPtr<IShellWindows> psw;
+	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
+		return;
+
+	auto hwndFGW = GetForegroundWindow();
+
+	auto count = 0L;
+	psw->get_Count(&count);
+
+	for (auto i = 0; i < count; i++)
+	{
+		VARIANT vi;
+		V_VT(&vi) = VT_I4;
+		V_I4(&vi) = i;
+
+		CComPtr<IDispatch> pdisp;
+		// ReSharper disable once CppSomeObjectMembersMightNotBeInitialized
+		if (FAILED(psw->Item(vi, &pdisp)))
+			continue;
+
+		CComQIPtr<IWebBrowserApp> pwba;
+		if (FAILED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
+			continue;
+
+		HWND hwndWBA;
+		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))))
+			continue;
+
+		if (hwndWBA != hwndFGW || isCursorActivated(hwndWBA))
+			continue;
+
+		getSelectedInternal(pwba, buffer);
+	}
+}
+
+void Shell32::getSelectedFromDesktop(PWCHAR buffer)
+{
+	CoInitialize(nullptr);
+
+	CComPtr<IShellWindows> psw;
+	CComQIPtr<IWebBrowserApp> pwba;
+
+	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
+		return;
+
+	VARIANT pvarLoc = {VT_EMPTY};
+	long phwnd;
+	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pwba))))
+		return;
+
+	if (isCursorActivated(reinterpret_cast<HWND>(phwnd)))
+		return;
+
+	getSelectedInternal(pwba, buffer);
+}
+
+void Shell32::getSelectedInternal(CComQIPtr<IWebBrowserApp> pwba, PWCHAR buffer)
+{
+	CComQIPtr<IServiceProvider> psp;
+	if (FAILED(pwba->QueryInterface(IID_IServiceProvider, reinterpret_cast<void**>(&psp))))
+		return;
+
+	CComPtr<IShellBrowser> psb;
+	if (FAILED(psp->QueryService(SID_STopLevelBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
+		return;
+
+	CComPtr<IShellView> psv;
+	if (FAILED(psb->QueryActiveShellView(&psv)))
+		return;
+
+	CComPtr<IDataObject> dao;
+	if (FAILED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
+		return;
+
+	return obtainFirstItem(dao, buffer);
+}
+
+void Shell32::obtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
+{
+	FORMATETC formatetc;
+	STGMEDIUM medium;
+
+	formatetc.cfFormat = CF_HDROP;
+	formatetc.ptd = nullptr;
+	formatetc.dwAspect = DVASPECT_CONTENT;
+	formatetc.lindex = -1;
+	formatetc.tymed = TYMED_HGLOBAL;
+
+	medium.tymed = TYMED_HGLOBAL;
+
+	if (FAILED(dao->GetData(&formatetc, &medium)))
+		return;
+
+	int n = DragQueryFile(HDROP(medium.hGlobal), 0xFFFFFFFF, nullptr, 0);
+
+	if (n < 1)
+		return;
+
+	DragQueryFile(HDROP(medium.hGlobal), 0, buffer, MAX_PATH - 1);
+}
+
+bool Shell32::isCursorActivated(HWND hwnd)
+{
+	auto tId = GetWindowThreadProcessId(hwnd, nullptr);
+
+	GUITHREADINFO gui = {sizeof gui};
+	GetGUIThreadInfo(tId, &gui);
+	return gui.flags || gui.hwndCaret;
 }

@@ -5,22 +5,12 @@
 
 #define EXPORT extern "C" __declspec(dllexport)
 
-EXPORT int GetFocusedWindowType()
+EXPORT Shell32::FocusedWindowType GetFocusedWindowType()
 {
 	return Shell32::GetFocusedWindowType();
 }
 
-EXPORT void SaveCurrentSelection()
+EXPORT void GetCurrentSelection(PWCHAR buffer)
 {
-	Shell32::SaveCurrentSelection();
-}
-
-EXPORT int GetCurrentSelectionCount()
-{
-	return Shell32::GetCurrentSelectionCount();
-}
-
-EXPORT void GetCurrentSelectionBuffer(PWCHAR buffer)
-{
-	Shell32::GetCurrentSelectionBuffer(buffer);
+	Shell32::GetCurrentSelection(buffer);
 }

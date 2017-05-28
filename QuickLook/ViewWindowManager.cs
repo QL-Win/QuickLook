@@ -9,13 +9,14 @@ using QuickLook.Plugin;
 
 namespace QuickLook
 {
-    internal class ViewWindowManager
+    internal class ViewWindowManager : IDisposable
     {
         private static ViewWindowManager _instance;
 
         private readonly MainWindowNoTransparent _viewWindowNoTransparent;
         private readonly MainWindowTransparent _viewWindowTransparentTransparent;
         private MainWindowTransparent _currentMainWindow;
+        private long _lastSwitchTick;
 
         private string _path = string.Empty;
 
@@ -27,10 +28,13 @@ namespace QuickLook
             _currentMainWindow = _viewWindowTransparentTransparent;
         }
 
+        public void Dispose()
+        {
+            StopFocusMonitor();
+        }
+
         internal void InvokeRoutine(KeyEventArgs kea)
         {
-            Debug.WriteLine(kea.KeyCode);
-
             switch (kea.KeyCode)
             {
                 case Keys.Up:
@@ -53,22 +57,29 @@ namespace QuickLook
             }
         }
 
-        private void RunAndClosePreview(KeyEventArgs kea = null)
+        internal void RunAndClosePreview(KeyEventArgs kea = null)
         {
-            if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
-                return;
+            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
+                NativeMethods.QuickLook.FocusedWindowType.Invalid)
+                if (!WindowHelper.IsForegroundWindowBelongToSelf())
+                    return;
 
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
             StopFocusMonitor();
-            _currentMainWindow.RunAndClose();
+            _currentMainWindow.RunAndHide();
             if (kea != null)
                 kea.Handled = true;
         }
 
         internal void ClosePreview(KeyEventArgs kea = null)
         {
+            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
+                NativeMethods.QuickLook.FocusedWindowType.Invalid)
+                if (!WindowHelper.IsForegroundWindowBelongToSelf())
+                    return;
+
             StopFocusMonitor();
             _currentMainWindow.BeginHide();
 
@@ -78,8 +89,12 @@ namespace QuickLook
 
         private void TogglePreview(KeyEventArgs kea = null)
         {
-            if (!WindowHelper.IsFocusedControlExplorerItem() && !WindowHelper.IsFocusedWindowSelf())
-                return;
+            _lastSwitchTick = DateTime.Now.Ticks;
+
+            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
+                NativeMethods.QuickLook.FocusedWindowType.Invalid)
+                if (!WindowHelper.IsForegroundWindowBelongToSelf())
+                    return;
 
             if (_currentMainWindow.Visibility == Visibility.Visible)
             {
@@ -87,7 +102,7 @@ namespace QuickLook
             }
             else
             {
-                _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
+                _path = NativeMethods.QuickLook.GetCurrentSelection();
                 InvokeViewer();
             }
             if (kea != null)
@@ -99,38 +114,34 @@ namespace QuickLook
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
-            if (!WindowHelper.IsFocusedControlExplorerItem())
+            _lastSwitchTick = DateTime.Now.Ticks;
+
+            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
+                NativeMethods.QuickLook.FocusedWindowType.Invalid)
                 return;
 
-            _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
+            _path = NativeMethods.QuickLook.GetCurrentSelection();
 
             InvokeViewer();
             if (kea != null)
                 kea.Handled = false;
         }
 
-        private void SwitchPreviewRemoteInvoke(FocusedItemChangedEventArgs e)
+        private void SwitchPreviewRemoteInvoke(HeartbeatEventArgs e)
         {
-            Debug.WriteLine("SwitchPreviewRemoteInvoke");
+            // sleep for 1.5s
+            if (e.InvokeTick - _lastSwitchTick < 1.5 * TimeSpan.TicksPerSecond)
+                return;
 
             if (e.FocusedFile == _path)
                 return;
 
+            Debug.WriteLine("SwitchPreviewRemoteInvoke:" + (e.InvokeTick - _lastSwitchTick));
+
             if (string.IsNullOrEmpty(e.FocusedFile))
                 return;
 
-            _currentMainWindow?.Dispatcher.Invoke(() =>
-            {
-                if (_currentMainWindow.Visibility != Visibility.Visible)
-                    return;
-
-                if (!WindowHelper.IsFocusedControlExplorerItem())
-                    return;
-
-                _path = NativeMethods.QuickLook.GetCurrentSelectionFirst();
-
-                InvokeViewer();
-            });
+            _currentMainWindow?.Dispatcher.Invoke(() => SwitchPreview());
         }
 
         private void RunFocusMonitor()
@@ -138,7 +149,7 @@ namespace QuickLook
             if (!FocusMonitor.GetInstance().IsRunning)
             {
                 FocusMonitor.GetInstance().Start();
-                FocusMonitor.GetInstance().FocusedItemChanged += SwitchPreviewRemoteInvoke;
+                FocusMonitor.GetInstance().Heartbeat += SwitchPreviewRemoteInvoke;
             }
         }
 
@@ -147,7 +158,7 @@ namespace QuickLook
             if (FocusMonitor.GetInstance().IsRunning)
             {
                 FocusMonitor.GetInstance().Stop();
-                FocusMonitor.GetInstance().FocusedItemChanged -= SwitchPreviewRemoteInvoke;
+                FocusMonitor.GetInstance().Heartbeat -= SwitchPreviewRemoteInvoke;
             }
         }
 

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace QuickLook
+namespace QuickLook.Helpers
 {
     internal static class PidHelper
     {

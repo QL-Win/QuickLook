@@ -13,16 +13,13 @@ public:
 	};
 
 	static FocusedWindowType GetFocusedWindowType();
-	static void SaveCurrentSelection();
-	static UINT GetCurrentSelectionCount();
-	static void GetCurrentSelectionBuffer(PWCHAR buffer);
+	static void GetCurrentSelection(PWCHAR buffer);
 
 private:
-	static std::vector<std::wstring> vector_items;
+	static void getSelectedFromDesktop(PWCHAR buffer);
+	static void getSelectedFromExplorer(PWCHAR buffer);
 
-	static void SaveSelectedFromDesktop();
-	static void SaveSelectedFromExplorer();
-
-	static CComQIPtr<IWebBrowser2> AttachDesktopShellWindow();
-	static void vectorFromDataObject(CComPtr<IDataObject> dao);
+	static void getSelectedInternal(CComQIPtr<IWebBrowserApp> pWebBrowserApp, PWCHAR buffer);
+	static void obtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer);
+	static bool isCursorActivated(HWND hwndfg);
 };

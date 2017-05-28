@@ -116,7 +116,7 @@
     <Compile Include="NativeMethods\Shell32\IWshShortcut.cs" />
     <Compile Include="NativeMethods\Shell32\ShellLink.cs" />
     <Compile Include="NativeMethods\Shell32\WshShell.cs" />
-    <Compile Include="PidHelper.cs" />
+    <Compile Include="Helpers\PidHelper.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />

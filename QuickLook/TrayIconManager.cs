@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using QuickLook.Helpers;
 using QuickLook.Properties;
-using Application = System.Windows.Application;
 
 namespace QuickLook
 {
@@ -26,14 +25,17 @@ namespace QuickLook
         {
             _icon = new NotifyIcon
             {
+                Text = $"QuickLook v{Application.ProductVersion}",
                 Icon = Resources.app,
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem($"Check for &Updates ({System.Windows.Forms.Application.ProductVersion})",
+                    new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
+                    new MenuItem("-"),
+                    new MenuItem("Check for &Updates...",
                         (sender, e) => Process.Start(@"http://pooi.moe/QuickLook/")),
                     _itemAutorun,
-                    new MenuItem("&Quit", (sender, e) => Application.Current.Shutdown())
+                    new MenuItem("&Quit", (sender, e) => System.Windows.Application.Current.Shutdown())
                 })
             };
 

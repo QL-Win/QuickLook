@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using QuickLook.Helpers;
 
 namespace QuickLook
 {
     internal class FocusMonitor
     {
-        public delegate void FocusedItemChangedEventHandler(FocusedItemChangedEventArgs e);
+        public delegate void HeartbeatEventHandler(HeartbeatEventArgs e);
 
         private static FocusMonitor _instance;
 
         public bool IsRunning { get; private set; }
 
-        public event FocusedItemChangedEventHandler FocusedItemChanged;
+        public event HeartbeatEventHandler Heartbeat;
 
         public void Start()
         {
@@ -21,21 +20,16 @@ namespace QuickLook
 
             new Task(() =>
             {
-                var currentPath = NativeMethods.QuickLook.GetCurrentSelectionFirst();
-
                 while (IsRunning)
                 {
                     Thread.Sleep(500);
 
-                    if (WindowHelper.IsFocusedControlExplorerItem())
-                    {
-                        var file = NativeMethods.QuickLook.GetCurrentSelectionFirst();
-                        if (file != currentPath)
-                        {
-                            FocusedItemChanged?.Invoke(new FocusedItemChangedEventArgs(file));
-                            currentPath = file;
-                        }
-                    }
+                    if (NativeMethods.QuickLook.GetFocusedWindowType() ==
+                        NativeMethods.QuickLook.FocusedWindowType.Invalid)
+                        continue;
+
+                    var file = NativeMethods.QuickLook.GetCurrentSelection();
+                    Heartbeat?.Invoke(new HeartbeatEventArgs(DateTime.Now.Ticks, file));
                 }
             }).Start();
         }
@@ -51,13 +45,15 @@ namespace QuickLook
         }
     }
 
-    internal class FocusedItemChangedEventArgs : EventArgs
+    internal class HeartbeatEventArgs : EventArgs
     {
-        public FocusedItemChangedEventArgs(string files)
+        public HeartbeatEventArgs(long tick, string files)
         {
+            InvokeTick = tick;
             FocusedFile = files;
         }
 
+        public long InvokeTick { get; }
         public string FocusedFile { get; }
     }
 }

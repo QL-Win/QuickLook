@@ -17,6 +17,7 @@ namespace QuickLook
         public void Dispose()
         {
             _hook?.Dispose();
+            _hook = null;
         }
 
         private void HotkeyEventHandler(object sender, KeyEventArgs e)

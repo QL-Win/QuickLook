@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
@@ -61,65 +60,21 @@ namespace QuickLook.Helpers
             pixelY = (int) (matrix.M22 * unitY);
         }
 
+        internal static bool IsForegroundWindowBelongToSelf()
+        {
+            var hwnd = User32.GetForegroundWindow();
+            if (hwnd == IntPtr.Zero)
+                return false;
+
+            User32.GetWindowThreadProcessId(hwnd, out uint procId);
+            return procId == Process.GetCurrentProcess().Id;
+        }
+
         internal static void SetNoactivate(WindowInteropHelper window)
         {
             User32.SetWindowLong(window.Handle, User32.GWL_EXSTYLE,
                 User32.GetWindowLong(window.Handle, User32.GWL_EXSTYLE) |
                 User32.WS_EX_NOACTIVATE);
-        }
-
-        internal static string GetWindowClassName(IntPtr window)
-        {
-            var pClassName = new StringBuilder(256);
-            User32.GetClassName(window, pClassName, pClassName.Capacity);
-
-            return pClassName.ToString();
-        }
-
-        internal static IntPtr GetParentWindow(IntPtr child)
-        {
-            return User32.GetParent(child);
-        }
-
-        internal static IntPtr GetFocusedWindow()
-        {
-            var activeWindowHandle = User32.GetForegroundWindow();
-
-            var activeWindowThread = User32.GetWindowThreadProcessId(activeWindowHandle, IntPtr.Zero);
-            var currentThread = Kernel32.GetCurrentThreadId();
-
-            User32.AttachThreadInput(activeWindowThread, currentThread, true);
-            var focusedControlHandle = User32.GetFocus();
-            User32.AttachThreadInput(activeWindowThread, currentThread, false);
-
-            return focusedControlHandle;
-        }
-
-        internal static bool IsFocusedWindowSelf()
-        {
-            var procId = Process.GetCurrentProcess().Id;
-            uint activeProcId;
-            User32.GetWindowThreadProcessId(GetFocusedWindow(), out activeProcId);
-
-            return activeProcId == procId;
-        }
-
-        internal static bool IsFocusedControlExplorerItem()
-        {
-            if (NativeMethods.QuickLook.GetFocusedWindowType() == 0)
-                return false;
-
-            var focusedWindowClass = GetWindowClassName(GetFocusedWindow());
-            var focusedWindowParentClass =
-                GetWindowClassName(GetParentWindow(GetFocusedWindow()));
-
-            if (focusedWindowClass != "SysListView32" && focusedWindowClass != "DirectUIHWND")
-                return false;
-
-            if (focusedWindowParentClass != "SHELLDLL_DefView")
-                return false;
-
-            return true;
         }
     }
 }

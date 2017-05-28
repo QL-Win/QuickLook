@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,40 +7,30 @@ namespace QuickLook.NativeMethods
     internal static class QuickLook
     {
         [DllImport("QuickLook.Native.Shell32.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetFocusedWindowType();
+        internal static extern FocusedWindowType GetFocusedWindowType();
 
-        [DllImport("QuickLook.Native.Shell32.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void SaveCurrentSelection();
+        [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetCurrentSelection",
+            CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void GetCurrentSelectionNative([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
-        [DllImport("QuickLook.Native.Shell32.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetCurrentSelectionCount();
-
-        [DllImport("QuickLook.Native.Shell32.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void GetCurrentSelectionBuffer([MarshalAs(UnmanagedType.LPWStr)] StringBuilder buffer);
-
-        internal static string[] GetCurrentSelection()
+        internal static string GetCurrentSelection()
         {
             StringBuilder sb = null;
             // communicate with COM in a separate thread
             Task.Run(() =>
             {
-                SaveCurrentSelection();
-
-                var n = GetCurrentSelectionCount();
-                if (n != 0)
-                {
-                    sb = new StringBuilder(n * 261); // MAX_PATH + NULL = 261
-                    GetCurrentSelectionBuffer(sb);
-                }
+                sb = new StringBuilder(255 + 1);
+                GetCurrentSelectionNative(sb);
             }).Wait();
-            return sb == null || sb.Length == 0 ? new string[0] : sb.ToString().Split('|');
+
+            return sb?.ToString() ?? string.Empty;
         }
 
-        internal static string GetCurrentSelectionFirst()
+        internal enum FocusedWindowType
         {
-            var files = GetCurrentSelection();
-
-            return files.Any() ? files.First() : string.Empty;
+            Invalid,
+            Desktop,
+            Explorer
         }
     }
 }

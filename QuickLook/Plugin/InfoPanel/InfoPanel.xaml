@@ -31,8 +31,9 @@
         </Image>
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10" />
@@ -42,7 +43,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" FontWeight="SemiBold" Padding="3">Filename.ext</TextBlock>
+            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" FontWeight="SemiBold" Padding="3"
+                       TextWrapping="Wrap"
+                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis">
+                FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename.ext
+            </TextBlock>
             <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3">Last modified at 01/01/2017 00:00:00</TextBlock>
             <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3">Calculating size...</TextBlock>
         </Grid>

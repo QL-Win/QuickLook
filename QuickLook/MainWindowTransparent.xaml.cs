@@ -3,13 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
-using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace QuickLook
 {
@@ -38,16 +36,16 @@ namespace QuickLook
                     BlurWindow.EnableWindowBlur(this);
             };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) => ViewWindowManager.GetInstance()
-                .InvokeRoutine(new KeyEventArgs(Keys.Escape));
+            buttonCloseWindow.MouseLeftButtonUp += (sender, e) =>
+                ViewWindowManager.GetInstance().ClosePreview();
 
-            buttonOpenWith.Click += (sender, e) => ViewWindowManager.GetInstance()
-                .InvokeRoutine(new KeyEventArgs(Keys.Enter));
+            buttonOpenWith.Click += (sender, e) =>
+                ViewWindowManager.GetInstance().RunAndClosePreview();
         }
 
         public ContextObject ContextObject { get; private set; }
 
-        internal void RunAndClose()
+        internal void RunAndHide()
         {
             if (string.IsNullOrEmpty(_path))
                 return;
@@ -83,6 +81,12 @@ namespace QuickLook
 
         internal void UnloadPlugin()
         {
+            // the focused element will not processed by GC: https://stackoverflow.com/questions/30848939/memory-leak-due-to-window-efectivevalues-retention
+            FocusManager.SetFocusedElement(this, null);
+            Keyboard.DefaultRestoreFocusMode =
+                RestoreFocusMode.None; // WPF will put the focused item into a "_restoreFocus" list ... omg
+            Keyboard.ClearFocus();
+
             ContextObject.Reset();
 
             _plugin?.Cleanup();
@@ -151,10 +155,6 @@ namespace QuickLook
 
         internal void BeginHide()
         {
-            // the focused element will not processed by GC: https://stackoverflow.com/questions/30848939/memory-leak-due-to-window-efectivevalues-retention
-            FocusManager.SetFocusedElement(this, null);
-            Keyboard.ClearFocus();
-
             UnloadPlugin();
             Hide();
 
