@@ -35,7 +35,6 @@ namespace QuickLook.Plugin.IPreviewHandlers
                 case ".pptx":
                 // OpenDocument
                 case ".odt":
-                case ".ott":
                 case ".ods":
                 case ".odp":
                     return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
