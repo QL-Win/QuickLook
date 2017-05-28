@@ -4,10 +4,12 @@ using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace QuickLook
 {
@@ -81,21 +83,20 @@ namespace QuickLook
 
         internal void UnloadPlugin()
         {
-            // clear ref to control
-            //container.Content = null;
-
             ContextObject.Reset();
 
             _plugin?.Cleanup();
             _plugin = null;
 
-            GC.Collect();
+            ProcessHelper.PerformAggressiveGC();
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path)
         {
             _path = path;
             _plugin = matchedPlugin;
+
+            ContextObject.ViewerWindow = this;
 
             // get window size before showing it
             _plugin.Prepare(path, ContextObject);
@@ -150,8 +151,14 @@ namespace QuickLook
 
         internal void BeginHide()
         {
+            // the focused element will not processed by GC: https://stackoverflow.com/questions/30848939/memory-leak-due-to-window-efectivevalues-retention
+            FocusManager.SetFocusedElement(this, null);
+            Keyboard.ClearFocus();
+
             UnloadPlugin();
             Hide();
+
+            ProcessHelper.PerformAggressiveGC();
         }
     }
 }

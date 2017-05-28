@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>QuickLook</RootNamespace>
     <AssemblyName>QuickLook</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -28,6 +28,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
@@ -108,6 +109,7 @@
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="NativeMethods\Shell32\IShellLink.cs" />
     <Compile Include="NativeMethods\Shell32\IWshShell.cs" />
