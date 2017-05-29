@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -37,12 +36,8 @@ namespace QuickLook.Plugin.PDFViewer
             return foundElement;
         }
 
-        [DllImport("gdi32")]
-        private static extern int DeleteObject(IntPtr o);
-
         public static BitmapSource ToBitmapSource(this Bitmap source)
         {
-            var ip = source.GetHbitmap();
             BitmapSource bs = null;
             try
             {
@@ -57,9 +52,9 @@ namespace QuickLook.Plugin.PDFViewer
 
                 bs.Freeze();
             }
-            finally
+            catch
             {
-                DeleteObject(ip);
+                // ignored
             }
 
             return bs;

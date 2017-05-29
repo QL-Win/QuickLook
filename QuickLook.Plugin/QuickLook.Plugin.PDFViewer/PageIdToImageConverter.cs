@@ -11,7 +11,7 @@ namespace QuickLook.Plugin.PDFViewer
             if (values.Length < 2)
                 throw new Exception("PageIdToImageConverter");
 
-            var zoom = 0.5f;
+            var zoom = 0.3f;
             if (parameter != null)
                 float.TryParse((string) parameter, out zoom);
 
@@ -21,7 +21,13 @@ namespace QuickLook.Plugin.PDFViewer
             var pageId = (int) values[1];
             if (pageId < 0) return null;
 
-            return handle.GetPage(pageId, zoom).ToBitmapSource();
+            var bitmap = handle.GetPage(pageId, zoom);
+            var bs = bitmap.ToBitmapSource();
+            bitmap.Dispose();
+
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+
+            return bs;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

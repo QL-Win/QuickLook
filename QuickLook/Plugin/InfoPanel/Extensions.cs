@@ -1,7 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -9,16 +7,12 @@ namespace QuickLook.Plugin.InfoPanel
 {
     public static class Extensions
     {
-        [DllImport("gdi32")]
-        private static extern int DeleteObject(IntPtr o);
-
         public static BitmapSource ToBitmapSource(this Bitmap source)
         {
             // BitmapSource.Create throws an exception when the image is scanned backward.
             // The Clone() will make it back scanning forward.
             source = (Bitmap) source.Clone();
 
-            var ip = source.GetHbitmap();
             BitmapSource bs = null;
             try
             {
@@ -33,9 +27,9 @@ namespace QuickLook.Plugin.InfoPanel
 
                 bs.Freeze();
             }
-            finally
+            catch
             {
-                DeleteObject(ip);
+                // ignored
             }
 
             return bs;

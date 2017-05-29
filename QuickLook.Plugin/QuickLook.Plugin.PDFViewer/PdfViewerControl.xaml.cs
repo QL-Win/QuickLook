@@ -143,7 +143,9 @@ namespace QuickLook.Plugin.PDFViewer
             if (!PdfLoaded)
                 return;
 
-            var image = PdfHandle.GetPage(CurrentPage, ZoomFactor).ToBitmapSource();
+            var bitmap = PdfHandle.GetPage(CurrentPage, ZoomFactor);
+            var image = bitmap.ToBitmapSource();
+            bitmap.Dispose();
 
             pageViewPanelImage.Source = image;
             pageViewPanelImage.Width = pageViewPanelImage.Source.Width;

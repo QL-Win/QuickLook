@@ -23,7 +23,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ListBox x:Name="listThumbnails" Grid.Column="0" VirtualizingPanel.ScrollUnit="Item"
-                 ScrollViewer.IsDeferredScrollingEnabled="False"
+                 VirtualizingPanel.IsVirtualizing="True"
                  SelectedIndex="0"
                  Focusable="False"
                  Background="#00FFFFFF"
