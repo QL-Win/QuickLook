@@ -92,12 +92,18 @@ namespace QuickLook.Plugin.ImageViewer
 
         private void ViewPanel_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
-                return;
-
             e.Handled = true;
 
-            var newZoom = _zoomFactor + e.Delta / 120 * 0.1;
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
+            {
+                // normal scroll
+                viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - e.Delta);
+
+                return;
+            }
+
+            // zoom
+            var newZoom = _zoomFactor + (double) e.Delta / 120 * 0.1;
 
             newZoom = Math.Max(newZoom, _minZoomFactor);
             newZoom = Math.Min(newZoom, 3);

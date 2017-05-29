@@ -79,19 +79,28 @@ namespace QuickLook.Plugin.PDFViewer
             if (Keyboard.Modifiers != ModifierKeys.None)
                 return;
 
+            e.Handled = true;
+
             if (e.Delta > 0) // up
             {
-                if (pageViewPanel.VerticalOffset != 0) return;
+                if (pageViewPanel.VerticalOffset != 0)
+                {
+                    pageViewPanel.ScrollToVerticalOffset(pageViewPanel.VerticalOffset - e.Delta); // normal scroll
+                    return;
+                }
+
 
                 PrevPage();
-                e.Handled = true;
             }
             else // down
             {
-                if (pageViewPanel.VerticalOffset != pageViewPanel.ScrollableHeight) return;
+                if (pageViewPanel.VerticalOffset != pageViewPanel.ScrollableHeight)
+                {
+                    pageViewPanel.ScrollToVerticalOffset(pageViewPanel.VerticalOffset - e.Delta); // normal scroll
+                    return;
+                }
 
                 NextPage();
-                e.Handled = true;
             }
         }
 
@@ -278,7 +287,7 @@ namespace QuickLook.Plugin.PDFViewer
 
                 e.Handled = true;
 
-                newZoom = newZoom + e.Delta / 120 * 0.1;
+                newZoom = newZoom + (double) e.Delta / 120 * 0.1;
 
                 newZoom = Math.Max(newZoom, MinZoomFactor);
                 newZoom = Math.Min(newZoom, 3);
