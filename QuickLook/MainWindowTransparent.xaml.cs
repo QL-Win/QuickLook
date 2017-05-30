@@ -156,6 +156,11 @@ namespace QuickLook
         internal void BeginHide()
         {
             UnloadPlugin();
+
+            // if the this window is hidden in Max state, new show() will results in failure:
+            // "Cannot show Window when ShowActivated is false and WindowState is set to Maximized"
+            WindowState = WindowState.Normal;
+
             Hide();
 
             ProcessHelper.PerformAggressiveGC();
