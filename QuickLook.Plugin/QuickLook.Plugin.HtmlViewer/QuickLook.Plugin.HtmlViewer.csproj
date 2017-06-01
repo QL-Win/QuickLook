@@ -35,20 +35,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CefSharp, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\CefSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="CefSharp.Core, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\CefSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="CefSharp.Wpf, Version=57.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\CefSharp.Wpf.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -57,20 +47,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="WebkitPanel.xaml">
+    <Compile Include="WpfBrowserWrapper.cs" />
+    <Page Include="WebpagePanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
-    <Compile Include="JsDialogHandler.cs" />
-    <Compile Include="MenuHandler.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="RequestHandler.cs" />
-    <Compile Include="UrlHelper.cs" />
-    <Compile Include="WebkitPanel.xaml.cs">
-      <DependentUpon>WebkitPanel.xaml</DependentUpon>
+    <Compile Include="Helper.cs" />
+    <Compile Include="WebpagePanel.xaml.cs">
+      <DependentUpon>WebpagePanel.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -78,38 +66,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <ContentWithTargetPath Include="CefSharp\cef.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>cef.pak</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\cef_100_percent.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>cef_100_percent.pak</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\cef_200_percent.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>cef_200_percent.pak</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\cef_extensions.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>cef_extensions.pak</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\icudtl.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>icudtl.dat</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\locales\en-US.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>locales\en-US.pak</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\natives_blob.bin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>natives_blob.bin</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\snapshot_blob.bin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>snapshot_blob.bin</TargetPath>
-    </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
@@ -119,38 +75,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="CefSharp\CefSharp.BrowserSubprocess.Core.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>CefSharp.BrowserSubprocess.Core.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\CefSharp.BrowserSubprocess.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>CefSharp.BrowserSubprocess.exe</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\chrome_elf.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>chrome_elf.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\d3dcompiler_47.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>d3dcompiler_47.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\libcef.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>libcef.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\libEGL.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>libEGL.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\libGLESv2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>libGLESv2.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="CefSharp\widevinecdmadapter.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>widevinecdmadapter.dll</TargetPath>
-    </ContentWithTargetPath>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

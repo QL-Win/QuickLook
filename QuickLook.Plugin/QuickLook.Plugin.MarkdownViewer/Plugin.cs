@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using QuickLook.Plugin.HtmlViewer;
 
 namespace QuickLook.Plugin.MarkdownViewer
 {
     public class Plugin : IViewer
     {
-        private WebkitPanel _panel;
+        private WebpagePanel _panel;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => true;
+        public bool AllowsTransparency => false;
 
         public bool CanHandle(string path)
         {
@@ -20,6 +21,7 @@ namespace QuickLook.Plugin.MarkdownViewer
             switch (Path.GetExtension(path).ToLower())
             {
                 case ".md":
+                case ".rmd":
                     return true;
 
                 default:
@@ -36,13 +38,12 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         public void View(string path, ContextObject context)
         {
-            _panel = new WebkitPanel();
+            _panel = new WebpagePanel();
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
 
-            _panel.LoadHtml(GenerateMarkdownHtml(path), path);
-
-            context.IsBusy = false;
+            _panel.LoadHtml(GenerateMarkdownHtml(path));
+            _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
         }
 
         public void Cleanup()
