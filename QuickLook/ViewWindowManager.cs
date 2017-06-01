@@ -41,23 +41,23 @@ namespace QuickLook
                 case Keys.Down:
                 case Keys.Left:
                 case Keys.Right:
-                    SwitchPreview(kea);
+                    SwitchPreview();
                     break;
                 case Keys.Space:
-                    TogglePreview(kea);
+                    TogglePreview();
                     break;
                 case Keys.Escape:
-                    ClosePreview(kea);
+                    ClosePreview();
                     break;
                 case Keys.Enter:
-                    RunAndClosePreview(kea);
+                    RunAndClosePreview();
                     break;
                 default:
                     break;
             }
         }
 
-        internal void RunAndClosePreview(KeyEventArgs kea = null)
+        internal void RunAndClosePreview()
         {
             if (NativeMethods.QuickLook.GetFocusedWindowType() ==
                 NativeMethods.QuickLook.FocusedWindowType.Invalid)
@@ -69,25 +69,23 @@ namespace QuickLook
 
             StopFocusMonitor();
             _currentMainWindow.RunAndHide();
-            if (kea != null)
-                kea.Handled = true;
         }
 
-        internal void ClosePreview(KeyEventArgs kea = null)
+        internal void ClosePreview()
         {
             if (NativeMethods.QuickLook.GetFocusedWindowType() ==
                 NativeMethods.QuickLook.FocusedWindowType.Invalid)
                 if (!WindowHelper.IsForegroundWindowBelongToSelf())
                     return;
 
+            if (_currentMainWindow.Visibility != Visibility.Visible)
+                return;
+
             StopFocusMonitor();
             _currentMainWindow.BeginHide();
-
-            if (kea != null)
-                kea.Handled = true;
         }
 
-        private void TogglePreview(KeyEventArgs kea = null)
+        private void TogglePreview()
         {
             _lastSwitchTick = DateTime.Now.Ticks;
 
@@ -105,11 +103,9 @@ namespace QuickLook
                 _path = NativeMethods.QuickLook.GetCurrentSelection();
                 InvokeViewer();
             }
-            if (kea != null)
-                kea.Handled = true;
         }
 
-        private void SwitchPreview(KeyEventArgs kea = null)
+        private void SwitchPreview()
         {
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
@@ -123,8 +119,6 @@ namespace QuickLook
             _path = NativeMethods.QuickLook.GetCurrentSelection();
 
             InvokeViewer();
-            if (kea != null)
-                kea.Handled = false;
         }
 
         private void SwitchPreviewRemoteInvoke(HeartbeatEventArgs e)
