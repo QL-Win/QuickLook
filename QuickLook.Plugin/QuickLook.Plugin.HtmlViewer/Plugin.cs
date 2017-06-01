@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        private WebpagePanel _panel;
+        private WebkitPanel _panel;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => false;
+        public bool AllowsTransparency => true;
 
         public bool CanHandle(string path)
         {
@@ -37,12 +36,12 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public void View(string path, ContextObject context)
         {
-            _panel = new WebpagePanel();
+            _panel = new WebkitPanel();
             context.ViewerContent = _panel;
             context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
 
             _panel.Navigate(path);
-            _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
+            context.IsBusy = false;
         }
 
         public void Cleanup()
