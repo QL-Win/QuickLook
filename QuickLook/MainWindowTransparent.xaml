@@ -72,7 +72,7 @@
                                 <ContentPresenter Content="{Binding}" RecognizesAccessKey="False" />
                             </DataTemplate>
                         </Button.ContentTemplate>
-                        </Button>
+                    </Button>
                     <!-- set grid.background colour makes it clickable -->
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"

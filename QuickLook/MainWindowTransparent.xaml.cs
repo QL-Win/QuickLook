@@ -154,7 +154,7 @@ namespace QuickLook
             buttonOpenWith.Content = isExe == null
                 ? Directory.Exists(_path)
                     ? $"Browse “{Path.GetFileName(_path)}”"
-                    : "Select ..."
+                    : "Open..."
                 : isExe == true
                     ? $"Run “{appFriendlyName}”"
                     : $"Open with “{appFriendlyName}”";

@@ -38,9 +38,10 @@
             </DockPanel>
             <Grid>
                 <ffmpeg:MediaElement x:Name="mediaElement" />
-                <Border x:Name="buttonMute" VerticalAlignment="Bottom" HorizontalAlignment="Right" Cursor="Hand" Margin="10,10" Width="100" Height="100">
+                <Border x:Name="buttonMute" VerticalAlignment="Bottom" HorizontalAlignment="Right" Cursor="Hand"
+                        Margin="10,10" Width="100" Height="100">
                     <Border.Background>
-                        <SolidColorBrush Color="Gray" Opacity="0.9"/>
+                        <SolidColorBrush Color="Gray" Opacity="0.9" />
                     </Border.Background>
                     <fa:ImageAwesome Icon="VolumeOff"
                                      Height="60" Width="60" Foreground="White" />

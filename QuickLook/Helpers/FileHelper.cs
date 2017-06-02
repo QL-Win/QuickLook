@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using QuickLook.NativeMethods.Shell32;
 
 namespace QuickLook.Helpers
 {
@@ -24,20 +23,14 @@ namespace QuickLook.Helpers
             if (!File.Exists(path))
                 return null;
 
-            if (Path.GetExtension(path) == ".lnk")
-            {
-                var shell = (IWshShell) new WshShell();
-                var link = shell.CreateShortcut(path);
-                path = FixWow64Path(link.TargetPath);
-            }
-
             var ext = Path.GetExtension(path).ToLower();
             var isExe = new[] {".cmd", ".bat", ".pif", ".scf", ".exe", ".com", ".scr"}.Contains(ext.ToLower());
 
             // no assoc. app. found
-            if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.Command)))
-                if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.AppId))) // UWP
-                    return null;
+            if (!isExe)
+                if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.Command)))
+                    if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.AppId))) // UWP
+                        return null;
 
             appFriendlyName = isExe
                 ? FileVersionInfo.GetVersionInfo(path).FileDescription
@@ -47,15 +40,6 @@ namespace QuickLook.Helpers
                 appFriendlyName = Path.GetFileName(path);
 
             return isExe;
-        }
-
-        public static string FixWow64Path(string targetPath)
-        {
-            if (!File.Exists(targetPath) && !Directory.Exists(targetPath))
-                if (targetPath.Contains("Program Files (x86)"))
-                    return targetPath.Replace("Program Files (x86)", "Program Files");
-
-            return targetPath;
         }
 
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto, SetLastError = true)]

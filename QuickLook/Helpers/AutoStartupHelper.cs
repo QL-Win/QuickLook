@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
-using QuickLook.NativeMethods.Shell32;
+using Shell32;
 
 namespace QuickLook.Helpers
 {
@@ -15,16 +14,19 @@ namespace QuickLook.Helpers
         {
             try
             {
-                var link = (IShellLink) new ShellLink();
+                File.Create(_startupFullPath);
 
-                link.SetPath(App.AppFullPath);
-                link.SetWorkingDirectory(App.AppPath);
-                link.SetIconLocation(App.AppFullPath, 0);
+                var shl = new Shell();
+                var dir = shl.NameSpace(Path.GetDirectoryName(_startupFullPath));
+                var itm = dir.Items().Item(Path.GetFileName(_startupFullPath));
+                var lnk = (ShellLinkObject) itm.GetLink;
 
-                link.SetArguments($"/autorun"); // silent
+                lnk.Path = App.AppFullPath;
+                lnk.Arguments = "/autorun"; // silent
+                lnk.SetIconLocation(App.AppFullPath, 0);
+                lnk.WorkingDirectory = App.AppPath;
 
-                var file = (IPersistFile) link;
-                file.Save(_startupFullPath, false);
+                lnk.Save(_startupFullPath);
             }
             catch (Exception)
             {

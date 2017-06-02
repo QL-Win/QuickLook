@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FontAwesome.WPF;
@@ -25,7 +26,7 @@ namespace QuickLook.Plugin.VideoViewer
             buttonMute.MouseLeftButtonUp += (sender, e) =>
             {
                 mediaElement.IsMuted = false;
-                buttonMute.Visibility = System.Windows.Visibility.Collapsed;
+                buttonMute.Visibility = Visibility.Collapsed;
             };
 
             mediaElement.PropertyChanged += ChangePlayPauseButton;

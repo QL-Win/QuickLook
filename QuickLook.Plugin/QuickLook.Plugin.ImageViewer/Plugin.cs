@@ -33,7 +33,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            // ImageMagick want to have dcraw.exe
+            // set dcraw.exe for Magick.NET
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             _imageSize = ImageFileHelper.GetImageSize(path) ?? Size.Empty;

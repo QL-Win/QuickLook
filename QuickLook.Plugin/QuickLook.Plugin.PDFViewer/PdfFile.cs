@@ -12,11 +12,20 @@ namespace QuickLook.Plugin.PDFViewer
 
         public PdfFile(string path)
         {
-            _ctx = LibMuPdf.NativeMethods.NewContext();
-            _stm = LibMuPdf.NativeMethods.OpenFile(_ctx, path);
-            _doc = LibMuPdf.NativeMethods.OpenDocumentStream(_ctx, _stm);
-
-            TotalPages = LibMuPdf.NativeMethods.CountPages(_doc);
+            if (App.Is64Bit)
+            {
+                _ctx = LibMuPdf.NativeMethods.NewContext();
+                _stm = LibMuPdf.NativeMethods.OpenFile_64(_ctx, path);
+                _doc = LibMuPdf.NativeMethods.OpenDocumentStream_64(_ctx, _stm);
+                TotalPages = LibMuPdf.NativeMethods.CountPages_64(_doc);
+            }
+            else
+            {
+                _ctx = LibMuPdf.NativeMethods.NewContext();
+                _stm = LibMuPdf.NativeMethods.OpenFile_32(_ctx, path);
+                _doc = LibMuPdf.NativeMethods.OpenDocumentStream_32(_ctx, _stm);
+                TotalPages = LibMuPdf.NativeMethods.CountPages_32(_doc);
+            }
         }
 
         public int TotalPages { get; }
@@ -25,9 +34,18 @@ namespace QuickLook.Plugin.PDFViewer
         {
             GC.SuppressFinalize(this);
 
-            LibMuPdf.NativeMethods.CloseDocument(_doc);
-            LibMuPdf.NativeMethods.CloseStream(_stm);
-            LibMuPdf.NativeMethods.FreeContext(_ctx);
+            if (App.Is64Bit)
+            {
+                LibMuPdf.NativeMethods.CloseDocument_64(_doc);
+                LibMuPdf.NativeMethods.CloseStream_64(_stm);
+                LibMuPdf.NativeMethods.FreeContext_64(_ctx);
+            }
+            else
+            {
+                LibMuPdf.NativeMethods.CloseDocument_32(_doc);
+                LibMuPdf.NativeMethods.CloseStream_32(_stm);
+                LibMuPdf.NativeMethods.FreeContext_32(_ctx);
+            }
         }
 
         ~PdfFile()
@@ -46,10 +64,15 @@ namespace QuickLook.Plugin.PDFViewer
                 throw new OverflowException(
                     $"Page id {pageId} should greater or equal than 0 and less than total page count {TotalPages}.");
 
-            var p = LibMuPdf.NativeMethods.LoadPage(_doc, pageId);
+            var p = App.Is64Bit
+                ? LibMuPdf.NativeMethods.LoadPage_64(_doc, pageId)
+                : LibMuPdf.NativeMethods.LoadPage_32(_doc, pageId);
 
             var realSize = new LibMuPdf.Rectangle();
-            LibMuPdf.NativeMethods.BoundPage(_doc, p, ref realSize);
+            if (App.Is64Bit)
+                LibMuPdf.NativeMethods.BoundPage_64(_doc, p, ref realSize);
+            else
+                LibMuPdf.NativeMethods.BoundPage_32(_doc, p, ref realSize);
 
             var size = new Size
             {
@@ -57,7 +80,10 @@ namespace QuickLook.Plugin.PDFViewer
                 Height = realSize.Bottom * zoomFactor
             };
 
-            LibMuPdf.NativeMethods.FreePage(_doc, p);
+            if (App.Is64Bit)
+                LibMuPdf.NativeMethods.FreePage_64(_doc, p);
+            else
+                LibMuPdf.NativeMethods.FreePage_32(_doc, p);
 
             return size;
         }
@@ -68,11 +94,16 @@ namespace QuickLook.Plugin.PDFViewer
                 throw new OverflowException(
                     $"Page id {pageId} should greater or equal than 0 and less than total page count {TotalPages}.");
 
-            var p = LibMuPdf.NativeMethods.LoadPage(_doc, pageId);
+            var p = App.Is64Bit
+                ? LibMuPdf.NativeMethods.LoadPage_64(_doc, pageId)
+                : LibMuPdf.NativeMethods.LoadPage_32(_doc, pageId);
 
             var bmp = LibMuPdf.RenderPage(_ctx, _doc, p, zoomFactor);
 
-            LibMuPdf.NativeMethods.FreePage(_doc, p);
+            if (App.Is64Bit)
+                LibMuPdf.NativeMethods.FreePage_64(_doc, p);
+            else
+                LibMuPdf.NativeMethods.FreePage_32(_doc, p);
 
             return bmp;
         }
