@@ -22,6 +22,11 @@ namespace QuickLook.Plugin.VideoViewer
             _context = context;
 
             buttonPlayPause.MouseLeftButtonUp += TogglePlayPause;
+            buttonMute.MouseLeftButtonUp += (sender, e) =>
+            {
+                mediaElement.IsMuted = false;
+                buttonMute.Visibility = System.Windows.Visibility.Collapsed;
+            };
 
             mediaElement.PropertyChanged += ChangePlayPauseButton;
             mediaElement.MouseLeftButtonUp += TogglePlayPause;
@@ -67,6 +72,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             mediaElement.Source = new Uri(path);
+            mediaElement.IsMuted = true;
             mediaElement.Play();
         }
 
