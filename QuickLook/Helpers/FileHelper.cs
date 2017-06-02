@@ -11,16 +11,6 @@ namespace QuickLook.Helpers
 {
     internal class FileHelper
     {
-        private static string GetExecutable(string line)
-        {
-            var ret = line.StartsWith("\"")
-                ? line.Split(new[] {"\" "}, 2, StringSplitOptions.None)
-                : line.Split(new[] {' '}, 2, StringSplitOptions.None);
-
-            ret[0] = ret[0].StartsWith("\"") ? ret[0].Substring(1) : ret[0];
-            return ret[0];
-        }
-
         public static bool? GetAssocApplication(string path, out string appFriendlyName)
         {
             appFriendlyName = string.Empty;
@@ -38,7 +28,7 @@ namespace QuickLook.Helpers
             {
                 var shell = (IWshShell) new WshShell();
                 var link = shell.CreateShortcut(path);
-                path = GetExecutable(link.TargetPath);
+                path = FixWow64Path(link.TargetPath);
             }
 
             var ext = Path.GetExtension(path).ToLower();
@@ -57,6 +47,15 @@ namespace QuickLook.Helpers
                 appFriendlyName = Path.GetFileName(path);
 
             return isExe;
+        }
+
+        public static string FixWow64Path(string targetPath)
+        {
+            if (!File.Exists(targetPath) && !Directory.Exists(targetPath))
+                if (targetPath.Contains("Program Files (x86)"))
+                    return targetPath.Replace("Program Files (x86)", "Program Files");
+
+            return targetPath;
         }
 
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto, SetLastError = true)]

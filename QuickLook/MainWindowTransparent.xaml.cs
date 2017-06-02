@@ -50,10 +50,17 @@ namespace QuickLook
             if (string.IsNullOrEmpty(_path))
                 return;
 
-            Process.Start(new ProcessStartInfo(_path)
+            try
             {
-                WorkingDirectory = Path.GetDirectoryName(_path)
-            });
+                Process.Start(new ProcessStartInfo(_path)
+                {
+                    WorkingDirectory = Path.GetDirectoryName(_path)
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
             BeginHide();
         }
 
