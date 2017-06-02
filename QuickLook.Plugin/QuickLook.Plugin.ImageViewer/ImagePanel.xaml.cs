@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using ImageMagick;
 using XamlAnimatedGif;
 
 namespace QuickLook.Plugin.ImageViewer
@@ -30,37 +30,28 @@ namespace QuickLook.Plugin.ImageViewer
 
             viewPanel.PreviewMouseLeftButtonDown += ViewPanel_PreviewMouseLeftButtonDown;
             viewPanel.PreviewMouseMove += ViewPanel_PreviewMouseMove;
-
-            viewPanel.TouchDown += ViewPanel_TouchDown;
-        }
-
-        private void ViewPanel_TouchDown(object sender, TouchEventArgs e)
-        {
-            // TODO: touch support
         }
 
         private void LoadImage(string path)
         {
-            var ori = ImageFileHelper.GetOrientationFromExif(path);
-
-            var bitmap = new BitmapImage();
-            using (var fs = File.OpenRead(path))
+            if (Path.GetExtension(path).ToLower() == ".gif")
             {
-                bitmap.BeginInit();
-                bitmap.StreamSource = fs;
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.Rotation = ori == ImageFileHelper.ExifOrientation.Rotate90CW
-                    ? Rotation.Rotate90
-                    : ori == ImageFileHelper.ExifOrientation.Rotate270CW
-                        ? Rotation.Rotate270
-                        : Rotation.Rotate0;
-                bitmap.EndInit();
+                AnimationBehavior.SetSourceUri(viewPanelImage, new Uri(path));
+                return;
             }
 
-            viewPanelImage.Source = bitmap;
+            using (var image = new MagickImage(path))
+            {
+                image.Rotate(image.Orientation == OrientationType.RightTop
+                    ? 90
+                    : image.Orientation == OrientationType.BottomRight
+                        ? 180
+                        : image.Orientation == OrientationType.LeftBotom
+                            ? 270
+                            : 0);
 
-            if (Path.GetExtension(path).ToLower() == ".gif")
-                AnimationBehavior.SetSourceUri(viewPanelImage, new Uri(path));
+                viewPanelImage.Source = image.ToBitmapSource();
+            }
         }
 
         private void ViewPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

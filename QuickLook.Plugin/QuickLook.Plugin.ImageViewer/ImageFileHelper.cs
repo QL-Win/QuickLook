@@ -1,53 +1,48 @@
-﻿using System.IO;
+﻿using System;
 using System.Windows;
-using System.Windows.Media.Imaging;
+using ExifLib;
+using ImageMagick;
 
 namespace QuickLook.Plugin.ImageViewer
 {
     internal static class ImageFileHelper
     {
-        internal static Size GetImageSize(string path)
+        internal static Size? GetImageSize(string path)
         {
             var ori = GetOrientationFromExif(path);
 
-            using (var stream = File.OpenRead(path))
+            try
             {
-                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.None);
-                var frame = decoder.Frames[0];
+                var info = new MagickImageInfo(path);
 
-                if (ori == ExifOrientation.Rotate90CW || ori == ExifOrientation.Rotate270CW)
-                    return new Size {Width = frame.PixelHeight, Height = frame.PixelWidth};
-
-                return new Size {Width = frame.PixelWidth, Height = frame.PixelHeight};
+                if (ori == OrientationType.RightTop || ori == OrientationType.LeftBotom)
+                    return new Size {Width = info.Height, Height = info.Width};
+                return new Size {Width = info.Width, Height = info.Height};
+            }
+            catch (MagickException)
+            {
+                return null;
             }
         }
 
-        internal static ExifOrientation GetOrientationFromExif(string path)
+        private static OrientationType GetOrientationFromExif(string path)
         {
-            using (var stream = File.OpenRead(path))
+            try
             {
-                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.None);
-                var frame = decoder.Frames[0];
+                using (var re = new ExifReader(path))
+                {
+                    re.GetTagValue(ExifTags.Orientation, out ushort orientation);
 
-                var orientation = ((BitmapMetadata) frame.Metadata)?.GetQuery(@"/app1/{ushort=0}/{ushort=274}");
+                    if (orientation == 0)
+                        return OrientationType.Undefined;
 
-                if (orientation == null)
-                    return ExifOrientation.Horizontal;
-
-                return (ExifOrientation) (ushort) orientation;
+                    return (OrientationType) orientation;
+                }
             }
-        }
-
-        internal enum ExifOrientation
-        {
-            Horizontal = 1,
-            MirrorHorizontal = 2,
-            Rotate180 = 3,
-            MirrorVertical = 4,
-            MirrorHorizontal270CW = 5,
-            Rotate90CW = 6,
-            MirrorHorizontal90CW = 7,
-            Rotate270CW = 8
+            catch (Exception)
+            {
+                return OrientationType.Undefined;
+            }
         }
     }
 }
