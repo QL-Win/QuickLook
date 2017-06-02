@@ -84,7 +84,6 @@ namespace QuickLook.Plugin.HtmlViewer
 
         private void InnerBrowserLoaded(object sender, EventArgs e)
         {
-            // make browser control not silent: allow HTTP-Auth-dialogs. Requery command availability
             var ie = ActiveXControl;
             ie.Silent = true;
         }
@@ -107,6 +106,10 @@ namespace QuickLook.Plugin.HtmlViewer
         private void InnerBrowserNavigated(object sender, NavigationEventArgs e)
         {
             RegisterWindowErrorHanlder_();
+
+            var alertBlocker =
+                "window.print = window.alert = window.open = null;document.oncontextmenu=function(){return false;}";
+            _innerBrowser.InvokeScript("execScript", alertBlocker, "JavaScript");
         }
 
         public void Navigate(string uri)
