@@ -35,10 +35,7 @@ namespace QuickLook.Plugin.ImageViewer
         private void LoadImage(string path)
         {
             if (Path.GetExtension(path).ToLower() == ".gif")
-            {
                 AnimationBehavior.SetSourceUri(viewPanelImage, new Uri(path));
-                return;
-            }
 
             using (var image = new MagickImage(path))
             {
