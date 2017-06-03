@@ -50,23 +50,23 @@ Note that any plugin must be under the `QuickLook.Plugin` namespace, has the fil
 
 QuickLook is standing on shoulders of several open-source libraries, named
 
- - [Font-Awesome-WPF](https://github.com/charri/Font-Awesome-WPF): WPF & UWP controls for the iconic font and CSS toolkit Font Awesome
- - [SharpCompress](https://github.com/adamhathcock/sharpcompress): a fully managed C# library to deal with many compression types and formats
- - [WpfWebBrowserWrapper](https://www.codeproject.com/Articles/555302/A-better-WPF-Browser-Control-IE-Wrapper): a better WPF-Browser-Control (IE-Wrapper)
- - [PreviewHandlerHost](http://www.brad-smith.info/blog/archives/79): IPreviewHandler Revisited
- - [ExifLib](https://www.codeproject.com/Articles/36342/ExifLib-A-Fast-Exif-Data-Extractor-for-NET): a fast Exif data extractor for .NET 2.0+
+ - [AvalonEdit](https://github.com/icsharpcode/AvalonEdit): the WPF-based text editor component used in SharpDevelop
  - [dcraw](http://www.cybercom.net/~dcoffin/dcraw/): decoding raw digital photos in Linux
+ - [ExifLib](https://www.codeproject.com/Articles/36342/ExifLib-A-Fast-Exif-Data-Extractor-for-NET): a fast Exif data extractor for .NET 2.0+
+ - [FFmpeg](https://ffmpeg.org/): a complete, cross-platform solution to record, convert and stream audio and video
+ - [FFmpegMediaElement](https://github.com/unosquare/ffmediaelement/tree/master/Unosquare.FFmpegMediaElement): WPF MediaElement replacement based on FFmpeg
+ - [Font-Awesome-WPF](https://github.com/charri/Font-Awesome-WPF): WPF & UWP controls for the iconic font and CSS toolkit Font Awesome
+ - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css): The minimal amount of CSS to replicate the GitHub Markdown style
  - [ImageMagick](http://www.imagemagick.org): convert, edit, or compose bitmap images
  - [Magick.NET](https://github.com/dlemstra/Magick.NET): The .NET wrapper for the ImageMagick library
- - [XamlAnimatedGif](https://github.com/XamlAnimatedGif/XamlAnimatedGif): a simple library to display animated GIF images in XAML apps
  - [markdown-it](https://github.com/markdown-it/markdown-it): markdown parser, done right. 100% CommonMark support, extensions, syntax plugins & high speed
- - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css): The minimal amount of CSS to replicate the GitHub Markdown style
  - [MuPdf](https://mupdf.com/): lightweight PDF, XPS, and E-book viewer
- -  [Sumatra PDF](https://www.sumatrapdfreader.org): a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows
- - [FFmpegMediaElement](https://github.com/unosquare/ffmediaelement/tree/master/Unosquare.FFmpegMediaElement): WPF MediaElement replacement based on FFmpeg
- - [FFmpeg](https://ffmpeg.org/): a complete, cross-platform solution to record, convert and stream audio and video
- - [AvalonEdit](https://github.com/icsharpcode/AvalonEdit): the WPF-based text editor component used in SharpDevelop
-
+ - [PreviewHandlerHost](http://www.brad-smith.info/blog/archives/79): IPreviewHandler Revisited
+ - [SharpCompress](https://github.com/adamhathcock/sharpcompress): a fully managed C# library to deal with many compression types and formats
+ - [Sumatra PDF](https://www.sumatrapdfreader.org): a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows
+ - [WpfWebBrowserWrapper](https://www.codeproject.com/Articles/555302/A-better-WPF-Browser-Control-IE-Wrapper): a better WPF-Browser-Control (IE-Wrapper)
+ - [XamlAnimatedGif](https://github.com/XamlAnimatedGif/XamlAnimatedGif): a simple library to display animated GIF images in XAML apps
+ 
 ## Licenses
 
 ![LGPL-v3](http://www.gnu.org/graphics/lgplv3-147x51.png)
