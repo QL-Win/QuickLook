@@ -19,7 +19,7 @@ You may ask, why you write this when there several alternatives available on the
 Till now, QuickLook supports the preview of 
 
  - Images: e.g. `.png`, `.jpg`, `.bmp`, `.gif`, `.psd` and Camera RAW formats
- - Compressed archives: `.zip`, `.rar`, `.7z` etc.
+ - Compressed archives: `.zip`, `.rar`, `.tar.gz`, `.7z` etc.
  - Pdf file
  - All kinds of text files (determined by file content)
  - Microsoft Word (`.doc`, `.docx`), Excel (`.xls`, `.xlsx`) and PowerPoint (`.ppt`, `.pptx`) files (requires MS Office installation)

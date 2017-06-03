@@ -22,11 +22,14 @@ namespace QuickLook.Plugin.ArchiveViewer
 
             switch (Path.GetExtension(path).ToLower())
             {
-                case ".zip":
                 case ".rar":
-                case ".7z":
-                case ".gz":
+                case ".zip":
                 case ".tar":
+                case ".gz":
+                case ".bz2":
+                case ".lz":
+                case ".xz":
+                case ".7z":
                     return true;
 
                 default:

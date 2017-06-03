@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Controls;
 using SharpCompress.Archives;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
@@ -13,7 +15,6 @@ namespace QuickLook.Plugin.ArchiveViewer
     public partial class ArchiveInfoPanel : UserControl, IDisposable
     {
         private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = new Dictionary<string, ArchiveFileEntry>();
-        private bool _solid;
         private ulong _totalZippedSize;
         private string _type;
 
@@ -30,6 +31,7 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             GC.SuppressFinalize(this);
 
+            _fileEntries.Clear();
             fileListView.Dispose();
         }
 
@@ -40,6 +42,8 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         private void LoadArchive(string path)
         {
+            _totalZippedSize = (ulong) new FileInfo(path).Length;
+
             LoadItemsFromArchive(path);
 
             var folders = -1; // do not count root node
@@ -55,8 +59,6 @@ namespace QuickLook.Plugin.ArchiveViewer
                 sizeU += e.Value.Size;
             });
 
-            var s = _solid ? ", solid" : "";
-
             string t;
             var d = folders != 0 ? $"{folders} folders" : string.Empty;
             var f = files != 0 ? $"{files} files" : string.Empty;
@@ -68,7 +70,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                 t = $", {d}{f}";
 
             archiveCount.Content =
-                $"{_type} archive{s}{t}";
+                $"{_type} archive{t}";
             archiveSizeC.Content = $"Compressed size {_totalZippedSize.ToPrettySize(2)}";
             archiveSizeU.Content = $"Uncompressed size {sizeU.ToPrettySize(2)}";
         }
@@ -77,21 +79,36 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             using (var stream = File.OpenRead(path))
             {
-                var archive = ArchiveFactory.Open(stream);
+                // https://github.com/adamhathcock/sharpcompress/blob/master/FORMATS.md says:
+                // The 7Zip format doesn't allow for reading as a forward-only stream so 7Zip is only supported through the Archive API
+                if (Path.GetExtension(path).ToLower() == ".7z")
+                {
+                    var archive = ArchiveFactory.Open(stream);
 
-                _totalZippedSize = (ulong) archive.TotalSize;
-                _solid = archive.IsSolid;
-                _type = archive.Type.ToString();
+                    _type = archive.Type.ToString();
 
-                var root = new ArchiveFileEntry(Path.GetFileName(path), true);
-                _fileEntries.Add("", root);
+                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
+                    _fileEntries.Add("", root);
 
-                foreach (var entry in archive.Entries)
-                    ProcessByLevel(entry);
+                    foreach (var entry in archive.Entries)
+                        ProcessByLevel(entry);
+                }
+                else
+                {
+                    var reader = ReaderFactory.Open(stream);
+
+                    _type = reader.ArchiveType.ToString();
+
+                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
+                    _fileEntries.Add("", root);
+
+                    while (reader.MoveToNextEntry())
+                        ProcessByLevel(reader.Entry);
+                }
             }
         }
 
-        private void ProcessByLevel(IArchiveEntry entry)
+        private void ProcessByLevel(IEntry entry)
         {
             var pf = GetPathFragments(entry.Key);
 
