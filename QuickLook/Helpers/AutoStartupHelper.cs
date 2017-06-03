@@ -14,7 +14,7 @@ namespace QuickLook.Helpers
         {
             try
             {
-                File.Create(_startupFullPath);
+                File.Create(_startupFullPath).Close();
 
                 var shl = new Shell();
                 var dir = shl.NameSpace(Path.GetDirectoryName(_startupFullPath));
