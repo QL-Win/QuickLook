@@ -734,6 +734,11 @@
             Initializes the <see cref="T:Unosquare.FFmpegMediaElement.MediaElement.FFmpegPaths"/> class.
             </summary>
         </member>
+        <member name="M:Unosquare.FFmpegMediaElement.MediaElement.FFmpegPaths.RegisterFFmpeg">
+            <summary>
+            Extract and register FFmpeg from resources
+            </summary>
+        </member>
         <member name="P:Unosquare.FFmpegMediaElement.MediaElement.FFmpegPaths.BasePath">
             <summary>
             Gets the path to where the FFmpeg binaries are stored
