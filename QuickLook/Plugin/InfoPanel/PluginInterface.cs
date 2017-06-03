@@ -9,6 +9,10 @@ namespace QuickLook.Plugin.InfoPanel
         public int Priority => int.MinValue;
         public bool AllowsTransparency => true;
 
+        public void Init()
+        {
+        }
+
         public bool CanHandle(string sample)
         {
             return true;

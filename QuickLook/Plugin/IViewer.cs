@@ -17,6 +17,11 @@
         bool AllowsTransparency { get; }
 
         /// <summary>
+        ///     Do ont-time job when application starts. You may extract nessessary resource here.
+        /// </summary>
+        void Init();
+
+        /// <summary>
         ///     Determine whether this plugin can open this file. Please also check the file header, if applicable.
         /// </summary>
         /// <param name="path">The full path of the target file.</param>

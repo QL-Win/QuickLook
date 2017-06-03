@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using ImageMagick;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -22,6 +23,11 @@ namespace QuickLook.Plugin.ImageViewer
 
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => true;
+
+        public void Init()
+        {
+            new MagickImage().Dispose();
+        }
 
         public bool CanHandle(string path)
         {

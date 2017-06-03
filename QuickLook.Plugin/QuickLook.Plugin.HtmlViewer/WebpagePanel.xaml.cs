@@ -14,8 +14,6 @@ namespace QuickLook.Plugin.HtmlViewer
         public WebpagePanel()
         {
             InitializeComponent();
-
-            Helper.SetBrowserFeatureControl();
         }
 
         public void Dispose()

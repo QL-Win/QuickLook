@@ -12,6 +12,11 @@ namespace QuickLook.Plugin.HtmlViewer
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => false;
 
+        public void Init()
+        {
+            Helper.SetBrowserFeatureControl();
+        }
+
         public bool CanHandle(string path)
         {
             if (Directory.Exists(path))

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using QuickLook.ExtensionMethods;
 using QuickLook.Plugin;
 using QuickLook.Plugin.InfoPanel;
@@ -66,6 +68,18 @@ namespace QuickLook
                     });
 
             LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
+
+            LoadedPlugins.ForEach(i =>
+            {
+                try
+                {
+                    i.Init();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+            });
         }
     }
 }

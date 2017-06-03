@@ -13,6 +13,11 @@ namespace QuickLook.Plugin.VideoViewer
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => true;
 
+        public void Init()
+        {
+            MediaElement.FFmpegPaths.RegisterFFmpeg();
+        }
+
         public bool CanHandle(string path)
         {
             if (Directory.Exists(path))

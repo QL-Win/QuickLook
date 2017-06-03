@@ -11,6 +11,10 @@ namespace QuickLook.Plugin.ArchiveViewer
         public int Priority => 0;
         public bool AllowsTransparency => true;
 
+        public void Init()
+        {
+        }
+
         public bool CanHandle(string path)
         {
             if (Directory.Exists(path))

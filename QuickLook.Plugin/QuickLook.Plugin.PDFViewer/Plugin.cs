@@ -12,6 +12,10 @@ namespace QuickLook.Plugin.PDFViewer
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => true;
 
+        public void Init()
+        {
+        }
+
         public bool CanHandle(string path)
         {
             if (Directory.Exists(path))

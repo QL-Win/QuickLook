@@ -13,6 +13,10 @@ namespace QuickLook.Plugin.MarkdownViewer
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => false;
 
+        public void Init()
+        {
+        }
+
         public bool CanHandle(string path)
         {
             if (Directory.Exists(path))
