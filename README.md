@@ -1,4 +1,4 @@
-![QuickLook icon](https://cloud.githubusercontent.com/assets/1687847/26008086/060d9cca-374c-11e7-9345-7f0f0f91a421.png)
+![QuickLook icon](http://pooi.moe/QuickLook/sample.gif)
 
 # QuickLook
 
