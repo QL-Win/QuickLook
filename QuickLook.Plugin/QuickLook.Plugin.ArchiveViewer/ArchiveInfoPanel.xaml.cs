@@ -79,21 +79,10 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             using (var stream = File.OpenRead(path))
             {
-                // https://github.com/adamhathcock/sharpcompress/blob/master/FORMATS.md says:
-                // The 7Zip format doesn't allow for reading as a forward-only stream so 7Zip is only supported through the Archive API
-                if (Path.GetExtension(path).ToLower() == ".7z")
-                {
-                    var archive = ArchiveFactory.Open(stream);
+                // ReaderFactory is slow... so limit its usage
+                string[] useReader = {".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"};
 
-                    _type = archive.Type.ToString();
-
-                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
-                    _fileEntries.Add("", root);
-
-                    foreach (var entry in archive.Entries)
-                        ProcessByLevel(entry);
-                }
-                else
+                if (useReader.Any(i => path.EndsWith(i)))
                 {
                     var reader = ReaderFactory.Open(stream);
 
@@ -104,6 +93,18 @@ namespace QuickLook.Plugin.ArchiveViewer
 
                     while (reader.MoveToNextEntry())
                         ProcessByLevel(reader.Entry);
+                }
+                else
+                {
+                    var archive = ArchiveFactory.Open(stream);
+
+                    _type = archive.Type.ToString();
+
+                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
+                    _fileEntries.Add("", root);
+
+                    foreach (var entry in archive.Entries)
+                        ProcessByLevel(entry);
                 }
             }
         }

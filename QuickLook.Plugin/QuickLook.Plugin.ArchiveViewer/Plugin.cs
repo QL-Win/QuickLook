@@ -25,6 +25,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                 case ".rar":
                 case ".zip":
                 case ".tar":
+                case ".tgz":
                 case ".gz":
                 case ".bz2":
                 case ".lz":
@@ -39,7 +40,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            context.PreferredSize = new Size {Width = 800, Height = 600};
+            context.PreferredSize = new Size {Width = 800, Height = 400};
         }
 
         public void View(string path, ContextObject context)
