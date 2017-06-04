@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace QuickLook
 {
@@ -25,7 +26,8 @@ namespace QuickLook
             if (e.Modifiers != Keys.None)
                 return;
 
-            ViewWindowManager.GetInstance().InvokeRoutine(e);
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => ViewWindowManager.GetInstance().InvokeRoutine(e)),
+                DispatcherPriority.ApplicationIdle);
         }
 
         private void InstallKeyHook(KeyEventHandler handler)

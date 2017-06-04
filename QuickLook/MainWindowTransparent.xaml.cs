@@ -16,9 +16,6 @@ namespace QuickLook
     /// </summary>
     public partial class MainWindowTransparent : Window
     {
-        private string _path = string.Empty;
-        private IViewer _plugin;
-
         internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
@@ -43,18 +40,21 @@ namespace QuickLook
                 ViewWindowManager.GetInstance().RunAndClosePreview();
         }
 
+        public string PreviewPath { get; private set; }
+        public IViewer Plugin { get; private set; }
+
         public ContextObject ContextObject { get; private set; }
 
         internal void RunAndHide()
         {
-            if (string.IsNullOrEmpty(_path))
+            if (string.IsNullOrEmpty(PreviewPath))
                 return;
 
             try
             {
-                Process.Start(new ProcessStartInfo(_path)
+                Process.Start(new ProcessStartInfo(PreviewPath)
                 {
-                    WorkingDirectory = Path.GetDirectoryName(_path)
+                    WorkingDirectory = Path.GetDirectoryName(PreviewPath)
                 });
             }
             catch (Exception e)
@@ -96,21 +96,21 @@ namespace QuickLook
 
             ContextObject.Reset();
 
-            _plugin?.Cleanup();
-            _plugin = null;
+            Plugin?.Cleanup();
+            Plugin = null;
 
             ProcessHelper.PerformAggressiveGC();
         }
 
-        internal void BeginShow(IViewer matchedPlugin, string path)
+        internal void BeginShow(IViewer matchedPlugin, string path, Action<ExceptionDispatchInfo> exceptionHandler)
         {
-            _path = path;
-            _plugin = matchedPlugin;
+            PreviewPath = path;
+            Plugin = matchedPlugin;
 
             ContextObject.ViewerWindow = this;
 
             // get window size before showing it
-            _plugin.Prepare(path, ContextObject);
+            Plugin.Prepare(path, ContextObject);
 
             SetOpenWithButtonAndPath();
 
@@ -129,31 +129,27 @@ namespace QuickLook
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
             // load plugin, do not block UI
-            Exception thrown = null;
             Dispatcher.BeginInvoke(new Action(() =>
                 {
                     try
                     {
-                        _plugin.View(path, ContextObject);
+                        Plugin.View(path, ContextObject);
                     }
                     catch (Exception e)
                     {
-                        thrown = e;
+                        exceptionHandler(ExceptionDispatchInfo.Capture(e));
                     }
                 }),
-                DispatcherPriority.Render).Wait();
-
-            if (thrown != null)
-                ExceptionDispatchInfo.Capture(thrown).Throw();
+                DispatcherPriority.Input);
         }
 
         private void SetOpenWithButtonAndPath()
         {
-            var isExe = FileHelper.GetAssocApplication(_path, out string appFriendlyName);
+            var isExe = FileHelper.GetAssocApplication(PreviewPath, out string appFriendlyName);
 
             buttonOpenWith.Content = isExe == null
-                ? Directory.Exists(_path)
-                    ? $"Browse “{Path.GetFileName(_path)}”"
+                ? Directory.Exists(PreviewPath)
+                    ? $"Browse “{Path.GetFileName(PreviewPath)}”"
                     : "Open..."
                 : isExe == true
                     ? $"Run “{appFriendlyName}”"

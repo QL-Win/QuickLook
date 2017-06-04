@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -123,8 +124,8 @@ namespace QuickLook
 
         private void SwitchPreviewRemoteInvoke(HeartbeatEventArgs e)
         {
-            // sleep for 1.5s
-            if (e.InvokeTick - _lastSwitchTick < 1.5 * TimeSpan.TicksPerSecond)
+            // sleep for 0.6s
+            if (e.InvokeTick - _lastSwitchTick < 0.6 * TimeSpan.TicksPerSecond)
                 return;
 
             if (e.FocusedFile == _path)
@@ -135,7 +136,7 @@ namespace QuickLook
             if (string.IsNullOrEmpty(e.FocusedFile))
                 return;
 
-            _currentMainWindow?.Dispatcher.Invoke(() => SwitchPreview());
+            _currentMainWindow?.Dispatcher.BeginInvoke(new Action(SwitchPreview), DispatcherPriority.ApplicationIdle);
         }
 
         private void RunFocusMonitor()
@@ -158,59 +159,53 @@ namespace QuickLook
 
         internal bool InvokeViewer(string path = null)
         {
-            if (path == null)
-                path = _path;
+            if (path != null)
+                _path = path;
 
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(_path))
                 return false;
-            if (!Directory.Exists(path) && !File.Exists(path))
+            if (!Directory.Exists(_path) && !File.Exists(_path))
                 return false;
 
             RunFocusMonitor();
 
-            var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+            var matchedPlugin = PluginManager.GetInstance().FindMatch(_path);
 
-            BeginShowNewWindow(matchedPlugin, path);
+            BeginShowNewWindow(matchedPlugin);
 
             return true;
         }
 
-        private void BeginShowNewWindow(IViewer matchedPlugin, string path)
+        private void BeginShowNewWindow(IViewer matchedPlugin)
         {
-            try
-            {
-                _currentMainWindow.UnloadPlugin();
+            _currentMainWindow.UnloadPlugin();
 
-                // switch window
-                var oldWindow = _currentMainWindow;
-                _currentMainWindow = matchedPlugin.AllowsTransparency
-                    ? _viewWindowTransparentTransparent
-                    : _viewWindowNoTransparent;
-                if (!ReferenceEquals(oldWindow, _currentMainWindow))
-                    oldWindow.BeginHide();
+            // switch window
+            var oldWindow = _currentMainWindow;
+            _currentMainWindow = matchedPlugin.AllowsTransparency
+                ? _viewWindowTransparentTransparent
+                : _viewWindowNoTransparent;
+            if (!ReferenceEquals(oldWindow, _currentMainWindow))
+                oldWindow.BeginHide();
 
-                _currentMainWindow.BeginShow(matchedPlugin, path);
-            }
-            catch (Exception e) // if current plugin failed, switch to default one.
-            {
-                _currentMainWindow.BeginHide();
+            _currentMainWindow.BeginShow(matchedPlugin, _path, CurrentPluginFailed);
+        }
 
-                TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
+        private void CurrentPluginFailed(ExceptionDispatchInfo e)
+        {
+            var plugin = _currentMainWindow.Plugin.GetType();
 
-                Debug.WriteLine(e.ToString());
-                Debug.WriteLine(e.StackTrace);
+            _currentMainWindow.BeginHide();
 
-                if (matchedPlugin != PluginManager.GetInstance().DefaultPlugin)
-                {
-                    matchedPlugin.Cleanup();
-                    matchedPlugin = PluginManager.GetInstance().DefaultPlugin;
-                    BeginShowNewWindow(matchedPlugin, path);
-                }
-                else
-                {
-                    ExceptionDispatchInfo.Capture(e).Throw();
-                }
-            }
+            TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(_path)}", true);
+
+            Debug.WriteLine(e.ToString());
+            Debug.WriteLine(e.SourceException.StackTrace);
+
+            if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
+                BeginShowNewWindow(PluginManager.GetInstance().DefaultPlugin);
+            else
+                e.Throw();
         }
 
         internal static ViewWindowManager GetInstance()
