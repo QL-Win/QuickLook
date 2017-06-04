@@ -1,4 +1,4 @@
-![QuickLook icon](http://pooi.moe/QuickLook/sample.gif)
+![QuickLook icon](https://cloud.githubusercontent.com/assets/1687847/26008086/060d9cca-374c-11e7-9345-7f0f0f91a421.png)
 
 # QuickLook
 
@@ -6,7 +6,7 @@
 
 *This project is currently under heavy development. Come back often to see what's new.*
 
-<img src="http://pooi.moe/QuickLook/sample.gif" width="400">
+<img src="http://pooi.moe/QuickLook/sample.gif?2" width="400">
 
 ↑ The image above is caputred from an ancient version. It has changed a lot.
 
