@@ -8,19 +8,19 @@ namespace QuickLook.NativeMethods
     {
         [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
-        internal static extern FocusedWindowType GetFocusedWindowTypeNative_32();
+        private static extern FocusedWindowType GetFocusedWindowTypeNative_32();
 
         [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetCurrentSelection",
             CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void GetCurrentSelectionNative_32([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
+        private static extern void GetCurrentSelectionNative_32([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
         [DllImport("QuickLook.Native.Shell32.x64.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
-        internal static extern FocusedWindowType GetFocusedWindowTypeNative_64();
+        private static extern FocusedWindowType GetFocusedWindowTypeNative_64();
 
         [DllImport("QuickLook.Native.Shell32.x64.dll", EntryPoint = "GetCurrentSelection",
             CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void GetCurrentSelectionNative_64([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
+        private static extern void GetCurrentSelectionNative_64([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
         internal static FocusedWindowType GetFocusedWindowType()
         {

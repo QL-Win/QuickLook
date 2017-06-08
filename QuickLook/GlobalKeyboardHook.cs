@@ -14,8 +14,7 @@ namespace QuickLook
 
         private User32.KeyboardHookProc _callback;
         private IntPtr _hhook = IntPtr.Zero;
-        internal List<Keys> HookedDownKeys = new List<Keys>();
-        internal List<Keys> HookedUpKeys = new List<Keys>();
+        internal List<Keys> HookedKeys = new List<Keys>();
 
         protected GlobalKeyboardHook()
         {
@@ -64,21 +63,13 @@ namespace QuickLook
             if (code >= 0)
             {
                 var key = (Keys) lParam.vkCode;
-                if (HookedDownKeys.Contains(key))
+                if (HookedKeys.Contains(key))
                 {
                     key = AddModifiers(key);
 
                     var kea = new KeyEventArgs(key);
                     if (wParam == User32.WM_KEYDOWN || wParam == User32.WM_SYSKEYDOWN)
                         KeyDown?.Invoke(this, kea);
-                    if (kea.Handled)
-                        return 1;
-                }
-                else if (HookedUpKeys.Contains(key))
-                {
-                    key = AddModifiers(key);
-
-                    var kea = new KeyEventArgs(key);
                     if (wParam == User32.WM_KEYUP || wParam == User32.WM_SYSKEYUP)
                         KeyUp?.Invoke(this, kea);
                     if (kea.Handled)

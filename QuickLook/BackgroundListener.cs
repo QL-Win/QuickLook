@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
@@ -9,10 +10,11 @@ namespace QuickLook
         private static BackgroundListener _instance;
 
         private GlobalKeyboardHook _hook;
+        private bool _isKeyDownInDesktopOrShell;
 
         protected BackgroundListener()
         {
-            InstallKeyHook(HotkeyEventHandler);
+            InstallKeyHook(KeyDownEventHandler, KeyUpEventHandler);
         }
 
         public void Dispose()
@@ -21,29 +23,55 @@ namespace QuickLook
             _hook = null;
         }
 
-        private void HotkeyEventHandler(object sender, KeyEventArgs e)
+        private void KeyDownEventHandler(object sender, KeyEventArgs e)
+        {
+            CallViewWindowManagerInvokeRoutine(e, true);
+        }
+
+        private void KeyUpEventHandler(object sender, KeyEventArgs e)
+        {
+            CallViewWindowManagerInvokeRoutine(e, false);
+        }
+
+        private void CallViewWindowManagerInvokeRoutine(KeyEventArgs e, bool isKeyDown)
         {
             if (e.Modifiers != Keys.None)
                 return;
 
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => ViewWindowManager.GetInstance().InvokeRoutine(e)),
-                DispatcherPriority.ApplicationIdle);
+            // set variable only when KeyDown
+            if (isKeyDown)
+            {
+                _isKeyDownInDesktopOrShell = NativeMethods.QuickLook.GetFocusedWindowType() !=
+                                             NativeMethods.QuickLook.FocusedWindowType.Invalid;
+                _isKeyDownInDesktopOrShell |= WindowHelper.IsForegroundWindowBelongToSelf();
+            }
+
+            // call InvokeRoutine only when the KeyDown is valid
+            if (_isKeyDownInDesktopOrShell)
+                Dispatcher.CurrentDispatcher.BeginInvoke(
+                    new Action<bool>(down =>
+                        ViewWindowManager.GetInstance().InvokeRoutine(e, down)),
+                    DispatcherPriority.ApplicationIdle,
+                    isKeyDown);
+
+            // reset variable only when KeyUp
+            if (!isKeyDown)
+                _isKeyDownInDesktopOrShell = false;
         }
 
-        private void InstallKeyHook(KeyEventHandler handler)
+        private void InstallKeyHook(KeyEventHandler downHandler, KeyEventHandler upHandler)
         {
             _hook = GlobalKeyboardHook.GetInstance();
 
-            _hook.HookedDownKeys.Add(Keys.Enter);
-            _hook.KeyDown += handler;
-
-            _hook.HookedUpKeys.Add(Keys.Space);
-            _hook.HookedUpKeys.Add(Keys.Escape);
-            _hook.HookedUpKeys.Add(Keys.Up);
-            _hook.HookedUpKeys.Add(Keys.Down);
-            _hook.HookedUpKeys.Add(Keys.Left);
-            _hook.HookedUpKeys.Add(Keys.Right);
-            _hook.KeyUp += handler;
+            _hook.HookedKeys.Add(Keys.Enter);
+            _hook.HookedKeys.Add(Keys.Space);
+            _hook.HookedKeys.Add(Keys.Escape);
+            _hook.HookedKeys.Add(Keys.Up);
+            _hook.HookedKeys.Add(Keys.Down);
+            _hook.HookedKeys.Add(Keys.Left);
+            _hook.HookedKeys.Add(Keys.Right);
+            _hook.KeyDown += downHandler;
+            _hook.KeyUp += upHandler;
         }
 
         internal static BackgroundListener GetInstance()

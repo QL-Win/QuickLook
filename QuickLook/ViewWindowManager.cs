@@ -34,38 +34,54 @@ namespace QuickLook
             StopFocusMonitor();
         }
 
-        internal void InvokeRoutine(KeyEventArgs kea)
+        internal void InvokeRoutine(KeyEventArgs kea, bool isKeyDown)
         {
-            switch (kea.KeyCode)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Left:
-                case Keys.Right:
-                    SwitchPreview();
-                    break;
-                case Keys.Space:
-                    TogglePreview();
-                    break;
-                case Keys.Escape:
-                    ClosePreview();
-                    break;
-                case Keys.Enter:
-                    RunAndClosePreview();
-                    break;
-                default:
-                    break;
-            }
+            Debug.WriteLine($"InvokeRoutine: key={kea.KeyCode},down={isKeyDown}");
+
+
+            if (isKeyDown)
+                switch (kea.KeyCode)
+                {
+                    case Keys.Enter:
+                        RunAndClosePreview();
+                        break;
+                }
+            else
+                switch (kea.KeyCode)
+                {
+                    case Keys.Up:
+                    case Keys.Down:
+                    case Keys.Left:
+                    case Keys.Right:
+                        SwitchPreview();
+                        break;
+                    case Keys.Space:
+                        TogglePreview();
+                        break;
+                    case Keys.Escape:
+                        ClosePreview();
+                        break;
+                }
         }
 
         internal void RunAndClosePreview()
         {
-            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
-                NativeMethods.QuickLook.FocusedWindowType.Invalid)
-                if (!WindowHelper.IsForegroundWindowBelongToSelf())
-                    return;
-
             if (_currentMainWindow.Visibility != Visibility.Visible)
+                return;
+
+            // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
+            var focus = NativeMethods.QuickLook.GetFocusedWindowType();
+            if (focus == NativeMethods.QuickLook.FocusedWindowType.Desktop ||
+                focus == NativeMethods.QuickLook.FocusedWindowType.Explorer)
+                if (_path == NativeMethods.QuickLook.GetCurrentSelection())
+                {
+                    StopFocusMonitor();
+                    _currentMainWindow.BeginHide();
+                    return;
+                }
+
+            // if the focus is in the preview window, run it
+            if (!WindowHelper.IsForegroundWindowBelongToSelf())
                 return;
 
             StopFocusMonitor();
@@ -74,11 +90,6 @@ namespace QuickLook
 
         internal void ClosePreview()
         {
-            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
-                NativeMethods.QuickLook.FocusedWindowType.Invalid)
-                if (!WindowHelper.IsForegroundWindowBelongToSelf())
-                    return;
-
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
@@ -89,11 +100,6 @@ namespace QuickLook
         private void TogglePreview()
         {
             _lastSwitchTick = DateTime.Now.Ticks;
-
-            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
-                NativeMethods.QuickLook.FocusedWindowType.Invalid)
-                if (!WindowHelper.IsForegroundWindowBelongToSelf())
-                    return;
 
             if (_currentMainWindow.Visibility == Visibility.Visible)
             {
@@ -112,10 +118,6 @@ namespace QuickLook
                 return;
 
             _lastSwitchTick = DateTime.Now.Ticks;
-
-            if (NativeMethods.QuickLook.GetFocusedWindowType() ==
-                NativeMethods.QuickLook.FocusedWindowType.Invalid)
-                return;
 
             _path = NativeMethods.QuickLook.GetCurrentSelection();
 
