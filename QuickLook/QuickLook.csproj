@@ -81,6 +81,9 @@
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -146,6 +149,7 @@
     <Compile Include="TrayIconManager.cs" />
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
+    <Compile Include="Updater.cs" />
     <Compile Include="ViewWindowManager.cs" />
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
