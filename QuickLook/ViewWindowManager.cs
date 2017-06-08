@@ -17,7 +17,6 @@ namespace QuickLook
         private readonly MainWindowNoTransparent _viewWindowNoTransparent;
         private readonly MainWindowTransparent _viewWindowTransparentTransparent;
         private MainWindowTransparent _currentMainWindow;
-        private long _lastSwitchTick;
 
         private string _path = string.Empty;
 
@@ -99,8 +98,6 @@ namespace QuickLook
 
         private void TogglePreview()
         {
-            _lastSwitchTick = DateTime.Now.Ticks;
-
             if (_currentMainWindow.Visibility == Visibility.Visible)
             {
                 ClosePreview();
@@ -117,23 +114,25 @@ namespace QuickLook
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
 
-            _lastSwitchTick = DateTime.Now.Ticks;
+            // if the switch has been done by SwitchPreviewRemoteInvoke, we'll not do anything
+            var select = NativeMethods.QuickLook.GetCurrentSelection();
+            if (_path == select)
+                return;
 
-            _path = NativeMethods.QuickLook.GetCurrentSelection();
+            _path = select;
+
+            Debug.WriteLine($"SwitchPreview: {_path}");
 
             InvokeViewer();
         }
 
         private void SwitchPreviewRemoteInvoke(HeartbeatEventArgs e)
         {
-            // sleep for 0.6s
-            if (e.InvokeTick - _lastSwitchTick < 0.6 * TimeSpan.TicksPerSecond)
-                return;
-
+            // if the switch has been done by SwitchPreview, we'll not do anything
             if (e.FocusedFile == _path)
                 return;
 
-            Debug.WriteLine("SwitchPreviewRemoteInvoke:" + (e.InvokeTick - _lastSwitchTick));
+            Debug.WriteLine($"SwitchPreviewRemoteInvoke: {e.FocusedFile}");
 
             if (string.IsNullOrEmpty(e.FocusedFile))
                 return;
