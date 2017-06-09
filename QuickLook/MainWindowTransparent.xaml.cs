@@ -23,10 +23,6 @@ namespace QuickLook
 
             InitializeComponent();
 
-            // do not set TopMost property if we are now debugging. it makes debugging painful...
-            if (!Debugger.IsAttached)
-                Topmost = true;
-
             SourceInitialized += (sender, e) =>
             {
                 if (AllowsTransparency)
