@@ -131,7 +131,7 @@
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
-    <Compile Include="Helpers\PidHelper.cs" />
+    <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
     <Compile Include="Plugin\InfoPanel\Extensions.cs" />
