@@ -47,9 +47,25 @@ namespace QuickLook
             _icon.Visible = false;
         }
 
-        public void ShowNotification(string title, string content, bool isError = false)
+        public void ShowNotification(string title, string content, bool isError = false, Action clickEvent = null,
+            Action closeEvent = null)
         {
             _icon.ShowBalloonTip(5000, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
+            _icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
+            _icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+
+            void OnIconOnBalloonTipClicked(object sender, EventArgs e)
+            {
+                clickEvent?.Invoke();
+                _icon.BalloonTipClicked -= OnIconOnBalloonTipClicked;
+            }
+
+
+            void OnIconOnBalloonTipClosed(object sender, EventArgs e)
+            {
+                closeEvent?.Invoke();
+                _icon.BalloonTipClosed -= OnIconOnBalloonTipClosed;
+            }
         }
 
         internal static TrayIconManager GetInstance()
