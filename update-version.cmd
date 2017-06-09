@@ -7,4 +7,3 @@ echo. >> %2
 echo using System.Reflection;>> %2
 echo. >> %2
 echo [assembly: AssemblyVersion("%git_tag%")]>> %2
-echo [assembly: AssemblyInformationalVersion("%git_revision%")]>> %2
