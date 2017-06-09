@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
-using QuickLook.Helpers;
+using System.Windows.Threading;
 
 namespace QuickLook
 {
@@ -16,9 +16,9 @@ namespace QuickLook
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
-        public static bool RunningAsViewer;
 
-        private static bool _duplicated;
+        private bool _isFirstInstance;
+        private Mutex _isRunning;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -27,7 +27,7 @@ namespace QuickLook
                 MessageBox.Show(((Exception) args.ExceptionObject).Message + Environment.NewLine +
                                 ((Exception) args.ExceptionObject).StackTrace);
 
-                Current.Shutdown();
+                Shutdown();
             };
 
             base.OnStartup(e);
@@ -35,65 +35,60 @@ namespace QuickLook
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Any())
-                if (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First()))
-                    RunAsViewer(e);
+            EnsureFirstInstance();
+
+            if (!_isFirstInstance)
+            {
+                // second instance: preview this file
+                if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
+                    RemoteCallShowPreview(e);
+                // second instance: duplicate
                 else
-                    RunAsListener(e);
-            else
-                RunAsListener(e);
-        }
+                    MessageBox.Show("QuickLook is already running in the background.");
 
-        private void RunAsViewer(StartupEventArgs e)
-        {
-            RunningAsViewer = true;
-
-            var runningPid = PidHelper.GetRunningInstance();
-            if (runningPid != -1)
-            {
-                Process.GetProcessById(runningPid).Kill();
-
-                Current.Shutdown();
+                Shutdown();
                 return;
             }
 
-            PidHelper.WritePid();
+            RunListener(e);
 
-            ViewWindowManager.GetInstance().InvokeViewer(e.Args.First());
+            // second instance: run and preview this file
+            if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
+                RemoteCallShowPreview(e);
         }
 
-        private void RunAsListener(StartupEventArgs e)
+        private void RemoteCallShowPreview(StartupEventArgs e)
         {
-            RunningAsViewer = false;
+            PipeServerManager.SendMessage(e.Args.First());
+        }
 
-            if (PidHelper.GetRunningInstance() != -1)
-            {
-                _duplicated = true;
-
-                MessageBox.Show("QuickLook is already running in the background.");
-
-                Current.Shutdown();
-                return;
-            }
-
-            PidHelper.WritePid();
-
+        private void RunListener(StartupEventArgs e)
+        {
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun"))
                 TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
 
             PluginManager.GetInstance();
-
             BackgroundListener.GetInstance();
+            PipeServerManager.GetInstance().MessageReceived +=
+                (msg, ea) => Dispatcher.BeginInvoke(
+                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string)),
+                    DispatcherPriority.ApplicationIdle);
         }
 
         private void App_OnExit(object sender, ExitEventArgs e)
         {
-            TrayIconManager.GetInstance().Dispose();
-            BackgroundListener.GetInstance().Dispose();
+            if (_isFirstInstance)
+            {
+                PipeServerManager.GetInstance().Dispose();
+                TrayIconManager.GetInstance().Dispose();
+                BackgroundListener.GetInstance().Dispose();
+            }
+        }
 
-            if (!_duplicated)
-                PidHelper.DeletePid();
+        private void EnsureFirstInstance()
+        {
+            _isRunning = new Mutex(true, "QuickLook.App.Mutex", out _isFirstInstance);
         }
     }
 }
