@@ -2,7 +2,7 @@
 
 # QuickLook
 
-[![Build status](https://ci.appveyor.com/api/projects/status/w5lx1mlq8b0mb8fo?svg=true)](https://ci.appveyor.com/project/xupefei/quicklook)
+[![license](https://img.shields.io/github/license/xupefei/QuickLook.svg)](https://www.gnu.org/licenses/lgpl-3.0.en.html) [![Build status](https://ci.appveyor.com/api/projects/status/w5lx1mlq8b0mb8fo?svg=true)](https://ci.appveyor.com/project/xupefei/quicklook) [![Github All Releases](https://img.shields.io/github/downloads/xupefei/QuickLook/total.svg)](https://github.com/xupefei/QuickLook/releases) [![GitHub release](https://img.shields.io/github/release/xupefei/QuickLook.svg)](https://github.com/xupefei/QuickLook/releases/latest)
 
 *This project is currently under heavy development. Come back often to see what's new.*
 
