@@ -32,7 +32,7 @@ Till now, QuickLook supports the preview of
 
 ## Usages
 In-place preview / Integrate with 3rd-party file manager
- - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. Press your hotkey for the 2nd time will close the existing preview window.
+ - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. 
  
 Hotkeys in preview window:
 
