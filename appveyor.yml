@@ -12,11 +12,17 @@ build:
 after_build:
 - cmd: >-
     type GitVersion.cs
+
     cd Build
+
     move QuickLook.msi ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.msi
+
     dir ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.msi
+
     7z a ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.zip .\Package\* -r
+
     7z l ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.zip
+
 artifacts:
 - path: QuickLook-$(APPVEYOR_REPO_TAG_NAME).zip
   name: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
