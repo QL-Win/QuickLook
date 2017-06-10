@@ -103,7 +103,7 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pwba))))
 		return;
 
-	if (isCursorActivated(reinterpret_cast<HWND>(phwnd)))
+	if (isCursorActivated(reinterpret_cast<HWND>(LongToHandle(phwnd))))
 		return;
 
 	getSelectedInternal(pwba, buffer);
