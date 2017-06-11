@@ -16,6 +16,29 @@
 
 You may ask, why you write this when there several alternatives available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer))? The answer is that, they are all among those which no longer actively developed, lack of support of file types and plugins, or asking user for amounts of $$$.
 
+## Usage
+
+### General usage
+
+ 1. Download either installer or portable archive from [GitHub Release](https://github.com/xupefei/QuickLook/releases) page
+ 2. Run `QuickLook.exe`
+ 3. Select a file/folder on the Desktop / in a File Explorer window / in an Open- or Save-File dialog
+ 4. Press <kbd>Spacebar</kbd>
+ 5. Select another file/folder in the same manner
+ 6. When you're done, click on the `❎` button, or press <kbd>Spacebar</kbd> again
+
+### Hotkeys
+
+ - <kbd>Spacebar</kbd> Show/Hide the preview window
+ - <kbd>Esc</kbd> Hide the preview window
+ - <kbd>Enter</kbd> Open/Execute current file
+ - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
+ - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
+
+### Integration
+ - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. 
+ 
+
 ## Features
 Till now, QuickLook supports the preview of 
 
@@ -29,18 +52,6 @@ Till now, QuickLook supports the preview of
  - HTML files (`.htm`, `.html`)
  - Markdown file (`.md`)
  - Other files and folders will be shown in a information box
-
-## Usages
-In-place preview / Integrate with 3rd-party file manager
- - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. 
- 
-Hotkeys in preview window:
-
- - <kbd>Space</kbd> Show/Hide the preview window
- - <kbd>Esc</kbd> Hide the preview window
- - <kbd>Enter</kbd> Open/Execute current file
- - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
- - <kbd>Ctrl-Wheel</kbd> Zoom in/out
 
 ## Development
 
