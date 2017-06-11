@@ -89,12 +89,15 @@ namespace QuickLook
                 return;
             }
 
-            // System.Windows.Forms does not consider DPI, so we need to do it maunally
-
             var screen = WindowHelper.GetCurrentWindowRect();
 
-            var newLeft = screen.Left + (screen.Width - size.Width) / 2;
-            var newTop = screen.Top + (screen.Height - size.Height) / 2;
+            // if the window is visible, place new window in respect to the old center point.
+            // otherwise, place it to the screen center.
+            var oldCenterX = Visibility == Visibility.Visible ? Left + Width / 2 : screen.Left + screen.Width / 2;
+            var oldCenterY = Visibility == Visibility.Visible ? Top + Height / 2 : screen.Top + screen.Height / 2;
+
+            var newLeft = oldCenterX - size.Width / 2;
+            var newTop = oldCenterY - size.Height / 2;
 
             this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
