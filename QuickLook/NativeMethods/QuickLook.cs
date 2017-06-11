@@ -8,19 +8,19 @@ namespace QuickLook.NativeMethods
     {
         private const int MaxPath = 260;
 
-        [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetFocusedWindowType",
+        [DllImport("QuickLook.Native32.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern FocusedWindowType GetFocusedWindowTypeNative_32();
 
-        [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetCurrentSelection",
+        [DllImport("QuickLook.Native32.dll", EntryPoint = "GetCurrentSelection",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_32([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
-        [DllImport("QuickLook.Native.Shell32.x64.dll", EntryPoint = "GetFocusedWindowType",
+        [DllImport("QuickLook.Native64.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern FocusedWindowType GetFocusedWindowTypeNative_64();
 
-        [DllImport("QuickLook.Native.Shell32.x64.dll", EntryPoint = "GetCurrentSelection",
+        [DllImport("QuickLook.Native64.dll", EntryPoint = "GetCurrentSelection",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_64([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
