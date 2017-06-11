@@ -30,7 +30,7 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lgpl.rtf" />
+    <Content Include="gpl.rtf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuickLook\QuickLook.csproj">

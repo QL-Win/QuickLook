@@ -234,10 +234,6 @@
       <Link>LICENSE-GPL.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\LICENSE-LGPL.txt">
-      <Link>LICENSE-LGPL.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Shell32">

@@ -12,7 +12,7 @@
     <Property Id='ALLUSERS' Value='2' />
     <Property Id='MSIINSTALLPERUSER' Value='1' />
 
-    <WixVariable Id="WixUILicenseRtf" Value="lgpl.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="gpl.rtf" />
 
     <Feature Id="ProductFeature" Title="QuickLook.Installer" Level="1">
       <ComponentGroupRef Id="QuickLookComponents" />
