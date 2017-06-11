@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace QuickLook.NativeMethods
 {
@@ -16,6 +17,10 @@ namespace QuickLook.NativeMethods
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_32([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
+        [DllImport("QuickLook.Native64.dll", EntryPoint = "LaunchWoW64HookHelper",
+            CallingConvention = CallingConvention.Cdecl)]
+        private static extern void LaunchWoW64HookHelper_64();
+
         [DllImport("QuickLook.Native64.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern FocusedWindowType GetFocusedWindowTypeNative_64();
@@ -23,6 +28,12 @@ namespace QuickLook.NativeMethods
         [DllImport("QuickLook.Native64.dll", EntryPoint = "GetCurrentSelection",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_64([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
+
+        internal static void LaunchWoW64HookHelper()
+        {
+            if (App.Is64Bit)
+                LaunchWoW64HookHelper_64();
+        }
 
         internal static FocusedWindowType GetFocusedWindowType()
         {

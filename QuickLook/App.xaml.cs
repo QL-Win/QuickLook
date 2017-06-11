@@ -52,7 +52,7 @@ namespace QuickLook
 
             RunListener(e);
 
-            // second instance: run and preview this file
+            // first instance: run and preview this file
             if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
                 RemoteCallShowPreview(e);
         }
@@ -67,6 +67,9 @@ namespace QuickLook
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun"))
                 TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
+
+            if (Is64Bit)
+                NativeMethods.QuickLook.LaunchWoW64HookHelper();
 
             PluginManager.GetInstance();
             BackgroundListener.GetInstance();
