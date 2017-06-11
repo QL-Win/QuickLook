@@ -6,6 +6,8 @@ namespace QuickLook.NativeMethods
 {
     internal static class QuickLook
     {
+        private const int MaxPath = 260;
+
         [DllImport("QuickLook.Native.Shell32.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern FocusedWindowType GetFocusedWindowTypeNative_32();
@@ -33,7 +35,7 @@ namespace QuickLook.NativeMethods
             // communicate with COM in a separate thread
             Task.Run(() =>
             {
-                sb = new StringBuilder(255 + 1);
+                sb = new StringBuilder(MaxPath);
                 if (App.Is64Bit)
                     GetCurrentSelectionNative_64(sb);
                 else
@@ -47,7 +49,8 @@ namespace QuickLook.NativeMethods
         {
             Invalid,
             Desktop,
-            Explorer
+            Explorer,
+            Dialog
         }
     }
 }

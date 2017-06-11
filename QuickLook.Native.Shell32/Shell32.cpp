@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "Shell32.h"
-#include <atlcomcli.h>
 
 using namespace std;
 
@@ -28,6 +27,13 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 		{
 			type = EXPLORER;
 		}
+		else if (wcscmp(classBuffer, L"#32770") == 0)
+		{
+			if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
+			{
+				type = DIALOG;
+			}
+		}
 	}
 	delete[] classBuffer;
 
@@ -38,11 +44,14 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 {
 	switch (GetFocusedWindowType())
 	{
+	case DESKTOP:
+		getSelectedFromDesktop(buffer);
+		break;
 	case EXPLORER:
 		getSelectedFromExplorer(buffer);
 		break;
-	case DESKTOP:
-		getSelectedFromDesktop(buffer);
+	case DIALOG:
+		getSelectedFromCommonDialog(buffer);
 		break;
 	default:
 		break;
@@ -57,7 +66,7 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
 		return;
 
-	auto hwndFGW = GetForegroundWindow();
+	auto hwndfg = GetForegroundWindow();
 
 	auto count = 0L;
 	psw->get_Count(&count);
@@ -77,11 +86,11 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 		if (FAILED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
 			continue;
 
-		HWND hwndWBA;
-		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))))
+		HWND hwndwba;
+		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndwba))))
 			continue;
 
-		if (hwndWBA != hwndFGW || isCursorActivated(hwndWBA))
+		if (hwndwba != hwndfg || isCursorActivated(hwndwba))
 			continue;
 
 		getSelectedInternal(pwba, buffer);
@@ -162,3 +171,79 @@ bool Shell32::isCursorActivated(HWND hwnd)
 	GetGUIThreadInfo(tId, &gui);
 	return gui.flags || gui.hwndCaret;
 }
+
+#pragma region DialogHook
+
+#pragma comment(linker, "/SECTION:.shared,RWS")
+#pragma data_seg(".shared")
+HWND ghMsgWindow = nullptr; // Window handle
+HHOOK ghHook = nullptr; // Hook handle
+UINT WM_HOOK_NOTIFY = 0;
+WCHAR filePathBuffer[MAX_PATH] = {'\0'};
+#pragma data_seg()
+
+void Shell32::getSelectedFromCommonDialog(PWCHAR buffer)
+{
+	auto hwndfg = GetForegroundWindow();
+	auto tid = GetWindowThreadProcessId(hwndfg, nullptr);
+
+	if (WM_HOOK_NOTIFY == 0)
+		WM_HOOK_NOTIFY = RegisterWindowMessage(L"WM_QUICKLOOK_HOOK_NOTIFY_MSG");
+
+	if (ghHook != nullptr)
+		UnhookWindowsHookEx(ghHook);
+	ghHook = SetWindowsHookEx(WH_CALLWNDPROC, static_cast<HOOKPROC>(MsgHookProc), ModuleFromAddress(MsgHookProc), tid);
+	if (ghHook == nullptr)
+		return;
+
+	SendMessage(hwndfg, WM_HOOK_NOTIFY, 0, 0);
+	wcscpy_s(buffer, wcslen(buffer) - 1, filePathBuffer);
+}
+
+HMODULE Shell32::ModuleFromAddress(PVOID pv)
+{
+	MEMORY_BASIC_INFORMATION mbi;
+	return VirtualQuery(pv, &mbi, sizeof mbi) != 0 ? static_cast<HMODULE>(mbi.AllocationBase) : nullptr;
+}
+
+LRESULT Shell32::MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	if (nCode < 0)
+		goto CONTINUE;
+
+	auto pMSG = reinterpret_cast<CWPSTRUCT*>(lParam);
+
+	// only response to WM_HOOK_NOTIFY
+	if (pMSG->message != WM_HOOK_NOTIFY)
+		goto CONTINUE;
+
+	UnhookWindowsHookEx(ghHook);
+	ghHook = nullptr;
+
+	// get current selected item
+	auto psb = reinterpret_cast<IShellBrowser*>(SendMessage(GetForegroundWindow(), WM_USER + 7, 0, 0));
+	if (psb == nullptr)
+		goto CONTINUE;
+
+	getSelectedInternal2(psb, filePathBuffer);
+
+	return 0;
+
+CONTINUE:
+	return CallNextHookEx(ghHook, nCode, wParam, lParam);
+}
+
+void Shell32::getSelectedInternal2(CComPtr<IShellBrowser> psb, PWCHAR buffer)
+{
+	CComPtr<IShellView> psv;
+	if (FAILED(psb->QueryActiveShellView(&psv)))
+		return;
+
+	CComPtr<IDataObject> dao;
+	if (FAILED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
+		return;
+
+	return obtainFirstItem(dao, buffer);
+}
+
+#pragma endregion DialogHook

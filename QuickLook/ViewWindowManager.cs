@@ -70,14 +70,12 @@ namespace QuickLook
 
             // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
             var focus = NativeMethods.QuickLook.GetFocusedWindowType();
-            if (focus == NativeMethods.QuickLook.FocusedWindowType.Desktop ||
-                focus == NativeMethods.QuickLook.FocusedWindowType.Explorer)
-                if (_path == NativeMethods.QuickLook.GetCurrentSelection())
-                {
-                    StopFocusMonitor();
-                    _currentMainWindow.BeginHide();
-                    return;
-                }
+            if (focus != NativeMethods.QuickLook.FocusedWindowType.Invalid)
+            {
+                StopFocusMonitor();
+                _currentMainWindow.BeginHide();
+                return;
+            }
 
             // if the focus is in the preview window, run it
             if (!WindowHelper.IsForegroundWindowBelongToSelf())

@@ -19,4 +19,3 @@
 #include<shlguid.h>
 #include<Shlobj.h>
 #include<Shellapi.h>
-#include<vector>
