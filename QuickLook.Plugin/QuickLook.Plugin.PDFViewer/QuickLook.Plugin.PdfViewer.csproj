@@ -86,10 +86,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LibMuPdf.dll">
+    <Content Include="LibMuPdf32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="LibMuPdf.x64.dll">
+    <Content Include="LibMuPdf64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

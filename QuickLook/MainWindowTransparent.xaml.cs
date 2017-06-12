@@ -1,4 +1,21 @@
-﻿using System;
+﻿// Copyright © 2017 Paddy Xu
+// 
+// This file is part of QuickLook program.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
@@ -72,12 +89,15 @@ namespace QuickLook
                 return;
             }
 
-            // System.Windows.Forms does not consider DPI, so we need to do it maunally
-
             var screen = WindowHelper.GetCurrentWindowRect();
 
-            var newLeft = screen.Left + (screen.Width - size.Width) / 2;
-            var newTop = screen.Top + (screen.Height - size.Height) / 2;
+            // if the window is visible, place new window in respect to the old center point.
+            // otherwise, place it to the screen center.
+            var oldCenterX = Visibility == Visibility.Visible ? Left + Width / 2 : screen.Left + screen.Width / 2;
+            var oldCenterY = Visibility == Visibility.Visible ? Top + Height / 2 : screen.Top + screen.Height / 2;
+
+            var newLeft = oldCenterX - size.Width / 2;
+            var newTop = oldCenterY - size.Height / 2;
 
             this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }

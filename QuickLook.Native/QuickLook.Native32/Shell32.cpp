@@ -1,7 +1,25 @@
+// Copyright © 2017 Paddy Xu
+// 
+// This file is part of QuickLook program.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "stdafx.h"
 
 #include "Shell32.h"
-#include <atlcomcli.h>
+#include "HelperMethods.h"
+#include "DialogHook.h"
 
 using namespace std;
 
@@ -11,10 +29,10 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 
 	auto hwndfg = GetForegroundWindow();
 
-	if (isCursorActivated(hwndfg))
+	if (HelperMethods::IsCursorActivated(hwndfg))
 		return INVALID;
 
-	auto classBuffer = new WCHAR[MAX_PATH];
+	WCHAR classBuffer[MAX_PATH] = {'\0'};
 	if (SUCCEEDED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
 	{
 		if (wcscmp(classBuffer, L"WorkerW") == 0 || wcscmp(classBuffer, L"Progman") == 0)
@@ -28,8 +46,14 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 		{
 			type = EXPLORER;
 		}
+		else if (wcscmp(classBuffer, L"#32770") == 0)
+		{
+			if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
+			{
+				type = DIALOG;
+			}
+		}
 	}
-	delete[] classBuffer;
 
 	return type;
 }
@@ -38,11 +62,14 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 {
 	switch (GetFocusedWindowType())
 	{
+	case DESKTOP:
+		getSelectedFromDesktop(buffer);
+		break;
 	case EXPLORER:
 		getSelectedFromExplorer(buffer);
 		break;
-	case DESKTOP:
-		getSelectedFromDesktop(buffer);
+	case DIALOG:
+		DialogHook::GetSelectedFromCommonDialog(buffer);
 		break;
 	default:
 		break;
@@ -57,7 +84,7 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
 		return;
 
-	auto hwndFGW = GetForegroundWindow();
+	auto hwndfg = GetForegroundWindow();
 
 	auto count = 0L;
 	psw->get_Count(&count);
@@ -77,14 +104,14 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 		if (FAILED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
 			continue;
 
-		HWND hwndWBA;
-		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndWBA))))
+		HWND hwndwba;
+		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndwba))))
 			continue;
 
-		if (hwndWBA != hwndFGW || isCursorActivated(hwndWBA))
+		if (hwndwba != hwndfg || HelperMethods::IsCursorActivated(hwndwba))
 			continue;
 
-		getSelectedInternal(pwba, buffer);
+		HelperMethods::GetSelectedInternal(pwba, buffer);
 	}
 }
 
@@ -103,62 +130,8 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pwba))))
 		return;
 
-	if (isCursorActivated(reinterpret_cast<HWND>(phwnd)))
+	if (HelperMethods::IsCursorActivated(reinterpret_cast<HWND>(LongToHandle(phwnd))))
 		return;
 
-	getSelectedInternal(pwba, buffer);
-}
-
-void Shell32::getSelectedInternal(CComQIPtr<IWebBrowserApp> pwba, PWCHAR buffer)
-{
-	CComQIPtr<IServiceProvider> psp;
-	if (FAILED(pwba->QueryInterface(IID_IServiceProvider, reinterpret_cast<void**>(&psp))))
-		return;
-
-	CComPtr<IShellBrowser> psb;
-	if (FAILED(psp->QueryService(SID_STopLevelBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
-		return;
-
-	CComPtr<IShellView> psv;
-	if (FAILED(psb->QueryActiveShellView(&psv)))
-		return;
-
-	CComPtr<IDataObject> dao;
-	if (FAILED(psv->GetItemObject(SVGIO_SELECTION, IID_IDataObject, reinterpret_cast<void**>(&dao))))
-		return;
-
-	return obtainFirstItem(dao, buffer);
-}
-
-void Shell32::obtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
-{
-	FORMATETC formatetc;
-	STGMEDIUM medium;
-
-	formatetc.cfFormat = CF_HDROP;
-	formatetc.ptd = nullptr;
-	formatetc.dwAspect = DVASPECT_CONTENT;
-	formatetc.lindex = -1;
-	formatetc.tymed = TYMED_HGLOBAL;
-
-	medium.tymed = TYMED_HGLOBAL;
-
-	if (FAILED(dao->GetData(&formatetc, &medium)))
-		return;
-
-	int n = DragQueryFile(HDROP(medium.hGlobal), 0xFFFFFFFF, nullptr, 0);
-
-	if (n < 1)
-		return;
-
-	DragQueryFile(HDROP(medium.hGlobal), 0, buffer, MAX_PATH - 1);
-}
-
-bool Shell32::isCursorActivated(HWND hwnd)
-{
-	auto tId = GetWindowThreadProcessId(hwnd, nullptr);
-
-	GUITHREADINFO gui = {sizeof gui};
-	GetGUIThreadInfo(tId, &gui);
-	return gui.flags || gui.hwndCaret;
+	HelperMethods::GetSelectedInternal(pwba, buffer);
 }
