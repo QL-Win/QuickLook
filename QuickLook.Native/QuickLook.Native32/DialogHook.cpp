@@ -46,11 +46,11 @@ void DialogHook::GetSelectedFromCommonDialog(PWCHAR buffer)
 		WM_HOOK_NOTIFY = RegisterWindowMessage(L"WM_QUICKLOOK_HOOK_NOTIFY_MSG");
 
 	BOOL isTargetWoW64 = false;
-	if (GetProcAddress(GetModuleHandle(L"kernel32.dll"), "IsWow64Process") && !IsWow64Process(hProc, &isTargetWoW64))
+	if (!IsWow64Process(hProc, &isTargetWoW64))
 		return;
 
 	BOOL isSelfWoW64 = false;
-	if (GetProcAddress(GetModuleHandle(L"kernel32.dll"), "IsWow64Process") && !IsWow64Process(GetCurrentProcess(), &isSelfWoW64))
+	if (!IsWow64Process(GetCurrentProcess(), &isSelfWoW64))
 		return;
 
 	if (isTargetWoW64 && !isSelfWoW64)
