@@ -7,6 +7,6 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <local:WpfWebBrowserWrapper x:Name="browser" Zoom="200" />
+        <local:WpfWebBrowserWrapper x:Name="browser" />
     </Grid>
 </UserControl>

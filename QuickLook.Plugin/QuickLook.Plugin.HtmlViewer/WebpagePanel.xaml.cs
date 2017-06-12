@@ -31,6 +31,8 @@ namespace QuickLook.Plugin.HtmlViewer
         public WebpagePanel()
         {
             InitializeComponent();
+
+            browser.Zoom = (int) (100 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI);
         }
 
         public void Dispose()
