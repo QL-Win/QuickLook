@@ -1,4 +1,21 @@
-﻿using System;
+﻿// Copyright © 2017 Paddy Xu
+// 
+// This file is part of QuickLook program.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +45,6 @@ namespace QuickLook
 
             try
             {
-                //check github api for json file containing the latest version info
                 HttpWebRequest QLWebRequest = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/xupefei/QuickLook/releases/latest");
                 QLWebRequest.UserAgent = "QuickLook Auto Updater";
                 var response = QLWebRequest.GetResponse();
@@ -48,7 +64,6 @@ namespace QuickLook
                 }
                 else
                 {
-                    //wipe the temporary download folder
                     System.IO.DirectoryInfo di = new DirectoryInfo(tmpFolderPath);
                     foreach (FileInfo file in di.GetFiles())
                     {
@@ -65,7 +80,6 @@ namespace QuickLook
                     File.Delete(changeLogPath);
                 }
 
-                // Create the file.
                 using (FileStream fs = File.Create(changeLogPath))
                 {
                     Byte[] info = new UTF8Encoding(true).GetBytes(mdchangelog);
@@ -79,14 +93,12 @@ namespace QuickLook
                 success = false;
             }
 
-
             if ((cleanCurrentVersion < cleanNewVersion) && success)
             {
                 Action acpt = new Action(() => UpdateConfirmation(changeLogPath, dpath));
                 Action dcln = new Action(() => CancelUpdate());
 
                 TrayIconManager.GetInstance().ShowNotification("QuickLook", "A new version of QuickLook is available. Click here to learn more.", false, acpt, dcln);
-                //TriggerUpdate(dpath); //this function will be called when the user accepts the update
                 return true;
             }
             else if (!success)
@@ -143,7 +155,6 @@ namespace QuickLook
             var r = e.Result;
             if (r is string)
             {
-                //executes the msi installer through a cmd command chain
                 string command = @"""" + r + "\" && exit";
                 var commandDispatcherSettings = new ProcessStartInfo();
                 var commandDispatcherProcess = new Process();
@@ -164,15 +175,22 @@ namespace QuickLook
         private static void QuickLookUpdateDownloader_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             var dpath = e.Argument.ToString();
-
             string tmpFolderPath = Directory.GetCurrentDirectory() + @"\quicklook_updates";
             string newUpdateFileLocation = tmpFolderPath + @"\quicklook_update_" + Guid.NewGuid().ToString() + ".msi";
             bool success = false;
             try
             {              
-                //download the new update msi package from the URL specified on the json file
-                var fileReader = new WebClient();
-                fileReader.DownloadFile(new Uri(dpath), newUpdateFileLocation);
+                //var fileReader = new WebClient();
+                //fileReader.DownloadFile(new Uri(dpath), newUpdateFileLocation);
+
+                WebClientEx client = new WebClientEx(120000);
+                var downloadedStream = client.DownloadDataStream(dpath);
+                var fileStream = File.Create(newUpdateFileLocation);
+                downloadedStream.WriteTo(fileStream);
+                fileStream.Close();
+                client.Dispose();
+                fileStream.Dispose();
+                downloadedStream.Dispose();
                 success = true;
             }
             catch (Exception ex)

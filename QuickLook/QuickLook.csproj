@@ -151,6 +151,9 @@
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="ViewWindowManager.cs" />
+    <Compile Include="WebClientEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
