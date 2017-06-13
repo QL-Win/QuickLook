@@ -36,7 +36,8 @@ You may ask, why you write this when there several alternatives available on the
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
 
 ### Integration
- - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`. 
+ - You may set up a custom hot key that fires event `QuickLook.exe C:\path\to\your\file.txt`.
+ - For developer: Send **a line** (ends with `\r\n`) of UTF-8 string which contains the file path to the [named pipe](https://msdn.microsoft.com/en-us/library/windows/desktop/aa365590(v=vs.85).aspx) named `\\.\pipe\QuickLook.App.Pipe`.
  
 
 ## Features
