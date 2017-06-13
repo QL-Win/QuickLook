@@ -39,8 +39,6 @@ namespace QuickLook
             var dpath = "";
             var mdchangelog = "";
             bool success = false;
-            int cleanNewVersion = 0;
-            int cleanCurrentVersion = 0;
             Version vNew = new Version();
             Version vCurrent = new Version();
             string changeLogPath = Directory.GetCurrentDirectory() + @"\quicklook_updates\changelog.md";
@@ -181,9 +179,6 @@ namespace QuickLook
             bool success = false;
             try
             {              
-                //var fileReader = new WebClient();
-                //fileReader.DownloadFile(new Uri(dpath), newUpdateFileLocation);
-
                 WebClientEx client = new WebClientEx(120000);
                 var downloadedStream = client.DownloadDataStream(dpath);
                 var fileStream = File.Create(newUpdateFileLocation);
