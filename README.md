@@ -16,6 +16,17 @@
 
 You may ask, why you write this when there several alternatives available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer))? The answer is that, they are all among those which no longer actively developed, lack of support of file types and plugins, or asking user for amounts of $$$.
 
+## Highlights
+
+✅ Instant preview
+✅ Beautiful UI
+✅ Perfect HiDPI support
+✅ Native 64-bit application
+
+✅ Preview from Open and Save File Dialog
+✅ Easy extended by plguins 
+✅ Strict GPL license to keep it free forever
+
 ## Usage
 
 ### General usage
