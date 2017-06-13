@@ -41,6 +41,8 @@ namespace QuickLook
             bool success = false;
             int cleanNewVersion = 0;
             int cleanCurrentVersion = 0;
+            Version vNew = new Version();
+            Version vCurrent = new Version();
             string changeLogPath = Directory.GetCurrentDirectory() + @"\quicklook_updates\changelog.md";
 
             try
@@ -53,9 +55,8 @@ namespace QuickLook
                 lversion = results["name"];
                 dpath = results["assets"][0]["browser_download_url"];
                 mdchangelog = results["body"];
-                lversion = lversion + ".0"; //update-version.cmd adds an aditional 0 to the version, github api doesnt.  
-                cleanNewVersion = Convert.ToInt32(lversion.Replace(".", ""));
-                cleanCurrentVersion = Convert.ToInt32(Application.ProductVersion.Replace(".", ""));
+                vNew = new Version(lversion);
+                vCurrent = new Version(Application.ProductVersion);
 
                 string tmpFolderPath = Directory.GetCurrentDirectory() + @"\quicklook_updates";
                 if (!Directory.Exists(tmpFolderPath))
@@ -93,7 +94,7 @@ namespace QuickLook
                 success = false;
             }
 
-            if ((cleanCurrentVersion < cleanNewVersion) && success)
+            if ((vNew.CompareTo(vCurrent) > 0) && success)
             {
                 Action acpt = new Action(() => UpdateConfirmation(changeLogPath, dpath));
                 Action dcln = new Action(() => CancelUpdate());
@@ -113,7 +114,7 @@ namespace QuickLook
             {
                 if (!silent)
                 {
-                    TrayIconManager.GetInstance().ShowNotification("QuickLook", "You have the latest version installed.", false);
+                    TrayIconManager.GetInstance().ShowNotification("", "You have the latest version installed.", false);
                 }
                 return false;
             }
