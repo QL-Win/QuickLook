@@ -32,9 +32,15 @@ namespace QuickLook
 {
     class Updater
     {
-      
+        private static BackgroundWorker QuickLookUpdateDownloader = new BackgroundWorker();
+
         public static bool CheckForUpdates(bool silent = false)
         {
+            if (QuickLookUpdateDownloader.IsBusy)
+            {
+                TrayIconManager.GetInstance().ShowNotification("", "A new version is already being downloaded.", false);
+                return false;
+            }
             var lversion = "";
             var dpath = "";
             var mdchangelog = "";
@@ -42,7 +48,6 @@ namespace QuickLook
             Version vNew = new Version();
             Version vCurrent = new Version();
             string changeLogPath = Directory.GetCurrentDirectory() + @"\quicklook_updates\changelog.md";
-
             try
             {
                 HttpWebRequest QLWebRequest = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/xupefei/QuickLook/releases/latest");
@@ -142,7 +147,6 @@ namespace QuickLook
 
         public static void TriggerUpdate(string path)
         {
-            BackgroundWorker QuickLookUpdateDownloader = new BackgroundWorker();
             QuickLookUpdateDownloader.DoWork += QuickLookUpdateDownloader_DoWork;
             QuickLookUpdateDownloader.RunWorkerCompleted += QuickLookUpdateDownloader_RunWorkerCompleted;
             QuickLookUpdateDownloader.RunWorkerAsync(path);
@@ -179,7 +183,7 @@ namespace QuickLook
             bool success = false;
             try
             {              
-                WebClientEx client = new WebClientEx(120000);
+                WebClientEx client = new WebClientEx(300000);
                 var downloadedStream = client.DownloadDataStream(dpath);
                 var fileStream = File.Create(newUpdateFileLocation);
                 downloadedStream.WriteTo(fileStream);
