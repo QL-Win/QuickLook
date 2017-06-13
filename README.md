@@ -24,7 +24,7 @@ You may ask, why you write this when there several alternatives available on the
 ✅ Native 64-bit application
 
 ✅ Preview from Open and Save File Dialog
-✅ Easy extended by plguins 
+✅ Easy extended by plugins 
 ✅ Strict GPL license to keep it free forever
 
 ## Usage
