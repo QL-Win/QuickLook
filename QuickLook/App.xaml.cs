@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
@@ -84,6 +85,8 @@ namespace QuickLook
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun"))
                 TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
+            if (e.Args.Contains("/first"))
+                AutoStartupHelper.CreateAutorunShortcut();
 
             if (Is64Bit)
                 NativeMethods.QuickLook.LaunchWoW64HookHelper();

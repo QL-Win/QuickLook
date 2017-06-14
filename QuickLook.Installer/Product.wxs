@@ -60,8 +60,18 @@
       </Directory>
     </Directory>
 
-    <UIRef Id="WixUI_InstallDir" />
+    <CustomAction Id="LaunchApplication"
+                  FileKey="fil22F7B7F07E63622AD2451459086A3CF2"
+                  ExeCommand="/first"
+                  Execute="immediate"
+                  Impersonate="yes"
+                  Return="asyncNoWait" />
 
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="LaunchApplication">1</Publish>
+    </UI>
   </Product>
 </Wix>
