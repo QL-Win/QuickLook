@@ -29,6 +29,10 @@ namespace QuickLook.NativeMethods
             [MarshalAs(UnmanagedType.Bool)] bool bRepaint);
 
         [DllImport("user32.dll")]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy,
+            uint uFlags);
+
+        [DllImport("user32.dll")]
         internal static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance,
             uint threadId);
 
@@ -78,13 +82,34 @@ namespace QuickLook.NativeMethods
         }
 
         // ReSharper disable InconsistentNaming
-        internal const int WH_KEYBOARD_LL = 13;
-        internal const int WM_KEYDOWN = 0x100;
-        internal const int WM_KEYUP = 0x101;
-        internal const int WM_SYSKEYDOWN = 0x104;
-        internal const int WM_SYSKEYUP = 0x105;
-        internal const int GWL_EXSTYLE = -20;
-        internal const int WS_EX_NOACTIVATE = 0x08000000;
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        public static readonly IntPtr HWND_TOP = new IntPtr(0);
+        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
+        public const uint SWP_NOSIZE = 0x0001;
+        public const uint SWP_NOMOVE = 0x0002;
+        public const uint SWP_NOZORDER = 0x0004;
+        public const uint SWP_NOREDRAW = 0x0008;
+        public const uint SWP_NOACTIVATE = 0x0010;
+        public const uint SWP_DRAWFRAME = 0x0020;
+        public const uint SWP_FRAMECHANGED = 0x0020;
+        public const uint SWP_SHOWWINDOW = 0x0040;
+        public const uint SWP_HIDEWINDOW = 0x0080;
+        public const uint SWP_NOCOPYBITS = 0x0100;
+        public const uint SWP_NOOWNERZORDER = 0x0200;
+        public const uint SWP_NOREPOSITION = 0x0200;
+        public const uint SWP_NOSENDCHANGING = 0x0400;
+        public const uint SWP_DEFERERASE = 0x2000;
+        public const uint SWP_ASYNCWINDOWPOS = 0x4000;
+
+        public const int WH_KEYBOARD_LL = 13;
+        public const int WM_KEYDOWN = 0x100;
+        public const int WM_KEYUP = 0x101;
+        public const int WM_SYSKEYDOWN = 0x104;
+        public const int WM_SYSKEYUP = 0x105;
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_NOACTIVATE = 0x08000000;
         // ReSharper restore InconsistentNaming
     }
 }

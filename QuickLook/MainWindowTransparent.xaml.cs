@@ -89,6 +89,10 @@ namespace QuickLook
                 return;
             }
 
+            // if this is a new window, place it to top
+            if (Visibility != Visibility.Visible)
+                this.BringToFront();
+
             var screen = WindowHelper.GetCurrentWindowRect();
 
             // if the window is visible, place new window in respect to the old center point.

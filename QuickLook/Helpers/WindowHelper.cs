@@ -38,6 +38,15 @@ namespace QuickLook.Helpers
                 new Size(screen.Width / scaleX, screen.Height / scaleY));
         }
 
+        public static void BringToFront(this Window window)
+        {
+            var handle = new WindowInteropHelper(window).Handle;
+            User32.SetWindowPos(handle, User32.HWND_TOPMOST, 0, 0, 0, 0,
+                User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOACTIVATE);
+            User32.SetWindowPos(handle, User32.HWND_NOTOPMOST, 0, 0, 0, 0,
+                User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOACTIVATE);
+        }
+
         public static void MoveWindow(this Window window,
             double left,
             double top,
@@ -53,8 +62,7 @@ namespace QuickLook.Helpers
             window.TransformToPixels(width, height,
                 out pxWidth, out pxHeight);
 
-            var helper = new WindowInteropHelper(window);
-            User32.MoveWindow(helper.Handle, pxLeft, pxTop, pxWidth, pxHeight, true);
+            User32.MoveWindow(new WindowInteropHelper(window).Handle, pxLeft, pxTop, pxWidth, pxHeight, true);
         }
 
         private static void TransformToPixels(this Visual visual,

@@ -203,8 +203,7 @@ namespace QuickLook
                 : _viewWindowNoTransparent;
             if (!ReferenceEquals(oldWindow, _currentMainWindow))
                 oldWindow.BeginHide();
-
-            _currentMainWindow.Topmost = !Debugger.IsAttached && topMost;
+            
             _currentMainWindow.BeginShow(matchedPlugin, _path, CurrentPluginFailed);
         }
 
