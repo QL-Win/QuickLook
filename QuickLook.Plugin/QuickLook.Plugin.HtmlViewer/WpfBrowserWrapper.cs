@@ -115,7 +115,9 @@ namespace QuickLook.Plugin.HtmlViewer
         private void InnerBrowserNavigating(object sender, NavigatingCancelEventArgs e)
         {
             if (_loaded)
-                e.Cancel = true;
+                if (_innerBrowser.Source.Scheme != e.Uri.Scheme ||
+                    _innerBrowser.Source.AbsolutePath != e.Uri.AbsolutePath) // allow in-page navigation
+                    e.Cancel = true;
             _loaded = true;
         }
 
