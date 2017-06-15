@@ -20,13 +20,12 @@
 #include "Shell32.h"
 #include "HelperMethods.h"
 #include "DialogHook.h"
+#include "Everything.h"
 
 using namespace std;
 
 Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 {
-	auto type = INVALID;
-
 	auto hwndfg = GetForegroundWindow();
 
 	if (HelperMethods::IsCursorActivated(hwndfg))
@@ -35,27 +34,31 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 	WCHAR classBuffer[MAX_PATH] = {'\0'};
 	if (SUCCEEDED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
 	{
+		if (wcscmp(classBuffer, L"EVERYTHING") == 0)
+		{
+			return EVERYTHING;
+		}
 		if (wcscmp(classBuffer, L"WorkerW") == 0 || wcscmp(classBuffer, L"Progman") == 0)
 		{
 			if (FindWindowEx(hwndfg, nullptr, L"SHELLDLL_DefView", nullptr) != nullptr)
 			{
-				type = DESKTOP;
+				return DESKTOP;
 			}
 		}
-		else if (wcscmp(classBuffer, L"ExploreWClass") == 0 || wcscmp(classBuffer, L"CabinetWClass") == 0)
+		if (wcscmp(classBuffer, L"ExploreWClass") == 0 || wcscmp(classBuffer, L"CabinetWClass") == 0)
 		{
-			type = EXPLORER;
+			return EXPLORER;
 		}
-		else if (wcscmp(classBuffer, L"#32770") == 0)
+		if (wcscmp(classBuffer, L"#32770") == 0)
 		{
 			if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
 			{
-				type = DIALOG;
+				return DIALOG;
 			}
 		}
 	}
 
-	return type;
+	return INVALID;
 }
 
 void Shell32::GetCurrentSelection(PWCHAR buffer)
@@ -69,7 +72,10 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 		getSelectedFromExplorer(buffer);
 		break;
 	case DIALOG:
-		DialogHook::GetSelectedFromCommonDialog(buffer);
+		DialogHook::GetSelected(buffer);
+		break;
+	case EVERYTHING:
+		Everything::GetSelected(buffer);
 		break;
 	default:
 		break;

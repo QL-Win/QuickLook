@@ -16,14 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-class DialogHook
+class Everything
 {
 public:
 	static void GetSelected(PWCHAR buffer);
 
 private:
-	static void getSelectedInternal(CComPtr<IShellBrowser> psb, PWCHAR buffer);
-	static void GetSelectedFromWoW64HookHelper(PWCHAR buffer);
-	static HMODULE ModuleFromAddress(PVOID pv);
-	static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam);
+	static void backupClipboard();
+	static void restoreClipboard();
 };

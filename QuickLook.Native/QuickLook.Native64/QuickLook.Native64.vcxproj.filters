@@ -8,5 +8,6 @@
     <ClCompile Include="..\QuickLook.Native32\Shell32.cpp" />
     <ClCompile Include="..\QuickLook.Native32\stdafx.cpp" />
     <ClCompile Include="..\QuickLook.Native32\WoW64HookHelper.cpp" />
+    <ClCompile Include="..\QuickLook.Native32\Everything.cpp" />
   </ItemGroup>
 </Project>

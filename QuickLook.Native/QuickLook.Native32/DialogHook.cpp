@@ -32,7 +32,7 @@ static WCHAR filePathBuffer[MAX_PATH] = {'\0'};
 
 #define SHARED_MEM_NAME L"QUICKLOOK_WOW64HOOKHELPER_MEM"
 
-void DialogHook::GetSelectedFromCommonDialog(PWCHAR buffer)
+void DialogHook::GetSelected(PWCHAR buffer)
 {
 	auto hwndfg = GetForegroundWindow();
 	DWORD pid = 0;
@@ -67,7 +67,7 @@ void DialogHook::GetSelectedFromCommonDialog(PWCHAR buffer)
 			return;
 
 		SendMessage(hwndfg, WM_HOOK_NOTIFY, 0, 0);
-		wcscpy_s(buffer, wcslen(buffer) - 1, filePathBuffer);
+		wcscpy_s(buffer, MAX_PATH, filePathBuffer);
 	}
 }
 

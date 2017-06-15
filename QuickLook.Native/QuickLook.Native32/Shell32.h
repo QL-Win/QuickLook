@@ -24,10 +24,11 @@ class Shell32
 public:
 	enum FocusedWindowType
 	{
-		INVALID = 0,
-		DESKTOP = 1,
-		EXPLORER = 2,
-		DIALOG = 3,
+		INVALID,
+		DESKTOP,
+		EXPLORER,
+		DIALOG,
+		EVERYTHING,
 	};
 
 	static FocusedWindowType GetFocusedWindowType();

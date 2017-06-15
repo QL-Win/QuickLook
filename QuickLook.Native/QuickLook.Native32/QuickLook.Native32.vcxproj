@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DialogHook.h" />
+    <ClInclude Include="Everything.h" />
     <ClInclude Include="HelperMethods.h" />
     <ClInclude Include="WoW64HookHelper.h" />
     <ClInclude Include="Shell32.h" />
@@ -99,6 +100,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Everything.cpp" />
     <ClCompile Include="HelperMethods.cpp" />
     <ClCompile Include="DllExport.cpp" />
     <ClCompile Include="Shell32.cpp" />

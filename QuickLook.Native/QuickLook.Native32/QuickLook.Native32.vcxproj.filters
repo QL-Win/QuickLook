@@ -33,6 +33,9 @@
     <ClInclude Include="HelperMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Everything.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DllExport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Everything.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
