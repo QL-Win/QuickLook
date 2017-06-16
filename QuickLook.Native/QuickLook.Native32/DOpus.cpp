@@ -103,6 +103,8 @@ void DOpus::ParseXmlBuffer(PWCHAR buffer)
 		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path, -1, b, size);
 
 		wcscpy_s(buffer, MAX_PATH, b);
+
+		delete[] b;
 		return; // we now cares only the first result
 	}
 }
