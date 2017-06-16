@@ -29,6 +29,7 @@ public:
 		EXPLORER,
 		DIALOG,
 		EVERYTHING,
+		DOPUS,
 	};
 
 	static FocusedWindowType GetFocusedWindowType();

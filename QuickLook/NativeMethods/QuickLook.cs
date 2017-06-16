@@ -25,6 +25,10 @@ namespace QuickLook.NativeMethods
     {
         private const int MaxPath = 260;
 
+        [DllImport("QuickLook.Native32.dll", EntryPoint = "Init",
+            CallingConvention = CallingConvention.Cdecl)]
+        private static extern void Init_32();
+
         [DllImport("QuickLook.Native32.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
         private static extern FocusedWindowType GetFocusedWindowTypeNative_32();
@@ -33,9 +37,9 @@ namespace QuickLook.NativeMethods
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_32([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
-        [DllImport("QuickLook.Native64.dll", EntryPoint = "LaunchWoW64HookHelper",
+        [DllImport("QuickLook.Native64.dll", EntryPoint = "Init",
             CallingConvention = CallingConvention.Cdecl)]
-        private static extern void LaunchWoW64HookHelper_64();
+        private static extern void Init_64();
 
         [DllImport("QuickLook.Native64.dll", EntryPoint = "GetFocusedWindowType",
             CallingConvention = CallingConvention.Cdecl)]
@@ -45,10 +49,12 @@ namespace QuickLook.NativeMethods
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetCurrentSelectionNative_64([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sb);
 
-        internal static void LaunchWoW64HookHelper()
+        internal static void Init()
         {
             if (App.Is64Bit)
-                LaunchWoW64HookHelper_64();
+                Init_64();
+            else
+                Init_32();
         }
 
         internal static FocusedWindowType GetFocusedWindowType()

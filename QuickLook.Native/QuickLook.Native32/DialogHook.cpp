@@ -49,6 +49,8 @@ void DialogHook::GetSelected(PWCHAR buffer)
 	if (!IsWow64Process(hProc, &isTargetWoW64))
 		return;
 
+	CloseHandle(hProc);
+
 	BOOL isSelfWoW64 = false;
 	if (!IsWow64Process(GetCurrentProcess(), &isSelfWoW64))
 		return;

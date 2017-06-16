@@ -16,19 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-
-#include "targetver.h"
-
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-// Windows Header Files:
-#include <windows.h>
-
-
-// TODO: reference additional headers your program requires here
-#include<atlcomcli.h>
-#include<Exdisp.h>
-#include<Shobjidl.h>
-#include<shlguid.h>
-#include<Shlobj.h>
-#include<Shellapi.h>
-#include<Psapi.h>
+class DOpus
+{
+public:
+	static void PrepareMessageWindow();
+	static void GetSelected(PWCHAR buffer);
+private:
+	static void ParseXmlBuffer(PWCHAR buffer);
+	static LRESULT CALLBACK msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+};

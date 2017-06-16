@@ -21,6 +21,7 @@
 #include "HelperMethods.h"
 #include "DialogHook.h"
 #include "Everything.h"
+#include "DOpus.h"
 
 using namespace std;
 
@@ -32,29 +33,33 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 		return INVALID;
 
 	WCHAR classBuffer[MAX_PATH] = {'\0'};
-	if (SUCCEEDED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
+	if (FAILED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
+		return INVALID;
+
+	if (wcscmp(classBuffer, L"dopus.lister") == 0)
 	{
-		if (wcscmp(classBuffer, L"EVERYTHING") == 0)
+		return DOPUS;
+	}
+	if (wcscmp(classBuffer, L"EVERYTHING") == 0)
+	{
+		return EVERYTHING;
+	}
+	if (wcscmp(classBuffer, L"WorkerW") == 0 || wcscmp(classBuffer, L"Progman") == 0)
+	{
+		if (FindWindowEx(hwndfg, nullptr, L"SHELLDLL_DefView", nullptr) != nullptr)
 		{
-			return EVERYTHING;
+			return DESKTOP;
 		}
-		if (wcscmp(classBuffer, L"WorkerW") == 0 || wcscmp(classBuffer, L"Progman") == 0)
+	}
+	if (wcscmp(classBuffer, L"ExploreWClass") == 0 || wcscmp(classBuffer, L"CabinetWClass") == 0)
+	{
+		return EXPLORER;
+	}
+	if (wcscmp(classBuffer, L"#32770") == 0)
+	{
+		if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
 		{
-			if (FindWindowEx(hwndfg, nullptr, L"SHELLDLL_DefView", nullptr) != nullptr)
-			{
-				return DESKTOP;
-			}
-		}
-		if (wcscmp(classBuffer, L"ExploreWClass") == 0 || wcscmp(classBuffer, L"CabinetWClass") == 0)
-		{
-			return EXPLORER;
-		}
-		if (wcscmp(classBuffer, L"#32770") == 0)
-		{
-			if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
-			{
-				return DIALOG;
-			}
+			return DIALOG;
 		}
 	}
 
@@ -76,6 +81,9 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 		break;
 	case EVERYTHING:
 		Everything::GetSelected(buffer);
+		break;
+	case DOPUS:
+		DOpus::GetSelected(buffer);
 		break;
 	default:
 		break;

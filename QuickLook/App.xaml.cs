@@ -88,14 +88,13 @@ namespace QuickLook
             if (e.Args.Contains("/first"))
                 AutoStartupHelper.CreateAutorunShortcut();
 
-            if (Is64Bit)
-                NativeMethods.QuickLook.LaunchWoW64HookHelper();
+            NativeMethods.QuickLook.Init();
 
             PluginManager.GetInstance();
             BackgroundListener.GetInstance();
             PipeServerManager.GetInstance().MessageReceived +=
                 (msg, ea) => Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string)),
+                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string, closeIfSame: true)),
                     DispatcherPriority.ApplicationIdle);
         }
 

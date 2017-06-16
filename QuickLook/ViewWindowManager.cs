@@ -173,8 +173,15 @@ namespace QuickLook
             }
         }
 
-        internal bool InvokeViewer(string path = null, bool topMost = true)
+        internal bool InvokeViewer(string path = null, bool topMost = true, bool closeIfSame = false)
         {
+            if(closeIfSame)
+                if (_currentMainWindow.Visibility == Visibility.Visible && path == _path)
+                {
+                    ClosePreview();
+                    return false;
+                }
+
             if (path != null)
                 _path = path;
 
