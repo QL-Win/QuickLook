@@ -58,7 +58,7 @@ See the [Wiki page](https://github.com/xupefei/QuickLook/wiki).
 
 Application icons made by Freepik from www.flaticon.com. Used under the [Flaticon Basic License](http://file000.flaticon.com/downloads/license/license.pdf).
 
-This project references many other projects. See [here](https://github.com/xupefei/QuickLook/wiki/Related-Projects) for the full list.
+This project references many other projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
 
 All source codes, except which are from other projects mentioned above, are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
 
