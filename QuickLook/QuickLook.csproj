@@ -149,9 +149,9 @@
     <Compile Include="TrayIconManager.cs" />
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
-    <Compile Include="Updater.cs" />
+    <Compile Include="Helpers\Updater.cs" />
     <Compile Include="ViewWindowManager.cs" />
-    <Compile Include="WebClientEx.cs">
+    <Compile Include="Controls\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
