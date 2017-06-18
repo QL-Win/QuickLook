@@ -50,7 +50,7 @@ namespace QuickLook
                     new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
                     new MenuItem("-"),
                     new MenuItem("Check for &Updates...",
-                        (sender, e) => Process.Start(@"http://pooi.moe/QuickLook/")),
+                        (sender, e) => Updater.CheckForUpdates()),
                     _itemAutorun,
                     new MenuItem("&Quit", (sender, e) => System.Windows.Application.Current.Shutdown())
                 })
