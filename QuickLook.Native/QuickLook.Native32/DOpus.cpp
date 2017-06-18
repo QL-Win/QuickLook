@@ -21,10 +21,10 @@
 
 #include <iostream>
 
-#define DOPOUS_IPC_LP_INFO 0x00000015
-#define DOPOUS_IPC_LP_DATA L"listsel"
-#define DOPOUS_CLASS L"DOpus.ParentWindow"
-#define DOPOUS_NAME L"Directory Opus"
+#define DOPUS_IPC_LP_INFO 0x00000015
+#define DOPUS_IPC_LP_DATA L"listsel"
+#define DOPUS_CLASS L"DOpus.ParentWindow"
+#define DOPUS_NAME L"Directory Opus"
 #define MSGWINDOW_CLASS L"QuickLook.Native.DOpus.MsgWindow"
 
 HWND hMsgWnd;
@@ -59,13 +59,13 @@ void DOpus::GetSelected(PWCHAR buffer)
 	if (hMsgWnd == nullptr)
 		return;
 
-	PWCHAR data = DOPOUS_IPC_LP_DATA;
+	PWCHAR data = DOPUS_IPC_LP_DATA;
 	COPYDATASTRUCT cds;
-	cds.dwData = DOPOUS_IPC_LP_INFO;
+	cds.dwData = DOPUS_IPC_LP_INFO;
 	cds.cbData = (wcslen(data) + 1) * sizeof WCHAR;
 	cds.lpData = data;
 
-	auto ret = SendMessage(FindWindow(DOPOUS_CLASS, DOPOUS_NAME), WM_COPYDATA, (WPARAM)hMsgWnd, (LPARAM)&cds);
+	auto ret = SendMessage(FindWindow(DOPUS_CLASS, DOPUS_NAME), WM_COPYDATA, (WPARAM)hMsgWnd, (LPARAM)&cds);
 	if (!ret)
 		return;
 
