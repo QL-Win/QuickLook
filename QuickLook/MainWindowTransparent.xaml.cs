@@ -85,6 +85,7 @@ namespace QuickLook
                 Width = size.Width;
                 Height = size.Height;
                 WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                this.BringToFront();
 
                 return;
             }
