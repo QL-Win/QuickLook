@@ -173,7 +173,7 @@ namespace QuickLook
             }
         }
 
-        internal bool InvokeViewer(string path = null, bool topMost = true, bool closeIfSame = false)
+        internal bool InvokeViewer(string path = null, bool closeIfSame = false)
         {
             if(closeIfSame)
                 if (_currentMainWindow.Visibility == Visibility.Visible && path == _path)
@@ -194,12 +194,12 @@ namespace QuickLook
 
             var matchedPlugin = PluginManager.GetInstance().FindMatch(_path);
 
-            BeginShowNewWindow(matchedPlugin, topMost);
+            BeginShowNewWindow(matchedPlugin);
 
             return true;
         }
 
-        private void BeginShowNewWindow(IViewer matchedPlugin, bool topMost = true)
+        private void BeginShowNewWindow(IViewer matchedPlugin)
         {
             _currentMainWindow.UnloadPlugin();
 
