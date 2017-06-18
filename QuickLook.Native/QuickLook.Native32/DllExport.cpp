@@ -25,7 +25,9 @@
 
 EXPORT void Init()
 {
+#ifdef WIN64
 	WoW64HookHelper::Launch();
+#endif
 	DOpus::PrepareMessageWindow();
 }
 

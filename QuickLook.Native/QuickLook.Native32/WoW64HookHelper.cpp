@@ -33,6 +33,10 @@ bool WoW64HookHelper::CheckStatus()
 
 bool WoW64HookHelper::Launch()
 {
+#ifndef WIN64
+	return true;
+#endif
+
 	if (CheckStatus())
 		return true;
 
