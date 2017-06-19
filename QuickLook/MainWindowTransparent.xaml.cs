@@ -85,7 +85,7 @@ namespace QuickLook
                 Width = size.Width;
                 Height = size.Height;
                 WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                this.BringToFront();
+                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
 
                 return;
             }
