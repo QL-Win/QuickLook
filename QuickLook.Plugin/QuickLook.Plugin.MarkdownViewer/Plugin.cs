@@ -41,6 +41,7 @@ namespace QuickLook.Plugin.MarkdownViewer
 
             switch (Path.GetExtension(path).ToLower())
             {
+                case ".markdown":
                 case ".md":
                 case ".rmd":
                     return true;
