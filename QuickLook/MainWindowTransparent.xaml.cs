@@ -90,6 +90,10 @@ namespace QuickLook
                 return;
             }
 
+            // is the window is now now maximized, do not move it
+            if (WindowState == WindowState.Maximized)
+                return;
+
             // if this is a new window, place it to top
             if (Visibility != Visibility.Visible)
                 this.BringToFront();
@@ -145,7 +149,8 @@ namespace QuickLook
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 
-            Show();
+            if (Visibility != Visibility.Visible)
+                Show();
 
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
