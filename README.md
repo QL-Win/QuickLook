@@ -33,7 +33,7 @@ You may ask, why you write this when there several alternatives available on the
 
 ### General usage
 
- 1. Download either installer or portable archive from [GitHub Release](https://github.com/xupefei/QuickLook/releases) page
+ 1. Download either installer or portable archive from [Appveyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts)(**unstable**) or [GitHub Release](https://github.com/xupefei/QuickLook/releases)(stable) page
  2. Run `QuickLook.exe`
  3. Select a file/folder on the Desktop / in a File Explorer window / in an Open- or Save-File dialog
  4. Press <kbd>Spacebar</kbd>
