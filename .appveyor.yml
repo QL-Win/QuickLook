@@ -15,24 +15,13 @@ after_build:
 
     cd Build
 
-    move QuickLook.msi ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.msi
+    dir QuickLook.msi
 
-    dir ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.msi
+    7z a QuickLook.zip .\Package\* -r
 
-    7z a ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.zip .\Package\* -r
-
-    7z l ..\QuickLook-%APPVEYOR_REPO_TAG_NAME%.zip
+    7z l QuickLook.zip
 artifacts:
-- path: QuickLook-$(APPVEYOR_REPO_TAG_NAME).zip
-  name: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
-- path: QuickLook-$(APPVEYOR_REPO_TAG_NAME).msi
-  name: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
-deploy:
-- provider: GitHub
-  auth_token:
-    secure: YwPL9DCYIWsHKBT7WMnx+IHTWph9fEOUBpnfZhZMTgz6VzWem01X+l/vZPlFxCG/
-  artifact: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
-  draft: true
-  on:
-    branch: master
-    APPVEYOR_REPO_TAG: true
+- path: %APPVEYOR_BUILD_FOLDER%\Build\QuickLook.zip
+  name: QuickLook
+- path: %APPVEYOR_BUILD_FOLDER%\Build\QuickLook.msi
+  name: QuickLook
