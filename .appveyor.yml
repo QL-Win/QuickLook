@@ -6,7 +6,10 @@ cache:
 - packages -> **\packages.config
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
-- cmd: nuget restore
+- cmd: >-
+    FOR /F %i in ('git describe --always --tags') do set GIT_TAG=%i
+
+    nuget restore
 build:
   verbosity: minimal
 after_build:
@@ -15,13 +18,16 @@ after_build:
 
     cd Build
 
-    dir QuickLook.msi
+    move QuickLook.msi ..\QuickLook-%GIT_TAG%.msi
 
-    7z a QuickLook.zip .\Package\* -r
+    dir ..\QuickLook-%GIT_TAG%.msi
 
-    7z l QuickLook.zip
+    7z a ..\QuickLook-%GIT_TAG%.zip .\Package\* -r
+
+    7z l ..\QuickLook-%GIT_TAG%.zip
+
 artifacts:
-- path: Build\QuickLook.zip
-  name: QuickLook
-- path: Build\QuickLook.msi
-  name: QuickLook
+- path: QuickLook-%GIT_TAG%.zip
+  name: QuickLook-%GIT_TAG%
+- path: QuickLook-%GIT_TAG%.msi
+  name: QuickLook-%GIT_TAG%
