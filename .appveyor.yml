@@ -7,7 +7,7 @@ cache:
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
 - cmd: >-
-    FOR /F %i in ('git describe --always --tags') do set GIT_TAG=%i
+    FOR /F %%i in ('git describe --always --tags') do set GIT_TAG=%%i
 
     nuget restore
 build:
