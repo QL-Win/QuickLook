@@ -21,7 +21,7 @@ after_build:
 
     7z l QuickLook.zip
 artifacts:
-- path: %APPVEYOR_BUILD_FOLDER%\Build\QuickLook.zip
+- path: Build\QuickLook.zip
   name: QuickLook
-- path: %APPVEYOR_BUILD_FOLDER%\Build\QuickLook.msi
+- path: Build\QuickLook.msi
   name: QuickLook
