@@ -71,7 +71,7 @@
       <UIRef Id="WixUI_InstallDir" />
       <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="LaunchApplication">1</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="LaunchApplication">NOT Installed</Publish>
     </UI>
   </Product>
 </Wix>
