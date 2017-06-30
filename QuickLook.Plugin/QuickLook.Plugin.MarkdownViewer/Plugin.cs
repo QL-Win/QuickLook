@@ -84,6 +84,9 @@ namespace QuickLook.Plugin.MarkdownViewer
         private string GenerateMarkdownHtml(string path)
         {
             var md = File.ReadAllText(path);
+            md = md.Replace("&", "&amp;")
+                   .Replace("<", "&lt;")
+                   .Replace(">", "&gt;");
             var html = Resources.md2html.Replace("{{content}}", md);
 
             return html;
