@@ -222,7 +222,7 @@ namespace QuickLook
 
             TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(_path)}", true);
 
-            Debug.WriteLine(e.ToString());
+            Debug.WriteLine(e.SourceException.ToString());
             Debug.WriteLine(e.SourceException.StackTrace);
 
             if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
