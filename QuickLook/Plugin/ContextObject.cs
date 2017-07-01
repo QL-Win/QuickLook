@@ -31,7 +31,7 @@ namespace QuickLook.Plugin
     {
         private bool _canFocus;
         private bool _canResize = true;
-
+        private bool _fullWindowDragging;
         private bool _isBusy = true;
         private string _title = "";
         private object _viewerContent;
@@ -94,6 +94,19 @@ namespace QuickLook.Plugin
             set
             {
                 _canResize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Set whether the full viewer window can be used for mouse dragging.
+        /// </summary>
+        public bool FullWindowDragging
+        {
+            get => _fullWindowDragging;
+            set
+            {
+                _fullWindowDragging = value;
                 OnPropertyChanged();
             }
         }
@@ -164,6 +177,7 @@ namespace QuickLook.Plugin
             IsBusy = true;
             PreferredSize = new Size();
             CanResize = true;
+            FullWindowDragging = false;
             CanFocus = false;
         }
 

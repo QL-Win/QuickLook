@@ -149,6 +149,8 @@ namespace QuickLook
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 
+            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : titlebar.Height - 5;
+
             if (Visibility != Visibility.Visible)
                 Show();
 

@@ -25,8 +25,7 @@
                  Path="ContextObject.CanResize" />
     </Window.ResizeMode>
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="{Binding Height, ElementName=titlebar}"
-                      ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
+        <WindowChrome x:Name="chrome" ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
                       UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">

@@ -41,6 +41,7 @@ namespace QuickLook.Plugin.InfoPanel
 
             context.Title = "";
             context.CanResize = false;
+            context.FullWindowDragging = true;
         }
 
         public void View(string path, ContextObject context)
