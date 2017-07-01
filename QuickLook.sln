@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook", "QuickLook\QuickLook.csproj", "{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -61,6 +61,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QuickLook.WoW64HookHelper",
 	ProjectSection(ProjectDependencies) = postProject
 		{D31EE321-C2B0-4984-B749-736F7DE509F1} = {D31EE321-C2B0-4984-B749-736F7DE509F1}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.CsvViewer", "QuickLook.Plugin\QuickLook.Plugin.CsvViewer\QuickLook.Plugin.CsvViewer.csproj", "{863ECAAC-18D9-4256-A27D-0F308089FB47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +170,14 @@ Global
 		{2C58F9B2-D8FA-4586-942B-5170CECE5963}.Release|Any CPU.ActiveCfg = Release|Win32
 		{2C58F9B2-D8FA-4586-942B-5170CECE5963}.Release|Any CPU.Build.0 = Release|Win32
 		{2C58F9B2-D8FA-4586-942B-5170CECE5963}.Release|x86.ActiveCfg = Release|Win32
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Debug|x86.ActiveCfg = Debug|x86
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Debug|x86.Build.0 = Debug|x86
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Release|x86.ActiveCfg = Release|x86
+		{863ECAAC-18D9-4256-A27D-0F308089FB47}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,5 +194,6 @@ Global
 		{E37675EA-D957-4495-8655-2609BF86756C} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 		{794E4DCF-F715-4836-9D30-ABD296586D23} = {D18A23FF-76BD-43BD-AC32-786D166EBAC9}
 		{2C58F9B2-D8FA-4586-942B-5170CECE5963} = {D18A23FF-76BD-43BD-AC32-786D166EBAC9}
+		{863ECAAC-18D9-4256-A27D-0F308089FB47} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 	EndGlobalSection
 EndGlobal
