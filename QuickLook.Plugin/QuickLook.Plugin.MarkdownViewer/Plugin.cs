@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Threading;
 using QuickLook.Plugin.HtmlViewer;
@@ -84,6 +85,8 @@ namespace QuickLook.Plugin.MarkdownViewer
         private string GenerateMarkdownHtml(string path)
         {
             var md = File.ReadAllText(path);
+            md = WebUtility.HtmlEncode(md);
+
             var html = Resources.md2html.Replace("{{content}}", md);
 
             return html;
