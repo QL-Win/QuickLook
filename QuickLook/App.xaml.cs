@@ -42,8 +42,7 @@ namespace QuickLook
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                MessageBox.Show(((Exception) args.ExceptionObject).Message + Environment.NewLine +
-                                ((Exception) args.ExceptionObject).StackTrace);
+                MessageBox.Show(((Exception) args.ExceptionObject).ToString());
 
                 Shutdown();
             };
