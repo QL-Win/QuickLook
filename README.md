@@ -48,7 +48,7 @@ You may ask, why you write this when there several alternatives available on the
  - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
 
-## More Information
+## More Information: supported file types etc.
 
 See the [Wiki page](https://github.com/xupefei/QuickLook/wiki).
 
