@@ -45,8 +45,8 @@ namespace QuickLook.Plugin.ImageViewer
 
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
 
-            viewPanel.PreviewMouseLeftButtonDown += ViewPanel_PreviewMouseLeftButtonDown;
-            viewPanel.PreviewMouseMove += ViewPanel_PreviewMouseMove;
+            viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
+            viewPanel.MouseMove += ViewPanel_MouseMove;
         }
 
         private void LoadImage(string path)
@@ -68,21 +68,25 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        private void ViewPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ViewPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            e.MouseDevice.Capture(viewPanel);
+
             _dragInitPos = e.GetPosition(viewPanel);
             var temp = _dragInitPos.Value; // Point is a type value
             temp.Offset(viewPanel.HorizontalOffset, viewPanel.VerticalOffset);
             _dragInitPos = temp;
         }
 
-        private void ViewPanel_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void ViewPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_dragInitPos.HasValue)
                 return;
 
             if (e.LeftButton == MouseButtonState.Released)
             {
+                e.MouseDevice.Capture(null);
+
                 _dragInitPos = null;
                 return;
             }

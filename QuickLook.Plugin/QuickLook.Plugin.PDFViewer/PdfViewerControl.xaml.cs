@@ -250,8 +250,8 @@ namespace QuickLook.Plugin.PDFViewer
             pageViewPanel.PreviewMouseWheel += NavigatePage;
             StartMouseWhellDelayedZoomMonitor(pageViewPanel);
 
-            pageViewPanel.PreviewMouseLeftButtonDown += DragScrollStart;
-            pageViewPanel.PreviewMouseMove += DragScrolling;
+            pageViewPanel.MouseLeftButtonDown += DragScrollStart;
+            pageViewPanel.MouseMove += DragScrolling;
         }
 
         private void DragScrolling(object sender, MouseEventArgs e)
@@ -261,6 +261,8 @@ namespace QuickLook.Plugin.PDFViewer
 
             if (e.LeftButton == MouseButtonState.Released)
             {
+                e.MouseDevice.Capture(null);
+
                 _dragInitPos = null;
                 return;
             }
@@ -275,6 +277,8 @@ namespace QuickLook.Plugin.PDFViewer
 
         private void DragScrollStart(object sender, MouseButtonEventArgs e)
         {
+            e.MouseDevice.Capture(pageViewPanel);
+
             _dragInitPos = e.GetPosition(pageViewPanel);
             var temp = _dragInitPos.Value; // Point is a type value
             temp.Offset(pageViewPanel.HorizontalOffset, pageViewPanel.VerticalOffset);
