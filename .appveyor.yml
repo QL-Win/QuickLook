@@ -6,25 +6,19 @@ cache:
 - packages -> **\packages.config
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
-- cmd: >-
-    FOR /F %%i in ('git describe --always --tags') do set GIT_TAG=%%i
+- ps: >-
+    $env:GIT_TAG = git describe --always --tags
 
     nuget restore
 build:
   verbosity: minimal
 after_build:
-- cmd: >-
-    type GitVersion.cs
+- ps: >-
+    Get-Content GitVersion.cs
 
-    cd Build
-
-    move QuickLook.msi ..\QuickLook-%GIT_TAG%.msi
-
-    dir ..\QuickLook-%GIT_TAG%.msi
-
-    7z a ..\QuickLook-%GIT_TAG%.zip .\Package\* -r
-
-    7z l ..\QuickLook-%GIT_TAG%.zip
+    Move-Item Build\QuickLook-$env:GIT_TAG.msi QuickLook-$env:GIT_TAG.msi
+    
+    Move-Item Build\QuickLook-$env:GIT_TAG.zip QuickLook-$env:GIT_TAG.zip
 
 artifacts:
 - path: QuickLook-%GIT_TAG%.zip

@@ -18,6 +18,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>..\Build\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>PackageDir=$(SolutionDir)Build\Package\</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="C_QuickLookComponents.wxs" />
@@ -32,25 +33,24 @@
   <ItemGroup>
     <Content Include="gpl.rtf" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\QuickLook\QuickLook.csproj">
-      <Name>QuickLook</Name>
-      <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>robocopy "$(SolutionDir)Build\$(Configuration)" "$(SolutionDir)Build\Package" %2a.%2a /e /njh /njs /ndl /nfl /nc /ns /np /xf %2a.pdb /xf %2a.obj /xf %2a.ipdb /xf %2a.iobj /xf %2a.exp /xf %2a.lib /xf %2a.ilk /xf %2a.xml
+    <PreBuildEvent>rmdir /S /Q "$(SolutionDir)Build\Package\%2a"
 
-"$(WIX)bin\heat" dir "$(SolutionDir)Build\Package" -dr INSTALLFOLDER -cg QuickLookComponents -gg -g1 -sf -srd -sreg -var "var.QuickLook.TargetDir" -out "$(ProjectDir)C_QuickLookComponents.wxs"</PreBuildEvent>
+robocopy "$(SolutionDir)Build\$(Configuration)" "$(SolutionDir)Build\Package" %2a.%2a /e /njh /njs /ndl /nfl /nc /ns /np /xf %2a.pdb /xf %2a.obj /xf %2a.ipdb /xf %2a.iobj /xf %2a.exp /xf %2a.lib /xf %2a.ilk /xf %2a.xml
+
+powershell -file "$(SolutionDir)Scripts\sign-package.ps1"
+
+"$(WIX)bin\heat" dir "$(SolutionDir)Build\Package" -dr INSTALLFOLDER -cg QuickLookComponents -gg -g1 -sf -srd -sreg -var "var.PackageDir" -out "$(ProjectDir)C_QuickLookComponents.wxs"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>powershell -file "$(SolutionDir)Scripts\sign-msi.ps1"
+
+powershell -file "$(SolutionDir)Scripts\rename-pkg.ps1"</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
