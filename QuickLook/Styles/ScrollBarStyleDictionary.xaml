@@ -101,7 +101,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <!-- VerticalScrollBar Template using the previously created Templates -->
     <ControlTemplate x:Key="VerticalScrollBar"
                      TargetType="{x:Type ScrollBar}">
         <Grid Width="13">
@@ -114,7 +114,7 @@
                     <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,0,0,0"
+                    <Thumb Style="{StaticResource ScrollBarThumb}" Margin="1,0"
                            Background="{StaticResource HorizontalNormalBrush}"
                            BorderBrush="{StaticResource HorizontalNormalBorderBrush}" />
                 </Track.Thumb>
