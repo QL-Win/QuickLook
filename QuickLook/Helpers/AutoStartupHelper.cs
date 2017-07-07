@@ -29,6 +29,9 @@ namespace QuickLook.Helpers
 
         internal static void CreateAutorunShortcut()
         {
+            if (App.IsUWP)
+                return;
+
             try
             {
                 File.Create(_startupFullPath).Close();
@@ -53,11 +56,17 @@ namespace QuickLook.Helpers
 
         internal static void RemoveAutorunShortcut()
         {
+            if (App.IsUWP)
+                return;
+
             File.Delete(_startupFullPath);
         }
 
         internal static bool IsAutorun()
         {
+            if (App.IsUWP)
+                return true;
+
             return File.Exists(_startupFullPath);
         }
     }

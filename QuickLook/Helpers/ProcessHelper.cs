@@ -17,16 +17,34 @@
 
 using System;
 using System.Threading.Tasks;
+using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
     internal class ProcessHelper
     {
+        private const int ErrorInsufficientBuffer = 0x7A;
+
         // ReSharper disable once InconsistentNaming
         public static void PerformAggressiveGC()
         {
             // delay some time to make sure that all windows are closed
             Task.Delay(1000).ContinueWith(t => GC.Collect(GC.MaxGeneration));
+        }
+
+        public static bool IsRunningAsUWP()
+        {
+            try
+            {
+                uint len = 0;
+                var r = Kernel32.GetCurrentPackageFullName(ref len, null);
+
+                return r == ErrorInsufficientBuffer;
+            }
+            catch (EntryPointNotFoundException)
+            {
+                return false;
+            }
         }
     }
 }

@@ -17,6 +17,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace QuickLook.NativeMethods
 {
@@ -24,6 +25,10 @@ namespace QuickLook.NativeMethods
     {
         [DllImport("kernel32.dll")]
         internal static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("kernel32.dll")]
+        internal static extern int GetCurrentPackageFullName(ref uint packageFullNameLength,
+            [MarshalAs(UnmanagedType.LPWStr)] StringBuilder packageFullName);
 
         [DllImport("kernel32.dll")]
         internal static extern IntPtr GetCurrentThreadId();

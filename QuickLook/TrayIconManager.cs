@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using QuickLook.Helpers;
 using QuickLook.Properties;
@@ -36,7 +35,7 @@ namespace QuickLook
                     AutoStartupHelper.RemoveAutorunShortcut();
                 else
                     AutoStartupHelper.CreateAutorunShortcut();
-            });
+            }) {Enabled = !App.IsUWP};
 
         private TrayIconManager()
         {
@@ -50,7 +49,7 @@ namespace QuickLook
                     new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
                     new MenuItem("-"),
                     new MenuItem("Check for &Updates...",
-                        (sender, e) => Updater.CheckForUpdates()),
+                        (sender, e) => Updater.CheckForUpdates()) {Enabled = !App.IsUWP},
                     _itemAutorun,
                     new MenuItem("&Quit", (sender, e) => System.Windows.Application.Current.Shutdown())
                 })

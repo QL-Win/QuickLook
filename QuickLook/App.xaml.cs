@@ -31,6 +31,7 @@ namespace QuickLook
     /// </summary>
     public partial class App : Application
     {
+        public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
@@ -82,7 +83,7 @@ namespace QuickLook
         private void RunListener(StartupEventArgs e)
         {
             TrayIconManager.GetInstance();
-            if (!e.Args.Contains("/autorun"))
+            if (!e.Args.Contains("/autorun") && !IsUWP)
                 TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
             if (e.Args.Contains("/first"))
                 AutoStartupHelper.CreateAutorunShortcut();
@@ -93,7 +94,7 @@ namespace QuickLook
             BackgroundListener.GetInstance();
             PipeServerManager.GetInstance().MessageReceived +=
                 (msg, ea) => Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string, closeIfSame: true)),
+                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string, true)),
                     DispatcherPriority.ApplicationIdle);
         }
 

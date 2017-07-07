@@ -31,6 +31,9 @@ namespace QuickLook.Helpers
     {
         public static void CheckForUpdates(bool silent = false)
         {
+            if (App.IsUWP)
+                return;
+
             Task.Run(() =>
             {
                 try
