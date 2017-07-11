@@ -32,3 +32,4 @@
 #include<Shlobj.h>
 #include<Shellapi.h>
 #include<Psapi.h>
+#include<AppModel.h>

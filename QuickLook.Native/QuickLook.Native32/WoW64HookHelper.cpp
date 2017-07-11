@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 #include "WoW64HookHelper.h"
+#include "HelperMethods.h"
 
 #define HELPER_FILE L"\\QuickLook.WoW64HookHelper.exe"
 #define RUN_ARG L"033A853A-E4B2-4552-9A91-E88789761C48"
@@ -36,6 +37,9 @@ bool WoW64HookHelper::Launch()
 #ifndef WIN64
 	return true;
 #endif
+
+	if (HelperMethods::IsUWP())
+		return true;
 
 	if (CheckStatus())
 		return true;

@@ -71,3 +71,14 @@ bool HelperMethods::IsCursorActivated(HWND hwnd)
 	GetGUIThreadInfo(tId, &gui);
 	return gui.flags || gui.hwndCaret;
 }
+
+bool HelperMethods::IsUWP()
+{
+	auto pGCPFN = decltype(&GetCurrentPackageFullName)(GetProcAddress(GetModuleHandle(L"kernel32.dll"), "GetCurrentPackageFullName"));
+
+	if (!pGCPFN)
+		return false;
+
+	UINT32 pn = 0;
+	return pGCPFN(&pn, nullptr) == ERROR_INSUFFICIENT_BUFFER;
+}

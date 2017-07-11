@@ -22,4 +22,5 @@ public:
 	static void GetSelectedInternal(CComQIPtr<IWebBrowserApp> pWebBrowserApp, PWCHAR buffer);
 	static void ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer);
 	static bool IsCursorActivated(HWND hwndfg);
+	static bool HelperMethods::IsUWP();
 };

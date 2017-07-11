@@ -34,6 +34,9 @@ static WCHAR filePathBuffer[MAX_PATH] = {'\0'};
 
 void DialogHook::GetSelected(PWCHAR buffer)
 {
+	if (HelperMethods::IsUWP())
+		return;
+
 	auto hwndfg = GetForegroundWindow();
 	DWORD pid = 0;
 	auto tid = GetWindowThreadProcessId(hwndfg, &pid);
