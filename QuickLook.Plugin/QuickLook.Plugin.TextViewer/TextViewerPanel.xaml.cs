@@ -16,8 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.IO;
+using System.Text;
 using System.Windows.Controls;
 using ICSharpCode.AvalonEdit.Highlighting;
+using QuickLook.Plugin.TextViewer.SimpleHelpers;
 
 namespace QuickLook.Plugin.TextViewer
 {
@@ -35,9 +37,20 @@ namespace QuickLook.Plugin.TextViewer
 
         private void LoadFile(string path)
         {
-            viewer.Load(path);
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                viewer.Encoding = DetectEncoding(s);
+                viewer.Load(path);
+            }
 
             viewer.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
+        }
+
+        private static Encoding DetectEncoding(Stream s)
+        {
+            var det = new FileEncoding();
+            det.Detect(s, 1 * 1024 * 1024);
+            return det.Complete() ?? Encoding.Default;
         }
     }
 }
