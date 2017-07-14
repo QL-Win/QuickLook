@@ -29,7 +29,7 @@ namespace QuickLook
         private readonly NotifyIcon _icon;
 
         private readonly MenuItem _itemAutorun =
-            new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_RunAtStartup"),
+            new MenuItem(TranslationHelper.GetString("Icon_RunAtStartup"),
                 (sender, e) =>
                 {
                     if (AutoStartupHelper.IsAutorun())
@@ -42,7 +42,7 @@ namespace QuickLook
         {
             _icon = new NotifyIcon
             {
-                Text = string.Format(TranslationHelper.GetString(App.Translations, "Icon_ToolTip"),
+                Text = string.Format(TranslationHelper.GetString("Icon_ToolTip"),
                     Application.ProductVersion),
                 Icon = Resources.app,
                 Visible = true,
@@ -50,10 +50,10 @@ namespace QuickLook
                 {
                     new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
                     new MenuItem("-"),
-                    new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_CheckUpdate"),
+                    new MenuItem(TranslationHelper.GetString("Icon_CheckUpdate"),
                         (sender, e) => Updater.CheckForUpdates()) {Enabled = !App.IsUWP},
                     _itemAutorun,
-                    new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_Quit"),
+                    new MenuItem(TranslationHelper.GetString("Icon_Quit"),
                         (sender, e) => System.Windows.Application.Current.Shutdown())
                 })
             };

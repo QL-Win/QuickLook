@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -35,9 +34,7 @@ namespace QuickLook.Plugin.TextViewer
             InitializeComponent();
 
             viewer.FontFamily =
-                new FontFamily(context.GetString(
-                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Translations.config"),
-                    "Editor_FontFamily", failsafe: "Consolas"));
+                new FontFamily(context.GetString("Editor_FontFamily", failsafe: "Consolas"));
 
             LoadFile(path);
         }

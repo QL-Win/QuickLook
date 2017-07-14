@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Xml.XPath;
 
 namespace QuickLook.Helpers
@@ -13,8 +15,14 @@ namespace QuickLook.Helpers
         private static readonly Dictionary<string, XPathNavigator> FileCache = new Dictionary<string, XPathNavigator>();
         private static readonly Dictionary<string, string> StringCache = new Dictionary<string, string>();
 
-        public static string GetString(string file, string id, CultureInfo locale = null, string failsafe = null)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null,
+            Assembly calling = null)
         {
+            if (file == null)
+                file = Path.Combine(Path.GetDirectoryName((calling ?? Assembly.GetCallingAssembly()).Location),
+                    "Translations.config");
+
             if (!File.Exists(file))
                 return failsafe ?? id;
 
@@ -44,7 +52,7 @@ namespace QuickLook.Helpers
 
         private static string GetStringFromXml(XPathNavigator nav, string id, CultureInfo locale)
         {
-            var cacheKey = $"{locale.Name}::{id}";
+            var cacheKey = $"{nav.BaseURI.GetHashCode()}::{locale.Name}::{id}";
             if (StringCache.ContainsKey(cacheKey))
                 return StringCache[cacheKey];
 

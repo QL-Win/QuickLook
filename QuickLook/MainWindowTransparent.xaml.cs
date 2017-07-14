@@ -42,7 +42,7 @@ namespace QuickLook
             InitializeComponent();
 
             FontFamily =
-                new FontFamily(TranslationHelper.GetString(App.Translations, "UI_FontFamily", failsafe: "Segoe UI"));
+                new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
 
             SourceInitialized += (sender, e) =>
             {
@@ -181,13 +181,13 @@ namespace QuickLook
 
             buttonOpenWith.Content = isExe == null
                 ? Directory.Exists(PreviewPath)
-                    ? string.Format(TranslationHelper.GetString(App.Translations, "MW_BrowseFolder"),
+                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"),
                         Path.GetFileName(PreviewPath))
-                    : string.Format(TranslationHelper.GetString(App.Translations, "MW_Open"),
+                    : string.Format(TranslationHelper.GetString("MW_Open"),
                         Path.GetFileName(PreviewPath))
                 : isExe == true
-                    ? string.Format(TranslationHelper.GetString(App.Translations, "MW_Run"), appFriendlyName)
-                    : string.Format(TranslationHelper.GetString(App.Translations, "MW_OpenWith"), appFriendlyName);
+                    ? string.Format(TranslationHelper.GetString("MW_Run"), appFriendlyName)
+                    : string.Format(TranslationHelper.GetString("MW_OpenWith"), appFriendlyName);
         }
 
         internal void BeginHide()

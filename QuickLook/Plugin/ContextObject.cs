@@ -18,6 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Annotations;
@@ -130,9 +131,10 @@ namespace QuickLook.Plugin
         /// <summary>
         ///     Get a string from translation Xml document.
         /// </summary>
-        public string GetString(string file, string id, CultureInfo locale = null, string failsafe = null)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null)
         {
-            return TranslationHelper.GetString(file, id, locale, failsafe);
+            return TranslationHelper.GetString(id, file, locale, failsafe, Assembly.GetCallingAssembly());
         }
 
         /// <summary>

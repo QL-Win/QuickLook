@@ -53,7 +53,7 @@ namespace QuickLook.Helpers
                         if (!silent)
                             Application.Current.Dispatcher.Invoke(
                                 () => TrayIconManager.GetInstance().ShowNotification("",
-                                    TranslationHelper.GetString(App.Translations, "Update_NoUpdate")));
+                                    TranslationHelper.GetString("Update_NoUpdate")));
                         return;
                     }
 
@@ -67,7 +67,7 @@ namespace QuickLook.Helpers
                         {
                             ViewWindowManager.GetInstance().InvokeViewer(changeLogPath);
                             TrayIconManager.GetInstance().ShowNotification("",
-                                string.Format(TranslationHelper.GetString(App.Translations, "Update_Found"), nVersion),
+                                string.Format(TranslationHelper.GetString("Update_Found"), nVersion),
                                 clickEvent: () => Process.Start(
                                     @"https://github.com/xupefei/QuickLook/releases/latest"));
                         });
@@ -77,7 +77,7 @@ namespace QuickLook.Helpers
                     Debug.WriteLine(e.Message);
                     Application.Current.Dispatcher.Invoke(
                         () => TrayIconManager.GetInstance().ShowNotification("",
-                            string.Format(TranslationHelper.GetString(App.Translations, "Update_Error"), e.Message)));
+                            string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
                 }
             });
         }
