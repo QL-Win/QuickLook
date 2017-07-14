@@ -107,7 +107,7 @@
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
+    <Compile Include="Converters\BooleanTrueToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />

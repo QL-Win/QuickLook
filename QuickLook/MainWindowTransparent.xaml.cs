@@ -16,13 +16,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using QuickLook.Annotations;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
@@ -32,8 +35,10 @@ namespace QuickLook
     /// <summary>
     ///     Interaction logic for MainWindowTransparent.xaml
     /// </summary>
-    public partial class MainWindowTransparent : Window
+    public partial class MainWindowTransparent : Window, INotifyPropertyChanged
     {
+        private bool _pinned;
+
         internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
@@ -41,8 +46,7 @@ namespace QuickLook
 
             InitializeComponent();
 
-            FontFamily =
-                new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
+            FontFamily = new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
 
             SourceInitialized += (sender, e) =>
             {
@@ -50,17 +54,42 @@ namespace QuickLook
                     BlurWindow.EnableWindowBlur(this);
             };
 
+            buttonPin.MouseLeftButtonUp += (sender, e) =>
+            {
+                if (Pinned) return;
+                Pinned = true;
+                buttonOpenWith.Visibility = Visibility.Collapsed;
+                ViewWindowManager.GetInstance().ForgetCurrentWindow();
+            };
+
             buttonCloseWindow.MouseLeftButtonUp += (sender, e) =>
-                ViewWindowManager.GetInstance().ClosePreview();
+            {
+                if (Pinned)
+                    BeginClose();
+                else
+                    ViewWindowManager.GetInstance().ClosePreview();
+            };
 
             buttonOpenWith.Click += (sender, e) =>
                 ViewWindowManager.GetInstance().RunAndClosePreview();
+        }
+
+        public bool Pinned
+        {
+            get => _pinned;
+            private set
+            {
+                _pinned = value;
+                OnPropertyChanged();
+            }
         }
 
         public string PreviewPath { get; private set; }
         public IViewer Plugin { get; private set; }
 
         public ContextObject ContextObject { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         internal void RunAndHide()
         {
@@ -181,10 +210,8 @@ namespace QuickLook
 
             buttonOpenWith.Content = isExe == null
                 ? Directory.Exists(PreviewPath)
-                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"),
-                        Path.GetFileName(PreviewPath))
-                    : string.Format(TranslationHelper.GetString("MW_Open"),
-                        Path.GetFileName(PreviewPath))
+                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"), Path.GetFileName(PreviewPath))
+                    : string.Format(TranslationHelper.GetString("MW_Open"), Path.GetFileName(PreviewPath))
                 : isExe == true
                     ? string.Format(TranslationHelper.GetString("MW_Run"), appFriendlyName)
                     : string.Format(TranslationHelper.GetString("MW_OpenWith"), appFriendlyName);
@@ -201,6 +228,21 @@ namespace QuickLook
             Hide();
 
             ProcessHelper.PerformAggressiveGC();
+        }
+
+        internal void BeginClose()
+        {
+            UnloadPlugin();
+
+            Close();
+
+            ProcessHelper.PerformAggressiveGC();
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -31,18 +31,18 @@ namespace QuickLook
     {
         private static ViewWindowManager _instance;
 
-        private readonly MainWindowNoTransparent _viewWindowNoTransparent;
-        private readonly MainWindowTransparent _viewWindowTransparentTransparent;
+        private MainWindowNoTransparent _viewWindowNoTransparent;
+        private MainWindowTransparent _viewWindowTransparent;
         private MainWindowTransparent _currentMainWindow;
 
         private string _path = string.Empty;
 
         internal ViewWindowManager()
         {
-            _viewWindowTransparentTransparent = new MainWindowTransparent();
+            _viewWindowTransparent = new MainWindowTransparent();
             _viewWindowNoTransparent = new MainWindowNoTransparent();
 
-            _currentMainWindow = _viewWindowTransparentTransparent;
+            _currentMainWindow = _viewWindowTransparent;
         }
 
         public void Dispose()
@@ -172,6 +172,18 @@ namespace QuickLook
                 FocusMonitor.GetInstance().Heartbeat -= SwitchPreviewRemoteInvoke;
             }
         }
+        
+        internal void ForgetCurrentWindow()
+        {
+            StopFocusMonitor();
+
+            if (ReferenceEquals(_currentMainWindow, _viewWindowTransparent))
+                _viewWindowTransparent=new MainWindowTransparent();
+            else
+                _viewWindowNoTransparent = new MainWindowNoTransparent();
+
+            _currentMainWindow = _viewWindowTransparent;
+        }
 
         internal bool InvokeViewer(string path = null, bool closeIfSame = false)
         {
@@ -206,7 +218,7 @@ namespace QuickLook
             // switch window
             var oldWindow = _currentMainWindow;
             _currentMainWindow = matchedPlugin.AllowsTransparency
-                ? _viewWindowTransparentTransparent
+                ? _viewWindowTransparent
                 : _viewWindowNoTransparent;
             if (!ReferenceEquals(oldWindow, _currentMainWindow))
                 oldWindow.BeginHide();

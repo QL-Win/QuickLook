@@ -22,16 +22,16 @@ using System.Windows.Data;
 
 namespace QuickLook.Converters
 {
-    public sealed class BooleanToVisibilityCollapsedConverter : DependencyObject, IValueConverter
+    public sealed class BooleanTrueToVisibilityCollapsedConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return Visibility.Visible;
+                return Visibility.Collapsed;
 
             var v = (bool) value;
 
-            return v ? Visibility.Visible : Visibility.Collapsed;
+            return v ? Visibility.Collapsed : Visibility.Visible;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
