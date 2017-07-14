@@ -65,7 +65,7 @@ namespace QuickLook
                     return can;
                 });
 
-            return matched ?? DefaultPlugin;
+            return (matched ?? DefaultPlugin).GetType().CreateInstance<IViewer>();
         }
 
         private void LoadPlugins()
