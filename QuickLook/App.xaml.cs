@@ -36,7 +36,7 @@ namespace QuickLook
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
 
-        internal static readonly string Translations = Path.Combine(AppPath, @"Translations.lang");
+        internal static readonly string Translations = Path.Combine(AppPath, @"Translations.config");
 
         private bool _isFirstInstance;
         private Mutex _isRunning;

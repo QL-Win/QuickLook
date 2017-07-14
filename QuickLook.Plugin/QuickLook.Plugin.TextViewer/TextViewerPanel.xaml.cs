@@ -36,7 +36,7 @@ namespace QuickLook.Plugin.TextViewer
 
             viewer.FontFamily =
                 new FontFamily(context.GetString(
-                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Translations.lang"),
+                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Translations.config"),
                     "Editor_FontFamily", failsafe: "Consolas"));
 
             LoadFile(path);

@@ -257,7 +257,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Translations.lang">
+    <None Include="Translations.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>

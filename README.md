@@ -54,7 +54,7 @@ See the [Wiki page](https://github.com/xupefei/QuickLook/wiki).
 
 ## Translations
 
-If you would like to translate QuickLook to your language, feel free to modify [these files](https://github.com/xupefei/QuickLook/search?utf8=%E2%9C%93&q=filename%3ATranslations.lang) and then send me a pull request. Thank you for the effort.
+If you would like to translate QuickLook to your language, feel free to modify [these files](https://github.com/xupefei/QuickLook/search?utf8=%E2%9C%93&q=filename%3ATranslations.config) and then send me a pull request. Thank you for the effort.
 
 ## Licenses
 
