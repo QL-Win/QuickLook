@@ -92,6 +92,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -133,6 +135,7 @@
     <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Helpers\TranslationHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
@@ -252,6 +255,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Translations.lang">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

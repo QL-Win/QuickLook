@@ -16,8 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 using QuickLook.Plugin.TextViewer.SimpleHelpers;
 
@@ -28,9 +30,14 @@ namespace QuickLook.Plugin.TextViewer
     /// </summary>
     public partial class TextViewerPanel : UserControl
     {
-        public TextViewerPanel(string path)
+        public TextViewerPanel(string path, ContextObject context)
         {
             InitializeComponent();
+
+            viewer.FontFamily =
+                new FontFamily(context.GetString(
+                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Translations.lang"),
+                    "Editor_FontFamily", failsafe: "Consolas"));
 
             LoadFile(path);
         }

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Translations>
+  <en>
+    <Editor_FontFamily>Consolas</Editor_FontFamily>
+  </en>
+  <zh-CN>
+    <Editor_FontFamily>Consolas,Microsoft Yahei UI,Microsoft Yahei,SimSun</Editor_FontFamily>
+  </zh-CN>
+  <ja-JP>
+    <Editor_FontFamily>Consolas,Meiryo UI,MS UI Gothic,MS Gothic</Editor_FontFamily>
+  </ja-JP>
+</Translations>

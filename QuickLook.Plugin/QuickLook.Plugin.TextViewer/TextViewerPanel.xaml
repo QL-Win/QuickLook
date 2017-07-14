@@ -10,8 +10,7 @@
              d:DesignWidth="448.79"
              UseLayoutRounding="True">
     <Grid>
-        <avalonEdit:TextEditor x:Name="viewer" Background="#00FFFFFF" FontFamily="Consolas" FontSize="14"
-                               ShowLineNumbers="True"
+        <avalonEdit:TextEditor x:Name="viewer" Background="#00FFFFFF" FontSize="14" ShowLineNumbers="True"
                                WordWrap="True" IsReadOnly="True" />
     </Grid>
 </UserControl>

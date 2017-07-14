@@ -29,29 +29,32 @@ namespace QuickLook
         private readonly NotifyIcon _icon;
 
         private readonly MenuItem _itemAutorun =
-            new MenuItem("Run at &Startup", (sender, e) =>
-            {
-                if (AutoStartupHelper.IsAutorun())
-                    AutoStartupHelper.RemoveAutorunShortcut();
-                else
-                    AutoStartupHelper.CreateAutorunShortcut();
-            }) {Enabled = !App.IsUWP};
+            new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_RunAtStartup"),
+                (sender, e) =>
+                {
+                    if (AutoStartupHelper.IsAutorun())
+                        AutoStartupHelper.RemoveAutorunShortcut();
+                    else
+                        AutoStartupHelper.CreateAutorunShortcut();
+                }) {Enabled = !App.IsUWP};
 
         private TrayIconManager()
         {
             _icon = new NotifyIcon
             {
-                Text = $"QuickLook v{Application.ProductVersion}",
+                Text = string.Format(TranslationHelper.GetString(App.Translations, "Icon_ToolTip"),
+                    Application.ProductVersion),
                 Icon = Resources.app,
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
                     new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
                     new MenuItem("-"),
-                    new MenuItem("Check for &Updates...",
+                    new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_CheckUpdate"),
                         (sender, e) => Updater.CheckForUpdates()) {Enabled = !App.IsUWP},
                     _itemAutorun,
-                    new MenuItem("&Quit", (sender, e) => System.Windows.Application.Current.Shutdown())
+                    new MenuItem(TranslationHelper.GetString(App.Translations, "Icon_Quit"),
+                        (sender, e) => System.Windows.Application.Current.Shutdown())
                 })
             };
 

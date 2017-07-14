@@ -21,6 +21,7 @@ using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Helpers.BlurLibrary;
@@ -39,6 +40,9 @@ namespace QuickLook
             ContextObject = new ContextObject();
 
             InitializeComponent();
+
+            FontFamily =
+                new FontFamily(TranslationHelper.GetString(App.Translations, "UI_FontFamily", failsafe: "Segoe UI"));
 
             SourceInitialized += (sender, e) =>
             {
@@ -177,11 +181,13 @@ namespace QuickLook
 
             buttonOpenWith.Content = isExe == null
                 ? Directory.Exists(PreviewPath)
-                    ? $"Browse “{Path.GetFileName(PreviewPath)}”"
-                    : "Open..."
+                    ? string.Format(TranslationHelper.GetString(App.Translations, "MW_BrowseFolder"),
+                        Path.GetFileName(PreviewPath))
+                    : string.Format(TranslationHelper.GetString(App.Translations, "MW_Open"),
+                        Path.GetFileName(PreviewPath))
                 : isExe == true
-                    ? $"Run “{appFriendlyName}”"
-                    : $"Open with “{appFriendlyName}”";
+                    ? string.Format(TranslationHelper.GetString(App.Translations, "MW_Run"), appFriendlyName)
+                    : string.Format(TranslationHelper.GetString(App.Translations, "MW_OpenWith"), appFriendlyName);
         }
 
         internal void BeginHide()

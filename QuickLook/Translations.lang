@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Translations>
+  <en>
+    <UI_FontFamily>Segoe UI</UI_FontFamily>
+    <APP_START>QuickLook is running in the background.</APP_START>
+    <APP_SECOND>QuickLook is already running in the background.</APP_SECOND>
+    <MW_BrowseFolder>Browse “{0}”</MW_BrowseFolder>
+    <MW_Open>Open “{0}”</MW_Open>
+    <MW_OpenWith>Open with “{0}”</MW_OpenWith>
+    <MW_Run>Run “{0}”</MW_Run>
+    <Icon_RunAtStartup>Run at &amp;Startup</Icon_RunAtStartup>
+    <Icon_ToolTip>QuickLook v{0}</Icon_ToolTip>
+    <Icon_CheckUpdate>Check for &amp;Updates...</Icon_CheckUpdate>
+    <Icon_Quit>&amp;Quit</Icon_Quit>
+    <Update_NoUpdate>You are now on the latest version.</Update_NoUpdate>
+    <Update_Found>New version {0} is released. Click here to open the download page.</Update_Found>
+    <Update_Error>Error occured when checking for updates: {0}</Update_Error>
+    <InfoPanel_LastModified>Last modified at {0}</InfoPanel_LastModified>
+    <InfoPanel_DriveSize>Capacity {0}, {1} available</InfoPanel_DriveSize>
+    <InfoPanel_Folders>{0} folders</InfoPanel_Folders>
+    <InfoPanel_Files>{0} files</InfoPanel_Files>
+    <InfoPanel_FolderAndFile>({0} and {1})</InfoPanel_FolderAndFile>
+  </en>
+  <zh-CN>
+    <UI_FontFamily>Segoe UI,Microsoft Yahei UI,Microsoft Yahei,SimSun</UI_FontFamily>
+    <APP_START>QuickLook 正在后台运行。</APP_START>
+    <APP_SECOND>另一个 QuickLook 进程正在运行。</APP_SECOND>
+    <MW_BrowseFolder>浏览 “{0}”</MW_BrowseFolder>
+    <MW_Open>打开 “{0}”</MW_Open>
+    <MW_OpenWith>用 “{0}” 打开</MW_OpenWith>
+    <MW_Run>运行 “{0}”</MW_Run>
+    <Icon_RunAtStartup>启动时自动运行 (&amp;S)</Icon_RunAtStartup>
+    <Icon_ToolTip>QuickLook v{0}</Icon_ToolTip>
+    <Icon_CheckUpdate>检查更新... (&amp;U)</Icon_CheckUpdate>
+    <Icon_Quit>退出 (&amp;Q)</Icon_Quit>
+    <Update_NoUpdate>您已使用了最新版本。</Update_NoUpdate>
+    <Update_Found>发现新版本 {0}。点击这里打开下载页面。</Update_Found>
+    <Update_Error>检查更新时发生错误：{0}</Update_Error>
+    <InfoPanel_LastModified>最后修改于 {0}</InfoPanel_LastModified>
+    <InfoPanel_DriveSize>总容量 {0}，可用 {1}</InfoPanel_DriveSize>
+    <InfoPanel_Folders>{0} 个目录</InfoPanel_Folders>
+    <InfoPanel_Files>{0} 个文件</InfoPanel_Files>
+    <InfoPanel_FolderAndFile>(含 {0}和 {1})</InfoPanel_FolderAndFile>
+  </zh-CN>
+</Translations>

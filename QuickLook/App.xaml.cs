@@ -36,6 +36,8 @@ namespace QuickLook
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
 
+        internal static readonly string Translations = Path.Combine(AppPath, @"Translations.lang");
+
         private bool _isFirstInstance;
         private Mutex _isRunning;
 
@@ -62,7 +64,7 @@ namespace QuickLook
                     RemoteCallShowPreview(e);
                 // second instance: duplicate
                 else
-                    MessageBox.Show("QuickLook is already running in the background.");
+                    MessageBox.Show(TranslationHelper.GetString(Translations, "APP_SECOND"));
 
                 Shutdown();
                 return;
@@ -84,7 +86,8 @@ namespace QuickLook
         {
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun") && !IsUWP)
-                TrayIconManager.GetInstance().ShowNotification("", "QuickLook is running in the background.");
+                TrayIconManager.GetInstance()
+                    .ShowNotification("", TranslationHelper.GetString(Translations, "APP_START"));
             if (e.Args.Contains("/first"))
                 AutoStartupHelper.CreateAutorunShortcut();
 

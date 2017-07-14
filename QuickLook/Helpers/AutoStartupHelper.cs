@@ -23,7 +23,7 @@ namespace QuickLook.Helpers
 {
     internal static class AutoStartupHelper
     {
-        private static readonly string _startupFullPath = Path.Combine(
+        private static readonly string StartupFullPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.Startup),
             Path.ChangeExtension(Path.GetFileName(App.AppFullPath), ".lnk"));
 
@@ -34,11 +34,11 @@ namespace QuickLook.Helpers
 
             try
             {
-                File.Create(_startupFullPath).Close();
+                File.Create(StartupFullPath).Close();
 
                 var shl = new Shell();
-                var dir = shl.NameSpace(Path.GetDirectoryName(_startupFullPath));
-                var itm = dir.Items().Item(Path.GetFileName(_startupFullPath));
+                var dir = shl.NameSpace(Path.GetDirectoryName(StartupFullPath));
+                var itm = dir.Items().Item(Path.GetFileName(StartupFullPath));
                 var lnk = (ShellLinkObject) itm.GetLink;
 
                 lnk.Path = App.AppFullPath;
@@ -46,7 +46,7 @@ namespace QuickLook.Helpers
                 lnk.SetIconLocation(App.AppFullPath, 0);
                 lnk.WorkingDirectory = App.AppPath;
 
-                lnk.Save(_startupFullPath);
+                lnk.Save(StartupFullPath);
             }
             catch (Exception)
             {
@@ -59,7 +59,7 @@ namespace QuickLook.Helpers
             if (App.IsUWP)
                 return;
 
-            File.Delete(_startupFullPath);
+            File.Delete(StartupFullPath);
         }
 
         internal static bool IsAutorun()
@@ -67,7 +67,7 @@ namespace QuickLook.Helpers
             if (App.IsUWP)
                 return true;
 
-            return File.Exists(_startupFullPath);
+            return File.Exists(StartupFullPath);
         }
     }
 }

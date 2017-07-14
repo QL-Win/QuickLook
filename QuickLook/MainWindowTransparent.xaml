@@ -14,8 +14,7 @@
     WindowStartupLocation="CenterScreen"
     Focusable="False" WindowStyle="None"
     Background="#E5FAFAFA" AllowsTransparency="True"
-    ShowActivated="False" ShowInTaskbar="False"
-    FontFamily="Segoe UI,Microsoft Yahei UI">
+    ShowActivated="False" ShowInTaskbar="False">
     <Window.Resources>
         <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
         <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />

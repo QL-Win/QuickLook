@@ -17,6 +17,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Annotations;
@@ -125,6 +126,14 @@ namespace QuickLook.Plugin
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Get a string from translation Xml document.
+        /// </summary>
+        public string GetString(string file, string id, CultureInfo locale = null, string failsafe = null)
+        {
+            return TranslationHelper.GetString(file, id, locale, failsafe);
+        }
 
         /// <summary>
         ///     Show a notification balloon.

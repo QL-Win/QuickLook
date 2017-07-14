@@ -70,7 +70,7 @@ namespace QuickLook.Plugin.TextViewer
 
         public void View(string path, ContextObject context)
         {
-            _tvp = new TextViewerPanel(path);
+            _tvp = new TextViewerPanel(path, context);
 
             context.ViewerContent = _tvp;
             context.Title = $"{Path.GetFileName(path)}";
