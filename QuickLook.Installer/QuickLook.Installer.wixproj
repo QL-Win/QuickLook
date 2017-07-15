@@ -50,7 +50,9 @@ powershell -file "$(SolutionDir)Scripts\sign-package.ps1"
   <PropertyGroup>
     <PostBuildEvent>powershell -file "$(SolutionDir)Scripts\sign-msi.ps1"
 
-powershell -file "$(SolutionDir)Scripts\rename-pkg.ps1"</PostBuildEvent>
+powershell -file "$(SolutionDir)Scripts\rename-msi.ps1"
+
+powershell -file "$(SolutionDir)Scripts\pack-zip.ps1"</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
