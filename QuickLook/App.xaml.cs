@@ -127,9 +127,12 @@ namespace QuickLook
         {
             if (_isFirstInstance)
             {
+                _isRunning.ReleaseMutex();
+
                 PipeServerManager.GetInstance().Dispose();
                 TrayIconManager.GetInstance().Dispose();
                 BackgroundListener.GetInstance().Dispose();
+                ViewWindowManager.GetInstance().Dispose();
             }
         }
 

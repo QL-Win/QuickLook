@@ -48,6 +48,7 @@ namespace QuickLook
         public void Dispose()
         {
             StopFocusMonitor();
+            ClosePreview();
         }
 
         internal void InvokeRoutine(KeyEventArgs kea, bool isKeyDown)
