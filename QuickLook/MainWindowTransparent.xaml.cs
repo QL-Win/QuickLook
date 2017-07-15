@@ -58,7 +58,6 @@ namespace QuickLook
             {
                 if (Pinned) return;
                 Pinned = true;
-                buttonOpenWith.Visibility = Visibility.Collapsed;
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 
@@ -71,7 +70,12 @@ namespace QuickLook
             };
 
             buttonOpenWith.Click += (sender, e) =>
-                ViewWindowManager.GetInstance().RunAndClosePreview();
+            {
+                if (Pinned)
+                    RunAndClose();
+                else
+                    ViewWindowManager.GetInstance().RunAndClosePreview();
+            };
         }
 
         public bool Pinned
@@ -91,7 +95,7 @@ namespace QuickLook
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void RunAndHide()
+        internal void Run()
         {
             if (string.IsNullOrEmpty(PreviewPath))
                 return;
@@ -107,7 +111,18 @@ namespace QuickLook
             {
                 Debug.WriteLine(e.Message);
             }
+        }
+
+        internal void RunAndHide()
+        {
+            Run();
             BeginHide();
+        }
+
+        internal void RunAndClose()
+        {
+            Run();
+            BeginClose();
         }
 
         private void ResizeAndCenter(Size size)
