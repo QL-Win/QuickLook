@@ -20,9 +20,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using QuickLook.Helpers;
+using QuickLook.Properties;
 
 namespace QuickLook
 {
@@ -68,11 +70,33 @@ namespace QuickLook
                 return;
             }
 
+            UpgradeSettings();
+            CheckUpdate();
             RunListener(e);
 
             // first instance: run and preview this file
             if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
                 RemoteCallShowPreview(e);
+        }
+
+        private void CheckUpdate()
+        {
+            if (DateTime.Now - Settings.Default.LastUpdate < TimeSpan.FromDays(7))
+                return;
+
+            Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
+            Settings.Default.LastUpdate = DateTime.Now;
+            Settings.Default.Save();
+        }
+
+        private void UpgradeSettings()
+        {
+            if (!Settings.Default.Upgraded)
+                return;
+
+            Settings.Default.Upgrade();
+            Settings.Default.Upgraded = false;
+            Settings.Default.Save();
         }
 
         private void RemoteCallShowPreview(StartupEventArgs e)

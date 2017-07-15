@@ -76,6 +76,12 @@ namespace QuickLook
                 else
                     ViewWindowManager.GetInstance().RunAndClosePreview();
             };
+
+            buttonWindowStatus.MouseLeftButtonUp += (sender, e) =>
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+            buttonShare.MouseLeftButtonUp +=
+                (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {Path}");
         }
 
         public bool Pinned
@@ -88,23 +94,42 @@ namespace QuickLook
             }
         }
 
-        public string PreviewPath { get; private set; }
+        public string Path { get; private set; }
         public IViewer Plugin { get; private set; }
 
         public ContextObject ContextObject { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void Run()
+        internal void RunWith(string with, string arg)
         {
-            if (string.IsNullOrEmpty(PreviewPath))
+            if (string.IsNullOrEmpty(Path))
                 return;
 
             try
             {
-                Process.Start(new ProcessStartInfo(PreviewPath)
+                Process.Start(new ProcessStartInfo(with)
                 {
-                    WorkingDirectory = Path.GetDirectoryName(PreviewPath)
+                    Arguments = arg,
+                    WorkingDirectory = System.IO.Path.GetDirectoryName(Path)
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        internal void Run()
+        {
+            if (string.IsNullOrEmpty(Path))
+                return;
+
+            try
+            {
+                Process.Start(new ProcessStartInfo(Path)
+                {
+                    WorkingDirectory = System.IO.Path.GetDirectoryName(Path)
                 });
             }
             catch (Exception e)
@@ -177,7 +202,7 @@ namespace QuickLook
 
         internal void BeginShow(IViewer matchedPlugin, string path, Action<ExceptionDispatchInfo> exceptionHandler)
         {
-            PreviewPath = path;
+            Path = path;
             Plugin = matchedPlugin;
 
             ContextObject.ViewerWindow = this;
@@ -221,12 +246,12 @@ namespace QuickLook
 
         private void SetOpenWithButtonAndPath()
         {
-            var isExe = FileHelper.GetAssocApplication(PreviewPath, out string appFriendlyName);
+            var isExe = FileHelper.GetAssocApplication(Path, out string appFriendlyName);
 
             buttonOpenWith.Content = isExe == null
-                ? Directory.Exists(PreviewPath)
-                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"), Path.GetFileName(PreviewPath))
-                    : string.Format(TranslationHelper.GetString("MW_Open"), Path.GetFileName(PreviewPath))
+                ? Directory.Exists(Path)
+                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"), System.IO.Path.GetFileName(Path))
+                    : string.Format(TranslationHelper.GetString("MW_Open"), System.IO.Path.GetFileName(Path))
                 : isExe == true
                     ? string.Format(TranslationHelper.GetString("MW_Run"), appFriendlyName)
                     : string.Format(TranslationHelper.GetString("MW_OpenWith"), appFriendlyName);
