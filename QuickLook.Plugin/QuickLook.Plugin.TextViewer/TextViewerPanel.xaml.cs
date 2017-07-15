@@ -20,7 +20,6 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
-using QuickLook.Plugin.TextViewer.SimpleHelpers;
 
 namespace QuickLook.Plugin.TextViewer
 {
@@ -43,18 +42,11 @@ namespace QuickLook.Plugin.TextViewer
         {
             using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                viewer.Encoding = DetectEncoding(s);
-                viewer.Load(path);
+                viewer.Encoding = FileEncoding.DetectFileEncoding(s, Encoding.Default);
             }
 
+            viewer.Load(path);
             viewer.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
-        }
-
-        private static Encoding DetectEncoding(Stream s)
-        {
-            var det = new FileEncoding();
-            det.Detect(s, 1 * 1024 * 1024);
-            return det.Complete() ?? Encoding.Default;
         }
     }
 }

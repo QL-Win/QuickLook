@@ -58,8 +58,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="Ude, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\UDE.CSharp.1.1.0\lib\Ude.dll</HintPath>
+    <Reference Include="Ude, Version=0.1.1.0, Culture=neutral, PublicKeyToken=dd537652db4726a9, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Ude.Signed.0.1.1\lib\net40\Ude.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -69,7 +69,7 @@
     </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleHelpers\FileEncoding.cs" />
+    <Compile Include="FileEncoding.cs" />
     <Compile Include="TextViewerPanel.xaml.cs">
       <DependentUpon>TextViewerPanel.xaml</DependentUpon>
     </Compile>
