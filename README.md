@@ -18,6 +18,7 @@ You may ask, why you write this when there several alternatives available on the
 
 ## Highlights
 
+ - Tons of supported file types (full list [here](https://github.com/xupefei/QuickLook/wiki/Supported-File-Types))
  - HiDPI support
  - Native 64-bit application
  - Preview from Open and Save File Dialog
