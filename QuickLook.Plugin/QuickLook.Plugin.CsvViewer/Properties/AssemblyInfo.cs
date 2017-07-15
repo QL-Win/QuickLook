@@ -25,9 +25,9 @@ using System.Windows;
 [assembly: AssemblyTitle("QuickLook.Plugin.CsvViewer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("pooi.moe")]
 [assembly: AssemblyProduct("QuickLook.Plugin.CsvViewer")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © Paddy Xu 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -25,9 +25,9 @@ using System.Windows;
 [assembly: AssemblyTitle("QuickLook")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Paddy Xu")]
+[assembly: AssemblyCompany("pooi.moe")]
 [assembly: AssemblyProduct("QuickLook")]
-[assembly: AssemblyCopyright("Copyright © 2017")]
+[assembly: AssemblyCopyright("Copyright © Paddy Xu 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
