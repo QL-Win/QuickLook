@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" 
+         xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" 
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" 
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+  <Identity Name="21090PaddyXu.QuickLook" Version="0.0.0.0" Publisher="CN=CE36AF3D-FF94-43EB-9908-7EC8FD1D29FB" />
+  <Properties>
+    <DisplayName>QuickLook</DisplayName>
+    <PublisherDisplayName>Paddy Xu</PublisherDisplayName>
+    <Description>Bring macOS “Quick Look” feature to Windows</Description>
+    <Logo>Assets/StoreLogo.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource uap:Scale="100" />
+    <Resource uap:Scale="200" />
+    <Resource uap:Scale="400" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.15063.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+  <Applications>
+    <Application Id="Main" Executable="Package\QuickLook.exe" EntryPoint="Windows.FullTrustApplication">
+      <Extensions>
+        <desktop:Extension Category="windows.startupTask" Executable="Package\QuickLook.exe" 
+                           EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="QuickLookTask" Enabled="true" DisplayName="QuickLook" />
+        </desktop:Extension>
+      </Extensions>
+      <uap:VisualElements BackgroundColor="transparent"
+                          DisplayName="QuickLook" 
+                          Square150x150Logo="Assets/Square150x150Logo.png" 
+                          Square44x44Logo="Assets/Square44x44Logo.png" 
+                          Description="Bring macOS “Quick Look” feature to Windows" />
+    </Application>
+  </Applications>
+</Package>
