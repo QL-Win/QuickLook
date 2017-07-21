@@ -48,7 +48,7 @@ namespace QuickLook
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem($"v{Application.ProductVersion}") {Enabled = false},
+                    new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : "")}") {Enabled = false},
                     new MenuItem("-"),
                     new MenuItem(TranslationHelper.GetString("Icon_CheckUpdate"),
                         (sender, e) => Updater.CheckForUpdates()) {Enabled = !App.IsUWP},
