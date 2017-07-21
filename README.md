@@ -31,7 +31,7 @@ You may ask, why you write this when there several alternatives available on the
 ### Download / General usage
 
  1. Download from one of the following
-    * Windows Store (for Windows 10 users) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://assets.windowsphone.com/13484911-a6ab-4170-8b7e-795c1e8b4165/English_get_L_InvariantCulture_Default.png" width="60px" alt="Store Link" /></a> 
+    * Windows Store (for Windows 10 users) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://assets.windowsphone.com/13484911-a6ab-4170-8b7e-795c1e8b4165/English_get_L_InvariantCulture_Default.png" width="80px" alt="Store Link" /></a> 
     * Installer or portable archive of the stable version from [GitHub Release](https://github.com/xupefei/QuickLook/releases) 
     * Unstable builds from [AppVeyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts)
  2. Run `QuickLook.exe`
