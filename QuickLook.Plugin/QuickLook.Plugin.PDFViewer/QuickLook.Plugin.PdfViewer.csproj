@@ -73,7 +73,6 @@
     <Compile Include="DpiHelpers.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="LibMuPdf.cs" />
-    <Compile Include="MouseWheelMonitor.cs" />
     <Compile Include="PageIdToImageConverter.cs" />
     <Compile Include="PdfFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +81,11 @@
     <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
       <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
       <Name>QuickLook</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj">
+      <Project>{fe5a5111-9607-4721-a7be-422754002ed8}</Project>
+      <Name>QuickLook.Plugin.ImageViewer</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

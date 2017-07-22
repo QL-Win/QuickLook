@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.PDFViewer"
+             xmlns:imageViewer="clr-namespace:QuickLook.Plugin.ImageViewer;assembly=QuickLook.Plugin.ImageViewer"
              mc:Ignorable="d"
              x:Name="thisPdfViewer"
              UseLayoutRounding="True"
@@ -69,10 +70,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Column="1" Background="#00EFEFEF">
-            <ScrollViewer x:Name="pageViewPanel" HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto" Focusable="False">
-                <Image x:Name="pageViewPanelImage" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" />
-            </ScrollViewer>
+            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" />
         </Grid>
     </Grid>
 </UserControl>

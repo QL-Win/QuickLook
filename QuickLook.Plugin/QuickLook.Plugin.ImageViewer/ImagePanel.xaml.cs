@@ -16,56 +16,139 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.IO;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ImageMagick;
-using XamlAnimatedGif;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using QuickLook.Annotations;
 
 namespace QuickLook.Plugin.ImageViewer
 {
     /// <summary>
     ///     Interaction logic for ImagePanel.xaml
     /// </summary>
-    public partial class ImagePanel : UserControl
+    public partial class ImagePanel : UserControl, INotifyPropertyChanged
     {
         private Point? _dragInitPos;
-        private double _minZoomFactor = 1d;
+        private DateTime _lastZoomTime = DateTime.MinValue;
+        private double _maxZoomFactor = 3d;
+        private double _minZoomFactor = 0.1d;
+        private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
+        private BitmapSource _source;
         private double _zoomFactor = 1d;
 
-        public ImagePanel(string path)
+        private bool _zoomToFit = true;
+
+        public ImagePanel()
         {
             InitializeComponent();
 
-            LoadImage(path);
-
-            Loaded += (sender, e) => { ZoomToFit(); };
+            SizeChanged += ImagePanel_SizeChanged;
 
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
-
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
             viewPanel.MouseMove += ViewPanel_MouseMove;
+
+            viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
+            viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
         }
 
-        private void LoadImage(string path)
+        public BitmapScalingMode RenderMode
         {
-            if (Path.GetExtension(path).ToLower() == ".gif")
-                AnimationBehavior.SetSourceUri(viewPanelImage, new Uri(path));
-
-            using (var image = new MagickImage(path))
+            get => _renderMode;
+            set
             {
-                image.Rotate(image.Orientation == OrientationType.RightTop
-                    ? 90
-                    : image.Orientation == OrientationType.BottomRight
-                        ? 180
-                        : image.Orientation == OrientationType.LeftBotom
-                            ? 270
-                            : 0);
-
-                viewPanelImage.Source = image.ToBitmapSource();
+                _renderMode = value;
+                OnPropertyChanged();
             }
+        }
+
+        public bool ZoomToFit
+        {
+            get => _zoomToFit;
+            set
+            {
+                _zoomToFit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double MinZoomFactor
+        {
+            get => _minZoomFactor;
+            set
+            {
+                _minZoomFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double MaxZoomFactor
+        {
+            get => _maxZoomFactor;
+            set
+            {
+                _maxZoomFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double ZoomFactor
+        {
+            get => _zoomFactor;
+            private set
+            {
+                _zoomFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BitmapSource Source
+        {
+            get => _source;
+            set
+            {
+                _source = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public event EventHandler<int> ImageScrolled;
+        public event EventHandler DelayedReRender;
+
+        private void ImagePanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (ZoomToFit)
+                DoZoomToFit(false);
+        }
+
+        private void ViewPanel_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
+        {
+            e.ManipulationContainer = viewPanel;
+            e.Mode = ManipulationModes.Scale | ManipulationModes.Translate;
+        }
+
+        private void ViewPanel_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
+        {
+            var delta = e.DeltaManipulation;
+
+            var newZoom = ZoomFactor + ZoomFactor * (delta.Scale.X - 1);
+
+            Zoom(newZoom, false);
+
+            viewPanel.ScrollToHorizontalOffset(viewPanel.HorizontalOffset - delta.Translation.X);
+            viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - delta.Translation.Y);
+
+            e.Handled = true;
         }
 
         private void ViewPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -95,6 +178,8 @@ namespace QuickLook.Plugin.ImageViewer
 
             var delta = _dragInitPos.Value - e.GetPosition(viewPanel);
 
+            Debug.WriteLine(_dragInitPos.Value);
+
             viewPanel.ScrollToHorizontalOffset(delta.X);
             viewPanel.ScrollToVerticalOffset(delta.Y);
         }
@@ -108,33 +193,63 @@ namespace QuickLook.Plugin.ImageViewer
                 // normal scroll
                 viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - e.Delta);
 
+                ImageScrolled?.Invoke(this, e.Delta);
+
                 return;
             }
 
             // zoom
-            var newZoom = _zoomFactor + (double) e.Delta / 120 * 0.1;
-
-            newZoom = Math.Max(newZoom, _minZoomFactor);
-            newZoom = Math.Min(newZoom, 3);
+            var newZoom = ZoomFactor + ZoomFactor * e.Delta / 120 * 0.1;
 
             Zoom(newZoom, false);
         }
 
-        private void ZoomToFit()
+        public Size GetScrollSize()
         {
+            return new Size(viewPanel.ScrollableWidth, viewPanel.ScrollableHeight);
+        }
+
+        public Point GetScrollPosition()
+        {
+            return new Point(viewPanel.HorizontalOffset, viewPanel.VerticalOffset);
+        }
+
+        public void SetScrollPosition(Point point)
+        {
+            viewPanel.ScrollToHorizontalOffset(point.X);
+            viewPanel.ScrollToVerticalOffset(point.Y);
+        }
+
+        public void DoZoomToFit(bool suppressEvent)
+        {
+            if (viewPanelImage.Source == null)
+                return;
+
             var factor = Math.Min(viewPanel.ActualWidth / viewPanelImage.Source.Width,
                 viewPanel.ActualHeight / viewPanelImage.Source.Height);
 
-            _minZoomFactor = factor;
-
-            Zoom(factor, true);
+            Zoom(factor, true, suppressEvent);
         }
 
-        private void Zoom(double factor, bool fromCenter)
+        public void ResetZoom()
         {
-            _zoomFactor = factor;
+            Zoom(1d, false, true);
+        }
 
-            var position = fromCenter
+        public void Zoom(double factor, bool toFit, bool suppressEvent = false)
+        {
+            if (viewPanelImage.Source == null)
+                return;
+
+            factor = Math.Max(factor, MinZoomFactor);
+            factor = Math.Min(factor, MaxZoomFactor);
+
+            ZoomFactor = factor;
+
+            if (!toFit)
+                ZoomToFit = false;
+
+            var position = toFit
                 ? new Point(viewPanelImage.Source.Width / 2, viewPanelImage.Source.Height / 2)
                 : Mouse.GetPosition(viewPanelImage);
 
@@ -151,6 +266,41 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ScrollToHorizontalOffset(offset.X);
             viewPanel.ScrollToVerticalOffset(offset.Y);
             UpdateLayout();
+
+            if (!suppressEvent)
+                ProcessDelayed();
+        }
+
+        private void ProcessDelayed()
+        {
+            _lastZoomTime = DateTime.Now;
+
+            Task.Delay(500).ContinueWith(t =>
+            {
+                if (DateTime.Now - _lastZoomTime < TimeSpan.FromSeconds(0.5))
+                    return;
+
+                Debug.WriteLine($"ProcessDelayed fired: {Thread.CurrentThread.ManagedThreadId}");
+
+                Dispatcher.BeginInvoke(new Action(() => DelayedReRender?.Invoke(this, new EventArgs())),
+                    DispatcherPriority.Background);
+            });
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void ScrollToTop()
+        {
+            viewPanel.ScrollToTop();
+        }
+
+        public void ScrollToBottom()
+        {
+            viewPanel.ScrollToBottom();
         }
     }
 }

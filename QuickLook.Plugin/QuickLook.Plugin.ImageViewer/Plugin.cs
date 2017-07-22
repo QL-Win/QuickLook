@@ -15,11 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using ImageMagick;
+using XamlAnimatedGif;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -69,11 +71,14 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void View(string path, ContextObject context)
         {
-            _ip = new ImagePanel(path);
+            _ip = new ImagePanel();
+
             context.ViewerContent = _ip;
             context.Title = _imageSize.IsEmpty
                 ? $"{Path.GetFileName(path)}"
                 : $"{Path.GetFileName(path)} ({_imageSize.Width}×{_imageSize.Height})";
+
+            LoadImage(_ip, path);
 
             context.IsBusy = false;
         }
@@ -82,6 +87,25 @@ namespace QuickLook.Plugin.ImageViewer
         {
             Directory.SetCurrentDirectory(App.AppPath);
             _ip = null;
+        }
+
+        private void LoadImage(ImagePanel ui, string path)
+        {
+            if (Path.GetExtension(path).ToLower() == ".gif")
+                AnimationBehavior.SetSourceUri(ui.viewPanelImage, new Uri(path));
+
+            using (var image = new MagickImage(path))
+            {
+                image.Rotate(image.Orientation == OrientationType.RightTop
+                    ? 90
+                    : image.Orientation == OrientationType.BottomRight
+                        ? 180
+                        : image.Orientation == OrientationType.LeftBotom
+                            ? 270
+                            : 0);
+
+                ui.Source = image.ToBitmapSource();
+            }
         }
     }
 }
