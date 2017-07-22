@@ -34,6 +34,8 @@ namespace QuickLook.Plugin.PDFViewer
     {
         private const double MinZoomFactor = 0.1d;
         private const double MaxZoomFactor = 3d;
+        private int _changePageDeltaSum;
+
         private bool _pdfLoaded;
         private double _viewRenderFactor = 1d;
 
@@ -103,9 +105,23 @@ namespace QuickLook.Plugin.PDFViewer
 
             const double tolerance = 0.0001d;
             if (Math.Abs(pos.Y) < tolerance && delta > 0)
+            {
+                _changePageDeltaSum += delta;
+                if (Math.Abs(_changePageDeltaSum) < 20)
+                    return;
+
                 PrevPage();
-            else if (Math.Abs(pos.Y - size.Height) < tolerance && delta < 0)
+                _changePageDeltaSum = 0;
+            }
+            else if (Math.Abs(pos.Y - size.Height) < tolerance && delta < -0)
+            {
+                _changePageDeltaSum += delta;
+                if (Math.Abs(_changePageDeltaSum) < 20)
+                    return;
+
                 NextPage();
+                _changePageDeltaSum = 0;
+            }
         }
 
         private void NextPage()
@@ -193,7 +209,7 @@ namespace QuickLook.Plugin.PDFViewer
             OnPropertyChanged("PageIds");
 
             CurrentPage = 0;
-            pagePanel.DoZoomToFit(true);
+            pagePanel.DoZoomToFit();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

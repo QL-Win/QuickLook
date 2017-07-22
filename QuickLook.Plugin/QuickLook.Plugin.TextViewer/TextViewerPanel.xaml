@@ -11,6 +11,6 @@
              UseLayoutRounding="True">
     <Grid>
         <avalonEdit:TextEditor x:Name="viewer" Background="#00FFFFFF" FontSize="14" ShowLineNumbers="True"
-                               WordWrap="True" IsReadOnly="True" />
+                               WordWrap="True" IsReadOnly="True" IsManipulationEnabled="True" />
     </Grid>
 </UserControl>

@@ -18,6 +18,7 @@
 using System.IO;
 using System.Text;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 
@@ -32,10 +33,46 @@ namespace QuickLook.Plugin.TextViewer
         {
             InitializeComponent();
 
+            viewer.ManipulationInertiaStarting += Viewer_ManipulationInertiaStarting;
+            viewer.ManipulationStarting += Viewer_ManipulationStarting;
+            viewer.ManipulationDelta += Viewer_ManipulationDelta;
+
+            viewer.PreviewMouseWheel += Viewer_MouseWheel;
+
             viewer.FontFamily =
                 new FontFamily(context.GetString("Editor_FontFamily", failsafe: "Consolas"));
 
             LoadFile(path);
+        }
+
+        private void Viewer_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
+        {
+            e.TranslationBehavior = new InertiaTranslationBehavior
+            {
+                InitialVelocity = e.InitialVelocities.LinearVelocity,
+                DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0)
+            };
+        }
+
+        private void Viewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+
+            viewer.ScrollToVerticalOffset(viewer.VerticalOffset - e.Delta);
+        }
+
+        private void Viewer_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
+        {
+            e.Handled = true;
+
+            var delta = e.DeltaManipulation;
+            viewer.ScrollToVerticalOffset(viewer.VerticalOffset - delta.Translation.Y);
+        }
+
+        private void Viewer_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
+        {
+            e.ManipulationContainer = this;
+            e.Mode = ManipulationModes.Translate;
         }
 
         private void LoadFile(string path)

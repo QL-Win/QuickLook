@@ -56,6 +56,7 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
             viewPanel.MouseMove += ViewPanel_MouseMove;
 
+            viewPanel.ManipulationInertiaStarting += ViewPanel_ManipulationInertiaStarting;
             viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
             viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
         }
@@ -128,7 +129,16 @@ namespace QuickLook.Plugin.ImageViewer
         private void ImagePanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (ZoomToFit)
-                DoZoomToFit(false);
+                DoZoomToFit();
+        }
+
+        private void ViewPanel_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
+        {
+            e.TranslationBehavior = new InertiaTranslationBehavior
+            {
+                InitialVelocity = e.InitialVelocities.LinearVelocity,
+                DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0)
+            };
         }
 
         private void ViewPanel_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
@@ -220,7 +230,7 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ScrollToVerticalOffset(point.Y);
         }
 
-        public void DoZoomToFit(bool suppressEvent)
+        public void DoZoomToFit()
         {
             if (viewPanelImage.Source == null)
                 return;
@@ -228,7 +238,7 @@ namespace QuickLook.Plugin.ImageViewer
             var factor = Math.Min(viewPanel.ActualWidth / viewPanelImage.Source.Width,
                 viewPanel.ActualHeight / viewPanelImage.Source.Height);
 
-            Zoom(factor, true, suppressEvent);
+            Zoom(factor, true);
         }
 
         public void ResetZoom()
