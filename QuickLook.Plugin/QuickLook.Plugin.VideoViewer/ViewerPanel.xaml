@@ -24,7 +24,7 @@
                                  Height="16" Width="16" Margin="5,5" Foreground="Gray"
                                  Cursor="Hand" />
                 <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Orientation="Horizontal" Margin="10,0,0,0">
+                            Orientation="Horizontal" Margin="10,0,5,0">
                     <TextBlock FontSize="14"
                                Text="{Binding Position, ElementName=mediaElement,Converter={StaticResource DecimalToTimeSpanConverter}}" />
                     <TextBlock FontSize="14" Text=" / " />
