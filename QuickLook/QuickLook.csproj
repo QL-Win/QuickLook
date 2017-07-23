@@ -144,7 +144,7 @@
     <Compile Include="Plugin\InfoPanel\InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Plugin\InfoPanel\PluginInterface.cs" />
+    <Compile Include="Plugin\InfoPanel\Plugin.cs" />
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="Helpers\DpiHelper.cs" />

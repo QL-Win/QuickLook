@@ -1,4 +1,4 @@
-// Copyright � 2017 Paddy Xu
+﻿// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 

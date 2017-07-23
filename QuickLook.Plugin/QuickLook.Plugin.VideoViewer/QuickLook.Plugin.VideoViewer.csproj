@@ -82,7 +82,7 @@
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
     <Compile Include="DoubleToHMSConverter.cs" />
-    <Compile Include="PluginInterface.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="ViewerPanel.xaml.cs">
       <DependentUpon>ViewerPanel.xaml</DependentUpon>
       <SubType>Code</SubType>

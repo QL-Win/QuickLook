@@ -21,7 +21,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.IPreviewHandlers
 {
-    public class PluginInterface : IViewer
+    public class Plugin : IViewer
     {
         private PreviewPanel _panel;
 
@@ -88,7 +88,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _panel = null;
         }
 
-        ~PluginInterface()
+        ~Plugin()
         {
             Cleanup();
         }

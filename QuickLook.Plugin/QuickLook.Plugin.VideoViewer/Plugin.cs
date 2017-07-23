@@ -23,7 +23,7 @@ using Unosquare.FFmpegMediaElement;
 
 namespace QuickLook.Plugin.VideoViewer
 {
-    public class PluginInterface : IViewer
+    public class Plugin : IViewer
     {
         private ViewerPanel _vp;
 

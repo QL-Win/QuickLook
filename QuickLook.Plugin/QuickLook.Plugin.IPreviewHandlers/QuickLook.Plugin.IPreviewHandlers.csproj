@@ -69,7 +69,7 @@
     </Compile>
     <Compile Include="IInitializeWithFile.cs" />
     <Compile Include="IPreviewHandler.cs" />
-    <Compile Include="PluginInterface.cs">
+    <Compile Include="Plugin.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
