@@ -18,6 +18,7 @@
 using System.IO;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Highlighting;
+using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer
 {
@@ -39,26 +40,21 @@ namespace QuickLook.Plugin.TextViewer
 
             const long MAX_SIZE = 20 * 1024 * 1024;
 
-            // if there is a possible highlighting scheme (by file extension), treat it as a plain text file
+            if (Path.GetExtension(path).ToLower() == ".txt")
+                return new FileInfo(path).Length <= MAX_SIZE;
+
+            // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
             if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
                 return new FileInfo(path).Length <= MAX_SIZE;
 
-            // otherwise, read the first 512 bytes as string (StreamReader handles encoding automatically),
-            // check whether they are all printable chars. 
-            using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            // otherwise, read the first 10KB, check if we can get something. 
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                var buffer = new char[512];
-                var len = sr.Read(buffer, 0, 512);
+                const int bufferLength = 10 * 1024;
+                var buffer = new byte[bufferLength];
+                s.Read(buffer, 0, bufferLength);
 
-                for (var i = 0; i < len; i++)
-                {
-                    if (!char.IsControl(buffer[i])) continue;
-
-                    if (buffer[i] != '\r' && buffer[i] != '\n' && buffer[i] != '\t')
-                        return false;
-                }
-
-                return new FileInfo(path).Length <= MAX_SIZE;
+                return CharsetDetector.DetectFromBytes(buffer).Detected != null && s.Length <= MAX_SIZE;
             }
         }
 
@@ -80,7 +76,7 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Cleanup()
         {
-            _tvp = null;
+            _tvp.viewer = null;
         }
     }
 }

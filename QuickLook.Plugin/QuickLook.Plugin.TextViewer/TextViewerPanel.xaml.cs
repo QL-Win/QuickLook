@@ -21,6 +21,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
+using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer
 {
@@ -79,7 +80,11 @@ namespace QuickLook.Plugin.TextViewer
         {
             using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                viewer.Encoding = FileEncoding.DetectFileEncoding(s, Encoding.Default);
+                const int bufferLength = 1 * 1024 * 1024;
+                var buffer = new byte[bufferLength];
+                s.Read(buffer, 0, bufferLength);
+
+                viewer.Encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
             }
 
             viewer.Load(path);
