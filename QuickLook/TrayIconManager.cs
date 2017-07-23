@@ -66,10 +66,11 @@ namespace QuickLook
             _icon.Visible = false;
         }
 
-        public void ShowNotification(string title, string content, bool isError = false, Action clickEvent = null,
+        public void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
+            Action clickEvent = null,
             Action closeEvent = null)
         {
-            _icon.ShowBalloonTip(5000, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
+            _icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
             _icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
             _icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
 

@@ -68,7 +68,9 @@ namespace QuickLook.Helpers
                             ViewWindowManager.GetInstance().InvokeViewer(changeLogPath);
                             TrayIconManager.GetInstance().ShowNotification("",
                                 string.Format(TranslationHelper.GetString("Update_Found"), nVersion),
-                                clickEvent: () => Process.Start(
+                                timeout: 20000,
+                                clickEvent:
+                                () => Process.Start(
                                     @"https://github.com/xupefei/QuickLook/releases/latest"));
                         });
                 }
