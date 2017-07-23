@@ -94,6 +94,8 @@ namespace QuickLook
             if (!Settings.Default.Upgraded)
                 return;
 
+            Updater.CollectAndShowReleaseNotes();
+
             Settings.Default.Upgrade();
             Settings.Default.Upgraded = false;
             Settings.Default.Save();

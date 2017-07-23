@@ -30,12 +30,12 @@ namespace QuickLook
     internal class ViewWindowManager : IDisposable
     {
         private static ViewWindowManager _instance;
-
-        private MainWindowNoTransparent _viewWindowNoTransparent;
-        private MainWindowTransparent _viewWindowTransparent;
         private MainWindowTransparent _currentMainWindow;
 
         private string _path = string.Empty;
+
+        private MainWindowNoTransparent _viewWindowNoTransparent;
+        private MainWindowTransparent _viewWindowTransparent;
 
         internal ViewWindowManager()
         {
@@ -148,10 +148,10 @@ namespace QuickLook
             if (e.FocusedFile == _path)
                 return;
 
-            Debug.WriteLine($"SwitchPreviewRemoteInvoke: {e.FocusedFile}");
-
             if (string.IsNullOrEmpty(e.FocusedFile))
                 return;
+
+            Debug.WriteLine($"SwitchPreviewRemoteInvoke: {e.FocusedFile}");
 
             _currentMainWindow?.Dispatcher.BeginInvoke(new Action(SwitchPreview), DispatcherPriority.ApplicationIdle);
         }
@@ -173,13 +173,13 @@ namespace QuickLook
                 FocusMonitor.GetInstance().Heartbeat -= SwitchPreviewRemoteInvoke;
             }
         }
-        
+
         internal void ForgetCurrentWindow()
         {
             StopFocusMonitor();
 
             if (ReferenceEquals(_currentMainWindow, _viewWindowTransparent))
-                _viewWindowTransparent=new MainWindowTransparent();
+                _viewWindowTransparent = new MainWindowTransparent();
             else
                 _viewWindowNoTransparent = new MainWindowNoTransparent();
 
@@ -188,7 +188,7 @@ namespace QuickLook
 
         internal bool InvokeViewer(string path = null, bool closeIfSame = false)
         {
-            if(closeIfSame)
+            if (closeIfSame)
                 if (_currentMainWindow.Visibility == Visibility.Visible && path == _path)
                 {
                     ClosePreview();
@@ -223,7 +223,7 @@ namespace QuickLook
                 : _viewWindowNoTransparent;
             if (!ReferenceEquals(oldWindow, _currentMainWindow))
                 oldWindow.BeginHide();
-            
+
             _currentMainWindow.BeginShow(matchedPlugin, _path, CurrentPluginFailed);
         }
 

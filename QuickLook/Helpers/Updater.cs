@@ -38,15 +38,10 @@ namespace QuickLook.Helpers
             {
                 try
                 {
-                    var web = new WebClientEx(15 * 1000);
-                    web.Headers.Add(HttpRequestHeader.UserAgent, "Wget/1.9.1");
+                    var json = DownloadJson("https://api.github.com/repos/xupefei/QuickLook/releases/latest");
 
-                    var response = web.DownloadDataStream("https://api.github.com/repos/xupefei/QuickLook/releases");
-
-                    var json = JsonConvert.DeserializeObject<dynamic>(new StreamReader(response).ReadToEnd());
-
-                    var nVersion = (string) json[0]["tag_name"];
-                    //nVersion = "0.2.1";
+                    var nVersion = (string) json["tag_name"];
+                    //nVersion = "9.2.1";
 
                     if (new Version(nVersion) <= Assembly.GetExecutingAssembly().GetName().Version)
                     {
@@ -57,15 +52,11 @@ namespace QuickLook.Helpers
                         return;
                     }
 
-                    string notes = CollectReleaseNotes(json);
-
-                    var changeLogPath = Path.GetTempFileName() + ".md";
-                    File.WriteAllText(changeLogPath, notes);
+                    CollectAndShowReleaseNotes();
 
                     Application.Current.Dispatcher.Invoke(
                         () =>
                         {
-                            ViewWindowManager.GetInstance().InvokeViewer(changeLogPath);
                             TrayIconManager.GetInstance().ShowNotification("",
                                 string.Format(TranslationHelper.GetString("Update_Found"), nVersion),
                                 timeout: 20000,
@@ -84,17 +75,48 @@ namespace QuickLook.Helpers
             });
         }
 
-        private static string CollectReleaseNotes(dynamic json)
+        public static void CollectAndShowReleaseNotes()
         {
-            var notes = string.Empty;
-
-            foreach (var item in json)
+            Task.Run(() =>
             {
-                notes += $"# {item["name"]}\r\n\r\n";
-                notes += item["body"] + "\r\n\r\n";
-            }
+                try
+                {
+                    var json = DownloadJson("https://api.github.com/repos/xupefei/QuickLook/releases");
 
-            return notes;
+                    var notes = string.Empty;
+
+                    foreach (var item in json)
+                    {
+                        notes += $"# {item["name"]}\r\n\r\n";
+                        notes += item["body"] + "\r\n\r\n";
+                    }
+
+                    var changeLogPath = Path.GetTempFileName() + ".md";
+                    File.WriteAllText(changeLogPath, notes);
+
+                    Application.Current.Dispatcher.Invoke(() => ViewWindowManager.GetInstance()
+                        .InvokeViewer(changeLogPath));
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    Application.Current.Dispatcher.Invoke(
+                        () => TrayIconManager.GetInstance().ShowNotification("",
+                            string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
+                }
+            });
+        }
+
+        private static dynamic DownloadJson(string url)
+        {
+            var web = new WebClientEx(15 * 1000);
+            web.Headers.Add(HttpRequestHeader.UserAgent, "Wget/1.9.1");
+
+            var response =
+                web.DownloadDataStream(url);
+
+            var json = JsonConvert.DeserializeObject<dynamic>(new StreamReader(response).ReadToEnd());
+            return json;
         }
     }
 }
