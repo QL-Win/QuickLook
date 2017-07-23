@@ -101,7 +101,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
                 if (useReader.Any(i => path.EndsWith(i)))
                 {
-                    var reader = ReaderFactory.Open(stream);
+                    var reader = ReaderFactory.Open(stream, new ChardetReaderOptions());
 
                     _type = reader.ArchiveType.ToString();
 
@@ -113,7 +113,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                 }
                 else
                 {
-                    var archive = ArchiveFactory.Open(stream);
+                    var archive = ArchiveFactory.Open(stream, new ChardetReaderOptions());
 
                     _type = archive.Type.ToString();
 
@@ -138,8 +138,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                     if (_fileEntries.ContainsKey(f))
                         return;
 
-                    ArchiveFileEntry parent;
-                    _fileEntries.TryGetValue(GetDirectoryName(f), out parent);
+                    _fileEntries.TryGetValue(GetDirectoryName(f), out ArchiveFileEntry parent);
 
                     var afe = new ArchiveFileEntry(Path.GetFileName(f), true, parent);
 
@@ -151,8 +150,7 @@ namespace QuickLook.Plugin.ArchiveViewer
             {
                 var file = pf.Last();
 
-                ArchiveFileEntry parent;
-                _fileEntries.TryGetValue(GetDirectoryName(file), out parent);
+                _fileEntries.TryGetValue(GetDirectoryName(file), out ArchiveFileEntry parent);
 
                 _fileEntries.Add(file, new ArchiveFileEntry(Path.GetFileName(entry.Key), false, parent)
                 {

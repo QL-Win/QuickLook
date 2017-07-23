@@ -52,13 +52,16 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
+    <Reference Include="SharpCompress, Version=0.18.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpCompress.0.18.0\lib\net45\SharpCompress.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
+    <Reference Include="UtfUnknown, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90217ce7a23260d4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\UTF.Unknown.1.0.0-beta1\lib\net40\UtfUnknown.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +72,7 @@
       <DependentUpon>ArchiveInfoPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ArchiveFileEntry.cs" />
+    <Compile Include="ChardetReaderOptions.cs" />
     <Compile Include="IconManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Converters.cs" />
