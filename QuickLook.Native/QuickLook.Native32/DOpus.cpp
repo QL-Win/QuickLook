@@ -62,10 +62,10 @@ void DOpus::GetSelected(PWCHAR buffer)
 	PWCHAR data = DOPUS_IPC_LP_DATA;
 	COPYDATASTRUCT cds;
 	cds.dwData = DOPUS_IPC_LP_INFO;
-	cds.cbData = (wcslen(data) + 1) * sizeof WCHAR;
+	cds.cbData = static_cast<DWORD>(wcslen(data) + 1) * sizeof WCHAR;
 	cds.lpData = data;
 
-	auto ret = SendMessage(FindWindow(DOPUS_CLASS, DOPUS_NAME), WM_COPYDATA, (WPARAM)hMsgWnd, (LPARAM)&cds);
+	auto ret = SendMessage(FindWindow(DOPUS_CLASS, DOPUS_NAME), WM_COPYDATA, reinterpret_cast<WPARAM>(hMsgWnd), reinterpret_cast<LPARAM>(&cds));
 	if (!ret)
 		return;
 
