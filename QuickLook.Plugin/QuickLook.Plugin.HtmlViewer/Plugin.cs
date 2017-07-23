@@ -41,6 +41,8 @@ namespace QuickLook.Plugin.HtmlViewer
 
             switch (Path.GetExtension(path).ToLower())
             {
+                case ".mht":
+                case ".mhtml":
                 case ".html":
                 case ".htm":
                     return true;
