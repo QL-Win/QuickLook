@@ -55,7 +55,13 @@ namespace QuickLook
                     var can = false;
                     try
                     {
+                        var timer = new Stopwatch();
+                        timer.Start();
+
                         can = plugin.CanHandle(path);
+
+                        timer.Stop();
+                        Debug.WriteLine($"{plugin.GetType()}: {can}, {timer.ElapsedMilliseconds}ms");
                     }
                     catch (Exception)
                     {

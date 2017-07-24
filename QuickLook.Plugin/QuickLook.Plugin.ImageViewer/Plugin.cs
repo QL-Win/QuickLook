@@ -35,7 +35,7 @@ namespace QuickLook.Plugin.ImageViewer
             ".orf", ".pef", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw",
             ".tif", ".x3f",
             // normal
-            ".bmp", ".gif", ".ico", ".jpg", ".jpeg", ".png", ".psd", ".svg", ".wdp", ".tiff", ".tga"
+            ".bmp", ".gif", ".ico", ".icon", ".jpg", ".jpeg", ".png", ".psd", ".svg", ".wdp", ".tiff", ".tga", ".webp"
         };
         private Size _imageSize;
         private ImagePanel _ip;

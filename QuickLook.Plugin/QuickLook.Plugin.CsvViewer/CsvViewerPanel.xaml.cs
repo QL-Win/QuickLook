@@ -41,7 +41,7 @@ namespace QuickLook.Plugin.CsvViewer
 
         public void LoadFile(string path)
         {
-            const int limit = 100000;
+            const int limit = 10000;
             var binded = false;
 
             using (var sr = new StreamReader(path))
