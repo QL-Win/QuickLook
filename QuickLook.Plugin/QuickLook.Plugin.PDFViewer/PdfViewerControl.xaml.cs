@@ -160,12 +160,12 @@ namespace QuickLook.Plugin.PDFViewer
             var bitmap = PdfHandle.GetPage(CurrentPage, factor);
             var image = bitmap.ToBitmapSource();
             bitmap.Dispose();
-
-            pagePanel.ResetZoom();
+            
             pagePanel.Source = image;
+            pagePanel.ResetZoom();
 
             _viewRenderFactor = factor;
-
+            
             pagePanel.SetScrollPosition(pos);
 
             Dispatcher.Delay(500, t => GC.Collect());
