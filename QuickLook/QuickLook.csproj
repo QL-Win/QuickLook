@@ -263,6 +263,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)Scripts\update-version.cmd" "$(SolutionDir)" "$(SolutionDir)GitVersion.cs"</PreBuildEvent>
+    <PreBuildEvent>powershell -file "$(SolutionDir)Scripts\update-version.ps1"
+</PreBuildEvent>
   </PropertyGroup>
 </Project>
