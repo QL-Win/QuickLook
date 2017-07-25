@@ -293,3 +293,5 @@ __pycache__/
 /Build/*
 !/Build/Assets
 !/Build/AppxManifest.*
+!/Build/assetslayout.resfiles
+!/Build/priconfig.xml
