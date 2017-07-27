@@ -42,7 +42,7 @@ void HelperMethods::GetSelectedInternal(CComQIPtr<IWebBrowserApp> pwba, PWCHAR b
 void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 {
 	FORMATETC formatetc;
-	STGMEDIUM medium;
+	STGMEDIUM medium = {sizeof medium};
 
 	formatetc.cfFormat = CF_HDROP;
 	formatetc.ptd = nullptr;

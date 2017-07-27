@@ -51,7 +51,7 @@ bool WoW64HookHelper::Launch()
 	auto p = wcsrchr(fullPath, L'\\');
 	memcpy(p, HELPER_FILE, wcslen(HELPER_FILE) * sizeof WCHAR);
 
-	STARTUPINFO si = {'\0'};
+	STARTUPINFO si = {sizeof si};
 	PROCESS_INFORMATION pi = {nullptr};
 	si.cb = sizeof si;
 
@@ -70,9 +70,9 @@ void WoW64HookHelper::createJob()
 
 	hJob = CreateJobObject(nullptr, nullptr);
 
-	JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation = {'\0'};
+	JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation = {sizeof BasicLimitInformation};
 	BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
-	JOBOBJECT_EXTENDED_LIMIT_INFORMATION lpJobObjectInfo = {'\0'};
+	JOBOBJECT_EXTENDED_LIMIT_INFORMATION lpJobObjectInfo = {sizeof lpJobObjectInfo};
 	lpJobObjectInfo.BasicLimitInformation = BasicLimitInformation;
 
 	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &lpJobObjectInfo, sizeof JOBOBJECT_EXTENDED_LIMIT_INFORMATION);

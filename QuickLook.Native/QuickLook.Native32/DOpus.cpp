@@ -111,7 +111,7 @@ void DOpus::ParseXmlBuffer(PWCHAR buffer)
 
 void DOpus::PrepareMessageWindow()
 {
-	WNDCLASSEX wx = {'\0'};
+	WNDCLASSEX wx = {sizeof wx};
 	wx.cbSize = sizeof(WNDCLASSEX);
 	wx.lpfnWndProc = msgWindowProc;
 	wx.lpszClassName = MSGWINDOW_CLASS;

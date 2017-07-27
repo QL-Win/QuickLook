@@ -106,12 +106,12 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 	for (auto i = 0; i < count; i++)
 	{
 		VARIANT vi;
+		VariantInit(&vi);
 		V_VT(&vi) = VT_I4;
 		V_I4(&vi) = i;
 
 		CComPtr<IDispatch> pdisp;
-		// ReSharper disable once CppSomeObjectMembersMightNotBeInitialized
-		if (FAILED(psw->Item(vi, &pdisp)))
+		if (S_OK != psw->Item(vi, &pdisp))
 			continue;
 
 		CComQIPtr<IWebBrowserApp> pwba;
@@ -139,7 +139,8 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
 		return;
 
-	VARIANT pvarLoc = {VT_EMPTY};
+	VARIANT pvarLoc;
+	VariantInit(&pvarLoc);
 	long phwnd;
 	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pwba))))
 		return;

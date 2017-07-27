@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +25,7 @@ namespace QuickLook.NativeMethods
 {
     internal static class QuickLook
     {
-        private const int MaxPath = 260;
+        private const int MaxPath = 8192;
 
         [DllImport("QuickLook.Native32.dll", EntryPoint = "Init",
             CallingConvention = CallingConvention.Cdecl)]
@@ -51,30 +53,51 @@ namespace QuickLook.NativeMethods
 
         internal static void Init()
         {
-            if (App.Is64Bit)
-                Init_64();
-            else
-                Init_32();
+            try
+            {
+                if (App.Is64Bit)
+                    Init_64();
+                else
+                    Init_32();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         internal static FocusedWindowType GetFocusedWindowType()
         {
-            return App.Is64Bit ? GetFocusedWindowTypeNative_64() : GetFocusedWindowTypeNative_32();
+            try
+            {
+                return App.Is64Bit ? GetFocusedWindowTypeNative_64() : GetFocusedWindowTypeNative_32();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return FocusedWindowType.Invalid;
+            }
         }
 
         internal static string GetCurrentSelection()
         {
             StringBuilder sb = null;
-            // communicate with COM in a separate thread
-            Task.Run(() =>
+            try
             {
-                sb = new StringBuilder(MaxPath);
-                if (App.Is64Bit)
-                    GetCurrentSelectionNative_64(sb);
-                else
-                    GetCurrentSelectionNative_32(sb);
-            }).Wait();
-
+                // communicate with COM in a separate thread
+                Task.Run(() =>
+                {
+                    sb = new StringBuilder(MaxPath);
+                    if (App.Is64Bit)
+                        GetCurrentSelectionNative_64(sb);
+                    else
+                        GetCurrentSelectionNative_32(sb);
+                }).Wait();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             return sb?.ToString() ?? string.Empty;
         }
 
