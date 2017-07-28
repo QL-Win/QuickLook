@@ -98,12 +98,13 @@
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
-                    <fa:ImageAwesome DockPanel.Dock="Left" x:Name="buttonPin" Icon="ThumbTack"
+                    <fa:ImageAwesome DockPanel.Dock="Left" x:Name="buttonPin"
                                      WindowChrome.IsHitTestVisibleInChrome="True"
                                      Width="14" Height="14" Margin="10,0"
                                      Cursor="Hand">
                         <fa:ImageAwesome.Style>
                             <Style TargetType="{x:Type fa:ImageAwesome}">
+                                <Setter Property="Icon" Value="ThumbTack" />
                                 <Setter Property="Foreground" Value="#E5868686" />
                                 <Setter Property="LayoutTransform">
                                     <Setter.Value>
@@ -111,6 +112,17 @@
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition
+                                                Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                Value="True" />
+                                            <Condition Binding="{Binding Pinned, ElementName=mainWindow}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Icon" Value="TimesCircle" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
                                     <DataTrigger Binding="{Binding Pinned, ElementName=mainWindow}" Value="True">
                                         <Setter Property="Foreground" Value="#E53C3C3C" />
                                         <Setter Property="LayoutTransform">

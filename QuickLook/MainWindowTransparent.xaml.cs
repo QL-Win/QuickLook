@@ -56,7 +56,15 @@ namespace QuickLook
 
             buttonPin.MouseLeftButtonUp += (sender, e) =>
             {
-                if (Pinned) return;
+                if (Pinned)
+                {
+                    buttonCloseWindow.RaiseEvent(
+                        new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left)
+                        {
+                            RoutedEvent = MouseLeftButtonUpEvent
+                        });
+                    return;
+                }
                 Pinned = true;
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
@@ -194,10 +202,17 @@ namespace QuickLook
 
             ContextObject.Reset();
 
-            Plugin?.Cleanup();
+            try
+            {
+                Plugin?.Cleanup();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             Plugin = null;
 
-            ProcessHelper.PerformAggressiveGC();
+            Path = string.Empty;
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path, Action<ExceptionDispatchInfo> exceptionHandler)
