@@ -57,8 +57,6 @@ namespace QuickLook.Plugin.VideoViewer
             using (var element = new MediaElement {Source = new Uri(path)})
             {
                 context.SetPreferredSizeFit(new Size(element.NaturalVideoWidth, element.NaturalVideoHeight), 0.6);
-                context.PreferredSize = new Size(context.PreferredSize.Width,
-                    context.PreferredSize.Height + 26); // add control bar
             }
         }
 

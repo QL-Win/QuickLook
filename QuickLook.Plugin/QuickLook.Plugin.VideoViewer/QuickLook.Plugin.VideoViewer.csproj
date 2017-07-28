@@ -70,7 +70,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="HorizontalSliderStyle.xaml">
+    <Page Include="Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -81,7 +81,7 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
-    <Compile Include="DoubleToHMSConverter.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="ViewerPanel.xaml.cs">
       <DependentUpon>ViewerPanel.xaml</DependentUpon>

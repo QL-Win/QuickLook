@@ -57,4 +57,22 @@ namespace QuickLook.Plugin.VideoViewer
             throw new NotImplementedException();
         }
     }
+
+    public sealed class BooleanToVisibilityHiddenConverter : DependencyObject, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Visibility.Hidden;
+
+            var v = (bool) value;
+
+            return v ? Visibility.Hidden : Visibility.Visible;
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

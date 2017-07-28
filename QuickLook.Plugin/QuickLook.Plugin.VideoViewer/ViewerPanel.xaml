@@ -7,50 +7,122 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:ffmpeg="clr-namespace:Unosquare.FFmpegMediaElement;assembly=Unosquare.FFmpegMediaElement"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="449.167" d:DesignWidth="767">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
                 <local:DoubleToTimeSpanConverter x:Key="DoubleToTimeSpanConverter" />
                 <local:DecimalToTimeSpanConverter x:Key="DecimalToTimeSpanConverter" />
+                <local:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="HorizontalSliderStyle.xaml" />
+                    <ResourceDictionary Source="Styles.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
-        <DockPanel>
-            <DockPanel DockPanel.Dock="Bottom" Height="26" Margin="-1,0,0,0">
-                <fa:ImageAwesome DockPanel.Dock="Left" x:Name="buttonPlayPause" Icon="PauseCircleOutline"
-                                 Height="16" Width="16" Margin="5,5" Foreground="Gray"
-                                 Cursor="Hand" />
-                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Orientation="Horizontal" Margin="10,0,5,0">
-                    <TextBlock FontSize="14"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <ffmpeg:MediaElement Grid.RowSpan="255" x:Name="mediaElement" />
+
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Offset="0.0" Color="#00000000" />
+                    <GradientStop Offset="0.25" Color="#66000000" />
+                    <GradientStop Offset="1" Color="#D6000000" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="75" />
+            </Grid.RowDefinitions>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
+                    Value="{Binding Position, ElementName=mediaElement}"
+                    Maximum="{Binding NaturalDuration, ElementName=mediaElement, Mode=OneWay}" Grid.Row="1" />
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Orientation="Horizontal" Margin="20,0,0,0">
+                    <Grid x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}">
+                        <fa:ImageAwesome Height="30" Width="30" Foreground="#FFEFEFEF">
+                            <fa:ImageAwesome.Style>
+                                <Style TargetType="fa:ImageAwesome">
+                                    <Setter Property="Icon" Value="VolumeOff" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMuted, ElementName=mediaElement}"
+                                                     Value="False">
+                                            <Setter Property="Icon" Value="VolumeUp" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </fa:ImageAwesome.Style>
+                        </fa:ImageAwesome>
+                    </Grid>
+                    <Slider Style="{StaticResource CustomSliderStyle}" Width="80" Maximum="1"
+                            Value="{Binding Volume, ElementName=mediaElement}"
+                            Visibility="{Binding IsMuted, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityHiddenConverter}}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Grid x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}">
+                        <fa:ImageAwesome Height="30" Width="30" Foreground="#FFEFEFEF">
+                            <fa:ImageAwesome.Style>
+                                <Style>
+                                    <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPlaying, ElementName=mediaElement}"
+                                                     Value="False">
+                                            <Setter Property="fa:ImageAwesome.Icon" Value="Play" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </fa:ImageAwesome.Style>
+                        </fa:ImageAwesome>
+                    </Grid>
+                    <Grid Width="15" />
+                    <Grid x:Name="buttonStop" Style="{StaticResource ControlButtonStyle}">
+                        <fa:ImageAwesome Icon="Stop" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Orientation="Horizontal" Margin="0,0,20,0">
+                    <TextBlock FontSize="16" Foreground="#FFEFEFEF"
                                Text="{Binding Position, ElementName=mediaElement,Converter={StaticResource DecimalToTimeSpanConverter}}" />
-                    <TextBlock FontSize="14" Text=" / " />
-                    <TextBlock FontSize="14"
+                    <TextBlock FontSize="16" Text=" / " Foreground="#FFEFEFEF" />
+                    <TextBlock FontSize="16" Foreground="#FFEFEFEF"
                                Text="{Binding NaturalDuration, StringFormat=hh:mm:ss, ElementName=mediaElement,Converter={StaticResource DoubleToTimeSpanConverter}}" />
                 </StackPanel>
-                <Slider x:Name="sliderProgress" Style="{StaticResource HorizontalSlider}"
-                        Margin="0,0,0,0" VerticalAlignment="Center"
-                        Value="{Binding Position, ElementName=mediaElement}"
-                        Maximum="{Binding NaturalDuration, ElementName=mediaElement, Mode=OneWay}" />
-            </DockPanel>
-            <Grid>
-                <ffmpeg:MediaElement x:Name="mediaElement" />
-                <Border x:Name="buttonMute" VerticalAlignment="Bottom" HorizontalAlignment="Right" Cursor="Hand"
-                        Margin="10,10" Width="100" Height="100">
-                    <Border.Background>
-                        <SolidColorBrush Color="Gray" Opacity="0.9" />
-                    </Border.Background>
-                    <fa:ImageAwesome Icon="VolumeOff"
-                                     Height="60" Width="60" Foreground="White" />
-                </Border>
             </Grid>
-        </DockPanel>
-        <Label x:Name="errorOverlay" Visibility="Collapsed" Background="#CCAAAAAA" VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center">
-            Video load failed.
-        </Label>
+        </Grid>
     </Grid>
 </UserControl>

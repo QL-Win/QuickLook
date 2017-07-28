@@ -16,12 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using FontAwesome.WPF;
 using Unosquare.FFmpegMediaElement;
 
 namespace QuickLook.Plugin.VideoViewer
@@ -40,14 +37,14 @@ namespace QuickLook.Plugin.VideoViewer
             _context = context;
 
             buttonPlayPause.MouseLeftButtonUp += TogglePlayPause;
-            buttonMute.MouseLeftButtonUp += (sender, e) =>
-            {
-                mediaElement.IsMuted = false;
-                buttonMute.Visibility = Visibility.Collapsed;
-            };
+            //buttonMute.MouseLeftButtonUp += (sender, e) =>
+            //{
+            //    mediaElement.IsMuted = false;
+            //    buttonMute.Visibility = Visibility.Collapsed;
+            //};
+            buttonMute.MouseLeftButtonUp += (sender, e) => mediaElement.IsMuted = !mediaElement.IsMuted;
+            buttonStop.MouseLeftButtonUp += (sender, e) => mediaElement.Stop();
 
-            mediaElement.PropertyChanged += ChangePlayPauseButton;
-            mediaElement.MouseLeftButtonUp += TogglePlayPause;
             mediaElement.MediaErrored += ShowErrorNotification;
             mediaElement.MediaFailed += ShowErrorNotification;
         }
@@ -55,6 +52,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void Dispose()
         {
             mediaElement?.Dispose();
+            mediaElement = null;
         }
 
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
@@ -63,16 +61,6 @@ namespace QuickLook.Plugin.VideoViewer
                 mediaElement.Pause();
             else
                 mediaElement.Play();
-        }
-
-        private void ChangePlayPauseButton(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != "IsPlaying" && e.PropertyName != "HasMediaEnded")
-                return;
-
-            buttonPlayPause.Icon = mediaElement.IsPlaying
-                ? FontAwesomeIcon.PauseCircleOutline
-                : FontAwesomeIcon.PlayCircleOutline;
         }
 
         [DebuggerNonUserCode]
