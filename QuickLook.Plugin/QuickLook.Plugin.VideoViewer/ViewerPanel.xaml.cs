@@ -44,6 +44,8 @@ namespace QuickLook.Plugin.VideoViewer
             //};
             buttonMute.MouseLeftButtonUp += (sender, e) => mediaElement.IsMuted = !mediaElement.IsMuted;
             buttonStop.MouseLeftButtonUp += (sender, e) => mediaElement.Stop();
+            buttonBackward.MouseLeftButtonUp += (sender, e) => SeekBackward();
+            buttonForward.MouseLeftButtonUp += (sender, e) => SeekForward();
 
             mediaElement.MediaErrored += ShowErrorNotification;
             mediaElement.MediaFailed += ShowErrorNotification;
@@ -53,6 +55,24 @@ namespace QuickLook.Plugin.VideoViewer
         {
             mediaElement?.Dispose();
             mediaElement = null;
+        }
+
+        private void SeekBackward()
+        {
+            var pos = Convert.ToDouble(mediaElement.Position);
+            var len = mediaElement.NaturalDuration;
+            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+
+            mediaElement.Position = Convert.ToDecimal(pos - delta < 0 ? 0 : pos - delta);
+        }
+
+        private void SeekForward()
+        {
+            var pos = Convert.ToDouble(mediaElement.Position);
+            var len = mediaElement.NaturalDuration;
+            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+
+            mediaElement.Position = Convert.ToDecimal(pos + delta > len ? len : pos + delta);
         }
 
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
