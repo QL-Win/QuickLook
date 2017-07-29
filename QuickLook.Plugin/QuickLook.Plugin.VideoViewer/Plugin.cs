@@ -28,7 +28,7 @@ namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
-        private Size _mediaSize;
+        private FFprobe _probe;
         private ViewerPanel _vp;
 
         public int Priority => int.MaxValue;
@@ -46,24 +46,28 @@ namespace QuickLook.Plugin.VideoViewer
             if (Directory.Exists(path))
                 return false;
 
-            var blacklist = new[]
-            {
-                ".txt", ".jpg", ".bmp"
-            };
+            var blacklist = new[] {".txt", ".jpg", ".bmp", ".tiff"};
 
             if (blacklist.Contains(Path.GetExtension(path).ToLower()))
                 return false;
 
-            return new FFprobe(path).CanDecode();
+            var probe = new FFprobe(path);
+
+            // check if it is a APNG image
+            if (Path.GetExtension(path).ToLower() == ".png" && probe.GetFormatName().ToLower() != "apng")
+                return false;
+
+            return probe.CanDecode();
         }
 
         public void Prepare(string path, ContextObject context)
         {
             var def = new Size(450, 450);
 
-            _mediaSize = new FFprobe(path).GetViewSize();
+            _probe = new FFprobe(path);
+            var mediaSize = _probe.GetViewSize();
 
-            var windowSize = _mediaSize == Size.Empty ? def : _mediaSize;
+            var windowSize = mediaSize == Size.Empty ? def : mediaSize;
             windowSize.Width = Math.Max(def.Width, windowSize.Width);
             windowSize.Height = Math.Max(def.Height, windowSize.Height);
 
@@ -75,14 +79,13 @@ namespace QuickLook.Plugin.VideoViewer
             _vp = new ViewerPanel(context);
 
             context.ViewerContent = _vp;
-
-            Debug.WriteLine("ViewerContent done");
+            
             _vp.LoadAndPlay(path);
-            Debug.WriteLine("LoadAndPlay done");
 
             _vp.mediaElement.MediaOpened += (sender, e) => context.IsBusy = false;
 
-            var info = _mediaSize == Size.Empty ? "Audio" : $"{_mediaSize.Width}×{_mediaSize.Height}";
+            var mediaSize = _probe.GetViewSize();
+            var info = mediaSize == Size.Empty ? "Audio" : $"{mediaSize.Width}×{mediaSize.Height}";
 
             context.Title =
                 $"{Path.GetFileName(path)} ({info})";
@@ -90,6 +93,8 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Cleanup()
         {
+            _probe = null;
+
             _vp?.Dispose();
             _vp = null;
         }

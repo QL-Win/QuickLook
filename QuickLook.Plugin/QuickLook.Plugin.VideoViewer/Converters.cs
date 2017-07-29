@@ -67,7 +67,7 @@ namespace QuickLook.Plugin.VideoViewer
 
             var v = (bool) value;
 
-            return v ? Visibility.Visible : Visibility.Hidden;
+            return v ? Visibility.Visible : Visibility.Collapsed;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -81,11 +81,11 @@ namespace QuickLook.Plugin.VideoViewer
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return Visibility.Hidden;
+                return Visibility.Collapsed;
 
             var v = (bool) value;
 
-            return v ? Visibility.Hidden : Visibility.Visible;
+            return v ? Visibility.Collapsed : Visibility.Visible;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

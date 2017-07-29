@@ -46,8 +46,8 @@ namespace QuickLook.Plugin.VideoViewer
             //};
             buttonMute.MouseLeftButtonUp += (sender, e) => mediaElement.IsMuted = !mediaElement.IsMuted;
             buttonStop.MouseLeftButtonUp += (sender, e) => mediaElement.Stop();
-            buttonBackward.MouseLeftButtonUp += (sender, e) => SeekBackward();
-            buttonForward.MouseLeftButtonUp += (sender, e) => SeekForward();
+            buttonBackward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(-10));
+            buttonForward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(10));
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {
@@ -60,52 +60,44 @@ namespace QuickLook.Plugin.VideoViewer
             };
 
             mediaElement.MediaFailed += ShowErrorNotification;
-            mediaElement.MediaEnded += (s, e) =>
+            /*mediaElement.MediaEnded += (s, e) =>
             {
-                if (!mediaElement.NaturalDuration.HasTimeSpan)
-                {
-                    mediaElement.Stop();
-                    mediaElement.Play();
-                }
-            };
+                if (mediaElement.IsOpen)
+                    if (!mediaElement.NaturalDuration.HasTimeSpan)
+                    {
+                        mediaElement.Stop();
+                        mediaElement.Play();
+                    }
+            };*/
+
+            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 / 50);
         }
 
         public void Dispose()
         {
-            mediaElement?.Stop();
-            mediaElement?.Dispose();
+            try
+            {
+                mediaElement?.Stop();
+                mediaElement?.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             mediaElement = null;
-            Debug.WriteLine("dispose done");
         }
 
-        private void ResumePlaying()
+        private void ChangeVolume(double delta)
         {
-            _wasPlaying = mediaElement.IsPlaying;
+            mediaElement.Volume += delta;
         }
 
-        private void SeekBackward()
-        {
-            _wasPlaying = mediaElement.IsPlaying;
-            mediaElement.Pause();
-
-            var pos = mediaElement.Position;
-            var delta = TimeSpan.FromSeconds(15);
-
-            mediaElement.Position = pos < pos - delta ? TimeSpan.Zero : pos - delta;
-
-            if (_wasPlaying) mediaElement.Play();
-        }
-
-        private void SeekForward()
+        private void Seek(TimeSpan delta)
         {
             _wasPlaying = mediaElement.IsPlaying;
             mediaElement.Pause();
 
-            var pos = mediaElement.Position;
-            var len = mediaElement.NaturalDuration.TimeSpan;
-            var delta = TimeSpan.FromSeconds(15);
-
-            mediaElement.Position = pos + delta > len ? len : pos + delta;
+            mediaElement.Position = mediaElement.Position + delta;
 
             if (_wasPlaying) mediaElement.Play();
         }
@@ -113,9 +105,15 @@ namespace QuickLook.Plugin.VideoViewer
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
         {
             if (mediaElement.IsPlaying)
+            {
                 mediaElement.Pause();
+            }
             else
+            {
+                if (mediaElement.HasMediaEnded)
+                    mediaElement.Stop();
                 mediaElement.Play();
+            }
         }
 
         [DebuggerNonUserCode]
@@ -133,7 +131,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             mediaElement.Source = new Uri(path);
-            mediaElement.MediaOpened += (sender, e) => mediaElement.IsMuted = true;
+            mediaElement.MediaOpened += (sender, e) => mediaElement.Volume = 0.2;
         }
 
         ~ViewerPanel()
