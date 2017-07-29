@@ -18,6 +18,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Xml.XPath;
 
@@ -47,6 +48,7 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.FileName = _probePath;
                 p.StartInfo.Arguments = $"-v quiet -print_format xml -show_streams -show_format \"{media}\"";
+                p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 p.Start();
                 p.WaitForExit();
 
@@ -67,7 +69,7 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
 
         public bool CanDecode()
         {
-            var info = infoNavigator.SelectSingleNode("/ffprobe/streams");
+            var info = infoNavigator.SelectSingleNode("/ffprobe/format");
 
             return info != null;
         }

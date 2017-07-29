@@ -35,7 +35,7 @@ namespace QuickLook.Plugin.ImageViewer
             ".orf", ".pef", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw",
             ".tif", ".x3f",
             // normal
-            ".bmp", ".gif", ".ico", ".icon", ".jpg", ".jpeg", ".png", ".psd", ".svg", ".wdp", ".tiff", ".tga", ".webp"
+            ".bmp", ".ggg", ".ico", ".icon", ".jpg", ".jpeg", ".png", ".psd", ".svg", ".wdp", ".tiff", ".tga", ".webp"
         };
         private Size _imageSize;
         private ImagePanel _ip;
@@ -67,10 +67,15 @@ namespace QuickLook.Plugin.ImageViewer
                 context.SetPreferredSizeFit(_imageSize, 0.8);
             else
                 context.PreferredSize = new Size(1024, 768);
+
+            Directory.SetCurrentDirectory(App.AppPath);
         }
 
         public void View(string path, ContextObject context)
         {
+            // set dcraw.exe for Magick.NET
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
             _ip = new ImagePanel();
 
             context.ViewerContent = _ip;
@@ -81,11 +86,12 @@ namespace QuickLook.Plugin.ImageViewer
             LoadImage(_ip, path);
 
             context.IsBusy = false;
+
+            Directory.SetCurrentDirectory(App.AppPath);
         }
 
         public void Cleanup()
         {
-            Directory.SetCurrentDirectory(App.AppPath);
             _ip = null;
         }
 

@@ -7,26 +7,45 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:ffmpeg="clr-namespace:Unosquare.FFME;assembly=ffme"
              mc:Ignorable="d"
-             Background="#B2454545"
-             d:DesignHeight="449.167" d:DesignWidth="767">
+             x:Name="userControl"
+             Background="#CC4E4E4E"
+             d:DesignHeight="450" d:DesignWidth="450">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
                 <local:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter" />
+                <local:BooleanToVisibilityVisibleConverter x:Key="BooleanToVisibilityVisibleConverter" />
                 <local:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
+                <local:DurationToTimeSpanConverter x:Key="DurationToTimeSpanConverter" />
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="Styles.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="7*" />
-            <RowDefinition Height="3*" />
-        </Grid.RowDefinitions>
 
-        <ffmpeg:MediaElement Grid.RowSpan="255" x:Name="mediaElement" />
+        <ffmpeg:MediaElement x:Name="mediaElement" />
 
-        <Grid Grid.Row="1">
+        <Image Margin="50" Source="Resources/compact-disc.png">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsOpen, ElementName=mediaElement}" Value="True" />
+                                <Condition Binding="{Binding HasVideo, ElementName=mediaElement}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="100"
+              Visibility="{Binding NaturalDuration.HasTimeSpan, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityVisibleConverter}}">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Offset="0.0" Color="#00000000" />
@@ -42,22 +61,30 @@
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Trigger.EnterActions>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition Binding="{Binding IsOpen, ElementName=mediaElement}" Value="True" />
+                                <Condition Binding="{Binding HasVideo, ElementName=mediaElement}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"
+                                                         Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
+                            </MultiDataTrigger.EnterActions>
+                            <MultiDataTrigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0"
+                                                         Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
-                            </Trigger.ExitActions>
-                        </Trigger>
+                            </MultiDataTrigger.ExitActions>
+                        </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
@@ -72,13 +99,13 @@
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="149" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                            Orientation="Horizontal" Margin="20,0,0,0">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center"
+                            Orientation="Horizontal" Margin="10,0,0,0">
                     <Grid x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Height="30" Width="30" Foreground="#FFEFEFEF">
+                        <fa:ImageAwesome Height="23" Width="23" Foreground="#FFEFEFEF">
                             <fa:ImageAwesome.Style>
                                 <Style TargetType="fa:ImageAwesome">
                                     <Setter Property="Icon" Value="VolumeOff" />
@@ -92,17 +119,18 @@
                             </fa:ImageAwesome.Style>
                         </fa:ImageAwesome>
                     </Grid>
-                    <Slider Style="{StaticResource CustomSliderStyle}" Width="80" Maximum="1"
+                    <Slider Style="{StaticResource CustomSliderStyle}" MaxWidth="75" Maximum="1"
                             Value="{Binding Volume, ElementName=mediaElement}"
-                            Visibility="{Binding IsMuted, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityHiddenConverter}}" />
+                            Visibility="{Binding IsMuted, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
+                            BorderThickness="0,0,5,0" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Grid x:Name="buttonBackward" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Backward" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                        <fa:ImageAwesome Icon="Backward" Height="23" Width="23" Foreground="#FFEFEFEF" />
                     </Grid>
-                    <Grid Width="7" />
+                    <Grid Width="3" />
                     <Grid x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Height="30" Width="30" Foreground="#FFEFEFEF">
+                        <fa:ImageAwesome Height="23" Width="23" Foreground="#FFEFEFEF">
                             <fa:ImageAwesome.Style>
                                 <Style>
                                     <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
@@ -116,22 +144,22 @@
                             </fa:ImageAwesome.Style>
                         </fa:ImageAwesome>
                     </Grid>
-                    <Grid Width="7" />
+                    <Grid Width="3" />
                     <Grid x:Name="buttonStop" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Stop" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                        <fa:ImageAwesome Icon="Stop" Height="21" Width="21" Foreground="#FFEFEFEF" />
                     </Grid>
-                    <Grid Width="7" />
+                    <Grid Width="3" />
                     <Grid x:Name="buttonForward" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Forward" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                        <fa:ImageAwesome Icon="Forward" Height="23" Width="23" Foreground="#FFEFEFEF" />
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
-                            Orientation="Horizontal" Margin="0,0,20,0">
-                    <TextBlock FontSize="16" Foreground="#FFEFEFEF"
+                            Orientation="Horizontal" Margin="0,0,10,0">
+                    <TextBlock FontSize="14" Foreground="#FFEFEFEF"
                                Text="{Binding Position, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
-                    <TextBlock FontSize="16" Text=" / " Foreground="#FFEFEFEF" />
-                    <TextBlock FontSize="16" Foreground="#FFEFEFEF"
-                               Text="{Binding NaturalDuration.TimeSpan, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
+                    <TextBlock FontSize="14" Text=" / " Foreground="#FFEFEFEF" />
+                    <TextBlock FontSize="14" Foreground="#FFEFEFEF"
+                               Text="{Binding NaturalDuration, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement, Converter={StaticResource DurationToTimeSpanConverter}}" />
                 </StackPanel>
             </Grid>
         </Grid>

@@ -30,6 +30,8 @@ namespace QuickLook.Plugin.VideoViewer
     {
         private readonly ContextObject _context;
 
+        private bool _wasPlaying;
+
         public ViewerPanel(ContextObject context)
         {
             InitializeComponent();
@@ -47,7 +49,25 @@ namespace QuickLook.Plugin.VideoViewer
             buttonBackward.MouseLeftButtonUp += (sender, e) => SeekBackward();
             buttonForward.MouseLeftButtonUp += (sender, e) => SeekForward();
 
+            sliderProgress.PreviewMouseDown += (sender, e) =>
+            {
+                _wasPlaying = mediaElement.IsPlaying;
+                mediaElement.Pause();
+            };
+            sliderProgress.PreviewMouseUp += (sender, e) =>
+            {
+                if (_wasPlaying) mediaElement.Play();
+            };
+
             mediaElement.MediaFailed += ShowErrorNotification;
+            mediaElement.MediaEnded += (s, e) =>
+            {
+                if (!mediaElement.NaturalDuration.HasTimeSpan)
+                {
+                    mediaElement.Stop();
+                    mediaElement.Play();
+                }
+            };
         }
 
         public void Dispose()
@@ -55,23 +75,39 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement?.Stop();
             mediaElement?.Dispose();
             mediaElement = null;
+            Debug.WriteLine("dispose done");
+        }
+
+        private void ResumePlaying()
+        {
+            _wasPlaying = mediaElement.IsPlaying;
         }
 
         private void SeekBackward()
         {
+            _wasPlaying = mediaElement.IsPlaying;
+            mediaElement.Pause();
+
             var pos = mediaElement.Position;
             var delta = TimeSpan.FromSeconds(15);
 
             mediaElement.Position = pos < pos - delta ? TimeSpan.Zero : pos - delta;
+
+            if (_wasPlaying) mediaElement.Play();
         }
 
         private void SeekForward()
         {
+            _wasPlaying = mediaElement.IsPlaying;
+            mediaElement.Pause();
+
             var pos = mediaElement.Position;
             var len = mediaElement.NaturalDuration.TimeSpan;
             var delta = TimeSpan.FromSeconds(15);
 
             mediaElement.Position = pos + delta > len ? len : pos + delta;
+
+            if (_wasPlaying) mediaElement.Play();
         }
 
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
@@ -86,12 +122,12 @@ namespace QuickLook.Plugin.VideoViewer
         private void ShowErrorNotification(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
             _context.ShowNotification("", "An error occurred while loading the video.");
-            mediaElement.Stop();
+            mediaElement?.Close();
 
             Dispose();
 
 
-            throw new Exception("fallback to default viewer.");
+            //throw new Exception("fallback to default viewer.");
         }
 
         public void LoadAndPlay(string path)
