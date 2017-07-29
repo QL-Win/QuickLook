@@ -75,4 +75,28 @@ namespace QuickLook.Plugin.VideoViewer
             throw new NotImplementedException();
         }
     }
+
+    public class TimeSpanToSecondsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (value is TimeSpan) return ((TimeSpan) value).TotalSeconds;
+            if (value is Duration)
+                return ((Duration) value).HasTimeSpan ? ((Duration) value).TimeSpan.TotalSeconds : 0d;
+
+            return 0d;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            var result = TimeSpan.FromTicks((long) Math.Round(TimeSpan.TicksPerSecond * (double) value, 0));
+            // Do the conversion from visibility to bool
+            if (targetType == typeof(TimeSpan)) return result;
+            if (targetType == typeof(Duration)) return new Duration(result);
+
+            return Activator.CreateInstance(targetType);
+        }
+    }
 }

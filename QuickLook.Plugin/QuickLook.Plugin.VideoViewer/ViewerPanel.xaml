@@ -5,15 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
-             xmlns:ffmpeg="clr-namespace:Unosquare.FFmpegMediaElement;assembly=Unosquare.FFmpegMediaElement"
+             xmlns:ffmpeg="clr-namespace:Unosquare.FFME;assembly=ffme"
              mc:Ignorable="d"
              Background="#B2454545"
              d:DesignHeight="449.167" d:DesignWidth="767">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
-                <local:DoubleToTimeSpanConverter x:Key="DoubleToTimeSpanConverter" />
-                <local:DecimalToTimeSpanConverter x:Key="DecimalToTimeSpanConverter" />
+                <local:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter" />
                 <local:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="Styles.xaml" />
@@ -63,9 +62,12 @@
                 </Style>
             </Grid.Style>
 
-            <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                    Value="{Binding Position, ElementName=mediaElement}"
-                    Maximum="{Binding NaturalDuration, ElementName=mediaElement, Mode=OneWay}" Grid.Row="1" />
+            <Slider Grid.Row="1" x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
+                    IsEnabled="{Binding IsOpen, ElementName=mediaElement}"
+                    SmallChange="{Binding FrameStepDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
+                    LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
+                    Maximum="{Binding NaturalDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
+                    Value="{Binding Position, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" />
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -126,10 +128,10 @@
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Orientation="Horizontal" Margin="0,0,20,0">
                     <TextBlock FontSize="16" Foreground="#FFEFEFEF"
-                               Text="{Binding Position, ElementName=mediaElement,Converter={StaticResource DecimalToTimeSpanConverter}}" />
+                               Text="{Binding Position, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
                     <TextBlock FontSize="16" Text=" / " Foreground="#FFEFEFEF" />
                     <TextBlock FontSize="16" Foreground="#FFEFEFEF"
-                               Text="{Binding NaturalDuration, StringFormat=hh:mm:ss, ElementName=mediaElement,Converter={StaticResource DoubleToTimeSpanConverter}}" />
+                               Text="{Binding NaturalDuration.TimeSpan, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
                 </StackPanel>
             </Grid>
         </Grid>

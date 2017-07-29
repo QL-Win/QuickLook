@@ -17,9 +17,9 @@
 
 using System;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Unosquare.FFmpegMediaElement;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -47,32 +47,31 @@ namespace QuickLook.Plugin.VideoViewer
             buttonBackward.MouseLeftButtonUp += (sender, e) => SeekBackward();
             buttonForward.MouseLeftButtonUp += (sender, e) => SeekForward();
 
-            mediaElement.MediaErrored += ShowErrorNotification;
             mediaElement.MediaFailed += ShowErrorNotification;
         }
 
         public void Dispose()
         {
+            mediaElement?.Stop();
             mediaElement?.Dispose();
             mediaElement = null;
         }
 
         private void SeekBackward()
         {
-            var pos = Convert.ToDouble(mediaElement.Position);
-            var len = mediaElement.NaturalDuration;
-            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+            var pos = mediaElement.Position;
+            var delta = TimeSpan.FromSeconds(15);
 
-            mediaElement.Position = Convert.ToDecimal(pos - delta < 0 ? 0 : pos - delta);
+            mediaElement.Position = pos < pos - delta ? TimeSpan.Zero : pos - delta;
         }
 
         private void SeekForward()
         {
-            var pos = Convert.ToDouble(mediaElement.Position);
-            var len = mediaElement.NaturalDuration;
-            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+            var pos = mediaElement.Position;
+            var len = mediaElement.NaturalDuration.TimeSpan;
+            var delta = TimeSpan.FromSeconds(15);
 
-            mediaElement.Position = Convert.ToDecimal(pos + delta > len ? len : pos + delta);
+            mediaElement.Position = pos + delta > len ? len : pos + delta;
         }
 
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
@@ -84,7 +83,7 @@ namespace QuickLook.Plugin.VideoViewer
         }
 
         [DebuggerNonUserCode]
-        private void ShowErrorNotification(object sender, MediaErrorRoutedEventArgs e)
+        private void ShowErrorNotification(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
             _context.ShowNotification("", "An error occurred while loading the video.");
             mediaElement.Stop();
@@ -98,8 +97,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             mediaElement.Source = new Uri(path);
-            mediaElement.IsMuted = true;
-            mediaElement.Play();
+            mediaElement.MediaOpened += (sender, e) => mediaElement.IsMuted = true;
         }
 
         ~ViewerPanel()

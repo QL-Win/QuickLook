@@ -15,11 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
-using Unosquare.FFmpegMediaElement;
+using QuickLook.Plugin.VideoViewer.FFmpeg;
+using Unosquare.FFME;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -32,7 +33,9 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Init()
         {
-            MediaElement.FFmpegPaths.RegisterFFmpeg();
+            MediaElement.FFmpegDirectory =
+                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "\\FFmpeg\\",
+                    App.Is64Bit ? "x64\\" : "x86\\");
         }
 
         public bool CanHandle(string path)
@@ -54,10 +57,11 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            using (var element = new MediaElement {Source = new Uri(path)})
-            {
-                context.SetPreferredSizeFit(new Size(element.NaturalVideoWidth, element.NaturalVideoHeight), 0.6);
-            }
+            var def = new Size(1024, 768);
+
+            var real = new FFprobe(path).GetViewSize();
+
+            context.SetPreferredSizeFit(real == Size.Empty ? def : real, 0.6);
         }
 
         public void View(string path, ContextObject context)
