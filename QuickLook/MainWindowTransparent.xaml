@@ -19,6 +19,7 @@
         <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
         <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:ScaledValueConverter x:Key="ScaledValueConverter" />
     </Window.Resources>
     <Window.ResizeMode>
         <Binding Converter="{StaticResource BooleanToResizeModeConverter}" ElementName="mainWindow"
@@ -88,13 +89,14 @@
                                      Width="14" Height="14" Margin="10,0,5,0" Foreground="#E5868686"
                                      Cursor="Hand" />
                     <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" Content="Open with..." Height="20"
-                            Margin="10,0,0,0" Padding="5,0"
+                            Margin="10,0,0,0" Padding="5,0" 
+                            MaxWidth="{Binding Width, ElementName=mainWindow, Converter={StaticResource ScaledValueConverter}, ConverterParameter='0.25'}"
                             Focusable="False" Cursor="Hand"
                             Background="#E5EEEEEE" BorderBrush="#E59A9A9A"
                             WindowChrome.IsHitTestVisibleInChrome="True" Foreground="#FF404040">
                         <Button.ContentTemplate>
                             <DataTemplate>
-                                <ContentPresenter Content="{Binding}" RecognizesAccessKey="False" />
+                                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
@@ -172,7 +174,7 @@
                     <!-- set grid.background colour makes it clickable -->
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"
-                                   HorizontalAlignment="Center"
+                                   HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center" Margin="5,0" />
                     </Grid>
                 </DockPanel>
