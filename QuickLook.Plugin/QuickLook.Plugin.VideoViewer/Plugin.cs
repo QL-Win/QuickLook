@@ -16,15 +16,19 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
-using Unosquare.FFmpegMediaElement;
+using QuickLook.Plugin.VideoViewer.FFmpeg;
+using Unosquare.FFME;
 
 namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
+        private Size _mediaSize;
         private ViewerPanel _vp;
 
         public int Priority => int.MaxValue;
@@ -32,7 +36,9 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Init()
         {
-            MediaElement.FFmpegPaths.RegisterFFmpeg();
+            MediaElement.FFmpegDirectory =
+                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "\\FFmpeg\\",
+                    App.Is64Bit ? "x64\\" : "x86\\");
         }
 
         public bool CanHandle(string path)
@@ -40,24 +46,28 @@ namespace QuickLook.Plugin.VideoViewer
             if (Directory.Exists(path))
                 return false;
 
-            var formats = new[]
+            var blacklist = new[]
             {
-                ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".m2ts", ".m4v", ".mkv",
-                ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".vob", ".webm", ".wmv"
+                ".txt", ".jpg", ".bmp"
             };
 
-            if (formats.Contains(Path.GetExtension(path).ToLower()))
-                return true;
+            if (blacklist.Contains(Path.GetExtension(path).ToLower()))
+                return false;
 
-            return false;
+            return new FFprobe(path).CanDecode();
         }
 
         public void Prepare(string path, ContextObject context)
         {
-            using (var element = new MediaElement {Source = new Uri(path)})
-            {
-                context.SetPreferredSizeFit(new Size(element.NaturalVideoWidth, element.NaturalVideoHeight), 0.6);
-            }
+            var def = new Size(450, 450);
+
+            _mediaSize = new FFprobe(path).GetViewSize();
+
+            var windowSize = _mediaSize == Size.Empty ? def : _mediaSize;
+            windowSize.Width = Math.Max(def.Width, windowSize.Width);
+            windowSize.Height = Math.Max(def.Height, windowSize.Height);
+
+            context.SetPreferredSizeFit(windowSize, 0.6);
         }
 
         public void View(string path, ContextObject context)
@@ -66,11 +76,16 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.ViewerContent = _vp;
 
+            Debug.WriteLine("ViewerContent done");
             _vp.LoadAndPlay(path);
+            Debug.WriteLine("LoadAndPlay done");
+
+            _vp.mediaElement.MediaOpened += (sender, e) => context.IsBusy = false;
+
+            var info = _mediaSize == Size.Empty ? "Audio" : $"{_mediaSize.Width}×{_mediaSize.Height}";
 
             context.Title =
-                $"{Path.GetFileName(path)} ({_vp.mediaElement.NaturalVideoWidth}×{_vp.mediaElement.NaturalVideoHeight})";
-            context.IsBusy = false;
+                $"{Path.GetFileName(path)} ({info})";
         }
 
         public void Cleanup()

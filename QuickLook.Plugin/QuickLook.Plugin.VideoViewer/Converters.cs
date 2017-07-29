@@ -58,6 +58,24 @@ namespace QuickLook.Plugin.VideoViewer
         }
     }
 
+    public sealed class BooleanToVisibilityVisibleConverter : DependencyObject, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Visibility.Visible;
+
+            var v = (bool) value;
+
+            return v ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public sealed class BooleanToVisibilityHiddenConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -71,6 +89,43 @@ namespace QuickLook.Plugin.VideoViewer
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TimeSpanToSecondsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is TimeSpan) return ((TimeSpan) value).TotalSeconds;
+            if (value is Duration)
+                return ((Duration) value).HasTimeSpan ? ((Duration) value).TimeSpan.TotalSeconds : 0d;
+
+            return 0d;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var result = TimeSpan.FromTicks((long) Math.Round(TimeSpan.TicksPerSecond * (double) value, 0));
+
+            if (targetType == typeof(TimeSpan)) return result;
+            if (targetType == typeof(Duration)) return new Duration(result);
+
+            return Activator.CreateInstance(targetType);
+        }
+    }
+
+    public class DurationToTimeSpanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var val = (Duration) value;
+
+            return val.HasTimeSpan ? val.TimeSpan : TimeSpan.Zero;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

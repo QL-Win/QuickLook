@@ -17,9 +17,9 @@
 
 using System;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Unosquare.FFmpegMediaElement;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -29,6 +29,8 @@ namespace QuickLook.Plugin.VideoViewer
     public partial class ViewerPanel : UserControl, IDisposable
     {
         private readonly ContextObject _context;
+
+        private bool _wasPlaying;
 
         public ViewerPanel(ContextObject context)
         {
@@ -47,32 +49,65 @@ namespace QuickLook.Plugin.VideoViewer
             buttonBackward.MouseLeftButtonUp += (sender, e) => SeekBackward();
             buttonForward.MouseLeftButtonUp += (sender, e) => SeekForward();
 
-            mediaElement.MediaErrored += ShowErrorNotification;
+            sliderProgress.PreviewMouseDown += (sender, e) =>
+            {
+                _wasPlaying = mediaElement.IsPlaying;
+                mediaElement.Pause();
+            };
+            sliderProgress.PreviewMouseUp += (sender, e) =>
+            {
+                if (_wasPlaying) mediaElement.Play();
+            };
+
             mediaElement.MediaFailed += ShowErrorNotification;
+            mediaElement.MediaEnded += (s, e) =>
+            {
+                if (!mediaElement.NaturalDuration.HasTimeSpan)
+                {
+                    mediaElement.Stop();
+                    mediaElement.Play();
+                }
+            };
         }
 
         public void Dispose()
         {
+            mediaElement?.Stop();
             mediaElement?.Dispose();
             mediaElement = null;
+            Debug.WriteLine("dispose done");
+        }
+
+        private void ResumePlaying()
+        {
+            _wasPlaying = mediaElement.IsPlaying;
         }
 
         private void SeekBackward()
         {
-            var pos = Convert.ToDouble(mediaElement.Position);
-            var len = mediaElement.NaturalDuration;
-            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+            _wasPlaying = mediaElement.IsPlaying;
+            mediaElement.Pause();
 
-            mediaElement.Position = Convert.ToDecimal(pos - delta < 0 ? 0 : pos - delta);
+            var pos = mediaElement.Position;
+            var delta = TimeSpan.FromSeconds(15);
+
+            mediaElement.Position = pos < pos - delta ? TimeSpan.Zero : pos - delta;
+
+            if (_wasPlaying) mediaElement.Play();
         }
 
         private void SeekForward()
         {
-            var pos = Convert.ToDouble(mediaElement.Position);
-            var len = mediaElement.NaturalDuration;
-            var delta = TimeSpan.FromSeconds(15).TotalSeconds;
+            _wasPlaying = mediaElement.IsPlaying;
+            mediaElement.Pause();
 
-            mediaElement.Position = Convert.ToDecimal(pos + delta > len ? len : pos + delta);
+            var pos = mediaElement.Position;
+            var len = mediaElement.NaturalDuration.TimeSpan;
+            var delta = TimeSpan.FromSeconds(15);
+
+            mediaElement.Position = pos + delta > len ? len : pos + delta;
+
+            if (_wasPlaying) mediaElement.Play();
         }
 
         private void TogglePlayPause(object sender, MouseButtonEventArgs e)
@@ -84,22 +119,21 @@ namespace QuickLook.Plugin.VideoViewer
         }
 
         [DebuggerNonUserCode]
-        private void ShowErrorNotification(object sender, MediaErrorRoutedEventArgs e)
+        private void ShowErrorNotification(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
             _context.ShowNotification("", "An error occurred while loading the video.");
-            mediaElement.Stop();
+            mediaElement?.Close();
 
             Dispose();
 
 
-            throw new Exception("fallback to default viewer.");
+            //throw new Exception("fallback to default viewer.");
         }
 
         public void LoadAndPlay(string path)
         {
             mediaElement.Source = new Uri(path);
-            mediaElement.IsMuted = true;
-            mediaElement.Play();
+            mediaElement.MediaOpened += (sender, e) => mediaElement.IsMuted = true;
         }
 
         ~ViewerPanel()
