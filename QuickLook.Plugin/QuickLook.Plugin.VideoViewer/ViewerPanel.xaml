@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:ffmpeg="clr-namespace:Unosquare.FFmpegMediaElement;assembly=Unosquare.FFmpegMediaElement"
              mc:Ignorable="d"
+             Background="#B2454545"
              d:DesignHeight="449.167" d:DesignWidth="767">
     <Grid>
         <Grid.Resources>
@@ -94,6 +95,10 @@
                             Visibility="{Binding IsMuted, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityHiddenConverter}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Grid x:Name="buttonBackward" Style="{StaticResource ControlButtonStyle}">
+                        <fa:ImageAwesome Icon="Backward" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                    </Grid>
+                    <Grid Width="7" />
                     <Grid x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}">
                         <fa:ImageAwesome Height="30" Width="30" Foreground="#FFEFEFEF">
                             <fa:ImageAwesome.Style>
@@ -109,9 +114,13 @@
                             </fa:ImageAwesome.Style>
                         </fa:ImageAwesome>
                     </Grid>
-                    <Grid Width="15" />
+                    <Grid Width="7" />
                     <Grid x:Name="buttonStop" Style="{StaticResource ControlButtonStyle}">
                         <fa:ImageAwesome Icon="Stop" Height="27" Width="27" Foreground="#FFEFEFEF" />
+                    </Grid>
+                    <Grid Width="7" />
+                    <Grid x:Name="buttonForward" Style="{StaticResource ControlButtonStyle}">
+                        <fa:ImageAwesome Icon="Forward" Height="27" Width="27" Foreground="#FFEFEFEF" />
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
