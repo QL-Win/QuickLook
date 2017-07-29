@@ -108,6 +108,7 @@
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
+    <Compile Include="Converters\ScaledValueConverter.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BackgroundVisualHost.cs" />
