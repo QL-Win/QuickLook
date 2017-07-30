@@ -12,9 +12,6 @@
   </Properties>
   <Resources>
     <Resource Language="en-us" />
-    <Resource Language="en-gb" />
-    <Resource Language="zh-hans" />
-    <Resource Language="es" />
     <Resource uap:Scale="100" />
     <Resource uap:Scale="200" />
     <Resource uap:Scale="400" />
