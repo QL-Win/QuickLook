@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.VideoViewer
         private FFprobe _probe;
         private ViewerPanel _vp;
 
-        public int Priority => int.MaxValue - 10; // make it lower than ImageViewer
+        public int Priority => 0 - 10; // make it lower than TextViewer
         public bool AllowsTransparency => true;
 
         public void Init()
@@ -56,7 +56,9 @@ namespace QuickLook.Plugin.VideoViewer
                 // ass
                 ".ass",
                 // apng
-                ".png", ".apng"
+                ".png", ".apng",
+                // asterisk (pcmdec)
+                ".gsm", ".sln"
             };
 
             if (blacklist.Contains(Path.GetExtension(path).ToLower()))
