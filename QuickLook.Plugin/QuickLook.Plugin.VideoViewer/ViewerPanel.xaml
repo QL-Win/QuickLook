@@ -45,7 +45,6 @@
         </Image>
 
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="100">
-            <!--Visibility="{Binding NaturalDuration.HasTimeSpan, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityVisibleConverter}}"-->
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Offset="0.0" Color="#00000000" />
@@ -93,7 +92,6 @@
                     SmallChange="{Binding FrameStepDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
                     LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
                     Maximum="{Binding NaturalDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
-                    Visibility="{Binding NaturalDuration.HasTimeSpan, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityVisibleConverter}}"
                     Value="{Binding Position, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" />
 
             <Grid Grid.Row="2">
@@ -158,11 +156,9 @@
                             Orientation="Horizontal" Margin="0,0,10,0">
                     <TextBlock FontSize="14" Foreground="#FFEFEFEF"
                                Text="{Binding Position, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
-                    <TextBlock FontSize="14" Text=" / " Foreground="#FFEFEFEF"
-                               Visibility="{Binding NaturalDuration.HasTimeSpan, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityVisibleConverter}}" />
+                    <TextBlock FontSize="14" Text=" / " Foreground="#FFEFEFEF" />
                     <TextBlock FontSize="14" Foreground="#FFEFEFEF"
-                               Text="{Binding NaturalDuration, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement, Converter={StaticResource DurationToTimeSpanConverter}}"
-                               Visibility="{Binding NaturalDuration.HasTimeSpan, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityVisibleConverter}}" />
+                               Text="{Binding NaturalDuration, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement, Converter={StaticResource DurationToTimeSpanConverter}}" />
                 </StackPanel>
             </Grid>
         </Grid>
