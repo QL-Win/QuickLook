@@ -18,7 +18,6 @@
 using System.IO;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Highlighting;
-using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer
 {
@@ -47,14 +46,14 @@ namespace QuickLook.Plugin.TextViewer
             if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
                 return new FileInfo(path).Length <= MAX_SIZE;
 
-            // otherwise, read the first 10KB, check if we can get something. 
-            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            // otherwise, read the first 512KB, check if we can get something. 
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                const int bufferLength = 10 * 1024;
+                const int bufferLength = 512 * 1024;
                 var buffer = new byte[bufferLength];
-                s.Read(buffer, 0, bufferLength);
+                var size = s.Read(buffer, 0, bufferLength);
 
-                return CharsetDetector.DetectFromBytes(buffer).Detected != null && s.Length <= MAX_SIZE;
+                return IsText(buffer, size) && new FileInfo(path).Length <= MAX_SIZE;
             }
         }
 
@@ -77,6 +76,15 @@ namespace QuickLook.Plugin.TextViewer
         public void Cleanup()
         {
             _tvp.viewer = null;
+        }
+
+        private bool IsText(byte[] buffer, int size)
+        {
+            for (var i = 1; i < size; i++)
+                if (buffer[i - 1] == 0 && buffer[i] == 0)
+                    return false;
+
+            return true;
         }
     }
 }
