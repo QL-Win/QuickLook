@@ -55,6 +55,9 @@
     <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ExifLib.1.7.0.0\lib\net45\ExifLib.dll</HintPath>
     </Reference>
+    <Reference Include="LibAPNG">
+      <HintPath>.\LibAPNG.dll</HintPath>
+    </Reference>
     <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.7.0.6.102\lib\net40\Magick.NET-Q8-AnyCPU.dll</HintPath>
     </Reference>
@@ -65,14 +68,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="XamlAnimatedGif, Version=1.1.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\XamlAnimatedGif.1.1.10\lib\net45\XamlAnimatedGif.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="AnimatedImage\AnimatedImage.cs" />
+    <Compile Include="AnimatedImage\APNGAnimationProvider.cs" />
+    <Compile Include="AnimatedImage\GIFAnimationProvider.cs" />
+    <Compile Include="AnimatedImage\IAnimationProvider.cs" />
+    <Compile Include="AnimatedImage\ImageMagickProvider.cs" />
     <Compile Include="ImageFileHelper.cs" />
     <Compile Include="ImagePanel.xaml.cs">
       <DependentUpon>ImagePanel.xaml</DependentUpon>

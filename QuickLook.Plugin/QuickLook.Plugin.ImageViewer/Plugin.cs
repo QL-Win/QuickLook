@@ -18,10 +18,8 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using ImageMagick;
-using XamlAnimatedGif;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -35,7 +33,10 @@ namespace QuickLook.Plugin.ImageViewer
             ".orf", ".pef", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw",
             ".tif", ".x3f",
             // normal
-            ".bmp", ".ggg", ".ico", ".icon", ".jpg", ".jpeg", ".png", ".psd", ".svg", ".wdp", ".tiff", ".tga", ".webp"
+            ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".svg", ".wdp", ".tif", ".tiff", ".tga",
+            ".webp",
+            // animated
+            ".png", ".apng", ".gif"
         };
         private Size _imageSize;
         private ImagePanel _ip;
@@ -58,9 +59,6 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            // set dcraw.exe for Magick.NET
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-
             _imageSize = ImageFileHelper.GetImageSize(path) ?? Size.Empty;
 
             if (!_imageSize.IsEmpty)
@@ -73,9 +71,6 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void View(string path, ContextObject context)
         {
-            // set dcraw.exe for Magick.NET
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-
             _ip = new ImagePanel();
 
             context.ViewerContent = _ip;
@@ -86,8 +81,6 @@ namespace QuickLook.Plugin.ImageViewer
             LoadImage(_ip, path);
 
             context.IsBusy = false;
-
-            Directory.SetCurrentDirectory(App.AppPath);
         }
 
         public void Cleanup()
@@ -97,21 +90,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         private void LoadImage(ImagePanel ui, string path)
         {
-            if (Path.GetExtension(path).ToLower() == ".gif")
-                AnimationBehavior.SetSourceUri(ui.viewPanelImage, new Uri(path));
-
-            using (var image = new MagickImage(path))
-            {
-                image.Rotate(image.Orientation == OrientationType.RightTop
-                    ? 90
-                    : image.Orientation == OrientationType.BottomRight
-                        ? 180
-                        : image.Orientation == OrientationType.LeftBotom
-                            ? 270
-                            : 0);
-
-                ui.Source = image.ToBitmapSource();
-            }
+            ui.ImageUriSource = new Uri(path);
         }
     }
 }

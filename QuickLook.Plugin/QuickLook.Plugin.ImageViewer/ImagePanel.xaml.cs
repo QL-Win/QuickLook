@@ -34,9 +34,10 @@ namespace QuickLook.Plugin.ImageViewer
     /// <summary>
     ///     Interaction logic for ImagePanel.xaml
     /// </summary>
-    public partial class ImagePanel : UserControl, INotifyPropertyChanged
+    public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
         private Point? _dragInitPos;
+        private Uri _imageSource;
         private DateTime _lastZoomTime = DateTime.MinValue;
         private double _maxZoomFactor = 3d;
         private double _minZoomFactor = 0.1d;
@@ -111,6 +112,16 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
+        public Uri ImageUriSource
+        {
+            get => _imageSource;
+            set
+            {
+                _imageSource = value;
+                OnPropertyChanged();
+            }
+        }
+
         public BitmapSource Source
         {
             get => _source;
@@ -118,7 +129,16 @@ namespace QuickLook.Plugin.ImageViewer
             {
                 _source = value;
                 OnPropertyChanged();
+
+                if (ImageUriSource == null)
+                    viewPanelImage.Source = _source;
             }
+        }
+
+        public void Dispose()
+        {
+            viewPanelImage?.Dispose();
+            viewPanelImage = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

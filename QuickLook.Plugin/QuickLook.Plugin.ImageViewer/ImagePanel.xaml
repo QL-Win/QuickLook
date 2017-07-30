@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.ImageViewer"
+             xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
              mc:Ignorable="d"
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
-            <Image x:Name="viewPanelImage" Stretch="None" Source="{Binding Source, ElementName=imagePanel}" 
-                   RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}" />
+            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
+                                         RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
+                                         AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
         </ScrollViewer>
     </Grid>
 </UserControl>
