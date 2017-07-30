@@ -69,7 +69,7 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
 
         public bool CanDecode()
         {
-            var info = infoNavigator.SelectSingleNode("/ffprobe/format");
+            var info = infoNavigator.SelectSingleNode("/ffprobe/format[@probe_score>25]");
 
             return info != null;
         }

@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -31,7 +30,7 @@ namespace QuickLook.Plugin.VideoViewer
         private FFprobe _probe;
         private ViewerPanel _vp;
 
-        public int Priority => int.MaxValue;
+        public int Priority => int.MaxValue - 10; // make it lower than ImageViewer
         public bool AllowsTransparency => true;
 
         public void Init()
@@ -46,15 +45,29 @@ namespace QuickLook.Plugin.VideoViewer
             if (Directory.Exists(path))
                 return false;
 
-            var blacklist = new[] {".txt", ".jpg", ".bmp", ".tiff"};
+            var blacklist = new[]
+            {
+                // tty
+                ".ans", ".art", ".asc", ".diz", ".ice", ".nfo", ".txt", ".vt",
+                // ico
+                ".ico", ".icon",
+                // bmp_pipe
+                ".bmp",
+                // ass
+                ".ass",
+                // apng
+                ".png", ".apng"
+            };
 
             if (blacklist.Contains(Path.GetExtension(path).ToLower()))
                 return false;
 
             var probe = new FFprobe(path);
-
-            // check if it is a APNG image
-            if (Path.GetExtension(path).ToLower() == ".png" && probe.GetFormatName().ToLower() != "apng")
+            // check if it is an image. Normal images shows "image2"
+            // "dpx,jls,jpeg,jpg,ljpg,pam,pbm,pcx,pgm,pgmyuv,png,"
+            // "ppm,sgi,tga,tif,tiff,jp2,j2c,xwd,sun,ras,rs,im1,im8,im24,"
+            // "sunras,xbm,xface"
+            if (probe.GetFormatName().ToLower() == "image2")
                 return false;
 
             return probe.CanDecode();
@@ -79,7 +92,7 @@ namespace QuickLook.Plugin.VideoViewer
             _vp = new ViewerPanel(context);
 
             context.ViewerContent = _vp;
-            
+
             _vp.LoadAndPlay(path);
 
             _vp.mediaElement.MediaOpened += (sender, e) => context.IsBusy = false;
