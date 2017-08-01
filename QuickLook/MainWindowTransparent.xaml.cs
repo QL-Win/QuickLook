@@ -160,6 +160,10 @@ namespace QuickLook
 
         private void ResizeAndCenter(Size size)
         {
+            // resize to MinSize first
+            size.Width = Math.Max(size.Width, MinWidth);
+            size.Height = Math.Max(size.Height, MinHeight);
+
             if (!IsLoaded)
             {
                 // if the window is not loaded yet, just leave the problem to WPF
