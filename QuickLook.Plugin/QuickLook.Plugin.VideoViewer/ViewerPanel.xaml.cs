@@ -207,10 +207,10 @@ namespace QuickLook.Plugin.VideoViewer
                 case MediaState.Opening:
                     HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
-                    CoverArt = mediaElement.VlcMediaPlayer.Media.GetMeta(
-                        MetaDataType.ArtworkUrl);
                     break;
                 case MediaState.Playing:
+                    CoverArt = mediaElement.VlcMediaPlayer.Media.GetMeta(
+                        MetaDataType.ArtworkUrl);
                     HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     IsPlaying = true;
