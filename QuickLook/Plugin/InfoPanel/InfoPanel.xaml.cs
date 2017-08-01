@@ -101,18 +101,12 @@ namespace QuickLook.Plugin.InfoPanel
                             string t;
                             var folders = totalDirsL == 0
                                 ? string.Empty
-                                : totalDirsL == 1
-                                    ? string.Format(
-                                        TranslationHelper.GetString("InfoPanel_Folder"), totalDirsL)
-                                    : string.Format(
-                                        TranslationHelper.GetString("InfoPanel_Folders"), totalDirsL);
+                                : string.Format(TranslationHelper.GetString(
+                                    totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
                             var files = totalFilesL == 0
                                 ? string.Empty
-                                : totalFilesL == 1
-                                    ? string.Format(
-                                        TranslationHelper.GetString("InfoPanel_File"), totalFilesL)
-                                    : string.Format(
-                                        TranslationHelper.GetString("InfoPanel_Files"), totalFilesL);
+                                : string.Format(TranslationHelper.GetString(
+                                    totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
 
                             if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
                                 t = string.Format(
