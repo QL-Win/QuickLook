@@ -33,13 +33,18 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             using (var image = new MagickImage(path))
             {
-                image.Rotate(image.Orientation == OrientationType.RightTop
-                    ? 90
-                    : image.Orientation == OrientationType.BottomRight
-                        ? 180
-                        : image.Orientation == OrientationType.LeftBotom
-                            ? 270
-                            : 0);
+                switch (image.Orientation)
+                {
+                    case OrientationType.RightTop:
+                        image.Rotate(90);
+                        break;
+                    case OrientationType.BottomRight:
+                        image.Rotate(180);
+                        break;
+                    case OrientationType.LeftBotom:
+                        image.Rotate(270);
+                        break;
+                }
 
                 animator.KeyFrames.Add(new DiscreteObjectKeyFrame(image.ToBitmapSource(), TimeSpan.Zero));
                 animator.Duration = Duration.Forever;
