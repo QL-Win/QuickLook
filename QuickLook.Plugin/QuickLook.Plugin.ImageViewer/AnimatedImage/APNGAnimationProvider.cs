@@ -33,7 +33,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (decoder.IsSimplePNG)
             {
                 animator.KeyFrames.Add(
-                    new DiscreteObjectKeyFrame(decoder.DefaultImage.GetBitmapSource(), TimeSpan.Zero));
+                    new DiscreteObjectKeyFrame(BitmapFrame.Create(new Uri(path)), TimeSpan.Zero));
                 animator.Duration = Duration.Forever;
                 return;
             }
