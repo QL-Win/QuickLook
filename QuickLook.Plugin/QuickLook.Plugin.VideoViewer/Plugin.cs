@@ -18,16 +18,17 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Windows;
-using QuickLook.Plugin.VideoViewer.FFmpeg;
-using Unosquare.FFME;
+using Meta.Vlc;
+using Meta.Vlc.Interop.Media;
+using Meta.Vlc.Wpf;
+using Size = System.Windows.Size;
+using VideoTrack = Meta.Vlc.VideoTrack;
 
 namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
-        private FFprobe _probe;
+        private Size _mediaSize = Size.Empty;
         private ViewerPanel _vp;
 
         public int Priority => 0 - 10; // make it lower than TextViewer
@@ -35,9 +36,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Init()
         {
-            MediaElement.FFmpegDirectory =
-                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "\\FFmpeg\\",
-                    App.Is64Bit ? "x64\\" : "x86\\");
+            ApiManager.Initialize(VlcSettings.LibVlcPath, VlcSettings.VlcOptions);
         }
 
         public bool CanHandle(string path)
@@ -45,44 +44,27 @@ namespace QuickLook.Plugin.VideoViewer
             if (Directory.Exists(path))
                 return false;
 
-            var blacklist = new[]
+            var formats = new[]
             {
-                // tty
-                ".ans", ".art", ".asc", ".diz", ".ice", ".nfo", ".txt", ".vt",
-                // ico
-                ".ico", ".icon",
-                // bmp_pipe
-                ".bmp",
-                // ass
-                ".ass",
-                // apng
-                ".png", ".apng",
-                // asterisk (pcmdec)
-                ".gsm", ".sln"
+                // video
+                ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".m2ts", ".m4v", ".mkv",
+                ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".vob", ".webm", ".wmv",
+                // audio
+                ".3gp", ".aa", ".aac", ".aax", ".act", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
+                ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
+                ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
             };
 
-            if (blacklist.Contains(Path.GetExtension(path).ToLower()))
-                return false;
-
-            var probe = new FFprobe(path);
-            // check if it is an image. Normal images shows "image2"
-            // "dpx,jls,jpeg,jpg,ljpg,pam,pbm,pcx,pgm,pgmyuv,png,"
-            // "ppm,sgi,tga,tif,tiff,jp2,j2c,xwd,sun,ras,rs,im1,im8,im24,"
-            // "sunras,xbm,xface"
-            if (probe.GetFormatName().ToLower() == "image2")
-                return false;
-
-            return probe.CanDecode();
+            return formats.Contains(Path.GetExtension(path).ToLower());
         }
 
         public void Prepare(string path, ContextObject context)
         {
             var def = new Size(450, 450);
 
-            _probe = new FFprobe(path);
-            var mediaSize = _probe.GetViewSize();
+            _mediaSize = GetMediaSizeWithVlc(path);
 
-            var windowSize = mediaSize == Size.Empty ? def : mediaSize;
+            var windowSize = _mediaSize == Size.Empty ? def : _mediaSize;
             windowSize.Width = Math.Max(def.Width, windowSize.Width);
             windowSize.Height = Math.Max(def.Height, windowSize.Height);
 
@@ -95,12 +77,11 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.ViewerContent = _vp;
 
+            _vp.mediaElement.VlcMediaPlayer.Opening += (sender, e) => context.IsBusy = false;
+
             _vp.LoadAndPlay(path);
 
-            _vp.mediaElement.MediaOpened += (sender, e) => context.IsBusy = false;
-
-            var mediaSize = _probe.GetViewSize();
-            var info = mediaSize == Size.Empty ? "Audio" : $"{mediaSize.Width}×{mediaSize.Height}";
+            var info = _mediaSize == Size.Empty ? "Audio" : $"{_mediaSize.Width}×{_mediaSize.Height}";
 
             context.Title =
                 $"{Path.GetFileName(path)} ({info})";
@@ -108,10 +89,23 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Cleanup()
         {
-            _probe = null;
-
             _vp?.Dispose();
             _vp = null;
+        }
+
+        private Size GetMediaSizeWithVlc(string path)
+        {
+            using (var vlc = new Vlc(VlcSettings.VlcOptions))
+            {
+                using (var media = vlc.CreateMediaFromPath(path))
+                {
+                    media.Parse();
+                    var tracks = media.GetTracks();
+                    var video = tracks.FirstOrDefault(mt => mt.Type == TrackType.Video) as VideoTrack;
+
+                    return video == null ? Size.Empty : new Size(video.Width, video.Height);
+                }
+            }
         }
     }
 }

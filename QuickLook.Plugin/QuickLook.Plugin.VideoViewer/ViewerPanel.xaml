@@ -4,41 +4,40 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:vlc="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
-             xmlns:ffmpeg="clr-namespace:Unosquare.FFME;assembly=ffme"
              mc:Ignorable="d"
-             x:Name="userControl"
+             x:Name="viewerPanel"
              Background="#CC4E4E4E"
              d:DesignHeight="450" d:DesignWidth="450">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
-                <local:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter" />
-                <local:BooleanToVisibilityVisibleConverter x:Key="BooleanToVisibilityVisibleConverter" />
                 <local:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
-                <local:DurationToTimeSpanConverter x:Key="DurationToTimeSpanConverter" />
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="Styles.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
 
-        <ffmpeg:MediaElement x:Name="mediaElement" />
+        <vlc:VlcPlayer x:Name="mediaElement" LibVlcPath="{Binding LibVlcPath, ElementName=viewerPanel}"
+                       VlcOption="{Binding VlcOption, ElementName=viewerPanel}" />
 
-        <Image Margin="50" Source="Resources/compact-disc.png">
+        <Image>
             <Image.Style>
                 <Style TargetType="Image">
+                    <Setter Property="Source" Value="{Binding CoverArt, ElementName=viewerPanel}" />
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsOpen, ElementName=mediaElement}" Value="True" />
-                                <Condition Binding="{Binding HasVideo, ElementName=mediaElement}" Value="False" />
-                            </MultiDataTrigger.Conditions>
-                            <MultiDataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Visible" />
-                            </MultiDataTrigger.Setters>
-                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding CoverArt.Length, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
+                            Value="0">
+                            <Setter Property="Source" Value="Resources/compact-disc.png" />
+                            <Setter Property="Margin" Value="50" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Image.Style>
@@ -64,8 +63,7 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
                                            Value="True" />
-                                <Condition Binding="{Binding IsOpen, ElementName=mediaElement}" Value="True" />
-                                <Condition Binding="{Binding HasVideo, ElementName=mediaElement}" Value="True" />
+                                <Condition Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="True" />
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.EnterActions>
                                 <BeginStoryboard>
@@ -89,10 +87,8 @@
             </Grid.Style>
 
             <Slider Grid.Row="1" x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                    SmallChange="{Binding FrameStepDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
-                    LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
-                    Maximum="{Binding NaturalDuration, ElementName=mediaElement,Converter={StaticResource TimeSpanToSecondsConverter}}"
-                    Value="{Binding Position, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" />
+                    SmallChange="0.00001" LargeChange="0.01" Maximum="1"
+                    Value="{Binding Position, ElementName=mediaElement}" />
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -100,16 +96,24 @@
                     <ColumnDefinition Width="149" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center"
-                            Visibility="{Binding HasAudio, ElementName=mediaElement,Converter={StaticResource BooleanToVisibilityVisibleConverter}}"
-                            Orientation="Horizontal" Margin="10,0,0,0">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="10,0,0,0">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasAudio, ElementName=viewerPanel}" Value="False">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                     <Grid x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}">
                         <fa:ImageAwesome Height="23" Width="23" Foreground="#FFEFEFEF">
                             <fa:ImageAwesome.Style>
                                 <Style TargetType="fa:ImageAwesome">
                                     <Setter Property="Icon" Value="VolumeOff" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMuted, ElementName=mediaElement}"
+                                        <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
                                                      Value="False">
                                             <Setter Property="Icon" Value="VolumeUp" />
                                         </DataTrigger>
@@ -118,9 +122,9 @@
                             </fa:ImageAwesome.Style>
                         </fa:ImageAwesome>
                     </Grid>
-                    <Slider Style="{StaticResource CustomSliderStyle}" Width="75" Maximum="1"
+                    <Slider Style="{StaticResource CustomSliderStyle}" Width="75" Maximum="100"
                             Value="{Binding Volume, ElementName=mediaElement}"
-                            Visibility="{Binding IsMuted, ElementName=mediaElement, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
+                            Visibility="{Binding IsMuted, ElementName=viewerPanel, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
                             BorderThickness="0,0,5,0" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -134,7 +138,7 @@
                                 <Style>
                                     <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsPlaying, ElementName=mediaElement}"
+                                        <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
                                                      Value="False">
                                             <Setter Property="fa:ImageAwesome.Icon" Value="Play" />
                                         </DataTrigger>
@@ -155,10 +159,10 @@
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Orientation="Horizontal" Margin="0,0,10,0">
                     <TextBlock FontSize="14" Foreground="#FFEFEFEF"
-                               Text="{Binding Position, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
+                               Text="{Binding Time, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
                     <TextBlock FontSize="14" Text=" / " Foreground="#FFEFEFEF" />
                     <TextBlock FontSize="14" Foreground="#FFEFEFEF"
-                               Text="{Binding NaturalDuration, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement, Converter={StaticResource DurationToTimeSpanConverter}}" />
+                               Text="{Binding Length, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
                 </StackPanel>
             </Grid>
         </Grid>

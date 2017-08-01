@@ -1,0 +1,3085 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meta.Vlc</name>
+    </assembly>
+    <members>
+        <member name="T:Meta.Vlc.AudioDevice">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioDevice" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.AudioDeviceList">
+            <summary>
+                A list warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioDevice" /> linklist struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.AudioDeviceList.#ctor(System.IntPtr)">
+            <summary>
+                Create a readonly list by a pointer of <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioDevice" />.
+            </summary>
+            <param name="pointer"></param>
+        </member>
+        <member name="T:Meta.Vlc.AudioEqualizer">
+            <summary>
+                Audio equalizer of VLC player.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.AudioEqualizer.#ctor">
+            <summary>
+                Create a new default equalizer, with all frequency values zeroed.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.AudioEqualizer.#ctor(Meta.Vlc.PresetAudioEqualizerType)">
+            <summary>
+                Create a new equalizer, with initial frequency values copied from an existing preset.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Meta.Vlc.AudioEqualizer.#ctor(System.UInt32)">
+            <summary>
+                Create a new equalizer, with initial frequency values copied from an existing preset.
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.IsLibLoaded">
+            <summary>
+                获取一个值,该值指示当前模块是否被载入
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.PresetEqualizerCount">
+            <summary>
+                Get the number of equalizer presets.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.EqualizerBandCount">
+            <summary>
+                Get the number of distinct frequency bands for an equalizer.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.VlcInstance">
+            <summary>
+                Aways return <see cref="!:null" />.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.Preamp">
+            <summary>
+                Get or set the current pre-amplification value from an equalizer.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.AudioEqualizer.Item(System.UInt32)">
+            <summary>
+                Get or set the amplification value for a particular equalizer frequency band.
+            </summary>
+            <param name="band">frequency band index.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.AudioEqualizer.GetPresetEqualizerName(System.UInt32)">
+            <summary>
+                Get the name of a particular equalizer preset.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.AudioEqualizer.GetEqualizerBandFrequency(System.UInt32)">
+            <summary>
+                Get a particular equalizer band frequency.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.AudioOutput">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioOutput" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.AudioOutputList">
+            <summary>
+                A list warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioOutput" /> linklist struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.AudioOutputList.#ctor(System.IntPtr)">
+            <summary>
+                Create a readonly list by a pointer of <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioOutput" />.
+            </summary>
+            <param name="pointer"></param>
+        </member>
+        <member name="T:Meta.Vlc.LibVlcException">
+            <summary>
+                A base class of LibVlc exceptions.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcException.#ctor(System.String)">
+            <summary>
+                Create exception with a message.
+            </summary>
+            <param name="message">exception message</param>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcException.#ctor(System.String,System.Exception)">
+            <summary>
+                Create exception with a message and a inner exception.
+            </summary>
+            <param name="message">exception message</param>
+            <param name="innerException">inner exception</param>
+        </member>
+        <member name="T:Meta.Vlc.NoLibVlcFunctionAttributeException">
+            <summary>
+                If a LibVlc function don't have <see cref="T:Meta.Vlc.Interop.LibVlcFunctionAttribute" />, this exception will be throwed.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.NoLibVlcFunctionAttributeException.#ctor">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.NoLibVlcFunctionAttributeException" />.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.FunctionNotFoundException">
+            <summary>
+                If a function can't be found in LibVlc dlls, this exception will be throwed, maybe we should check the LibVlc
+                version what the function need.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.FunctionNotFoundException.#ctor(Meta.Vlc.Interop.LibVlcFunctionAttribute,Meta.Vlc.Interop.LibVlcVersion)">
+            <summary>
+                Create a  <see cref="T:Meta.Vlc.FunctionNotFoundException" /> with function's infomation and LibVlc's version.
+            </summary>
+            <param name="functionInfo">infomation of function</param>
+            <param name="libvlcVersion">version of LibVlc</param>
+        </member>
+        <member name="M:Meta.Vlc.FunctionNotFoundException.#ctor(Meta.Vlc.Interop.LibVlcFunctionAttribute,Meta.Vlc.Interop.LibVlcVersion,System.Exception)">
+            <summary>
+                Create a  <see cref="T:Meta.Vlc.FunctionNotFoundException" /> with function's infomation, LibVlc's version and a inner
+                exception.
+            </summary>
+            <param name="functionInfo">infomation of function</param>
+            <param name="libvlcVersion">version of LibVlc</param>
+            <param name="innerException">inner exception</param>
+        </member>
+        <member name="P:Meta.Vlc.FunctionNotFoundException.FunctionInfomation">
+            <summary>
+                Infomation of function what not found.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.FunctionNotFoundException.LibVlcVersion">
+            <summary>
+                Versiong infomation of current LibVlc.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.FunctionNotAvailableException">
+            <summary>
+                If a function is not available in current version LibVlc, but you call this, the exception will be throwed.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.FunctionNotAvailableException.#ctor(Meta.Vlc.Interop.LibVlcFunctionAttribute,Meta.Vlc.Interop.LibVlcVersion)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.FunctionNotAvailableException" /> with function's infomation and LibVlc's version.
+            </summary>
+            <param name="functionInfo">infomation of function</param>
+            <param name="libvlcVersion">version of LibVlc</param>
+        </member>
+        <member name="P:Meta.Vlc.FunctionNotAvailableException.FunctionInfomation">
+            <summary>
+                Infomation of function what not found.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.FunctionNotAvailableException.LibVlcVersion">
+            <summary>
+                Versiong infomation of current LibVlc.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.VersionStringParseException">
+            <summary>
+                If a version string parse failed, this exception will be throwed.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VersionStringParseException.#ctor(System.String)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.VersionStringParseException" /> with parse failed version string.
+            </summary>
+            <param name="versionString"></param>
+        </member>
+        <member name="P:Meta.Vlc.VersionStringParseException.VersionString">
+            <summary>
+                Parse failed version string.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.LibVlcLoadLibraryException">
+            <summary>
+                If some exception throwed when loading LibVlc, this exception will be throwed. Maybe you should check the LibVlc
+                target platform and your app target platform.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcLoadLibraryException.#ctor">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.LibVlcLoadLibraryException" />.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcLoadLibraryException.#ctor(System.Exception)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.LibVlcLoadLibraryException" /> with a inner exception.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.VlcCreateFailException">
+            <summary>
+                If create a new Vlc instence return NULL, this exception will be throwed. Maybe you should check your Vlc options.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcCreateFailException.#ctor">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.VlcCreateFailException" />.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcCreateFailException.#ctor(System.String)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.VlcCreateFailException" /> with some message.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.InteropHelper">
+            <summary>
+                Some helper method of interopping with unmanaged dlls.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.InteropHelper.PtrToString(System.IntPtr,System.Int32,System.Boolean,System.Text.Encoding)">
+            <summary>
+                Convert a pointer of string to manmaged <see cref="T:System.String" />.
+            </summary>
+            <param name="ptr">pointer of string</param>
+            <param name="count">count of string, -1 mean auto check the end char</param>
+            <param name="toBeFree">free this pointer when convert over</param>
+            <param name="encoding">encoding of string</param>
+            <returns>result string</returns>
+        </member>
+        <member name="M:Meta.Vlc.InteropHelper.StringToPtr(System.String)">
+            <summary>
+                Pinned a <see cref="T:System.String" /> to get pointer of this, you should call <see cref="M:System.Runtime.InteropServices.GCHandle.Free" /> when all is
+                over.
+            </summary>
+            <param name="str">string you need pinned</param>
+            <returns>GCHandle of <see cref="T:System.String" />, you can call <see cref="M:System.Runtime.InteropServices.GCHandle.AddrOfPinnedObject" /> to get pointer.</returns>
+        </member>
+        <member name="M:Meta.Vlc.InteropHelper.PtrsToStringArray(System.IntPtr[],System.Int32)">
+            <summary>
+                Convert a pointer array to <see cref="T:System.String" /> array.
+            </summary>
+            <param name="ptrs">pointer array</param>
+            <param name="length">length of pointer array</param>
+            <returns><see cref="T:System.String" /> array</returns>
+        </member>
+        <member name="M:Meta.Vlc.InteropHelper.StringArrayToPtr(System.String[])">
+            <summary>
+                Get a pointer of <see cref="T:System.String" /> array.
+            </summary>
+            <param name="strings"><see cref="T:System.String" /> array</param>
+            <returns>pointer of <see cref="T:System.String" /> array</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.AddInterface">
+            <summary>
+                尝试启动一个用户接口,用于 LibVlc 实例
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="name">接口名,为 NULL 则为默认</param>
+            <returns>如果成功会返回 0 ,否则会返回 -1</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.GetAudioFilterList">
+            <summary>
+                获取可用的音频过滤器
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <returns>可用音频过滤器列表指针,这是一个 <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" /> 类型的指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Free">
+            <summary>
+                释放由 LibVlc 函数返回的指针资源,其作用类似于 C语言 中的 free() 函数
+            </summary>
+            <param name="pointer">指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.GetChangeset">
+            <summary>
+                获取 LibVlc 的变更集(?)
+            </summary>
+            <returns>返回 LibVlc 的变更集,类似于 "aa9bce0bc4"</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.GetCompiler">
+            <summary>
+                获取 LibVlc 的编译器信息
+            </summary>
+            <returns>返回 LibVlc 的编译器信息</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.GetVersion">
+            <summary>
+                获取 LibVlc 的版本信息
+            </summary>
+            <returns>返回 LibVlc 的版本信息,类似于 "1.1.0-git The Luggage"</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.ReleaseLibVlcModuleDescription">
+            <summary>
+                释放 <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" /> 的资源
+            </summary>
+            <param name="moduleDescription">资源指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.NewInstance">
+            <summary>
+                创建并初始化一个 LibVlc 实例,并提供相应的参数,这些参数和命令行提供的参数类似,会影响到 LibVlc 实例的默认配置.
+                有效参数的列表取决于 LibVlc 版本,操作系统,可用 LibVlc 插件和平台.无效或不支持的参数会导致实例创建失败
+            </summary>
+            <param name="argsCount">参数个数</param>
+            <param name="argv">参数列表</param>
+            <returns>返回 LibVlc 实例指针,如果出错将返回 NULL</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.ReleaseInstance">
+            <summary>
+                递减 LibVlc 实例的引用计数,如果它达到零,将会释放这个实例
+            </summary>
+            <param name="instance">需要释放的 LibVlc 实例指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.RetainInstance">
+            <summary>
+                递增 LibVlc 实例的引用计数,当调用 NewInstance 初始化成功时,引用计数将初始化为1
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.SetAppId">
+            <summary>
+                设置一些元信息关于该应用程序
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="id">Java 风格的应用标识符,类似于 "com.acme.foobar"</param>
+            <param name="version">应用程序版本,类似于 "1.2.3"</param>
+            <param name="icon">应用程序图标,类似于 "foobar"</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.SetExitHandler">
+            <summary>
+                为 LibVlc 设置一个回调,该回调将会在 LibVlc 退出时被调用,不能与 <see cref="T:Meta.Vlc.Interop.Core.Wait" /> 一起使用.
+                而且,这个函数应该在播放一个列表或者开始一个用户接口前被调用,否则可能导致 LibVlc 在注册该回调前退出
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="handler">函数指针,这是一个参数为 void*,无返回值的函数指针</param>
+            <param name="arg">数据指针,将做为参数传递给回调函数</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.SetUserAgent">
+            <summary>
+                设置一个用户代理字符串,当一个协议需要它的时候,LibVlc 将会提供该字符串
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="name">应用程序名称,类似于 "FooBar player 1.2.3",实际上只要能标识应用程序,任何字符串都是可以的</param>
+            <param name="http">HTTP 用户代理,类似于 "FooBar/1.2.3 Python/2.6.0"</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.GetVideoFilterList">
+            <summary>
+                获取可用的视频过滤器
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <returns>可用视频过滤器列表指针,这是一个 <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" /> 类型的指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Wait">
+            <summary>
+                等待,直到一个接口导致 LibVlc 实例退出为止,在使用之前,应该使用 <see cref="T:Meta.Vlc.Interop.Core.AddInterface" /> 添加至少一个用户接口.
+                实际上这个方法只会导致一个线程阻塞,建议使用 <see cref="T:Meta.Vlc.Interop.Core.SetExitHandler" />
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.ModuleDescription">
+            <summary>
+                对一个 LibVlc 的模块的说明
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Error.ErrorMessage">
+            <summary>
+                获取一个可读的 LibVlc 错误信息
+            </summary>
+            <returns>返回一个可读的 LibVlc 错误信息,如果没有错误信息将返回 NULL</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Error.CleanError">
+            <summary>
+                清除当前线程的 LibVlc 的错误信息
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Events.EventAttach">
+            <summary>
+                为一个事件通知注册一个回调
+            </summary>
+            <param name="manager">事件管理器</param>
+            <param name="type">事件类型</param>
+            <param name="callback">回调</param>
+            <param name="userData">由用户定义的数据</param>
+            <returns>0代表成功,12代表出错</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Events.EventDetach">
+            <summary>
+                为一个事件通知取消注册一个回调
+            </summary>
+            <param name="manager">事件管理器</param>
+            <param name="type">事件类型</param>
+            <param name="callback">回调</param>
+            <param name="userData">由用户定义的数据</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Events.GetTypeName">
+            <summary>
+                获取事件类型名称
+            </summary>
+            <param name="type">事件类型</param>
+            <returns>返回事件类型名称</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Events.LibVlcEventCallBack">
+            <summary>
+                表示一个 LibVlc 的事件回调代理
+            </summary>
+            <param name="eventArgs">事件参数</param>
+            <param name="userData">用户数据指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Core.Events.EventTypes">
+            <summary>
+                事件类型
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaMetaChanged">
+            <summary>
+                媒体元数据改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaSubItemAdded">
+            <summary>
+                媒体的子项被添加
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaDurationChanged">
+            <summary>
+                媒体时长改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaParsedChanged">
+            <summary>
+                媒体解析状态被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaFreed">
+            <summary>
+                媒体被释放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaStateChanged">
+            <summary>
+                媒体状态改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerMediaChanged">
+            <summary>
+                媒体播放器的媒体被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerOpening">
+            <summary>
+                媒体播放器正在打开媒体
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerBuffering">
+            <summary>
+                媒体播放器正在缓冲媒体
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerPlaying">
+            <summary>
+                媒体播放器正在播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerPaused">
+            <summary>
+                媒体播放器被暂停
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerStopped">
+            <summary>
+                媒体播放器被停止播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerForward">
+            <summary>
+                媒体播放器前进
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerBackward">
+            <summary>
+                媒体播放器后退
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerEndReached">
+            <summary>
+                媒体播放器结束播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerEncounteredError">
+            <summary>
+                媒体播放器遇到错误
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerTimeChanged">
+            <summary>
+                媒体播放器时间改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerPositionChanged">
+            <summary>
+                媒体播放器进度改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerSeekableChanged">
+            <summary>
+                媒体播放器是否允许寻址被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerPausableChanged">
+            <summary>
+                媒体播放器是否允许被暂停被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerTitleChanged">
+            <summary>
+                媒体播放器标题被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerSnapshotTaken">
+            <summary>
+                媒体播放器捕获一个快照
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerLengthChanged">
+            <summary>
+                媒体播放器长度改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaPlayerVideoOutChanged">
+            <summary>
+                媒体播放器视频输出改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListItemAdded">
+            <summary>
+                一个项被添加到媒体列表
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListWillAddItem">
+            <summary>
+                一个项将被添加到媒体列表
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListItemDeleted">
+            <summary>
+                一个项从媒体列表移除
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListWillDeleteItem">
+            <summary>
+                一个项将从媒体列表移除
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListViewItemAdded">
+            <summary>
+                一个项被添加到媒体列表视图
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListViewWillAddItem">
+            <summary>
+                一个项将被添加到媒体列表视图
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListViewItemDeleted">
+            <summary>
+                一个项从媒体列表视图移除
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListViewWillDeleteItem">
+            <summary>
+                一个项将从媒体列表视图移除
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListPlayerPlayed">
+            <summary>
+                媒体列表播放器开始播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListPlayerNextItemSet">
+            <summary>
+                媒体列表播放器跳到下个项
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaListPlayerStopped">
+            <summary>
+                媒体列表播放器停止
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaDiscovererStarted">
+            <summary>
+                媒体搜寻器开始搜寻
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.MediaDiscovererEnded">
+            <summary>
+                媒体搜寻器搜寻结束
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaAdded">
+            <summary>
+                一个 VLM 媒体被添加
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaRemoved">
+            <summary>
+                一个 VLM 媒体被移除
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaChanged">
+            <summary>
+                一个 VLM 媒体被改变
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStarted">
+            <summary>
+                一个 VLM 媒体实例开始
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStopped">
+            <summary>
+                一个 VLM 媒体实例停止
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusInit">
+            <summary>
+                一个 VLM 媒体实例被初始化
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusOpening">
+            <summary>
+                一个 VLM 媒体实例正在打开
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusPlaying">
+            <summary>
+                一个 VLM 媒体实例正在播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusPause">
+            <summary>
+                一个 VLM 媒体实例被暂停
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusEnd">
+            <summary>
+                一个 VLM 媒体实例结束播放
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Core.Events.EventTypes.VlmMediaInstanceStatusError">
+            <summary>
+                一个 VLM 媒体实例出现错误
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.MediaAddOption">
+            <summary>
+                向一个媒体添加一个选项,这个选项将会确定媒体播放器将如何读取介质,
+            </summary>
+            <param name="media">一个媒体指针</param>
+            <param name="options"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.MediaAddOptionFlag">
+            <summary>
+                向一个媒体通过可配置的标志添加一个选项,这个选项将会确定媒体播放器将如何读取介质,
+            </summary>
+            <param name="media">一个媒体指针</param>
+            <param name="options"></param>
+            <param name="flags"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.MediaDuplicate">
+            <summary>
+                复制一个媒体对象
+            </summary>
+            <param name="media">要被复制的媒体对象</param>
+            <returns>复制的媒体对象</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetEventManager">
+            <summary>
+                获取媒体对象的事件管理器,该函数不会增加引用计数
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回媒体对象的事件管理器</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetCodecDescription">
+            <summary>
+                获取媒体的基本编码器的说明
+            </summary>
+            <param name="type">由 <see cref="F:Meta.Vlc.Interop.Media.MediaTrack.Type" /> 得来</param>
+            <param name="codec">由 <see cref="F:Meta.Vlc.Interop.Media.MediaTrack.Codec" /> 得来</param>
+            <returns>返回媒体的基本编码器的说明</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetDuration">
+            <summary>
+                获取媒体的时间长度
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回媒体的时间长度</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetMeta">
+            <summary>
+                获取媒体的某个元属性,如果尚未解析元属性,将会返回 NULL.
+                这个方法会自动调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMediaAsync" /> 方法,所以你在之后应该会收到一个 MediaMetaChanged 事件.
+                如果你喜欢同步版本,可以在 GetMeta 之前调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 方法
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="type">元属性类型</param>
+            <returns>返回媒体的某个元属性</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetMrl">
+            <summary>
+                获取该媒体的媒体资源地址
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回该媒体的媒体资源地址</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetState">
+            <summary>
+                获取媒体当前状态
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回媒体当前状态</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetStats">
+            <summary>
+                获取媒体当前统计
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="stats">统计结构体指针,指向 <seealso cref="T:Meta.Vlc.Interop.Media.MediaStats" /></param>
+            <returns>如果成功会返回 true ,否则会返回 false</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetTracksInfo">
+            <summary>
+                获取媒体的基本流的描述,注意,在调用该方法之前你需要首先调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 方法,或者至少播放一次.
+                否则,你将的得到一个空数组
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="tracks">一个 <see cref="T:Meta.Vlc.Interop.Media.MediaTrackInfo" /> 数组</param>
+            <returns>数组的元素个数</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetUserData">
+            <summary>
+                获取由用户定义的媒体数据
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回由用户定义的媒体数据指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.IsParsed">
+            <summary>
+                获取一个值表示该媒体是否已经解析
+            </summary>
+            <param name="media">LibVlc 实例指针</param>
+            <returns>True 表示已经解析,False 表示尚未被解析</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.CreateMediaAsNewNode">
+            <summary>
+                创建一个具有名字的媒体作为一个空节点
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="name">名字</param>
+            <returns>创建的媒体对象指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.CreateMediaFromFileDescriptor">
+            <summary>
+                通过给定的文件描述符创建一个媒体,该文件描述符必须具有 Read 访问权限.
+                LibVlc 不会关闭任何文件描述符,尽管如此,一般一个媒体描述符只能在媒体播放器中使用一次,如果你想复用,需要使用 lseek 函数将文件描述符的文件指针倒回开头
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="fileDescriptor">文件描述符</param>
+            <returns>创建的媒体对象指针,发送错误时会返回 NULL</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.CreateMediaFromLocation">
+            <summary>
+                通过给定的文件 Url 创建一个媒体,该 Url 的格式必须以 "file://" 开头,参见 "RFC3986".
+                对于打开本地媒体,其实我们更推荐使用 <see cref="T:Meta.Vlc.Interop.Media.CreateMediaFromPath" />
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="url">媒体的文件 Url</param>
+            <returns>创建的媒体对象指针,发送错误时会返回 NULL</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.CreateMediaFromPath">
+            <summary>
+                通过给定的文件路径创建一个媒体
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <param name="path">媒体文件路径</param>
+            <returns>创建的媒体对象指针,发送错误时会返回 NULL</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.ParseMedia">
+            <summary>
+                解析一个媒体,获取媒体的元数据和轨道信息
+            </summary>
+            <param name="media">媒体对象指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.ParseMediaAsync">
+            <summary>
+                异步解析一个媒体,获取媒体的元数据和轨道信息,这是 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 的异步版本,
+                解析完成会触发 MediaParsedChanged 事件,您可以跟踪该事件
+            </summary>
+            <param name="media">媒体对象指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.ParseMediaWithOptionAsync">
+            <summary>
+                根据提供的标志异步解析一个媒体,获取媒体的元数据和轨道信息,这是 <see cref="T:Meta.Vlc.Interop.Media.ParseMediaAsync" /> 的高级版本,
+                默认情况下解析一个本地文件,解析完成会触发 MediaParsedChanged 事件,您可以跟踪该事件
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="flag">提供的解析标志</param>
+            <returns>成功解析会返回 0,否则会返回 -1</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.ReleaseMedia">
+            <summary>
+                递减媒体对象的引用计数,如果它达到零,将会释放这个实例
+            </summary>
+            <param name="media">媒体对象指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.RetainMedia">
+            <summary>
+                递增媒体对象的引用计数
+            </summary>
+            <param name="media">媒体对象指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.SaveMeta">
+            <summary>
+                保存当前的元数据到媒体
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>如果操作成功将会返回 True</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.SetMeta">
+            <summary>
+                设置媒体的元数据
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="type">元数据类型</param>
+            <param name="data">元数据值</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.SetUserData">
+            <summary>
+                设置媒体的由用户定义的数据
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="userData">用户定义的数据</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetSubitems">
+            <summary>
+                获取媒体对象的子对象列表,这将增加引用计数,使用 <see cref="!:Interop.MediaList.ReleaseMediaList" /> 来减少引用计数
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>返回媒体对象的子对象列表</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.GetTracks">
+            <summary>
+                获取媒体的基本流的描述,注意,在调用该方法之前你需要首先调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 方法,或者至少播放一次.
+                否则,你将的得到一个空数组
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <param name="tracks">一个 <see cref="T:Meta.Vlc.Interop.Media.MediaTrack" /> 数组的数组</param>
+            <returns>返回媒体的基本流的描述</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Media.ReleaseTracks">
+            <summary>
+                释放一个媒体的基本流的描述的数组
+            </summary>
+            <param name="tracks">基本流的描述的数组</param>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.MediaTrackInfo.ChannelsOrHeight">
+            <summary>
+                表示音频的通道数或者视频的帧高
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.MediaTrackInfo.RateOrWidth">
+            <summary>
+                表示音频的速率或者视频的帧宽
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.AudioTrack.Channels">
+            <summary>
+                表示音频的通道数
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.AudioTrack.Rate">
+            <summary>
+                表示音频的速率
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.VideoTrack.Height">
+            <summary>
+                表示视频的帧高
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.VideoTrack.Width">
+            <summary>
+                表示视频的帧宽
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.Media.MediaTrack.Track">
+            <summary>
+                表示一个 Track 的具体指针,该指针可能指向 <see cref="T:Meta.Vlc.Interop.Media.VideoTrack" />,<see cref="T:Meta.Vlc.Interop.Media.AudioTrack" /> 或者 <see cref="T:Meta.Vlc.Interop.Media.SubtitleTrack" />,根据
+                Type 的值不同,Track 的指向数据也可能不同
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ToggleMute">
+            <summary>
+                切换音频静音状态
+            </summary>
+            <param name="mediaPlayer"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetMute">
+            <summary>
+                获取音频静音状态
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns>0为正常,1为静音,-1为未定义</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetMute">
+            <summary>
+                设置音频静音状态
+            </summary>
+            <param name="mediaPlayer"></param>
+            <param name="status"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVolume">
+            <summary>
+                获取音频音量
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns>0~100之间</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVolume">
+            <summary>
+                设置音频音量
+            </summary>
+            <param name="mediaPlayer"></param>
+            <param name="volume">0~100之间</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetOutputChannel">
+            <summary>
+                获取音频输出通道
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetOutputChannel">
+            <summary>
+                设置音频输出通道
+            </summary>
+            <param name="mediaPlayer"></param>
+            <param name="channel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioTrackCount">
+            <summary>
+                获取音频轨道数
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioTrack">
+            <summary>
+                获取当前音轨
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioTrack">
+            <summary>
+                设置当前音轨
+            </summary>
+            <param name="mediaPlayer"></param>
+            <param name="track"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioTrackDescription">
+            <summary>
+                获取音轨描述
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioDevice">
+            <summary>
+                Description for audio output device.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.AudioDevice.Next">
+            <summary>
+                Next entry in list.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.AudioDevice.Device">
+            <summary>
+                Device identifier string.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.AudioDevice.Description">
+            <summary>
+                User-friendly device description.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioOutput">
+            <summary>
+                Description for audio output.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.EnumAudioDeviceList">
+            <summary>
+                Gets a list of potential audio output devices.
+            </summary>
+            <param name="mediaPlayer">media player</param>
+            <returns>
+                A NULL-terminated linked list of potential audio output devices. It must be freed with
+                <see cref="T:Meta.Vlc.Interop.MediaPlayer.ReleaseAudioDeviceList" />
+            </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ReleaseAudioDeviceList">
+            <summary>
+                Frees a list of available audio output devices.
+            </summary>
+            <param name="audioDeviceList">list with audio outputs for release </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioDeviceList">
+            <summary>
+                Gets a list of audio output devices for a given audio output module.
+            </summary>
+            <param name="instance">libvlc instance</param>
+            <param name="audioOutput">audio output name (as returned by <see cref="T:Meta.Vlc.Interop.MediaPlayer.GetAudioOutputList" />)</param>
+            <returns>
+                A NULL-terminated linked list of potential audio output devices. It must be freed with
+                <see cref="T:Meta.Vlc.Interop.MediaPlayer.ReleaseAudioDeviceList" />
+            </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioOutputList">
+            <summary>
+                Gets the list of available audio output modules.
+            </summary>
+            <param name="instance">libvlc instance</param>
+            <returns>list of available audio outputs. It must be freed with  <see cref="T:Meta.Vlc.Interop.MediaPlayer.ReleaseAudioOutputList" /></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ReleaseAudioOutputList">
+            <summary>
+                Frees the list of available audio output modules.
+            </summary>
+            <param name="audioOutputList">list with audio outputs for release </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioOutput">
+            <summary>
+                Selects an audio output module.
+                Any change will take be effect only after playback is stopped and restarted. Audio output cannot be changed while
+                playing.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="name">name of audio output, use <see cref="F:Meta.Vlc.Interop.MediaPlayer.AudioOutput.Name" /></param>
+            <returns>0 if function succeded, -1 on error </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioDevice">
+            <summary>
+                Configures an explicit audio output device. If the module paramater is NULL,
+                audio output will be moved to the device specified by the device identifier string immediately.
+                This is the recommended usage. A list of adequate potential device strings can be obtained with
+                <see cref="T:Meta.Vlc.Interop.MediaPlayer.EnumAudioDeviceList" />.
+                However passing NULL is supported in LibVLC version 2.2.0 and later only; in earlier versions, this function would
+                have no effects when the module parameter was NULL.
+                If the module parameter is not NULL, the device parameter of the corresponding audio output, if it exists, will be
+                set to the specified string.
+                Note that some audio output modules do not have such a parameter (notably MMDevice and PulseAudio).
+                A list of adequate potential device strings can be obtained with <see cref="T:Meta.Vlc.Interop.MediaPlayer.GetAudioDeviceList" />.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="module">
+                If NULL, current audio output module. if non-NULL, name of audio output module (
+                <see cref="F:Meta.Vlc.Interop.MediaPlayer.AudioOutput.Name" />)
+            </param>
+            <param name="deviceId">device identifier string </param>
+            <returns>Nothing. Errors are ignored (this is a design issue).</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAudioDevice">
+            <summary>
+                Get the current audio output device identifier.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>
+                the current audio output device identifier NULL if no device is selected or in case of error (the result must
+                be released with <see cref="T:Meta.Vlc.Interop.Core.Free" />).
+            </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerPresetCount">
+            <summary>
+                获取预设均衡器数量
+            </summary>
+            <param name="mediaPlayer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerPresetName">
+            <summary>
+                获取预设均衡器名称
+            </summary>
+            <param name="index">均衡器编号</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerBandCount">
+            <summary>
+                获取均衡器频带数目
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerBandFrequency">
+            <summary>
+                获取均衡器频带的频率
+            </summary>
+            <param name="index">频带编号</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CreateEqualizer">
+            <summary>
+                创建一个新的均衡器
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CreateEqualizerFromPreset">
+            <summary>
+                从预设创建一个新的均衡器
+            </summary>
+            <param name="index">预设均衡器编号</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ReleaseEqualizer">
+            <summary>
+                释放均衡器
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetEqualizerPreamp">
+            <summary>
+                设置均衡器的新预设放大值
+            </summary>
+            <param name="equalizer"></param>
+            <param name="preamp">取值范围为 -20.0~+20.0</param>
+            <returns>0 成功，-1 失败</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerPreamp">
+            <summary>
+                获取均衡器的新预设放大值
+            </summary>
+            <param name="equalizer"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetEqualizerAmplification">
+            <summary>
+                设置均衡器的放大值
+            </summary>
+            <param name="equalizer">均衡器</param>
+            <param name="preamp">取值范围为 -20.0~+20.0</param>
+            <param name="band">屏带编号</param>
+            <returns>0 成功，-1 失败</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEqualizerAmplification">
+            <summary>
+                获取均衡器的放大值
+            </summary>
+            <param name="equalizer">均衡器</param>
+            <param name="band">屏带编号</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetEqualizer">
+            <summary>
+                为播放器设置均衡器，提供 NULL 来关闭均衡器，在该方法返回后即可立即释放均衡器，播放器不会引用均衡器实例
+            </summary>
+            <param name="meidaPlayer">播放器</param>
+            <param name="equalizer">均衡器</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.TrackDescription">
+            <summary>
+                表示一个视频,音频,或者文本的描述
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoMarqueeOption">
+            <summary>
+                视频字幕设定项
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoLockCallback">
+            <summary>
+                当锁定图像缓存时,调用此回调.
+                每当一个新帧需要被解码,都会调用此回调,一个或者三个像素平面会被通过第二个参数返回.这些像素屏幕需要 32 字节对齐
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="planes">像素平面</param>
+            <returns>一个私有指针用来显示或解锁回调用来识别图像缓存</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoUnlockCallback">
+            <summary>
+                当解锁图像缓存时,调用此回调.
+                每当一个帧被解码完成,都会调用此回调,该回调并不是必须的,但是它是读取像素值的唯一的途径.
+                该回调会发生在图片解码之后,显示之前
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="picture">由 <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoLockCallback" /> 返回的指针</param>
+            <param name="planes">像素平面</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoDisplayCallback">
+            <summary>
+                当显示图像时,调用此回调.
+                每当一个帧需要被显示时,都会调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="picture">由 <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoLockCallback" /> 返回的指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoFormatCallback">
+            <summary>
+                当配置图像缓存格式时,调用此回调.
+                此回调会获取由解码器和过滤器(如果有)输出的视频的格式,
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="chroma">视频格式识别码</param>
+            <param name="width">像素宽</param>
+            <param name="height">像素高</param>
+            <param name="pitches">每个像素平面字节的扫描线间距</param>
+            <param name="lines">每个像素平面的扫描线的个数</param>
+            <returns>分配的图片缓存大小,0代表失败</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.VideoCleanupCallback">
+            <summary>
+                配置图片缓存格式时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioPlayCallback">
+            <summary>
+                音频播放时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="sample">采样数据</param>
+            <param name="count">采样数</param>
+            <param name="pts">预计播放时间戳</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioPauseCallback">
+            <summary>
+                音频暂停时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="pts">请求暂停的时间戳</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioResumeCallback">
+            <summary>
+                音频继续播放时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="pts">请求继续的时间戳</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioFlushCallback">
+            <summary>
+                音频缓冲刷新时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="pts"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioDrainCallback">
+            <summary>
+            </summary>
+            <param name="opaque"></param>
+            <param name="pts"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioSetupCallback">
+            <summary>
+                音频格式完成配置时调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="format">格式字符串,一个四字符的字符串</param>
+            <param name="rate">采样率</param>
+            <param name="channels">通道数</param>
+            <returns>0代表成功</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioCleanupCallback">
+            <summary>
+            </summary>
+            <param name="opaque"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.AudioSetVolumeCallback">
+            <summary>
+                音频设置音量时,调用此回调
+            </summary>
+            <param name="opaque">一个私有指针</param>
+            <param name="volume">音量</param>
+            <param name="mute">是否为静音</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CreateMediaPlayer">
+            <summary>
+                创建一个空的媒体播放器对象
+            </summary>
+            <param name="instance">LibVlc 实例指针</param>
+            <returns>创建好的媒体播放器对象指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CreateMediaPlayerFromMedia">
+            <summary>
+                通过一个媒体对象创建一个媒体播放器对象
+            </summary>
+            <param name="media">媒体对象指针</param>
+            <returns>创建好的媒体播放器对象指针</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ReleaseMediaPlayer">
+            <summary>
+                递减媒体播放器对象的引用计数,如果它达到零,将会释放这个实例
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.RetainMediaPlayer">
+            <summary>
+                递增媒体播放器对象的引用计数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetMedia">
+            <summary>
+                为媒体播放器设置媒体
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="media">媒体对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetMedia">
+            <summary>
+                获取媒体播放器的媒体
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>媒体对象</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetEventManager">
+            <summary>
+                获取媒体播放器对象的事件管理器,该函数不会增加引用计数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>返回媒体播放器对象的事件管理器</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.IsPlaying">
+            <summary>
+                获取媒体播放器对象是否正在播放
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>如果播放器对象正在播放则返回 True ,否则返回 Flase</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.Play">
+            <summary>
+                使媒体播放器开始播放
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>0代表成功,-1代表失败</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetPause">
+            <summary>
+                设置媒体播放器播放或者暂停,如果没有设置媒体对象,将会没有作用
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="pause">true 代表暂停,false 代表播放或继续</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetPosition">
+            <summary>
+                设置媒体播放器的进度,如果后台播放未启用将会没有作用,根据底层的输入格式和协议,可能导致无法正常播放
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="pos">播放进度,取值为0.0~1.0</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.Stop">
+            <summary>
+                停止媒体播放器的播放,如果没有设置媒体将会没有作用
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoCallback">
+            <summary>
+                设置 Video 的事件回调
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="lockCallback">Lock 事件回调,必须</param>
+            <param name="unlockCallback">Unlock 事件回调</param>
+            <param name="displayCallback">Display 事件回调</param>
+            <param name="userData">回调用用户数据</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoFormat">
+            <summary>
+                设置 Video 解码格式
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="chroma">视频格式识别码,一个四个字符的识别码</param>
+            <param name="width">像素宽</param>
+            <param name="height">像素高</param>
+            <param name="pitch">扫描线</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoFormatCallback">
+            <summary>
+                设置 Video 解码格式回调
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="formatCallback"></param>
+            <param name="cleanupCallback"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetHwnd">
+            <summary>
+                为媒体播放器设置一个视频输出句柄,将会在该句柄上绘图
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="hwnd">句柄</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetHwnd">
+            <summary>
+                获取为媒体播放器设置的视频输出句柄
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>句柄</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioCallback">
+            <summary>
+                设置 Audio 的事件回调
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="playCallback"></param>
+            <param name="pauseCallback"></param>
+            <param name="resumeCallback"></param>
+            <param name="flushCallback"></param>
+            <param name="drainCallback"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioFormat">
+            <summary>
+                设置 Audio 的格式
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="format">格式字符串,一个四字符的字符串</param>
+            <param name="rate">采样率</param>
+            <param name="channels">通道数</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioFormatCallback">
+            <summary>
+                设置 Audio 的格式回调
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="setupCallback"></param>
+            <param name="cheanupCallback"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAudioVolumeCallback">
+            <summary>
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="volumeCallback"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetLength">
+            <summary>
+                获取媒体的长度,以毫秒为单位
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>-1为未设置媒体</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetTime">
+            <summary>
+                获取目前的媒体进度,以毫秒为单位
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>-1为未设置媒体</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetTime">
+            <summary>
+                设置目前的媒体进度,以毫秒为单位
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="time">播放进度</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetPosition">
+            <summary>
+                获取当前媒体进度,0~1范围
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetChapter">
+            <summary>
+                设置当前媒体播放器的章节
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="chapter">章节</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetChapter">
+            <summary>
+                获取当前媒体播放器的章节
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>-1代表没有设置媒体</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetChapterCount">
+            <summary>
+                获取当前媒体播放器的章节数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns>-1代表没有设置媒体</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CanPlay">
+            <summary>
+                获取当前媒体播放器是否处于可播放
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetTitleChapterCount">
+            <summary>
+                获取标题的章节数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="title">标题</param>
+            <returns>-1代表没有设置媒体</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetTitle">
+            <summary>
+                设置媒体播放器的标题
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="title"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetTitle">
+            <summary>
+                获取媒体播放器的标题
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetTitleCount">
+            <summary>
+                获取媒体播放器的标题数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.PreviousChapter">
+            <summary>
+                上一个章节
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.NextChapter">
+            <summary>
+                下一个章节
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetRate">
+            <summary>
+                获取媒体速率
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetRate">
+            <summary>
+                设置媒体是速率
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="rate"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetState">
+            <summary>
+                获取媒体的状态
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetFps">
+            <summary>
+                获取媒体的FPS
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.HasVout">
+            <summary>
+                获取该媒体播放器视频输出的个数
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.IsSeekable">
+            <summary>
+                获取该媒体是否能够跳进度
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.CanPause">
+            <summary>
+                获取该媒体是否能够暂停
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.NextFrame">
+            <summary>
+                播放下一帧
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.Navigate">
+            <summary>
+                导航DVD菜单
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="navigate"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoTitleDisplay">
+            <summary>
+                设置播放器播放视频时显示视频标题
+            </summary>
+            <param name="mediaPlayer">媒体播放器对象</param>
+            <param name="pos"></param>
+            <param name="timeout"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.ReleaseTrackDescription">
+            <summary>
+                释放 TrackDescriptionList 资源
+            </summary>
+            <param name="track"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetCursor">
+            <summary>
+                Get the mouse pointer coordinates over a video.
+                Coordinates are expressed in terms of the decoded video resolution, not in terms of pixels on the screen/viewport
+                (to get the latter, you can query your windowing system directly).
+                Either of the coordinates may be negative or larger than the corresponding dimension of the video, if the cursor is
+                outside the rendering area.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="num">number of the video (starting from, and most commonly 0) </param>
+            <param name="px">pointer to get the abscissa [OUT] </param>
+            <param name="py">pointer to get the ordinate [OUT] </param>
+            <returns>0 on success, -1 if the specified video does not exist </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetCursor">
+            <summary>
+                Set the mouse pointer coordinates over a video.
+                This is a special function of xZune dev version. If you display using HWND, you will needn't this function.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="num">number of the video (starting from, and most commonly 0) </param>
+            <param name="px">pointer to get the abscissa [OUT] </param>
+            <param name="py">pointer to get the ordinate [OUT] </param>
+            <returns>0 on success, -1 if the specified video does not exist </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetMouseDown">
+            <summary>
+                Set the a mouse button is down.
+                This is a special function of xZune dev version. If you display using HWND, you will needn't this function.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="num">number of the video (starting from, and most commonly 0) </param>
+            <param name="mouseButton">a enum of mouse button </param>
+            <returns>0 on success, -1 if the specified video does not exist </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetMouseUp">
+            <summary>
+                Set the a mouse button is up.
+                This is a special function of xZune dev version. If you display using HWND, you will needn't this function.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="num">number of the video (starting from, and most commonly 0) </param>
+            <param name="mouseButton">a enum of mouse button </param>
+            <returns>0 on success, -1 if the specified video does not exist </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetSize">
+            <summary>
+                Get the pixel dimensions of a video.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="num">number of the video (starting from, and most commonly 0) </param>
+            <param name="px">pointer to get the pixel width [OUT] </param>
+            <param name="py">pointer to get the pixel height [OUT] </param>
+            <returns>0 on success, -1 if the specified video does not exist </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetScale">
+            <summary>
+                Get the current video scaling factor.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>
+                the currently configured zoom factor, or 0. if the video is set to fit to the output window/drawable
+                automatically.
+            </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetScale">
+            <summary>
+                Set the video scaling factor.
+                That is the ratio of the number of pixels on screen to the number of pixels in the original decoded video in each
+                dimension.
+                Zero is a special value; it will adjust the video to the output window/drawable (in windowed mode) or the entire
+                screen.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="scale">the scaling factor, or zero </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetAspectRatio">
+            <summary>
+                Get current video aspect ratio.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>the video aspect ratio or NULL if unspecified (the result must be released with <see cref="!:Free" />). </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetAspectRatio">
+            <summary>
+                Set new video aspect ratio.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="scale">new video aspect-ratio or NULL to reset to default </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoWidth">
+            <summary>
+                Get current video width. Use <seealso cref="T:Meta.Vlc.Interop.MediaPlayer.GetSize" /> instead.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>the video pixel width or 0 if not applicable </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoHeight">
+            <summary>
+                Get current video height. Use <seealso cref="T:Meta.Vlc.Interop.MediaPlayer.GetSize" /> instead.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>the video pixel height or 0 if not applicable </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoTrackCount">
+            <summary>
+                Get number of available video tracks.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>the number of available video tracks (int) </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoTrack">
+            <summary>
+                Get current video track.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>the video track ID(int) or -1 if no active input</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoTrack">
+            <summary>
+                Set video track.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="track">the track ID (i_id field from track description)</param>
+            <returns>0 on success, -1 if out of range </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoTrackDescription">
+            <summary>
+                Get the description of available video tracks.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <returns>
+                list with description of available video tracks, or NULL on error. It must be freed with
+                <see cref="T:Meta.Vlc.Interop.MediaPlayer.ReleaseTrackDescription" />
+            </returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoAdjustInt">
+            <summary>
+            Get integer adjust option. 
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="adjust">adjust option to get, values of <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoAdjust"/></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.GetVideoAdjustFloat">
+            <summary>
+            Get float adjust option. 
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="adjust">adjust option to get, values of <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoAdjust"/></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoAdjustInt">
+            <summary>
+            Set adjust option as integer. Options that take a different type value are ignored. Passing libvlc_adjust_enable as option value has the side effect of starting (arg !0) or stopping (arg 0) the adjust filter.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="adjust">adjust option to set, values of <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoAdjust"/></param>
+            <param name="value">adjust option value </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.SetVideoAdjustFloat">
+            <summary>
+            Set adjust option as float. Options that take a different type value are ignored.
+            </summary>
+            <param name="mediaPlayer">media player </param>
+            <param name="adjust">adjust option to set, values of <see cref="T:Meta.Vlc.Interop.MediaPlayer.VideoAdjust"/></param>
+            <param name="value">adjust option value </param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.MediaPlayer.MouseButton">
+            <summary>
+                A enum of mouse button.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.MouseButton.Left">
+            <summary>
+                The left button of mouse.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.MouseButton.Right">
+            <summary>
+                The right button of mouse.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Interop.MediaPlayer.MouseButton.Other">
+            <summary>
+                Other buttons of mouse, it is not commonly used.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Time.Clock">
+            <summary>
+                获取由 LibVlc 定义的当前时间
+            </summary>
+            <returns>返回由 LibVlc 定义的当前时间</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.Time.Delay">
+            <summary>
+                获取与提供的时间戳之间的延迟
+            </summary>
+            <param name="timestamp">时间戳</param>
+            <returns>返回与提供的时间戳之间的延迟</returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.ReleaseVlmInstance">
+            <summary>
+                释放给定的 LibVlc 的实例相关的 VLM 实例
+            </summary>
+            <param name="instance"></param>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.NewBroadCastInput">
+            <summary>
+                添加广播和一个输入
+            </summary>
+            <param name="instance">VLM 实例指针</param>
+            <param name="broadcastName">广播名</param>
+            <param name="inputMRL">输入媒体资源地址</param>
+            <param name="outputMRl">输出媒体资源地址</param>
+            <param name="options"></param>
+            <param name="IntPtrOptions"></param>
+            <param name="boolNewBorodcast">设置一个值允许打开新的新的广播</param>
+            <param name="ifLoopBroadcast">是否广播循环播放</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.NewVodInput">
+            <summary>
+                添加视频点播和一个输入
+            </summary>
+            <param name="instance">VLM 实例指针</param>
+            <param name="mediaWork"></param>
+            <param name="MRLinput"></param>
+            <param name="numberOptions"></param>
+            <param name="addOptions"></param>
+            <param name="boolNewVod"></param>
+            <param name="vodMuxer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.DelBoroadcastOrOvd">
+            <summary>
+                删除媒体(视频点播或广播)
+            </summary>
+            <param name="instance">VLM 实例指针</param>
+            <param name="delBroadcastName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.MediaSwitch">
+            <summary>
+                启用或禁用媒体(视频点播或广播)
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaWork"></param>
+            <param name="boolNewBorodcast"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.SetMediaOutput">
+            <summary>
+                设置媒体输出
+            </summary>
+            <param name="instance">VLM 实例指针</param>
+            <param name="broadcastWork"></param>
+            <param name="outputMRl"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.SetMediaInput">
+            <summary>
+                设置媒体的 MRL 输入
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaWork"></param>
+            <param name="inputMRl"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.AddMediaInput">
+            <summary>
+                增加一个媒体的 MRL 输入
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaWork"></param>
+            <param name="inputMRl"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.SetMediaLoop">
+            <summary>
+                设置媒体循环状态
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaWork"></param>
+            <param name="newStatus">媒体新的状态</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.SetVodMuxer">
+            <summary>
+                设置媒体的 Vod Muxer
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaWork"></param>
+            <param name="newMuxer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.EditMediaParas">
+            <summary>
+                编辑媒体参数
+            </summary>
+            <param name="instance"></param>
+            <param name="newBroadcastName"></param>
+            <param name="inPutMRL"></param>
+            <param name="outPutMRL"></param>
+            <param name="numberOptains"></param>
+            <param name="addOptains"></param>
+            <param name="boolNewBroadcast"></param>
+            <param name="ifLoopBroadcast"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.PlayNamedBroadcast">
+            <summary>
+                播放指定媒体
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName">指定的媒体的名字</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.StopNamedBroadcast">
+            <summary>
+                停止指定的媒体
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName">指定的媒体的名字</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.PauseNamedBroadcast">
+            <summary>
+                暂停指定的媒体
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName">指定的媒体的名字</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.SeekInNamedBroadcast">
+            <summary>
+                在指定的广播中寻找
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName">指定的媒体的名字</param>
+            <param name="seekPercent">寻找进度的百分比数值</param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.ReturnJsonMessage">
+            <summary>
+                以 Json 字符串的形式返回一个关于媒体的信息
+            </summary>
+            <param name="instance"></param>
+            <param name="namedMediaName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.GetMediaPosition">
+            <summary>
+                通过名称或 ID 获取媒体实例的位置
+            </summary>
+            <param name="instance"></param>
+            <param name="MediaName"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.GetMediaTime">
+            <summary>
+                通过名称或 ID 获取媒体实例的时间
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.GetMediaLength">
+            <summary>
+                通过名称或 ID 获取媒体实例的长度
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.GetMediaBackRate">
+            <summary>
+                通过名称或 ID 获取媒体实例的退率
+            </summary>
+            <param name="instance"></param>
+            <param name="mediaName"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.VLM.GetMediaEventManager">
+            <summary>
+                从 Vim Media 中得到 Libvlc 事件管理器
+            </summary>
+            <param name="libvlcInstance"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.Interop.LibVlcFunction`1">
+            <summary>
+                A dynamic mapper of LibVlc functions.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcFunction`1.#ctor">
+            <summary>
+                Load a LibVlc function from unmanaged to managed.
+            </summary>
+            <exception cref="T:System.TypeLoadException">A custom attribute type cannot be loaded. </exception>
+            <exception cref="T:Meta.Vlc.NoLibVlcFunctionAttributeException">
+                For LibVlcFunction, need LibVlcFunctionAttribute to get Infomation
+                of function.
+            </exception>
+            <exception cref="T:Meta.Vlc.FunctionNotFoundException">Can't find function in dll.</exception>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunction`1.IsEnable">
+            <summary>
+                Get this <see cref="T:Meta.Vlc.Interop.LibVlcFunction`1" /> is available or not.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunction`1.FunctionInfomation">
+            <summary>
+                Get infomation of this <see cref="T:Meta.Vlc.Interop.LibVlcFunction`1" />.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunction`1.Delegate">
+            <summary>
+                Get delegate of this <see cref="T:Meta.Vlc.Interop.LibVlcFunction`1" />, if <see cref="P:Meta.Vlc.Interop.LibVlcFunction`1.IsEnable" /> is false, this method will throw
+                exception.
+            </summary>
+            <exception cref="T:Meta.Vlc.FunctionNotAvailableException" accessor="get">This function isn't available on current version LibVlc.</exception>
+        </member>
+        <member name="T:Meta.Vlc.Interop.LibVlcFunctionAttribute">
+            <summary>
+                为 LibVlc 函数委托初始化提供必要的信息
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcFunctionAttribute.#ctor(System.String)">
+            <summary>
+                指定该委托在 LibVlc 中的函数名,不限定 LibVlc 的版本
+            </summary>
+            <param name="functionName">函数名</param>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcFunctionAttribute.#ctor(System.String,System.String)">
+            <summary>
+                指定该委托在 LibVlc 中的函数名,并要求不低于指定版本的 LibVlc
+            </summary>
+            <param name="functionName">函数名</param>
+            <param name="minVersion">最低支持的 LibVlc</param>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcFunctionAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+                指定该委托在 LibVlc 中的函数名,并要求不低于指定版本的 LibVlc,也不高于指定的最大版本
+            </summary>
+            <param name="functionName">函数名</param>
+            <param name="minVersion">最低支持的 LibVlc</param>
+            <param name="maxVersion">最高支持的 LibVlc</param>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcFunctionAttribute.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+                指定该委托在 LibVlc 中的函数名,并要求不低于指定版本的 LibVlc,也不高于指定的最大版本
+            </summary>
+            <param name="functionName">函数名</param>
+            <param name="minVersion">最低支持的 LibVlc</param>
+            <param name="maxVersion">最高支持的 LibVlc</param>
+            <param name="dev">特定支持的 LibVlc 开发版本</param>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunctionAttribute.FunctionName">
+            <summary>
+                获取一个值,表示函数在 LibVlc 中的名称
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunctionAttribute.MinVersion">
+            <summary>
+                获取一个值,表示支持该函数的最小 LibVlc 版本
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunctionAttribute.MaxVersion">
+            <summary>
+                获取一个值,表示支持该函数的最大 LibVlc 版本
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcFunctionAttribute.Dev">
+            <summary>
+                获取一个值,表示特定的开发版本
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Interop.LibVlcVersion">
+            <summary>
+                Version infomation of LibVlc.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcVersion.#ctor(System.String)">
+            <summary>
+                Create LibVlcVersion from version string, it must like "2.2.0-Meta Weatherwax".
+            </summary>
+            <param name="versionString">version string</param>
+            <exception cref="T:Meta.Vlc.VersionStringParseException">Can't parse libvlc version string, it must like "2.2.0-Meta Weatherwax".</exception>
+            <exception cref="T:System.OverflowException">
+                At least one component of version represents a number greater than
+                <see cref="F:System.Int32.MaxValue" />.
+            </exception>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcVersion.Version">
+            <summary>
+                Version of LibVlc.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcVersion.DevString">
+            <summary>
+                DevString of LibVlc.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Interop.LibVlcVersion.CodeName">
+            <summary>
+                Code name of LibVlc.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Interop.LibVlcVersion.IsFunctionAvailable(Meta.Vlc.Interop.LibVlcFunctionAttribute)">
+            <summary>
+                Check a function is available for this version.
+            </summary>
+            <param name="functionInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.IVlcObject">
+            <summary>
+                A Vlc unmanaged object.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.IVlcObject.InstancePointer">
+            <summary>
+                A pointer of this Vlc object.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.IVlcObject.VlcInstance">
+            <summary>
+                A relation <see cref="T:Meta.Vlc.Vlc" /> of this object.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.IVlcObjectWithEvent">
+            <summary>
+                A Vlc unmanaged object with Vlc event system.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.IVlcObjectWithEvent.EventManager">
+            <summary>
+                Vlc event manager.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.LibVlcManager">
+            <summary>
+                LibVlc dlls manager, load LibVlc and initialize LibVlc to use. Some public method also in this class, like
+                <see cref="M:Meta.Vlc.LibVlcManager.Free(System.IntPtr)" /> method.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.LibVlcManager.IsLibLoaded">
+            <summary>
+                LibVlc loaded or not.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.LibVlcManager.LibVlcHandle">
+            <summary>
+                Handle of libvlc.dll.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.LibVlcManager.LibVlcVCoreHandle">
+            <summary>
+                Handle of libvlccore.dll.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.LibVlcManager.LibVlcDirectory">
+            <summary>
+                Directory of LibVlc dlls.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.LibVlcManager.LibVlcVersion">
+            <summary>
+                Version infomation of LibVlc.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.LoadLibVlc(System.String)">
+            <summary>
+                Load LibVlc dlls, and mapping all function.
+            </summary>
+            <param name="libVlcDirectory">directory of LibVlc</param>
+            <exception cref="T:Meta.Vlc.LibVlcLoadLibraryException">
+                Can't load LibVlc dlls, check the platform and LibVlc target platform
+                (should be same, x86 or x64).
+            </exception>
+            <exception cref="T:System.TypeLoadException">A custom attribute type cannot be loaded. </exception>
+            <exception cref="T:Meta.Vlc.NoLibVlcFunctionAttributeException">
+                For LibVlcFunction, need LibVlcFunctionAttribute to get Infomation
+                of function.
+            </exception>
+            <exception cref="T:Meta.Vlc.FunctionNotFoundException">Can't find function in dll.</exception>
+            <exception cref="T:Meta.Vlc.VersionStringParseException">Can't parse libvlc version string, it must like "2.2.0-Meta Weatherwax".</exception>
+            <exception cref="T:System.OverflowException">
+                At least one component of version represents a number greater than
+                <see cref="F:System.Int32.MaxValue" />.
+            </exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.GetVersion">
+            <summary>
+                Get version string of LibVlc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.GetCompiler">
+            <summary>
+                Get compiler infomation of LibVlc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.GetChangeset">
+            <summary>
+                Get changeset of LibVlc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.Free(System.IntPtr)">
+            <summary>
+                Frees an heap allocation returned by a LibVLC function, like ANSI C free() method.
+            </summary>
+            <param name="pointer">the pointer of object to be released </param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.ReleaseModuleDescriptionList(System.IntPtr)">
+            <summary>
+                Release a list of module descriptions.
+            </summary>
+            <param name="moduleDescriptionList">the list to be released </param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.ReleaseAudioOutputList(System.IntPtr)">
+            <summary>
+                Frees the list of available audio output modules.
+            </summary>
+            <param name="pointer">a pointer of first <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioOutput" />. </param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.ReleaseAudioDeviceList(System.IntPtr)">
+            <summary>
+                Frees a list of available audio output devices.
+            </summary>
+            <param name="pointer">a pointer of first <see cref="T:Meta.Vlc.Interop.MediaPlayer.AudioDevice" />. </param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.ReleaseTrackDescriptionList(System.IntPtr)">
+            <summary>
+                Release (free) pointer of <see cref="T:Meta.Vlc.TrackDescriptionList" />.
+            </summary>
+            <param name="pointer"></param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.LibVlcManager.ReleaseTracks(System.IntPtr,System.UInt32)">
+            <summary>
+                Release media descriptor's elementary streams description array.
+            </summary>
+            <param name="pointer">pointer tracks info array to release </param>
+            <param name="count">number of elements in the array </param>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="T:Meta.Vlc.MediaTrack">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.Media.MediaTrack" /> struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.MediaTrack.CreateFromPointer(System.IntPtr)">
+            <summary>
+                Create a media track from a pointer, it will distinguish type of media track auto.
+            </summary>
+            <param name="pointer">pointer of media track</param>
+            <returns>a audio track, video track, subtitle track or unknow track</returns>
+        </member>
+        <member name="T:Meta.Vlc.AudioTrack">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.Media.AudioTrack" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.VideoTrack">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.Media.VideoTrack" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.SubtitleTrack">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.Media.SubtitleTrack" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.UnkownTrack">
+            <summary>
+                A warpper for orther media track.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.MediaTrackList">
+            <summary>
+                A list warpper for <see cref="T:Meta.Vlc.Interop.Media.MediaTrack" /> struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.MediaTrackList.#ctor(System.IntPtr,System.UInt32)">
+            <summary>
+                Create a list of media track from a pointer of array.
+            </summary>
+            <param name="pointer">pointer of media track array</param>
+            <param name="count">count of media track array</param>
+        </member>
+        <member name="T:Meta.Vlc.ModuleDescription">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.ModuleDescriptionList">
+            <summary>
+                A list warpper for <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" /> linklist struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.ModuleDescriptionList.#ctor(System.IntPtr)">
+            <summary>
+                Create a readonly list by a pointer of <see cref="T:Meta.Vlc.Interop.Core.ModuleDescription" />.
+            </summary>
+            <param name="pointer"></param>
+        </member>
+        <member name="T:Meta.Vlc.PresetAudioEqualizerType">
+            <summary>
+                Preset audio equlizer type.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Size">
+            <summary>
+                A struct with width and height, for downward compatibility.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.TrackDescription">
+            <summary>
+                A warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.TrackDescription" /> struct.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.TrackDescriptionList">
+            <summary>
+                A list warpper for <see cref="T:Meta.Vlc.Interop.MediaPlayer.TrackDescription" /> linklist struct.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.TrackDescriptionList.#ctor(System.IntPtr)">
+            <summary>
+                Create a readonly list by a pointer of <see cref="T:Meta.Vlc.Interop.MediaPlayer.TrackDescription" />.
+            </summary>
+            <param name="pointer"></param>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._newInstanceFunction">
+            <summary>
+                创建并初始化一个 LibVlc 实例,并提供相应的参数,这些参数和命令行提供的参数类似,会影响到 LibVlc 实例的默认配置.
+                有效参数的列表取决于 LibVlc 版本,操作系统,可用 LibVlc 插件和平台.无效或不支持的参数会导致实例创建失败
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._releaseInstanceFunction">
+            <summary>
+                递减 LibVlc 实例的引用计数,如果它达到零,将会释放这个实例
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._retainInstanceFunction">
+            <summary>
+                递增 LibVlc 实例的引用计数,当调用 NewInstance 初始化成功时,引用计数将初始化为1
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._addInterfaceFunction">
+            <summary>
+                尝试启动一个用户接口,用于 LibVlc 实例
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._setExitHandlerFunction">
+            <summary>
+                为 LibVlc 设置一个回调,该回调将会在 LibVlc 退出时被调用,不能与 <see cref="M:Meta.Vlc.Vlc.Wait" /> 一起使用.
+                而且,这个函数应该在播放一个列表或者开始一个用户接口前被调用,否则可能导致 LibVlc 在注册该回调前退出
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._waitFunction">
+            <summary>
+                等待,直到一个接口导致 LibVlc 实例退出为止,在使用之前,应该使用 <see cref="M:Meta.Vlc.Vlc.AddInterface(System.String)" /> 添加至少一个用户接口.
+                实际上这个方法只会导致一个线程阻塞,建议使用 <see cref="M:Meta.Vlc.Vlc.SetExitHandler(Meta.Vlc.Interop.Core.ExitHandler,System.IntPtr)" />
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._setUserAgentFunction">
+            <summary>
+                设置一个用户代理字符串,当一个协议需要它的时候,LibVlc 将会提供该字符串
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._setAppIdFunction">
+            <summary>
+                设置一些元信息关于该应用程序
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._getAudioFilterListFunction">
+            <summary>
+                获取可用的音频过滤器
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Vlc._getVideoFilterListFunction">
+            <summary>
+                获取可用的视频过滤器
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.#ctor">
+            <summary>
+                使用默认的参数初始化一个 Vlc 实例
+            </summary>
+            <exception cref="T:Meta.Vlc.VlcCreateFailException">Can't create a Vlc instence, check your Vlc options.</exception>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.#ctor(System.String[])">
+            <summary>
+                提供指定的参数初始化一个 Vlc 实例
+            </summary>
+            <param name="argv"></param>
+            <exception cref="T:Meta.Vlc.VlcCreateFailException">Can't create a Vlc instence, check your Vlc options.</exception>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.Dispose">
+            <summary>
+                释放当前 Vlc 资源
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Vlc.IsLibLoaded">
+            <summary>
+                获取一个值,该值指示当前模块是否被载入
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Vlc.InstancePointer">
+            <summary>
+                获取 Vlc 实例的指针
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.LoadLibVlc">
+            <exception cref="T:System.TypeLoadException">A custom attribute type cannot be loaded. </exception>
+            <exception cref="T:Meta.Vlc.NoLibVlcFunctionAttributeException">
+                For LibVlcFunction, need LibVlcFunctionAttribute to get Infomation
+                of function.
+            </exception>
+            <exception cref="T:Meta.Vlc.FunctionNotFoundException">Can't find function in dll.</exception>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.Retain">
+            <summary>
+                递增引用计数,在使用 Meta.Vlc 时,一般是不需要调用此方法,引用计数是由 Vlc 类托管的
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.AddInterface(System.String)">
+            <summary>
+                尝试添加一个用户接口
+            </summary>
+            <param name="name">接口名,为 NULL 则为默认</param>
+            <returns>是否成功添加接口</returns>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.Wait">
+            <summary>
+                等待,直到一个接口导致实例退出为止,在使用之前,应该使用 <see cref="M:Meta.Vlc.Vlc.AddInterface(System.String)" /> 添加至少一个用户接口.
+                实际上这个方法只会导致线程阻塞
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.SetUserAgent(System.String,System.String)">
+            <summary>
+                设置一个用户代理字符串,当一个协议需要它的时候,将会提供该字符串
+            </summary>
+            <param name="name">应用程序名称,类似于 "FooBar player 1.2.3",实际上只要能标识应用程序,任何字符串都是可以的</param>
+            <param name="http">HTTP 用户代理,类似于 "FooBar/1.2.3 Python/2.6.0"</param>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.SetAppId(System.String,System.String,System.String)">
+            <summary>
+                设置一些元信息关于该应用程序
+            </summary>
+            <param name="id">Java 风格的应用标识符,类似于 "com.acme.foobar"</param>
+            <param name="version">应用程序版本,类似于 "1.2.3"</param>
+            <param name="icon">应用程序图标,类似于 "foobar"</param>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.GetAudioFilterList">
+            <summary>
+                获取可用的音频过滤器
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.GetVideoFilterList">
+            <summary>
+                获取可用的视频过滤器
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.CreateMediaAsNewNode(System.String)">
+            <summary>
+                通过名称创建一个新的 VlcMedia
+            </summary>
+            <param name="name">媒体名称</param>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.CreateMediaFromFileDescriptor(System.Int32)">
+            <summary>
+                通过给定的文件描述符创建一个新的 VlcMedia
+            </summary>
+            <param name="fileDescriptor">文件描述符</param>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.CreateMediaFromLocation(System.String)">
+            <summary>
+                通过给定的文件 Url 创建一个新的 VlcMedia,该 Url 的格式必须以 "file://" 开头,参见 "RFC3986".
+            </summary>
+            <param name="url">文件 Url</param>
+        </member>
+        <member name="M:Meta.Vlc.Vlc.CreateMediaFromPath(System.String)">
+            <summary>
+                通过给定的文件路径创建一个新的 VlcMedia
+            </summary>
+            <param name="path">文件路径</param>
+        </member>
+        <member name="P:Meta.Vlc.VlcError.IsLibLoaded">
+            <summary>
+                LibVlc error module loaded or not.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcError.GetErrorMessage">
+            <summary>
+                Get a readable error message.
+            </summary>
+            <returns>return a readable LibVlc error message, if there are no error will return <see cref="!:null" /></returns>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.VlcError.CleanError">
+            <summary>
+                Clear error message of current thread.
+            </summary>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="T:Meta.Vlc.VlcEventManager">
+            <summary>
+                A manager of LibVlc event system.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcEventManager.#ctor(Meta.Vlc.IVlcObject,System.IntPtr)">
+            <summary>
+                Create a event manager with parent Vlc object and pointer of event manager.
+            </summary>
+            <param name="parentVlcObject"></param>
+            <param name="pointer"></param>
+        </member>
+        <member name="P:Meta.Vlc.VlcEventManager.IsLibLoaded">
+            <summary>
+                LibVlc event module loaded or not.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcEventManager.InstancePointer">
+            <summary>
+                Pointer of this event manager.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcEventManager.VlcInstance">
+            <summary>
+                A relation <see cref="T:Meta.Vlc.Vlc" /> of this object.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcEventManager.Dispose">
+            <summary>
+                Release this event manager.
+            </summary>
+            <exception cref="T:System.Exception">A delegate callback throws an exception.</exception>
+        </member>
+        <member name="M:Meta.Vlc.VlcEventManager.Attach(Meta.Vlc.Interop.Core.Events.EventTypes,Meta.Vlc.Interop.Core.Events.LibVlcEventCallBack,System.IntPtr)">
+            <summary>
+                Attach a event with a callback.
+            </summary>
+            <param name="type">event type</param>
+            <param name="callback">callback which will be called when event case</param>
+            <param name="userData">some custom data</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcEventManager.Detach(Meta.Vlc.Interop.Core.Events.EventTypes,Meta.Vlc.Interop.Core.Events.LibVlcEventCallBack,System.IntPtr)">
+            <summary>
+                Deattach a event with a callback.
+            </summary>
+            <param name="type">event type</param>
+            <param name="callback">callback which will be called when event case</param>
+            <param name="userData">some custom data</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcEventManager.GetEventTypeName(Meta.Vlc.Interop.Core.Events.EventTypes)">
+            <summary>
+                Get event type name.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Meta.Vlc.VlcMedia">
+            <summary>
+                The API warpper of LibVlc media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.IsLibLoaded">
+            <summary>
+                获取一个值,该值指示当前模块是否被载入
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.Duration">
+            <summary>
+                获取媒体的时间长度
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.Mrl">
+            <summary>
+                获取该媒体的媒体资源地址
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.State">
+            <summary>
+                获取媒体当前状态
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.Stats">
+            <summary>
+                获取媒体当前统计
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.UserData">
+            <summary>
+                获取或设置由用户定义的媒体数据
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.IsParsed">
+            <summary>
+                获取一个值表示该媒体是否已经解析
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMedia.InstancePointer">
+            <summary>
+                获取 Media 实例指针
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.Dispose">
+            <summary>
+                释放 VlcMedia 资源
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.LoadLibVlc">
+            <summary>
+                载入 LibVlc 的 Media 模块,该方法会在 <see cref="M:Meta.Vlc.Vlc.LoadLibVlc" /> 中自动被调用
+            </summary>
+            <param name="libHandle"></param>
+            <param name="libVersion"></param>
+            <param name="devString"></param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.CreateAsNewNode(Meta.Vlc.Vlc,System.String)">
+            <summary>
+                通过名称创建一个新的 VlcMedia
+            </summary>
+            <param name="vlc">Vlc 对象</param>
+            <param name="name">媒体名称</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.CreateFormFileDescriptor(Meta.Vlc.Vlc,System.Int32)">
+            <summary>
+                通过给定的文件描述符创建一个新的 VlcMedia
+            </summary>
+            <param name="vlc">Vlc 对象</param>
+            <param name="fileDescriptor">文件描述符</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.CreateFormLocation(Meta.Vlc.Vlc,System.String)">
+            <summary>
+                通过给定的文件 Url 创建一个新的 VlcMedia,该 Url 的格式必须以 "file://" 开头,参见 "RFC3986".
+            </summary>
+            <param name="vlc">Vlc 对象</param>
+            <param name="url">文件 Url</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.CreateFormPath(Meta.Vlc.Vlc,System.String)">
+            <summary>
+                通过给定的文件路径创建一个新的 VlcMedia
+            </summary>
+            <param name="vlc">Vlc 对象</param>
+            <param name="path">文件路径</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.AddOption(System.String[])">
+            <summary>
+                向一个媒体添加选项,这个选项将会确定媒体播放器将如何读取介质,
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.AddOptionFlag(System.String,Meta.Vlc.Interop.Media.MediaOption)">
+            <summary>
+                向一个媒体通过可配置的标志添加一个选项,这个选项将会确定媒体播放器将如何读取介质,
+            </summary>
+            <param name="options"></param>
+            <param name="flag"></param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.Duplicate">
+            <summary>
+                复制一个媒体对象
+            </summary>
+            <returns>复制的媒体对象</returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.GetCodecDescription(Meta.Vlc.Interop.Media.TrackType,System.Int32)">
+            <summary>
+                获取媒体的基本编码器的说明
+            </summary>
+            <param name="type">由 <see cref="P:Meta.Vlc.MediaTrack.Type" /> 得来</param>
+            <param name="codec">由 <see cref="P:Meta.Vlc.MediaTrack.Codec" /> 得来</param>
+            <returns>返回媒体的基本编码器的说明</returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.GetMeta(Meta.Vlc.Interop.Media.MetaDataType)">
+            <summary>
+                获取媒体的某个元属性,如果尚未解析元属性,将会返回 NULL.
+                这个方法会自动调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMediaAsync" /> 方法,所以你在之后应该会收到一个 MediaMetaChanged 事件.
+                如果你喜欢同步版本,可以在 GetMeta 之前调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 方法
+            </summary>
+            <param name="type">元属性类型</param>
+            <returns>返回媒体的某个元属性</returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.GetTrackInfo">
+            <summary>
+                获取媒体的基本流的描述,注意,在调用该方法之前你需要首先调用 <see cref="T:Meta.Vlc.Interop.Media.ParseMedia" /> 方法,或者至少播放一次.
+                否则,你将的得到一个空数组
+            </summary>
+            <returns>一个 <see cref="T:Meta.Vlc.Interop.Media.MediaTrackInfo" /> 数组</returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.Parse">
+            <summary>
+                解析一个媒体,获取媒体的元数据和轨道信息
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.ParseAsync">
+            <summary>
+                异步解析一个媒体,获取媒体的元数据和轨道信息,这是 <see cref="M:Meta.Vlc.VlcMedia.Parse" /> 的异步版本,
+                解析完成会触发 <see cref="E:Meta.Vlc.VlcMedia.ParsedChanged" /> 事件,您可以跟踪该事件
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.ParseWithOptionAsync(Meta.Vlc.Interop.Media.MediaParseFlag)">
+            <summary>
+                根据提供的标志异步解析一个媒体,获取媒体的元数据和轨道信息,这是 <see cref="M:Meta.Vlc.VlcMedia.ParseAsync" /> 的高级版本,
+                默认情况下解析一个本地文件,解析完成会触发 <see cref="E:Meta.Vlc.VlcMedia.ParsedChanged" /> 事件,您可以跟踪该事件
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.RetainMedia">
+            <summary>
+                递增媒体对象的引用计数
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.SaveMeta">
+            <summary>
+                保存当前的元数据到媒体
+            </summary>
+            <returns>如果操作成功将会返回 True</returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.SetMeta(Meta.Vlc.Interop.Media.MetaDataType,System.String)">
+            <summary>
+                设置媒体的元数据
+            </summary>
+            <param name="type">元数据类型</param>
+            <param name="data">元数据值</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMedia.GetTracks">
+            <summary>
+                获取媒体的基本流的描述,注意,在调用该方法之前你需要首先调用 <see cref="M:Meta.Vlc.VlcMedia.Parse" /> 方法,或者至少播放一次.
+                否则,你将的得到一个空数组
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.VlcMediaPlayer">
+            <summary>
+                The lowest layer API warpper of LibVlc media player.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.IsLibLoaded">
+            <summary>
+                获取一个值,该值指示当前模块是否被载入
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.LoadLibVlc">
+            <summary>
+                载入 LibVlc 的 MediaPlayer 模块,该方法会在 <see cref="M:Meta.Vlc.Vlc.LoadLibVlc" /> 中自动被调用
+            </summary>
+            <param name="libHandle"></param>
+            <param name="libVersion"></param>
+            <param name="devString"></param>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.IsPlaying">
+            <summary>
+                获取一个值,该值表示 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 是否正在播放
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Position">
+            <summary>
+                获取或设置一个值,该值表示 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 的播放进度,范围为0.0~1.0
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Hwnd">
+            <summary>
+                获取或设置一个值,该值表示 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 通过GDI的方式,将视频渲染到指定的窗口句柄
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Length">
+            <summary>
+                获取一个值,该值表示 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 目前媒体的长度
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Time">
+            <summary>
+                获取或设置一个值,该值表示当前媒体播放进度
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Chapter">
+            <summary>
+                获取或设置一个值,该值表示当前 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 播放的章节
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.ChapterCount">
+            <summary>
+                获取一个值,该值表示媒体共有多少个章节
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.CanPlay">
+            <summary>
+                获取一个值,该值表示现在媒体是否可以进行播放
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Title">
+            <summary>
+                获取或设置一个值,该值表示 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 当前播放的标题
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Rate">
+            <summary>
+                获取或设置一个值,该值表示当前媒体的播放速率
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.State">
+            <summary>
+                获取一个值,该值示当前媒体状态
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Fps">
+            <summary>
+                获取一个值,该值表示当前媒体的FPS
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.HasVideoOutCount">
+            <summary>
+                获取一个值,该值表示当前拥有的视频输出数量
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.IsSeekable">
+            <summary>
+                获取一个值,该值表示当前媒体是否允许跳进度
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.CanPause">
+            <summary>
+                获取一个值,该值表示当前媒体是否允许暂停
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.Volume">
+            <summary>
+                获取或设置一个值,该值表示当前媒体音频的音量
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.IsMute">
+            <summary>
+                获取或设置一个值,该值表示当前媒体是否静音
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.VlcMediaPlayer.AudioOutputChannel">
+            <summary>
+                获取或设置一个值，该值表示音频输出通道
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.Play">
+            <summary>
+                使 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 开始播放
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetPause(System.Boolean)">
+            <summary>
+                设置 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 播放或者暂停
+            </summary>
+            <param name="pause">true 代表暂停,false 代表播放或继续</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.Pause">
+            <summary>
+                设置 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 为暂停
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.Resume">
+            <summary>
+                设置 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 为播放
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.PauseOrResume">
+            <summary>
+                当播放时设置 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 为暂停,反之为播放
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.Stop">
+            <summary>
+                设置 <see cref="T:Meta.Vlc.VlcMediaPlayer" /> 为停止
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetAudioFormat(System.String,System.UInt32,System.UInt32)">
+            <summary>
+                设置 Audio 的格式
+            </summary>
+            <param name="format">格式字符串,一个四字符的字符串</param>
+            <param name="rate">采样率</param>
+            <param name="channels">通道数</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.PreviousChapter">
+            <summary>
+                播放上一个章节
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.NextChapter">
+            <summary>
+                播放下一个章节
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.NextFrame">
+            <summary>
+                播放下一帧
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetVideoTitleDisplay(Meta.Vlc.Interop.MediaPlayer.Position,System.UInt32)">
+            <summary>
+                设置标题显示位置
+            </summary>
+            <param name="pos">位置</param>
+            <param name="timeout">显示时间</param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.ToggleMute">
+            <summary>
+                切换静音状态
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.GetMouseCursor(System.UInt32,System.Int32@,System.Int32@)">
+            <summary>
+                获取鼠标坐标
+            </summary>
+            <param name="num">视频输出号</param>
+            <param name="x"></param>
+            <param name="y"></param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetEqualizer(Meta.Vlc.AudioEqualizer)">
+            <summary>
+                Apply new equalizer settings to a media player.
+                <para />
+                The media player does not keep a reference to the supplied equalizer so you should set it again when you changed
+                some value of equalizer.
+                <para />
+                After you set equalizer you can dispose it. if you want to disable equalizer set it to <see cref="!:null" />.
+            </summary>
+            <param name="equalizer"></param>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.EnumAudioDeviceList">
+            <summary>
+                Gets a list of potential audio output devices.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.GetAudioDeviceList(Meta.Vlc.AudioOutput)">
+            <summary>
+                Gets a list of audio output devices for a given audio output module.
+            </summary>
+            <param name="audioOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.GetAudioOutputList">
+            <summary>
+                Gets the list of available audio output modules.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetAudioOutput(Meta.Vlc.AudioOutput)">
+            <summary>
+                Selects an audio output module.
+                Any change will take be effect only after playback is stopped and restarted. Audio output cannot be changed while
+                playing.
+            </summary>
+            <param name="audioOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.GetAudioDevice">
+            <summary>
+                Get the current audio output device identifier.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.SetAudioDevice(Meta.Vlc.AudioOutput,Meta.Vlc.AudioDevice)">
+            <summary>
+                Configures an explicit audio output device. If the module paramater is NULL,
+                audio output will be moved to the device specified by the device identifier string immediately.
+                This is the recommended usage. A list of adequate potential device strings can be obtained with
+                <see cref="M:Meta.Vlc.VlcMediaPlayer.EnumAudioDeviceList" />.
+                However passing NULL is supported in LibVLC version 2.2.0 and later only; in earlier versions, this function would
+                have no effects when the module parameter was NULL.
+                If the module parameter is not NULL, the device parameter of the corresponding audio output, if it exists, will be
+                set to the specified string.
+                Note that some audio output modules do not have such a parameter (notably MMDevice and PulseAudio).
+                A list of adequate potential device strings can be obtained with <see cref="M:Meta.Vlc.VlcMediaPlayer.GetAudioDeviceList(Meta.Vlc.AudioOutput)" />.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.VlcMediaPlayer.Dispose">
+            <summary>
+                释放 VlcMedia 资源
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Win32Api">
+            <summary>
+                Some method of Win32 APIs.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.LoadLibrary(System.String)">
+            <summary>
+                进程调用 LoadLibrary 以显式链接到 DLL,如果函数执行成功,它会将指定的 DLL 映射到调用进程的地址空间中并返回该 DLL 的句柄,此句柄可以与其他函数(如 GetProcAddress 和
+                FreeLibrary)一起在显式链接中使用
+                LoadLibrary 将尝试使用用于隐式链接的相同搜索序列来查找 DLL.如果系统无法找到所需的 DLL 或者入口点函数返回 FALSE.则 LoadLibrary 将抛出异常.如果对 LoadLibrary 的调用所指定的
+                DLL 模块已映射到调用进程的地址空间中,则该函数将返回该 DLL 的句柄并递增模块的引用数
+            </summary>
+            <param name="lpFileName">DLL 模块地址</param>
+            <returns>返回 DLL 模块句柄,如果出错将抛出异常</returns>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.GetProcAddress(System.IntPtr,System.String)">
+            <summary>
+                显式链接到 DLL 的进程调用 GetProcAddress 来获取 DLL 导出函数的地址,由于是通过指针调用 DLL 函数并且没有编译时类型检查,需确保函数的参数是正确的,以便不会超出在堆栈上分配的内存和不会导致访问冲突
+            </summary>
+            <param name="hModule">DLL 模块句柄</param>
+            <param name="lpProcName">调用的函数名</param>
+            <returns>返回函数地址</returns>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.FreeLibrary(System.IntPtr)">
+            <summary>
+                不再需要 DLL 模块时,显式链接到 DLL 的进程调用 FreeLibrary 函数.此函数递减模块的引用数,如果引用数为零,此函数便从进程的地址空间中取消模块的映射
+            </summary>
+            <param name="hModule">DLL 模块句柄</param>
+            <returns>如果成功会返回 true ,否则会返回 false,请通过 GetLastError 获取更多信息</returns>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.CreateFileMapping(System.IntPtr,System.IntPtr,Meta.Vlc.PageAccess,System.Int32,System.Int32,System.String)">
+            <summary>
+                创建一个新的文件映射内核对象
+            </summary>
+            <param name="hFile">指定欲在其中创建映射的一个文件句柄,为0xFFFFFFFF则表示创建一个内存文件映射</param>
+            <param name="lpAttributes">它指明返回的句柄是否可以被子进程所继承,使用 NULL 表示使用默认安全设置</param>
+            <param name="flProtect">指定文件映射对象的页面保护</param>
+            <param name="dwMaximumSizeHigh">表示映射文件大小的高32位</param>
+            <param name="dwMaximumSizeLow">表示映射文件大小的低32位</param>
+            <param name="lpName">指定文件映射对象的名字,如果为 NULL 则会创建一个无名称的文件映射对象</param>
+            <returns>返回文件映射对象指针,如果错误将返回 NULL,请通过 GetLastError 获取更多信息</returns>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.MapViewOfFile(System.IntPtr,Meta.Vlc.FileMapAccess,System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+                将一个文件映射对象映射到当前应用程序的地址空间
+            </summary>
+            <param name="hFileMappingObject">文件映射对象的句柄</param>
+            <param name="dwDesiredAccess">映射对象的文件数据的访问方式,而且同样要与 CreateFileMapping 函数所设置的保护属性相匹配</param>
+            <param name="dwFileOffsetHigh">表示文件映射起始偏移的高32位</param>
+            <param name="dwFileOffsetLow">表示文件映射起始偏移的低32位</param>
+            <param name="dwNumberOfBytesToMap">指定映射文件的字节数</param>
+            <returns>返回文件映射在内存中的起始地址,如果错误将返回 NULL,请通过 GetLastError 获取更多信息</returns>
+        </member>
+        <member name="M:Meta.Vlc.Win32Api.CloseHandle(System.IntPtr)">
+            <summary>
+                关闭一个内核对象.其中包括文件,文件映射,进程,线程,安全和同步对象等
+            </summary>
+            <param name="handle">欲关闭的一个对象的句柄</param>
+            <returns>如果成功会返回 true ,否则会返回 false,请通过 GetLastError 获取更多信息</returns>
+        </member>
+    </members>
+</doc>
