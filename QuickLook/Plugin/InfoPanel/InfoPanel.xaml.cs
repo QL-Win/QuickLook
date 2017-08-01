@@ -99,21 +99,28 @@ namespace QuickLook.Plugin.InfoPanel
                         Dispatcher.Invoke(() =>
                         {
                             string t;
-                            var d = totalDirsL != 0
-                                ? string.Format(
-                                    TranslationHelper.GetString("InfoPanel_Folders"), totalDirsL)
-                                : string.Empty;
-                            var f = totalFilesL != 0
-                                ? string.Format(
-                                    TranslationHelper.GetString("InfoPanel_Files"), totalFilesL)
-                                : string.Empty;
-                            if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
+                            var folders = totalDirsL == 0
+                                ? string.Empty
+                                : totalDirsL == 1
+                                    ? string.Format(
+                                        TranslationHelper.GetString("InfoPanel_Folder"), totalDirsL)
+                                    : string.Format(
+                                        TranslationHelper.GetString("InfoPanel_Folders"), totalDirsL);
+                            var files = totalFilesL == 0
+                                ? string.Empty
+                                : totalFilesL == 1
+                                    ? string.Format(
+                                        TranslationHelper.GetString("InfoPanel_File"), totalFilesL)
+                                    : string.Format(
+                                        TranslationHelper.GetString("InfoPanel_Files"), totalFilesL);
+
+                            if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
                                 t = string.Format(
-                                    TranslationHelper.GetString("InfoPanel_FolderAndFile"), d, f);
-                            else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
+                                    TranslationHelper.GetString("InfoPanel_FolderAndFile"), folders, files);
+                            else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
                                 t = string.Empty;
                             else
-                                t = $"({d}{f})";
+                                t = $"({folders}{files})";
 
                             totalSize.Text =
                                 $"{totalSizeL.ToPrettySize(2)} {t}";
