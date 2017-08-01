@@ -19,6 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Meta.Vlc;
@@ -34,13 +35,13 @@ namespace QuickLook.Plugin.VideoViewer
     public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChanged
     {
         private readonly ContextObject _context;
+
         private string _coverArt;
         private bool _hasAudio;
         private bool _hasEnded;
         private bool _hasVideo;
         private bool _isMuted;
         private bool _isPlaying;
-
         private bool _wasPlaying;
 
         public ViewerPanel(ContextObject context)
@@ -163,15 +164,16 @@ namespace QuickLook.Plugin.VideoViewer
         {
             try
             {
-                //if (mediaElement != null && !mediaElement.VlcMediaPlayer.CanPlay)
-                //    Thread.Sleep(200);
-                mediaElement?.Dispose();
+                Task.Run(() =>
+                {
+                    mediaElement?.Dispose();
+                    mediaElement = null;
+                });
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
-            mediaElement = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
