@@ -22,7 +22,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace QuickLook.Controls
+namespace QuickLook.Controls.BusyDecorator
 {
     public delegate Visual CreateContentFunction();
 

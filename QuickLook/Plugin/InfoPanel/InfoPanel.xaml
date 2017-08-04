@@ -5,13 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
              FontSize="14"
-             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
+             Background="#FFF8F8FB"
+             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True" TextOptions.TextHintingMode="Animated">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0" Margin="0,-20,0,0">
+        <Image x:Name="image" Grid.Row="1" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0" Margin="0,-20,0,0">
             <Image.Style>
                 <Style TargetType="{x:Type Image}">
                     <Style.Triggers>
@@ -29,7 +34,7 @@
                 </Style>
             </Image.Style>
         </Image>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
@@ -43,13 +48,19 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" FontWeight="SemiBold" Padding="3"
+            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
                        TextWrapping="Wrap"
-                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis">
+                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="Normal">
                 FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename.ext
             </TextBlock>
-            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3">Last modified at 01/01/2017 00:00:00</TextBlock>
-            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3">Calculating size...</TextBlock>
+            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3" FontWeight="Light"
+                       Foreground="DimGray">
+                Last modified at 01/01/2017 00:00:00
+            </TextBlock>
+            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3" FontWeight="Light"
+                       Foreground="DimGray">
+                Calculating size...
+            </TextBlock>
         </Grid>
     </Grid>
 </UserControl>

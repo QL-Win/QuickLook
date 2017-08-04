@@ -22,7 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace QuickLook.Controls
+namespace QuickLook.Controls.BusyDecorator
 {
     [StyleTypedProperty(Property = "BusyStyle", StyleTargetType = typeof(Control))]
     public class BusyDecorator : Decorator, IDisposable

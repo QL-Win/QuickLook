@@ -3,9 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:local="clr-namespace:QuickLook"
-    xmlns:controls="clr-namespace:QuickLook.Controls">
+    xmlns:controls="clr-namespace:QuickLook.Controls"
+    xmlns:busyDecorator="clr-namespace:QuickLook.Controls.BusyDecorator">
 
-    <Style TargetType="{x:Type controls:BusyDecorator}">
+    <Style TargetType="{x:Type busyDecorator:BusyDecorator}">
         <Setter Property="BusyStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type Control}">

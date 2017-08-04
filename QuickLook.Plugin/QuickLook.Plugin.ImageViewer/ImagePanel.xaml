@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.ImageViewer"
              xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
              mc:Ignorable="d"
+             Background="White"
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -13,7 +14,7 @@
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
             <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
-                                         AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
+                                         AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" Margin="0,28,0,0" />
         </ScrollViewer>
     </Grid>
 </UserControl>

@@ -18,7 +18,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace QuickLook.Controls
+namespace QuickLook.Controls.BusyDecorator
 {
     public class VisualTargetPresentationSource : PresentationSource
     {

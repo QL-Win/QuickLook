@@ -50,8 +50,8 @@ namespace QuickLook
 
             SourceInitialized += (sender, e) =>
             {
-                if (AllowsTransparency)
-                    BlurWindow.EnableWindowBlur(this);
+                //if (AllowsTransparency)
+                //    BlurWindow.EnableWindowBlur(this);
             };
 
             buttonPin.MouseLeftButtonUp += (sender, e) =>
@@ -234,10 +234,8 @@ namespace QuickLook
             // revert UI changes
             ContextObject.IsBusy = true;
 
-            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height + windowBorder.BorderThickness.Top +
-                            windowBorder.BorderThickness.Bottom;
-            var newWidth = ContextObject.PreferredSize.Width + windowBorder.BorderThickness.Left +
-                           windowBorder.BorderThickness.Right;
+            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height;
+            var newWidth = ContextObject.PreferredSize.Width;
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 

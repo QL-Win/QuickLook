@@ -3,17 +3,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:local="clr-namespace:QuickLook"
-    xmlns:control="clr-namespace:QuickLook.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:QuickLook.Converters"
+    xmlns:controls="clr-namespace:QuickLook.Controls"
+    xmlns:busyDecorator="clr-namespace:QuickLook.Controls.BusyDecorator"
+    xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer"
     mc:Ignorable="d" x:Class="QuickLook.MainWindowTransparent" x:Name="mainWindow"
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="275" MinHeight="150"
     WindowStartupLocation="CenterScreen"
     Focusable="False" WindowStyle="None"
-    Background="#E5FAFAFA" AllowsTransparency="True"
+    AllowsTransparency="True"
+    Background="Transparent"
     ShowActivated="False" ShowInTaskbar="False">
     <Window.Resources>
         <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
@@ -21,213 +24,218 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:ScaledValueConverter x:Key="ScaledValueConverter" />
     </Window.Resources>
-    <Window.ResizeMode>
-        <Binding Converter="{StaticResource BooleanToResizeModeConverter}" ElementName="mainWindow"
-                 Path="ContextObject.CanResize" />
-    </Window.ResizeMode>
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="chrome"
                       ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
                       UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
-    <Border x:Name="windowBorder" BorderThickness="1" BorderBrush="#FF7B7B7B">
-        <Grid>
-            <DockPanel x:Name="windowPanel">
-                <DockPanel.Style>
-                    <Style TargetType="{x:Type DockPanel}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
-                                         Value="False">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
-                                                             BeginTime="0:0:0" Duration="0:0:0" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0"
-                                                             BeginTime="0:0:0" Duration="0:0:0" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DockPanel.Style>
-                <DockPanel x:Name="titlebar" Height="28" Dock="Top">
-                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
-                                     WindowChrome.IsHitTestVisibleInChrome="True"
-                                     Width="15" Height="15" Margin="5,0,10,0" Foreground="#E5868686"
-                                     Cursor="Hand" />
-                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonWindowStatus"
-                                     WindowChrome.IsHitTestVisibleInChrome="True"
-                                     Width="14" Height="14" Margin="5,0,5,0" Foreground="#E5868686"
-                                     Visibility="{Binding ContextObject.CanResize,ElementName=mainWindow,Converter={StaticResource BooleanToVisibilityConverter}}"
-                                     Cursor="Hand">
-                        <fa:ImageAwesome.Style>
-                            <Style TargetType="{x:Type fa:ImageAwesome}">
-                                <Setter Property="Icon" Value="WindowMaximize" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
-                                                 Value="Maximized">
-                                        <Setter Property="Icon" Value="WindowRestore" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
-                                                 Value="Normal">
+    <Border>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.6" Color="Gray" />
+        </Border.Effect>
+        <Grid Background="#FFF8F8FB" Margin="5">
+            <Grid>
+                <Grid x:Name="windowPanel">
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
+                                    Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
+                                                                 BeginTime="0:0:0" Duration="0:0:0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0"
+                                                                 BeginTime="0:0:0" Duration="0:0:0" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Grid VerticalAlignment="Top" Panel.ZIndex="9999">
+                        <glassLayer:GlassLayer BlurredElement="{Binding ElementName=container}" />
+                        <DockPanel x:Name="titlebar" Height="28">
+                            <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonCloseWindow" Icon="TimesCircle"
+                                             WindowChrome.IsHitTestVisibleInChrome="True"
+                                             Width="15" Height="15" Margin="5,0,10,0" Foreground="#E5868686"
+                                             Cursor="Hand" />
+                            <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonWindowStatus"
+                                             WindowChrome.IsHitTestVisibleInChrome="True"
+                                             Width="14" Height="14" Margin="5,0,5,0" Foreground="#E5868686"
+                                             Visibility="{Binding ContextObject.CanResize,ElementName=mainWindow,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                             Cursor="Hand">
+                                <fa:ImageAwesome.Style>
+                                    <Style TargetType="{x:Type fa:ImageAwesome}">
                                         <Setter Property="Icon" Value="WindowMaximize" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </fa:ImageAwesome.Style>
-                    </fa:ImageAwesome>
-                    <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonShare" Icon="ShareAlt"
-                                     WindowChrome.IsHitTestVisibleInChrome="True"
-                                     Width="14" Height="14" Margin="10,0,5,0" Foreground="#E5868686"
-                                     Cursor="Hand" />
-                    <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" Content="Open with..." Height="20"
-                            Margin="10,0,0,0" Padding="5,0" 
-                            MaxWidth="{Binding Width, ElementName=mainWindow, Converter={StaticResource ScaledValueConverter}, ConverterParameter='0.25'}"
-                            Focusable="False" Cursor="Hand"
-                            Background="#E5EEEEEE" BorderBrush="#E59A9A9A"
-                            WindowChrome.IsHitTestVisibleInChrome="True" Foreground="#FF404040">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Grid DockPanel.Dock="Left" Width="20" Margin="5,0">
-                        <fa:ImageAwesome x:Name="buttonPin"
-                                         WindowChrome.IsHitTestVisibleInChrome="True"
-                                         Width="14" Height="14"
-                                         Cursor="Hand">
-                            <fa:ImageAwesome.Style>
-                                <Style TargetType="{x:Type fa:ImageAwesome}">
-                                    <Setter Property="Icon" Value="ThumbTack" />
-                                    <Setter Property="Foreground" Value="#E5868686" />
-                                    <Setter Property="LayoutTransform">
-                                        <Setter.Value>
-                                            <RotateTransform Angle="-45" />
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition
-                                                    Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
-                                                    Value="True" />
-                                                <Condition Binding="{Binding Pinned, ElementName=mainWindow}"
-                                                           Value="True" />
-                                                <Condition
-                                                    Binding="{Binding Path=LayoutTransform.(RotateTransform.Angle), RelativeSource={RelativeSource Self}}"
-                                                    Value="0" />
-                                            </MultiDataTrigger.Conditions>
-                                            <MultiDataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <ObjectAnimationUsingKeyFrames
-                                                            Storyboard.TargetProperty="Icon">
-                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.2"
-                                                                                    Value="{x:Static fa:FontAwesomeIcon.TimesCircle}" />
-                                                        </ObjectAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </MultiDataTrigger.EnterActions>
-                                            <MultiDataTrigger.ExitActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <ObjectAnimationUsingKeyFrames
-                                                            Storyboard.TargetProperty="Icon">
-                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                                    Value="{x:Static fa:FontAwesomeIcon.ThumbTack}" />
-                                                        </ObjectAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </MultiDataTrigger.ExitActions>
-                                        </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding Pinned, ElementName=mainWindow}" Value="True">
-                                            <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <ParallelTimeline>
-                                                            <DoubleAnimation
-                                                                Storyboard.TargetProperty="LayoutTransform.(RotateTransform.Angle)"
-                                                                To="0" Duration="0:0:0.05" />
-                                                            <ColorAnimation
-                                                                Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                                                To="#E53C3C3C" Duration="0:0:0.05" />
-                                                        </ParallelTimeline>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.EnterActions>
-                                            <Setter Property="Foreground" Value="#E53C3C3C" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </fa:ImageAwesome.Style>
-                        </fa:ImageAwesome>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
+                                                         Value="Maximized">
+                                                <Setter Property="Icon" Value="WindowRestore" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
+                                                         Value="Normal">
+                                                <Setter Property="Icon" Value="WindowMaximize" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </fa:ImageAwesome.Style>
+                            </fa:ImageAwesome>
+                            <fa:ImageAwesome DockPanel.Dock="Right" x:Name="buttonShare" Icon="ShareAlt"
+                                             WindowChrome.IsHitTestVisibleInChrome="True"
+                                             Width="14" Height="14" Margin="10,0,5,0" Foreground="#E5868686"
+                                             Cursor="Hand" />
+                            <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" Content="Open with..." Height="20"
+                                    Margin="10,0,0,0" Padding="5,0"
+                                    MaxWidth="{Binding Width, ElementName=mainWindow, Converter={StaticResource ScaledValueConverter}, ConverterParameter='0.25'}"
+                                    Focusable="False" Cursor="Hand"
+                                    Background="#E5EEEEEE" BorderBrush="#E59A9A9A"
+                                    WindowChrome.IsHitTestVisibleInChrome="True" Foreground="#FF404040">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </Button>
+                            <Grid DockPanel.Dock="Left" Width="20" Margin="5,0">
+                                <fa:ImageAwesome x:Name="buttonPin"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True"
+                                                 Width="14" Height="14"
+                                                 Cursor="Hand">
+                                    <fa:ImageAwesome.Style>
+                                        <Style TargetType="{x:Type fa:ImageAwesome}">
+                                            <Setter Property="Icon" Value="ThumbTack" />
+                                            <Setter Property="Foreground" Value="#E5868686" />
+                                            <Setter Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="-45" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition
+                                                            Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                            Value="True" />
+                                                        <Condition Binding="{Binding Pinned, ElementName=mainWindow}"
+                                                                   Value="True" />
+                                                        <Condition
+                                                            Binding="{Binding Path=LayoutTransform.(RotateTransform.Angle), RelativeSource={RelativeSource Self}}"
+                                                            Value="0" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames
+                                                                    Storyboard.TargetProperty="Icon">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.2"
+                                                                                            Value="{x:Static fa:FontAwesomeIcon.TimesCircle}" />
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </MultiDataTrigger.EnterActions>
+                                                    <MultiDataTrigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames
+                                                                    Storyboard.TargetProperty="Icon">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                                            Value="{x:Static fa:FontAwesomeIcon.ThumbTack}" />
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </MultiDataTrigger.ExitActions>
+                                                </MultiDataTrigger>
+                                                <DataTrigger Binding="{Binding Pinned, ElementName=mainWindow}"
+                                                             Value="True">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ParallelTimeline>
+                                                                    <DoubleAnimation
+                                                                        Storyboard.TargetProperty="LayoutTransform.(RotateTransform.Angle)"
+                                                                        To="0" Duration="0:0:0.05" />
+                                                                    <ColorAnimation
+                                                                        Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                                                        To="#E53C3C3C" Duration="0:0:0.05" />
+                                                                </ParallelTimeline>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <Setter Property="Foreground" Value="#E53C3C3C" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </fa:ImageAwesome.Style>
+                                </fa:ImageAwesome>
+                            </Grid>
+                            <!-- set grid.background colour makes it clickable -->
+                            <Grid x:Name="titleArea" Background="Transparent">
+                                <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"
+                                           HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" Margin="5,0" />
+                            </Grid>
+                        </DockPanel>
                     </Grid>
-                    <!-- set grid.background colour makes it clickable -->
-                    <Grid x:Name="titleArea" Background="Transparent">
-                        <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="14"
-                                   HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
-                                   VerticalAlignment="Center" Margin="5,0" />
-                    </Grid>
-                </DockPanel>
-                <Grid>
                     <ContentControl x:Name="container"
                                     Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
                 </Grid>
-            </DockPanel>
-            <Grid x:Name="busyIndicatorLayer">
-                <Grid.Style>
-                    <Style TargetType="{x:Type Grid}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
-                                         Value="False">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ParallelTimeline>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0"
-                                                                 Duration="0:0:0.05" />
-                                                <ObjectAnimationUsingKeyFrames
-                                                    Storyboard.TargetProperty="(UIElement.Visibility)">
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.05"
-                                                                            Value="{x:Static Visibility.Hidden}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </ParallelTimeline>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ParallelTimeline>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"
-                                                                 Duration="0:0:0" />
-                                                <ObjectAnimationUsingKeyFrames
-                                                    Storyboard.TargetProperty="(UIElement.Visibility)">
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                            Value="{x:Static Visibility.Visible}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </ParallelTimeline>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <!--IsBusyIndicatorShowing="{Binding IsVisible, ElementName=busyIndicatorLayer}"-->
-                <control:BusyDecorator x:Name="busyDecorator"
-                                       IsBusyIndicatorShowing="True"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center" />
+                <Grid x:Name="busyIndicatorLayer">
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
+                                    Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ParallelTimeline>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0"
+                                                                     Duration="0:0:0.05" />
+                                                    <ObjectAnimationUsingKeyFrames
+                                                        Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.05"
+                                                                                Value="{x:Static Visibility.Hidden}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </ParallelTimeline>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ParallelTimeline>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"
+                                                                     Duration="0:0:0" />
+                                                    <ObjectAnimationUsingKeyFrames
+                                                        Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                                Value="{x:Static Visibility.Visible}" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </ParallelTimeline>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <!--IsBusyIndicatorShowing="{Binding IsVisible, ElementName=busyIndicatorLayer}"-->
+                    <busyDecorator:BusyDecorator x:Name="busyDecorator"
+                                                 IsBusyIndicatorShowing="True"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Center" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>

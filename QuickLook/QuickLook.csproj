@@ -111,15 +111,19 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
+    <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
+      <DependentUpon>GlassLayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
-    <Compile Include="Controls\BackgroundVisualHost.cs" />
-    <Compile Include="Controls\BusyDecorator.cs" />
-    <Compile Include="Controls\VisualTargetPresentationSource.cs" />
+    <Compile Include="Controls\BusyDecorator\BackgroundVisualHost.cs" />
+    <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
+    <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="Helpers\BlurLibrary\BlurWindow.cs" />
     <Compile Include="Helpers\BlurLibrary\Helpers.cs" />
@@ -163,6 +167,10 @@
     <Compile Include="Controls\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Page Include="Controls\GlassLayer\GlassLayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -218,6 +226,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
     <None Include="key.snk" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -268,6 +277,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
+    <None Include="Controls\GlassLayer\GaussianBlur.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
