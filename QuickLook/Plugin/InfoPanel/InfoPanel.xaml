@@ -16,7 +16,8 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Row="1" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0" Margin="0,-20,0,0">
+        <Image x:Name="image" Grid.Row="1" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0"
+               Margin="0,-20,0,0">
             <Image.Style>
                 <Style TargetType="{x:Type Image}">
                     <Style.Triggers>

@@ -27,7 +27,6 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Annotations;
 using QuickLook.Helpers;
-using QuickLook.Helpers.BlurLibrary;
 using QuickLook.Plugin;
 
 namespace QuickLook
@@ -234,12 +233,13 @@ namespace QuickLook
             // revert UI changes
             ContextObject.IsBusy = true;
 
-            var newHeight = ContextObject.PreferredSize.Height + titlebar.Height;
-            var newWidth = ContextObject.PreferredSize.Width;
+            var newHeight = ContextObject.PreferredSize.Height + 10 +
+                            (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
+            var newWidth = ContextObject.PreferredSize.Width + 10;
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 
-            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : titlebar.Height - 5;
+            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : windowCaptionContainer.Height - 5;
 
             if (Visibility != Visibility.Visible)
                 Show();
@@ -300,6 +300,16 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void RemoveWindowChromeCaption(object sender, EventArgs e)
+        {
+            chrome.CaptionHeight = 0;
+        }
+
+        private void RestoreWindowChromeCaption(object sender, EventArgs e)
+        {
+            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : windowCaptionContainer.Height - 5;
         }
     }
 }

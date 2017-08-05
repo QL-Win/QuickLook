@@ -29,20 +29,17 @@ namespace QuickLook.Controls.GlassLayer
         public static readonly DependencyProperty DirectionProperty =
             DependencyProperty.Register("Direction", typeof(Point), typeof(GaussianBlurEffect),
                 new UIPropertyMetadata(new Point(0, 1), PixelShaderConstantCallback(0)));
+        public static DependencyProperty ShaderProperty =
+            DependencyProperty.Register("Shader", typeof(Uri), typeof(GaussianBlurEffect),
+                new PropertyMetadata(null, UpdateShader()));
 
-        public GaussianBlurEffect()
+        public Uri Shader
         {
-            var pixelShader = new PixelShader
-            {
-                UriSource = new Uri("pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps",
-                    UriKind.Absolute)
-            };
-            PixelShader = pixelShader;
+            get => (Uri) GetValue(ShaderProperty);
 
-            DdxUvDdyUvRegisterIndex = 1;
-            UpdateShaderValue(InputProperty);
-            UpdateShaderValue(DirectionProperty);
+            set => SetValue(ShaderProperty, value);
         }
+
 
         public Brush Input
         {
@@ -54,6 +51,21 @@ namespace QuickLook.Controls.GlassLayer
         {
             get => (Point) GetValue(DirectionProperty);
             set => SetValue(DirectionProperty, value);
+        }
+
+        private static PropertyChangedCallback UpdateShader()
+        {
+            return (obj, ea) =>
+            {
+                if (obj is GaussianBlurEffect instance)
+                {
+                    instance.PixelShader = new PixelShader {UriSource = ea.NewValue as Uri};
+
+                    instance.UpdateShaderValue(InputProperty); // S0
+                    instance.UpdateShaderValue(DirectionProperty); // C0
+                    instance.DdxUvDdyUvRegisterIndex = 1; // C1
+                }
+            };
         }
     }
 }

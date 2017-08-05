@@ -31,11 +31,12 @@ namespace QuickLook.Plugin
     /// </summary>
     public class ContextObject : INotifyPropertyChanged
     {
-        private bool _canFocus;
+        private bool _autoHideTitlebar;
         private bool _canResize = true;
         private bool _fullWindowDragging;
         private bool _isBusy = true;
         private string _title = "";
+        private bool _titlebarOverlap;
         private object _viewerContent;
 
         /// <summary>
@@ -114,14 +115,27 @@ namespace QuickLook.Plugin
         }
 
         /// <summary>
-        ///     Set whether user are allowed to set focus at the viewer window.
+        ///     Set whether the viewer content is overlapped by the title bar
         /// </summary>
-        public bool CanFocus
+        public bool TitlebarOverlap
         {
-            get => _canFocus;
+            get => _titlebarOverlap;
             set
             {
-                _canFocus = value;
+                _titlebarOverlap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Set whether the title bar of viewer window should be auto-hidden.
+        /// </summary>
+        public bool AutoHideTitlebar
+        {
+            get => _autoHideTitlebar;
+            set
+            {
+                _autoHideTitlebar = value;
                 OnPropertyChanged();
             }
         }
@@ -189,7 +203,8 @@ namespace QuickLook.Plugin
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;
-            CanFocus = false;
+            AutoHideTitlebar = false;
+            TitlebarOverlap = false;
         }
 
         [NotifyPropertyChangedInvocator]

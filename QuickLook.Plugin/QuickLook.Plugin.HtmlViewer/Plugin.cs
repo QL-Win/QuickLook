@@ -55,8 +55,6 @@ namespace QuickLook.Plugin.HtmlViewer
         public void Prepare(string path, ContextObject context)
         {
             context.PreferredSize = new Size(1000, 600);
-
-            context.CanFocus = true;
         }
 
         public void View(string path, ContextObject context)

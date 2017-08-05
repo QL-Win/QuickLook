@@ -116,6 +116,7 @@
       <DependentUpon>GlassLayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
@@ -175,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\MainWindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\ScrollBarStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -226,7 +231,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
-    <Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
+    <Resource Include="Controls\GlassLayer\GaussianBlur.ps">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <None Include="key.snk" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

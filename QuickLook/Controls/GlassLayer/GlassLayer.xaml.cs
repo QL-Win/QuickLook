@@ -50,25 +50,25 @@ namespace QuickLook.Controls.GlassLayer
 
         #endregion public Visual BlurredElement
 
-        #region public double GlassOpacity
+        #region public Visibility GrayOverlayVisibility
 
         /// <summary>
-        ///     Identifies the GlassOpacity dependency property.
+        ///     Identifies the GrayOverlayVisibility dependency property.
         /// </summary>
-        public static DependencyProperty GlassOpacityProperty =
-            DependencyProperty.Register("GlassOpacity", typeof(double), typeof(GlassLayer),
-                new UIPropertyMetadata(0.6));
+        public static DependencyProperty GrayOverlayVisibilityProperty =
+            DependencyProperty.Register("GrayOverlayVisibility", typeof(Visibility), typeof(GlassLayer),
+                new UIPropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// </summary>
-        public double GlassOpacity
+        public Visibility GrayOverlayVisibility
         {
-            get => (double) GetValue(GlassOpacityProperty);
+            get => (Visibility) GetValue(GrayOverlayVisibilityProperty);
 
-            set => SetValue(GlassOpacityProperty, value);
+            set => SetValue(GrayOverlayVisibilityProperty, value);
         }
 
-        #endregion public double GlassOpacity
+        #endregion public Visibility GrayOverlayVisibility
 
         #region public Visibility NoiseVisibility
 
@@ -89,5 +89,25 @@ namespace QuickLook.Controls.GlassLayer
         }
 
         #endregion public Visibility NoiseVisibility
+
+        #region public Visibility GlassVisibility
+
+        /// <summary>
+        ///     Identifies the GlassVisibility dependency property.
+        /// </summary>
+        public static DependencyProperty GlassVisibilityProperty =
+            DependencyProperty.Register("GlassVisibility", typeof(Visibility), typeof(GlassLayer),
+                new UIPropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// </summary>
+        public Visibility GlassVisibility
+        {
+            get => (Visibility) GetValue(GlassVisibilityProperty);
+
+            set => SetValue(GlassVisibilityProperty, value);
+        }
+
+        #endregion public Visibility GlassVisibility
     }
 }

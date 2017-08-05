@@ -67,6 +67,9 @@ namespace QuickLook.Plugin.ImageViewer
                 context.PreferredSize = new Size(1024, 768);
 
             Directory.SetCurrentDirectory(App.AppPath);
+
+            context.AutoHideTitlebar = true;
+            context.TitlebarOverlap = true;
         }
 
         public void View(string path, ContextObject context)

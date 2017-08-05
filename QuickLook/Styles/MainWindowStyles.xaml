@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
+    <system:Double x:Key="MainWindowShadowBlurRadius">5</system:Double>
+    <Thickness x:Key="MainWindowShadowPaddingThinkness">5</Thickness>
+    <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
+    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
+    <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
+
+    <Style x:Key="CaptionButtonStyle" TargetType="Grid">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Margin" Value="5,0,5,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#22FFFFFF" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
