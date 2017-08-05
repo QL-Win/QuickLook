@@ -82,12 +82,12 @@
                     </Grid.Style>
                     <glassLayer:GlassLayer BlurredElement="{Binding ElementName=containerPanel}" />
                     <DockPanel>
-                        <Grid x:Name="buttonCloseWindow" Style="{StaticResource CaptionButtonStyle}"
+                        <Border x:Name="buttonCloseWindow" Style="{StaticResource CaptionButtonStyle}"
                               DockPanel.Dock="Right">
                             <fa:ImageAwesome Icon="TimesCircle"
                                              Foreground="{StaticResource CaptionButtonIconForeground}" />
-                        </Grid>
-                        <Grid x:Name="buttonWindowStatus" Style="{StaticResource CaptionButtonStyle}"
+                        </Border>
+                        <Border x:Name="buttonWindowStatus" Style="{StaticResource CaptionButtonStyle}"
                               DockPanel.Dock="Right">
                             <fa:ImageAwesome Foreground="{StaticResource CaptionButtonIconForeground}">
                                 <fa:ImageAwesome.Style>
@@ -106,7 +106,7 @@
                                     </Style>
                                 </fa:ImageAwesome.Style>
                             </fa:ImageAwesome>
-                        </Grid>
+                        </Border>
                         <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" Content="Open with..." Height="20"
                                 Margin="10,0,0,0" Padding="5,0"
                                 MaxWidth="{Binding Width, ElementName=mainWindow, Converter={StaticResource ScaledValueConverter}, ConverterParameter='0.25'}"
@@ -119,12 +119,12 @@
                                 </DataTemplate>
                             </Button.ContentTemplate>
                         </Button>
-                        <Grid DockPanel.Dock="Left" x:Name="buttonPin" Style="{StaticResource CaptionButtonStyle}">
+                        <Border DockPanel.Dock="Left" x:Name="buttonPin" Style="{StaticResource CaptionButtonStyle}">
                             <fa:ImageAwesome Icon="ThumbTack" Foreground="{StaticResource CaptionButtonIconForeground}" />
-                        </Grid>
-                        <Grid x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">
+                        </Border>
+                        <Border x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">
                             <fa:ImageAwesome Icon="ShareAlt" Foreground="{StaticResource CaptionButtonIconForeground}" />
-                        </Grid>
+                        </Border>
                         <Grid x:Name="titleArea" Background="Transparent">
                             <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
                                        HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
@@ -142,12 +142,12 @@
             <Grid x:Name="busyIndicatorLayer" Background="{StaticResource MainWindowBackground}" ZIndex="200">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow, Mode=OneWay}"
-                                Value="False">
-                                <Setter Property="Visibility" Value="Collapsed" />
+                                Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
+                                Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

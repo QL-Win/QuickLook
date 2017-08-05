@@ -8,10 +8,10 @@
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
 
-    <Style x:Key="CaptionButtonStyle" TargetType="Grid">
-        <Setter Property="Width" Value="20" />
-        <Setter Property="Height" Value="20" />
-        <Setter Property="Margin" Value="5,0,5,0" />
+    <Style x:Key="CaptionButtonStyle" TargetType="Border">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="9,9,9,9" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
