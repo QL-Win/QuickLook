@@ -15,46 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace QuickLook.Plugin.PDFViewer
+namespace QuickLook.ExtensionMethods
 {
-    public static class Extensions
+    public static class BitmapExtensions
     {
-        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        public static BitmapSource ToBitmapSource(this Bitmap old_source)
         {
-            foreach (var item in enumeration)
-                action(item);
-        }
+            // BitmapSource.Create throws an exception when the image is scanned backward.
+            // The Clone() will make it back scanning forward.
+            var source = (Bitmap) old_source.Clone();
 
-        public static T GetDescendantByType<T>(this Visual element) where T : class
-        {
-            if (element == null)
-                return default(T);
-            if (element.GetType() == typeof(T))
-                return element as T;
-
-            T foundElement = null;
-            (element as FrameworkElement)?.ApplyTemplate();
-
-            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
-            {
-                var visual = VisualTreeHelper.GetChild(element, i) as Visual;
-                foundElement = visual.GetDescendantByType<T>();
-                if (foundElement != null)
-                    break;
-            }
-            return foundElement;
-        }
-
-        public static BitmapSource ToBitmapSource(this Bitmap source)
-        {
             BitmapSource bs = null;
             try
             {
@@ -62,7 +37,7 @@ namespace QuickLook.Plugin.PDFViewer
                     ImageLockMode.ReadOnly, source.PixelFormat);
 
                 bs = BitmapSource.Create(source.Width, source.Height, source.HorizontalResolution,
-                    source.VerticalResolution, PixelFormats.Bgr24, null,
+                    source.VerticalResolution, PixelFormats.Bgra32, null,
                     data.Scan0, data.Stride * source.Height, data.Stride);
 
                 source.UnlockBits(data);
@@ -72,6 +47,10 @@ namespace QuickLook.Plugin.PDFViewer
             catch
             {
                 // ignored
+            }
+            finally
+            {
+                source.Dispose();
             }
 
             return bs;

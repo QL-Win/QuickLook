@@ -19,6 +19,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using QuickLook.ExtensionMethods;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
@@ -77,7 +78,7 @@ namespace QuickLook.Plugin.ArchiveViewer
             var size = (ulong) values[0];
             var isFolder = (bool) values[1];
 
-            return isFolder ? "" : size.ToPrettySize(2);
+            return isFolder ? "" : ((long) size).ToPrettySize(2);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

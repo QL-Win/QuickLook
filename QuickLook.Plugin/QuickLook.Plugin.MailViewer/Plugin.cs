@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using MsgReader;
@@ -27,7 +28,7 @@ namespace QuickLook.Plugin.MailViewer
     public class Plugin : IViewer
     {
         private WebpagePanel _panel;
-        private string tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        private string _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         public int Priority => int.MaxValue;
         public bool AllowsTransparency => false;
@@ -38,18 +39,7 @@ namespace QuickLook.Plugin.MailViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            switch (Path.GetExtension(path).ToLower())
-            {
-                case ".eml":
-                case ".msg":
-                    return true;
-
-                default:
-                    return false;
-            }
+            return !Directory.Exists(path) && new[] {".eml", ".msg"}.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)
@@ -74,18 +64,18 @@ namespace QuickLook.Plugin.MailViewer
             _panel?.Dispose();
             _panel = null;
 
-            if (Directory.Exists(tmpDir))
-                Directory.Delete(tmpDir, true);
+            if (Directory.Exists(_tmpDir))
+                Directory.Delete(_tmpDir, true);
         }
 
         private string ExtractMailBody(string path)
         {
-            tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Directory.CreateDirectory(tmpDir);
+            _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(_tmpDir);
 
             var msg = new Reader();
 
-            var files = msg.ExtractToFolder(path, tmpDir, true);
+            var files = msg.ExtractToFolder(path, _tmpDir, true);
 
             if (files.Length > 0 && !string.IsNullOrEmpty(files[0]))
                 return files[0];

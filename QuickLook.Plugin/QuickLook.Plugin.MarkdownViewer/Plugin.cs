@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Threading;
@@ -37,19 +38,7 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            switch (Path.GetExtension(path).ToLower())
-            {
-                case ".markdown":
-                case ".md":
-                case ".rmd":
-                    return true;
-
-                default:
-                    return false;
-            }
+            return !Directory.Exists(path) && new[] {".md", ".rmd", ".maekdown"}.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)

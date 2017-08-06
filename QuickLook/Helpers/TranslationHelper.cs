@@ -24,7 +24,7 @@ using System.Xml.XPath;
 
 namespace QuickLook.Helpers
 {
-    internal class TranslationHelper
+    public class TranslationHelper
     {
         private static readonly CultureInfo CurrentCultureInfo = CultureInfo.CurrentUICulture;
         //private static readonly CultureInfo CurrentCultureInfo = CultureInfo.GetCultureInfo("zh-CN");

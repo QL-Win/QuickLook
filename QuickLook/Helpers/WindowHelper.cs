@@ -25,17 +25,15 @@ using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
-    internal static class WindowHelper
+    public static class WindowHelper
     {
         public static Rect GetCurrentWindowRect()
         {
             var screen = Screen.FromPoint(Cursor.Position).WorkingArea;
-            var dpi = DpiHelper.GetCurrentDpi();
-            var scaleX = dpi.HorizontalDpi / DpiHelper.DEFAULT_DPI;
-            var scaleY = dpi.VerticalDpi / DpiHelper.DEFAULT_DPI;
+            var scale = DpiHelper.GetCurrentScaleFactor();
             return new Rect(
-                new Point(screen.X / scaleX, screen.Y / scaleY),
-                new Size(screen.Width / scaleX, screen.Height / scaleY));
+                new Point(screen.X / scale.Horizontal, screen.Y / scale.Vertical),
+                new Size(screen.Width / scale.Horizontal, screen.Height / scale.Vertical));
         }
 
         public static void BringToFront(this Window window)

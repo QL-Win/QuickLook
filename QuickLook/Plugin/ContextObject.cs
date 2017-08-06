@@ -17,8 +17,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Annotations;
@@ -143,26 +141,6 @@ namespace QuickLook.Plugin
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        ///     Get a string from translation Xml document.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null)
-        {
-            return TranslationHelper.GetString(id, file, locale, failsafe, Assembly.GetCallingAssembly());
-        }
-
-        /// <summary>
-        ///     Show a notification balloon.
-        /// </summary>
-        /// <param name="title">Title of the notification.</param>
-        /// <param name="content">The content.</param>
-        /// <param name="isError">Is this indicates a error?</param>
-        public void ShowNotification(string title, string content, bool isError = false)
-        {
-            TrayIconManager.GetInstance().ShowNotification(title, content, isError);
-        }
-
-        /// <summary>
         ///     Set the size of viewer window and shrink to fit (to screen resolution).
         ///     The window can take maximum (maxRatio*resolution) space.
         /// </summary>
@@ -173,7 +151,7 @@ namespace QuickLook.Plugin
             if (maxRatio > 1)
                 maxRatio = 1;
 
-            var max = GetMaximumDisplayBound();
+            var max = WindowHelper.GetCurrentWindowRect();
 
             var widthRatio = max.Width * maxRatio / size.Width;
             var heightRatio = max.Height * maxRatio / size.Height;
@@ -184,14 +162,6 @@ namespace QuickLook.Plugin
             PreferredSize = new Size {Width = size.Width * ratio, Height = size.Height * ratio};
 
             return ratio;
-        }
-
-        /// <summary>
-        ///     Get the device-independent resolution.
-        /// </summary>
-        public Rect GetMaximumDisplayBound()
-        {
-            return WindowHelper.GetCurrentWindowRect();
         }
 
         internal void Reset()

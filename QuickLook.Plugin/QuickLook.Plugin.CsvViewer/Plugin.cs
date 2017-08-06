@@ -34,10 +34,7 @@ namespace QuickLook.Plugin.CsvViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            return Path.GetExtension(path).ToLower() == ".csv";
+            return !Directory.Exists(path) && path.ToLower().EndsWith(".csv");
         }
 
         public void Prepare(string path, ContextObject context)

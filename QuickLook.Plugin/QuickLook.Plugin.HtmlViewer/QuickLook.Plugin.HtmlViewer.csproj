@@ -72,7 +72,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DpiHelpers.cs" />
     <Compile Include="WpfBrowserWrapper.cs" />
     <Page Include="WebpagePanel.xaml">
       <Generator>MSBuild:Compile</Generator>

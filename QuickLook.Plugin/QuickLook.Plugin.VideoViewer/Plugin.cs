@@ -28,6 +28,18 @@ namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
+        private static readonly string[] Formats =
+        {
+            // video
+            ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".m2ts", ".m4v", ".mkv",
+            ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".vob", ".webm", ".wmv",
+            // audio
+            ".3gp", ".aa", ".aac", ".aax", ".act", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
+            ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
+            ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
+        };
+        private ContextObject _context;
+
         private Size _mediaSize = Size.Empty;
         private ViewerPanel _vp;
 
@@ -41,25 +53,13 @@ namespace QuickLook.Plugin.VideoViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            var formats = new[]
-            {
-                // video
-                ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".m2ts", ".m4v", ".mkv",
-                ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".vob", ".webm", ".wmv",
-                // audio
-                ".3gp", ".aa", ".aac", ".aax", ".act", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
-                ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
-                ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
-            };
-
-            return formats.Contains(Path.GetExtension(path).ToLower());
+            return !Directory.Exists(path) && Formats.Contains(Path.GetExtension(path).ToLower());
         }
 
         public void Prepare(string path, ContextObject context)
         {
+            _context = context;
+
             var def = new Size(450, 450);
 
             _mediaSize = GetMediaSizeWithVlc(path);
@@ -77,7 +77,8 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.ViewerContent = _vp;
 
-            _vp.mediaElement.VlcMediaPlayer.Opening += (sender, e) => context.IsBusy = false;
+
+            _vp.mediaElement.VlcMediaPlayer.Opening += MarkReady;
 
             _vp.LoadAndPlay(path);
 
@@ -89,8 +90,16 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Cleanup()
         {
+            _vp.mediaElement.VlcMediaPlayer.Opening -= MarkReady;
             _vp?.Dispose();
             _vp = null;
+
+            _context = null;
+        }
+
+        private void MarkReady(object sender, ObjectEventArgs<MediaState> e)
+        {
+            _context.IsBusy = false;
         }
 
         private Size GetMediaSizeWithVlc(string path)

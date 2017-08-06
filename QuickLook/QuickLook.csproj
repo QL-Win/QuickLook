@@ -120,6 +120,9 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
+    <Compile Include="ExtensionMethods\BitmapExtensions.cs" />
+    <Compile Include="ExtensionMethods\EnumerableExtensions.cs" />
+    <Compile Include="ExtensionMethods\FileExtensions.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BusyDecorator\BackgroundVisualHost.cs" />
@@ -150,8 +153,6 @@
     <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
-    <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
-    <Compile Include="Plugin\InfoPanel\Extensions.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
     <Compile Include="Plugin\InfoPanel\InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>

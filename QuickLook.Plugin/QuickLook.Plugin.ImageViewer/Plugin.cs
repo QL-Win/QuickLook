@@ -25,7 +25,7 @@ namespace QuickLook.Plugin.ImageViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] _formats =
+        private static readonly string[] Formats =
         {
             // camera raw
             ".3fr", ".ari", ".arw", ".bay", ".crw", ".cr2", ".cap", ".data", ".dcs", ".dcr", ".dng", ".drf", ".eip",
@@ -51,10 +51,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            return _formats.Contains(Path.GetExtension(path).ToLower());
+            return !Directory.Exists(path) && Formats.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)

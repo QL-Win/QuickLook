@@ -266,7 +266,7 @@ namespace QuickLook.Plugin.VideoViewer
         [DebuggerNonUserCode]
         private void ShowErrorNotification(object sender, EventArgs e)
         {
-            _context.ShowNotification("", "An error occurred while loading the video.");
+            TrayIconManager.GetInstance().ShowNotification("", "An error occurred while loading the video.");
             mediaElement?.Stop();
 
             Dispose();

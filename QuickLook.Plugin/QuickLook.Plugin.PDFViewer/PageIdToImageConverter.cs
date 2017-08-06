@@ -18,6 +18,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using QuickLook.ExtensionMethods;
 
 namespace QuickLook.Plugin.PDFViewer
 {

@@ -37,14 +37,14 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            const long MAX_SIZE = 20 * 1024 * 1024;
+            const long maxSize = 20 * 1024 * 1024;
 
-            if (Path.GetExtension(path).ToLower() == ".txt")
-                return new FileInfo(path).Length <= MAX_SIZE;
+            if (path.ToLower().EndsWith(".txt"))
+                return new FileInfo(path).Length <= maxSize;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
             if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-                return new FileInfo(path).Length <= MAX_SIZE;
+                return new FileInfo(path).Length <= maxSize;
 
             // otherwise, read the first 512KB, check if we can get something. 
             using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -53,7 +53,7 @@ namespace QuickLook.Plugin.TextViewer
                 var buffer = new byte[bufferLength];
                 var size = s.Read(buffer, 0, bufferLength);
 
-                return IsText(buffer, size) && new FileInfo(path).Length <= MAX_SIZE;
+                return IsText(buffer, size) && new FileInfo(path).Length <= maxSize;
             }
         }
 
@@ -64,7 +64,7 @@ namespace QuickLook.Plugin.TextViewer
 
         public void View(string path, ContextObject context)
         {
-            _tvp = new TextViewerPanel(path, context);
+            _tvp = new TextViewerPanel(path);
 
             context.ViewerContent = _tvp;
             context.Title = $"{Path.GetFileName(path)}";

@@ -19,9 +19,11 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -37,6 +39,7 @@ namespace QuickLook
     public partial class MainWindowTransparent : Window, INotifyPropertyChanged
     {
         private bool _pinned;
+        private bool _restoreForDragMove;
 
         internal MainWindowTransparent()
         {
@@ -47,13 +50,11 @@ namespace QuickLook
 
             FontFamily = new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
 
-            SourceInitialized += (sender, e) =>
-            {
-                //if (AllowsTransparency)
-                //    BlurWindow.EnableWindowBlur(this);
-            };
+            windowCaptionContainer.MouseLeftButtonDown += WindowDragMoveStart;
+            windowCaptionContainer.MouseMove += WindowDragMoving;
+            windowCaptionContainer.MouseLeftButtonUp += WindowDragMoveEnd;
 
-            buttonPin.MouseLeftButtonUp += (sender, e) =>
+            buttonPin.Click += (sender, e) =>
             {
                 if (Pinned)
                 {
@@ -68,7 +69,7 @@ namespace QuickLook
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 
-            buttonCloseWindow.MouseLeftButtonUp += (sender, e) =>
+            buttonCloseWindow.Click += (sender, e) =>
             {
                 if (Pinned)
                     BeginClose();
@@ -84,10 +85,10 @@ namespace QuickLook
                     ViewWindowManager.GetInstance().RunAndClosePreview();
             };
 
-            buttonWindowStatus.MouseLeftButtonUp += (sender, e) =>
+            buttonWindowStatus.Click += (sender, e) =>
                 WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-            buttonShare.MouseLeftButtonUp +=
+            buttonShare.Click +=
                 (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {Path}");
         }
 
@@ -107,6 +108,53 @@ namespace QuickLook
         public ContextObject ContextObject { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void WindowDragMoveEnd(object sender, MouseButtonEventArgs e)
+        {
+            _restoreForDragMove = false;
+        }
+
+        private void WindowDragMoving(object sender, MouseEventArgs e)
+        {
+            if (!_restoreForDragMove)
+                return;
+            _restoreForDragMove = false;
+
+            var scale = DpiHelper.GetCurrentScaleFactor();
+            var point = PointToScreen(e.MouseDevice.GetPosition(this));
+            point.X /= scale.Horizontal;
+            point.Y /= scale.Vertical;
+
+            var monitor = WindowHelper.GetCurrentWindowRect();
+            var precentLeft = (point.X - monitor.Left) / monitor.Width;
+            var precentTop = (point.Y - monitor.Top) / monitor.Height;
+
+            Left = point.X - RestoreBounds.Width * precentLeft;
+            Top = point.Y - RestoreBounds.Height * precentTop;
+
+            WindowState = WindowState.Normal;
+
+            DragMove();
+        }
+
+        private void WindowDragMoveStart(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (ResizeMode != ResizeMode.CanResize &&
+                    ResizeMode != ResizeMode.CanResizeWithGrip)
+                    return;
+
+                WindowState = WindowState == WindowState.Maximized
+                    ? WindowState.Normal
+                    : WindowState.Maximized;
+            }
+            else
+            {
+                _restoreForDragMove = WindowState == WindowState.Maximized;
+                DragMove();
+            }
+        }
 
         internal void RunWith(string with, string arg)
         {
@@ -239,8 +287,6 @@ namespace QuickLook
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 
-            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : windowCaptionContainer.Height - 5;
-
             if (Visibility != Visibility.Visible)
                 Show();
 
@@ -263,15 +309,43 @@ namespace QuickLook
 
         private void SetOpenWithButtonAndPath()
         {
-            var isExe = FileHelper.GetAssocApplication(Path, out string appFriendlyName);
+            buttonOpenWithText.Inlines.Clear();
 
-            buttonOpenWith.Content = isExe == null
-                ? Directory.Exists(Path)
-                    ? string.Format(TranslationHelper.GetString("MW_BrowseFolder"), System.IO.Path.GetFileName(Path))
-                    : string.Format(TranslationHelper.GetString("MW_Open"), System.IO.Path.GetFileName(Path))
-                : isExe == true
-                    ? string.Format(TranslationHelper.GetString("MW_Run"), appFriendlyName)
-                    : string.Format(TranslationHelper.GetString("MW_OpenWith"), appFriendlyName);
+            if (Directory.Exists(Path))
+            {
+                AddToInlines("MW_BrowseFolder", System.IO.Path.GetFileName(Path));
+                return;
+            }
+            var isExe = FileHelper.IsExecutable(Path, out string appFriendlyName);
+            if (isExe)
+            {
+                AddToInlines("MW_Run", appFriendlyName);
+                return;
+            }
+            // not an exe
+            var found = FileHelper.GetAssocApplication(Path, out appFriendlyName);
+            if (found)
+            {
+                AddToInlines("MW_OpenWith", appFriendlyName);
+                return;
+            }
+            // assoc not found
+            AddToInlines("MW_Open", System.IO.Path.GetFileName(Path));
+
+            void AddToInlines(string str, string replaceWith)
+            {
+                str = TranslationHelper.GetString(str);
+                var elements = str.Split(new[] {"{0}"}, StringSplitOptions.None).ToList();
+                while (elements.Count < 2)
+                    elements.Add(string.Empty);
+
+                buttonOpenWithText.Inlines.Add(
+                    new Run(elements[0]) {FontWeight = FontWeights.Normal}); // text beforehand
+                buttonOpenWithText.Inlines.Add(
+                    new Run(replaceWith) {FontWeight = FontWeights.SemiBold}); // appFriendlyName
+                buttonOpenWithText.Inlines.Add(
+                    new Run(elements[1]) {FontWeight = FontWeights.Normal}); // text afterward
+            }
         }
 
         internal void BeginHide()
@@ -300,16 +374,6 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void RemoveWindowChromeCaption(object sender, EventArgs e)
-        {
-            chrome.CaptionHeight = 0;
-        }
-
-        private void RestoreWindowChromeCaption(object sender, EventArgs e)
-        {
-            chrome.CaptionHeight = ContextObject.FullWindowDragging ? Height : windowCaptionContainer.Height - 5;
         }
     }
 }

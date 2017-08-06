@@ -20,6 +20,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
@@ -32,7 +33,7 @@ namespace QuickLook.Plugin.HtmlViewer
         {
             InitializeComponent();
 
-            browser.Zoom = (int) (100 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI);
+            browser.Zoom = (int) (100 * DpiHelper.GetCurrentScaleFactor().Vertical);
         }
 
         public void Dispose()

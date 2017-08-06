@@ -24,6 +24,8 @@ namespace QuickLook.Plugin.PDFViewer
 {
     public class Plugin : IViewer
     {
+        private ContextObject _context;
+        private string _path;
         private PdfViewerControl _pdfControl;
 
         public int Priority => int.MaxValue;
@@ -50,6 +52,9 @@ namespace QuickLook.Plugin.PDFViewer
 
         public void Prepare(string path, ContextObject context)
         {
+            _context = context;
+            _path = path;
+
             var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
 
             context.SetPreferredSizeFit(desiredSize, 0.8);
@@ -69,8 +74,8 @@ namespace QuickLook.Plugin.PDFViewer
                     _pdfControl.LoadPdf(path);
 
                     context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
-                    _pdfControl.CurrentPageChanged += (sender2, e2) => context.Title =
-                        $"{Path.GetFileName(path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
+
+                    _pdfControl.CurrentPageChanged += UpdateVindowCaption;
                     context.IsBusy = false;
                 }
                 catch (Exception e)
@@ -87,8 +92,16 @@ namespace QuickLook.Plugin.PDFViewer
         {
             GC.SuppressFinalize(this);
 
+            _pdfControl.CurrentPageChanged -= UpdateVindowCaption;
             _pdfControl?.Dispose();
             _pdfControl = null;
+
+            _context = null;
+        }
+
+        private void UpdateVindowCaption(object sender, EventArgs e2)
+        {
+            _context.Title = $"{Path.GetFileName(_path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
         }
 
         ~Plugin()

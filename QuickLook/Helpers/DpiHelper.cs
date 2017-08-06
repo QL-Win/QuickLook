@@ -21,26 +21,23 @@ using System.Runtime.InteropServices;
 
 namespace QuickLook.Helpers
 {
-    internal static class DpiHelper
+    public static class DpiHelper
     {
-        public const float DEFAULT_DPI = 96;
+        public const float DefaultDpi = 96;
 
-        public static Dpi GetCurrentDpi()
+        public static ScaleFactor GetCurrentScaleFactor()
         {
             var g = Graphics.FromHwnd(IntPtr.Zero);
             var desktop = g.GetHdc();
 
-            var dpi = new Dpi
-            {
-                HorizontalDpi = GetDeviceCaps(desktop, (int) DeviceCap.LOGPIXELSX),
-                VerticalDpi = GetDeviceCaps(desktop, (int) DeviceCap.LOGPIXELSY)
-            };
+            var horizontalDpi = GetDeviceCaps(desktop, (int) DeviceCap.LOGPIXELSX);
+            var verticalDpi = GetDeviceCaps(desktop, (int) DeviceCap.LOGPIXELSY);
 
-            return dpi;
+            return new ScaleFactor {Horizontal = horizontalDpi / DefaultDpi, Vertical = verticalDpi / DefaultDpi};
         }
 
         [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
+        private static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 
         private enum DeviceCap
         {
@@ -54,10 +51,10 @@ namespace QuickLook.Helpers
             LOGPIXELSY = 90
         }
 
-        public struct Dpi
+        public struct ScaleFactor
         {
-            public float HorizontalDpi;
-            public float VerticalDpi;
+            public float Horizontal;
+            public float Vertical;
         }
     }
 }

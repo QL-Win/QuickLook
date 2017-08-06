@@ -88,7 +88,7 @@ namespace QuickLook
             }
         }
 
-        internal static TrayIconManager GetInstance()
+        public static TrayIconManager GetInstance()
         {
             return _instance ?? (_instance = new TrayIconManager());
         }

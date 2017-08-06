@@ -8,18 +8,73 @@
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
 
-    <Style x:Key="CaptionButtonStyle" TargetType="Border">
-        <Setter Property="Width" Value="40" />
-        <Setter Property="Height" Value="32" />
-        <Setter Property="Padding" Value="9,9,9,9" />
+    <Style x:Key="CaptionButtonBaseStyle" TargetType="Button">
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="#E50E0E0E" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    </Style>
+
+    <Style x:Key="CaptionTextButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonBaseStyle}">
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="6,2,6,2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#22FFFFFF" />
+                <Setter Property="BorderBrush" Value="#FF3D3D3D" />
+                <Setter Property="Background" Value="#44FFFFFF" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#88FFFFFF" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CaptionButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonBaseStyle}">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="9,9,9,9" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#44FFFFFF" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#88FFFFFF" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CaptionCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FFE81123" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#FFB5394B" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -212,7 +212,7 @@ namespace QuickLook.Plugin.PDFViewer
 
             // fill thumbnails list
             Enumerable.Range(0, PdfHandle.TotalPages).ForEach(PageIds.Add);
-            OnPropertyChanged("PageIds");
+            OnPropertyChanged(nameof(PageIds));
 
             CurrentPage = 0;
             pagePanel.DoZoomToFit();
