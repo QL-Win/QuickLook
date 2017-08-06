@@ -21,7 +21,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
-using QuickLook.Helpers;
 using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer
@@ -31,7 +30,7 @@ namespace QuickLook.Plugin.TextViewer
     /// </summary>
     public partial class TextViewerPanel : UserControl
     {
-        public TextViewerPanel(string path)
+        public TextViewerPanel(string path, ContextObject context)
         {
             InitializeComponent();
 
@@ -42,7 +41,7 @@ namespace QuickLook.Plugin.TextViewer
             viewer.PreviewMouseWheel += Viewer_MouseWheel;
 
             viewer.FontFamily =
-                new FontFamily(TranslationHelper.GetString("Editor_FontFamily"));
+                new FontFamily(context.GetString("Editor_FontFamily"));
 
             LoadFile(path);
         }

@@ -22,7 +22,7 @@ using QuickLook.Properties;
 
 namespace QuickLook
 {
-    public class TrayIconManager : IDisposable
+    internal class TrayIconManager : IDisposable
     {
         private static TrayIconManager _instance;
 

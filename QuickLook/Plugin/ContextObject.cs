@@ -17,6 +17,8 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Annotations;
@@ -125,20 +127,27 @@ namespace QuickLook.Plugin
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
-        ///     Set whether the title bar of viewer window should be auto-hidden.
+        ///     Get a string from translation Xml document.
         /// </summary>
-        public bool AutoHideTitlebar
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null)
         {
-            get => _autoHideTitlebar;
-            set
-            {
-                _autoHideTitlebar = value;
-                OnPropertyChanged();
-            }
+            return TranslationHelper.GetString(id, file, locale, failsafe, Assembly.GetCallingAssembly());
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        ///     Show a notification balloon.
+        /// </summary>
+        /// <param name="title">Title of the notification.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="isError">Is this indicates a error?</param>
+        public void ShowNotification(string title, string content, bool isError = false)
+        {
+            TrayIconManager.GetInstance().ShowNotification(title, content, isError);
+        }
 
         /// <summary>
         ///     Set the size of viewer window and shrink to fit (to screen resolution).
@@ -173,7 +182,6 @@ namespace QuickLook.Plugin
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;
-            AutoHideTitlebar = false;
             TitlebarOverlap = false;
         }
 

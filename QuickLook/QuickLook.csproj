@@ -111,11 +111,13 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="Actions\ConditionalEventTrigger.cs" />
     <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
     <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
       <DependentUpon>GlassLayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MainWindowBase.cs" />
+    <Compile Include="Converters\BooleanToKeyTimeConverter.cs" />
     <Compile Include="Converters\WindowStateToThicknessConverter.cs" />
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />

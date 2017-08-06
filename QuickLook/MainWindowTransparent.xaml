@@ -8,6 +8,7 @@
     xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer"
     xmlns:converters="clr-namespace:QuickLook.Converters"
     xmlns:controls="clr-namespace:QuickLook.Controls"
+    xmlns:actions="clr-namespace:QuickLook.Actions"
     mc:Ignorable="d" x:Class="QuickLook.MainWindowTransparent" x:Name="mainWindow"
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
@@ -23,6 +24,7 @@
                 <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
+            <converters:BooleanToKeyTimeConverter x:Key="BooleanToKeyTimeConverter" />
             <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
             <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
@@ -35,8 +37,8 @@
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CaptionHeight="0"
-                      ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
-                      UseAeroCaptionButtons="False" />
+                                  ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
+                                  UseAeroCaptionButtons="False" />
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
@@ -61,45 +63,29 @@
         </Border.Effect>
         <Grid x:Name="windowFrameContainer" Background="{StaticResource MainWindowBackground}"
               Margin="{Binding WindowState, ElementName=mainWindow, Converter={StaticResource WindowStateToThicknessConverter}, ConverterParameter={StaticResource MainWindowShadowPaddingThinkness}}">
+            <Grid.Resources>
+                <Storyboard x:Key="ShowCaptionStoryboard">
+                    <DoubleAnimation  
+                        Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                        Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
+                    </DoubleAnimation>
+                </Storyboard>
+                <Storyboard x:Key="ShowAndHideTitlebarStoryboard">
+                    <DoubleAnimationUsingKeyFrames
+                        Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                        Storyboard.TargetProperty="Opacity">
+                        <DoubleAnimationUsingKeyFrames.KeyFrames>
+                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.05" />
+                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:3" />
+                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3.05" />
+                        </DoubleAnimationUsingKeyFrames.KeyFrames>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </Grid.Resources>
             <Grid x:Name="viewerRootContainer" ZIndex="190">
                 <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
                       VerticalAlignment="Top"
                       ZIndex="100">
-                    <Grid.Resources>
-                        <Storyboard x:Key="HideTitlebarStoryboard">
-                            <DoubleAnimation
-                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                                Storyboard.TargetProperty="Opacity" To="0" BeginTime="0:0:3"
-                                Duration="0:0:0.05" />
-                        </Storyboard>
-                        <Storyboard x:Key="ShowTitlebarStoryboard">
-                            <DoubleAnimation
-                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                                Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />
-                        </Storyboard>
-                    </Grid.Resources>
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition
-                                            Binding="{Binding IsMouseOver, ElementName=windowCaptionContainer}"
-                                            Value="False" />
-                                        <Condition
-                                            Binding="{Binding ContextObject.AutoHideTitlebar, ElementName=mainWindow}"
-                                            Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <MultiDataTrigger.EnterActions>
-                                        <BeginStoryboard Storyboard="{StaticResource HideTitlebarStoryboard}" />
-                                    </MultiDataTrigger.EnterActions>
-                                    <MultiDataTrigger.ExitActions>
-                                        <BeginStoryboard Storyboard="{StaticResource ShowTitlebarStoryboard}" />
-                                    </MultiDataTrigger.ExitActions>
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
                     <glassLayer:GlassLayer BlurredElement="{Binding ElementName=containerPanel}" />
                     <DockPanel>
                         <Button x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}"

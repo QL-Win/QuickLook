@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using QuickLook.Annotations;
 using QuickLook.Controls;
@@ -54,6 +55,8 @@ namespace QuickLook
             windowCaptionContainer.MouseLeftButtonDown += WindowDragMoveStart;
             windowCaptionContainer.MouseMove += WindowDragMoving;
             windowCaptionContainer.MouseLeftButtonUp += WindowDragMoveEnd;
+            
+            windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
             buttonPin.Click += (sender, e) =>
             {
@@ -91,6 +94,20 @@ namespace QuickLook
 
             buttonShare.Click +=
                 (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {Path}");
+        }
+
+        private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
+        {
+            if (!ContextObject.TitlebarOverlap)
+                return;
+
+            var show = (Storyboard) windowFrameContainer.FindResource("ShowCaptionStoryboard");
+            var showAndHide = (Storyboard) windowFrameContainer.FindResource("ShowAndHideTitlebarStoryboard");
+            
+            if (windowCaptionContainer.IsMouseOver)
+                show.Begin();
+            else
+                showAndHide.Begin();
         }
 
         public bool Pinned
@@ -136,7 +153,7 @@ namespace QuickLook
             Top = point.Y - RestoreBounds.Height * precentTop;
 
             WindowState = WindowState.Normal;
-            
+
             DragMove();
         }
 
@@ -373,6 +390,16 @@ namespace QuickLook
             Close();
 
             ProcessHelper.PerformAggressiveGC();
+        }
+
+        public void ShowTitlebar()
+        {
+        }
+
+        public void HideTitlebar()
+        {
+            var sb = FindResource("HideTitlebarStoryboard") as Storyboard;
+            sb?.Begin();
         }
 
         [NotifyPropertyChangedInvocator]

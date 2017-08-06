@@ -45,6 +45,7 @@ namespace QuickLook.Plugin.ImageViewer
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private BitmapSource _source;
         private double _zoomFactor = 1d;
+        private Visibility _backgroundVisibility = Visibility.Visible;
 
         private bool _zoomToFit = true;
 
@@ -84,6 +85,16 @@ namespace QuickLook.Plugin.ImageViewer
             set
             {
                 _zoomToFit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Visibility BackgroundVisibility
+        {
+            get => _backgroundVisibility;
+            set
+            {
+                _backgroundVisibility = value;
                 OnPropertyChanged();
             }
         }
