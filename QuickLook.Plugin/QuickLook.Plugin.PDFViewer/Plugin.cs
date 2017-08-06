@@ -92,7 +92,8 @@ namespace QuickLook.Plugin.PDFViewer
         {
             GC.SuppressFinalize(this);
 
-            _pdfControl.CurrentPageChanged -= UpdateVindowCaption;
+            if (_pdfControl != null)
+                _pdfControl.CurrentPageChanged -= UpdateVindowCaption;
             _pdfControl?.Dispose();
             _pdfControl = null;
 

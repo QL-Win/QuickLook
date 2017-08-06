@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:fa="http://schemas.fontawesome.io/icons/">
-    <system:Double x:Key="MainWindowShadowBlurRadius">5</system:Double>
-    <Thickness x:Key="MainWindowShadowPaddingThinkness">5</Thickness>
+    <system:Double x:Key="MainWindowShadowBlurRadius">6</system:Double>
+    <Thickness x:Key="MainWindowShadowPaddingThinkness">6</Thickness>
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />

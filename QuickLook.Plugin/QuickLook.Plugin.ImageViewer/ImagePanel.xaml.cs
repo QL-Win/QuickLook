@@ -28,6 +28,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Annotations;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -50,6 +51,11 @@ namespace QuickLook.Plugin.ImageViewer
         public ImagePanel()
         {
             InitializeComponent();
+
+            var scale = DpiHelper.GetCurrentScaleFactor();
+            backgroundBrush.Viewport = new Rect(new Size(
+                backgroundBrush.ImageSource.Width / scale.Horizontal,
+                backgroundBrush.ImageSource.Height / scale.Vertical));
 
             SizeChanged += ImagePanel_SizeChanged;
 

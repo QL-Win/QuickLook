@@ -37,7 +37,7 @@ namespace QuickLook.ExtensionMethods
                     ImageLockMode.ReadOnly, source.PixelFormat);
 
                 bs = BitmapSource.Create(source.Width, source.Height, source.HorizontalResolution,
-                    source.VerticalResolution, PixelFormats.Bgra32, null,
+                    source.VerticalResolution, ConvertPixelFormat(source.PixelFormat), null,
                     data.Scan0, data.Stride * source.Height, data.Stride);
 
                 source.UnlockBits(data);
@@ -54,6 +54,23 @@ namespace QuickLook.ExtensionMethods
             }
 
             return bs;
+        }
+
+        private static System.Windows.Media.PixelFormat ConvertPixelFormat(
+            System.Drawing.Imaging.PixelFormat sourceFormat)
+        {
+            switch (sourceFormat)
+            {
+                case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+                    return PixelFormats.Bgr24;
+
+                case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
+                    return PixelFormats.Bgra32;
+
+                case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
+                    return PixelFormats.Bgr32;
+            }
+            return new System.Windows.Media.PixelFormat();
         }
     }
 }

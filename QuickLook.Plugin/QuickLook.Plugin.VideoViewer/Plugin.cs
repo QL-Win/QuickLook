@@ -90,7 +90,8 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Cleanup()
         {
-            _vp.mediaElement.VlcMediaPlayer.Opening -= MarkReady;
+            if (_vp != null)
+                _vp.mediaElement.VlcMediaPlayer.Opening -= MarkReady;
             _vp?.Dispose();
             _vp = null;
 

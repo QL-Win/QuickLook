@@ -18,6 +18,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using QuickLook.Helpers;
 
 namespace QuickLook.Controls.GlassLayer
 {
@@ -29,6 +30,11 @@ namespace QuickLook.Controls.GlassLayer
         public GlassLayer()
         {
             InitializeComponent();
+
+            var scale = DpiHelper.GetCurrentScaleFactor();
+            noiseBrush.Viewport = new Rect(new Size(
+                noiseBrush.ImageSource.Width / scale.Horizontal,
+                noiseBrush.ImageSource.Height / scale.Vertical));
         }
 
         #region public Visual BlurredElement

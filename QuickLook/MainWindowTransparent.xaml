@@ -1,4 +1,4 @@
-﻿<Window
+﻿<controls:MainWindowBase
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,6 +7,7 @@
     xmlns:busyDecorator="clr-namespace:QuickLook.Controls.BusyDecorator"
     xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer"
     xmlns:converters="clr-namespace:QuickLook.Converters"
+    xmlns:controls="clr-namespace:QuickLook.Controls"
     mc:Ignorable="d" x:Class="QuickLook.MainWindowTransparent" x:Name="mainWindow"
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
@@ -16,35 +17,50 @@
     AllowsTransparency="True"
     Background="Transparent"
     ShowActivated="False" ShowInTaskbar="False">
-    <Window.Resources>
+    <controls:MainWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
+            <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
             <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:ScaledValueConverter x:Key="ScaledValueConverter" />
         </ResourceDictionary>
-    </Window.Resources>
-    <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="chrome"
-                      CaptionHeight="0"
+    </controls:MainWindowBase.Resources>
+    <controls:MainWindowBase.Style>
+        <Style TargetType="controls:MainWindowBase">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="0"
                       ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
                       UseAeroCaptionButtons="False" />
-    </WindowChrome.WindowChrome>
-    <Window.ResizeMode>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="WindowState" Value="Maximized">
+                    <Setter Property="WindowChrome.WindowChrome">
+                        <Setter.Value>
+                            <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </controls:MainWindowBase.Style>
+    <controls:MainWindowBase.ResizeMode>
         <Binding ElementName="mainWindow" Path="ContextObject.CanResize"
                  Converter="{StaticResource BooleanToResizeModeConverter}" />
-    </Window.ResizeMode>
+    </controls:MainWindowBase.ResizeMode>
     <Border>
         <Border.Effect>
             <DropShadowEffect BlurRadius="{StaticResource MainWindowShadowBlurRadius}" ShadowDepth="0" Opacity="0.6"
                               Color="Gray" />
         </Border.Effect>
-        <Grid Background="{StaticResource MainWindowBackground}"
-              Margin="{StaticResource MainWindowShadowPaddingThinkness}">
+        <Grid x:Name="windowFrameContainer" Background="{StaticResource MainWindowBackground}"
+              Margin="{Binding WindowState, ElementName=mainWindow, Converter={StaticResource WindowStateToThicknessConverter}, ConverterParameter={StaticResource MainWindowShadowPaddingThinkness}}">
             <Grid x:Name="viewerRootContainer" ZIndex="190">
                 <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
                       VerticalAlignment="Top"
@@ -138,6 +154,18 @@
                           Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
                     <ContentControl x:Name="container"
                                     Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
+                    <DockPanel.Style>
+                        <Style TargetType="{x:Type DockPanel}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
+                                    Value="True">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
                 </DockPanel>
             </Grid>
             <Grid x:Name="busyIndicatorLayer" Background="{StaticResource MainWindowBackground}" ZIndex="200">
@@ -160,4 +188,4 @@
             </Grid>
         </Grid>
     </Border>
-</Window>
+</controls:MainWindowBase>

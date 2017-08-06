@@ -21,6 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using LibAPNG;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -99,7 +100,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             var bitmap = new RenderTargetBitmap(
                 header.Width, header.Height,
-                96, 96,
+                DpiHelper.DefaultDpi, DpiHelper.DefaultDpi,
                 PixelFormats.Pbgra32);
             bitmap.Render(visual);
             return bitmap;

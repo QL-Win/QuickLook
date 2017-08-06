@@ -28,6 +28,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Annotations;
+using QuickLook.Controls;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -36,7 +37,7 @@ namespace QuickLook
     /// <summary>
     ///     Interaction logic for MainWindowTransparent.xaml
     /// </summary>
-    public partial class MainWindowTransparent : Window, INotifyPropertyChanged
+    public partial class MainWindowTransparent : MainWindowBase, INotifyPropertyChanged
     {
         private bool _pinned;
         private bool _restoreForDragMove;
@@ -116,6 +117,8 @@ namespace QuickLook
 
         private void WindowDragMoving(object sender, MouseEventArgs e)
         {
+            if (e.LeftButton != MouseButtonState.Pressed)
+                return;
             if (!_restoreForDragMove)
                 return;
             _restoreForDragMove = false;
@@ -133,7 +136,7 @@ namespace QuickLook
             Top = point.Y - RestoreBounds.Height * precentTop;
 
             WindowState = WindowState.Normal;
-
+            
             DragMove();
         }
 
@@ -281,9 +284,11 @@ namespace QuickLook
             // revert UI changes
             ContextObject.IsBusy = true;
 
-            var newHeight = ContextObject.PreferredSize.Height + 10 +
+            var margin = windowFrameContainer.Margin.Top * 2;
+
+            var newHeight = ContextObject.PreferredSize.Height + margin +
                             (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
-            var newWidth = ContextObject.PreferredSize.Width + 10;
+            var newWidth = ContextObject.PreferredSize.Width + margin;
 
             ResizeAndCenter(new Size(newWidth, newHeight));
 

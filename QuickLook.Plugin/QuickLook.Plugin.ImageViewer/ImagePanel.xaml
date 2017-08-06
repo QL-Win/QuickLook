@@ -9,6 +9,12 @@
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Rectangle>
+            <Rectangle.Fill>
+                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background.png" AlignmentY="Top" Viewport="0,0,32,32"
+                            ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
+            </Rectangle.Fill>
+        </Rectangle>
         <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
             <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
