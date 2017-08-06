@@ -15,10 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using QuickLook.Helpers;
+using Color = System.Windows.Media.Color;
+using Size = System.Windows.Size;
 
 namespace QuickLook.Controls.GlassLayer
 {
@@ -56,25 +59,44 @@ namespace QuickLook.Controls.GlassLayer
 
         #endregion public Visual BlurredElement
 
-        #region public Visibility GrayOverlayVisibility
+        #region public SolidColorBrush OverlayColor
 
         /// <summary>
-        ///     Identifies the GrayOverlayVisibility dependency property.
+        ///     Identifies the OverlayColor dependency property.
         /// </summary>
-        public static DependencyProperty GrayOverlayVisibilityProperty =
-            DependencyProperty.Register("GrayOverlayVisibility", typeof(Visibility), typeof(GlassLayer),
-                new UIPropertyMetadata(Visibility.Visible));
+        public static DependencyProperty OverlayColorProperty =
+            DependencyProperty.Register("OverlayColor", typeof(SolidColorBrush), typeof(GlassLayer),
+                new UIPropertyMetadata(new SolidColorBrush(Color.FromRgb(0xDA, 0xDA, 0xDA))));
 
         /// <summary>
         /// </summary>
-        public Visibility GrayOverlayVisibility
+        public SolidColorBrush OverlayColor
         {
-            get => (Visibility) GetValue(GrayOverlayVisibilityProperty);
+            
+            get => (SolidColorBrush) GetValue(OverlayColorProperty);
 
-            set => SetValue(GrayOverlayVisibilityProperty, value);
+            set => SetValue(OverlayColorProperty, value);
         }
 
-        #endregion public Visibility GrayOverlayVisibility
+        #endregion public SolidColorBrush OverlayColor
+
+        #region public Visibility ColorOverlayVisibility
+
+        /// <summary>
+        ///     Identifies the ColorOverlayVisibilityProperty dependency property.
+        /// </summary>
+        public static DependencyProperty ColorOverlayVisibilityProperty =
+            DependencyProperty.Register("ColorOverlayVisibility", typeof(Visibility), typeof(GlassLayer),
+                new UIPropertyMetadata(Visibility.Visible));
+
+        public Visibility ColorOverlayVisibility
+        {
+            get => (Visibility) GetValue(ColorOverlayVisibilityProperty);
+
+            set => SetValue(ColorOverlayVisibilityProperty, value);
+        }
+
+        #endregion public Visibility ColorOverlayVisibility
 
         #region public Visibility NoiseVisibility
 

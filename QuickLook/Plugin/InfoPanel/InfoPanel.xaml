@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
              FontSize="14"
-             Background="#FFF8F8FB"
              mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True" TextOptions.TextHintingMode="Animated">
     <Grid>
         <Grid.RowDefinitions>

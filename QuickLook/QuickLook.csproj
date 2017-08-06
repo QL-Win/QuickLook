@@ -111,7 +111,6 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
-    <Compile Include="Actions\ConditionalEventTrigger.cs" />
     <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
     <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
       <DependentUpon>GlassLayer.xaml</DependentUpon>
@@ -178,6 +177,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MainWindowStyles.Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

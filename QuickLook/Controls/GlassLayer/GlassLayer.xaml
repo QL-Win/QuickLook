@@ -15,8 +15,8 @@
                             Viewport="0,0,100,100" TileMode="FlipY" Stretch="UniformToFill" />
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle Panel.ZIndex="50" Fill="#FFDADADA" Opacity="0.8"
-                   Visibility="{Binding ElementName=glassLayer,Path=GrayOverlayVisibility}" />
+        <Rectangle Panel.ZIndex="50" Fill="{Binding ElementName=glassLayer, Path=OverlayColor}" Opacity="0.7"
+                   Visibility="{Binding ElementName=glassLayer,Path=ColorOverlayVisibility}" />
         <Grid Panel.ZIndex="0" Visibility="{Binding ElementName=glassLayer,Path=GlassVisibility}">
             <Grid.Effect>
                 <local:GaussianBlurEffect Direction="0,1"

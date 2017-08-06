@@ -5,13 +5,21 @@
     <system:Double x:Key="MainWindowShadowBlurRadius">6</system:Double>
     <Thickness x:Key="MainWindowShadowPaddingThinkness">6</Thickness>
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
-    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
+    <Color x:Key="MainWindowShadowColor">Gray</Color>
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
+    <SolidColorBrush x:Key="MainWindowForeground" Color="#E50E0E0E" />
+    <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />
+    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
+    <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#44FFFFFF" />
+    <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#88FFFFFF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
+    <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
+    <SolidColorBrush x:Key="CaptionBackground" Color="#FFDADADA" />
 
     <Style x:Key="CaptionButtonBaseStyle" TargetType="Button">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="#E50E0E0E" />
+        <Setter Property="Foreground" Value="{DynamicResource MainWindowForeground}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
@@ -35,11 +43,11 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="#FF3D3D3D" />
-                <Setter Property="Background" Value="#44FFFFFF" />
+                <Setter Property="BorderBrush" Value="{DynamicResource CaptionTextHoverBorder}" />
+                <Setter Property="Background" Value="{DynamicResource CaptionButtonHoverBackground}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#88FFFFFF" />
+                <Setter Property="Background" Value="{DynamicResource CaptionButtonPressBackground}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -60,10 +68,10 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#44FFFFFF" />
+                <Setter Property="Background" Value="{DynamicResource CaptionButtonHoverBackground}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#88FFFFFF" />
+                <Setter Property="Background" Value="{DynamicResource CaptionButtonPressBackground}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -71,10 +79,10 @@
     <Style x:Key="CaptionCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#FFE81123" />
+                <Setter Property="Background" Value="{DynamicResource CaptionCloseButtonHoverBackground}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#FFB5394B" />
+                <Setter Property="Background" Value="{DynamicResource CaptionCloseButtonPressBackground}" />
             </Trigger>
         </Style.Triggers>
     </Style>

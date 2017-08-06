@@ -31,13 +31,13 @@ namespace QuickLook.Plugin
     /// </summary>
     public class ContextObject : INotifyPropertyChanged
     {
-        private bool _autoHideTitlebar;
         private bool _canResize = true;
         private bool _fullWindowDragging;
         private bool _isBusy = true;
         private string _title = "";
         private bool _titlebarOverlap;
         private object _viewerContent;
+        private bool _useDarkTheme;
 
         /// <summary>
         ///     Get the viewer window.
@@ -127,6 +127,21 @@ namespace QuickLook.Plugin
             }
         }
 
+        public bool UseDarkTheme
+        {
+            get { return _useDarkTheme; }
+            set
+            {
+                _useDarkTheme = value;
+                ApplyViewerWindowTheme();
+            }
+        }
+
+        private void ApplyViewerWindowTheme()
+        {
+            ViewerWindow?.SwitchTheme(UseDarkTheme);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -175,14 +190,16 @@ namespace QuickLook.Plugin
 
         internal void Reset()
         {
-            ViewerWindow = null;
             Title = "";
-            ViewerContent = null;
             IsBusy = true;
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;
             TitlebarOverlap = false;
+            UseDarkTheme = false;
+
+            ViewerContent = null;
+            ViewerWindow = null;
         }
 
         [NotifyPropertyChangedInvocator]

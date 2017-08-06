@@ -69,6 +69,8 @@ namespace QuickLook.Plugin.VideoViewer
             windowSize.Height = Math.Max(def.Height, windowSize.Height);
 
             context.SetPreferredSizeFit(windowSize, 0.6);
+            context.UseDarkTheme = true;
+            context.TitlebarOverlap = true;
         }
 
         public void View(string path, ContextObject context)

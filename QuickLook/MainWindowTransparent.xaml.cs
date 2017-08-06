@@ -40,10 +40,15 @@ namespace QuickLook
     /// </summary>
     public partial class MainWindowTransparent : MainWindowBase, INotifyPropertyChanged
     {
+        private string _path;
         private bool _pinned;
         private bool _restoreForDragMove;
+        private readonly ResourceDictionary _darkDict = new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/QuickLook;component/Styles/MainWindowStyles.Dark.xaml")
+        };
 
-        internal MainWindowTransparent()
+    internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
             ContextObject = new ContextObject();
@@ -93,17 +98,21 @@ namespace QuickLook
                 WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
             buttonShare.Click +=
-                (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {Path}");
+                (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {_path}");
         }
 
         private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
         {
-            if (!ContextObject.TitlebarOverlap)
-                return;
-
             var show = (Storyboard) windowFrameContainer.FindResource("ShowCaptionStoryboard");
             var showAndHide = (Storyboard) windowFrameContainer.FindResource("ShowAndHideTitlebarStoryboard");
             
+            if (!ContextObject.TitlebarOverlap)
+            {
+                show.Begin();
+                showAndHide.Stop();
+                return;
+            }
+
             if (windowCaptionContainer.IsMouseOver)
                 show.Begin();
             else
@@ -120,7 +129,6 @@ namespace QuickLook
             }
         }
 
-        public string Path { get; private set; }
         public IViewer Plugin { get; private set; }
 
         public ContextObject ContextObject { get; private set; }
@@ -178,7 +186,7 @@ namespace QuickLook
 
         internal void RunWith(string with, string arg)
         {
-            if (string.IsNullOrEmpty(Path))
+            if (string.IsNullOrEmpty(_path))
                 return;
 
             try
@@ -186,7 +194,7 @@ namespace QuickLook
                 Process.Start(new ProcessStartInfo(with)
                 {
                     Arguments = arg,
-                    WorkingDirectory = System.IO.Path.GetDirectoryName(Path)
+                    WorkingDirectory = System.IO.Path.GetDirectoryName(_path)
                 });
             }
             catch (Exception e)
@@ -197,14 +205,14 @@ namespace QuickLook
 
         internal void Run()
         {
-            if (string.IsNullOrEmpty(Path))
+            if (string.IsNullOrEmpty(_path))
                 return;
 
             try
             {
-                Process.Start(new ProcessStartInfo(Path)
+                Process.Start(new ProcessStartInfo(_path)
                 {
-                    WorkingDirectory = System.IO.Path.GetDirectoryName(Path)
+                    WorkingDirectory = System.IO.Path.GetDirectoryName(_path)
                 });
             }
             catch (Exception e)
@@ -283,12 +291,12 @@ namespace QuickLook
             }
             Plugin = null;
 
-            Path = string.Empty;
+            _path = string.Empty;
         }
 
         internal void BeginShow(IViewer matchedPlugin, string path, Action<ExceptionDispatchInfo> exceptionHandler)
         {
-            Path = path;
+            _path = path;
             Plugin = matchedPlugin;
 
             ContextObject.ViewerWindow = this;
@@ -312,6 +320,7 @@ namespace QuickLook
             if (Visibility != Visibility.Visible)
                 Show();
 
+            ShowWindowCaptionContainer(null, null);
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
             // load plugin, do not block UI
@@ -333,26 +342,26 @@ namespace QuickLook
         {
             buttonOpenWithText.Inlines.Clear();
 
-            if (Directory.Exists(Path))
+            if (Directory.Exists(_path))
             {
-                AddToInlines("MW_BrowseFolder", System.IO.Path.GetFileName(Path));
+                AddToInlines("MW_BrowseFolder", System.IO.Path.GetFileName(_path));
                 return;
             }
-            var isExe = FileHelper.IsExecutable(Path, out string appFriendlyName);
+            var isExe = FileHelper.IsExecutable(_path, out string appFriendlyName);
             if (isExe)
             {
                 AddToInlines("MW_Run", appFriendlyName);
                 return;
             }
             // not an exe
-            var found = FileHelper.GetAssocApplication(Path, out appFriendlyName);
+            var found = FileHelper.GetAssocApplication(_path, out appFriendlyName);
             if (found)
             {
                 AddToInlines("MW_OpenWith", appFriendlyName);
                 return;
             }
             // assoc not found
-            AddToInlines("MW_Open", System.IO.Path.GetFileName(Path));
+            AddToInlines("MW_Open", System.IO.Path.GetFileName(_path));
 
             void AddToInlines(string str, string replaceWith)
             {
@@ -406,6 +415,20 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void SwitchTheme(bool dark)
+        {
+            if (dark)
+            {
+                if (!Resources.MergedDictionaries.Contains(_darkDict))
+                    Resources.MergedDictionaries.Add(_darkDict);
+            }
+            else
+            {
+                if (Resources.MergedDictionaries.Contains(_darkDict))
+                    Resources.MergedDictionaries.Remove(_darkDict);
+            }
         }
     }
 }

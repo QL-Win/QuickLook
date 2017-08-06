@@ -6,9 +6,9 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:vlc="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
+             xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              mc:Ignorable="d"
              x:Name="viewerPanel"
-             Background="#CC4E4E4E"
              d:DesignHeight="450" d:DesignWidth="450">
     <Grid>
         <Grid.Resources>
@@ -43,128 +43,48 @@
             </Image.Style>
         </Image>
 
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="100">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                    <GradientStop Offset="0.0" Color="#00000000" />
-                    <GradientStop Offset="0.25" Color="#66000000" />
-                    <GradientStop Offset="1" Color="#D6000000" />
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="75" />
-            </Grid.RowDefinitions>
-            <Grid.Style>
-                <Style TargetType="{x:Type Grid}">
-                    <Style.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
-                                           Value="True" />
-                                <Condition Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="True" />
-                            </MultiDataTrigger.Conditions>
-                            <MultiDataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"
-                                                         Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </MultiDataTrigger.EnterActions>
-                            <MultiDataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0"
-                                                         Duration="0:0:0.2" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </MultiDataTrigger.ExitActions>
-                        </MultiDataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-
-            <Slider Grid.Row="1" x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                    SmallChange="0.00001" LargeChange="0.01" Maximum="1"
-                    Value="{Binding Position, ElementName=mediaElement}" />
-
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="149" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="10,0,0,0">
-                    <StackPanel.Style>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Visibility" Value="Visible" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasAudio, ElementName=viewerPanel}" Value="False">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Style>
-                    <Grid x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Height="23" Width="23" Foreground="#FFEFEFEF">
-                            <fa:ImageAwesome.Style>
-                                <Style TargetType="fa:ImageAwesome">
-                                    <Setter Property="Icon" Value="VolumeOff" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
-                                                     Value="False">
-                                            <Setter Property="Icon" Value="VolumeUp" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </fa:ImageAwesome.Style>
-                        </fa:ImageAwesome>
-                    </Grid>
-                    <Slider Style="{StaticResource CustomSliderStyle}" Width="75" Maximum="100"
-                            Value="{Binding Volume, ElementName=mediaElement}"
-                            Visibility="{Binding IsMuted, ElementName=viewerPanel, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
-                            BorderThickness="0,0,5,0" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Grid x:Name="buttonBackward" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Backward" Height="23" Width="23" Foreground="#FFEFEFEF" />
-                    </Grid>
-                    <Grid Width="3" />
-                    <Grid x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Height="23" Width="23" Foreground="#FFEFEFEF">
-                            <fa:ImageAwesome.Style>
-                                <Style>
-                                    <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
-                                                     Value="False">
-                                            <Setter Property="fa:ImageAwesome.Icon" Value="Play" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </fa:ImageAwesome.Style>
-                        </fa:ImageAwesome>
-                    </Grid>
-                    <Grid Width="3" />
-                    <Grid x:Name="buttonStop" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Stop" Height="21" Width="21" Foreground="#FFEFEFEF" />
-                    </Grid>
-                    <Grid Width="3" />
-                    <Grid x:Name="buttonForward" Style="{StaticResource ControlButtonStyle}">
-                        <fa:ImageAwesome Icon="Forward" Height="23" Width="23" Foreground="#FFEFEFEF" />
-                    </Grid>
-                </StackPanel>
-                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
-                            Orientation="Horizontal" Margin="0,0,10,0">
-                    <TextBlock FontSize="14" Foreground="#FFEFEFEF"
-                               Text="{Binding Time, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
-                    <TextBlock FontSize="14" Text=" / " Foreground="#FFEFEFEF" />
-                    <TextBlock FontSize="14" Foreground="#FFEFEFEF"
-                               Text="{Binding Length, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}" />
-                </StackPanel>
-            </Grid>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
+            <glassLayer:GlassLayer BlurredElement="{Binding ElementName=mediaElement}" OverlayColor="#FF3B3B3B" />
+            <DockPanel>
+                <Button x:Name="buttonPlayPause" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">
+                    <fa:ImageAwesome Foreground="{DynamicResource CaptionButtonIconForeground}">
+                        <fa:ImageAwesome.Style>
+                            <Style>
+                                <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
+                                                 Value="False">
+                                        <Setter Property="fa:ImageAwesome.Icon" Value="Play" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </fa:ImageAwesome.Style>
+                    </fa:ImageAwesome>
+                </Button>
+                <Button x:Name="buttonMute" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Right">
+                    <fa:ImageAwesome Icon="VolumeUp" Foreground="{DynamicResource CaptionButtonIconForeground}">
+                        <fa:ImageAwesome.Style>
+                            <Style TargetType="fa:ImageAwesome">
+                                <Setter Property="Icon" Value="VolumeOff" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
+                                                 Value="False">
+                                        <Setter Property="Icon" Value="VolumeUp" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </fa:ImageAwesome.Style>
+                    </fa:ImageAwesome>
+                </Button>
+                <Button Width="Auto" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Right">
+                    <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11"
+                               Foreground="{DynamicResource CaptionButtonIconForeground}"
+                               Text="{Binding Time, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}"/>
+                </Button>
+                <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
+                        SmallChange="0.00001" LargeChange="0.01" Maximum="1"
+                        Value="{Binding Position, ElementName=mediaElement}" />
+            </DockPanel>
         </Grid>
     </Grid>
 </UserControl>

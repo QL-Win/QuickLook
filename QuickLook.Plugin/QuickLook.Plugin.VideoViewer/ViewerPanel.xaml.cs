@@ -60,9 +60,6 @@ namespace QuickLook.Plugin.VideoViewer
             //    buttonMute.Visibility = Visibility.Collapsed;
             //};
             buttonMute.MouseLeftButtonUp += (sender, e) => IsMuted = !IsMuted;
-            buttonStop.MouseLeftButtonUp += PlayerStop;
-            buttonBackward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(-10));
-            buttonForward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(10));
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {
