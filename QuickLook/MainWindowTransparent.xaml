@@ -19,9 +19,6 @@
     ShowActivated="False" ShowInTaskbar="False">
     <controls:MainWindowBase.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
             <converters:BooleanToKeyTimeConverter x:Key="BooleanToKeyTimeConverter" />
             <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
@@ -33,7 +30,7 @@
     </controls:MainWindowBase.Resources>
     <controls:MainWindowBase.Style>
         <Style TargetType="controls:MainWindowBase">
-            <Setter Property="Foreground" Value="{DynamicResource MainWindowForeground}" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
             <Setter Property="ResizeMode"
                     Value="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToResizeModeConverter}}" />
             <Setter Property="WindowChrome.WindowChrome">
@@ -61,29 +58,29 @@
         </Border.Effect>
         <Grid x:Name="windowFrameContainer" Background="{DynamicResource MainWindowBackground}"
               Margin="{Binding WindowState, ElementName=mainWindow, Converter={StaticResource WindowStateToThicknessConverter}, ConverterParameter={StaticResource MainWindowShadowPaddingThinkness}}">
-            <Grid.Resources>
-                <Storyboard x:Key="ShowCaptionStoryboard">
-                    <DoubleAnimation  
-                        Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                        Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
-                    </DoubleAnimation>
-                </Storyboard>
-                <Storyboard x:Key="ShowAndHideTitlebarStoryboard">
-                    <DoubleAnimationUsingKeyFrames
-                        Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                        Storyboard.TargetProperty="Opacity">
-                        <DoubleAnimationUsingKeyFrames.KeyFrames>
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.05" />
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:3" />
-                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3.05" />
-                        </DoubleAnimationUsingKeyFrames.KeyFrames>
-                    </DoubleAnimationUsingKeyFrames>
-                </Storyboard>
-            </Grid.Resources>
             <Grid x:Name="viewerRootContainer" ZIndex="190">
                 <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
                       VerticalAlignment="Top"
                       ZIndex="100">
+                    <Grid.Resources>
+                        <Storyboard x:Key="ShowCaptionContainerStoryboard" Completed="AutoHideCaptionContainer">
+                            <DoubleAnimation
+                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                                Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
+                            </DoubleAnimation>
+                        </Storyboard>
+                        <Storyboard x:Key="HideCaptionContainerStoryboard">
+                            <DoubleAnimationUsingKeyFrames
+                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                                Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimationUsingKeyFrames.KeyFrames>
+                                    <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0" />
+                                    <LinearDoubleKeyFrame Value="1" KeyTime="0:0:3" />
+                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3.05" />
+                                </DoubleAnimationUsingKeyFrames.KeyFrames>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </Grid.Resources>
                     <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}" BlurredElement="{Binding ElementName=containerPanel}" />
                     <DockPanel>
                         <Button x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}"

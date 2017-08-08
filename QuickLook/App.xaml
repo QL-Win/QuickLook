@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ScrollBarStyleDictionary.xaml" />
                 <ResourceDictionary Source="Styles/BusyDecorator.xaml" />
+                <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

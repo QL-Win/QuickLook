@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
 using QuickLook.Annotations;
@@ -47,6 +48,9 @@ namespace QuickLook.Plugin.VideoViewer
         public ViewerPanel(ContextObject context)
         {
             InitializeComponent();
+
+            ShowViedoControlContainer(null, null);
+            viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
 
             mediaElement.PropertyChanged += PlayerPropertyChanged;
             mediaElement.StateChanged += PlayerStateChanged;
@@ -174,6 +178,23 @@ namespace QuickLook.Plugin.VideoViewer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void ShowViedoControlContainer(object sender, MouseEventArgs e)
+        {
+            var show = (Storyboard) videoControlContainer.FindResource("ShowControlStoryboard");
+            if (videoControlContainer.Opacity == 0 || videoControlContainer.Opacity == 1)
+                show.Begin();
+        }
+
+        private void AutoHideViedoControlContainer(object sender, EventArgs e)
+        {
+            if (videoControlContainer.IsMouseOver)
+                return;
+
+            var hide = (Storyboard) videoControlContainer.FindResource("HideControlStoryboard");
+
+            hide.Begin();
+        }
 
         private void PlayerStop(object sender, MouseButtonEventArgs e)
         {

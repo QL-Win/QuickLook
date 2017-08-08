@@ -54,11 +54,11 @@
                 FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename.ext
             </TextBlock>
             <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3" FontWeight="Light"
-                       Foreground="DimGray">
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Last modified at 01/01/2017 00:00:00
             </TextBlock>
             <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3" FontWeight="Light"
-                       Foreground="DimGray">
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Calculating size...
             </TextBlock>
         </Grid>

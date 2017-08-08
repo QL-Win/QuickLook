@@ -9,7 +9,7 @@
              xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              mc:Ignorable="d"
              x:Name="viewerPanel"
-             d:DesignHeight="450" d:DesignWidth="450">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
@@ -19,31 +19,71 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
-
         <vlc:VlcPlayer x:Name="mediaElement" LibVlcPath="{Binding LibVlcPath, ElementName=viewerPanel}"
                        VlcOption="{Binding VlcOption, ElementName=viewerPanel}" />
-
-        <Image>
-            <Image.Style>
-                <Style TargetType="Image">
-                    <Setter Property="Source" Value="{Binding CoverArt, ElementName=viewerPanel}" />
-                    <Setter Property="Visibility" Value="Collapsed" />
+        <Grid>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="False">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding CoverArt.Length, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
-                            Value="0">
-                            <Setter Property="Source" Value="Resources/compact-disc.png" />
-                            <Setter Property="Margin" Value="50" />
+                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Image.Style>
-        </Image>
+            </Grid.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" ClipToBounds="True">
+                <Rectangle.Effect>
+                    <BlurEffect Radius="100"/>
+                </Rectangle.Effect>
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="{Binding ElementName=imageCoverArt, Path=Source}" Viewbox="0.15,0,0.7,1" Stretch="UniformToFill" />
+                </Rectangle.Fill>
+                
+            </Rectangle>
+            <Image Grid.Column="0" x:Name="imageCoverArt" Margin="20,40,20,40">
+                <Image.Effect>
+                    <DropShadowEffect Direction="0" BlurRadius="6" Color="#FF898989" ShadowDepth="0"/>
+                </Image.Effect>
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="{Binding CoverArt, ElementName=viewerPanel}" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding CoverArt.Length, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
+                                Value="0">
+                                <Setter Property="Source" Value="Resources/compact-disc.png" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Grid>
 
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
+        <Grid x:Name="videoControlContainer" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
+            <Grid.Resources>
+                <Storyboard x:Key="ShowControlStoryboard" Completed="AutoHideViedoControlContainer">
+                    <DoubleAnimation
+                        Storyboard.Target="{Binding Source={x:Reference videoControlContainer}}"
+                        Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
+                    </DoubleAnimation>
+                </Storyboard>
+                <Storyboard x:Key="HideControlStoryboard">
+                    <DoubleAnimationUsingKeyFrames
+                        Storyboard.Target="{Binding Source={x:Reference videoControlContainer}}"
+                        Storyboard.TargetProperty="Opacity">
+                        <DoubleAnimationUsingKeyFrames.KeyFrames>
+                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0" />
+                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:3" />
+                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3.05" />
+                        </DoubleAnimationUsingKeyFrames.KeyFrames>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </Grid.Resources>
             <glassLayer:GlassLayer BlurredElement="{Binding ElementName=mediaElement}" OverlayColor="#FF3B3B3B" />
             <DockPanel>
                 <Button x:Name="buttonPlayPause" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">

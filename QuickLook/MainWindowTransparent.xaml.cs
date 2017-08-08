@@ -103,21 +103,25 @@ namespace QuickLook
 
         private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
         {
-            var show = (Storyboard) windowFrameContainer.FindResource("ShowCaptionStoryboard");
-            var showAndHide = (Storyboard) windowFrameContainer.FindResource("ShowAndHideTitlebarStoryboard");
+            var show = (Storyboard) windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
             
-            if (!ContextObject.TitlebarOverlap)
-            {
+            if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
                 show.Begin();
-                showAndHide.Stop();
+        }
+
+        private void AutoHideCaptionContainer(object sender, EventArgs e)
+        {
+            if (!ContextObject.TitlebarOverlap)
                 return;
-            }
 
             if (windowCaptionContainer.IsMouseOver)
-                show.Begin();
-            else
-                showAndHide.Begin();
+                return;
+
+            var hide = (Storyboard) windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
+
+            hide.Begin();
         }
+
 
         public bool Pinned
         {
@@ -401,16 +405,6 @@ namespace QuickLook
             ProcessHelper.PerformAggressiveGC();
         }
 
-        public void ShowTitlebar()
-        {
-        }
-
-        public void HideTitlebar()
-        {
-            var sb = FindResource("HideTitlebarStoryboard") as Storyboard;
-            sb?.Begin();
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -421,13 +415,13 @@ namespace QuickLook
         {
             if (dark)
             {
-                if (!Resources.MergedDictionaries.Contains(_darkDict))
-                    Resources.MergedDictionaries.Add(_darkDict);
+                if (!Application.Current.Resources.MergedDictionaries.Contains(_darkDict))
+                    Application.Current.Resources.MergedDictionaries.Add(_darkDict);
             }
             else
             {
-                if (Resources.MergedDictionaries.Contains(_darkDict))
-                    Resources.MergedDictionaries.Remove(_darkDict);
+                if (Application.Current.Resources.MergedDictionaries.Contains(_darkDict))
+                    Application.Current.Resources.MergedDictionaries.Remove(_darkDict);
             }
         }
     }

@@ -4,7 +4,8 @@
                     xmlns:fa="http://schemas.fontawesome.io/icons/">
     <Color x:Key="MainWindowShadowColor">Gray</Color>
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FF565656" />
-    <SolidColorBrush x:Key="MainWindowForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="WindowTextForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FFB9B9B9" />
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#22FFFFFF" />

@@ -60,7 +60,7 @@ namespace QuickLook.Plugin.VideoViewer
         {
             _context = context;
 
-            var def = new Size(450, 450);
+            var def = new Size(500, 300);
 
             _mediaSize = GetMediaSizeWithVlc(path);
 

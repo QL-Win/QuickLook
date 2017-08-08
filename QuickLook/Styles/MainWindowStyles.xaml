@@ -7,7 +7,8 @@
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
     <Color x:Key="MainWindowShadowColor">Gray</Color>
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
-    <SolidColorBrush x:Key="MainWindowForeground" Color="#E50E0E0E" />
+    <SolidColorBrush x:Key="WindowTextForeground" Color="#E50E0E0E" />
+    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5626262" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#44FFFFFF" />
@@ -19,7 +20,7 @@
     <Style x:Key="CaptionButtonBaseStyle" TargetType="Button">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="{DynamicResource MainWindowForeground}" />
+        <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
