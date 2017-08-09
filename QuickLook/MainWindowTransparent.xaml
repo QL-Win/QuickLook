@@ -16,7 +16,7 @@
     Focusable="False" WindowStyle="None"
     AllowsTransparency="True"
     Background="Transparent"
-    ShowActivated="False" ShowInTaskbar="False">
+    ShowActivated="False" ShowInTaskbar="True">
     <controls:MainWindowBase.Resources>
         <ResourceDictionary>
             <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
@@ -24,7 +24,7 @@
             <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
             <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:ScaledValueConverter x:Key="ScaledValueConverter" />
         </ResourceDictionary>
     </controls:MainWindowBase.Resources>
@@ -81,7 +81,10 @@
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </Grid.Resources>
-                    <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}" BlurredElement="{Binding ElementName=containerPanel}" />
+                    <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}" BlurredElement="{Binding ElementName=containerPanel}" 
+                                           ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           NoiseVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <DockPanel>
                         <Button x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}"
                                 DockPanel.Dock="Right">
@@ -134,7 +137,7 @@
                     <Grid DockPanel.Dock="Top" Height="{StaticResource MainWindowCaptionHeight}"
                           Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
                     <ContentControl x:Name="container"
-                                    Foreground="{DynamicResource CaptionButtonIconForeground}"
+                                    Foreground="{DynamicResource WindowTextForeground}"
                                     Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
                     <DockPanel.Style>
                         <Style TargetType="{x:Type DockPanel}">

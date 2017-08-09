@@ -15,27 +15,36 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace QuickLook.ExtensionMethods
 {
     public static class BitmapExtensions
     {
-        public static BitmapSource ToBitmapSource(this Bitmap old_source)
+        public static BitmapSource ToBitmapSource(this Bitmap source)
         {
-            // BitmapSource.Create throws an exception when the image is scanned backward.
-            // The Clone() will make it back scanning forward.
-            var source = (Bitmap) old_source.Clone();
-
+            var orgSource = source;
             BitmapSource bs = null;
             try
             {
                 var data = source.LockBits(new Rectangle(0, 0, source.Width, source.Height),
                     ImageLockMode.ReadOnly, source.PixelFormat);
 
+                // BitmapSource.Create throws an exception when the image is scanned backward.
+                // The Clone() will make it back scanning forward.
+                if (data.Stride < 0)
+                {
+                    source.UnlockBits(data);
+                    source = (Bitmap) source.Clone();
+                    data = source.LockBits(new Rectangle(0, 0, source.Width, source.Height),
+                        ImageLockMode.ReadOnly, source.PixelFormat);
+                }
                 bs = BitmapSource.Create(source.Width, source.Height, source.HorizontalResolution,
                     source.VerticalResolution, ConvertPixelFormat(source.PixelFormat), null,
                     data.Scan0, data.Stride * source.Height, data.Stride);
@@ -50,13 +59,14 @@ namespace QuickLook.ExtensionMethods
             }
             finally
             {
-                source.Dispose();
+                if (orgSource != source)
+                    source.Dispose();
             }
 
             return bs;
         }
 
-        private static System.Windows.Media.PixelFormat ConvertPixelFormat(
+        private static PixelFormat ConvertPixelFormat(
             System.Drawing.Imaging.PixelFormat sourceFormat)
         {
             switch (sourceFormat)
@@ -70,7 +80,46 @@ namespace QuickLook.ExtensionMethods
                 case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
                     return PixelFormats.Bgr32;
             }
-            return new System.Windows.Media.PixelFormat();
+            return new PixelFormat();
+        }
+
+        public static bool IsDarkImage(this Bitmap image)
+        {
+            // convert to 24-bit RGB image
+            image = image.Clone(new Rectangle(0, 0, image.Width, image.Height),
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            var sampleCount = (int) (0.2 * image.Width * image.Height);
+            const int pixelSize = 24 / 8;
+            var data = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
+                ImageLockMode.ReadWrite, image.PixelFormat);
+
+            var darks = 0;
+            unsafe
+            {
+                var pFirst = (byte*) data.Scan0;
+
+                Parallel.For(0, sampleCount, n =>
+                {
+                    var rand = new Random(n);
+                    var row = rand.Next(0, data.Height);
+                    var col = rand.Next(0, data.Width);
+                    var pos = pFirst + row * data.Stride + col * pixelSize;
+
+                    var b = pos[0];
+                    var g = pos[1];
+                    var r = pos[2];
+
+                    var y = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+                    if (y < 0.5)
+                        darks++;
+                });
+            }
+            image.UnlockBits(data);
+            image.Dispose();
+
+            return darks > 0.65 * sampleCount;
         }
     }
 }

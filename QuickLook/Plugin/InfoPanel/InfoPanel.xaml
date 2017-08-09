@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
              FontSize="14"
-             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True" TextOptions.TextHintingMode="Animated">
+             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="28" />
+            <RowDefinition Height="15" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -50,14 +50,14 @@
             </Grid.RowDefinitions>
             <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
                        TextWrapping="Wrap"
-                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="Normal">
+                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
                 FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename.ext
             </TextBlock>
-            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3" FontWeight="Light"
+            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Last modified at 01/01/2017 00:00:00
             </TextBlock>
-            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3" FontWeight="Light"
+            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Calculating size...
             </TextBlock>

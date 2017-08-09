@@ -34,10 +34,13 @@ namespace QuickLook.Plugin
         private bool _canResize = true;
         private bool _fullWindowDragging;
         private bool _isBusy = true;
-        private string _title = "";
+        private string _title = string.Empty;
+        private bool _titlebarAutoHide;
+        private bool _titlebarBlurVisibility = true;
+        private bool _titlebarColourVisibility = true;
         private bool _titlebarOverlap;
-        private object _viewerContent;
         private bool _useDarkTheme;
+        private object _viewerContent;
 
         /// <summary>
         ///     Get the viewer window.
@@ -127,9 +130,54 @@ namespace QuickLook.Plugin
             }
         }
 
+        /// <summary>
+        ///     Set whether the title bar shows a blurred background
+        /// </summary>
+        public bool TitlebarBlurVisibility
+        {
+            get => _titlebarBlurVisibility;
+            set
+            {
+                if (value == _titlebarBlurVisibility) return;
+                _titlebarBlurVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Set whether the title bar shows a colour overlay
+        /// </summary>
+        public bool TitlebarColourVisibility
+        {
+            get => _titlebarColourVisibility;
+            set
+            {
+                if (value == _titlebarColourVisibility) return;
+                _titlebarColourVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Should the titlebar hides itself after a short period of inactivity?
+        /// </summary>
+        public bool TitlebarAutoHide
+        {
+            get => _titlebarAutoHide;
+            set
+            {
+                if (value == _titlebarAutoHide) return;
+                _titlebarAutoHide = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Switch to dark theme?
+        /// </summary>
         public bool UseDarkTheme
         {
-            get { return _useDarkTheme; }
+            get => _useDarkTheme;
             set
             {
                 _useDarkTheme = value;
@@ -137,12 +185,12 @@ namespace QuickLook.Plugin
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void ApplyViewerWindowTheme()
         {
             ViewerWindow?.SwitchTheme(UseDarkTheme);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         ///     Get a string from translation Xml document.
@@ -190,13 +238,17 @@ namespace QuickLook.Plugin
 
         internal void Reset()
         {
-            Title = "";
+            Title = string.Empty;
             IsBusy = true;
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;
-            TitlebarOverlap = false;
+
             UseDarkTheme = false;
+            TitlebarOverlap = false;
+            TitlebarAutoHide = false;
+            TitlebarBlurVisibility = true;
+            TitlebarColourVisibility = true;
 
             ViewerContent = null;
             ViewerWindow = null;

@@ -111,6 +111,9 @@ namespace QuickLook
 
         private void AutoHideCaptionContainer(object sender, EventArgs e)
         {
+            if (!ContextObject.TitlebarAutoHide)
+                return;
+
             if (!ContextObject.TitlebarOverlap)
                 return;
 

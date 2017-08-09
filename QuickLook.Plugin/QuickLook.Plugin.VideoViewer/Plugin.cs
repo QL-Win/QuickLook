@@ -40,7 +40,6 @@ namespace QuickLook.Plugin.VideoViewer
         };
         private ContextObject _context;
 
-        private Size _mediaSize = Size.Empty;
         private ViewerPanel _vp;
 
         public int Priority => 0 - 10; // make it lower than TextViewer
@@ -62,15 +61,25 @@ namespace QuickLook.Plugin.VideoViewer
 
             var def = new Size(500, 300);
 
-            _mediaSize = GetMediaSizeWithVlc(path);
+            var hasVideo = HasVideoStream(path, out Size mediaSize);
 
-            var windowSize = _mediaSize == Size.Empty ? def : _mediaSize;
+            var windowSize = mediaSize == Size.Empty ? def : mediaSize;
             windowSize.Width = Math.Max(def.Width, windowSize.Width);
             windowSize.Height = Math.Max(def.Height, windowSize.Height);
 
             context.SetPreferredSizeFit(windowSize, 0.6);
-            context.UseDarkTheme = true;
             context.TitlebarOverlap = true;
+            if (!hasVideo)
+            {
+                context.CanResize = false;
+                context.TitlebarAutoHide = false;
+                context.TitlebarBlurVisibility = false;
+                context.TitlebarColourVisibility = false;
+            }
+            else
+            {
+                context.UseDarkTheme = true;
+            }
         }
 
         public void View(string path, ContextObject context)
@@ -79,15 +88,11 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.ViewerContent = _vp;
 
-
             _vp.mediaElement.VlcMediaPlayer.Opening += MarkReady;
 
             _vp.LoadAndPlay(path);
 
-            var info = _mediaSize == Size.Empty ? "Audio" : $"{_mediaSize.Width}×{_mediaSize.Height}";
-
-            context.Title =
-                $"{Path.GetFileName(path)} ({info})";
+            context.Title = $"{Path.GetFileName(path)}";
         }
 
         public void Cleanup()
@@ -105,7 +110,7 @@ namespace QuickLook.Plugin.VideoViewer
             _context.IsBusy = false;
         }
 
-        private Size GetMediaSizeWithVlc(string path)
+        private bool HasVideoStream(string path, out Size size)
         {
             using (var vlc = new Vlc(VlcSettings.VlcOptions))
             {
@@ -115,7 +120,9 @@ namespace QuickLook.Plugin.VideoViewer
                     var tracks = media.GetTracks();
                     var video = tracks.FirstOrDefault(mt => mt.Type == TrackType.Video) as VideoTrack;
 
-                    return video == null ? Size.Empty : new Size(video.Width, video.Height);
+                    size = video == null ? Size.Empty : new Size(video.Width, video.Height);
+
+                    return video != null;
                 }
             }
         }

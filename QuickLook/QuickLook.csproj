@@ -65,6 +65,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>..\Build\Release\</OutputPath>
@@ -120,7 +121,6 @@
     <Compile Include="Converters\WindowStateToThicknessConverter.cs" />
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
     <Compile Include="ExtensionMethods\BitmapExtensions.cs" />
@@ -132,24 +132,6 @@
     <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
     <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
-    <Compile Include="Helpers\BlurLibrary\BlurWindow.cs" />
-    <Compile Include="Helpers\BlurLibrary\Helpers.cs" />
-    <Compile Include="Helpers\BlurLibrary\IWindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentPolicy.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentState.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttribute.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttributeData.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\WindowsVistaAnd7\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\OsHelper.cs" />
-    <Compile Include="Helpers\BlurLibrary\OsType.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\OsNotSupportedWindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows10WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows7WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows81WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\TranslationHelper.cs" />

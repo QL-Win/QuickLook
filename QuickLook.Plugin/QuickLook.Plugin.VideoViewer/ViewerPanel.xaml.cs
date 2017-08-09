@@ -18,6 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -26,6 +27,7 @@ using System.Windows.Media.Animation;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
 using QuickLook.Annotations;
+using QuickLook.ExtensionMethods;
 using MediaState = Meta.Vlc.Interop.Media.MediaState;
 
 namespace QuickLook.Plugin.VideoViewer
@@ -37,7 +39,7 @@ namespace QuickLook.Plugin.VideoViewer
     {
         private readonly ContextObject _context;
 
-        private string _coverArt;
+        private Uri _coverArt;
         private bool _hasAudio;
         private bool _hasEnded;
         private bool _hasVideo;
@@ -48,6 +50,9 @@ namespace QuickLook.Plugin.VideoViewer
         public ViewerPanel(ContextObject context)
         {
             InitializeComponent();
+
+            // apply global theme
+            Resources.MergedDictionaries[0].MergedDictionaries.Clear();
 
             ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
@@ -145,7 +150,7 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        public string CoverArt
+        public Uri CoverArt
         {
             get => _coverArt;
             private set
@@ -188,6 +193,9 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void AutoHideViedoControlContainer(object sender, EventArgs e)
         {
+            if (!HasVideo)
+                return;
+
             if (videoControlContainer.IsMouseOver)
                 return;
 
@@ -220,6 +228,8 @@ namespace QuickLook.Plugin.VideoViewer
         {
             var state = e.Value;
 
+            Debug.WriteLine(state);
+
             switch (state)
             {
                 case MediaState.Opening:
@@ -227,8 +237,8 @@ namespace QuickLook.Plugin.VideoViewer
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     break;
                 case MediaState.Playing:
-                    CoverArt = mediaElement.VlcMediaPlayer.Media.GetMeta(
-                        MetaDataType.ArtworkUrl);
+                    UpdateMeta();
+                    DetermineTheme();
                     HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     IsPlaying = true;
@@ -244,6 +254,37 @@ namespace QuickLook.Plugin.VideoViewer
                     ShowErrorNotification(sender, e);
                     break;
             }
+        }
+
+        private void UpdateMeta()
+        {
+            if (HasVideo)
+                return;
+
+            var path = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.ArtworkUrl);
+            if (!string.IsNullOrEmpty(path))
+                CoverArt = new Uri(path);
+
+            metaTitle.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Title);
+            metaArtists.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Artist);
+            metaAlbum.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Album);
+        }
+
+        private void DetermineTheme()
+        {
+            if (HasVideo)
+                return;
+
+            if (CoverArt == null)
+                return;
+
+            var dark = false;
+            using (var bitmap = new Bitmap(CoverArt.LocalPath))
+            {
+                dark = bitmap.IsDarkImage();
+            }
+
+            _context.UseDarkTheme = dark;
         }
 
         private void ChangeVolume(double delta)

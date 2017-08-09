@@ -10,18 +10,19 @@
              mc:Ignorable="d"
              x:Name="viewerPanel"
              d:DesignHeight="300" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <local:TimeSpanToShortStringConverter x:Key="TimeSpanToShortStringConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <Grid.Resources>
-            <ResourceDictionary>
-                <local:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="Styles.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
         <vlc:VlcPlayer x:Name="mediaElement" LibVlcPath="{Binding LibVlcPath, ElementName=viewerPanel}"
                        VlcOption="{Binding VlcOption, ElementName=viewerPanel}" />
-        <Grid>
+        <Grid x:Name="coverArtPersenter" ClipToBounds="True" Background="{StaticResource MainWindowBackground}">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Visible" />
@@ -36,25 +37,24 @@
                 <ColumnDefinition Width="4*" />
                 <ColumnDefinition Width="6*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" ClipToBounds="True">
+            <Rectangle Margin="-50" Grid.Column="0" Grid.ColumnSpan="2">
                 <Rectangle.Effect>
-                    <BlurEffect Radius="100"/>
+                    <BlurEffect Radius="100" />
                 </Rectangle.Effect>
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="{Binding ElementName=imageCoverArt, Path=Source}" Viewbox="0.15,0,0.7,1" Stretch="UniformToFill" />
+                    <ImageBrush ImageSource="{Binding ElementName=imageCoverArt, Path=Source}" Stretch="UniformToFill" Opacity="0.9" />
                 </Rectangle.Fill>
-                
             </Rectangle>
             <Image Grid.Column="0" x:Name="imageCoverArt" Margin="20,40,20,40">
                 <Image.Effect>
-                    <DropShadowEffect Direction="0" BlurRadius="6" Color="#FF898989" ShadowDepth="0"/>
+                    <DropShadowEffect Direction="0" BlurRadius="6" Color="#FF898989" ShadowDepth="0" />
                 </Image.Effect>
                 <Image.Style>
                     <Style TargetType="Image">
                         <Setter Property="Source" Value="{Binding CoverArt, ElementName=viewerPanel}" />
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding CoverArt.Length, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
+                                Binding="{Binding CoverArt, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
                                 Value="0">
                                 <Setter Property="Source" Value="Resources/compact-disc.png" />
                             </DataTrigger>
@@ -62,6 +62,36 @@
                     </Style>
                 </Image.Style>
             </Image>
+            <Grid Grid.Column="1">
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
+                </Grid.Effect>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="metaTitle" Grid.Row="1" FontSize="22" Padding="3"
+                           TextWrapping="Wrap"
+                           LineHeight="28" MaxHeight="80" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
+                    ときめきポポロン♪
+                </TextBlock>
+                <TextBlock x:Name="metaArtists" Grid.Row="3" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                           Foreground="{DynamicResource WindowTextForeground}">
+                    チマメ隊
+                </TextBlock>
+                <TextBlock x:Name="metaAlbum" Grid.Row="4" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                           Foreground="{DynamicResource WindowTextForeground}">
+                    ときめきポポロン♪
+                </TextBlock>
+                <TextBlock x:Name="metaLength" Grid.Row="5" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                           Foreground="{DynamicResource WindowTextForeground}"
+                           Text="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}"/>
+            </Grid>
         </Grid>
 
         <Grid x:Name="videoControlContainer" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
@@ -84,9 +114,22 @@
                     </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
             </Grid.Resources>
-            <glassLayer:GlassLayer BlurredElement="{Binding ElementName=mediaElement}" OverlayColor="#FF3B3B3B" />
+            <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}"
+                                   GlassVisibility="{Binding ElementName=viewerPanel, Path=HasVideo,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=HasVideo,Converter={StaticResource BooleanToVisibilityConverter}}">
+                <glassLayer:GlassLayer.Style>
+                    <Style TargetType="glassLayer:GlassLayer">
+                        <Setter Property="BlurredElement" Value="{Binding ElementName=viewerPanel}"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=viewerPanel,Path=HasVideo}" Value="True">
+                                <Setter Property="BlurredElement" Value="{Binding ElementName=mediaElement}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </glassLayer:GlassLayer.Style>
+            </glassLayer:GlassLayer>
             <DockPanel>
-                <Button x:Name="buttonPlayPause" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">
+                <Button x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Left">
                     <fa:ImageAwesome Foreground="{DynamicResource CaptionButtonIconForeground}">
                         <fa:ImageAwesome.Style>
                             <Style>
@@ -101,7 +144,7 @@
                         </fa:ImageAwesome.Style>
                     </fa:ImageAwesome>
                 </Button>
-                <Button x:Name="buttonMute" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Right">
+                <Button x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right">
                     <fa:ImageAwesome Icon="VolumeUp" Foreground="{DynamicResource CaptionButtonIconForeground}">
                         <fa:ImageAwesome.Style>
                             <Style TargetType="fa:ImageAwesome">
@@ -116,10 +159,10 @@
                         </fa:ImageAwesome.Style>
                     </fa:ImageAwesome>
                 </Button>
-                <Button Width="Auto" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Right">
+                <Button Width="Auto" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right">
                     <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11"
                                Foreground="{DynamicResource CaptionButtonIconForeground}"
-                               Text="{Binding Time, StringFormat=hh\\:mm\\:ss, ElementName=mediaElement}"/>
+                               Text="{Binding ElementName=mediaElement, Path=Time, Converter={StaticResource TimeSpanToShortStringConverter}}" />
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
                         SmallChange="0.00001" LargeChange="0.01" Maximum="1"
