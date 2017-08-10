@@ -1,6 +1,5 @@
 ﻿<controls:MainWindowBase
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,16 +15,17 @@
     Focusable="False" WindowStyle="None"
     AllowsTransparency="True"
     Background="Transparent"
-    ShowActivated="False" ShowInTaskbar="True">
+    ShowActivated="False" ShowInTaskbar="False">
     <controls:MainWindowBase.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
-            <converters:BooleanToKeyTimeConverter x:Key="BooleanToKeyTimeConverter" />
             <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
             <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:ScaledValueConverter x:Key="ScaledValueConverter" />
         </ResourceDictionary>
     </controls:MainWindowBase.Resources>
     <controls:MainWindowBase.Style>
@@ -66,8 +66,7 @@
                         <Storyboard x:Key="ShowCaptionContainerStoryboard" Completed="AutoHideCaptionContainer">
                             <DoubleAnimation
                                 Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                                Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
-                            </DoubleAnimation>
+                                Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />
                         </Storyboard>
                         <Storyboard x:Key="HideCaptionContainerStoryboard">
                             <DoubleAnimationUsingKeyFrames
@@ -81,36 +80,26 @@
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </Grid.Resources>
-                    <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}" BlurredElement="{Binding ElementName=containerPanel}" 
+                    <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}"
+                                           BlurredElement="{Binding ElementName=containerPanel}"
                                            ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            NoiseVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <DockPanel>
-                        <Button x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}"
-                                DockPanel.Dock="Right">
-                            <fa:ImageAwesome Icon="TimesCircle"
-                                             Foreground="{DynamicResource CaptionButtonIconForeground}" />
-                        </Button>
-                        <Button x:Name="buttonWindowStatus" Style="{StaticResource CaptionButtonStyle}"
-                                Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                DockPanel.Dock="Right">
-                            <fa:ImageAwesome Foreground="{DynamicResource CaptionButtonIconForeground}">
-                                <fa:ImageAwesome.Style>
-                                    <Style TargetType="{x:Type fa:ImageAwesome}">
-                                        <Setter Property="Icon" Value="WindowMaximize" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
-                                                         Value="Maximized">
-                                                <Setter Property="Icon" Value="WindowRestore" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
-                                                         Value="Normal">
-                                                <Setter Property="Icon" Value="WindowMaximize" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </fa:ImageAwesome.Style>
-                            </fa:ImageAwesome>
+                        <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;"/>
+                        <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"
+                                Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                                    <Setter Property="Content" Value="&#xE740;" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
+                                                     Value="Maximized">
+                                            <Setter Property="Content" Value="&#xE73F;" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                         </Button>
                         <Button x:Name="buttonOpenWith" DockPanel.Dock="Right"
                                 Style="{StaticResource CaptionTextButtonStyle}">
@@ -120,12 +109,36 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
-                        <Button DockPanel.Dock="Left" x:Name="buttonPin" Style="{StaticResource CaptionButtonStyle}">
-                            <fa:ImageAwesome Icon="ThumbTack" Foreground="{DynamicResource CaptionButtonIconForeground}" />
+                        <Button DockPanel.Dock="Left" x:Name="buttonPin" Tag="Auto">
+                            <Button.Resources>
+                                <Grid x:Key="ContentPin">
+                                    <TextBlock>&#xE840;</TextBlock>
+                                    <TextBlock>&#xE842;</TextBlock>
+                                </Grid>
+                                <Grid x:Key="ContentPinTop">
+                                    <TextBlock>&#xE840;</TextBlock>
+                                    <TextBlock>&#xE842;</TextBlock>
+                                    <TextBlock>&#xE889;</TextBlock>
+                                </Grid>
+                            </Button.Resources>
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                                    <Setter Property="Content" Value="&#xE840;" />
+                                    <Style.Triggers>
+                                        <Trigger Property="Tag" Value="Auto">
+                                            <Setter Property="Content" Value="&#xE840;" />
+                                        </Trigger>
+                                        <Trigger Property="Tag" Value="PinTop">
+                                            <Setter Property="Content" Value="{StaticResource ContentPinTop}" />
+                                        </Trigger>
+                                        <Trigger Property="Tag" Value="Pin">
+                                            <Setter Property="Content" Value="{StaticResource ContentPin}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                         </Button>
-                        <Button x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}" DockPanel.Dock="Left">
-                            <fa:ImageAwesome Icon="ShareAlt" Foreground="{DynamicResource CaptionButtonIconForeground}" />
-                        </Button>
+                        <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}" Content="&#xE72D;" />
                         <Grid x:Name="titleArea" Background="Transparent">
                             <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
                                        HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"

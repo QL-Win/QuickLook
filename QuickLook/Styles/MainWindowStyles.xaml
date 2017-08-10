@@ -10,7 +10,7 @@
     <SolidColorBrush x:Key="WindowTextForeground" Color="#E50E0E0E" />
     <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5626262" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />
-    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5868686" />
+    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E50E0E0E" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#44FFFFFF" />
     <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#88FFFFFF" />
     <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
@@ -56,7 +56,9 @@
     <Style x:Key="CaptionButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonBaseStyle}">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="32" />
-        <Setter Property="Padding" Value="9,9,9,9" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+        <Setter Property="Foreground" Value="{DynamicResource CaptionButtonIconForeground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">

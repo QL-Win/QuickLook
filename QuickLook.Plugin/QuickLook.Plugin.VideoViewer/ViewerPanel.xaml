@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:vlc="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
@@ -14,6 +13,7 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:TimeSpanToShortStringConverter x:Key="TimeSpanToShortStringConverter" />
+            <local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -42,7 +42,8 @@
                     <BlurEffect Radius="100" />
                 </Rectangle.Effect>
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="{Binding ElementName=imageCoverArt, Path=Source}" Stretch="UniformToFill" Opacity="0.9" />
+                    <ImageBrush ImageSource="{Binding ElementName=viewerPanel, Path=CoverArt}" Stretch="UniformToFill"
+                                Opacity="0.9" />
                 </Rectangle.Fill>
             </Rectangle>
             <Image Grid.Column="0" x:Name="imageCoverArt" Margin="20,40,20,40">
@@ -56,7 +57,7 @@
                             <DataTrigger
                                 Binding="{Binding CoverArt, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}"
                                 Value="0">
-                                <Setter Property="Source" Value="Resources/compact-disc.png" />
+                                <Setter Property="Source" Value="Resources/empty.png" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -67,7 +68,7 @@
                     <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
                 </Grid.Effect>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="70" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="10" />
                     <RowDefinition Height="Auto" />
@@ -77,20 +78,20 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="metaTitle" Grid.Row="1" FontSize="22" Padding="3"
                            TextWrapping="Wrap"
-                           LineHeight="28" MaxHeight="80" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
+                           LineHeight="28" MaxHeight="80" TextTrimming="CharacterEllipsis">
                     ときめきポポロン♪
                 </TextBlock>
-                <TextBlock x:Name="metaArtists" Grid.Row="3" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                <TextBlock x:Name="metaArtists" Grid.Row="3" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis"
                            Foreground="{DynamicResource WindowTextForeground}">
                     チマメ隊
                 </TextBlock>
-                <TextBlock x:Name="metaAlbum" Grid.Row="4" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                <TextBlock x:Name="metaAlbum" Grid.Row="4" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis"
                            Foreground="{DynamicResource WindowTextForeground}">
                     ときめきポポロン♪
                 </TextBlock>
-                <TextBlock x:Name="metaLength" Grid.Row="5" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis" 
+                <TextBlock x:Name="metaLength" Grid.Row="5" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis"
                            Foreground="{DynamicResource WindowTextForeground}"
-                           Text="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}"/>
+                           Text="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}" />
             </Grid>
         </Grid>
 
@@ -99,8 +100,7 @@
                 <Storyboard x:Key="ShowControlStoryboard" Completed="AutoHideViedoControlContainer">
                     <DoubleAnimation
                         Storyboard.Target="{Binding Source={x:Reference videoControlContainer}}"
-                        Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05">
-                    </DoubleAnimation>
+                        Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />
                 </Storyboard>
                 <Storyboard x:Key="HideControlStoryboard">
                     <DoubleAnimationUsingKeyFrames
@@ -119,7 +119,7 @@
                                    ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=HasVideo,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <glassLayer:GlassLayer.Style>
                     <Style TargetType="glassLayer:GlassLayer">
-                        <Setter Property="BlurredElement" Value="{Binding ElementName=viewerPanel}"></Setter>
+                        <Setter Property="BlurredElement" Value="{Binding ElementName=mediaElement}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=viewerPanel,Path=HasVideo}" Value="True">
                                 <Setter Property="BlurredElement" Value="{Binding ElementName=mediaElement}" />
@@ -129,38 +129,34 @@
                 </glassLayer:GlassLayer.Style>
             </glassLayer:GlassLayer>
             <DockPanel>
-                <Button x:Name="buttonPlayPause" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Left">
-                    <fa:ImageAwesome Foreground="{DynamicResource CaptionButtonIconForeground}">
-                        <fa:ImageAwesome.Style>
-                            <Style>
-                                <Setter Property="fa:ImageAwesome.Icon" Value="Pause" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
+                <Button x:Name="buttonPlayPause" DockPanel.Dock="Left">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
+                            <Setter Property="Content" Value="&#xE769;" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
                                                  Value="False">
-                                        <Setter Property="fa:ImageAwesome.Icon" Value="Play" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </fa:ImageAwesome.Style>
-                    </fa:ImageAwesome>
+                                    <Setter Property="Content" Value="&#xE768;" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                 </Button>
-                <Button x:Name="buttonMute" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right">
-                    <fa:ImageAwesome Icon="VolumeUp" Foreground="{DynamicResource CaptionButtonIconForeground}">
-                        <fa:ImageAwesome.Style>
-                            <Style TargetType="fa:ImageAwesome">
-                                <Setter Property="Icon" Value="VolumeOff" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
-                                                 Value="False">
-                                        <Setter Property="Icon" Value="VolumeUp" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </fa:ImageAwesome.Style>
-                    </fa:ImageAwesome>
+                <Button x:Name="buttonMute" DockPanel.Dock="Right">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
+                            <Setter Property="Content" Value="{Binding ElementName=mediaElement, Path=Volume, Converter={StaticResource VolumeToIconConverter}}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
+                                                 Value="True">
+                                    <Setter Property="Content" Value="&#xE74F;" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                 </Button>
                 <Button Width="Auto" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right">
-                    <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11"
+                    <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11" FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
                                Foreground="{DynamicResource CaptionButtonIconForeground}"
                                Text="{Binding ElementName=mediaElement, Path=Time, Converter={StaticResource TimeSpanToShortStringConverter}}" />
                 </Button>

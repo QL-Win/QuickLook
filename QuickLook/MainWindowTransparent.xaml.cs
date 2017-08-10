@@ -23,6 +23,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -40,15 +42,15 @@ namespace QuickLook
     /// </summary>
     public partial class MainWindowTransparent : MainWindowBase, INotifyPropertyChanged
     {
-        private string _path;
-        private bool _pinned;
-        private bool _restoreForDragMove;
         private readonly ResourceDictionary _darkDict = new ResourceDictionary
         {
             Source = new Uri("pack://application:,,,/QuickLook;component/Styles/MainWindowStyles.Dark.xaml")
         };
+        private string _path;
+        private bool _pinned;
+        private bool _restoreForDragMove;
 
-    internal MainWindowTransparent()
+        internal MainWindowTransparent()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
             ContextObject = new ContextObject();
@@ -60,21 +62,19 @@ namespace QuickLook
             windowCaptionContainer.MouseLeftButtonDown += WindowDragMoveStart;
             windowCaptionContainer.MouseMove += WindowDragMoving;
             windowCaptionContainer.MouseLeftButtonUp += WindowDragMoveEnd;
-            
+
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
             buttonPin.Click += (sender, e) =>
             {
                 if (Pinned)
                 {
-                    buttonCloseWindow.RaiseEvent(
-                        new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left)
-                        {
-                            RoutedEvent = MouseLeftButtonUpEvent
-                        });
+                    Topmost = !Topmost;
+                    buttonPin.Tag = Topmost ? "PinTop" : "Pin";
                     return;
                 }
                 Pinned = true;
+                buttonPin.Tag = "Pin";
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 
@@ -101,10 +101,26 @@ namespace QuickLook
                 (sender, e) => RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {_path}");
         }
 
+        public bool Pinned
+        {
+            get => _pinned;
+            private set
+            {
+                _pinned = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IViewer Plugin { get; private set; }
+
+        public ContextObject ContextObject { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
         {
             var show = (Storyboard) windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
-            
+
             if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
                 show.Begin();
         }
@@ -124,23 +140,6 @@ namespace QuickLook
 
             hide.Begin();
         }
-
-
-        public bool Pinned
-        {
-            get => _pinned;
-            private set
-            {
-                _pinned = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public IViewer Plugin { get; private set; }
-
-        public ContextObject ContextObject { get; private set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void WindowDragMoveEnd(object sender, MouseButtonEventArgs e)
         {
@@ -201,7 +200,7 @@ namespace QuickLook
                 Process.Start(new ProcessStartInfo(with)
                 {
                     Arguments = arg,
-                    WorkingDirectory = System.IO.Path.GetDirectoryName(_path)
+                    WorkingDirectory = Path.GetDirectoryName(_path)
                 });
             }
             catch (Exception e)
@@ -219,7 +218,7 @@ namespace QuickLook
             {
                 Process.Start(new ProcessStartInfo(_path)
                 {
-                    WorkingDirectory = System.IO.Path.GetDirectoryName(_path)
+                    WorkingDirectory = Path.GetDirectoryName(_path)
                 });
             }
             catch (Exception e)
@@ -351,7 +350,7 @@ namespace QuickLook
 
             if (Directory.Exists(_path))
             {
-                AddToInlines("MW_BrowseFolder", System.IO.Path.GetFileName(_path));
+                AddToInlines("MW_BrowseFolder", Path.GetFileName(_path));
                 return;
             }
             var isExe = FileHelper.IsExecutable(_path, out string appFriendlyName);
@@ -368,7 +367,7 @@ namespace QuickLook
                 return;
             }
             // assoc not found
-            AddToInlines("MW_Open", System.IO.Path.GetFileName(_path));
+            AddToInlines("MW_Open", Path.GetFileName(_path));
 
             void AddToInlines(string str, string replaceWith)
             {
@@ -395,6 +394,7 @@ namespace QuickLook
             WindowState = WindowState.Normal;
 
             Hide();
+            //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
 
             ProcessHelper.PerformAggressiveGC();
         }
@@ -418,13 +418,13 @@ namespace QuickLook
         {
             if (dark)
             {
-                if (!Application.Current.Resources.MergedDictionaries.Contains(_darkDict))
-                    Application.Current.Resources.MergedDictionaries.Add(_darkDict);
+                if (!Resources.MergedDictionaries.Contains(_darkDict))
+                    Resources.MergedDictionaries.Add(_darkDict);
             }
             else
             {
-                if (Application.Current.Resources.MergedDictionaries.Contains(_darkDict))
-                    Application.Current.Resources.MergedDictionaries.Remove(_darkDict);
+                if (Resources.MergedDictionaries.Contains(_darkDict))
+                    Resources.MergedDictionaries.Remove(_darkDict);
             }
         }
     }

@@ -43,7 +43,7 @@
                     </Border>
                     <Border ClipToBounds="True" Height="1" Visibility="Visible">
                         <Rectangle RadiusX="1" RadiusY="1" Margin="10,0,10,0"
-                                   Fill="{DynamicResource MainWindowBackground}" />
+                                   Fill="{DynamicResource WindowTextForegroundAlternative}" />
                     </Border>
                 </DockPanel>
                 <Track x:Name="PART_Track">

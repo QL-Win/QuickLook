@@ -29,6 +29,11 @@ namespace QuickLook.Controls.BusyDecorator
     {
         private readonly BackgroundVisualHost _busyHost = new BackgroundVisualHost();
 
+        private readonly ResourceDictionary _styles = new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/QuickLook;component/Controls/BusyDecorator/BusyDecorator.xaml")
+        };
+
         static BusyDecorator()
         {
             DefaultStyleKeyProperty.OverrideMetadata(
@@ -38,6 +43,8 @@ namespace QuickLook.Controls.BusyDecorator
 
         public BusyDecorator()
         {
+            Resources.MergedDictionaries.Add(_styles);
+
             AddLogicalChild(_busyHost);
             AddVisualChild(_busyHost);
 
@@ -85,9 +92,11 @@ namespace QuickLook.Controls.BusyDecorator
 
         private void SetBinding(DependencyObject obj, DependencyProperty source, DependencyProperty target)
         {
-            var b = new Binding();
-            b.Source = this;
-            b.Path = new PropertyPath(source);
+            var b = new Binding
+            {
+                Source = this,
+                Path = new PropertyPath(source)
+            };
             BindingOperations.SetBinding(obj, target, b);
         }
 

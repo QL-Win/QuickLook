@@ -6,6 +6,13 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
              FontSize="14"
              mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/MainWindowStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15" />

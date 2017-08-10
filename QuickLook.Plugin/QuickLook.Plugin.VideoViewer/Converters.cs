@@ -45,4 +45,28 @@ namespace QuickLook.Plugin.VideoViewer
             throw new NotImplementedException();
         }
     }
+
+    public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
+    {
+        private static readonly string[] Volumes = {"\xE992", "\xE993", "\xE994", "\xE995"};
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Volumes[0];
+
+            var v = (int) value;
+            if (v == 0)
+                return Volumes[0];
+
+            v = Math.Min(v, 100);
+
+            return Volumes[1 + v / 34];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

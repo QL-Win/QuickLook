@@ -15,16 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Windows;
-
-namespace QuickLook
+namespace QuickLook.Controls.BusyDecorator
 {
-    internal class MainWindowNoTransparent : MainWindowTransparent
+    /// <summary>
+    ///     Represents a spinable control
+    /// </summary>
+    internal interface ISpinable
     {
-        public MainWindowNoTransparent()
-        {
-            AllowsTransparency = false;
-            windowFrameContainer.Margin = new Thickness(0);
-        }
+        /// <summary>
+        ///     Gets or sets the current spin (angle) animation of the icon.
+        /// </summary>
+        bool Spin { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the duration of the spinning animation (in seconds). This will stop and start the spin animation.
+        /// </summary>
+        double SpinDuration { get; set; }
     }
 }

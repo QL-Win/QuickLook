@@ -11,7 +11,8 @@
     <Grid>
         <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}">
             <Rectangle.Fill>
-                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background.png" AlignmentY="Top" Viewport="0,0,32,32"
+                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background.png" AlignmentY="Top"
+                            Viewport="0,0,32,32"
                             ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
             </Rectangle.Fill>
         </Rectangle>

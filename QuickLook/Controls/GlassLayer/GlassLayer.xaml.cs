@@ -15,13 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using QuickLook.Helpers;
-using Color = System.Windows.Media.Color;
-using Size = System.Windows.Size;
 
 namespace QuickLook.Controls.GlassLayer
 {
@@ -72,7 +69,6 @@ namespace QuickLook.Controls.GlassLayer
         /// </summary>
         public SolidColorBrush OverlayColor
         {
-            
             get => (SolidColorBrush) GetValue(OverlayColorProperty);
 
             set => SetValue(OverlayColorProperty, value);

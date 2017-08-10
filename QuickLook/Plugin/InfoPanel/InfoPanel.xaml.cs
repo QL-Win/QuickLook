@@ -35,6 +35,9 @@ namespace QuickLook.Plugin.InfoPanel
         public InfoPanel()
         {
             InitializeComponent();
+
+            // apply global theme
+            Resources.MergedDictionaries[0].Clear();
         }
 
         public bool Stop

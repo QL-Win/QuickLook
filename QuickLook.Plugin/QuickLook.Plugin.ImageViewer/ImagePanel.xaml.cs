@@ -37,6 +37,7 @@ namespace QuickLook.Plugin.ImageViewer
     /// </summary>
     public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
+        private Visibility _backgroundVisibility = Visibility.Visible;
         private Point? _dragInitPos;
         private Uri _imageSource;
         private DateTime _lastZoomTime = DateTime.MinValue;
@@ -45,7 +46,6 @@ namespace QuickLook.Plugin.ImageViewer
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private BitmapSource _source;
         private double _zoomFactor = 1d;
-        private Visibility _backgroundVisibility = Visibility.Visible;
 
         private bool _zoomToFit = true;
 

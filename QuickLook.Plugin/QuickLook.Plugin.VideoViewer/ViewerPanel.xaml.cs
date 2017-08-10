@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -62,13 +63,13 @@ namespace QuickLook.Plugin.VideoViewer
 
             _context = context;
 
-            buttonPlayPause.MouseLeftButtonUp += TogglePlayPause;
+            buttonPlayPause.Click += TogglePlayPause;
             //buttonMute.MouseLeftButtonUp += (sender, e) =>
             //{
             //    mediaElement.IsMuted = false;
             //    buttonMute.Visibility = Visibility.Collapsed;
             //};
-            buttonMute.MouseLeftButtonUp += (sender, e) => IsMuted = !IsMuted;
+            buttonMute.Click += (sender, e) => IsMuted = !IsMuted;
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {
@@ -91,7 +92,7 @@ namespace QuickLook.Plugin.VideoViewer
                     }
             };*/
 
-            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 2);
+            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 4);
         }
 
         public bool IsMuted
@@ -228,8 +229,6 @@ namespace QuickLook.Plugin.VideoViewer
         {
             var state = e.Value;
 
-            Debug.WriteLine(state);
-
             switch (state)
             {
                 case MediaState.Opening:
@@ -268,6 +267,13 @@ namespace QuickLook.Plugin.VideoViewer
             metaTitle.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Title);
             metaArtists.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Artist);
             metaAlbum.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Album);
+
+            metaArtists.Visibility = string.IsNullOrEmpty(metaArtists.Text)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            metaAlbum.Visibility = string.IsNullOrEmpty(metaAlbum.Text)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
         }
 
         private void DetermineTheme()
@@ -308,7 +314,7 @@ namespace QuickLook.Plugin.VideoViewer
             if (_wasPlaying) mediaElement.Play();
         }
 
-        private void TogglePlayPause(object sender, MouseButtonEventArgs e)
+        private void TogglePlayPause(object sender, EventArgs e)
         {
             if (mediaElement.VlcMediaPlayer.IsPlaying)
             {
