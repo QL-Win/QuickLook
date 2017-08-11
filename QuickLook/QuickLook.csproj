@@ -111,6 +111,7 @@
     </Compile>
     <Compile Include="Controls\BusyDecorator\ISpinable.cs" />
     <Compile Include="Controls\BusyDecorator\SpinIcon.cs" />
+    <Compile Include="Controls\GlassLayer\ElementCoordinateConverter.cs" />
     <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
     <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
       <DependentUpon>GlassLayer.xaml</DependentUpon>

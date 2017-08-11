@@ -17,6 +17,7 @@
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using QuickLook.Helpers;
 
@@ -35,6 +36,11 @@ namespace QuickLook.Controls.GlassLayer
             noiseBrush.Viewport = new Rect(new Size(
                 noiseBrush.ImageSource.Width / scale.Horizontal,
                 noiseBrush.ImageSource.Height / scale.Vertical));
+
+            LayoutUpdated += (sender, e) =>
+            {
+                BindingOperations.GetBindingExpressionBase(brush, TileBrush.ViewboxProperty)?.UpdateTarget();
+            };
         }
 
         #region public Visual BlurredElement

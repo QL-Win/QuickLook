@@ -7,6 +7,9 @@
              mc:Ignorable="d"
              x:Name="glassLayer"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:ElementCoordinateConverter x:Key="ElementCoordinateConverter" />
+    </UserControl.Resources>
     <Grid>
         <Rectangle Panel.ZIndex="100" Visibility="{Binding ElementName=glassLayer, Path=NoiseVisibility}">
             <Rectangle.Fill>
@@ -29,9 +32,10 @@
                                               Shader="pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps" />
                 </Grid.Effect>
                 <Grid.Background>
-                    <VisualBrush Visual="{Binding ElementName=glassLayer, Path=BlurredElement}" AlignmentX="Left"
-                                 AlignmentY="Top"
-                                 Stretch="None" />
+                    <VisualBrush x:Name="brush" Visual="{Binding ElementName=glassLayer, Path=BlurredElement}"
+                                 Viewbox="{Binding ElementName=glassLayer, Converter={StaticResource ElementCoordinateConverter}}"
+                                 ViewboxUnits="Absolute"
+                                 AlignmentX="Left" AlignmentY="Top" Stretch="None" />
                 </Grid.Background>
                 <StackPanel />
             </Grid>
