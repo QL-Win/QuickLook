@@ -10,7 +10,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Control}">
-                                <busyDecorator:SpinIcon FontFamily="Segoe MDL2 Assets" FontSize="40" Spin="True">&#xE72C;</busyDecorator:SpinIcon>
+                                <busyDecorator:SpinIcon FontFamily="{StaticResource SegoeMDL2}" FontSize="40" Spin="True">&#xE72C;</busyDecorator:SpinIcon>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

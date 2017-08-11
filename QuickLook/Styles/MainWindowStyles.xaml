@@ -57,7 +57,7 @@
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="32" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeMDL2}" />
         <Setter Property="Foreground" Value="{DynamicResource CaptionButtonIconForeground}" />
         <Setter Property="Template">
             <Setter.Value>
