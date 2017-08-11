@@ -25,10 +25,10 @@
         <Grid x:Name="coverArtPersenter" ClipToBounds="True" Background="{StaticResource MainWindowBackground}">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed" />
+                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -135,7 +135,7 @@
                             <Setter Property="Content" Value="&#xE769;" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
-                                                 Value="False">
+                                             Value="False">
                                     <Setter Property="Content" Value="&#xE768;" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -145,25 +145,68 @@
                 <Button x:Name="buttonMute" DockPanel.Dock="Right">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
-                            <Setter Property="Content" Value="{Binding ElementName=mediaElement, Path=Volume, Converter={StaticResource VolumeToIconConverter}}" />
+                            <Setter Property="Content"
+                                    Value="{Binding ElementName=mediaElement, Path=Volume, Converter={StaticResource VolumeToIconConverter}}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
-                                                 Value="True">
+                                             Value="True">
                                     <Setter Property="Content" Value="&#xE74F;" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Width="Auto" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right">
-                    <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11" FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
-                               Foreground="{DynamicResource CaptionButtonIconForeground}"
-                               Text="{Binding ElementName=mediaElement, Path=Time, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                <Button x:Name="buttonTime" Width="37" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right" Tag="Time">
+                    <TextBlock VerticalAlignment="Center" FontSize="11"
+                               FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
+                               Foreground="{DynamicResource CaptionButtonIconForeground}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Time">
+                                        <Setter Property="Text"
+                                                Value="{Binding ElementName=mediaElement, Path=Time, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Length">
+                                        <Setter Property="Text"
+                                                Value="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                        </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
                         SmallChange="0.00001" LargeChange="0.01" Maximum="1"
                         Value="{Binding Position, ElementName=mediaElement}" />
             </DockPanel>
         </Grid>
+        <!--<Grid Height="32" Width="100" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+              Background="{DynamicResource CaptionBackground}" Margin="0,0,0,32">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Opacity" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=buttonMute, Path=IsMouseOver}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="Opacity">
+                                        <DoubleAnimation To="1" Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="Opacity">
+                                        <DoubleAnimation To="0" Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Slider Style="{StaticResource CustomSliderStyle}" Width="100" Maximum="100" Value="{Binding ElementName=mediaElement, Path=Volume}" />
+        </Grid>-->
     </Grid>
 </UserControl>

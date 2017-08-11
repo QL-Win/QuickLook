@@ -64,11 +64,7 @@ namespace QuickLook.Plugin.VideoViewer
             _context = context;
 
             buttonPlayPause.Click += TogglePlayPause;
-            //buttonMute.MouseLeftButtonUp += (sender, e) =>
-            //{
-            //    mediaElement.IsMuted = false;
-            //    buttonMute.Visibility = Visibility.Collapsed;
-            //};
+            buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
             buttonMute.Click += (sender, e) => IsMuted = !IsMuted;
 
             sliderProgress.PreviewMouseDown += (sender, e) =>

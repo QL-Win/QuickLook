@@ -48,6 +48,7 @@ namespace QuickLook.Plugin.ImageViewer
         private double _zoomFactor = 1d;
 
         private bool _zoomToFit = true;
+        private double _zoomToFitFactor;
 
         public ImagePanel()
         {
@@ -115,6 +116,16 @@ namespace QuickLook.Plugin.ImageViewer
             set
             {
                 _maxZoomFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double ZoomToFitFactor
+        {
+            get => _zoomToFitFactor;
+            private set
+            {
+                _zoomToFitFactor = value;
                 OnPropertyChanged();
             }
         }
@@ -190,7 +201,7 @@ namespace QuickLook.Plugin.ImageViewer
 
             var newZoom = ZoomFactor + ZoomFactor * (delta.Scale.X - 1);
 
-            Zoom(newZoom, false);
+            Zoom(newZoom);
 
             viewPanel.ScrollToHorizontalOffset(viewPanel.HorizontalOffset - delta.Translation.X);
             viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - delta.Translation.Y);
@@ -225,8 +236,6 @@ namespace QuickLook.Plugin.ImageViewer
 
             var delta = _dragInitPos.Value - e.GetPosition(viewPanel);
 
-            Debug.WriteLine(_dragInitPos.Value);
-
             viewPanel.ScrollToHorizontalOffset(delta.X);
             viewPanel.ScrollToVerticalOffset(delta.Y);
         }
@@ -248,7 +257,7 @@ namespace QuickLook.Plugin.ImageViewer
             // zoom
             var newZoom = ZoomFactor + ZoomFactor * e.Delta / 120 * 0.1;
 
-            Zoom(newZoom, false);
+            Zoom(newZoom);
         }
 
         public Size GetScrollSize()
@@ -275,28 +284,34 @@ namespace QuickLook.Plugin.ImageViewer
             var factor = Math.Min(viewPanel.ActualWidth / viewPanelImage.Source.Width,
                 viewPanel.ActualHeight / viewPanelImage.Source.Height);
 
-            Zoom(factor, true);
+            ZoomToFitFactor = factor;
+
+            Zoom(factor);
         }
 
         public void ResetZoom()
         {
-            Zoom(1d, false, true);
+            Zoom(1d, true);
         }
 
-        public void Zoom(double factor, bool toFit, bool suppressEvent = false)
+        public void Zoom(double factor, bool suppressEvent = false)
         {
             if (viewPanelImage.Source == null)
                 return;
+
+            if (ZoomFactor < ZoomToFitFactor && factor > ZoomToFitFactor
+                || ZoomFactor > ZoomToFitFactor && factor < ZoomToFitFactor)
+            {
+                factor = ZoomToFitFactor;
+                ZoomToFit = true;
+            }
 
             factor = Math.Max(factor, MinZoomFactor);
             factor = Math.Min(factor, MaxZoomFactor);
 
             ZoomFactor = factor;
 
-            if (!toFit)
-                ZoomToFit = false;
-
-            var position = toFit
+            var position = ZoomToFit
                 ? new Point(viewPanelImage.Source.Width / 2, viewPanelImage.Source.Height / 2)
                 : Mouse.GetPosition(viewPanelImage);
 

@@ -26,7 +26,7 @@ namespace QuickLook.Controls.GlassLayer
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var glass = (GlassLayer) value;
+            var glass = value as GlassLayer;
 
             if (glass?.BlurredElement == null)
                 return null;
