@@ -20,13 +20,23 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace QuickLook
 {
+    internal static class PipeMessages
+    {
+        public const string RunAndClose = "QuickLook.App.PipeMessages.RunAndClose";
+        public const string Invoke = "QuickLook.App.PipeMessages.Invoke";
+        public const string Toggle = "QuickLook.App.PipeMessages.Toggle";
+        public const string Close = "QuickLook.App.PipeMessages.Close";
+        public const string Quit = "QuickLook.App.PipeMessages.Quit";
+    }
+
     internal class PipeServerManager : IDisposable
     {
         private const string PipeName = "QuickLook.App.Pipe";
-        private const string PipeCloseMessage = "QuickLook.App.Pipe.QuitSingal";
         private static PipeServerManager _instance;
 
         private NamedPipeServerStream _server;
@@ -39,20 +49,18 @@ namespace QuickLook
             {
                 using (var reader = new StreamReader(_server))
                 {
+                    Debug.WriteLine("PipeManager: Ready");
+
                     while (true)
                     {
-                        Debug.WriteLine("PipeManager: WaitForConnection");
-
                         _server.WaitForConnection();
                         var msg = reader.ReadLine();
 
                         Debug.WriteLine($"PipeManager: {msg}");
 
-                        if (msg == PipeCloseMessage)
-                            return;
-
                         // dispatch message
-                        MessageReceived?.Invoke(msg, new EventArgs());
+                        if (MessageReceived(msg))
+                            return;
 
                         _server.Disconnect();
                     }
@@ -65,15 +73,16 @@ namespace QuickLook
             GC.SuppressFinalize(this);
 
             if (_server != null)
-                SendMessage(PipeCloseMessage);
+                SendMessage(PipeMessages.Quit);
             _server?.Dispose();
             _server = null;
         }
 
-        public event EventHandler MessageReceived;
-
-        public static void SendMessage(string msg)
+        public static void SendMessage(string pipeMessage, string path = null)
         {
+            if (path == null)
+                path = "";
+
             try
             {
                 using (var client = new NamedPipeClientStream(".", PipeName, PipeDirection.Out))
@@ -82,7 +91,7 @@ namespace QuickLook
 
                     using (var writer = new StreamWriter(client))
                     {
-                        writer.WriteLine(msg);
+                        writer.WriteLine($"{pipeMessage}|{path}");
                         writer.Flush();
                     }
                 }
@@ -90,6 +99,44 @@ namespace QuickLook
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
+            }
+        }
+
+        private bool MessageReceived(string msg)
+        {
+            var split = msg.IndexOf('|');
+            if (split == -1)
+                return false;
+
+            var wParam = msg.Substring(0, split);
+            var lParam = msg.Substring(split + 1, msg.Length - split - 1);
+
+            switch (wParam)
+            {
+                case PipeMessages.RunAndClose:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().RunAndClosePreview()),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Invoke:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().InvokePreview(lParam)),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Toggle:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().TogglePreview(lParam)),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Close:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().ClosePreview()),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Quit:
+                    return true;
+                default:
+                    return false;
             }
         }
 

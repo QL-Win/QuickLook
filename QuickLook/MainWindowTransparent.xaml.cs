@@ -23,8 +23,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -300,7 +298,8 @@ namespace QuickLook
             _path = string.Empty;
         }
 
-        internal void BeginShow(IViewer matchedPlugin, string path, Action<ExceptionDispatchInfo> exceptionHandler)
+        internal void BeginShow(IViewer matchedPlugin, string path,
+            Action<string, ExceptionDispatchInfo> exceptionHandler)
         {
             _path = path;
             Plugin = matchedPlugin;
@@ -338,7 +337,7 @@ namespace QuickLook
                     }
                     catch (Exception e)
                     {
-                        exceptionHandler(ExceptionDispatchInfo.Capture(e));
+                        exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
                     }
                 }),
                 DispatcherPriority.Input);

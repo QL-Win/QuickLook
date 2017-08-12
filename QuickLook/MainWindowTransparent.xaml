@@ -86,7 +86,8 @@
                                            GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            NoiseVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <DockPanel>
-                        <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow" Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;"/>
+                        <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
+                                Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
                         <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"
                                 Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Button.Style>
@@ -138,7 +139,8 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}" Content="&#xE72D;" />
+                        <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
+                                Content="&#xE72D;" />
                         <Grid x:Name="titleArea" Background="Transparent">
                             <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
                                        HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
