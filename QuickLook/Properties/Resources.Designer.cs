@@ -73,9 +73,29 @@ namespace QuickLook.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon app_16 {
+            get {
+                object obj = ResourceManager.GetObject("app_16", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon app_white {
             get {
                 object obj = ResourceManager.GetObject("app_white", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon app_white_16 {
+            get {
+                object obj = ResourceManager.GetObject("app_white_16", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

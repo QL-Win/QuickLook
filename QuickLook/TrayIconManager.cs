@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using QuickLook.Helpers;
 using QuickLook.Properties;
@@ -44,7 +45,7 @@ namespace QuickLook
             {
                 Text = string.Format(TranslationHelper.GetString("Icon_ToolTip"),
                     Application.ProductVersion),
-                Icon = Resources.app,
+                Icon = GetTrayIconByDPI(),
                 Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
@@ -64,6 +65,16 @@ namespace QuickLook
         public void Dispose()
         {
             _icon.Visible = false;
+        }
+
+        private Icon GetTrayIconByDPI()
+        {
+            var isWin7 = Environment.OSVersion.Version < new Version(6, 2);
+            var scale = DpiHelper.GetCurrentScaleFactor().Vertical;
+
+            if (isWin7)
+                return scale > 1 ? Resources.app : Resources.app_16;
+            return scale > 1 ? Resources.app_white : Resources.app_white_16;
         }
 
         public static void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
