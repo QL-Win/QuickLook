@@ -286,7 +286,7 @@ namespace QuickLook.Plugin.ImageViewer
 
             ZoomToFitFactor = factor;
 
-            Zoom(factor);
+            Zoom(factor, false, true);
         }
 
         public void ResetZoom()
@@ -294,7 +294,7 @@ namespace QuickLook.Plugin.ImageViewer
             Zoom(1d, true);
         }
 
-        public void Zoom(double factor, bool suppressEvent = false)
+        public void Zoom(double factor, bool suppressEvent = false, bool isToFit = false)
         {
             if (viewPanelImage.Source == null)
                 return;
@@ -304,6 +304,11 @@ namespace QuickLook.Plugin.ImageViewer
             {
                 factor = ZoomToFitFactor;
                 ZoomToFit = true;
+            }
+            else
+            {
+                if (!isToFit)
+                    ZoomToFit = false;
             }
 
             factor = Math.Max(factor, MinZoomFactor);
