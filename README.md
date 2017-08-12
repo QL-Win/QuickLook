@@ -11,7 +11,7 @@
 
 *This project is currently under heavy development. Come back often to see what's new.*
 
-<img src="http://pooi.moe/QuickLook/sample.gif?2" width="400">
+<img src="http://pooi.moe/QuickLook/sample.gif?3" width="400">
 
 ## Background
 [Quick Look](https://en.wikipedia.org/wiki/Quick_Look) is among the few features I missed from Mac OS X. It enables *very* quick preview of file by pressing <kbd>Space</kbd> key while highlighting it, without opening its associated application. Then I decide to add this feature to Windows by myself, which results this “QuickLook” project.
@@ -21,8 +21,9 @@ You may ask, why you write this when there several alternatives available on the
 ## Highlights
 
  - Tons of supported file types (full list [here](https://github.com/xupefei/QuickLook/wiki/Supported-File-Types))
+ - Fluent design (new in version 0.3)
+ - Touchscreen friendly
  - HiDPI support
- - Native 64-bit application
  - Preview from Open and Save File Dialog
  - Preview from 3rd-party file managers (see a list [here](https://github.com/xupefei/QuickLook/wiki/File-Managers))
  - Easy extended by plugins 
@@ -49,6 +50,7 @@ You may ask, why you write this when there several alternatives available on the
  - <kbd>Enter</kbd> Open/Execute current file
  - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
+ - <kbd>Wheel</kbd> in audio/video player will increase or decrease volume
 
 ## More Information
 
@@ -62,11 +64,10 @@ See the [Wiki page](https://github.com/xupefei/QuickLook/wiki/Translations).
 
 ![GPL-v3](https://www.gnu.org/graphics/gplv3-127x51.png)
 
-Application icons made by Freepik from www.flaticon.com. Used under the [Flaticon Basic License](http://file000.flaticon.com/downloads/license/license.pdf).
+Application icons made by [@QubitsDev](https://twitter.com/qubitsdev). User interface designed by [@OiCkilL](https://twitter.com/OiCkilL). Thank you!
 
 This project references many other projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
 
 All source codes, except which are from other projects mentioned above, are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
 
 If you want make any modification on these source codes while keeping new codes not protected by GPL-3.0, please contact me for a sublicense instead.
-
