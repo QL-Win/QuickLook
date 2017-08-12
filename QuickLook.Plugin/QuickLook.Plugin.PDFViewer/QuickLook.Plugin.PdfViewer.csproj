@@ -76,8 +76,6 @@
       <DependentUpon>PdfViewerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Plugin.cs" />
-    <Compile Include="DpiHelpers.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="LibMuPdf.cs" />
     <Compile Include="PageIdToImageConverter.cs" />
     <Compile Include="PdfFile.cs" />

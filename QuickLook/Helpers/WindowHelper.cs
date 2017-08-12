@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
@@ -25,17 +26,15 @@ using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
-    internal static class WindowHelper
+    public static class WindowHelper
     {
         public static Rect GetCurrentWindowRect()
         {
             var screen = Screen.FromPoint(Cursor.Position).WorkingArea;
-            var dpi = DpiHelper.GetCurrentDpi();
-            var scaleX = dpi.HorizontalDpi / DpiHelper.DEFAULT_DPI;
-            var scaleY = dpi.VerticalDpi / DpiHelper.DEFAULT_DPI;
+            var scale = DpiHelper.GetCurrentScaleFactor();
             return new Rect(
-                new Point(screen.X / scaleX, screen.Y / scaleY),
-                new Size(screen.Width / scaleX, screen.Height / scaleY));
+                new Point(screen.X / scale.Horizontal, screen.Y / scale.Vertical),
+                new Size(screen.Width / scale.Horizontal, screen.Height / scale.Vertical));
         }
 
         public static void BringToFront(this Window window)
@@ -100,6 +99,54 @@ namespace QuickLook.Helpers
             User32.SetWindowLong(window.Handle, User32.GWL_EXSTYLE,
                 User32.GetWindowLong(window.Handle, User32.GWL_EXSTYLE) |
                 User32.WS_EX_NOACTIVATE);
+        }
+
+        internal static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
+        {
+            var mmi = (MinMaxInfo) Marshal.PtrToStructure(lParam, typeof(MinMaxInfo));
+
+            // Adjust the maximized size and position to fit the work area of the correct monitor
+            var currentScreen = Screen.FromHandle(hwnd);
+            var workArea = currentScreen.WorkingArea;
+            var monitorArea = currentScreen.Bounds;
+            mmi.ptMaxPosition.x = Math.Abs(workArea.Left - monitorArea.Left);
+            mmi.ptMaxPosition.y = Math.Abs(workArea.Top - monitorArea.Top);
+            mmi.ptMaxSize.x = Math.Abs(workArea.Right - workArea.Left);
+            mmi.ptMaxSize.y = Math.Abs(workArea.Bottom - workArea.Top);
+
+            Marshal.StructureToPtr(mmi, lParam, true);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MinMaxInfo
+        {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            /// <summary>
+            ///     x coordinate of point.
+            /// </summary>
+            public int x;
+            /// <summary>
+            ///     y coordinate of point.
+            /// </summary>
+            public int y;
+
+            /// <summary>
+            ///     Construct a point of coordinates (x,y).
+            /// </summary>
+            public POINT(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
         }
     }
 }

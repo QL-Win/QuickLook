@@ -22,7 +22,7 @@ using QuickLook.Properties;
 
 namespace QuickLook
 {
-    public class TrayIconManager : IDisposable
+    internal class TrayIconManager : IDisposable
     {
         private static TrayIconManager _instance;
 
@@ -66,29 +66,30 @@ namespace QuickLook
             _icon.Visible = false;
         }
 
-        public void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
+        public static void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
             Action clickEvent = null,
             Action closeEvent = null)
         {
-            _icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
-            _icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
-            _icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+            var icon = GetInstance()._icon;
+            icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
+            icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
+            icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
 
             void OnIconOnBalloonTipClicked(object sender, EventArgs e)
             {
                 clickEvent?.Invoke();
-                _icon.BalloonTipClicked -= OnIconOnBalloonTipClicked;
+                icon.BalloonTipClicked -= OnIconOnBalloonTipClicked;
             }
 
 
             void OnIconOnBalloonTipClosed(object sender, EventArgs e)
             {
                 closeEvent?.Invoke();
-                _icon.BalloonTipClosed -= OnIconOnBalloonTipClosed;
+                icon.BalloonTipClosed -= OnIconOnBalloonTipClosed;
             }
         }
 
-        internal static TrayIconManager GetInstance()
+        public static TrayIconManager GetInstance()
         {
             return _instance ?? (_instance = new TrayIconManager());
         }

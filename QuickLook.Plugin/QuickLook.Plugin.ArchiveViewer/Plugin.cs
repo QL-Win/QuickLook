@@ -17,12 +17,16 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
     public class Plugin : IViewer
     {
+        private static readonly string[] Extensions =
+            {".rar", ".zip", ".tar", ".tgz", ".gz", ".bz2", ".lz", ".xz", ".7z"};
+
         private ArchiveInfoPanel _panel;
 
         public int Priority => 0;
@@ -34,25 +38,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            switch (Path.GetExtension(path).ToLower())
-            {
-                case ".rar":
-                case ".zip":
-                case ".tar":
-                case ".tgz":
-                case ".gz":
-                case ".bz2":
-                case ".lz":
-                case ".xz":
-                case ".7z":
-                    return true;
-
-                default:
-                    return false;
-            }
+            return !Directory.Exists(path) && Extensions.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)

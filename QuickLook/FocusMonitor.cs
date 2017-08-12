@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,20 +22,21 @@ namespace QuickLook
 {
     internal class FocusMonitor
     {
-        public delegate void HeartbeatEventHandler(HeartbeatEventArgs e);
-
         private static FocusMonitor _instance;
 
         public bool IsRunning { get; private set; }
 
-        public event HeartbeatEventHandler Heartbeat;
-
         public void Start()
         {
+            if (IsRunning)
+                return;
+
             IsRunning = true;
 
             new Task(() =>
             {
+                var last = string.Empty;
+
                 while (IsRunning)
                 {
                     Thread.Sleep(500);
@@ -45,8 +45,12 @@ namespace QuickLook
                         NativeMethods.QuickLook.FocusedWindowType.Invalid)
                         continue;
 
-                    var file = NativeMethods.QuickLook.GetCurrentSelection();
-                    Heartbeat?.Invoke(new HeartbeatEventArgs(DateTime.Now.Ticks, file));
+                    var path = NativeMethods.QuickLook.GetCurrentSelection();
+                    if (IsRunning && last != path)
+                    {
+                        last = path;
+                        PipeServerManager.SendMessage(PipeMessages.Invoke, path);
+                    }
                 }
             }).Start();
         }
@@ -60,17 +64,5 @@ namespace QuickLook
         {
             return _instance ?? (_instance = new FocusMonitor());
         }
-    }
-
-    internal class HeartbeatEventArgs : EventArgs
-    {
-        public HeartbeatEventArgs(long tick, string files)
-        {
-            InvokeTick = tick;
-            FocusedFile = files;
-        }
-
-        public long InvokeTick { get; }
-        public string FocusedFile { get; }
     }
 }

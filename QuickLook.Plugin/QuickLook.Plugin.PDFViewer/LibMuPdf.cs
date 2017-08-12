@@ -19,6 +19,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.PDFViewer
 {
@@ -37,9 +38,9 @@ namespace QuickLook.Plugin.PDFViewer
             else
                 NativeMethods.BoundPage_32(document, page, ref pageBound);
 
-            var currentDpi = DpiHelper.GetCurrentDpi();
-            var zoomX = zoomFactor * (currentDpi.HorizontalDpi / DpiHelper.DEFAULT_DPI);
-            var zoomY = zoomFactor * (currentDpi.VerticalDpi / DpiHelper.DEFAULT_DPI);
+            var scale = DpiHelper.GetCurrentScaleFactor();
+            var zoomX = zoomFactor * scale.Horizontal;
+            var zoomY = zoomFactor * scale.Vertical;
 
             // gets the size of the page and multiplies it with zoom factors
             var width = (int) (pageBound.Width * zoomX);
@@ -119,7 +120,7 @@ namespace QuickLook.Plugin.PDFViewer
             else
                 NativeMethods.DropPixmap_32(context, pix);
 
-            bmp.SetResolution(currentDpi.HorizontalDpi, currentDpi.VerticalDpi);
+            bmp.SetResolution(scale.Horizontal * DpiHelper.DefaultDpi, scale.Vertical * DpiHelper.DefaultDpi);
 
             return bmp;
         }

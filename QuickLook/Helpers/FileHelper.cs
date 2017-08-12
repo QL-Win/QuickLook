@@ -27,36 +27,37 @@ namespace QuickLook.Helpers
 {
     internal class FileHelper
     {
-        public static bool? GetAssocApplication(string path, out string appFriendlyName)
+        public static bool IsExecutable(string path, out string appFriendlyName)
         {
             appFriendlyName = string.Empty;
-
-            if (string.IsNullOrEmpty(path))
-                return null;
-
-            if (Directory.Exists(path))
-                return null;
-
-            if (!File.Exists(path))
-                return null;
-
             var ext = Path.GetExtension(path).ToLower();
             var isExe = new[] {".cmd", ".bat", ".pif", ".scf", ".exe", ".com", ".scr"}.Contains(ext.ToLower());
 
-            // no assoc. app. found
             if (!isExe)
-                if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.Command)))
-                    if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.AppId))) // UWP
-                        return null;
+                return false;
 
-            appFriendlyName = isExe
-                ? FileVersionInfo.GetVersionInfo(path).FileDescription
-                : GetAssocApplicationNative(ext, AssocStr.FriendlyAppName);
-
+            appFriendlyName = FileVersionInfo.GetVersionInfo(path).FileDescription;
             if (string.IsNullOrEmpty(appFriendlyName))
                 appFriendlyName = Path.GetFileName(path);
 
-            return isExe;
+            return true;
+        }
+
+        public static bool GetAssocApplication(string path, out string appFriendlyName)
+        {
+            appFriendlyName = string.Empty;
+            var ext = Path.GetExtension(path).ToLower();
+
+            // no assoc. app. found
+            if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.Command)))
+                if (string.IsNullOrEmpty(GetAssocApplicationNative(ext, AssocStr.AppId))) // UWP
+                    return false;
+
+            appFriendlyName = GetAssocApplicationNative(ext, AssocStr.FriendlyAppName);
+            if (string.IsNullOrEmpty(appFriendlyName))
+                appFriendlyName = Path.GetFileName(path);
+
+            return true;
         }
 
         [DllImport("shlwapi.dll", CharSet = CharSet.Auto, SetLastError = true)]

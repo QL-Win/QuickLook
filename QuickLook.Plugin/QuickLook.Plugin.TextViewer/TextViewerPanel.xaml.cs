@@ -41,7 +41,7 @@ namespace QuickLook.Plugin.TextViewer
             viewer.PreviewMouseWheel += Viewer_MouseWheel;
 
             viewer.FontFamily =
-                new FontFamily(context.GetString("Editor_FontFamily", failsafe: "Consolas"));
+                new FontFamily(context.GetString("Editor_FontFamily"));
 
             LoadFile(path);
         }

@@ -65,6 +65,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>..\Build\Release\</OutputPath>
@@ -75,6 +76,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -83,10 +85,6 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
-      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -111,42 +109,36 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="Controls\BusyDecorator\ISpinable.cs" />
+    <Compile Include="Controls\BusyDecorator\SpinIcon.cs" />
+    <Compile Include="Controls\GlassLayer\ElementCoordinateConverter.cs" />
+    <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
+    <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
+      <DependentUpon>GlassLayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MainWindowBase.cs" />
+    <Compile Include="Converters\BooleanToKeyTimeConverter.cs" />
+    <Compile Include="Converters\WindowStateToThicknessConverter.cs" />
     <Compile Include="Converters\BooleanToResizeModeConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\BooleanToResizeBorderThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
+    <Compile Include="ExtensionMethods\BitmapExtensions.cs" />
+    <Compile Include="Controls\BusyDecorator\ControlExtensions.cs" />
+    <Compile Include="ExtensionMethods\EnumerableExtensions.cs" />
+    <Compile Include="ExtensionMethods\FileExtensions.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
-    <Compile Include="Controls\BackgroundVisualHost.cs" />
-    <Compile Include="Controls\BusyDecorator.cs" />
-    <Compile Include="Controls\VisualTargetPresentationSource.cs" />
+    <Compile Include="Controls\BusyDecorator\BackgroundVisualHost.cs" />
+    <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
+    <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
-    <Compile Include="Helpers\BlurLibrary\BlurWindow.cs" />
-    <Compile Include="Helpers\BlurLibrary\Helpers.cs" />
-    <Compile Include="Helpers\BlurLibrary\IWindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentPolicy.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\AccentState.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttribute.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\Windows10\WindowCompositionAttributeData.cs" />
-    <Compile Include="Helpers\BlurLibrary\NativeThings\WindowsVistaAnd7\NativeMethods.cs" />
-    <Compile Include="Helpers\BlurLibrary\OsHelper.cs" />
-    <Compile Include="Helpers\BlurLibrary\OsType.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\OsNotSupportedWindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows10WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows7WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows81WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\Windows8WindowBlurController.cs" />
-    <Compile Include="Helpers\BlurLibrary\PlatformsImpl\WindowsVistaWindowBlurController.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\TranslationHelper.cs" />
     <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
-    <Compile Include="Plugin\InfoPanel\DpiHelpers.cs" />
-    <Compile Include="Plugin\InfoPanel\Extensions.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
     <Compile Include="Plugin\InfoPanel\InfoPanel.xaml.cs">
       <DependentUpon>InfoPanel.xaml</DependentUpon>
@@ -163,9 +155,21 @@
     <Compile Include="Controls\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Page Include="Controls\GlassLayer\GlassLayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MainWindowStyles.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MainWindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ScrollBarStyleDictionary.xaml">
       <SubType>Designer</SubType>
@@ -189,7 +193,7 @@
       <DependentUpon>MainWindowTransparent.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\BusyDecorator.xaml">
+    <Page Include="Controls\BusyDecorator\BusyDecorator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -218,6 +222,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <Resource Include="Controls\GlassLayer\GaussianBlur.ps">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Fonts\segmdl2.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="key.snk" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -268,6 +278,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
+    <None Include="Controls\GlassLayer\GaussianBlur.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

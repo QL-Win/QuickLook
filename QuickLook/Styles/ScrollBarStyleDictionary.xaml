@@ -10,16 +10,6 @@
     <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
     <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#888" />
     <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
-    <LinearGradientBrush x:Key="ListBoxBackgroundBrush"
-                         StartPoint="0,0" EndPoint="1,0.001">
-        <GradientBrush.GradientStops>
-            <GradientStopCollection>
-                <GradientStop Color="White" Offset="0.0" />
-                <GradientStop Color="White" Offset="0.6" />
-                <GradientStop Color="#DDDDDD" Offset="1.2" />
-            </GradientStopCollection>
-        </GradientBrush.GradientStops>
-    </LinearGradientBrush>
     <LinearGradientBrush x:Key="StandardBrush"
                          StartPoint="0,0" EndPoint="0,1">
         <GradientBrush.GradientStops>
@@ -108,7 +98,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border Grid.RowSpan="3" CornerRadius="2" Background="Transparent" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Background="#F0F0F0" />
             <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
@@ -171,7 +161,7 @@
                         Value="{StaticResource HorizontalScrollBar}" />
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
-                <Setter Property="Width" Value="15" />
+                <Setter Property="Width" Value="13" />
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template"
                         Value="{StaticResource VerticalScrollBar}" />

@@ -31,11 +31,15 @@ namespace QuickLook.Plugin
     /// </summary>
     public class ContextObject : INotifyPropertyChanged
     {
-        private bool _canFocus;
         private bool _canResize = true;
         private bool _fullWindowDragging;
         private bool _isBusy = true;
-        private string _title = "";
+        private string _title = string.Empty;
+        private bool _titlebarAutoHide;
+        private bool _titlebarBlurVisibility = true;
+        private bool _titlebarColourVisibility = true;
+        private bool _titlebarOverlap;
+        private bool _useDarkTheme;
         private object _viewerContent;
 
         /// <summary>
@@ -114,19 +118,79 @@ namespace QuickLook.Plugin
         }
 
         /// <summary>
-        ///     Set whether user are allowed to set focus at the viewer window.
+        ///     Set whether the viewer content is overlapped by the title bar
         /// </summary>
-        public bool CanFocus
+        public bool TitlebarOverlap
         {
-            get => _canFocus;
+            get => _titlebarOverlap;
             set
             {
-                _canFocus = value;
+                _titlebarOverlap = value;
                 OnPropertyChanged();
             }
         }
 
+        /// <summary>
+        ///     Set whether the title bar shows a blurred background
+        /// </summary>
+        public bool TitlebarBlurVisibility
+        {
+            get => _titlebarBlurVisibility;
+            set
+            {
+                if (value == _titlebarBlurVisibility) return;
+                _titlebarBlurVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Set whether the title bar shows a colour overlay
+        /// </summary>
+        public bool TitlebarColourVisibility
+        {
+            get => _titlebarColourVisibility;
+            set
+            {
+                if (value == _titlebarColourVisibility) return;
+                _titlebarColourVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Should the titlebar hides itself after a short period of inactivity?
+        /// </summary>
+        public bool TitlebarAutoHide
+        {
+            get => _titlebarAutoHide;
+            set
+            {
+                if (value == _titlebarAutoHide) return;
+                _titlebarAutoHide = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Switch to dark theme?
+        /// </summary>
+        public bool UseDarkTheme
+        {
+            get => _useDarkTheme;
+            set
+            {
+                _useDarkTheme = value;
+                ApplyViewerWindowTheme();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void ApplyViewerWindowTheme()
+        {
+            ViewerWindow?.SwitchTheme(UseDarkTheme);
+        }
 
         /// <summary>
         ///     Get a string from translation Xml document.
@@ -145,7 +209,7 @@ namespace QuickLook.Plugin
         /// <param name="isError">Is this indicates a error?</param>
         public void ShowNotification(string title, string content, bool isError = false)
         {
-            TrayIconManager.GetInstance().ShowNotification(title, content, isError);
+            TrayIconManager.ShowNotification(title, content, isError);
         }
 
         /// <summary>
@@ -159,7 +223,7 @@ namespace QuickLook.Plugin
             if (maxRatio > 1)
                 maxRatio = 1;
 
-            var max = GetMaximumDisplayBound();
+            var max = WindowHelper.GetCurrentWindowRect();
 
             var widthRatio = max.Width * maxRatio / size.Width;
             var heightRatio = max.Height * maxRatio / size.Height;
@@ -172,24 +236,22 @@ namespace QuickLook.Plugin
             return ratio;
         }
 
-        /// <summary>
-        ///     Get the device-independent resolution.
-        /// </summary>
-        public Rect GetMaximumDisplayBound()
-        {
-            return WindowHelper.GetCurrentWindowRect();
-        }
-
         internal void Reset()
         {
-            ViewerWindow = null;
-            Title = "";
-            ViewerContent = null;
+            Title = string.Empty;
             IsBusy = true;
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;
-            CanFocus = false;
+
+            UseDarkTheme = false;
+            TitlebarOverlap = false;
+            TitlebarAutoHide = false;
+            TitlebarBlurVisibility = true;
+            TitlebarColourVisibility = true;
+
+            ViewerContent = null;
+            ViewerWindow = null;
         }
 
         [NotifyPropertyChangedInvocator]

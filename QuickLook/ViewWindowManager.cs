@@ -20,8 +20,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -32,7 +30,7 @@ namespace QuickLook
         private static ViewWindowManager _instance;
         private MainWindowTransparent _currentMainWindow;
 
-        private string _path = string.Empty;
+        private string _invokedPath = string.Empty;
 
         private MainWindowNoTransparent _viewWindowNoTransparent;
         private MainWindowTransparent _viewWindowTransparent;
@@ -51,37 +49,7 @@ namespace QuickLook
             ClosePreview();
         }
 
-        internal void InvokeRoutine(KeyEventArgs kea, bool isKeyDown)
-        {
-            Debug.WriteLine($"InvokeRoutine: key={kea.KeyCode},down={isKeyDown}");
-
-
-            if (isKeyDown)
-                switch (kea.KeyCode)
-                {
-                    case Keys.Enter:
-                        RunAndClosePreview();
-                        break;
-                }
-            else
-                switch (kea.KeyCode)
-                {
-                    case Keys.Up:
-                    case Keys.Down:
-                    case Keys.Left:
-                    case Keys.Right:
-                        SwitchPreview();
-                        break;
-                    case Keys.Space:
-                        TogglePreview();
-                        break;
-                    case Keys.Escape:
-                        ClosePreview();
-                        break;
-                }
-        }
-
-        internal void RunAndClosePreview()
+        public void RunAndClosePreview()
         {
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
@@ -103,7 +71,7 @@ namespace QuickLook
             _currentMainWindow.RunAndHide();
         }
 
-        internal void ClosePreview()
+        public void ClosePreview()
         {
             if (_currentMainWindow.Visibility != Visibility.Visible)
                 return;
@@ -112,66 +80,22 @@ namespace QuickLook
             _currentMainWindow.BeginHide();
         }
 
-        private void TogglePreview()
+        public void TogglePreview(string path)
         {
             if (_currentMainWindow.Visibility == Visibility.Visible)
-            {
                 ClosePreview();
-            }
             else
-            {
-                _path = NativeMethods.QuickLook.GetCurrentSelection();
-                InvokeViewer();
-            }
-        }
-
-        private void SwitchPreview()
-        {
-            if (_currentMainWindow.Visibility != Visibility.Visible)
-                return;
-
-            // if the switch has been done by SwitchPreviewRemoteInvoke, we'll not do anything
-            var select = NativeMethods.QuickLook.GetCurrentSelection();
-            if (_path == select)
-                return;
-
-            _path = select;
-
-            Debug.WriteLine($"SwitchPreview: {_path}");
-
-            InvokeViewer();
-        }
-
-        private void SwitchPreviewRemoteInvoke(HeartbeatEventArgs e)
-        {
-            // if the switch has been done by SwitchPreview, we'll not do anything
-            if (e.FocusedFile == _path)
-                return;
-
-            if (string.IsNullOrEmpty(e.FocusedFile))
-                return;
-
-            Debug.WriteLine($"SwitchPreviewRemoteInvoke: {e.FocusedFile}");
-
-            _currentMainWindow?.Dispatcher.BeginInvoke(new Action(SwitchPreview), DispatcherPriority.ApplicationIdle);
+                InvokePreview(path);
         }
 
         private void RunFocusMonitor()
         {
-            if (!FocusMonitor.GetInstance().IsRunning)
-            {
-                FocusMonitor.GetInstance().Start();
-                FocusMonitor.GetInstance().Heartbeat += SwitchPreviewRemoteInvoke;
-            }
+            FocusMonitor.GetInstance().Start();
         }
 
         private void StopFocusMonitor()
         {
-            if (FocusMonitor.GetInstance().IsRunning)
-            {
-                FocusMonitor.GetInstance().Stop();
-                FocusMonitor.GetInstance().Heartbeat -= SwitchPreviewRemoteInvoke;
-            }
+            FocusMonitor.GetInstance().Stop();
         }
 
         internal void ForgetCurrentWindow()
@@ -186,33 +110,27 @@ namespace QuickLook
             _currentMainWindow = _viewWindowTransparent;
         }
 
-        internal bool InvokeViewer(string path = null, bool closeIfSame = false)
+        public void InvokePreview(string path)
         {
-            if (closeIfSame)
-                if (_currentMainWindow.Visibility == Visibility.Visible && path == _path)
-                {
-                    ClosePreview();
-                    return false;
-                }
+            if (string.IsNullOrEmpty(path))
+                return;
 
-            if (path != null)
-                _path = path;
+            if (_currentMainWindow.Visibility == Visibility.Visible && path == _invokedPath)
+                return;
 
-            if (string.IsNullOrEmpty(_path))
-                return false;
-            if (!Directory.Exists(_path) && !File.Exists(_path))
-                return false;
+            if (!Directory.Exists(path) && !File.Exists(path))
+                return;
+
+            _invokedPath = path;
 
             RunFocusMonitor();
 
-            var matchedPlugin = PluginManager.GetInstance().FindMatch(_path);
+            var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
 
-            BeginShowNewWindow(matchedPlugin);
-
-            return true;
+            BeginShowNewWindow(path, matchedPlugin);
         }
 
-        private void BeginShowNewWindow(IViewer matchedPlugin)
+        private void BeginShowNewWindow(string path, IViewer matchedPlugin)
         {
             _currentMainWindow.UnloadPlugin();
 
@@ -224,22 +142,22 @@ namespace QuickLook
             if (!ReferenceEquals(oldWindow, _currentMainWindow))
                 oldWindow.BeginHide();
 
-            _currentMainWindow.BeginShow(matchedPlugin, _path, CurrentPluginFailed);
+            _currentMainWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
         }
 
-        private void CurrentPluginFailed(ExceptionDispatchInfo e)
+        private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
         {
             var plugin = _currentMainWindow.Plugin.GetType();
 
             _currentMainWindow.BeginHide();
 
-            TrayIconManager.GetInstance().ShowNotification("", $"Failed to preview {Path.GetFileName(_path)}", true);
+            TrayIconManager.ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
 
             Debug.WriteLine(e.SourceException.ToString());
             Debug.WriteLine(e.SourceException.StackTrace);
 
             if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
-                BeginShowNewWindow(PluginManager.GetInstance().DefaultPlugin);
+                BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
             else
                 e.Throw();
         }

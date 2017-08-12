@@ -47,7 +47,7 @@ namespace QuickLook.Helpers
                     {
                         if (!silent)
                             Application.Current.Dispatcher.Invoke(
-                                () => TrayIconManager.GetInstance().ShowNotification("",
+                                () => TrayIconManager.ShowNotification("",
                                     TranslationHelper.GetString("Update_NoUpdate")));
                         return;
                     }
@@ -57,7 +57,7 @@ namespace QuickLook.Helpers
                     Application.Current.Dispatcher.Invoke(
                         () =>
                         {
-                            TrayIconManager.GetInstance().ShowNotification("",
+                            TrayIconManager.ShowNotification("",
                                 string.Format(TranslationHelper.GetString("Update_Found"), nVersion),
                                 timeout: 20000,
                                 clickEvent:
@@ -69,7 +69,7 @@ namespace QuickLook.Helpers
                 {
                     Debug.WriteLine(e.Message);
                     Application.Current.Dispatcher.Invoke(
-                        () => TrayIconManager.GetInstance().ShowNotification("",
+                        () => TrayIconManager.ShowNotification("",
                             string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
                 }
             });
@@ -94,14 +94,13 @@ namespace QuickLook.Helpers
                     var changeLogPath = Path.GetTempFileName() + ".md";
                     File.WriteAllText(changeLogPath, notes);
 
-                    Application.Current.Dispatcher.Invoke(() => ViewWindowManager.GetInstance()
-                        .InvokeViewer(changeLogPath));
+                    PipeServerManager.SendMessage(PipeMessages.Invoke, changeLogPath);
                 }
                 catch (Exception e)
                 {
                     Debug.WriteLine(e.Message);
                     Application.Current.Dispatcher.Invoke(
-                        () => TrayIconManager.GetInstance().ShowNotification("",
+                        () => TrayIconManager.ShowNotification("",
                             string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
                 }
             });

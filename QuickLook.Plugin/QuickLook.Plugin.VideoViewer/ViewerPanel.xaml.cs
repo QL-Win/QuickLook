@@ -18,13 +18,17 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
 using QuickLook.Annotations;
+using QuickLook.ExtensionMethods;
 using MediaState = Meta.Vlc.Interop.Media.MediaState;
 
 namespace QuickLook.Plugin.VideoViewer
@@ -36,7 +40,7 @@ namespace QuickLook.Plugin.VideoViewer
     {
         private readonly ContextObject _context;
 
-        private string _coverArt;
+        private Uri _coverArt;
         private bool _hasAudio;
         private bool _hasEnded;
         private bool _hasVideo;
@@ -48,21 +52,20 @@ namespace QuickLook.Plugin.VideoViewer
         {
             InitializeComponent();
 
+            // apply global theme
+            Resources.MergedDictionaries[0].MergedDictionaries.Clear();
+
+            ShowViedoControlContainer(null, null);
+            viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
+
             mediaElement.PropertyChanged += PlayerPropertyChanged;
             mediaElement.StateChanged += PlayerStateChanged;
 
             _context = context;
 
-            buttonPlayPause.MouseLeftButtonUp += TogglePlayPause;
-            //buttonMute.MouseLeftButtonUp += (sender, e) =>
-            //{
-            //    mediaElement.IsMuted = false;
-            //    buttonMute.Visibility = Visibility.Collapsed;
-            //};
-            buttonMute.MouseLeftButtonUp += (sender, e) => IsMuted = !IsMuted;
-            buttonStop.MouseLeftButtonUp += PlayerStop;
-            buttonBackward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(-10));
-            buttonForward.MouseLeftButtonUp += (sender, e) => Seek(TimeSpan.FromSeconds(10));
+            buttonPlayPause.Click += TogglePlayPause;
+            buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
+            buttonMute.Click += (sender, e) => IsMuted = !IsMuted;
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {
@@ -85,7 +88,7 @@ namespace QuickLook.Plugin.VideoViewer
                     }
             };*/
 
-            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 2);
+            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 4);
         }
 
         public bool IsMuted
@@ -144,7 +147,7 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        public string CoverArt
+        public Uri CoverArt
         {
             get => _coverArt;
             private set
@@ -178,6 +181,26 @@ namespace QuickLook.Plugin.VideoViewer
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private void ShowViedoControlContainer(object sender, MouseEventArgs e)
+        {
+            var show = (Storyboard) videoControlContainer.FindResource("ShowControlStoryboard");
+            if (videoControlContainer.Opacity == 0 || videoControlContainer.Opacity == 1)
+                show.Begin();
+        }
+
+        private void AutoHideViedoControlContainer(object sender, EventArgs e)
+        {
+            if (!HasVideo)
+                return;
+
+            if (videoControlContainer.IsMouseOver)
+                return;
+
+            var hide = (Storyboard) videoControlContainer.FindResource("HideControlStoryboard");
+
+            hide.Begin();
+        }
+
         private void PlayerStop(object sender, MouseButtonEventArgs e)
         {
             HasEnded = false;
@@ -209,8 +232,8 @@ namespace QuickLook.Plugin.VideoViewer
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     break;
                 case MediaState.Playing:
-                    CoverArt = mediaElement.VlcMediaPlayer.Media.GetMeta(
-                        MetaDataType.ArtworkUrl);
+                    UpdateMeta();
+                    DetermineTheme();
                     HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     IsPlaying = true;
@@ -226,6 +249,44 @@ namespace QuickLook.Plugin.VideoViewer
                     ShowErrorNotification(sender, e);
                     break;
             }
+        }
+
+        private void UpdateMeta()
+        {
+            if (HasVideo)
+                return;
+
+            var path = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.ArtworkUrl);
+            if (!string.IsNullOrEmpty(path))
+                CoverArt = new Uri(path);
+
+            metaTitle.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Title);
+            metaArtists.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Artist);
+            metaAlbum.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Album);
+
+            metaArtists.Visibility = string.IsNullOrEmpty(metaArtists.Text)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            metaAlbum.Visibility = string.IsNullOrEmpty(metaAlbum.Text)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+        }
+
+        private void DetermineTheme()
+        {
+            if (HasVideo)
+                return;
+
+            if (CoverArt == null)
+                return;
+
+            var dark = false;
+            using (var bitmap = new Bitmap(CoverArt.LocalPath))
+            {
+                dark = bitmap.IsDarkImage();
+            }
+
+            _context.UseDarkTheme = dark;
         }
 
         private void ChangeVolume(double delta)
@@ -249,7 +310,7 @@ namespace QuickLook.Plugin.VideoViewer
             if (_wasPlaying) mediaElement.Play();
         }
 
-        private void TogglePlayPause(object sender, MouseButtonEventArgs e)
+        private void TogglePlayPause(object sender, EventArgs e)
         {
             if (mediaElement.VlcMediaPlayer.IsPlaying)
             {

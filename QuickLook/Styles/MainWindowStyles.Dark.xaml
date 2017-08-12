@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
+    <Color x:Key="MainWindowShadowColor">Gray</Color>
+    <SolidColorBrush x:Key="MainWindowBackground" Color="#FF565656" />
+    <SolidColorBrush x:Key="WindowTextForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5D4D4D4" />
+    <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FFB9B9B9" />
+    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#22FFFFFF" />
+    <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#44FFFFFF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
+    <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
+    <SolidColorBrush x:Key="CaptionBackground" Color="#FF3B3B3B" />
+</ResourceDictionary>

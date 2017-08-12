@@ -22,19 +22,49 @@ using System.Windows.Data;
 
 namespace QuickLook.Plugin.VideoViewer
 {
-    public sealed class BooleanToVisibilityHiddenConverter : DependencyObject, IValueConverter
+    public sealed class TimeSpanToShortStringConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return Visibility.Collapsed;
+                return "00:00";
 
-            var v = (bool) value;
+            var v = (TimeSpan) value;
 
-            return v ? Visibility.Collapsed : Visibility.Visible;
+            var s = string.Empty;
+            if (v.Hours > 0)
+                s += $"{v.Hours:D2}:";
+
+            s += $"{v.Minutes:D2}:{v.Seconds:D2}";
+
+            return s;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
+    {
+        private static readonly string[] Volumes = {"\xE992", "\xE993", "\xE994", "\xE995"};
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Volumes[0];
+
+            var v = (int) value;
+            if (v == 0)
+                return Volumes[0];
+
+            v = Math.Min(v, 100);
+
+            return Volumes[1 + v / 34];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

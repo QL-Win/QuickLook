@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Windows.Media;
+using System.Windows;
 
 namespace QuickLook
 {
@@ -23,8 +23,8 @@ namespace QuickLook
     {
         public MainWindowNoTransparent()
         {
-            Background = new SolidColorBrush(Colors.White);
             AllowsTransparency = false;
+            windowFrameContainer.Margin = new Thickness(0);
         }
     }
 }

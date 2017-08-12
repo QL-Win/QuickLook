@@ -50,7 +50,6 @@ namespace QuickLook.Plugin.InfoPanel
             context.ViewerContent = _ip;
 
             _ip.DisplayInfo(path);
-
             context.IsBusy = false;
         }
 

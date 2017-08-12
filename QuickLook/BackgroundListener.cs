@@ -16,8 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using QuickLook.Helpers;
 
 namespace QuickLook
@@ -60,20 +60,48 @@ namespace QuickLook
             {
                 _isKeyDownInDesktopOrShell = NativeMethods.QuickLook.GetFocusedWindowType() !=
                                              NativeMethods.QuickLook.FocusedWindowType.Invalid;
+
                 _isKeyDownInDesktopOrShell |= WindowHelper.IsForegroundWindowBelongToSelf();
             }
 
             // call InvokeRoutine only when the KeyDown is valid
             if (_isKeyDownInDesktopOrShell)
-                Dispatcher.CurrentDispatcher.BeginInvoke(
-                    new Action<bool>(down =>
-                        ViewWindowManager.GetInstance().InvokeRoutine(e, down)),
-                    DispatcherPriority.ApplicationIdle,
-                    isKeyDown);
+                InvokeRoutine(e.KeyCode, isKeyDown);
 
             // reset variable only when KeyUp
             if (!isKeyDown)
                 _isKeyDownInDesktopOrShell = false;
+        }
+
+        private void InvokeRoutine(Keys key, bool isKeyDown)
+        {
+            var path = NativeMethods.QuickLook.GetCurrentSelection();
+
+            Debug.WriteLine($"InvokeRoutine: key={key},down={isKeyDown}");
+
+            if (isKeyDown)
+                switch (key)
+                {
+                    case Keys.Enter:
+                        PipeServerManager.SendMessage(PipeMessages.RunAndClose);
+                        break;
+                }
+            else
+                switch (key)
+                {
+                    case Keys.Up:
+                    case Keys.Down:
+                    case Keys.Left:
+                    case Keys.Right:
+                        PipeServerManager.SendMessage(PipeMessages.Invoke, path);
+                        break;
+                    case Keys.Space:
+                        PipeServerManager.SendMessage(PipeMessages.Toggle, path);
+                        break;
+                    case Keys.Escape:
+                        PipeServerManager.SendMessage(PipeMessages.Close);
+                        break;
+                }
         }
 
         private void InstallKeyHook(KeyEventHandler downHandler, KeyEventHandler upHandler)

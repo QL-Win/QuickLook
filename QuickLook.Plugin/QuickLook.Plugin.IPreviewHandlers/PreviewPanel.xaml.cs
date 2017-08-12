@@ -17,6 +17,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -36,7 +37,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
         public void Dispose()
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 presenter.Child = null;
                 presenter?.Dispose();
@@ -48,7 +49,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
         public void PreviewFile(string file, ContextObject context)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 _control = new PreviewHandlerHost();
                 presenter.Child = _control;

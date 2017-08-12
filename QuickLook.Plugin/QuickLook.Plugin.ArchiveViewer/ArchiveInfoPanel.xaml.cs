@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
+using QuickLook.ExtensionMethods;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
@@ -88,8 +89,9 @@ namespace QuickLook.Plugin.ArchiveViewer
 
             archiveCount.Content =
                 $"{_type} archive{t}";
-            archiveSizeC.Content = $"Compressed size {_totalZippedSize.ToPrettySize(2)}";
-            archiveSizeU.Content = $"Uncompressed size {sizeU.ToPrettySize(2)}";
+            archiveSizeC.Content =
+                $"Compressed size {((long) _totalZippedSize).ToPrettySize(2)}";
+            archiveSizeU.Content = $"Uncompressed size {((long) sizeU).ToPrettySize(2)}";
         }
 
         private void LoadItemsFromArchive(string path)
@@ -99,7 +101,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                 // ReaderFactory is slow... so limit its usage
                 string[] useReader = {".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"};
 
-                if (useReader.Any(i => path.EndsWith(i)))
+                if (useReader.Any(path.ToLower().EndsWith))
                 {
                     var reader = ReaderFactory.Open(stream, new ChardetReaderOptions());
 

@@ -29,7 +29,7 @@ namespace QuickLook.Helpers
         public static void PerformAggressiveGC()
         {
             // delay some time to make sure that all windows are closed
-            Task.Delay(1000).ContinueWith(t => GC.Collect(GC.MaxGeneration));
+            Task.Delay(2000).ContinueWith(t => GC.Collect(GC.MaxGeneration));
         }
 
         public static bool IsRunningAsUWP()

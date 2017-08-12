@@ -9,8 +9,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ScrollBarStyleDictionary.xaml" />
-                <ResourceDictionary Source="Styles/BusyDecorator.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="SegoeMDL2">./Fonts/#Segoe MDL2 Assets</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

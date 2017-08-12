@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -24,6 +25,8 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
+        private static readonly string[] Extensions = {".mht", ".mhtml", ".htm", ".html"};
+
         private WebpagePanel _panel;
 
         public int Priority => int.MaxValue;
@@ -36,27 +39,12 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            switch (Path.GetExtension(path).ToLower())
-            {
-                case ".mht":
-                case ".mhtml":
-                case ".html":
-                case ".htm":
-                    return true;
-
-                default:
-                    return false;
-            }
+            return !Directory.Exists(path) && Extensions.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)
         {
             context.PreferredSize = new Size(1000, 600);
-
-            context.CanFocus = true;
         }
 
         public void View(string path, ContextObject context)

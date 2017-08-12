@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.InfoPanel
@@ -34,6 +35,9 @@ namespace QuickLook.Plugin.InfoPanel
         public InfoPanel()
         {
             InitializeComponent();
+
+            // apply global theme
+            Resources.MergedDictionaries[0].Clear();
         }
 
         public bool Stop
@@ -46,10 +50,12 @@ namespace QuickLook.Plugin.InfoPanel
         {
             Task.Run(() =>
             {
+                var scale = DpiHelper.GetCurrentScaleFactor();
+
                 var icon =
                     WindowsThumbnailProvider.GetThumbnail(path,
-                        (int) (128 * DpiHelper.GetCurrentDpi().HorizontalDpi / DpiHelper.DEFAULT_DPI),
-                        (int) (128 * DpiHelper.GetCurrentDpi().VerticalDpi / DpiHelper.DEFAULT_DPI),
+                        (int) (128 * scale.Horizontal),
+                        (int) (128 * scale.Vertical),
                         ThumbnailOptions.ScaleUp);
 
                 var source = icon.ToBitmapSource();

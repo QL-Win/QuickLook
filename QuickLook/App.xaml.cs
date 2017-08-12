@@ -22,7 +22,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using QuickLook.Helpers;
 using QuickLook.Properties;
 
@@ -103,26 +102,23 @@ namespace QuickLook
 
         private void RemoteCallShowPreview(StartupEventArgs e)
         {
-            PipeServerManager.SendMessage(e.Args.First());
+            PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
         }
 
         private void RunListener(StartupEventArgs e)
         {
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun") && !IsUWP)
-                TrayIconManager.GetInstance()
-                    .ShowNotification("", TranslationHelper.GetString("APP_START"));
+                TrayIconManager.ShowNotification("", TranslationHelper.GetString("APP_START"));
             if (e.Args.Contains("/first"))
                 AutoStartupHelper.CreateAutorunShortcut();
 
             NativeMethods.QuickLook.Init();
 
             PluginManager.GetInstance();
+            ViewWindowManager.GetInstance();
             BackgroundListener.GetInstance();
-            PipeServerManager.GetInstance().MessageReceived +=
-                (msg, ea) => Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().InvokeViewer(msg as string, true)),
-                    DispatcherPriority.ApplicationIdle);
+            PipeServerManager.GetInstance();
         }
 
         private void App_OnExit(object sender, ExitEventArgs e)

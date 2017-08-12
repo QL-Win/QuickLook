@@ -17,12 +17,22 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace QuickLook.Plugin.IPreviewHandlers
 {
     public class Plugin : IViewer
     {
+        private static readonly string[] Extensions =
+        {
+            ".doc", ".docx", ".docm",
+            ".xls", ".xlsx", ".xlsm", ".xlsb",
+            /*".vsd", ".vsdx",*/
+            ".ppt", ".pptx",
+            ".odt", ".ods", ".odp"
+        };
+
         private PreviewPanel _panel;
 
         public int Priority => int.MaxValue;
@@ -37,29 +47,8 @@ namespace QuickLook.Plugin.IPreviewHandlers
             if (Directory.Exists(path))
                 return false;
 
-            switch (Path.GetExtension(path).ToLower())
-            {
-                // Word
-                case ".doc":
-                case ".docx":
-                case ".docm":
-                // Excel
-                case ".xls":
-                case ".xlsx":
-                case ".xlsm":
-                case ".xlsb":
-                // Visio Viewer will not quit after preview, which cause serious memory issue
-                //case ".vsd":
-                //case ".vsdx":
-                // PowerPoint
-                case ".ppt":
-                case ".pptx":
-                // OpenDocument
-                case ".odt":
-                case ".ods":
-                case ".odp":
-                    return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
-            }
+            if (Extensions.Any(path.ToLower().EndsWith))
+                return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
 
             return false;
         }
