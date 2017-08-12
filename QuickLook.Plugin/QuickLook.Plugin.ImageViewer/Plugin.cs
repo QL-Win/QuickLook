@@ -34,7 +34,7 @@ namespace QuickLook.Plugin.ImageViewer
             ".tif", ".x3f",
             // normal
             ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".svg", ".wdp", ".tif", ".tiff", ".tga",
-            ".webp",
+            ".webp", ".pbm", ".pgm", ".ppm", ".pnm",
             // animated
             ".png", ".apng", ".gif"
         };
