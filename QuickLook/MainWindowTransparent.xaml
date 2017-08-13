@@ -74,8 +74,8 @@
                                 Storyboard.TargetProperty="Opacity">
                                 <DoubleAnimationUsingKeyFrames.KeyFrames>
                                     <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0" />
-                                    <LinearDoubleKeyFrame Value="1" KeyTime="0:0:3" />
-                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3.05" />
+                                    <LinearDoubleKeyFrame Value="1" KeyTime="0:0:1" />
+                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:1.05" />
                                 </DoubleAnimationUsingKeyFrames.KeyFrames>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
