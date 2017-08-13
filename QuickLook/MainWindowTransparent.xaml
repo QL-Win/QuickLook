@@ -10,7 +10,7 @@
     mc:Ignorable="d" x:Class="QuickLook.MainWindowTransparent" x:Name="mainWindow"
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
-    MinWidth="275" MinHeight="150"
+    MinWidth="400" MinHeight="200"
     WindowStartupLocation="CenterScreen"
     Focusable="False" WindowStyle="None"
     AllowsTransparency="True"

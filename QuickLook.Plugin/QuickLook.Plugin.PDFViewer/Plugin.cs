@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -43,11 +44,10 @@ namespace QuickLook.Plugin.PDFViewer
             if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".pdf")
                 return true;
 
-            //using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            //{
-            //    return Encoding.ASCII.GetString(br.ReadBytes(4)) == "%PDF";
-            //}
-            return false;
+            using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                return Encoding.ASCII.GetString(br.ReadBytes(4)) == "%PDF";
+            }
         }
 
         public void Prepare(string path, ContextObject context)
