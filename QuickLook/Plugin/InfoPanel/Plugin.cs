@@ -40,6 +40,9 @@ namespace QuickLook.Plugin.InfoPanel
             context.PreferredSize = new Size {Width = 453, Height = 172};
 
             context.Title = "";
+            context.TitlebarOverlap = false;
+            context.TitlebarBlurVisibility = false;
+            context.TitlebarColourVisibility = false;
             context.CanResize = false;
             context.FullWindowDragging = true;
         }

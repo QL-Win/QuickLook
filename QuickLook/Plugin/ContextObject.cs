@@ -36,7 +36,7 @@ namespace QuickLook.Plugin
         private bool _isBusy = true;
         private string _title = string.Empty;
         private bool _titlebarAutoHide;
-        private bool _titlebarBlurVisibility = true;
+        private bool _titlebarBlurVisibility;
         private bool _titlebarColourVisibility = true;
         private bool _titlebarOverlap;
         private bool _useDarkTheme;
@@ -247,7 +247,7 @@ namespace QuickLook.Plugin
             UseDarkTheme = false;
             TitlebarOverlap = false;
             TitlebarAutoHide = false;
-            TitlebarBlurVisibility = true;
+            TitlebarBlurVisibility = false;
             TitlebarColourVisibility = true;
 
             ViewerContent = null;
