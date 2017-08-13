@@ -156,7 +156,8 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button x:Name="buttonTime" Width="37" Style="{StaticResource ControlButtonStyle}" DockPanel.Dock="Right" Tag="Time">
+                <Button x:Name="buttonTime" Width="37" Style="{StaticResource ControlButtonStyle}"
+                        DockPanel.Dock="Right" Tag="Time">
                     <TextBlock VerticalAlignment="Center" FontSize="11"
                                FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
                                Foreground="{DynamicResource CaptionButtonIconForeground}">
@@ -174,39 +175,19 @@
                                 </Style.Triggers>
                             </Style>
                         </TextBlock.Style>
-                        </TextBlock>
+                    </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
                         SmallChange="0.00001" LargeChange="0.01" Maximum="1"
                         Value="{Binding Position, ElementName=mediaElement}" />
             </DockPanel>
         </Grid>
-        <!--<Grid Height="32" Width="100" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-              Background="{DynamicResource CaptionBackground}" Margin="0,0,0,32">
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Opacity" Value="0" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=buttonMute, Path=IsMouseOver}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard TargetProperty="Opacity">
-                                        <DoubleAnimation To="1" Duration="0:0:0.1" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard TargetProperty="Opacity">
-                                        <DoubleAnimation To="0" Duration="0:0:0.1" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <Slider Style="{StaticResource CustomSliderStyle}" Width="100" Maximum="100" Value="{Binding ElementName=mediaElement, Path=Volume}" />
-        </Grid>-->
+        <Grid x:Name="volumeSliderLayer" Background="Transparent" Visibility="Collapsed">
+            <Grid Height="32" Width="130" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                  Background="{DynamicResource CaptionButtonHoverBackground}" Margin="0,0,0,32">
+                <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="100"
+                        Value="{Binding ElementName=mediaElement, Path=Volume}" />
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

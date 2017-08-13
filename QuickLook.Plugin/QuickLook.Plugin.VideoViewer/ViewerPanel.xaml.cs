@@ -65,7 +65,8 @@ namespace QuickLook.Plugin.VideoViewer
 
             buttonPlayPause.Click += TogglePlayPause;
             buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
-            buttonMute.Click += (sender, e) => IsMuted = !IsMuted;
+            buttonMute.Click += (sender, e) => volumeSliderLayer.Visibility = Visibility.Visible;
+            volumeSliderLayer.MouseDown += (sender, e) => volumeSliderLayer.Visibility = Visibility.Collapsed;
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {

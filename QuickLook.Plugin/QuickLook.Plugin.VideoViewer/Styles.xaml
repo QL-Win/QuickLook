@@ -77,7 +77,7 @@
     <!-- Custom Slider Control -->
     <ControlTemplate x:Key="CustomSliderThumbTemplate" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Rectangle x:Name="grip" Fill="{DynamicResource WindowTextForeground}" Width="8"
+            <Rectangle x:Name="grip" Fill="{DynamicResource WindowTextForeground}" Width="5"
                        Height="{Binding Path=Height, RelativeSource={RelativeSource TemplatedParent}}"
                        StrokeThickness="0"
                        UseLayoutRounding="True" Stretch="Fill" RadiusX="3" RadiusY="3" />
@@ -101,18 +101,18 @@
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
                 <DockPanel LastChildFill="True">
-                    <Border ClipToBounds="True" x:Name="PART_SelectionRange" Height="3" Visibility="Visible">
-                        <Rectangle RadiusX="1" RadiusY="1" Margin="4,0,-4,0"
+                    <Border ClipToBounds="True" x:Name="PART_SelectionRange" Height="1" Visibility="Visible">
+                        <Rectangle RadiusX="1" RadiusY="1" Margin="4,0,-2,0"
                                    Fill="{DynamicResource WindowTextForeground}" />
                     </Border>
-                    <Border ClipToBounds="True" Height="3" Visibility="Visible">
-                        <Rectangle x:Name="PART_NegativeSelection" RadiusX="1" RadiusY="1" Margin="8,0,4,0"
-                                   Fill="{DynamicResource MainWindowBackground}" />
+                    <Border ClipToBounds="True" Height="1" Visibility="Visible">
+                        <Rectangle x:Name="PART_NegativeSelection" RadiusX="1" RadiusY="1" Margin="-2,0,4,0"
+                                   Fill="{DynamicResource WindowTextForegroundAlternative}" />
                     </Border>
                 </DockPanel>
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
-                        <Thumb x:Name="Thumb" Focusable="False" Width="8" Height="{TemplateBinding MinHeight}"
+                        <Thumb x:Name="Thumb" Focusable="False" Width="5" Height="{TemplateBinding MinHeight}"
                                OverridesDefaultStyle="True" Template="{StaticResource CustomSliderThumbTemplate}"
                                VerticalAlignment="Center" />
                     </Track.Thumb>
@@ -124,9 +124,9 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="MinHeight" Value="16" />
-        <Setter Property="MaxHeight" Value="16" />
-        <Setter Property="Height" Value="16" />
+        <Setter Property="MinHeight" Value="14" />
+        <Setter Property="MaxHeight" Value="14" />
+        <Setter Property="Height" Value="14" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="IsSnapToTickEnabled" Value="True" />
         <Setter Property="SmallChange" Value="0.01" />
