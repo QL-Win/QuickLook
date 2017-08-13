@@ -93,7 +93,7 @@ namespace QuickLook
                     case Keys.Down:
                     case Keys.Left:
                     case Keys.Right:
-                        PipeServerManager.SendMessage(PipeMessages.Invoke, path);
+                        PipeServerManager.SendMessage(PipeMessages.Switch, path);
                         break;
                     case Keys.Space:
                         PipeServerManager.SendMessage(PipeMessages.Toggle, path);

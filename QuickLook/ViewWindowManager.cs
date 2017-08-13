@@ -110,6 +110,17 @@ namespace QuickLook
             _currentMainWindow = _viewWindowTransparent;
         }
 
+        public void SwitchPreview(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            if (_currentMainWindow.Visibility != Visibility.Visible)
+                return;
+
+            InvokePreview(path);
+        }
+
         public void InvokePreview(string path)
         {
             if (string.IsNullOrEmpty(path))

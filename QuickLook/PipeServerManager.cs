@@ -28,6 +28,7 @@ namespace QuickLook
     internal static class PipeMessages
     {
         public const string RunAndClose = "QuickLook.App.PipeMessages.RunAndClose";
+        public const string Switch = "QuickLook.App.PipeMessages.Switch";
         public const string Invoke = "QuickLook.App.PipeMessages.Invoke";
         public const string Toggle = "QuickLook.App.PipeMessages.Toggle";
         public const string Close = "QuickLook.App.PipeMessages.Close";
@@ -121,6 +122,11 @@ namespace QuickLook
                 case PipeMessages.Invoke:
                     Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => ViewWindowManager.GetInstance().InvokePreview(lParam)),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Switch:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().SwitchPreview(lParam)),
                         DispatcherPriority.ApplicationIdle);
                     return false;
                 case PipeMessages.Toggle:

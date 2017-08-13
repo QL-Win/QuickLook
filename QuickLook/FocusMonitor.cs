@@ -49,7 +49,7 @@ namespace QuickLook
                     if (IsRunning && last != path)
                     {
                         last = path;
-                        PipeServerManager.SendMessage(PipeMessages.Invoke, path);
+                        PipeServerManager.SendMessage(PipeMessages.Switch, path);
                     }
                 }
             }).Start();
