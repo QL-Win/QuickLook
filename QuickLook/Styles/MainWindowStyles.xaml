@@ -5,7 +5,7 @@
     <Thickness x:Key="MainWindowShadowPaddingThinkness">6</Thickness>
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
     <Color x:Key="MainWindowShadowColor">Gray</Color>
-    <SolidColorBrush x:Key="MainWindowBackground" Color="#FFF8F8FB" />
+    <SolidColorBrush x:Key="MainWindowBackground" Color="#FFFAFAFA" />
     <SolidColorBrush x:Key="WindowTextForeground" Color="#E50E0E0E" />
     <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5626262" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />
