@@ -34,13 +34,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             var clock = TimeSpan.Zero;
             BitmapSource prevFrame = null;
             FrameInfo prevInfo = null;
+            BitmapSource prevprevFrame = null;
             foreach (var rawFrame in decoder.Frames)
             {
                 var info = GetFrameInfo(rawFrame);
-                var frame = MakeFrame(
-                    decoder.Frames[0],
-                    rawFrame, info,
-                    prevFrame, prevInfo);
+                var frame = MakeFrame(decoder.Frames[0], rawFrame, info, prevFrame, prevInfo, prevprevFrame);
+                prevprevFrame = prevFrame;
                 prevFrame = frame;
                 prevInfo = info;
 
@@ -57,16 +56,29 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private static BitmapSource MakeFrame(
             BitmapSource fullImage,
             BitmapSource rawFrame, FrameInfo frameInfo,
-            BitmapSource previousFrame, FrameInfo previousFrameInfo)
+            BitmapSource previousFrame, FrameInfo previousFrameInfo,
+            BitmapSource previouspreviousFrame)
         {
             var visual = new DrawingVisual();
             using (var context = visual.RenderOpen())
             {
-                if (previousFrameInfo != null && previousFrame != null &&
-                    previousFrameInfo.DisposalMethod == FrameDisposalMethod.Combine)
+                if (previousFrameInfo != null && previousFrame != null)
                 {
                     var fullRect = new Rect(0, 0, fullImage.PixelWidth, fullImage.PixelHeight);
-                    context.DrawImage(previousFrame, fullRect);
+
+                    switch (previousFrameInfo.DisposalMethod)
+                    {
+                        case FrameDisposalMethod.Unspecified:
+                        case FrameDisposalMethod.Combine:
+                            context.DrawImage(previousFrame, fullRect);
+                            break;
+                        case FrameDisposalMethod.RestorePrevious:
+                            if (previouspreviousFrame != null)
+                                context.DrawImage(previouspreviousFrame, fullRect);
+                            break;
+                        case FrameDisposalMethod.RestoreBackground:
+                            break;
+                    }
                 }
 
                 context.DrawImage(rawFrame, frameInfo.Rect);
@@ -84,7 +96,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             var frameInfo = new FrameInfo
             {
                 Delay = TimeSpan.FromMilliseconds(100),
-                DisposalMethod = FrameDisposalMethod.Replace,
+                DisposalMethod = FrameDisposalMethod.Unspecified,
                 Width = frame.PixelWidth,
                 Height = frame.PixelHeight,
                 Left = 0,
@@ -152,7 +164,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         private enum FrameDisposalMethod
         {
-            Replace = 0,
+            Unspecified = 0,
             Combine = 1,
             RestoreBackground = 2,
             RestorePrevious = 3
