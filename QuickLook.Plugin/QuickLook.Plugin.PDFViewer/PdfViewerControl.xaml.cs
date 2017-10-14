@@ -197,7 +197,8 @@ namespace QuickLook.Plugin.PDFViewer
             var size = tempHandle.GetPageSize(0, 1d);
             tempHandle.Dispose();
 
-            size.Width += /*listThumbnails.ActualWidth*/ 150;
+            if (tempHandle.TotalPages > 1)
+                size.Width += /*listThumbnails.ActualWidth*/ 150;
 
             return size;
         }
@@ -213,6 +214,9 @@ namespace QuickLook.Plugin.PDFViewer
             // fill thumbnails list
             Enumerable.Range(0, PdfHandle.TotalPages).ForEach(PageIds.Add);
             OnPropertyChanged(nameof(PageIds));
+
+            if (PdfHandle.TotalPages < 2)
+                listThumbnails.Visibility = Visibility.Collapsed;
 
             CurrentPage = 0;
             pagePanel.DoZoomToFit();

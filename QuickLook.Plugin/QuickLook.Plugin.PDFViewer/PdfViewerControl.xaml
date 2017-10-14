@@ -20,11 +20,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ListBox x:Name="listThumbnails" Grid.Column="0" VirtualizingPanel.ScrollUnit="Item"
-                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.IsVirtualizing="True" Width="150"
                  SelectedIndex="0"
                  Focusable="False"
                  Background="#00FFFFFF"
