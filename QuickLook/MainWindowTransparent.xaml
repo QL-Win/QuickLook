@@ -102,10 +102,10 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Button x:Name="buttonOpenWith" DockPanel.Dock="Right"
+                        <Button x:Name="buttonOpenWith" DockPanel.Dock="Right" MaxWidth="190" 
                                 Style="{StaticResource CaptionTextButtonStyle}">
                             <Button.Content>
-                                <TextBlock x:Name="buttonOpenWithText" VerticalAlignment="Center">
+                                <TextBlock x:Name="buttonOpenWithText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
                                     Open with <Bold>AppName</Bold>
                                 </TextBlock>
                             </Button.Content>
