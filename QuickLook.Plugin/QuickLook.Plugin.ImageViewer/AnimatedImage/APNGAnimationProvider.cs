@@ -21,7 +21,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using LibAPNG;
-using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -33,9 +32,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             if (decoder.IsSimplePNG)
             {
-                animator.KeyFrames.Add(
-                    new DiscreteObjectKeyFrame(BitmapFrame.Create(new Uri(path)), TimeSpan.Zero));
-                animator.Duration = Duration.Forever;
+                new ImageMagickProvider().GetAnimator(animator, path);
                 return;
             }
 
@@ -64,7 +61,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private static BitmapSource MakeFrame(IHDRChunk header, Frame rawFrame, Frame previousFrame,
             BitmapSource previousRenderedFrame)
         {
+            var fs = rawFrame.GetBitmapSource();
             var visual = new DrawingVisual();
+
             using (var context = visual.RenderOpen())
             {
                 switch (rawFrame.fcTLChunk.DisposeOp)
@@ -95,12 +94,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 // draw current frame
                 var frameRect = new Rect(rawFrame.fcTLChunk.XOffset, rawFrame.fcTLChunk.YOffset,
                     rawFrame.fcTLChunk.Width, rawFrame.fcTLChunk.Height);
-                context.DrawImage(rawFrame.GetBitmapSource(), frameRect);
-            }
 
+                context.DrawImage(fs, frameRect);
+            }
             var bitmap = new RenderTargetBitmap(
                 header.Width, header.Height,
-                DpiHelper.DefaultDpi, DpiHelper.DefaultDpi,
+                Math.Floor(fs.DpiX), Math.Floor(fs.DpiY),
                 PixelFormats.Pbgra32);
             bitmap.Render(visual);
             return bitmap;

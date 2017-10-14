@@ -20,6 +20,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using QuickLook.ExtensionMethods;
+using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -85,7 +87,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             }
             var bitmap = new RenderTargetBitmap(
                 fullImage.PixelWidth, fullImage.PixelHeight,
-                fullImage.DpiX, fullImage.DpiY,
+                Math.Floor(fullImage.DpiX), Math.Floor(fullImage.DpiY),
                 PixelFormats.Pbgra32);
             bitmap.Render(visual);
             return bitmap;

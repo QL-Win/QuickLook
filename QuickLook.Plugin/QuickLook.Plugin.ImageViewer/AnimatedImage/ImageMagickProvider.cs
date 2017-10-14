@@ -33,6 +33,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             using (var image = new MagickImage(path))
             {
+                image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
                 image.AutoOrient();
 
                 animator.KeyFrames.Add(new DiscreteObjectKeyFrame(image.ToBitmapSource(), TimeSpan.Zero));

@@ -45,8 +45,8 @@ namespace QuickLook.ExtensionMethods
                     data = source.LockBits(new Rectangle(0, 0, source.Width, source.Height),
                         ImageLockMode.ReadOnly, source.PixelFormat);
                 }
-                bs = BitmapSource.Create(source.Width, source.Height, source.HorizontalResolution,
-                    source.VerticalResolution, ConvertPixelFormat(source.PixelFormat), null,
+                bs = BitmapSource.Create(source.Width, source.Height, Math.Floor(source.HorizontalResolution),
+                    Math.Floor(source.VerticalResolution), ConvertPixelFormat(source.PixelFormat), null,
                     data.Scan0, data.Stride * source.Height, data.Stride);
 
                 source.UnlockBits(data);
