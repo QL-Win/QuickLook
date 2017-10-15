@@ -18,6 +18,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -66,6 +67,19 @@ namespace QuickLook.ExtensionMethods
             return bs;
         }
 
+        public static Bitmap ToBitmap(this BitmapSource source)
+        {
+            using (var outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(source));
+                enc.Save(outStream);
+                var bitmap = new Bitmap(outStream);
+
+                return new Bitmap(bitmap);
+            }
+        }
+
         private static PixelFormat ConvertPixelFormat(
             System.Drawing.Imaging.PixelFormat sourceFormat)
         {
@@ -89,7 +103,7 @@ namespace QuickLook.ExtensionMethods
             image = image.Clone(new Rectangle(0, 0, image.Width, image.Height),
                 System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            var sampleCount = (int) (0.2 * image.Width * image.Height);
+            var sampleCount = (int) (0.2 * 400 * 400);
             const int pixelSize = 24 / 8;
             var data = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
                 ImageLockMode.ReadWrite, image.PixelFormat);

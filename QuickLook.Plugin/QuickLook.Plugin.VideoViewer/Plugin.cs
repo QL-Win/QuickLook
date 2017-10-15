@@ -18,11 +18,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using Meta.Vlc;
-using Meta.Vlc.Interop.Media;
-using Meta.Vlc.Wpf;
-using Size = System.Windows.Size;
-using VideoTrack = Meta.Vlc.VideoTrack;
+using System.Reflection;
+using System.Windows;
+using QuickLook.Plugin.VideoViewer.FFmpeg;
+using Unosquare.FFME;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -38,21 +37,32 @@ namespace QuickLook.Plugin.VideoViewer
             ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
             ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
         };
-        private ContextObject _context;
 
+        private ContextObject _context;
         private ViewerPanel _vp;
+
+        private FFprobe probe;
 
         public int Priority => 0 - 10; // make it lower than TextViewer
         public bool AllowsTransparency => true;
 
         public void Init()
         {
-            ApiManager.Initialize(VlcSettings.LibVlcPath, VlcSettings.VlcOptions);
+            MediaElement.FFmpegDirectory = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "FFmpeg\\",
+                App.Is64Bit ? "x64\\" : "x86\\");
         }
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Formats.Contains(Path.GetExtension(path).ToLower());
+            if (Directory.Exists(path))
+                return false;
+
+            return Formats.Contains(Path.GetExtension(path).ToLower());
+
+            //FFprobe is much slower than fixed extensions
+            //probe = new FFprobe(path);
+            //return probe.CanDecode() & (probe.HasAudio() | probe.HasVideo());
         }
 
         public void Prepare(string path, ContextObject context)
@@ -60,16 +70,9 @@ namespace QuickLook.Plugin.VideoViewer
             _context = context;
 
             var def = new Size(500, 300);
+            probe = probe ?? new FFprobe(path);
 
-            var hasVideo = HasVideoStream(path, out Size mediaSize);
-
-            var windowSize = mediaSize == Size.Empty ? def : mediaSize;
-            windowSize.Width = Math.Max(def.Width, windowSize.Width);
-            windowSize.Height = Math.Max(def.Height, windowSize.Height);
-
-            context.SetPreferredSizeFit(windowSize, 0.6);
-            context.TitlebarOverlap = true;
-            if (!hasVideo)
+            if (!probe.HasVideo())
             {
                 context.CanResize = false;
                 context.TitlebarAutoHide = false;
@@ -80,52 +83,47 @@ namespace QuickLook.Plugin.VideoViewer
             {
                 context.TitlebarAutoHide = true;
                 context.UseDarkTheme = true;
+                context.CanResize = true;
+                context.TitlebarAutoHide = true;
+                context.TitlebarBlurVisibility = true;
+                context.TitlebarColourVisibility = true;
             }
+
+            var windowSize = probe.GetViewSize() == Size.Empty ? def : probe.GetViewSize();
+            windowSize.Width = Math.Max(def.Width, windowSize.Width);
+            windowSize.Height = Math.Max(def.Height, windowSize.Height);
+
+            context.SetPreferredSizeFit(windowSize, 0.6);
+            context.TitlebarOverlap = true;
         }
 
         public void View(string path, ContextObject context)
         {
-            _vp = new ViewerPanel(context);
+            _vp = new ViewerPanel(context, probe.HasVideo());
 
             context.ViewerContent = _vp;
 
-            _vp.mediaElement.VlcMediaPlayer.Opening += MarkReady;
-
+            _vp.mediaElement.MediaOpened += MediaElement_MediaOpened;
             _vp.LoadAndPlay(path);
 
             context.Title = $"{Path.GetFileName(path)}";
+
         }
 
-        public void Cleanup()
-        {
-            if (_vp != null)
-                _vp.mediaElement.VlcMediaPlayer.Opening -= MarkReady;
-            _vp?.Dispose();
-            _vp = null;
-
-            _context = null;
-        }
-
-        private void MarkReady(object sender, ObjectEventArgs<MediaState> e)
+        private void MediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
             _context.IsBusy = false;
         }
 
-        private bool HasVideoStream(string path, out Size size)
+        public void Cleanup()
         {
-            using (var vlc = new Vlc(VlcSettings.VlcOptions))
-            {
-                using (var media = vlc.CreateMediaFromPath(path))
-                {
-                    media.Parse();
-                    var tracks = media.GetTracks();
-                    var video = tracks.FirstOrDefault(mt => mt.Type == TrackType.Video) as VideoTrack;
+            if (_vp?.mediaElement != null)
+                _vp.mediaElement.MediaOpened -= MediaElement_MediaOpened;
+            
+            _vp?.Dispose();
+            _vp = null;
 
-                    size = video == null ? Size.Empty : new Size(video.Width, video.Height);
-
-                    return video != null;
-                }
-            }
+            _context = null;
         }
     }
 }
