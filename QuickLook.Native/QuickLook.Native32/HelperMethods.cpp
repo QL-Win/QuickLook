@@ -63,18 +63,44 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 	DragQueryFile(HDROP(medium.hGlobal), 0, buffer, MAX_PATH - 1);
 }
 
+bool HelperMethods::IsListaryToolbarVisible()
+{
+	auto CALLBACK findListaryWindowProc = [](__in HWND hwnd, __in LPARAM lParam)-> BOOL
+	{
+		WCHAR classBuffer[MAX_PATH] = {'\0'};
+		if (FAILED(GetClassName(hwnd, classBuffer, MAX_PATH)))
+			return TRUE;
+
+		if (wcsncmp(classBuffer, L"Listary_WidgetWin_", 18) == 0)
+		{
+			if (IsWindowVisible(hwnd))
+			{
+				*reinterpret_cast<bool*>(lParam) = true;
+				return FALSE;
+			}
+		}
+		return TRUE;
+	};
+
+	auto found = false;
+	EnumWindows(findListaryWindowProc, reinterpret_cast<LPARAM>(&found));
+
+	return found;
+}
+
 bool HelperMethods::IsCursorActivated(HWND hwnd)
 {
 	auto tId = GetWindowThreadProcessId(hwnd, nullptr);
 
 	GUITHREADINFO gui = {sizeof gui};
 	GetGUIThreadInfo(tId, &gui);
-	return gui.flags || gui.hwndCaret;
+	return gui.flags || gui.hwndCaret || IsListaryToolbarVisible();
 }
 
 bool HelperMethods::IsUWP()
 {
-	auto pGCPFN = decltype(&GetCurrentPackageFullName)(GetProcAddress(GetModuleHandle(L"kernel32.dll"), "GetCurrentPackageFullName"));
+	auto pGCPFN = decltype(&GetCurrentPackageFullName)(
+		GetProcAddress(GetModuleHandle(L"kernel32.dll"), "GetCurrentPackageFullName"));
 
 	if (!pGCPFN)
 		return false;

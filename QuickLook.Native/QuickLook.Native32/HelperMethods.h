@@ -23,4 +23,7 @@ public:
 	static void ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer);
 	static bool IsCursorActivated(HWND hwndfg);
 	static bool HelperMethods::IsUWP();
+
+private:
+	static bool IsListaryToolbarVisible();
 };
