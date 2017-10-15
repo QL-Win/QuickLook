@@ -85,9 +85,12 @@ namespace QuickLook.Plugin.TextViewer
                 s.Read(buffer, 0, bufferLength);
 
                 viewer.Encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
+
+                s.Position = 0;
+                viewer.Load(s);
             }
 
-            viewer.Load(path);
+            //viewer.Load(path);
             viewer.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
         }
     }

@@ -20,8 +20,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using QuickLook.ExtensionMethods;
-using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -31,7 +29,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         {
             var decoder =
                 new GifBitmapDecoder(new Uri(path), BitmapCreateOptions.PreservePixelFormat,
-                    BitmapCacheOption.Default);
+                    BitmapCacheOption.OnLoad);
 
             var clock = TimeSpan.Zero;
             BitmapSource prevFrame = null;
