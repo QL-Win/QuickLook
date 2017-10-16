@@ -110,16 +110,32 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
+                        <Button DockPanel.Dock="Left" x:Name="buttonTop" Tag="Auto">
+                            <Button.Resources>
+                                <Grid x:Key="ContentTop">
+                                    <TextBlock>&#xE898;</TextBlock>
+                                    <TextBlock>&#xE872;</TextBlock>
+                                </Grid>
+                            </Button.Resources>
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                                    <Setter Property="Content" Value="&#xE898;" />
+                                    <Style.Triggers>
+                                        <Trigger Property="Tag" Value="Auto">
+                                            <Setter Property="Content" Value="&#xE898;" />
+                                        </Trigger>
+                                        <Trigger Property="Tag" Value="Top">
+                                            <Setter Property="Content" Value="{StaticResource ContentTop}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                         <Button DockPanel.Dock="Left" x:Name="buttonPin" Tag="Auto">
                             <Button.Resources>
                                 <Grid x:Key="ContentPin">
                                     <TextBlock>&#xE840;</TextBlock>
                                     <TextBlock>&#xE842;</TextBlock>
-                                </Grid>
-                                <Grid x:Key="ContentPinTop">
-                                    <TextBlock>&#xE840;</TextBlock>
-                                    <TextBlock>&#xE842;</TextBlock>
-                                    <TextBlock>&#xE889;</TextBlock>
                                 </Grid>
                             </Button.Resources>
                             <Button.Style>
@@ -128,9 +144,6 @@
                                     <Style.Triggers>
                                         <Trigger Property="Tag" Value="Auto">
                                             <Setter Property="Content" Value="&#xE840;" />
-                                        </Trigger>
-                                        <Trigger Property="Tag" Value="PinTop">
-                                            <Setter Property="Content" Value="{StaticResource ContentPinTop}" />
                                         </Trigger>
                                         <Trigger Property="Tag" Value="Pin">
                                             <Setter Property="Content" Value="{StaticResource ContentPin}" />

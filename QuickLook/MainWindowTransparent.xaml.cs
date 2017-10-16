@@ -63,14 +63,17 @@ namespace QuickLook
 
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
+            buttonTop.Click += (sender, e) =>
+            {
+                Topmost = !Topmost;
+                buttonTop.Tag = Topmost ? "Top" : "Auto";
+            };
+
             buttonPin.Click += (sender, e) =>
             {
                 if (Pinned)
-                {
-                    Topmost = !Topmost;
-                    buttonPin.Tag = Topmost ? "PinTop" : "Pin";
                     return;
-                }
+
                 Pinned = true;
                 buttonPin.Tag = "Pin";
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
