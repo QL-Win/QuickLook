@@ -339,7 +339,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void LoadAndPlay(string path)
         {
-            mediaElement.LoadMedia(path);
+            mediaElement.LoadMediaWithOptions(path, ":avcodec-hw=dxva2");
             mediaElement.Volume = 50;
 
             mediaElement.Play();
