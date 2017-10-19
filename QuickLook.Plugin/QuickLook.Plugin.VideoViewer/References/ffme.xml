@@ -2111,14 +2111,17 @@
             </summary>
             <param name="component">The component.</param>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.HardwareAccelerator.ExchangeFrame(FFmpeg.AutoGen.AVCodecContext*,FFmpeg.AutoGen.AVFrame*)">
+        <member name="M:Unosquare.FFME.Decoding.HardwareAccelerator.ExchangeFrame(FFmpeg.AutoGen.AVCodecContext*,FFmpeg.AutoGen.AVFrame*,System.Boolean@)">
             <summary>
             Downloads the frame from the hardware into a software frame if possible.
             The input hardware frame gets freed and the return value will point to the new software frame
             </summary>
             <param name="codecContext">The codec context.</param>
             <param name="input">The input.</param>
-            <returns>The frame downloaded from the device into RAM</returns>
+            <param name="comesFromHardware">if set to <c>true</c> [comes from hardware] otherwise, hardware decoding was not perfomred.</param>
+            <returns>
+            The frame downloaded from the device into RAM
+            </returns>
             <exception cref="T:System.Exception">Failed to transfer data to output frame</exception>
         </member>
         <member name="M:Unosquare.FFME.Decoding.HardwareAccelerator.GetPixelFormat(FFmpeg.AutoGen.AVCodecContext*,FFmpeg.AutoGen.AVPixelFormat*)">
@@ -3936,6 +3939,26 @@
             3. Block Rendering from block buffer
             </summary>
         </member>
+        <member name="P:Unosquare.FFME.MediaElement.PacketReadingCycle">
+            <summary>
+            Gets the packet reading cycle control evenet.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.FrameDecodingCycle">
+            <summary>
+            Gets the frame decoding cycle control event.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.BlockRenderingCycle">
+            <summary>
+            Gets the block rendering cycle control event.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.SeekingDone">
+            <summary>
+            Gets the seeking done control event.
+            </summary>
+        </member>
         <member name="P:Unosquare.FFME.MediaElement.IsTaskCancellationPending">
             <summary>
             Gets or sets a value indicating whether the workedrs have been requested
@@ -4098,6 +4121,11 @@
             When position is being set from within this control, this field will
             be set to true. This is useful to detect if the user is setting the position
             or if the Position property is being driven from within
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.m_IsDisposing">
+            <summary>
+            Flag when disposing process start but not finished yet
             </summary>
         </member>
         <member name="M:Unosquare.FFME.MediaElement.#cctor">
@@ -4399,6 +4427,14 @@
             <summary>
             Gets the duration in seconds of the video frame.
             Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoHardwareDecoder">
+            <summary>
+            Gets the name of the video hardware decoder in use.
+            Enabling hardware acceleration does not guarantee decoding will be performed in hardware.
+            When hardware decoding of frames is in use this will return the name of the HW accelerator.
+            Otherwise it will return an empty string.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.MediaElement.AudioCodec">
