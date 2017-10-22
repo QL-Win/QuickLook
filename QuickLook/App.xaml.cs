@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -44,9 +45,13 @@ namespace QuickLook
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                MessageBox.Show(((Exception) args.ExceptionObject).ToString());
+                //MessageBox.Show(((Exception) args.ExceptionObject).ToString());
 
-                Shutdown();
+                const string source = "QuickLook Application Error";
+                if (!EventLog.SourceExists(source))
+                    EventLog.CreateEventSource(source, "Application");
+                EventLog.WriteEntry(source, ((Exception) args.ExceptionObject).ToString(),
+                    EventLogEntryType.Error);
             };
 
             base.OnStartup(e);
