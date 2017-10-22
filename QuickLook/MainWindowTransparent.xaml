@@ -35,7 +35,7 @@
                     Value="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToResizeModeConverter}}" />
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
-                    <WindowChrome CaptionHeight="0"
+                    <WindowChrome CaptionHeight="0" CornerRadius="0" 
                                   ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
                                   UseAeroCaptionButtons="False" />
                 </Setter.Value>
@@ -44,7 +44,7 @@
                 <Trigger Property="WindowState" Value="Maximized">
                     <Setter Property="WindowChrome.WindowChrome">
                         <Setter.Value>
-                            <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+                            <WindowChrome CaptionHeight="0" CornerRadius="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
                         </Setter.Value>
                     </Setter>
                 </Trigger>
