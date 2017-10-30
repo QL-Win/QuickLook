@@ -80,8 +80,8 @@ namespace QuickLook.Helpers
                     matrix = src.CompositionTarget.TransformToDevice;
                 }
 
-            pixelX = (int) (matrix.M11 * unitX);
-            pixelY = (int) (matrix.M22 * unitY);
+            pixelX = (int)Math.Round((matrix.M11 * unitX));
+            pixelY = (int)Math.Round((matrix.M22 * unitY));
         }
 
         internal static bool IsForegroundWindowBelongToSelf()
