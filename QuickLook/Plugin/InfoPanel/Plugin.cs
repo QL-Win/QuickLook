@@ -24,7 +24,6 @@ namespace QuickLook.Plugin.InfoPanel
         private InfoPanel _ip;
 
         public int Priority => int.MinValue;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

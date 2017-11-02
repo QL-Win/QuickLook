@@ -42,7 +42,6 @@ namespace QuickLook.Plugin.ImageViewer
         private ImagePanel _ip;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

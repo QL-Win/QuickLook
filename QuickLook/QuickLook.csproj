@@ -136,7 +136,6 @@
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\TranslationHelper.cs" />
-    <Compile Include="MainWindowNoTransparent.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
@@ -175,7 +174,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindowTransparent.xaml">
+    <Page Include="ViewerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -189,8 +188,8 @@
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
-    <Compile Include="MainWindowTransparent.xaml.cs">
-      <DependentUpon>MainWindowTransparent.xaml</DependentUpon>
+    <Compile Include="ViewerWindow.xaml.cs">
+      <DependentUpon>ViewerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Controls\BusyDecorator\BusyDecorator.xaml">

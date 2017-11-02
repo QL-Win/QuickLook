@@ -30,7 +30,6 @@ namespace QuickLook.Plugin.PDFViewer
         private PdfViewerControl _pdfControl;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

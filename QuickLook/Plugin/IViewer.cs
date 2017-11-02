@@ -29,11 +29,6 @@ namespace QuickLook.Plugin
         int Priority { get; }
 
         /// <summary>
-        ///     Set whether the viewer window has blur effect.
-        /// </summary>
-        bool AllowsTransparency { get; }
-
-        /// <summary>
         ///     Do ont-time job when application starts. You may extract nessessary resource here.
         /// </summary>
         void Init();

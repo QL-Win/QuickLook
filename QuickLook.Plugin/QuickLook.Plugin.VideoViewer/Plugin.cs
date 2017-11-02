@@ -44,7 +44,6 @@ namespace QuickLook.Plugin.VideoViewer
         private FFprobe probe;
 
         public int Priority => 0 - 10; // make it lower than TextViewer
-        public bool AllowsTransparency => false;
 
         public void Init()
         {

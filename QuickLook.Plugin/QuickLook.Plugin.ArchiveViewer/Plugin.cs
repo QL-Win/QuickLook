@@ -30,7 +30,6 @@ namespace QuickLook.Plugin.ArchiveViewer
         private ArchiveInfoPanel _panel;
 
         public int Priority => 0;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

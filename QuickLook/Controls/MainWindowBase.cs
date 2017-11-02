@@ -27,7 +27,6 @@ namespace QuickLook.Controls
         public MainWindowBase()
         {
             WindowStyle = WindowStyle.None;
-            AllowsTransparency = true;
 
             SourceInitialized += SourceInitializedHandler;
         }

@@ -26,7 +26,6 @@ namespace QuickLook.Plugin.CsvViewer
         private CsvViewerPanel _panel;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

@@ -36,7 +36,6 @@ namespace QuickLook.Plugin.IPreviewHandlers
         private PreviewPanel _panel;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => false;
 
         public void Init()
         {

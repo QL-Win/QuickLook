@@ -30,7 +30,6 @@ namespace QuickLook.Plugin.HtmlViewer
         private WebpagePanel _panel;
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => false;
 
         public void Init()
         {

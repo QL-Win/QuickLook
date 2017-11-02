@@ -28,19 +28,13 @@ namespace QuickLook
     internal class ViewWindowManager : IDisposable
     {
         private static ViewWindowManager _instance;
-        private MainWindowTransparent _currentMainWindow;
+        private ViewerWindow _viewerWindow;
 
         private string _invokedPath = string.Empty;
 
-        private MainWindowNoTransparent _viewWindowNoTransparent;
-        private MainWindowTransparent _viewWindowTransparent;
-
         internal ViewWindowManager()
         {
-            _viewWindowTransparent = new MainWindowTransparent();
-            _viewWindowNoTransparent = new MainWindowNoTransparent();
-
-            _currentMainWindow = _viewWindowTransparent;
+            _viewerWindow = new ViewerWindow();
         }
 
         public void Dispose()
@@ -51,7 +45,7 @@ namespace QuickLook
 
         public void RunAndClosePreview()
         {
-            if (_currentMainWindow.Visibility != Visibility.Visible)
+            if (_viewerWindow.Visibility != Visibility.Visible)
                 return;
 
             // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
@@ -59,7 +53,7 @@ namespace QuickLook
             if (focus != NativeMethods.QuickLook.FocusedWindowType.Invalid)
             {
                 StopFocusMonitor();
-                _currentMainWindow.BeginHide();
+                _viewerWindow.BeginHide();
                 return;
             }
 
@@ -68,21 +62,21 @@ namespace QuickLook
                 return;
 
             StopFocusMonitor();
-            _currentMainWindow.RunAndHide();
+            _viewerWindow.RunAndHide();
         }
 
         public void ClosePreview()
         {
-            if (_currentMainWindow.Visibility != Visibility.Visible)
+            if (_viewerWindow.Visibility != Visibility.Visible)
                 return;
 
             StopFocusMonitor();
-            _currentMainWindow.BeginHide();
+            _viewerWindow.BeginHide();
         }
 
         public void TogglePreview(string path)
         {
-            if (_currentMainWindow.Visibility == Visibility.Visible)
+            if (_viewerWindow.Visibility == Visibility.Visible)
                 ClosePreview();
             else
                 InvokePreview(path);
@@ -102,12 +96,7 @@ namespace QuickLook
         {
             StopFocusMonitor();
 
-            if (ReferenceEquals(_currentMainWindow, _viewWindowTransparent))
-                _viewWindowTransparent = new MainWindowTransparent();
-            else
-                _viewWindowNoTransparent = new MainWindowNoTransparent();
-
-            _currentMainWindow = _viewWindowTransparent;
+            _viewerWindow = new ViewerWindow();
         }
 
         public void SwitchPreview(string path)
@@ -115,7 +104,7 @@ namespace QuickLook
             if (string.IsNullOrEmpty(path))
                 return;
 
-            if (_currentMainWindow.Visibility != Visibility.Visible)
+            if (_viewerWindow.Visibility != Visibility.Visible)
                 return;
 
             InvokePreview(path);
@@ -126,7 +115,7 @@ namespace QuickLook
             if (string.IsNullOrEmpty(path))
                 return;
 
-            if (_currentMainWindow.Visibility == Visibility.Visible && path == _invokedPath)
+            if (_viewerWindow.Visibility == Visibility.Visible && path == _invokedPath)
                 return;
 
             if (!Directory.Exists(path) && !File.Exists(path))
@@ -143,24 +132,16 @@ namespace QuickLook
 
         private void BeginShowNewWindow(string path, IViewer matchedPlugin)
         {
-            _currentMainWindow.UnloadPlugin();
-
-            // switch window
-            var oldWindow = _currentMainWindow;
-            _currentMainWindow = matchedPlugin.AllowsTransparency
-                ? _viewWindowTransparent
-                : _viewWindowNoTransparent;
-            if (!ReferenceEquals(oldWindow, _currentMainWindow))
-                oldWindow.BeginHide();
-
-            _currentMainWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
+            _viewerWindow.UnloadPlugin();
+            
+            _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
         }
 
         private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
         {
-            var plugin = _currentMainWindow.Plugin.GetType();
+            var plugin = _viewerWindow.Plugin.GetType();
 
-            _currentMainWindow.BeginHide();
+            _viewerWindow.BeginHide();
 
             TrayIconManager.ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
 

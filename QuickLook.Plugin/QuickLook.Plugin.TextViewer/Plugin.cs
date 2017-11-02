@@ -26,7 +26,6 @@ namespace QuickLook.Plugin.TextViewer
         private TextViewerPanel _tvp;
 
         public int Priority => 0;
-        public bool AllowsTransparency => true;
 
         public void Init()
         {

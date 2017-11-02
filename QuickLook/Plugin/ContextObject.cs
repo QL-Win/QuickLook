@@ -45,7 +45,7 @@ namespace QuickLook.Plugin
         /// <summary>
         ///     Get the viewer window.
         /// </summary>
-        public MainWindowTransparent ViewerWindow { get; internal set; }
+        public ViewerWindow ViewerWindow { get; internal set; }
 
         /// <summary>
         ///     Get or set the title of Viewer window.

@@ -31,7 +31,6 @@ namespace QuickLook.Plugin.MailViewer
         private string _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         public int Priority => int.MaxValue;
-        public bool AllowsTransparency => false;
 
         public void Init()
         {

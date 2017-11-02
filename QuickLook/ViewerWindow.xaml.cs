@@ -36,9 +36,9 @@ using QuickLook.Plugin;
 namespace QuickLook
 {
     /// <summary>
-    ///     Interaction logic for MainWindowTransparent.xaml
+    ///     Interaction logic for ViewerWindow.xaml
     /// </summary>
-    public partial class MainWindowTransparent : MainWindowBase, INotifyPropertyChanged
+    public partial class ViewerWindow : MainWindowBase, INotifyPropertyChanged
     {
         private readonly ResourceDictionary _darkDict = new ResourceDictionary
         {
@@ -48,7 +48,7 @@ namespace QuickLook
         private bool _pinned;
         private bool _restoreForDragMove;
 
-        internal MainWindowTransparent()
+        internal ViewerWindow()
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
             ContextObject = new ContextObject();
