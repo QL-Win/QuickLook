@@ -105,7 +105,7 @@ namespace QuickLook.Helpers
         {
             var mmi = (MinMaxInfo) Marshal.PtrToStructure(lParam, typeof(MinMaxInfo));
 
-            // Adjust the maximized size and position to fit the work area of the correct monitor
+            // Adjust the maximized size and position to fit the work area of the current monitor
             var currentScreen = Screen.FromHandle(hwnd);
             var workArea = currentScreen.WorkingArea;
             var monitorArea = currentScreen.Bounds;

@@ -373,6 +373,10 @@ namespace QuickLook
 
             void AddToInlines(string str, string replaceWith)
             {
+                // limit str length
+                if (replaceWith.Length > 16)
+                    replaceWith = replaceWith.Substring(0, 14) + "…" + replaceWith.Substring(replaceWith.Length - 2);
+
                 str = TranslationHelper.GetString(str);
                 var elements = str.Split(new[] {"{0}"}, StringSplitOptions.None).ToList();
                 while (elements.Count < 2)

@@ -27,16 +27,14 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </controls:MainWindowBase.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" CornerRadius="0" GlassFrameThickness="0,0,0,1" 
+                      ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
     <controls:MainWindowBase.Style>
         <Style TargetType="controls:MainWindowBase">
             <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
-            <Setter Property="WindowChrome.WindowChrome">
-                <Setter.Value>
-                    <WindowChrome CaptionHeight="0" CornerRadius="0" GlassFrameThickness="0,0,0,1" 
-                                  ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
-                                  UseAeroCaptionButtons="False" />
-                </Setter.Value>
-            </Setter>
         </Style>
     </controls:MainWindowBase.Style>
     <Grid x:Name="windowFrameContainer" Background="{DynamicResource MainWindowBackground}">
@@ -68,6 +66,9 @@
                                            GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            NoiseVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <DockPanel>
+                    <DockPanel.Effect>
+                        <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
+                    </DockPanel.Effect>
                     <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
                                 Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
                     <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"

@@ -130,7 +130,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void AutoHideViedoControlContainer(object sender, EventArgs e)
         {
-            if (ShowVideo)
+            if (!ShowVideo)
                 return;
 
             if (videoControlContainer.IsMouseOver)
