@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vlc="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
+             xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              mc:Ignorable="d"
@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:TimeSpanToShortStringConverter x:Key="TimeSpanToShortStringConverter" />
+            <local:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter" />
             <local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
@@ -20,14 +21,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <vlc:VlcPlayer x:Name="mediaElement" LibVlcPath="{Binding LibVlcPath, ElementName=viewerPanel}"
-                       VlcOption="{Binding VlcOption, ElementName=viewerPanel}" />
+        <ffme:MediaElement x:Name="mediaElement" />
         <Grid x:Name="coverArtPersenter" ClipToBounds="True" Background="{StaticResource MainWindowBackground}">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="False">
+                        <DataTrigger Binding="{Binding ShowVideo, ElementName=viewerPanel}" Value="False">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -91,7 +91,7 @@
                 </TextBlock>
                 <TextBlock x:Name="metaLength" Grid.Row="5" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis"
                            Foreground="{DynamicResource WindowTextForeground}"
-                           Text="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                           Text="{Binding ElementName=mediaElement, Path=NaturalDuration, Converter={StaticResource TimeSpanToShortStringConverter}}" />
             </Grid>
         </Grid>
 
@@ -115,13 +115,13 @@
                 </Storyboard>
             </Grid.Resources>
             <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}"
-                                   GlassVisibility="{Binding ElementName=viewerPanel, Path=HasVideo,Converter={StaticResource BooleanToVisibilityConverter}}"
-                                   ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=HasVideo,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                   GlassVisibility="{Binding ElementName=viewerPanel, Path=ShowVideo,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=ShowVideo,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <glassLayer:GlassLayer.Style>
                     <Style TargetType="glassLayer:GlassLayer">
                         <Setter Property="BlurredElement" Value="{Binding ElementName=mediaElement}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=viewerPanel,Path=HasVideo}" Value="True">
+                            <DataTrigger Binding="{Binding ElementName=viewerPanel,Path=ShowVideo}" Value="True">
                                 <Setter Property="BlurredElement" Value="{Binding ElementName=mediaElement}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -134,7 +134,7 @@
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
                             <Setter Property="Content" Value="&#xE769;" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPlaying, ElementName=viewerPanel}"
+                                <DataTrigger Binding="{Binding IsPlaying, ElementName=mediaElement}"
                                              Value="False">
                                     <Setter Property="Content" Value="&#xE768;" />
                                 </DataTrigger>
@@ -148,7 +148,7 @@
                             <Setter Property="Content"
                                     Value="{Binding ElementName=mediaElement, Path=Volume, Converter={StaticResource VolumeToIconConverter}}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMuted, ElementName=viewerPanel}"
+                                <DataTrigger Binding="{Binding IsMuted, ElementName=mediaElement}"
                                              Value="True">
                                     <Setter Property="Content" Value="&#xE74F;" />
                                 </DataTrigger>
@@ -166,11 +166,11 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Time">
                                         <Setter Property="Text"
-                                                Value="{Binding ElementName=mediaElement, Path=Time, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                                                Value="{Binding ElementName=mediaElement, Path=Position, Converter={StaticResource TimeSpanToShortStringConverter}}" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Length">
                                         <Setter Property="Text"
-                                                Value="{Binding ElementName=mediaElement, Path=Length, Converter={StaticResource TimeSpanToShortStringConverter}}" />
+                                                Value="{Binding ElementName=mediaElement, Path=NaturalDuration, Converter={StaticResource TimeSpanToShortStringConverter}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -178,14 +178,16 @@
                     </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                        SmallChange="0.00001" LargeChange="0.01" Maximum="1"
-                        Value="{Binding Position, ElementName=mediaElement}" />
+                        SmallChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" 
+                        LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" 
+                        Maximum="{Binding NaturalDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
+                        Value="{Binding Position, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" />
             </DockPanel>
         </Grid>
         <Grid x:Name="volumeSliderLayer" Background="Transparent" Visibility="Collapsed">
             <Grid Height="32" Width="130" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                   Background="{DynamicResource CaptionButtonHoverBackground}" Margin="0,0,0,32">
-                <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="100"
+                <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="1" 
                         Value="{Binding ElementName=mediaElement, Path=Volume}" />
             </Grid>
         </Grid>
