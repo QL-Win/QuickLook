@@ -64,7 +64,7 @@
                                            BlurredElement="{Binding ElementName=containerPanel}"
                                            ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                           NoiseVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                           NoiseVisibility="Visible" />
                 <DockPanel>
                     <DockPanel.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
