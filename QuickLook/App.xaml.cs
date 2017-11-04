@@ -59,6 +59,14 @@ namespace QuickLook
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            if (ProcessHelper.IsOnWindows10S())
+            {
+                MessageBox.Show("This application does not run on Windows 10 S.");
+
+                Shutdown();
+                return;
+            }
+
             EnsureFirstInstance();
 
             if (!_isFirstInstance)

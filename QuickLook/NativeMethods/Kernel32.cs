@@ -32,5 +32,9 @@ namespace QuickLook.NativeMethods
 
         [DllImport("kernel32.dll")]
         internal static extern IntPtr GetCurrentThreadId();
+
+        [DllImport("kernel32.dll")]
+        internal static extern bool GetProductInfo(int dwOSMajorVersion, int dwOSMinorVersion, int dwSpMajorVersion,
+            int dwSpMinorVersion, out uint pdwReturnedProductType);
     }
 }

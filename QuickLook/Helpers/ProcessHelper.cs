@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using QuickLook.NativeMethods;
 
@@ -45,6 +46,18 @@ namespace QuickLook.Helpers
             {
                 return false;
             }
+        }
+
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
+        public static bool IsOnWindows10S()
+        {
+            const uint PRODUCT_CLOUD = 0x000000B2; // Windows 10 S
+            const uint PRODUCT_CLOUDN = 0x000000B3; // Windows 10 S N
+
+            Kernel32.GetProductInfo(Environment.OSVersion.Version.Major,
+                Environment.OSVersion.Version.Minor, 0, 0, out var osType);
+
+            return osType == PRODUCT_CLOUD || osType == PRODUCT_CLOUDN;
         }
     }
 }
