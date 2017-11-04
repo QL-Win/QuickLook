@@ -58,15 +58,18 @@ namespace QuickLook.Plugin.ImageViewer
             _imageSize = ImageFileHelper.GetImageSize(path) ?? Size.Empty;
 
             if (!_imageSize.IsEmpty)
-                context.SetPreferredSizeFit(_imageSize, 0.8);
+                context.SetPreferredSizeFit(_imageSize, 0.6);
             else
-                context.PreferredSize = new Size(1024, 768);
+                context.PreferredSize = new Size(800, 600);
+
+            context.PreferredSize = new Size(context.PreferredSize.Width, context.PreferredSize.Height + 32);
 
             Directory.SetCurrentDirectory(App.AppPath);
 
-            context.TitlebarBlurVisibility = false;
-            context.TitlebarOverlap = false;
+            context.TitlebarBlurVisibility = true;
+            context.TitlebarOverlap = true;
             context.TitlebarAutoHide = false;
+            context.UseDarkTheme = true;
         }
 
         public void View(string path, ContextObject context)

@@ -11,14 +11,14 @@
     <Grid>
         <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}">
             <Rectangle.Fill>
-                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background.png" AlignmentY="Top"
+                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background-b.png" AlignmentY="Top"
                             Viewport="0,0,32,32"
                             ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
             </Rectangle.Fill>
         </Rectangle>
         <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
-            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
+            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None" Margin="0,32,0,0"
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
                                          AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
         </ScrollViewer>

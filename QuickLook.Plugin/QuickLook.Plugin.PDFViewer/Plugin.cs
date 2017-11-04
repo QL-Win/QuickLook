@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Text;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -56,7 +57,12 @@ namespace QuickLook.Plugin.PDFViewer
 
             var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
 
-            context.SetPreferredSizeFit(desiredSize, 0.8);
+            context.SetPreferredSizeFit(desiredSize, 0.6);
+
+            context.PreferredSize = new Size(context.PreferredSize.Width, context.PreferredSize.Height + 32);
+
+            context.TitlebarBlurVisibility = true;
+            context.TitlebarOverlap = true;
         }
 
         public void View(string path, ContextObject context)

@@ -273,7 +273,7 @@ namespace QuickLook
 
             // otherwise, resize it and place it to the old window center.
             var oldCenterX = Left + Width / 2;
-            var oldCenterY = Visibility == Visibility.Visible ? Top + Height / 2 : screen.Top + screen.Height / 2;
+            var oldCenterY = Top + Height / 2;
 
             var newLeft = oldCenterX - size.Width / 2;
             var newTop = oldCenterY - size.Height / 2;
