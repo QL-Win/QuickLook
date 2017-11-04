@@ -240,7 +240,7 @@ namespace QuickLook
             BeginClose();
         }
 
-        private void ResizeAndCenter(Size size)
+        private void ResizeAndCenter(Size size, bool canResize)
         {
             // resize to MinSize first
             size.Width = Math.Max(size.Width, MinWidth);
@@ -267,13 +267,22 @@ namespace QuickLook
 
             var screen = WindowHelper.GetCurrentWindowRect();
 
-            // if the window is visible, place new window in respect to the old center point.
-            // otherwise, place it to the screen center.
-            var oldCenterX = Visibility == Visibility.Visible ? Left + Width / 2 : screen.Left + screen.Width / 2;
+            // do not resize or reposition the window is it is visible - unless the next window is size-fixed
+            if (Visibility == Visibility.Visible && canResize)
+                return;
+
+            // otherwise, resize it and place it to the old window center.
+            var oldCenterX = Left + Width / 2;
             var oldCenterY = Visibility == Visibility.Visible ? Top + Height / 2 : screen.Top + screen.Height / 2;
 
             var newLeft = oldCenterX - size.Width / 2;
             var newTop = oldCenterY - size.Height / 2;
+
+            // ensure the new window is fully visible
+            newLeft = Math.Max(newLeft, screen.Left); // left
+            newTop = Math.Max(newTop, screen.Top); // top
+            newLeft = newLeft + size.Width > screen.Right ? screen.Right - size.Width : newLeft; // right
+            newTop = newTop + size.Height > screen.Bottom ? screen.Bottom - size.Height : newTop; // bottom
 
             this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
@@ -323,7 +332,7 @@ namespace QuickLook
                             (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
             var newWidth = ContextObject.PreferredSize.Width + margin;
 
-            ResizeAndCenter(new Size(newWidth, newHeight));
+            ResizeAndCenter(new Size(newWidth, newHeight), ContextObject.CanResize);
 
             if (Visibility != Visibility.Visible)
                 Show();
@@ -355,7 +364,7 @@ namespace QuickLook
                 AddToInlines("MW_BrowseFolder", Path.GetFileName(_path));
                 return;
             }
-            var isExe = FileHelper.IsExecutable(_path, out string appFriendlyName);
+            var isExe = FileHelper.IsExecutable(_path, out var appFriendlyName);
             if (isExe)
             {
                 AddToInlines("MW_Run", appFriendlyName);
