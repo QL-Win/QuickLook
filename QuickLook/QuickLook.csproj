@@ -150,6 +150,8 @@
     <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Helpers\Updater.cs" />
+    <Compile Include="ViewerWindow.Actions.cs" />
+    <Compile Include="ViewerWindow.Properties.cs" />
     <Compile Include="ViewWindowManager.cs" />
     <Compile Include="Controls\WebClientEx.cs">
       <SubType>Component</SubType>
