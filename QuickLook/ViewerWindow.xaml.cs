@@ -47,6 +47,7 @@ namespace QuickLook
         private string _path;
         private bool _pinned;
         private bool _restoreForDragMove;
+        private bool _canOldPluginResize;
 
         internal ViewerWindow()
         {
@@ -240,40 +241,40 @@ namespace QuickLook
             BeginClose();
         }
 
-        private void ResizeAndCenter(Size size, bool canResize)
+        private static void ResizeAndCenter(Window window, Size size, bool canOldPluginResize, bool canNextPluginResize)
         {
             // resize to MinSize first
-            size.Width = Math.Max(size.Width, MinWidth);
-            size.Height = Math.Max(size.Height, MinHeight);
+            size.Width = Math.Max(size.Width, window.MinWidth);
+            size.Height = Math.Max(size.Height, window.MinHeight);
 
-            if (!IsLoaded)
+            if (!window.IsLoaded)
             {
                 // if the window is not loaded yet, just leave the problem to WPF
-                Width = size.Width;
-                Height = size.Height;
-                WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
+                window.Width = size.Width;
+                window.Height = size.Height;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                window.Dispatcher.BeginInvoke(new Action(window.BringToFront), DispatcherPriority.Render);
 
                 return;
             }
 
             // is the window is now now maximized, do not move it
-            if (WindowState == WindowState.Maximized)
+            if (window.WindowState == WindowState.Maximized)
                 return;
 
             // if this is a new window, place it to top
-            if (Visibility != Visibility.Visible)
-                this.BringToFront();
+            if (window.Visibility != Visibility.Visible)
+                window.BringToFront();
 
             var screen = WindowHelper.GetCurrentWindowRect();
 
             // do not resize or reposition the window is it is visible - unless the next window is size-fixed
-            if (Visibility == Visibility.Visible && canResize)
+            if (window.Visibility == Visibility.Visible && canOldPluginResize && canNextPluginResize)
                 return;
 
             // otherwise, resize it and place it to the old window center.
-            var oldCenterX = Left + Width / 2;
-            var oldCenterY = Top + Height / 2;
+            var oldCenterX = window.Left + window.Width / 2;
+            var oldCenterY = window.Top + window.Height / 2;
 
             var newLeft = oldCenterX - size.Width / 2;
             var newTop = oldCenterY - size.Height / 2;
@@ -284,7 +285,7 @@ namespace QuickLook
             newLeft = newLeft + size.Width > screen.Right ? screen.Right - size.Width : newLeft; // right
             newTop = newTop + size.Height > screen.Bottom ? screen.Bottom - size.Height : newTop; // bottom
 
-            this.MoveWindow(newLeft, newTop, size.Width, size.Height);
+            window.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
 
         internal void UnloadPlugin()
@@ -294,6 +295,8 @@ namespace QuickLook
             Keyboard.DefaultRestoreFocusMode =
                 RestoreFocusMode.None; // WPF will put the focused item into a "_restoreFocus" list ... omg
             Keyboard.ClearFocus();
+
+            _canOldPluginResize = ContextObject.CanResize;
 
             ContextObject.Reset();
 
@@ -332,7 +335,7 @@ namespace QuickLook
                             (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
             var newWidth = ContextObject.PreferredSize.Width + margin;
 
-            ResizeAndCenter(new Size(newWidth, newHeight), ContextObject.CanResize);
+            ResizeAndCenter(this, new Size(newWidth, newHeight), _canOldPluginResize, ContextObject.CanResize);
 
             if (Visibility != Visibility.Visible)
                 Show();
