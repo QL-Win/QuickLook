@@ -22,7 +22,7 @@ using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
-    internal class ProcessHelper
+    public class ProcessHelper
     {
         private const int ErrorInsufficientBuffer = 0x7A;
 

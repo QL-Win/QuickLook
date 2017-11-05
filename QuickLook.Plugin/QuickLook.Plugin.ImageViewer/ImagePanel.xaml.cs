@@ -29,6 +29,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Annotations;
 using QuickLook.Helpers;
+using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -42,6 +43,7 @@ namespace QuickLook.Plugin.ImageViewer
         private Uri _imageSource;
         private DateTime _lastZoomTime = DateTime.MinValue;
         private double _maxZoomFactor = 3d;
+        private Meta _meta;
         private double _minZoomFactor = 0.1d;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private BitmapSource _source;
@@ -68,6 +70,11 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ManipulationInertiaStarting += ViewPanel_ManipulationInertiaStarting;
             viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
             viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
+        }
+
+        internal ImagePanel(Meta meta) : this()
+        {
+            Meta = meta;
         }
 
         public BitmapScalingMode RenderMode
@@ -160,6 +167,17 @@ namespace QuickLook.Plugin.ImageViewer
 
                 if (ImageUriSource == null)
                     viewPanelImage.Source = _source;
+            }
+        }
+
+        public Meta Meta
+        {
+            get => _meta;
+            set
+            {
+                if (Equals(value, _meta)) return;
+                _meta = value;
+                OnPropertyChanged();
             }
         }
 

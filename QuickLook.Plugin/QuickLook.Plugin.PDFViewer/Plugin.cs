@@ -60,9 +60,6 @@ namespace QuickLook.Plugin.PDFViewer
             context.SetPreferredSizeFit(desiredSize, 0.6);
 
             context.PreferredSize = new Size(context.PreferredSize.Width, context.PreferredSize.Height + 32);
-
-            context.TitlebarBlurVisibility = true;
-            context.TitlebarOverlap = true;
         }
 
         public void View(string path, ContextObject context)

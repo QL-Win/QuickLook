@@ -15,50 +15,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Windows;
-using ExifLib;
 using ImageMagick;
+using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
 {
     internal static class ImageFileHelper
     {
-        internal static Size? GetImageSize(string path)
+        internal static Size GetImageSize(string path, Meta meta)
         {
-            var ori = GetOrientationFromExif(path);
+            var size = meta.GetSize();
+
+            if (!size.IsEmpty)
+                return size;
 
             try
             {
                 var info = new MagickImageInfo(path);
 
-                if (ori == OrientationType.RightTop || ori == OrientationType.LeftBotom)
+                if (meta.GetOrientation() == OrientationType.RightTop ||
+                    meta.GetOrientation() == OrientationType.LeftBotom)
                     return new Size {Width = info.Height, Height = info.Width};
                 return new Size {Width = info.Width, Height = info.Height};
             }
             catch (MagickException)
             {
-                return null;
-            }
-        }
-
-        private static OrientationType GetOrientationFromExif(string path)
-        {
-            try
-            {
-                using (var re = new ExifReader(path))
-                {
-                    re.GetTagValue(ExifTags.Orientation, out ushort orientation);
-
-                    if (orientation == 0)
-                        return OrientationType.Undefined;
-
-                    return (OrientationType) orientation;
-                }
-            }
-            catch (Exception)
-            {
-                return OrientationType.Undefined;
+                return Size.Empty;
             }
         }
     }

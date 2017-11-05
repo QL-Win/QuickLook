@@ -28,9 +28,6 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
     {
         public void GetAnimator(ObjectAnimationUsingKeyFrames animator, string path)
         {
-            // set dcraw.exe for Magick.NET
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-
             using (var image = new MagickImage(path))
             {
                 image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
@@ -39,8 +36,6 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 animator.KeyFrames.Add(new DiscreteObjectKeyFrame(image.ToBitmapSource(), TimeSpan.Zero));
                 animator.Duration = Duration.Forever;
             }
-
-            Directory.SetCurrentDirectory(App.AppPath);
         }
     }
 }

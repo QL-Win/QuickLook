@@ -16,10 +16,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
+using QuickLook.Helpers;
+using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -29,7 +35,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             DependencyProperty.Register("AnimationUri", typeof(Uri), typeof(AnimatedImage),
                 new UIPropertyMetadata(null, LoadImage));
 
-        private readonly ObjectAnimationUsingKeyFrames _animator = new ObjectAnimationUsingKeyFrames();
+        public static readonly DependencyProperty MetaProperty =
+            DependencyProperty.Register("Meta", typeof(Meta), typeof(AnimatedImage));
+
+        private ObjectAnimationUsingKeyFrames _animator = new ObjectAnimationUsingKeyFrames();
+        private bool _disposed;
 
         public Uri AnimationUri
         {
@@ -37,11 +47,19 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             set => SetValue(AnimationUriProperty, value);
         }
 
+        public Meta Meta
+        {
+            private get => (Meta) GetValue(MetaProperty);
+            set => SetValue(MetaProperty, value);
+        }
+
         public void Dispose()
         {
             BeginAnimation(SourceProperty, null);
             Source = null;
             _animator.KeyFrames.Clear();
+
+            _disposed = true;
         }
 
         private static void LoadImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
@@ -50,8 +68,55 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (instance == null)
                 return;
 
-            var path = ((Uri) ev.NewValue).LocalPath;
-            var ext = Path.GetExtension(path).ToLower();
+            var thumbnail = instance.Meta?.GetThumbnail(true);
+            instance.Source = thumbnail;
+
+            if (thumbnail != null)
+                LoadFullImageAsync(obj, ev);
+            else
+                LoadFullImage(obj, ev);
+        }
+
+        private static void LoadFullImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
+        {
+            var instance = obj as AnimatedImage;
+            if (instance == null)
+                return;
+
+            instance._animator = LoadFullImageCore((Uri) ev.NewValue);
+            instance.BeginAnimation(SourceProperty, instance._animator);
+        }
+
+        private static void LoadFullImageAsync(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
+        {
+            Task.Run(() =>
+            {
+                var instance = obj as AnimatedImage;
+                if (instance == null)
+                    return;
+
+                var animator = LoadFullImageCore((Uri) ev.NewValue);
+
+                instance.Dispatcher.Invoke(DispatcherPriority.Render,
+                    new Action(() =>
+                    {
+                        if (instance._disposed)
+                        {
+                            ProcessHelper.PerformAggressiveGC();
+                            return;
+                        }
+
+                        instance._animator = animator;
+                        instance.BeginAnimation(SourceProperty, instance._animator);
+
+                        Debug.WriteLine($"LoadFullImageAsync {Thread.CurrentThread.ManagedThreadId}");
+                    }));
+            });
+        }
+
+        private static ObjectAnimationUsingKeyFrames LoadFullImageCore(Uri path)
+        {
+            var ext = Path.GetExtension(path.LocalPath).ToLower();
 
             IAnimationProvider provider;
 
@@ -67,10 +132,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     provider = new ImageMagickProvider();
                     break;
             }
+            var animator = new ObjectAnimationUsingKeyFrames();
+            provider.GetAnimator(animator, path.LocalPath);
+            animator.Freeze();
 
-            provider.GetAnimator(instance._animator, path);
-
-            instance.BeginAnimation(SourceProperty, instance._animator);
+            return animator;
         }
     }
 }

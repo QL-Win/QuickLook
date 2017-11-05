@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using ImageMagick;
+using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -28,18 +29,18 @@ namespace QuickLook.Plugin.ImageViewer
         private static readonly string[] Formats =
         {
             // camera raw
-            ".3fr", ".ari", ".arw", ".bay", ".crw", ".cr2", ".cap", ".data", ".dcs", ".dcr", ".dng", ".drf", ".eip",
-            ".erf", ".fff", ".gpr", ".iiq", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm",
-            ".orf", ".pef", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw",
-            ".tif", ".x3f",
+            ".ari", ".arw", ".bay", ".crw", ".cr2", ".cap", ".dcs", ".dcr", ".dng", ".drf", ".eip", ".erf", ".fff",
+            ".iiq", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf", ".pef", ".ptx",
+            ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw", ".x3f",
             // normal
-            ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".svg", ".wdp", ".tif", ".tiff", ".tga",
-            ".webp", ".pbm", ".pgm", ".ppm", ".pnm",
+            ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".svg", ".wdp", ".tif", ".tiff", ".tga", ".webp", ".pbm",
+            ".pgm", ".ppm", ".pnm",
             // animated
             ".png", ".apng", ".gif"
         };
-        private Size _imageSize;
         private ImagePanel _ip;
+        private Meta _meta;
+        private Size _imageSize;
 
         public int Priority => int.MaxValue;
 
@@ -55,26 +56,19 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            _imageSize = ImageFileHelper.GetImageSize(path) ?? Size.Empty;
+            _imageSize = ImageFileHelper.GetImageSize(path, _meta = new Meta(path));
 
             if (!_imageSize.IsEmpty)
-                context.SetPreferredSizeFit(_imageSize, 0.6);
+                context.SetPreferredSizeFit(_imageSize, 0.8);
             else
                 context.PreferredSize = new Size(800, 600);
-
-            context.PreferredSize = new Size(context.PreferredSize.Width, context.PreferredSize.Height + 32);
-
-            Directory.SetCurrentDirectory(App.AppPath);
-
-            context.TitlebarBlurVisibility = true;
-            context.TitlebarOverlap = true;
-            context.TitlebarAutoHide = false;
+            
             context.UseDarkTheme = true;
         }
 
         public void View(string path, ContextObject context)
         {
-            _ip = new ImagePanel();
+            _ip = new ImagePanel(_meta);
 
             context.ViewerContent = _ip;
             context.Title = _imageSize.IsEmpty

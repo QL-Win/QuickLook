@@ -58,9 +58,6 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ExifLib.1.7.0.0\lib\net45\ExifLib.dll</HintPath>
-    </Reference>
     <Reference Include="LibAPNG">
       <HintPath>.\LibAPNG.dll</HintPath>
     </Reference>
@@ -84,6 +81,7 @@
     <Compile Include="AnimatedImage\GIFAnimationProvider.cs" />
     <Compile Include="AnimatedImage\IAnimationProvider.cs" />
     <Compile Include="AnimatedImage\ImageMagickProvider.cs" />
+    <Compile Include="exiv2\Meta.cs" />
     <Compile Include="ImageFileHelper.cs" />
     <Compile Include="ImagePanel.xaml.cs">
       <DependentUpon>ImagePanel.xaml</DependentUpon>
@@ -109,11 +107,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dcraw.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Resources\background-b.png" />
     <Resource Include="Resources\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="exiv2\exiv2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="exiv2\exiv2.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="exiv2\expat.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="exiv2\zlib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

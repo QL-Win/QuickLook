@@ -27,7 +27,6 @@
                  VirtualizingPanel.IsVirtualizing="True" Width="150"
                  SelectedIndex="0"
                  Focusable="False"
-                 Margin="0,32,0,0"
                  Background="#00FFFFFF"
                  ItemsSource="{Binding PageIds, ElementName=thisPdfViewer}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
