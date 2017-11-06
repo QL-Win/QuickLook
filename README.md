@@ -50,7 +50,7 @@ You may ask, why you write this when there several alternatives available on the
  - <kbd>Enter</kbd> Open/Execute current file
  - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
- - <kbd>Wheel</kbd> in audio/video player will increase or decrease volume
+ - <kbd>Wheel</kbd> Increase/decrease volume
 
 ## More Information
 
