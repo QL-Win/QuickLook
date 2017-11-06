@@ -148,9 +148,9 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
                 p.StartInfo.Arguments = arg;
                 p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 p.Start();
-                p.WaitForExit();
 
                 result = p.StandardOutput.ReadToEnd();
+                p.WaitForExit(1000);
             }
 
             return string.IsNullOrWhiteSpace(result)

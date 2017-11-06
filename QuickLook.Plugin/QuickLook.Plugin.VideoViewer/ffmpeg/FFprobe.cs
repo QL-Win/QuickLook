@@ -51,9 +51,10 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
                 p.StartInfo.Arguments = $"-v quiet -print_format xml -show_streams -show_format \"{media}\"";
                 p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 p.Start();
-                p.WaitForExit();
 
                 result = p.StandardOutput.ReadToEnd();
+                p.WaitForExit(1000);
+
             }
 
             if (string.IsNullOrWhiteSpace(result))
