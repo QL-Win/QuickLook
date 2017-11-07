@@ -213,7 +213,7 @@ namespace QuickLook.Plugin
         }
 
         /// <summary>
-        ///     Set the size of viewer window and shrink to fit (to screen resolution).
+        ///     Set the size of viewer window, scale or shrink to fit (to screen resolution).
         ///     The window can take maximum (maxRatio*resolution) space.
         /// </summary>
         /// <param name="size">The desired size.</param>

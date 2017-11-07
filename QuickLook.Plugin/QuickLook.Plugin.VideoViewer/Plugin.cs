@@ -92,7 +92,10 @@ namespace QuickLook.Plugin.VideoViewer
             windowSize.Width = Math.Max(def.Width, windowSize.Width);
             windowSize.Height = Math.Max(def.Height, windowSize.Height);
 
-            context.SetPreferredSizeFit(windowSize, 0.6);
+            if (!probe.HasVideo())
+                context.PreferredSize = def;
+            else
+                context.SetPreferredSizeFit(windowSize, 0.6);
             context.TitlebarOverlap = true;
         }
 
