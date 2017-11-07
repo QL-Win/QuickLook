@@ -33,7 +33,7 @@ namespace QuickLook.Plugin.PDFViewer
     public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDisposable
     {
         private const double MinZoomFactor = 0.1d;
-        private const double MaxZoomFactor = 3d;
+        private const double MaxZoomFactor = 5d;
         private int _changePageDeltaSum;
 
         private bool _pdfLoaded;
