@@ -69,12 +69,12 @@ namespace QuickLook
 
         private Icon GetTrayIconByDPI()
         {
-            var isWin7 = Environment.OSVersion.Version < new Version(6, 2);
+            var isWin10 = Environment.OSVersion.Version >= new Version(10, 0);
             var scale = DpiHelper.GetCurrentScaleFactor().Vertical;
 
-            if (isWin7)
-                return scale > 1 ? Resources.app : Resources.app_16;
-            return scale > 1 ? Resources.app_white : Resources.app_white_16;
+            if (isWin10)
+                return scale > 1 ? Resources.app_white : Resources.app_white_16;
+            return scale > 1 ? Resources.app : Resources.app_16;
         }
 
         public static void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
