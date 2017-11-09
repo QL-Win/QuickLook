@@ -156,7 +156,8 @@ namespace QuickLook
             else
             {
                 _restoreForDragMove = WindowState == WindowState.Maximized;
-                DragMove();
+                if (e.LeftButton == MouseButtonState.Pressed)
+                    DragMove();
             }
         }
     }
