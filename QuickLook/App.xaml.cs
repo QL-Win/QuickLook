@@ -108,7 +108,14 @@ namespace QuickLook
 
             Updater.CollectAndShowReleaseNotes();
 
-            Settings.Default.Upgrade();
+            try
+            {
+                Settings.Default.Upgrade();
+            }
+            catch (Exception)
+            {
+                TrayIconManager.ShowNotification("", "Configuration file is currupted and has been removed.", true);
+            }
             Settings.Default.Upgraded = false;
             Settings.Default.Save();
         }
