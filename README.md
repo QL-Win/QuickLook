@@ -14,9 +14,9 @@
 <img src="http://pooi.moe/QuickLook/sample.gif?3" width="400">
 
 ## Background
-[Quick Look](https://en.wikipedia.org/wiki/Quick_Look) is among the few features I missed from Mac OS X. It enables *very* quick preview of file by pressing <kbd>Space</kbd> key while highlighting it, without opening its associated application. Then I decide to add this feature to Windows by myself, which results this “QuickLook” project.
+One of the few features I missed from Mac OS X is [Quick Look](https://en.wikipedia.org/wiki/Quick_Look). It allows user peek into a file content in a lightening speed by just pressing the <kbd>Space</kbd> key. Windows, on the other hand, does not has this handy feature ... until now.
 
-You may ask, why you write this when there several alternatives available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer))? The answer is that, they are all among those which no longer actively developed, lack of support of file types and plugins, or asking user for amounts of $$$.
+I am aware that several alternatives are already available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer)). Despite these options, I still decide to craft another one by myself, because they are either not being actively developed, lacks of variety, or asks for a amount of $$$.
 
 ## Highlights
 
