@@ -9,7 +9,7 @@
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}">
+        <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}" RenderOptions.BitmapScalingMode="NearestNeighbor">
             <Rectangle.Fill>
                 <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background-b.png" AlignmentY="Top"
                             Viewport="0,0,32,32"
@@ -22,5 +22,19 @@
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
                                          AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
         </ScrollViewer>
+        <Border x:Name="zoomLevelInfo" CornerRadius="5" IsHitTestVisible="False" Opacity="0" Background="Gray" Padding="15,4,15,4" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Foreground="White" FontSize="18" Text="{Binding ElementName=imagePanel, Path=ZoomFactor, StringFormat={}{0:P0}}" />
+            <Border.Resources>
+                <Storyboard x:Key="StoryboardShowZoomLevelInfo">
+                    <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference zoomLevelInfo}}" Storyboard.TargetProperty="Opacity">
+                        <DoubleAnimationUsingKeyFrames.KeyFrames>
+                            <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.1" />
+                            <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.6" />
+                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.8" />
+                        </DoubleAnimationUsingKeyFrames.KeyFrames>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </Border.Resources>
+        </Border>
     </Grid>
 </UserControl>

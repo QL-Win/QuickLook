@@ -25,6 +25,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Annotations;
@@ -41,11 +42,13 @@ namespace QuickLook.Plugin.ImageViewer
         private Visibility _backgroundVisibility = Visibility.Visible;
         private Point? _dragInitPos;
         private Uri _imageSource;
+        private bool _isZoomFactorFirstSet = true;
         private DateTime _lastZoomTime = DateTime.MinValue;
         private double _maxZoomFactor = 3d;
         private Meta _meta;
         private double _minZoomFactor = 0.1d;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
+        private bool _showZoomLevelInfo = true;
         private BitmapSource _source;
         private double _zoomFactor = 1d;
 
@@ -75,6 +78,17 @@ namespace QuickLook.Plugin.ImageViewer
         internal ImagePanel(Meta meta) : this()
         {
             Meta = meta;
+        }
+
+        public bool ShowZoomLevelInfo
+        {
+            get => _showZoomLevelInfo;
+            set
+            {
+                if (value == _showZoomLevelInfo) return;
+                _showZoomLevelInfo = value;
+                OnPropertyChanged();
+            }
         }
 
         public BitmapScalingMode RenderMode
@@ -144,6 +158,14 @@ namespace QuickLook.Plugin.ImageViewer
             {
                 _zoomFactor = value;
                 OnPropertyChanged();
+
+                if (_isZoomFactorFirstSet)
+                {
+                    _isZoomFactorFirstSet = false;
+                    return;
+                }
+                if (ShowZoomLevelInfo)
+                    ((Storyboard) zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
             }
         }
 
@@ -194,6 +216,8 @@ namespace QuickLook.Plugin.ImageViewer
 
         private void ImagePanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            UpdateZoomToFitFactor();
+
             if (ZoomToFit)
                 DoZoomToFit();
         }
@@ -296,19 +320,28 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void DoZoomToFit()
         {
+            UpdateZoomToFitFactor();
+
+            Zoom(ZoomToFitFactor, false, true);
+        }
+
+        private void UpdateZoomToFitFactor()
+        {
             if (viewPanelImage.Source == null)
+            {
+                ZoomToFitFactor = 1d;
                 return;
+            }
 
             var factor = Math.Min(viewPanel.ActualWidth / viewPanelImage.Source.Width,
                 viewPanel.ActualHeight / viewPanelImage.Source.Height);
 
             ZoomToFitFactor = factor;
-
-            Zoom(factor, false, true);
         }
 
         public void ResetZoom()
         {
+            ZoomToFitFactor = 1;
             Zoom(1d, true);
         }
 
@@ -317,11 +350,18 @@ namespace QuickLook.Plugin.ImageViewer
             if (viewPanelImage.Source == null)
                 return;
 
+            // pause when fit width
             if (ZoomFactor < ZoomToFitFactor && factor > ZoomToFitFactor
                 || ZoomFactor > ZoomToFitFactor && factor < ZoomToFitFactor)
             {
                 factor = ZoomToFitFactor;
                 ZoomToFit = true;
+            }
+            // pause when 100%
+            else if (ZoomFactor < 1 && factor > 1 || ZoomFactor > 1 && factor < 1)
+            {
+                factor = 1;
+                ZoomToFit = false;
             }
             else
             {

@@ -70,7 +70,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Column="1" Background="#00EFEFEF">
-            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" BackgroundVisibility="Collapsed" />
+            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False" BackgroundVisibility="Collapsed" />
         </Grid>
     </Grid>
 </UserControl>
