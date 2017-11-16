@@ -38,63 +38,79 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             var clock = TimeSpan.Zero;
             var header = decoder.IHDRChunk;
-            Frame prevFrame = null;
-            BitmapSource prevRenderedFrame = null;
-            foreach (var rawFrame in decoder.Frames)
+            Frame currentFrame = null;
+            BitmapSource currentRenderedFrame = null;
+            BitmapSource previousStateRenderedFrame = null;
+            foreach (var nextFrame in decoder.Frames)
             {
-                var frame = MakeFrame(header, rawFrame, prevFrame, prevRenderedFrame);
-                prevFrame = rawFrame;
-                prevRenderedFrame = frame;
+                var nextRenderedFrame = MakeNextFrame(header, nextFrame, currentFrame, currentRenderedFrame, previousStateRenderedFrame);
 
                 var delay = TimeSpan.FromSeconds(
-                    (double) rawFrame.fcTLChunk.DelayNum /
-                    (rawFrame.fcTLChunk.DelayDen == 0 ? 100 : rawFrame.fcTLChunk.DelayDen));
+                    (double)nextFrame.fcTLChunk.DelayNum /
+                    (nextFrame.fcTLChunk.DelayDen == 0 ? 100 : nextFrame.fcTLChunk.DelayDen));
 
-                animator.KeyFrames.Add(new DiscreteObjectKeyFrame(frame, clock));
+                animator.KeyFrames.Add(new DiscreteObjectKeyFrame(nextRenderedFrame, clock));
                 clock += delay;
+
+                // the "previous state" of a "DisposeOpPrevious" frame is its previous frame, so we do not record it
+                if (currentFrame != null && currentFrame.fcTLChunk.DisposeOp != DisposeOps.APNGDisposeOpPrevious)
+                    previousStateRenderedFrame = currentRenderedFrame;
+                currentRenderedFrame = nextRenderedFrame;
+                currentFrame = nextFrame;
             }
 
             animator.Duration = clock;
             animator.RepeatBehavior = RepeatBehavior.Forever;
         }
 
-        private static BitmapSource MakeFrame(IHDRChunk header, Frame rawFrame, Frame previousFrame,
-            BitmapSource previousRenderedFrame)
+        private static BitmapSource MakeNextFrame(IHDRChunk header, Frame nextFrame, Frame currentFrame,
+            BitmapSource currentRenderedFrame, BitmapSource previousStateRenderedFrame)
         {
-            var fs = rawFrame.GetBitmapSource();
+            var fullRect = new Rect(0, 0, header.Width, header.Height);
+            var frameRect = new Rect(nextFrame.fcTLChunk.XOffset, nextFrame.fcTLChunk.YOffset,
+                nextFrame.fcTLChunk.Width, nextFrame.fcTLChunk.Height);
+
+            var fs = nextFrame.GetBitmapSource();
             var visual = new DrawingVisual();
 
             using (var context = visual.RenderOpen())
             {
-                switch (rawFrame.fcTLChunk.DisposeOp)
+                // protect region
+                if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
                 {
-                    case DisposeOps.APNGDisposeOpNone:
-                        // restore previousRenderedFrame
-                        //if (previousRenderedFrame != null)
-                        //{
-                        //    var fullRect = new Rect(0, 0, header.Width, header.Height);
-                        //    context.DrawImage(previousRenderedFrame, fullRect);
-                        //}
-                        break;
-                    case DisposeOps.APNGDisposeOpPrevious:
-                        // restore previousFrame
-                        if (previousFrame != null)
-                        {
-                            var pFrameRect = new Rect(previousFrame.fcTLChunk.XOffset,
-                                previousFrame.fcTLChunk.YOffset,
-                                previousFrame.fcTLChunk.Width, previousFrame.fcTLChunk.Height);
-                            context.DrawImage(previousFrame.GetBitmapSource(), pFrameRect);
-                        }
-                        break;
-                    case DisposeOps.APNGDisposeOpBackground:
-                        // do nothing
-                        break;
+                    var freeRegion = new CombinedGeometry(GeometryCombineMode.Xor,
+                                                  new RectangleGeometry(fullRect),
+                                                 new RectangleGeometry(frameRect));
+                    context.PushOpacityMask(new DrawingBrush(new GeometryDrawing(Brushes.Transparent, null, freeRegion)));
                 }
 
-                // draw current frame
-                var frameRect = new Rect(rawFrame.fcTLChunk.XOffset, rawFrame.fcTLChunk.YOffset,
-                    rawFrame.fcTLChunk.Width, rawFrame.fcTLChunk.Height);
+                if (currentFrame != null && currentRenderedFrame != null)
+                {
+                    switch (currentFrame.fcTLChunk.DisposeOp)
+                    {
+                        case DisposeOps.APNGDisposeOpNone:
+                            // restore currentRenderedFrame
+                            if (currentRenderedFrame != null)
+                            {
+                                context.DrawImage(currentRenderedFrame, fullRect);
+                            }
+                            break;
+                        case DisposeOps.APNGDisposeOpPrevious:
+                            // restore previousStateRenderedFrame
+                            if (previousStateRenderedFrame != null)
+                            {
+                                context.DrawImage(previousStateRenderedFrame, fullRect);
+                            }
+                            break;
+                        case DisposeOps.APNGDisposeOpBackground:
+                            // do nothing
+                            break;
+                    }
+                }
 
+                // unprotect region and draw the next frame
+                if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
+                    context.Pop();
                 context.DrawImage(fs, frameRect);
             }
             var bitmap = new RenderTargetBitmap(
