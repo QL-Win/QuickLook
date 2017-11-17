@@ -40,28 +40,35 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
 
         private bool Run(string media)
         {
-            string result;
-
-            using (var p = new Process())
+            try
             {
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = _probePath;
-                p.StartInfo.Arguments = $"-v quiet -print_format xml -show_streams -show_format \"{media}\"";
-                p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-                p.Start();
+                string result;
 
-                result = p.StandardOutput.ReadToEnd();
-                p.WaitForExit(1000);
+                using (var p = new Process())
+                {
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.FileName = _probePath;
+                    p.StartInfo.Arguments = $"-v quiet -print_format xml -show_streams -show_format \"{media}\"";
+                    p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                    p.Start();
 
+                    result = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit(1000);
+
+                }
+
+                if (string.IsNullOrWhiteSpace(result))
+                    return false;
+
+                ParseResult(result);
+                return true;
             }
-
-            if (string.IsNullOrWhiteSpace(result))
+            catch (Exception)
+            {
                 return false;
-
-            ParseResult(result);
-            return true;
+            }
         }
 
         private void ParseResult(string result)
@@ -71,28 +78,28 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
 
         public bool CanDecode()
         {
-            var info = _infoNavigator.SelectSingleNode("/ffprobe/format[@probe_score>25]");
+            var info = _infoNavigator?.SelectSingleNode("/ffprobe/format[@probe_score>25]");
 
             return info != null;
         }
 
         public string GetFormatName()
         {
-            var format = _infoNavigator.SelectSingleNode("/ffprobe/format/@format_name")?.Value;
+            var format = _infoNavigator?.SelectSingleNode("/ffprobe/format/@format_name")?.Value;
 
             return format ?? string.Empty;
         }
 
         public string GetFormatLongName()
         {
-            var format = _infoNavigator.SelectSingleNode("/ffprobe/format/@format_long_name")?.Value;
+            var format = _infoNavigator?.SelectSingleNode("/ffprobe/format/@format_long_name")?.Value;
 
             return format ?? string.Empty;
         }
 
         public bool HasAudio()
         {
-            var duration = _infoNavigator.SelectSingleNode("/ffprobe/streams/stream[@codec_type='audio'][1]/@duration")
+            var duration = _infoNavigator?.SelectSingleNode("/ffprobe/streams/stream[@codec_type='audio'][1]/@duration")
                 ?.Value;
 
             if (duration == null)
@@ -104,7 +111,7 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
 
         public bool HasVideo()
         {
-            var fps = _infoNavigator.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@avg_frame_rate")
+            var fps = _infoNavigator?.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@avg_frame_rate")
                 ?.Value;
 
             if (fps == null)
@@ -118,9 +125,9 @@ namespace QuickLook.Plugin.VideoViewer.FFmpeg
             if (!HasVideo())
                 return Size.Empty;
 
-            var width = _infoNavigator.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@coded_width")
+            var width = _infoNavigator?.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@coded_width")
                 ?.Value;
-            var height = _infoNavigator.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@coded_height")
+            var height = _infoNavigator?.SelectSingleNode("/ffprobe/streams/stream[@codec_type='video'][1]/@coded_height")
                 ?.Value;
 
             if (width == null || height == null)

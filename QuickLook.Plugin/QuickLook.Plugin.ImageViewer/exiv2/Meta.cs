@@ -137,25 +137,31 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
 
         private Dictionary<string, string> Run(string arg, string regexSplit)
         {
-            string result;
-
-            using (var p = new Process())
+            try
             {
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = ExivPath;
-                p.StartInfo.Arguments = arg;
-                p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-                p.Start();
+                string result;
+                using (var p = new Process())
+                {
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.FileName = ExivPath;
+                    p.StartInfo.Arguments = arg;
+                    p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                    p.Start();
 
-                result = p.StandardOutput.ReadToEnd();
-                p.WaitForExit(1000);
+                    result = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit(1000);
+                }
+
+                return string.IsNullOrWhiteSpace(result)
+                    ? new Dictionary<string, string>()
+                    : ParseResult(result, regexSplit);
             }
-
-            return string.IsNullOrWhiteSpace(result)
-                ? new Dictionary<string, string>()
-                : ParseResult(result, regexSplit);
+            catch (Exception)
+            {
+                return new Dictionary<string, string>();
+            }
         }
 
         private Dictionary<string, string> ParseResult(string result, string regexSplit)
