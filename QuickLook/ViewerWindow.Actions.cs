@@ -161,7 +161,14 @@ namespace QuickLook
             ContextObject.ViewerWindow = this;
 
             // get window size before showing it
-            Plugin.Prepare(path, ContextObject);
+            try
+            {
+                Plugin.Prepare(path, ContextObject);
+            }
+            catch (Exception e)
+            {
+                exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
+            }
 
             SetOpenWithButtonAndPath();
 
