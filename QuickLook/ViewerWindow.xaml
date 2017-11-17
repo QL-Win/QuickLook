@@ -13,31 +13,41 @@
     MinWidth="400" MinHeight="200"
     WindowStartupLocation="CenterScreen"
     Focusable="False" WindowStyle="None"
-    Background="Transparent"
+    Background="{DynamicResource CaptionBackground}"
     ShowActivated="False" ShowInTaskbar="False">
     <controls:MainWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:BooleanToResizeModeConverter x:Key="BooleanToResizeModeConverter" />
-            <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
-            <converters:BooleanToResizeBorderThicknessConverter x:Key="BooleanToResizeBorderThicknessConverter" />
+            <converters:BooleanAndWindowStateToThicknessConverter x:Key="BooleanAndWindowStateToThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </controls:MainWindowBase.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" CornerRadius="0" GlassFrameThickness="0,0,0,1" 
-                      ResizeBorderThickness="{Binding ContextObject.CanResize, Converter={StaticResource BooleanToResizeBorderThicknessConverter}, ElementName=mainWindow}"
-                      UseAeroCaptionButtons="False" />
+                      UseAeroCaptionButtons="False">
+            <WindowChrome.ResizeBorderThickness>
+                <MultiBinding Converter="{StaticResource BooleanAndWindowStateToThicknessConverter}" ConverterParameter="{StaticResource MainWindowResizeThinkness}">
+                    <Binding ElementName="mainWindow" Path="ContextObject.CanResize" />
+                    <Binding ElementName="mainWindow" Path="WindowState" />
+                </MultiBinding>
+            </WindowChrome.ResizeBorderThickness>
+            </WindowChrome>
     </WindowChrome.WindowChrome>
     <controls:MainWindowBase.Style>
         <Style TargetType="controls:MainWindowBase">
             <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
         </Style>
     </controls:MainWindowBase.Style>
-    <Grid x:Name="windowFrameContainer" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="windowFrameContainer" Background="{DynamicResource CaptionBackground}">
+        <Grid.Margin>
+            <MultiBinding Converter="{StaticResource BooleanAndWindowStateToThicknessConverter}" ConverterParameter="{StaticResource MainWindowShadowMarginThinkness}">
+                <Binding ElementName="mainWindow" Path="ContextObject.CanResize" />
+                <Binding ElementName="mainWindow" Path="WindowState" />
+            </MultiBinding>
+        </Grid.Margin>
         <Grid x:Name="viewerRootContainer" ZIndex="190">
             <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
                       VerticalAlignment="Top"

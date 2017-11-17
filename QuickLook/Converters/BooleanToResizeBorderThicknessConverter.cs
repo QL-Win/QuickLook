@@ -22,19 +22,26 @@ using System.Windows.Data;
 
 namespace QuickLook.Converters
 {
-    public sealed class BooleanToResizeBorderThicknessConverter : DependencyObject, IValueConverter
+    public sealed class BooleanAndWindowStateToThicknessConverter : DependencyObject, IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                return 0;
+            var zero = new Thickness();
+            var def = parameter as Thickness? ?? new Thickness();
 
-            var v = (bool) value;
+            if (values == null || values.Length != 2)
+                return zero;
 
-            return v ? 6 : 0;
+            var canResize = values[0] as bool? ?? false;
+            var state = values[1] as WindowState? ?? WindowState.Normal;
+
+            if (!canResize)
+                return zero;
+
+            return state == WindowState.Maximized ? zero : def;
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

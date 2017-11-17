@@ -138,7 +138,8 @@ namespace QuickLook
 
             WindowState = WindowState.Normal;
 
-            DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
         }
 
         private void WindowDragMoveStart(object sender, MouseButtonEventArgs e)
