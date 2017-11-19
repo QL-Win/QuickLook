@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -103,18 +104,27 @@ namespace QuickLook
 
         private void UpgradeSettings()
         {
-            if (!Settings.Default.Upgraded)
-                return;
-
-            Updater.CollectAndShowReleaseNotes();
-
             try
             {
+                if (!Settings.Default.Upgraded)
+                    return;
+
+                Updater.CollectAndShowReleaseNotes();
+
                 Settings.Default.Upgrade();
             }
-            catch (Exception)
+            catch (ConfigurationErrorsException e)
             {
-                TrayIconManager.ShowNotification("", "Configuration file is currupted and has been removed.", true);
+                if (e.Filename != null)
+                    File.Delete(e.Filename);
+                else if (((ConfigurationErrorsException) e.InnerException)?.Filename != null)
+                    File.Delete(((ConfigurationErrorsException) e.InnerException).Filename);
+
+                MessageBox.Show("Configuration file is currupted and has been reseted. Please restart QuickLook.",
+                    "QuickLook", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                Process.GetCurrentProcess().Kill(); // just kill current process to avoid subsequence executions
+                //return;
             }
             Settings.Default.Upgraded = false;
             Settings.Default.Save();
