@@ -31,7 +31,9 @@ namespace QuickLook
     /// </summary>
     public partial class ViewerWindow : MainWindowBase
     {
-        private string _path;
+        private Size _customWindowSize = Size.Empty;
+        private bool _ignoreNextWindowSizeChange;
+        private string _path = string.Empty;
         private bool _restoreForDragMove;
 
         internal ViewerWindow()
@@ -42,6 +44,10 @@ namespace QuickLook
             InitializeComponent();
 
             FontFamily = new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
+
+            SizeChanged += SaveWindowSizeOnSizeChanged;
+
+            StateChanged += (sender, e) => _ignoreNextWindowSizeChange = true;
 
             windowCaptionContainer.MouseLeftButtonDown += WindowDragMoveStart;
             windowCaptionContainer.MouseMove += WindowDragMoving;
@@ -85,6 +91,22 @@ namespace QuickLook
                 WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
             buttonShare.Click += Share;
+        }
+
+        private void SaveWindowSizeOnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // first shown?
+            if (e.PreviousSize == new Size(0, 0))
+                return;
+            // resize when switching preview?
+            if (_ignoreNextWindowSizeChange)
+            {
+                _ignoreNextWindowSizeChange = false;
+                return;
+            }
+
+            // by user?
+            _customWindowSize = new Size(Width, Height);
         }
 
         private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)

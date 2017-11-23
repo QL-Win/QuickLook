@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <Thickness x:Key="MainWindowShadowMarginThinkness">1</Thickness>
-    <Thickness x:Key="MainWindowResizeThinkness">6</Thickness>
+    <Thickness x:Key="MainWindowShadowMarginThickness">1</Thickness>
+    <Thickness x:Key="MainWindowResizeThickness">6</Thickness>
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
     <Color x:Key="MainWindowShadowColor">Gray</Color>
     <SolidColorBrush x:Key="MainWindowBackground" Color="#FFFAFAFA" />

@@ -20,48 +20,37 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:BooleanAndWindowStateToThicknessConverter x:Key="BooleanAndWindowStateToThicknessConverter" />
+            <converters:WindowStateToThicknessConverter x:Key="WindowStateToThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </controls:MainWindowBase.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" CornerRadius="0" GlassFrameThickness="0,0,0,1" 
-                      UseAeroCaptionButtons="False">
-            <WindowChrome.ResizeBorderThickness>
-                <MultiBinding Converter="{StaticResource BooleanAndWindowStateToThicknessConverter}" ConverterParameter="{StaticResource MainWindowResizeThinkness}">
-                    <Binding ElementName="mainWindow" Path="ContextObject.CanResize" />
-                    <Binding ElementName="mainWindow" Path="WindowState" />
-                </MultiBinding>
-            </WindowChrome.ResizeBorderThickness>
-            </WindowChrome>
+        <WindowChrome CaptionHeight="0" CornerRadius="0" GlassFrameThickness="0,0,0,1"
+                      ResizeBorderThickness="{Binding ElementName=mainWindow, Path=WindowState, Converter={StaticResource WindowStateToThicknessConverter}, ConverterParameter={StaticResource MainWindowResizeThickness}}"
+                      UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <controls:MainWindowBase.Style>
         <Style TargetType="controls:MainWindowBase">
             <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
         </Style>
     </controls:MainWindowBase.Style>
-    <Grid x:Name="windowFrameContainer" Background="{DynamicResource CaptionBackground}">
-        <Grid.Margin>
-            <MultiBinding Converter="{StaticResource BooleanAndWindowStateToThicknessConverter}" ConverterParameter="{StaticResource MainWindowShadowMarginThinkness}">
-                <Binding ElementName="mainWindow" Path="ContextObject.CanResize" />
-                <Binding ElementName="mainWindow" Path="WindowState" />
-            </MultiBinding>
-        </Grid.Margin>
+    <Grid x:Name="windowFrameContainer" Background="{DynamicResource CaptionBackground}"
+          Margin="{Binding ElementName=mainWindow, Path=WindowState, Converter={StaticResource WindowStateToThicknessConverter}, ConverterParameter={StaticResource MainWindowShadowMarginThickness}}">
         <Grid x:Name="viewerRootContainer" ZIndex="190">
             <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
-                      VerticalAlignment="Top"
-                      ZIndex="100">
+                  VerticalAlignment="Top"
+                  ZIndex="100">
                 <Grid.Resources>
                     <Storyboard x:Key="ShowCaptionContainerStoryboard" Completed="AutoHideCaptionContainer">
                         <DoubleAnimation
-                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                                Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />
+                            Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                            Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />
                     </Storyboard>
                     <Storyboard x:Key="HideCaptionContainerStoryboard">
                         <DoubleAnimationUsingKeyFrames
-                                Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
-                                Storyboard.TargetProperty="Opacity">
+                            Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
+                            Storyboard.TargetProperty="Opacity">
                             <DoubleAnimationUsingKeyFrames.KeyFrames>
                                 <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0" />
                                 <LinearDoubleKeyFrame Value="1" KeyTime="0:0:1" />
@@ -71,24 +60,24 @@
                     </Storyboard>
                 </Grid.Resources>
                 <glassLayer:GlassLayer OverlayColor="{DynamicResource CaptionBackground}"
-                                           BlurredElement="{Binding ElementName=containerPanel}"
-                                           ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                           GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                           NoiseVisibility="Visible" />
+                                       BlurredElement="{Binding ElementName=containerPanel}"
+                                       ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       NoiseVisibility="Visible" />
                 <DockPanel>
                     <DockPanel.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
                     </DockPanel.Effect>
                     <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
-                                Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
+                            Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
                     <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"
-                                Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
                                 <Setter Property="Content" Value="&#xE740;" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding WindowState, ElementName=mainWindow}"
-                                                     Value="Maximized">
+                                                 Value="Maximized">
                                         <Setter Property="Content" Value="&#xE73F;" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -96,10 +85,10 @@
                         </Button.Style>
                     </Button>
                     <Button x:Name="buttonOpenWith" DockPanel.Dock="Right"
-                                Style="{StaticResource CaptionTextButtonStyle}">
+                            Style="{StaticResource CaptionTextButtonStyle}">
                         <Button.Content>
                             <TextBlock x:Name="buttonOpenWithText" VerticalAlignment="Center">
-                                    Open with <Bold>AppName</Bold>
+                                Open with <Bold>AppName</Bold>
                             </TextBlock>
                         </Button.Content>
                     </Button>
@@ -146,27 +135,27 @@
                         </Button.Style>
                     </Button>
                     <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
-                                Content="&#xE72D;" />
+                            Content="&#xE72D;" />
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
-                                       HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
-                                       VerticalAlignment="Center" Margin="5,0" />
+                                   HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center" Margin="5,0" />
                     </Grid>
                 </DockPanel>
             </Grid>
             <DockPanel x:Name="containerPanel" Background="{DynamicResource MainWindowBackground}" ZIndex="80">
                 <Grid DockPanel.Dock="Top" Height="{StaticResource MainWindowCaptionHeight}"
-                          Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                      Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
                 <ContentControl x:Name="container"
-                                    Foreground="{DynamicResource WindowTextForeground}"
-                                    Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
+                                Foreground="{DynamicResource WindowTextForeground}"
+                                Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
                 <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
                             <DataTrigger
-                                    Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
-                                    Value="True">
+                                Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
+                                Value="True">
                                 <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -180,17 +169,17 @@
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
                         <DataTrigger
-                                Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
-                                Value="True">
+                            Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
+                            Value="True">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
             <busyDecorator:BusyDecorator x:Name="busyDecorator"
-                                             IsBusyIndicatorShowing="True"
-                                             VerticalAlignment="Center"
-                                             HorizontalAlignment="Center" />
+                                         IsBusyIndicatorShowing="True"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center" />
         </Grid>
     </Grid>
 </controls:MainWindowBase>

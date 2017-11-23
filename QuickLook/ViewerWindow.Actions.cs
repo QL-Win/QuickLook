@@ -80,40 +80,36 @@ namespace QuickLook
             BeginClose();
         }
 
-        private static void ResizeAndCenter(Window window, Size size, bool canOldPluginResize, bool canNextPluginResize)
+        private void ResizeAndCenter(Size size, bool canOldPluginResize, bool canNextPluginResize)
         {
             // resize to MinSize first
-            size.Width = Math.Max(size.Width, window.MinWidth);
-            size.Height = Math.Max(size.Height, window.MinHeight);
+            size.Width = Math.Max(size.Width, MinWidth);
+            size.Height = Math.Max(size.Height, MinHeight);
 
-            if (!window.IsLoaded)
+            if (!IsLoaded)
             {
                 // if the window is not loaded yet, just leave the problem to WPF
-                window.Width = size.Width;
-                window.Height = size.Height;
-                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                window.Dispatcher.BeginInvoke(new Action(window.BringToFront), DispatcherPriority.Render);
+                Width = size.Width;
+                Height = size.Height;
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
 
                 return;
             }
 
             // is the window is now now maximized, do not move it
-            if (window.WindowState == WindowState.Maximized)
+            if (WindowState == WindowState.Maximized)
                 return;
 
             // if this is a new window, place it to top
-            if (window.Visibility != Visibility.Visible)
-                window.BringToFront();
+            if (Visibility != Visibility.Visible)
+                this.BringToFront();
 
             var screen = WindowHelper.GetCurrentWindowRect();
 
-            // do not resize or reposition the window is it is visible - unless the next window is size-fixed
-            if (window.Visibility == Visibility.Visible && canOldPluginResize && canNextPluginResize)
-                return;
-
             // otherwise, resize it and place it to the old window center.
-            var oldCenterX = window.Left + window.Width / 2;
-            var oldCenterY = window.Top + window.Height / 2;
+            var oldCenterX = Left + Width / 2;
+            var oldCenterY = Top + Height / 2;
 
             var newLeft = oldCenterX - size.Width / 2;
             var newTop = oldCenterY - size.Height / 2;
@@ -124,7 +120,7 @@ namespace QuickLook
             newLeft = newLeft + size.Width > screen.Right ? screen.Right - size.Width : newLeft; // right
             newTop = newTop + size.Height > screen.Bottom ? screen.Bottom - size.Height : newTop; // bottom
 
-            window.MoveWindow(newLeft, newTop, size.Width, size.Height);
+            this.MoveWindow(newLeft, newTop, size.Width, size.Height);
         }
 
         internal void UnloadPlugin()
@@ -181,7 +177,14 @@ namespace QuickLook
                             (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
             var newWidth = ContextObject.PreferredSize.Width + margin;
 
-            ResizeAndCenter(this, new Size(newWidth, newHeight), _canOldPluginResize, ContextObject.CanResize);
+            var newSize = new Size(newWidth, newHeight);
+            // if use has adjusted the window size, keep it
+            if (_customWindowSize != Size.Empty)
+                newSize = _customWindowSize;
+            else
+                _ignoreNextWindowSizeChange = true;
+
+            ResizeAndCenter(newSize, _canOldPluginResize, ContextObject.CanResize);
 
             if (Visibility != Visibility.Visible)
                 Show();
@@ -251,6 +254,10 @@ namespace QuickLook
 
         internal void BeginHide()
         {
+            // reset custom window size
+            _customWindowSize = Size.Empty;
+            _ignoreNextWindowSizeChange = true;
+
             UnloadPlugin();
 
             // if the this window is hidden in Max state, new show() will results in failure:

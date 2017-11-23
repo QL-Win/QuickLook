@@ -229,7 +229,7 @@ namespace QuickLook.Plugin
             var heightRatio = max.Height * maxRatio / size.Height;
 
             var ratio = Math.Min(widthRatio, heightRatio);
-            //if (ratio > 1) ratio = 1;
+            if (ratio > 1) ratio = 1;
 
             PreferredSize = new Size {Width = size.Width * ratio, Height = size.Height * ratio};
 

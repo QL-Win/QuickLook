@@ -99,7 +99,7 @@ namespace QuickLook.Plugin.InfoPanel
                 else if (Directory.Exists(path))
                 {
                     FileHelper.CountFolder(path, ref _stop,
-                        out long totalDirsL, out long totalFilesL, out long totalSizeL);
+                        out var totalDirsL, out var totalFilesL, out var totalSizeL);
 
                     if (!Stop)
                         Dispatcher.Invoke(() =>

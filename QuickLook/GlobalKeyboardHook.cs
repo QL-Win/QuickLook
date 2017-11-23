@@ -78,13 +78,12 @@ namespace QuickLook
         private int HookProc(int code, int wParam, ref User32.KeyboardHookStruct lParam)
         {
             if (code >= 0)
-            {
                 if (!IsWindowsKeyPressed())
                 {
-                    var key = (Keys)lParam.vkCode;
-                     if (HookedKeys.Contains(key))
+                    var key = (Keys) lParam.vkCode;
+                    if (HookedKeys.Contains(key))
                     {
-                         key = AddModifiers(key);
+                        key = AddModifiers(key);
 
                         var kea = new KeyEventArgs(key);
                         if (wParam == User32.WM_KEYDOWN || wParam == User32.WM_SYSKEYDOWN)
@@ -95,7 +94,6 @@ namespace QuickLook
                             return 1;
                     }
                 }
-            }
             return User32.CallNextHookEx(_hhook, code, wParam, ref lParam);
         }
 
