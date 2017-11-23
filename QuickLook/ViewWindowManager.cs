@@ -28,9 +28,9 @@ namespace QuickLook
     internal class ViewWindowManager : IDisposable
     {
         private static ViewWindowManager _instance;
-        private ViewerWindow _viewerWindow;
 
         private string _invokedPath = string.Empty;
+        private ViewerWindow _viewerWindow;
 
         internal ViewWindowManager()
         {
@@ -133,7 +133,7 @@ namespace QuickLook
         private void BeginShowNewWindow(string path, IViewer matchedPlugin)
         {
             _viewerWindow.UnloadPlugin();
-            
+
             _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
         }
 

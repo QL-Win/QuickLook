@@ -80,8 +80,8 @@ namespace QuickLook.Helpers
                     matrix = src.CompositionTarget.TransformToDevice;
                 }
 
-            pixelX = (int)Math.Round((matrix.M11 * unitX));
-            pixelY = (int)Math.Round((matrix.M22 * unitY));
+            pixelX = (int) Math.Round(matrix.M11 * unitX);
+            pixelY = (int) Math.Round(matrix.M22 * unitY);
         }
 
         internal static bool IsForegroundWindowBelongToSelf()
@@ -90,7 +90,7 @@ namespace QuickLook.Helpers
             if (hwnd == IntPtr.Zero)
                 return false;
 
-            User32.GetWindowThreadProcessId(hwnd, out uint procId);
+            User32.GetWindowThreadProcessId(hwnd, out var procId);
             return procId == Process.GetCurrentProcess().Id;
         }
 
