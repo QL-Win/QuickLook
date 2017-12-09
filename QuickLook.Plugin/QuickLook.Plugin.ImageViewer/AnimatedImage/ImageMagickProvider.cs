@@ -30,6 +30,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         {
             using (var image = new MagickImage(path))
             {
+                image.AddProfile(ColorProfile.SRGB);
                 image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
                 image.AutoOrient();
 
