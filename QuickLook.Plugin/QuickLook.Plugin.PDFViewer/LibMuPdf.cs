@@ -19,6 +19,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using QuickLook.Helpers;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -64,10 +65,10 @@ namespace QuickLook.Plugin.PDFViewer
                 NativeMethods.ClearPixmap_32(context, pix, 0xFF);
 
             // creates a drawing device
-            if (App.Is64Bit)
-                dev = NativeMethods.NewDrawDevice_64(context, pix);
-            else
-                dev = NativeMethods.NewDrawDevice_32(context, pix);
+            dev = App.Is64Bit
+                ? NativeMethods.NewDrawDevice_64(context, pix)
+                : NativeMethods.NewDrawDevice_32(context, pix);
+
             // draws the page on the device created from the pixmap
             if (App.Is64Bit)
                 NativeMethods.RunPage_64(document, page, dev, ref ctm, IntPtr.Zero);
@@ -87,21 +88,40 @@ namespace QuickLook.Plugin.PDFViewer
             unsafe
             {
                 // converts the pixmap data to Bitmap data
-                byte* ptrSrc;
+                byte* ptrSrcOrigin;
                 if (App.Is64Bit)
-                    ptrSrc =
+                    ptrSrcOrigin =
                         (byte*) NativeMethods.GetSamples_64(context, pix); // gets the rendered data from the pixmap
                 else
-                    ptrSrc = (byte*) NativeMethods
+                    ptrSrcOrigin = (byte*) NativeMethods
                         .GetSamples_32(context, pix); // gets the rendered data from the pixmap
-                var ptrDest = (byte*) imageData.Scan0;
-                for (var y = 0; y < height; y++)
+                var ptrDestOrigin = (byte*) imageData.Scan0;
+
+                Parallel.For(0, height, y =>
                 {
-                    var pl = ptrDest;
-                    var sl = ptrSrc;
+                    var ptrDest = ptrDestOrigin + imageData.Stride * y;
+                    var ptrSrc = ptrSrcOrigin + width * 4 * y;
+
+                    Parallel.For(0, width, x =>
+                    {
+                        var pl = ptrDest + 3 * x;
+                        var sl = ptrSrc + 4 * x;
+                        //Swap these here instead of in MuPDF because most pdf images will be rgb or cmyk.
+                        //Since we are going through the pixels one by one anyway swap here to save a conversion from rgb to bgr.
+                        pl[2] = sl[0]; //b-r
+                        pl[1] = sl[1]; //g-g
+                        pl[0] = sl[2]; //r-b
+                        //sl[3] is the alpha channel, we will skip it here
+                    });
+                });
+
+                /*for (var y = 0; y < height; y++)
+                {
+                    var pl = ptrDestOrigin;
+                    var sl = ptrSrcOrigin;
                     for (var x = 0; x < width; x++)
                     {
-                        //Swap these here instead of in MuPDF because most pdf images will be rgb or cmyk.
+                        //S these here instead of in MuPDF because most pdf images will be rgb or cmyk.
                         //Since we are going through the pixels one by one anyway swap here to save a conversion from rgb to bgr.
                         pl[2] = sl[0]; //b-r
                         pl[1] = sl[1]; //g-g
@@ -110,9 +130,9 @@ namespace QuickLook.Plugin.PDFViewer
                         pl += 3;
                         sl += 4;
                     }
-                    ptrDest += imageData.Stride;
-                    ptrSrc += width * 4;
-                }
+                    ptrDestOrigin += imageData.Stride;
+                    ptrSrcOrigin += width * 4;
+                }*/
             }
             bmp.UnlockBits(imageData);
             if (App.Is64Bit)
