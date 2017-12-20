@@ -12,7 +12,7 @@
     d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="400" MinHeight="200"
     WindowStartupLocation="CenterScreen"
-    Focusable="False" WindowStyle="None"
+    Focusable="False" 
     Background="{DynamicResource CaptionBackground}"
     ShowActivated="False" ShowInTaskbar="False">
     <controls:MainWindowBase.Resources>

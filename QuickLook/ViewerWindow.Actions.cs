@@ -267,6 +267,8 @@ namespace QuickLook
             Hide();
             //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
 
+            ViewWindowManager.GetInstance().ForgetCurrentWindow();
+
             ProcessHelper.PerformAggressiveGC();
         }
 

@@ -26,7 +26,7 @@ namespace QuickLook.Controls
     {
         public MainWindowBase()
         {
-            WindowStyle = WindowStyle.None;
+            //WindowStyle = WindowStyle.None;
 
             SourceInitialized += SourceInitializedHandler;
         }
