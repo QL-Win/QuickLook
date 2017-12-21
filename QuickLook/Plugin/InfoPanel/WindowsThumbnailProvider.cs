@@ -56,6 +56,9 @@ namespace QuickLook.Plugin.InfoPanel
         {
             var hBitmap = GetHBitmap(Path.GetFullPath(fileName), width, height, options);
 
+            if (hBitmap == IntPtr.Zero)
+                return null;
+
             try
             {
                 // return a System.Drawing.Bitmap from the hBitmap
@@ -114,25 +117,23 @@ namespace QuickLook.Plugin.InfoPanel
 
         private static IntPtr GetHBitmap(string fileName, int width, int height, ThumbnailOptions options)
         {
-            IShellItem nativeShellItem;
             var shellItem2Guid = new Guid(IShellItem2Guid);
-            var retCode = SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out nativeShellItem);
+            var retCode = SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out var nativeShellItem);
 
             if (retCode != 0)
                 throw Marshal.GetExceptionForHR(retCode);
 
-            var nativeSize = new NativeSize();
-            nativeSize.Width = width;
-            nativeSize.Height = height;
+            var nativeSize = new NativeSize
+            {
+                Width = width,
+                Height = height
+            };
 
-            IntPtr hBitmap;
-            var hr = ((IShellItemImageFactory) nativeShellItem).GetImage(nativeSize, options, out hBitmap);
+            var hr = ((IShellItemImageFactory) nativeShellItem).GetImage(nativeSize, options, out var hBitmap);
 
             Marshal.ReleaseComObject(nativeShellItem);
-
-            if (hr == HResult.Ok) return hBitmap;
-
-            throw Marshal.GetExceptionForHR((int) hr);
+            
+            return hr == HResult.Ok ? hBitmap : IntPtr.Zero;
         }
 
         [ComImport]

@@ -58,8 +58,8 @@ namespace QuickLook.Plugin.InfoPanel
                         (int) (128 * scale.Vertical),
                         ThumbnailOptions.ScaleUp);
 
-                var source = icon.ToBitmapSource();
-                icon.Dispose();
+                var source = icon?.ToBitmapSource();
+                icon?.Dispose();
 
                 Dispatcher.BeginInvoke(new Action(() => image.Source = source));
             });
