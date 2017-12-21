@@ -1,0 +1,1521 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumSharp</name>
+    </assembly>
+    <members>
+        <member name="T:PDFiumSharp.ActionTypes">
+            <summary>
+            PDF Action Types
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.ActionTypes.Unsupported">
+            <summary>
+            Unsupported action type.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.ActionTypes.GoTo">
+            <summary>
+            Go to a destination within current document.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.ActionTypes.RemoteGoTo">
+            <summary>
+            Go to a destination within another document.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.ActionTypes.Uri">
+            <summary>
+            URI, including web pages and other Internet resources.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.ActionTypes.Launch">
+            <summary>
+            Launch an application or open a file.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.BitmapFormats.FPDFBitmap_Gray">
+            <summary>
+            Gray scale bitmap, one byte per pixel.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.BitmapFormats.FPDFBitmap_BGR">
+            <summary>
+            3 bytes per pixel, byte order: blue, green, red.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.BitmapFormats.FPDFBitmap_BGRx">
+            <summary>
+            4 bytes per pixel, byte order: blue, green, red, unused.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.BitmapFormats.FPDFBitmap_BGRA">
+            <summary>
+            4 bytes per pixel, byte order: blue, green, red, alpha.
+            </summary>
+        </member>
+        <member name="T:PDFiumSharp.DocumentPermissions">
+            <summary>
+            Flags specifying document permissions.
+            </summary>
+            <seealso cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/>
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_GetSecurityHandlerRevision(PDFiumSharp.Types.FPDF_DOCUMENT)"/>
+            <seealso href="http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf">PDF Reference: Table 22</seealso>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.Print">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 2: Print the document.
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Print the document
+            (possibly not at the highest quality level, depending on whether <see cref="F:PDFiumSharp.DocumentPermissions.PrintHighQuality"/> is also set). 
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.Modify">
+            <summary>
+            Modify the contents of the document by operations other than those controlled by <see cref="F:PDFiumSharp.DocumentPermissions.ModfiyAnnotations"/>,
+            <see cref="F:PDFiumSharp.DocumentPermissions.FillInForms"/> and <see cref="F:PDFiumSharp.DocumentPermissions.AssembleDocument"/>.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.ExtractTextAndGraphics">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 2: Copy or otherwise extract text and graphics from the document,
+            including extracting text and graphics (in support of accessibility to users with disabilities or for other purposes).
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Copy or otherwise extract text and graphics from
+            the document by operations other than that controlled by <see cref="F:PDFiumSharp.DocumentPermissions.ExtractTextAndGraphics2"/>. 
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.ModfiyAnnotations">
+            <summary>
+            Add or modify text annotations, fill in interactive form fields, and, if <see cref="F:PDFiumSharp.DocumentPermissions.Modify"/> is also set,
+            create or modify interactive form fields (including signature fields). 
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.FillInForms">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Fill in existing interactive form fields
+            (including signature fields), even if <see cref="F:PDFiumSharp.DocumentPermissions.ModfiyAnnotations"/> is not set.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.ExtractTextAndGraphics2">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Extract text and graphics
+            (in support of accessibility to users with disabilities or for other purposes).
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.AssembleDocument">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Assemble the document
+            (insert, rotate, or delete pages and create bookmarks or thumbnail images), even if <see cref="F:PDFiumSharp.DocumentPermissions.Modify"/> is not set.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.DocumentPermissions.PrintHighQuality">
+            <summary>
+            For <see cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision"/> of 3 or greater: Print the document to a representation
+            from which a faithful digital copy of the PDF content could be generated. When <see cref="F:PDFiumSharp.DocumentPermissions.PrintHighQuality"/> is not set
+            (and <see cref="F:PDFiumSharp.DocumentPermissions.Print"/> is set), printing is limited to a low-level representation of the appearance, possibly of degraded quality.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.FlattenFlags.NormalDisplay">
+            <summary>
+            Flatten for normal display.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.FlattenFlags.Print">
+            <summary>
+            Flatten for print.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.FlattenResults.Fail">
+            <summary>
+            Flatten operation failed.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.FlattenResults.Success">
+            <summary>
+            Flatten operation succeed.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.FlattenResults.NothingToDo">
+            <summary>
+            Nothing to be flattened.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.Unknown">
+            <summary>
+            Unknown page mode.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.UseNone">
+            <summary>
+            Document outline, and thumbnails hidden.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.UseOutlines">
+            <summary>
+            Document outline visible.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.UseThumbs">
+            <summary>
+            Thumbnail images visible.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.Fullscreen">
+            <summary>
+            Full-screen mode, no menu bar, window controls, or other decorations visible.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.UseOC">
+            <summary>
+            Optional content group panel visible.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.PageModes.UseAttachments">
+            <summary>
+            Attachments panel visible.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfDestinationCollection.Count">
+            
+        </member>
+        <member name="P:PDFiumSharp.PdfDocument.Pages">
+            <summary>
+            Gets the pages in the current <see cref="T:PDFiumSharp.PdfDocument"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfDocument.FileVersion">
+            <summary>
+            Gets the PDF file version. File version: 14 for 1.4, 15 for 1.5, ...
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision">
+            <summary>
+            Gets the revision of the security handler.
+            </summary>
+            <seealso href="http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf">PDF Reference: Table 21</seealso>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.#ctor">
+            <summary>
+            Creates a new <see cref="T:PDFiumSharp.PdfDocument"/>.
+            <see cref="M:PDFiumSharp.PdfDocument.Close"/> must be called in order to free unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.#ctor(System.String,System.String)">
+            <summary>
+            Loads a <see cref="T:PDFiumSharp.PdfDocument"/> from the file system.
+            <see cref="M:PDFiumSharp.PdfDocument.Close"/> must be called in order to free unmanaged resources.
+            </summary>
+            <param name="fileName">Filepath of the PDF file to load.</param>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.#ctor(System.Byte[],System.Int32,System.Int32,System.String)">
+            <summary>
+            Loads a <see cref="T:PDFiumSharp.PdfDocument"/> from memory.
+            <see cref="M:PDFiumSharp.PdfDocument.Close"/> must be called in order to free unmanaged resources.
+            </summary>
+            <param name="data">Byte array containing the bytes of the PDF document to load.</param>
+            <param name="index">The index of the first byte to be copied from <paramref name="data"/>.</param>
+            <param name="count">The number of bytes to copy from <paramref name="data"/> or a negative value to copy all bytes.</param>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.#ctor(System.IO.Stream,System.Int32,System.String)">
+            <summary>
+            Loads a <see cref="T:PDFiumSharp.PdfDocument"/> from '<paramref name="count"/>' bytes read from a <paramref name="stream"/>.
+            <see cref="M:PDFiumSharp.PdfDocument.Close"/> must be called in order to free unmanaged resources.
+            </summary>
+            <param name="count">
+            The number of bytes to read from the <paramref name="stream"/>.
+            If the value is equal to or smaller than 0, the stream is read to the end.
+            </param>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.Close">
+            <summary>
+            Closes the <see cref="T:PDFiumSharp.PdfDocument"/> and frees unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.Save(System.IO.Stream,PDFiumSharp.SaveFlags,System.Int32)">
+            <summary>
+            Saves the <see cref="T:PDFiumSharp.PdfDocument"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="version">
+            The new PDF file version of the saved file.
+            14 for 1.4, 15 for 1.5, etc. Values smaller than 10 are ignored.
+            </param>
+        </member>
+        <member name="M:PDFiumSharp.PdfDocument.Save(System.String,PDFiumSharp.SaveFlags,System.Int32)">
+            <summary>
+            Saves the <see cref="T:PDFiumSharp.PdfDocument"/> to the file system.
+            </summary>
+            <param name="version">
+            The new PDF file version of the saved file.
+            14 for 1.4, 15 for 1.5, etc. Values smaller than 10 are ignored.
+            </param>
+        </member>
+        <member name="T:PDFiumSharp.PDFium">
+            <summary>
+            Static class containing the native (imported) PDFium functions.
+            In case of missing documentation, refer to the <see href="https://pdfium.googlesource.com/pdfium/+/master/public">PDFium header files</see>. 
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PDFium.IsAvailable">
+            <summary>
+            Gets a value indicating whether the PDFium library is available.
+            <c>false</c> is returned if the native libraries could not be
+            loaded for some reason.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadDocument(System.Byte[],System.Int32,System.Int32,System.String)">
+            <summary>
+            Loads a PDF document from memory.
+            </summary>
+            <param name="data">The data to load the document from.</param>
+            <param name="index">The index of the first byte to be copied from <paramref name="data"/>.</param>
+            <param name="count">The number of bytes to copy from <paramref name="data"/> or a negative value to copy all bytes.</param>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadDocument(System.IO.Stream,System.Int32,System.String)">
+            <summary>
+            Loads a PDF document from '<paramref name="count"/>' bytes read from a stream.
+            </summary>
+            <param name="count">
+            The number of bytes to read from the <paramref name="stream"/>.
+            If the value is equal to or smaller than 0, the stream is read to the end.
+            </param>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetNamedDest(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32)">
+            <summary>
+            Get the named destination by index.
+            </summary>
+            <param name="document">Handle to a document.</param>
+            <param name="index">The index of a named destination.</param>
+            <returns>
+            The destination handle and name for a given index, or (<see cref="P:PDFiumSharp.Types.FPDF_DEST.Null"/>, <c>null</c>)
+            if there is no named destination corresponding to <paramref name="index"/>.
+            </returns>
+            <seealso cref="!:PdfDestinationCollection[int]"/>
+            <seealso cref="P:PDFiumSharp.PdfDocument.Destinations"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetTitle(PDFiumSharp.Types.FPDF_BOOKMARK)">
+            <summary>
+            Get the title of <paramref name="bookmark"/>.
+            </summary>
+            <param name="bookmark">Handle to the bookmark.</param>
+            <returns>The title of the bookmark.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetFilePath(PDFiumSharp.Types.FPDF_ACTION)">
+            <summary>
+            Gets the file path of a <see cref="T:PDFiumSharp.Types.FPDF_ACTION"/> of type <see cref="F:PDFiumSharp.ActionTypes.RemoteGoTo"/> or <see cref="F:PDFiumSharp.ActionTypes.Launch"/>.
+            </summary>
+            <param name="action">Handle to the action. Must be of type <see cref="F:PDFiumSharp.ActionTypes.RemoteGoTo"/> or <see cref="F:PDFiumSharp.ActionTypes.Launch"/>.</param>
+            <returns>The file path of <paramref name="action"/>.</returns>
+            <seealso cref="P:PDFiumSharp.PdfAction.FilePath"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetURIPath(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_ACTION)">
+            <summary>
+            Gets URI path of a <see cref="T:PDFiumSharp.Types.FPDF_ACTION"/> of type <see cref="F:PDFiumSharp.ActionTypes.Uri"/>.
+            </summary>
+            <param name="document">Handle to the document.</param>
+            <param name="action">Handle to the action. Must be of type <see cref="F:PDFiumSharp.ActionTypes.Uri"/>.</param>
+            <returns>The URI path of <paramref name="action"/>.</returns>
+            <seealso cref="P:PDFiumSharp.PdfAction.Uri"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_Enumerate(PDFiumSharp.Types.FPDF_PAGE)">
+            <summary>
+            Enumerates all the link annotations in <paramref name="page"/>.
+            </summary>
+            <param name="page">Handle to the page.</param>
+            <returns>All the link annotations in <paramref name="page"/>.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetMetaText(PDFiumSharp.Types.FPDF_DOCUMENT,System.String)">
+            <summary>
+            Get meta-data <paramref name="tag"/> content from <paramref name="document"/>.
+            </summary>
+            <param name="document">Handle to the document.</param>
+            <param name="tag">
+            The tag to retrieve. The tag can be one of:
+            Title, Author, Subject, Keywords, Creator, Producer,
+            CreationDate, or ModDate.
+            </param>
+            <returns>The meta-data.</returns>
+            <remarks>
+            For detailed explanations of these tags and their respective
+            values, please refer to PDF Reference 1.6, section 10.2.1,
+            'Document Information Dictionary'.
+            </remarks>
+            <seealso href="http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf">PDF Reference</seealso>
+            <seealso cref="M:PDFiumSharp.PdfDocument.GetMetaText(PDFiumSharp.MetadataTags)"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetMetaText(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.MetadataTags)">
+            <summary>
+            Get meta-data <paramref name="tag"/> content from <paramref name="document"/>.
+            </summary>
+            <param name="document">Handle to the document.</param>
+            <param name="tag">The tag to retrieve.</param>
+            <returns>The meta-data.</returns>
+            <remarks>
+            For detailed explanations of these tags and their respective
+            values, please refer to PDF Reference 1.6, section 10.2.1,
+            'Document Information Dictionary'.
+            </remarks>
+            <seealso href="http://wwwimages.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf">PDF Reference</seealso>
+            <seealso cref="M:PDFiumSharp.PdfDocument.GetMetaText(PDFiumSharp.MetadataTags)"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_InsertObject(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.FPDF_PAGEOBJECT@)">
+            <summary>
+            Insert <paramref name="page_obj"/> into <paramref name="page"/>.
+            </summary>
+            <param name="page">Handle to a page.</param>
+            <param name="page_obj">Handle to a page object. The <paramref name="page_obj"/> will be automatically freed.</param>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_LoadJpegFile(PDFiumSharp.Types.FPDF_PAGE[],PDFiumSharp.Types.FPDF_PAGEOBJECT,System.IO.Stream,System.Int32,System.Boolean)">
+            <summary>
+            Load an image from a JPEG image file and then set it into <paramref name="image_object"/>.
+            </summary>
+            <param name="loadedPages">All loaded pages, may be <c>null</c>.</param>
+            <param name="image_object">Handle to an image object.</param>
+            <param name="stream">Stream which provides access to an JPEG image.</param>
+            <param name="count">The number of bytes to read from <paramref name="stream"/> or 0 to read to the end.</param>
+            <param name="inline">
+            If <c>true</c>, this function loads the JPEG image inline, so the image
+            content is copied to the file. This allows <paramref name="stream"/>
+            to be closed after this function returns.
+            </param>
+            <returns><c>true</c> on success.</returns>
+            <remarks>
+            The image object might already have an associated image, which is shared and
+            cached by the loaded pages. In that case, we need to clear the cached image
+            for all the loaded pages. Pass <paramref name="loadedPages"/> to this API
+            to clear the image cache. If the image is not previously shared, <c>null</c> is a
+            valid <paramref name="loadedPages"/> value.
+            </remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_SetBitmap(PDFiumSharp.Types.FPDF_PAGE[],PDFiumSharp.Types.FPDF_PAGEOBJECT,PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>
+            Set <paramref name="bitmap"/> to <paramref name="image_object"/>.
+            </summary>
+            <param name="loadedPages">All loaded pages, may be <c>null</c>.</param>
+            <param name="image_object">Handle to an image object.</param>
+            <param name="bitmap">Handle of the bitmap.</param>
+            <returns><c>true</c> on success.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_LoadFont(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.FontTypes,System.Boolean,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Returns a font object loaded from a stream of data. The font is loaded
+            into the document. The caller does not need to free the returned object.
+            </summary>
+            <param name="document">Handle to the document.</param>
+            <param name="cid">A value specifying if the font is a CID font or not.</param>
+            <param name="data">The data, which will be copied by the font object.</param>
+            <param name="index">The index of the first byte to be copied from <paramref name="data"/>.</param>
+            <param name="count">The number of bytes to copy from <paramref name="data"/> or a negative value to copy all bytes.</param>
+            <returns>Returns NULL on failure.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_ImportPages(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Int32[])">
+            <summary>
+            Imports pages from <paramref name="src_doc"/> to <paramref name="dest_doc"/>
+            </summary>
+            <param name="index">Zero-based index of where the imported pages should be inserted in the destination document.</param>
+            <param name="srcPageIndices">Zero-based indices of the pages to import in the source document</param>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_SaveAsCopy(PDFiumSharp.Types.FPDF_DOCUMENT,System.IO.Stream,PDFiumSharp.SaveFlags,System.Int32)">
+            <summary>
+            Saves a PDF document to a stream.
+            </summary>
+            <param name="version">
+            The new PDF file version of the saved file.
+            14 for 1.4, 15 for 1.5, etc. Values smaller than 10 are ignored.
+            </param>
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_SaveAsCopy(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_FILEWRITE,PDFiumSharp.SaveFlags)"/>
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_SaveWithVersion(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_FILEWRITE,PDFiumSharp.SaveFlags,System.Int32)"/>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructElement_GetAltText(PDFiumSharp.Types.FPDF_STRUCTELEMENT)">
+            <summary>
+            Get the alternative text for a given element.
+            </summary>
+            <param name="struct_element">Handle to the struct element.</param>
+            <returns>The alternative text for <paramref name="struct_element"/>.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_InitLibrary">
+            <summary>Initialize the PDFium library</summary><remarks>
+			Convenience function to call <see cref="M:PDFiumSharp.PDFium.FPDF_InitLibraryWithConfig(PDFiumSharp.Types.FPDF_LIBRARY_CONFIG@)" /> for
+			backwards comatibility purposes.
+		</remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_InitLibraryWithConfig(PDFiumSharp.Types.FPDF_LIBRARY_CONFIG@)">
+            <summary>Initialize the PDFium library</summary><remarks>
+			You have to call this function before you can call any PDF
+			processing functions.
+		</remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_DestroyLibrary">
+            <summary>Release all resources allocated by the PDFium library.</summary><remarks>
+			You can call this function to release all memory blocks allocated by
+			the library.
+			After this function is called, you should not call any PDF
+			processing functions.
+		</remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadDocument(System.String,System.String)">
+            <summary>Open and load a PDF document.</summary><param name="file_path">Path to the PDF file (including extension).</param><param name="password">
+			A string used as the password for the PDF file.
+			If no password is needed, <see cref="F:System.String.Empty" /> or <c>null</c> can be used.
+		</param><returns>A handle to the loaded document, or NULL on failure.</returns><remarks>
+			Loaded document can be closed by <see cref="M:PDFiumSharp.PDFium.FPDF_CloseDocument(PDFiumSharp.Types.FPDF_DOCUMENT)" />.
+			If this function fails, you can use <see cref="M:PDFiumSharp.PDFium.FPDF_GetLastError" /> to retrieve
+			the reason why it failed.
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PdfDocument.#ctor(System.String,System.String)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadMemDocument(System.Byte@,System.Int32,System.String)">
+            <summary>Open and load a PDF document from memory.</summary><param name="data_buf">Pointer to a buffer containing the PDF document.</param><param name="size">Number of bytes in the PDF document.</param><param name="password">
+			A string used as the password for the PDF file.
+			If no password is needed, <see cref="F:System.String.Empty" /> or <c>null</c> can be used.
+		</param><returns>A handle to the loaded document, or NULL on failure.</returns><remarks>
+			<para>
+				The memory buffer must remain valid when the document is open.
+				The loaded document can be closed by <see cref="M:PDFiumSharp.PDFium.FPDF_CloseDocument(PDFiumSharp.Types.FPDF_DOCUMENT)" />.
+				If this function fails, you can use <see cref="M:PDFiumSharp.PDFium.FPDF_GetLastError" /> to retrieve
+				the reason why it failed.       
+			</para>
+			<para>
+				If PDFium is built with the XFA module, the application should call
+				<see cref="!:FPDF_LoadXFA" /> function after the PDF document loaded to support XFA
+				fields defined in the fpdfformfill.h file.
+			</para>
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PdfDocument.#ctor(System.Byte[],System.Int32,System.Int32,System.String)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadCustomDocument(PDFiumSharp.Types.FPDF_FILEREAD,System.String)">
+            <summary>Load PDF document from a custom access descriptor.</summary><param name="fileRead">A structure for accessing the file.</param><param name="password">Optional password for decrypting the PDF file.</param><returns>A handle to the loaded document, or NULL on failure.</returns><remarks>
+			<para>
+				The application must keep the file resources valid until the PDF
+				document is closed.
+				The loaded document can be closed with FPDF_CloseDocument.
+			</para>
+			<para>
+				If PDFium is built with the XFA module, the application should call
+				<see cref="!:FPDF_LoadXFA" /> function after the PDF document loaded to support XFA
+				fields defined in the fpdfformfill.h file.
+			</para>
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PdfDocument.#ctor(System.IO.Stream,System.Int32,System.String)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetFileVersion(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32@)">
+            <summary>Get the file version of the given PDF document.</summary><param name="doc">Handle to a document.</param><param name="fileVersion">The PDF file version. File version: 14 for 1.4, 15 for 1.5, ...</param><returns>True if succeeds, false otherwise.</returns><remarks>
+			If the document was created by <see cref="M:PDFiumSharp.PDFium.FPDF_CreateNewDocument" />,
+			then this function will always fail.
+		</remarks>
+            <seealso cref="P:PDFiumSharp.PdfDocument.FileVersion" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetLastError">
+            <summary>Get last error code when a function fails.</summary><remarks>
+			If the previous SDK call succeeded, the return value of this
+			function is not defined.
+		</remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetDocPermissions(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetDocPermissions/*" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Permissions" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetSecurityHandlerRevision(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetSecurityHandlerRevision/*" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.SecurityHandlerRevision" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetPageCount(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Get total number of pages in the document.</summary><param name="document">Handle to document.</param><returns>Total number of pages in the document.</returns>
+            <seealso cref="P:PDFiumSharp.PdfPageCollection.Count" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Pages" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_LoadPage(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32)">
+            <summary>Load a page inside the document.</summary><param name="document">Handle to document.</param><param name="page_index">Zero-based index of the page.</param><returns>A handle to the loaded page, or NULL if page load fails.</returns><remarks>The loaded page can be closed using FPDF_ClosePage.</remarks>
+            <seealso cref="!:PdfPageCollection[int]" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Pages" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetPageWidth(PDFiumSharp.Types.FPDF_PAGE)">
+            <summary>Get page width.</summary><param name="page">Handle to the page.</param><returns>
+			Page width (excluding non-displayable area) measured in points.
+			One point is 1/72 inch (around 0.3528 mm).
+		</returns>
+            <seealso cref="P:PDFiumSharp.PdfPage.Width" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetPageHeight(PDFiumSharp.Types.FPDF_PAGE)">
+            <summary>Get page height.</summary><param name="page">Handle to the page.</param><returns>
+			Page height (excluding non-displayable area) measured in points.
+			One point is 1/72 inch (around 0.3528 mm)
+		</returns>
+            <seealso cref="P:PDFiumSharp.PdfPage.Height" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetPageSizeByIndex(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Double@,System.Double@)">
+            <summary>Get the size of the page at the given index.</summary><param name="document">Handle to document.</param><param name="index">Zero-based index of the page.</param><param name="width">Pointer to a double to receive the page width (in points).</param><param name="height">Pointer to a double to receive the page height (in points).</param>
+            <seealso cref="P:PDFiumSharp.PdfPage.Size" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_RenderPageBitmap(PDFiumSharp.Types.FPDF_BITMAP,PDFiumSharp.Types.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)">
+            <summary>Render contents of a page to a device independent bitmap.</summary><param name="bitmap">
+			Handle to the device independent bitmap (as the
+			output buffer). The bitmap handle can be created
+			by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.
+		</param><param name="page">Handle to the page.</param><param name="start_x">Left pixel position of the display area in bitmap coordinates.</param><param name="start_y">Top pixel position of the display area in bitmap coordinates.</param><param name="size_x">Horizontal size (in pixels) for displaying the page.</param><param name="size_y">Vertical size (in pixels) for displaying the page.</param><param name="rotate">Page orientation.</param><param name="flags">
+			<see cref="F:PDFiumSharp.RenderingFlags.None" /> for normal display, or combination of the Page
+			Rendering flags defined above. With the <see cref="F:PDFiumSharp.RenderingFlags.Annotations" />
+			flag, it renders all annotations that do not require
+			user-interaction, which are all annotations except
+			widget and popup annotations.
+		</param>
+            <seealso cref="M:PDFiumSharp.PdfPage.Render(PDFiumSharp.PDFiumBitmap,System.ValueTuple{System.Int32,System.Int32,System.Int32,System.Int32},PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_RenderPageBitmapWithMatrix(PDFiumSharp.Types.FPDF_BITMAP,PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.FS_MATRIX,PDFiumSharp.Types.FS_RECTF,PDFiumSharp.RenderingFlags)">
+            <summary>Render contents of a page to a device independent bitmap.</summary><param name="bitmap">
+			Handle to the device independent bitmap (as the
+			output buffer). The bitmap handle can be created
+			by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.
+		</param><param name="page">Handle to the page.</param><param name="matrix">The transform matrix.</param><param name="clipping">The rect to clip to.</param><param name="flags">
+			<see cref="F:PDFiumSharp.RenderingFlags.None" /> for normal display, or combination of the Page
+			Rendering flags defined above. With the <see cref="F:PDFiumSharp.RenderingFlags.Annotations" />
+			flag, it renders all annotations that do not require
+			user-interaction, which are all annotations except
+			widget and popup annotations.
+		</param>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_ClosePage(PDFiumSharp.Types.FPDF_PAGE)">
+            <summary>Close a loaded PDF page.</summary><param name="page">Handle to the loaded page.</param>
+            <seealso cref="M:PDFiumSharp.PdfDocument.Close" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_CloseDocument(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Close a loaded PDF document.</summary><param name="document">Handle to the loaded document.</param>
+            <seealso cref="M:PDFiumSharp.PdfDocument.Close" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_DeviceToPage(PDFiumSharp.Types.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.PageOrientations,System.Int32,System.Int32,System.Double@,System.Double@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_DeviceToPage/*" />
+            <seealso cref="!:PdfPage.DeviceToPage((int left, int top, int width, int height), int, int, PageOrientations)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_PageToDevice(PDFiumSharp.Types.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.PageOrientations,System.Double,System.Double,System.Int32@,System.Int32@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_PageToDevice/*" />
+            <seealso cref="!:PdfPage.PageToDevice((int left, int top, int width, int height), double, double, PageOrientations)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)">
+            <summary>Create a device independent bitmap (FXDIB).</summary><param name="width">The number of pixels in width for the bitmap. Must be greater than 0. </param><param name="height">The number of pixels in height for the bitmap. Must be greater than 0.</param><param name="hasAlpha">A value indicating whether the alpha channel is used.</param><returns>The bitmap handle, or <see cref="F:System.IntPtr.Zero" /> if parameter error or out of memory.</returns><remarks>
+			The bitmap always uses 4 bytes per pixel. The first byte is always
+			double word aligned.
+			
+			The byte order is BGRx (the last byte unused if no alpha channel) or BGRA.
+			
+			The pixels in a horizontal line are stored side by side, with the
+			left most pixel stored first (with lower memory address).
+			Each line uses width * 4 bytes.
+			
+			Lines are stored one after another, with the top most line stored
+			first. There is no gap between adjacent lines.
+			
+			This function allocates enough memory for holding all pixels in the
+			bitmap, but it doesn't initialize the buffer. Applications can use
+			<see cref="M:PDFiumSharp.PDFium.FPDFBitmap_FillRect(PDFiumSharp.Types.FPDF_BITMAP,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.Types.FPDF_COLOR)" /> to fill the bitmap using any color.
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PDFiumBitmap.#ctor(System.Int32,System.Int32,System.Boolean)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_CreateEx(System.Int32,System.Int32,PDFiumSharp.BitmapFormats,System.IntPtr,System.Int32)">
+            <summary>Create a device independent bitmap (FXDIB).</summary><param name="width">The number of pixels in width for the bitmap. Must be greater than 0. </param><param name="height">The number of pixels in height for the bitmap. Must be greater than 0.</param><param name="first_scan">
+			A pointer to the first byte of the first line if
+			using an external buffer. If this parameter is <see cref="F:System.IntPtr.Zero" />
+			then the a new buffer will be created.
+		</param><param name="stride">Number of bytes for each scan line, for external buffer only.</param><returns>The bitmap handle, or <see cref="F:System.IntPtr.Zero" /> if parameter error or out of memory.</returns><remarks>
+			Similar to <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" /> function, but allows for more formats
+			and an external buffer is supported. The bitmap created by this
+			function can be used in any place that a handle is required.
+			
+			If an external buffer is used, then the application should destroy
+			the buffer by itself. <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Destroy(PDFiumSharp.Types.FPDF_BITMAP)" /> function will not destroy
+			the buffer.
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PDFiumBitmap.#ctor(System.Int32,System.Int32,PDFiumSharp.BitmapFormats,System.IntPtr,System.Int32)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_FillRect(PDFiumSharp.Types.FPDF_BITMAP,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.Types.FPDF_COLOR)">
+            <summary>Fill a rectangle in a bitmap.</summary><param name="bitmap">The handle to the bitmap.</param><param name="left">The left position. Starting from 0 at the left-most pixel.</param><param name="top">The top position. Starting from 0 at the top-most line.</param><param name="width">Width in pixels to be filled.</param><param name="height">Height in pixels to be filled.</param><remarks>
+			This function sets the color and (optionally) alpha value in the
+			specified region of the bitmap.
+			
+			NOTE: If the alpha channel is used, this function does NOT
+			composite the background with the source color, instead the
+			background will be replaced by the source color and the alpha.
+			
+			If the alpha channel is not used, the alpha parameter is ignored.
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PDFiumBitmap.FillRectangle(System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.Types.FPDF_COLOR)" />
+            <seealso cref="M:PDFiumSharp.PDFiumBitmap.Fill(PDFiumSharp.Types.FPDF_COLOR)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_GetBuffer(PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>Get data buffer of a bitmap.</summary><param name="bitmap">Handle to the bitmap as returned by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.</param><returns>The pointer to the first byte of the bitmap buffer.</returns><remarks>
+			The stride may be more than width * number of bytes per pixel
+			
+			Applications can use this function to get the bitmap buffer pointer,
+			then manipulate any color and/or alpha values for any pixels in the bitmap.
+			
+			The data is in BGRA format. Where the A maybe unused if alpha was
+			not specified.
+		</remarks>
+            <seealso cref="P:PDFiumSharp.PDFiumBitmap.Scan0" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_GetWidth(PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>Get width of a bitmap.</summary><param name="bitmap">Handle to the bitmap as returned by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.</param><returns>The width of the bitmap in pixels.</returns>
+            <seealso cref="P:PDFiumSharp.PDFiumBitmap.Width" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_GetHeight(PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>Get height of a bitmap.</summary><param name="bitmap">Handle to the bitmap as returned by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.</param><returns>The height of the bitmap in pixels.</returns>
+            <seealso cref="P:PDFiumSharp.PDFiumBitmap.Height" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_GetStride(PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>Get number of bytes for each line in the bitmap buffer.</summary><param name="bitmap">Handle to the bitmap as returned by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.</param><returns>The number of bytes for each line in the bitmap buffer.</returns><remarks>The stride may be more than width * number of bytes per pixel.</remarks>
+            <seealso cref="P:PDFiumSharp.PDFiumBitmap.Stride" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBitmap_Destroy(PDFiumSharp.Types.FPDF_BITMAP)">
+            <summary>Destroy a bitmap and release all related buffers.</summary><param name="bitmap">Handle to the bitmap as returned by <see cref="M:PDFiumSharp.PDFium.FPDFBitmap_Create(System.Int32,System.Int32,System.Boolean)" />.</param><remarks>
+			This function will not destroy any external buffers provided when
+			the bitmap was created.
+		</remarks>
+            <seealso cref="M:PDFiumSharp.PDFiumBitmap.Dispose" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_VIEWERREF_GetPrintScaling(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Whether the PDF document prefers to be scaled or not.</summary><param name="document">Handle to the loaded document.</param>
+            <seealso cref="P:PDFiumSharp.PdfDocument.PrintPrefersScaling" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_VIEWERREF_GetNumCopies(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Returns the number of copies to be printed.</summary><param name="document">Handle to the loaded document.</param><returns>The number of copies to be printed.</returns>
+            <seealso cref="P:PDFiumSharp.PdfDocument.PrintCopyCount" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_VIEWERREF_GetPrintPageRange(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Page numbers to initialize print dialog box when file is printed.</summary><param name="document">Handle to the loaded document.</param><returns>The print page range to be used for printing.</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_VIEWERREF_GetDuplex(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Returns the paper handling option to be used when printing from the print dialog.</summary><param name="document">Handle to the loaded document.</param><returns>The paper handling option to be used when printing.</returns>
+            <seealso cref="P:PDFiumSharp.PdfDocument.DuplexType" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_VIEWERREF_GetName(PDFiumSharp.Types.FPDF_DOCUMENT,System.String,System.Byte@,System.UInt32)">
+            <summary>Gets the contents for a viewer ref, with a given key. The value must be of type "name".</summary><param name="document">Handle to the loaded document.</param><param name="key">Name of the key in the viewer pref dictionary.</param><param name="buffer">A string to write the contents of the key to.</param><param name="length">Length of the buffer.</param><returns>
+			The number of bytes in the contents, including the NULL terminator.
+			Thus if the return value is 0, then that indicates an error, such
+			as when |document| is invalid or |buffer| is NULL. If |length| is
+			less than the returned length, or |buffer| is NULL, |buffer| will
+			not be modified.
+		</returns>
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_CountNamedDests(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <summary>Get the count of named destinations in the PDF document.</summary><param name="document">Handle to the loaded document.</param><returns>The count of named destinations.</returns>
+            <seealso cref="P:PDFiumSharp.PdfDestinationCollection.Count" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Destinations" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetNamedDestByName(PDFiumSharp.Types.FPDF_DOCUMENT,System.String)">
+            <summary>Get a the destination handle for the given name.</summary><param name="document">Handle to the loaded document.</param><param name="name">The name of a destination.</param><returns>The handle to the destination.</returns>
+            <seealso cref="!:PdfDestinationCollection[string]" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Destinations" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetNamedDest(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.IntPtr,System.Int32@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetNamedDest/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_GetNamedDest(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetNamedDest(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Byte@,System.Int32@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetNamedDest/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_GetNamedDest(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetFirstChild(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_BOOKMARK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_GetFirstChild/*" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Bookmarks" />
+            <seealso cref="P:PDFiumSharp.PdfBookmark.Children" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetNextSibling(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_BOOKMARK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_GetNextSibling/*" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Bookmarks" />
+            <seealso cref="P:PDFiumSharp.PdfBookmark.Children" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetTitle(PDFiumSharp.Types.FPDF_BOOKMARK,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_GetTitle/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDFBookmark_GetTitle(PDFiumSharp.Types.FPDF_BOOKMARK)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_Find(PDFiumSharp.Types.FPDF_DOCUMENT,System.String)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_Find/*" />
+            <seealso cref="M:PDFiumSharp.PdfDocument.FindBookmark(System.String)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetDest(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_BOOKMARK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_GetDest/*" />
+            <seealso cref="P:PDFiumSharp.PdfBookmark.Destination" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFBookmark_GetAction(PDFiumSharp.Types.FPDF_BOOKMARK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFBookmark_GetAction/*" />
+            <seealso cref="P:PDFiumSharp.PdfBookmark.Action" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetType(PDFiumSharp.Types.FPDF_ACTION)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFAction_GetType/*" />
+            <seealso cref="P:PDFiumSharp.PdfAction.Type" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetDest(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_ACTION)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFAction_GetDest/*" />
+            <seealso cref="P:PDFiumSharp.PdfAction.Destination" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetFilePath(PDFiumSharp.Types.FPDF_ACTION,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFAction_GetFilePath/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDFAction_GetFilePath(PDFiumSharp.Types.FPDF_ACTION)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFAction_GetURIPath(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_ACTION,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFAction_GetURIPath/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDFAction_GetURIPath(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_ACTION)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFDest_GetPageIndex(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DEST)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFDest_GetPageIndex/*" />
+            <seealso cref="P:PDFiumSharp.PdfDestination.PageIndex" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Destinations" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFDest_GetLocationInPage(PDFiumSharp.Types.FPDF_DEST,System.Boolean@,System.Boolean@,System.Boolean@,System.Single@,System.Single@,System.Single@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFDest_GetLocationInPage/*" />
+            <seealso cref="P:PDFiumSharp.PdfDestination.LocationInPage" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Destinations" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetLinkAtPoint(PDFiumSharp.Types.FPDF_PAGE,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetLinkAtPoint/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetLinkZOrderAtPoint(PDFiumSharp.Types.FPDF_PAGE,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetLinkZOrderAtPoint/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetDest(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_LINK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetDest/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetAction(PDFiumSharp.Types.FPDF_LINK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetAction/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_Enumerate(PDFiumSharp.Types.FPDF_PAGE,System.Int32@,PDFiumSharp.Types.FPDF_LINK@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_Enumerate/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetAnnotRect(PDFiumSharp.Types.FPDF_LINK,PDFiumSharp.Types.FS_RECTF@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetAnnotRect/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_CountQuadPoints(PDFiumSharp.Types.FPDF_LINK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_CountQuadPoints/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetQuadPoints(PDFiumSharp.Types.FPDF_LINK,System.Int32,PDFiumSharp.Types.FS_QUADPOINTSF@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetQuadPoints/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetMetaText(PDFiumSharp.Types.FPDF_DOCUMENT,System.String,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetMetaText/*" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_GetMetaText(PDFiumSharp.Types.FPDF_DOCUMENT,System.String)" />
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_GetMetaText(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.MetadataTags)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_GetPageLabel(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_GetPageLabel/*" />
+            <seealso cref="!:PDFium.FPDF_GetPageLabel(FPDF_DOCUMENT, int)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_CreateNewDocument">
+            <summary>Create a new PDF document.</summary><returns>Returns a handle to a new document, or NULL on failure.</returns>
+            <seealso cref="M:PDFiumSharp.PdfDocument.#ctor(PDFiumSharp.Types.FPDF_DOCUMENT)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_New(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_New/*" />
+            <seealso cref="M:PDFiumSharp.PdfPageCollection.Add(System.Double,System.Double)" />
+            <seealso cref="M:PDFiumSharp.PdfPageCollection.Insert(System.Int32,System.Double,System.Double)" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Pages" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_Delete(PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_Delete/*" />
+            <seealso cref="M:PDFiumSharp.PdfPageCollection.RemoveAt(System.Int32)" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Pages" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_GetRotation(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_GetRotation/*" />
+            <seealso cref="P:PDFiumSharp.PdfPage.Orientation" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_SetRotation(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.PageOrientations)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_SetRotation/*" />
+            <seealso cref="P:PDFiumSharp.PdfPage.Orientation" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_InsertObject(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.FPDF_PAGEOBJECT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_InsertObject/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_CountObject(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_CountObject/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_GetObject(PDFiumSharp.Types.FPDF_PAGE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_GetObject/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_HasTransparency(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_HasTransparency/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_GenerateContent(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_GenerateContent/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_HasTransparency(PDFiumSharp.Types.FPDF_PAGEOBJECT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_HasTransparency/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_Transform(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_Transform/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_TransformAnnots(PDFiumSharp.Types.FPDF_PAGE,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_TransformAnnots/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_NewImageObj(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_NewImageObj/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_LoadJpegFile(PDFiumSharp.Types.FPDF_PAGE@,System.Int32,PDFiumSharp.Types.FPDF_PAGEOBJECT,PDFiumSharp.Types.FPDF_FILEREAD)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFImageObj_LoadJpegFile/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_LoadJpegFileInline(PDFiumSharp.Types.FPDF_PAGE@,System.Int32,PDFiumSharp.Types.FPDF_PAGEOBJECT,PDFiumSharp.Types.FPDF_FILEREAD)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFImageObj_LoadJpegFileInline/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_SetMatrix(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFImageObj_SetMatrix/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFImageObj_SetBitmap(PDFiumSharp.Types.FPDF_PAGE@,System.Int32,PDFiumSharp.Types.FPDF_PAGEOBJECT,PDFiumSharp.Types.FPDF_BITMAP)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFImageObj_SetBitmap/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_CreateNewPath(System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_CreateNewPath/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_CreateNewRect(System.Single,System.Single,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_CreateNewRect/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_SetStrokeColor(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_SetStrokeColor/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_SetStrokeWidth(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_SetStrokeWidth/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_SetFillColor(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_SetFillColor/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_MoveTo(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_MoveTo/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_LineTo(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_LineTo/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_BezierTo(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_BezierTo/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_Close(PDFiumSharp.Types.FPDF_PAGEOBJECT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_Close/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPath_SetDrawMode(PDFiumSharp.Types.FPDF_PAGEOBJECT,PDFiumSharp.PathFillModes,System.Boolean)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPath_SetDrawMode/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_NewTextObj(PDFiumSharp.Types.FPDF_DOCUMENT,System.String,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_NewTextObj/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_SetText(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.String)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_SetText/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_LoadFont(PDFiumSharp.Types.FPDF_DOCUMENT,System.Byte@,System.UInt32,PDFiumSharp.FontTypes,System.Boolean)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_LoadFont/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFDoc_GetPageMode(PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFDoc_GetPageMode/*" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.PageMode" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_Flatten(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.FlattenFlags)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_Flatten/*" />
+            <seealso cref="M:PDFiumSharp.PdfPage.Flatten(PDFiumSharp.FlattenFlags)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_ImportPages(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DOCUMENT,System.String,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_ImportPages/*" />
+            <seealso cref="M:PDFiumSharp.PdfPageCollection.Insert(System.Int32,PDFiumSharp.PdfDocument,System.Int32[])" />
+            <seealso cref="M:PDFiumSharp.PdfPageCollection.Add(PDFiumSharp.PdfDocument,System.Int32[])" />
+            <seealso cref="P:PDFiumSharp.PdfDocument.Pages" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_CopyViewerPreferences(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DOCUMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_CopyViewerPreferences/*" />
+            <seealso cref="M:PDFiumSharp.PdfDocument.CopyViewerPreferencesFrom(PDFiumSharp.PdfDocument)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_RenderPageBitmap_Start(PDFiumSharp.Types.FPDF_BITMAP,PDFiumSharp.Types.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags,PDFiumSharp.Types.IFSDK_PAUSE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_RenderPageBitmap_Start/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_RenderPage_Continue(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.IFSDK_PAUSE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_RenderPage_Continue/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_RenderPage_Close(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_RenderPage_Close/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_SaveAsCopy(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_FILEWRITE,PDFiumSharp.SaveFlags)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_SaveAsCopy/*" />
+            <seealso cref="!:PDFium.FPDF_SaveAsCopy(FPDF_DOCUMENT, Stream, SaveFlags, int)" />
+            <seealso cref="!:PdfDocument.Save(Stream, SaveFlags, int)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_SaveWithVersion(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_FILEWRITE,PDFiumSharp.SaveFlags,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_SaveWithVersion/*" />
+            <seealso cref="!:PDFium.FPDF_SaveAsCopy(FPDF_DOCUMENT, Stream, SaveFlags, int)" />
+            <seealso cref="!:PdfDocument.Save(Stream, SaveFlags, int)" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetCharIndexFromTextIndex(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetCharIndexFromTextIndex/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetTextIndexFromCharIndex(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetTextIndexFromCharIndex/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructTree_GetForPage(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructTree_GetForPage/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructTree_Close(PDFiumSharp.Types.FPDF_STRUCTTREE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructTree_Close/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructTree_CountChildren(PDFiumSharp.Types.FPDF_STRUCTTREE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructTree_CountChildren/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructTree_GetChildAtIndex(PDFiumSharp.Types.FPDF_STRUCTTREE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructTree_GetChildAtIndex/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructElement_GetAltText(PDFiumSharp.Types.FPDF_STRUCTELEMENT,System.Byte@,System.UInt32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructElement_GetAltText/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructElement_CountChildren(PDFiumSharp.Types.FPDF_STRUCTELEMENT)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructElement_CountChildren/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_StructElement_GetChildAtIndex(PDFiumSharp.Types.FPDF_STRUCTELEMENT,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_StructElement_GetChildAtIndex/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_LoadPage(PDFiumSharp.Types.FPDF_PAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_LoadPage/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_ClosePage(PDFiumSharp.Types.FPDF_TEXTPAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_ClosePage/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_CountChars(PDFiumSharp.Types.FPDF_TEXTPAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_CountChars/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetUnicode(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetUnicode/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetFontSize(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetFontSize/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetCharBox(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetCharBox/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetCharIndexAtPos(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Double,System.Double,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetCharIndexAtPos/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetText(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32,System.Int32,System.Byte@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetText/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_CountRects(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_CountRects/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetRect(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetRect/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetBoundedText(PDFiumSharp.Types.FPDF_TEXTPAGE,System.Double,System.Double,System.Double,System.Double,System.Byte@,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetBoundedText/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_FindStart(PDFiumSharp.Types.FPDF_TEXTPAGE,System.String,PDFiumSharp.SearchFlags,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_FindStart/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_FindNext(PDFiumSharp.Types.FPDF_SCHHANDLE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_FindNext/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_FindPrev(PDFiumSharp.Types.FPDF_SCHHANDLE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_FindPrev/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetSchResultIndex(PDFiumSharp.Types.FPDF_SCHHANDLE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetSchResultIndex/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_GetSchCount(PDFiumSharp.Types.FPDF_SCHHANDLE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_GetSchCount/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFText_FindClose(PDFiumSharp.Types.FPDF_SCHHANDLE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFText_FindClose/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_LoadWebLinks(PDFiumSharp.Types.FPDF_TEXTPAGE)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_LoadWebLinks/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_CountWebLinks(PDFiumSharp.Types.FPDF_PAGELINK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_CountWebLinks/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetURL(PDFiumSharp.Types.FPDF_PAGELINK,System.Int32,System.Byte@,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetURL/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_CountRects(PDFiumSharp.Types.FPDF_PAGELINK,System.Int32)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_CountRects/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_GetRect(PDFiumSharp.Types.FPDF_PAGELINK,System.Int32,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_GetRect/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFLink_CloseWebLinks(PDFiumSharp.Types.FPDF_PAGELINK)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFLink_CloseWebLinks/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_SetMediaBox(PDFiumSharp.Types.FPDF_PAGE,System.Single,System.Single,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_SetMediaBox/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_SetCropBox(PDFiumSharp.Types.FPDF_PAGE,System.Single,System.Single,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_SetCropBox/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_GetMediaBox(PDFiumSharp.Types.FPDF_PAGE,System.Single@,System.Single@,System.Single@,System.Single@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_GetMediaBox/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_GetCropBox(PDFiumSharp.Types.FPDF_PAGE,System.Single@,System.Single@,System.Single@,System.Single@)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_GetCropBox/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_TransFormWithClip(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.FS_MATRIX,PDFiumSharp.Types.FS_RECTF)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_TransFormWithClip/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPageObj_TransformClipPath(PDFiumSharp.Types.FPDF_PAGEOBJECT,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPageObj_TransformClipPath/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_CreateClipPath(System.Single,System.Single,System.Single,System.Single)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_CreateClipPath/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDF_DestroyClipPath(PDFiumSharp.Types.FPDF_CLIPPATH)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDF_DestroyClipPath/*" />
+        </member>
+        <member name="M:PDFiumSharp.PDFium.FPDFPage_InsertClipPath(PDFiumSharp.Types.FPDF_PAGE,PDFiumSharp.Types.FPDF_CLIPPATH)">
+            <!-- No matching elements were found for the following include tag --><include file="PDFium.xml" path="Documentation/FPDFPage_InsertClipPath/*" />
+        </member>
+        <member name="T:PDFiumSharp.PDFiumBitmap">
+            <summary>
+            A bitmap to which a <see cref="T:PDFiumSharp.PdfPage"/> can be rendered.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.#ctor(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:PDFiumSharp.PDFiumBitmap"/>. Unmanaged memory is allocated which must
+            be freed by calling <see cref="M:PDFiumSharp.PDFiumBitmap.Dispose"/>.
+            </summary>
+            <param name="width">The width of the new bitmap.</param>
+            <param name="height">The height of the new bitmap.</param>
+            <param name="hasAlpha">A value indicating wheter the new bitmap has an alpha channel.</param>
+            <remarks>
+            A bitmap created with this overload always uses 4 bytes per pixel.
+            Depending on <paramref name="hasAlpha"/> the <see cref="P:PDFiumSharp.PDFiumBitmap.Format"/> is then either
+            <see cref="F:PDFiumSharp.BitmapFormats.FPDFBitmap_BGRA"/> or <see cref="F:PDFiumSharp.BitmapFormats.FPDFBitmap_BGRx"/>.
+            </remarks>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.#ctor(System.Int32,System.Int32,PDFiumSharp.BitmapFormats,System.IntPtr,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:PDFiumSharp.PDFiumBitmap"/> using memory allocated by the caller.
+            The caller is responsible for freeing the memory and that the adress stays
+            valid during the lifetime of the returned <see cref="T:PDFiumSharp.PDFiumBitmap"/>. To free
+            unmanaged resources, <see cref="M:PDFiumSharp.PDFiumBitmap.Dispose"/> must be called.
+            </summary>
+            <param name="width">The width of the new bitmap.</param>
+            <param name="height">The height of the new bitmap.</param>
+            <param name="format">The format of the new bitmap.</param>
+            <param name="scan0">The adress of the memory block which holds the pixel values.</param>
+            <param name="stride">The number of bytes per image row.</param>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.FillRectangle(System.Int32,System.Int32,System.Int32,System.Int32,PDFiumSharp.Types.FPDF_COLOR)">
+            <summary>
+            Fills a rectangle in the <see cref="T:PDFiumSharp.PDFiumBitmap"/> with <paramref name="color"/>.
+            The pixel values in the rectangle are replaced and not blended.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.Fill(PDFiumSharp.Types.FPDF_COLOR)">
+            <summary>
+            Fills the whole <see cref="T:PDFiumSharp.PDFiumBitmap"/> with <paramref name="color"/>.
+            The pixel values in the rectangle are replaced and not blended.
+            </summary>
+            <param name="color"></param>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.Save(System.IO.Stream,System.Double,System.Double)">
+            <summary>
+            Saves the <see cref="T:PDFiumSharp.PDFiumBitmap"/> in the <see href="https://en.wikipedia.org/wiki/BMP_file_format">BMP</see> file format.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.Save(System.String,System.Double,System.Double)">
+            <summary>
+            Saves the <see cref="T:PDFiumSharp.PDFiumBitmap"/> in the <see href="https://en.wikipedia.org/wiki/BMP_file_format">BMP</see> file format.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PDFiumBitmap.AsBmpStream(System.Double,System.Double)">
+            <summary>
+            Exposes the underlying image data directly as read-only stream in the
+            <see href="https://en.wikipedia.org/wiki/BMP_file_format">BMP</see> file format.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Width">
+            <summary>
+            Gets the page width (excluding non-displayable area) measured in points.
+            One point is 1/72 inch(around 0.3528 mm).
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Height">
+            <summary>
+            Gets the page height (excluding non-displayable area) measured in points.
+            One point is 1/72 inch(around 0.3528 mm).
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Size">
+            <summary>
+            Gets the page width and height (excluding non-displayable area) measured in points.
+            One point is 1/72 inch(around 0.3528 mm).
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Orientation">
+            <summary>
+            Gets the page orientation.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Index">
+            <summary>
+            Gets the zero-based index of the page in the <see cref="P:PDFiumSharp.PdfPage.Document"/>
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPage.Document">
+            <summary>
+            Gets the <see cref="T:PDFiumSharp.PdfDocument"/> which contains the page.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfPage.Render(PDFiumSharp.PDFiumBitmap,System.ValueTuple{System.Int32,System.Int32,System.Int32,System.Int32},PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)">
+            <summary>
+            Renders the page to a <see cref="T:PDFiumSharp.PDFiumBitmap"/>
+            </summary>
+            <param name="renderTarget">The bitmap to which the page is to be rendered.</param>
+            <param name="rectDest">The destination rectangle in <paramref name="renderTarget"/>.</param>
+            <param name="orientation">The orientation at which the page is to be rendered.</param>
+            <param name="flags">The flags specifying how the page is to be rendered.</param>
+        </member>
+        <member name="M:PDFiumSharp.PdfPage.Render(PDFiumSharp.PDFiumBitmap,PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)">
+            <summary>
+            Renders the page to a <see cref="T:PDFiumSharp.PDFiumBitmap"/>
+            </summary>
+            <param name="renderTarget">The bitmap to which the page is to be rendered.</param>
+            <param name="orientation">The orientation at which the page is to be rendered.</param>
+            <param name="flags">The flags specifying how the page is to be rendered.</param>
+        </member>
+        <member name="P:PDFiumSharp.PdfPageCollection.Count">
+            <summary>
+            Gets the number of pages in the <see cref="T:PDFiumSharp.PdfDocument"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.PdfPageCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:PDFiumSharp.PdfPage"/> at the zero-based <paramref name="index"/> in the <see cref="T:PDFiumSharp.PdfDocument"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.Insert(System.Int32,PDFiumSharp.PdfDocument,System.Int32[])">
+            <summary>
+            Imports pages of <paramref name="sourceDocument"/> into the current <see cref="T:PDFiumSharp.PdfDocument"/>.
+            </summary>
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_ImportPages(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Int32[])"/>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.Add(PDFiumSharp.PdfDocument,System.Int32[])">
+            <summary>
+            Imports pages of <paramref name="sourceDocument"/> into the current <see cref="T:PDFiumSharp.PdfDocument"/>.
+            </summary>
+            <seealso cref="M:PDFiumSharp.PDFium.FPDF_ImportPages(PDFiumSharp.Types.FPDF_DOCUMENT,PDFiumSharp.Types.FPDF_DOCUMENT,System.Int32,System.Int32[])"/>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.Insert(System.Int32,System.Double,System.Double)">
+            <summary>
+            Inserts a new page at <paramref name="index"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.Add(System.Double,System.Double)">
+            <summary>
+            Adds a new page to the end of the document.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.RemoveAt(System.Int32)">
+            <summary>
+            Removes the page at <paramref name="index"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.PdfPageCollection.Remove(PDFiumSharp.PdfPage)">
+            <summary>
+            Removes the <paramref name="page"/> from the document.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.Annotations">
+            <summary>
+            Set if annotations are to be rendered.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.LcdText">
+            <summary>
+            Set if using text rendering optimized for LCD display.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.NoNativeText">
+            <summary>
+            Don't use the native text output available on some platforms
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.Grayscale">
+            <summary>
+            Grayscale output.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.DebugInfo">
+            <summary>
+            Set if you want to get some debug info.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.DontCatch">
+            <summary>
+            Set if you don't want to catch exceptions.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.LimitImageCache">
+            <summary>
+            Limit image cache size.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.ForceHalftone">
+            <summary>
+            Always use halftone for image stretching.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.Printing">
+            <summary>
+            Render for printing.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.NoSmoothText">
+            <summary>
+            Set to disable anti-aliasing on text.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.NoSmoothImage">
+            <summary>
+            Set to disable anti-aliasing on images.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.NoSmoothPath">
+            <summary>
+            Set to disable anti-aliasing on paths.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.RenderingFlags.ReverseByteOrder">
+            <summary>
+            Set whether to render in a reverse Byte order, this flag is only used when rendering to a bitmap.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.SearchFlags.MatchCase">
+            <summary>
+            If not set, it will not match case by default.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.SearchFlags.MatchWholeWord">
+            <summary>
+            If not set, it will not match the whole word by default.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.SUCCESS">
+            <summary>
+            No error.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.UNKNOWN">
+            <summary>
+            Unknown error.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.FILE">
+            <summary>
+            File not found or could not be opened.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.FORMAT">
+            <summary>
+            File not in PDF format or corrupted.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.PASSWORD">
+            <summary>
+            Password required or incorrect password.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.SECURITY">
+            <summary>
+            Unsupported security scheme.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.PAGE">
+            <summary>
+            Page not found or content error.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.XFALOAD">
+            <summary>
+            Load XFA error.
+            </summary>
+        </member>
+        <member name="F:PDFiumSharp.Types.FPDF_ERR.XFALAYOUT">
+            <summary>
+            Layout XFA error.
+            </summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_ACTION">
+            <summary>Handle to a FPDF_ACTION</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_ACTION.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_ACTION.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_BITMAP">
+            <summary>Handle to a FPDF_BITMAP</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_BITMAP.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_BITMAP.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_BOOKMARK">
+            <summary>Handle to a FPDF_BOOKMARK</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_BOOKMARK.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_BOOKMARK.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_CLIPPATH">
+            <summary>Handle to a FPDF_CLIPPATH</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_CLIPPATH.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_CLIPPATH.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_DEST">
+            <summary>Handle to a FPDF_DEST</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_DEST.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_DEST.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_DOCUMENT">
+            <summary>Handle to a FPDF_DOCUMENT</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_DOCUMENT.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_DOCUMENT.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_FONT">
+            <summary>Handle to a FPDF_FONT</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_FONT.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_FONT.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_LINK">
+            <summary>Handle to a FPDF_LINK</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_LINK.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_LINK.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_PAGE">
+            <summary>Handle to a FPDF_PAGE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_PAGELINK">
+            <summary>Handle to a FPDF_PAGELINK</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGELINK.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGELINK.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_PAGEOBJECT">
+            <summary>Handle to a FPDF_PAGEOBJECT</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGEOBJECT.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGEOBJECT.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_PAGERANGE">
+            <summary>Handle to a FPDF_PAGERANGE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGERANGE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_PAGERANGE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_RECORDER">
+            <summary>Handle to a FPDF_RECORDER</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_RECORDER.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_RECORDER.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_SCHHANDLE">
+            <summary>Handle to a FPDF_SCHHANDLE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_SCHHANDLE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_SCHHANDLE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_STRUCTELEMENT">
+            <summary>Handle to a FPDF_STRUCTELEMENT</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRUCTELEMENT.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRUCTELEMENT.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_STRUCTTREE">
+            <summary>Handle to a FPDF_STRUCTTREE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRUCTTREE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRUCTTREE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_TEXTPAGE">
+            <summary>Handle to a FPDF_TEXTPAGE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_TEXTPAGE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_TEXTPAGE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_STRINGHANDLE">
+            <summary>Handle to a FPDF_STRINGHANDLE</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRINGHANDLE.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_STRINGHANDLE.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="T:PDFiumSharp.Types.FPDF_WIDGET">
+            <summary>Handle to a FPDF_WIDGET</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_WIDGET.IsNull">
+            <summary>Gets a value indicating whether the handle is <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.FPDF_WIDGET.Null">
+            <summary>Gets a handle representing <c>null</c>.</summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.NativeWrapper`1.Handle">
+            <summary>
+            Handle which can be used with the native <see cref="T:PDFiumSharp.PDFium"/> functions.
+            </summary>
+        </member>
+        <member name="P:PDFiumSharp.Types.NativeWrapper`1.IsDisposed">
+            <summary>
+            Gets a value indicating whether <see cref="M:System.IDisposable.Dispose"/> was already
+            called on this instance.
+            </summary>
+        </member>
+        <member name="M:PDFiumSharp.Types.NativeWrapper`1.Dispose(`0)">
+            <summary>
+            Implementors should clean up here. This method is guaranteed to only be called once.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Text;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer

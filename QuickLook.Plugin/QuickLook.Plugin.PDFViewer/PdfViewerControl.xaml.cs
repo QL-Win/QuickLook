@@ -21,8 +21,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using PDFiumSharp;
 using QuickLook.ExtensionMethods;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -35,9 +38,10 @@ namespace QuickLook.Plugin.PDFViewer
         private const double MinZoomFactor = 0.1d;
         private const double MaxZoomFactor = 5d;
         private int _changePageDeltaSum;
+        private bool _initPage = true;
 
         private bool _pdfLoaded;
-        private double _viewRenderFactor = 1d;
+        private double _viewRenderFactor = 0.5d;
 
         public PdfViewerControl()
         {
@@ -49,13 +53,14 @@ namespace QuickLook.Plugin.PDFViewer
             pagePanel.ImageScrolled += NavigatePage;
         }
 
-        public ObservableCollection<int> PageIds { get; set; } = new ObservableCollection<int>();
+        public ObservableCollection<BitmapSource> PageThumbnails { get; set; } =
+            new ObservableCollection<BitmapSource>();
 
-        public PdfFile PdfHandleForThumbnails { get; private set; }
+        public PdfDocument PdfHandleForThumbnails { get; private set; }
 
-        public PdfFile PdfHandle { get; private set; }
+        public PdfDocument PdfHandle { get; private set; }
 
-        public int TotalPages => PdfHandle.TotalPages;
+        public int TotalPages => PdfHandle.Pages.Count;
 
         public int CurrentPage
         {
@@ -81,9 +86,9 @@ namespace QuickLook.Plugin.PDFViewer
             }
 
             _pdfLoaded = false;
-            PdfHandleForThumbnails?.Dispose();
+            PdfHandleForThumbnails?.Close();
             PdfHandleForThumbnails = null;
-            PdfHandle?.Dispose();
+            PdfHandle?.Close();
             PdfHandle = null;
         }
 
@@ -132,7 +137,7 @@ namespace QuickLook.Plugin.PDFViewer
 
         private void NextPage()
         {
-            if (CurrentPage < PdfHandle.TotalPages - 1)
+            if (CurrentPage < TotalPages - 1)
             {
                 CurrentPage++;
                 pagePanel.ScrollToTop();
@@ -163,9 +168,7 @@ namespace QuickLook.Plugin.PDFViewer
             pagePanel.MinZoomFactor = MinZoomFactor / factor;
             pagePanel.MaxZoomFactor = MaxZoomFactor / factor;
 
-            var bitmap = PdfHandle.GetPage(CurrentPage, factor);
-            var image = bitmap.ToBitmapSource();
-            bitmap.Dispose();
+            var image = PdfHandle.Pages[CurrentPage].Render(factor);
 
             pagePanel.Source = image;
             pagePanel.ResetZoom();
@@ -188,38 +191,59 @@ namespace QuickLook.Plugin.PDFViewer
             CurrentPageChanged?.Invoke(this, new EventArgs());
 
             ReRenderCurrentPage();
+
+            if (_initPage)
+            {
+                _initPage = false;
+                pagePanel.DoZoomToFit();
+            }
         }
 
         public static Size GetDesiredControlSizeByFirstPage(string path)
         {
-            var tempHandle = new PdfFile(path);
+            Size size;
+            using (var tempHandle = new PdfDocument(path))
+            {
+                size = new Size(0, 0);
+                tempHandle.Pages.Take(5).ForEach(p =>
+                {
+                    size.Width = Math.Max(size.Width, p.Width);
+                    size.Height = Math.Max(size.Height, p.Height);
+                });
 
-            var size = tempHandle.GetPageSize(0, 1d);
-            tempHandle.Dispose();
+                if (tempHandle.Pages.Count > 1)
+                    size.Width += /*listThumbnails.ActualWidth*/ 150;
 
-            if (tempHandle.TotalPages > 1)
-                size.Width += /*listThumbnails.ActualWidth*/ 150;
-
+                tempHandle.Close();
+            }
             return size;
         }
 
         public void LoadPdf(string path)
         {
-            PageIds.Clear();
-
-            PdfHandleForThumbnails = new PdfFile(path);
-            PdfHandle = new PdfFile(path);
+            PdfHandle = new PdfDocument(path);
             _pdfLoaded = true;
 
-            // fill thumbnails list
-            Enumerable.Range(0, PdfHandle.TotalPages).ForEach(PageIds.Add);
-            OnPropertyChanged(nameof(PageIds));
+            BeginLoadThumbnails(path);
 
-            if (PdfHandle.TotalPages < 2)
+            if (PdfHandle.Pages.Count < 2)
                 listThumbnails.Visibility = Visibility.Collapsed;
+        }
 
-            CurrentPage = 0;
-            pagePanel.DoZoomToFit();
+        private void BeginLoadThumbnails(string path, string password = null)
+        {
+            new Task(() =>
+            {
+                using (var handle = new PdfDocument(path, password))
+                {
+                    handle.Pages.ForEach(p =>
+                    {
+                        var bs = p.RenderThumbnail();
+
+                        Dispatcher.BeginInvoke(new Action(() => PageThumbnails.Add(bs)));
+                    });
+                }
+            }).Start();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

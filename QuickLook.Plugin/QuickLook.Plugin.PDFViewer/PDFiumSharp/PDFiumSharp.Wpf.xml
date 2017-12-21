@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumSharp.Wpf</name>
+    </assembly>
+    <members>
+        <member name="M:PDFiumSharp.RenderingExtensionsWpf.Render(PDFiumSharp.PdfPage,System.Windows.Media.Imaging.WriteableBitmap,System.ValueTuple{System.Int32,System.Int32,System.Int32,System.Int32},PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)">
+            <summary>
+            Renders the page to a <see cref="T:System.Windows.Media.Imaging.WriteableBitmap"/>
+            </summary>
+            <param name="page">The page which is to be rendered.</param>
+            <param name="renderTarget">The bitmap to which the page is to be rendered.</param>
+            <param name="rectDest">The destination rectangle in <paramref name="renderTarget"/>.</param>
+            <param name="orientation">The orientation at which the page is to be rendered.</param>
+            <param name="flags">The flags specifying how the page is to be rendered.</param>
+        </member>
+        <member name="M:PDFiumSharp.RenderingExtensionsWpf.Render(PDFiumSharp.PdfPage,System.Windows.Media.Imaging.WriteableBitmap,PDFiumSharp.PageOrientations,PDFiumSharp.RenderingFlags)">
+            <summary>
+            Renders the page to a <see cref="T:System.Windows.Media.Imaging.WriteableBitmap"/>
+            </summary>
+            <param name="page">The page which is to be rendered.</param>
+            <param name="renderTarget">The bitmap to which the page is to be rendered.</param>
+            <param name="orientation">The orientation at which the page is to be rendered.</param>
+            <param name="flags">The flags specifying how the page is to be rendered.</param>
+        </member>
+    </members>
+</doc>

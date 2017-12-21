@@ -12,7 +12,6 @@
              d:DesignWidth="720.29">
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:PageIdToImageConverter x:Key="PageIdToImageConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ListBoxItemStyleNoFocusedBorder.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -23,12 +22,12 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="listThumbnails" Grid.Column="0" VirtualizingPanel.ScrollUnit="Item"
+        <ListBox x:Name="listThumbnails" Grid.Column="0" VirtualizingPanel.ScrollUnit="Pixel"
                  VirtualizingPanel.IsVirtualizing="True" Width="150"
                  SelectedIndex="0"
                  Focusable="False"
                  Background="#00FFFFFF"
-                 ItemsSource="{Binding PageIds, ElementName=thisPdfViewer}"
+                 ItemsSource="{Binding PageThumbnails, ElementName=thisPdfViewer}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
                  ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
             <ListBox.ItemTemplate>
@@ -46,14 +45,7 @@
                             <RowDefinition Height="10" />
                         </Grid.RowDefinitions>
                         <Border x:Name="bbd" Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FFE1E1E1">
-                            <Image>
-                                <Image.Source>
-                                    <MultiBinding Converter="{StaticResource PageIdToImageConverter}">
-                                        <Binding Path="PdfHandleForThumbnails" ElementName="thisPdfViewer" />
-                                        <Binding />
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
+                            <Image Source="{Binding}" />
                         </Border>
                         <!--
                         <Label Grid.Row="1" Grid.Column="1" Content="{Binding Mode=OneWay, Converter={StaticResource MathConverter}, ConverterParameter=@VALUE+1}" FontSize="14" />
@@ -70,7 +62,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Column="1" Background="#00EFEFEF">
-            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False" BackgroundVisibility="Collapsed" />
+            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False"
+                                    BackgroundVisibility="Collapsed" />
         </Grid>
     </Grid>
 </UserControl>
