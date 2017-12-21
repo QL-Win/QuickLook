@@ -192,15 +192,19 @@ namespace QuickLook
             ShowWindowCaptionContainer(null, null);
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
-            // load plugin, sync
-            try
-            {
-                Plugin.View(path, ContextObject);
-            }
-            catch (Exception e)
-            {
-                exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
-            }
+            // load plugin, do not block UI
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    try
+                    {
+                        Plugin.View(path, ContextObject);
+                    }
+                    catch (Exception e)
+                    {
+                        exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
+                    }
+                }),
+                DispatcherPriority.Input);
         }
 
         private void SetOpenWithButtonAndPath()
