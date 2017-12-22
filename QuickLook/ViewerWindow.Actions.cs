@@ -164,6 +164,7 @@ namespace QuickLook
             catch (Exception e)
             {
                 exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
+                return;
             }
 
             SetOpenWithButtonAndPath();
