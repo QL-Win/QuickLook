@@ -7,21 +7,42 @@
              mc:Ignorable="d"
              x:Name="infoPanel"
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- only for design -->
+                <ResourceDictionary Source="/QuickLook;component/Styles/MainWindowStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:Percent100ToVisibilityVisibleConverter x:Key="Percent100ToVisibilityVisibleConverter" />
+            <local:Percent100ToVisibilityCollapsedConverter x:Key="Percent100ToVisibilityCollapsedConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
-        <local:ArchiveFileListView Grid.Row="0" x:Name="fileListView" Focusable="False" />
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40*" />
-                <ColumnDefinition Width="30*" />
-                <ColumnDefinition Width="30*" />
-            </Grid.ColumnDefinitions>
-            <Label x:Name="archiveCount" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">9 folders and 10 files, solid, password-protected</Label>
-            <Label x:Name="archiveSizeC" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Compressed size 9999 bytes</Label>
-            <Label x:Name="archiveSizeU" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Uncompressed size 99999 bytes</Label>
+        <Grid ZIndex="9999"
+              Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label FontSize="14" HorizontalAlignment="Center">Loading archive ...</Label>
+                <ProgressBar Height="13" Width="150"
+                             Value="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay}" />
+            </StackPanel>
+        </Grid>
+        <Grid
+            Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityVisibleConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <local:ArchiveFileListView Grid.Row="0" x:Name="fileListView" Focusable="False" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="30*" />
+                </Grid.ColumnDefinitions>
+                <Label x:Name="archiveCount" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">0 folders and 0 files, solid, password-protected</Label>
+                <Label x:Name="archiveSizeC" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Compressed size 0 bytes</Label>
+                <Label x:Name="archiveSizeU" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Uncompressed size 0 bytes</Label>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

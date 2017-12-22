@@ -17,9 +17,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using QuickLook.Annotations;
 using QuickLook.ExtensionMethods;
 using SharpCompress.Archives;
 using SharpCompress.Common;
@@ -30,9 +34,11 @@ namespace QuickLook.Plugin.ArchiveViewer
     /// <summary>
     ///     Interaction logic for ArchiveInfoPanel.xaml
     /// </summary>
-    public partial class ArchiveInfoPanel : UserControl, IDisposable
+    public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
     {
         private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = new Dictionary<string, ArchiveFileEntry>();
+        private bool _disposed;
+        private double _loadPercent;
         private ulong _totalZippedSize;
         private string _type;
 
@@ -40,58 +46,88 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             InitializeComponent();
 
-            LoadArchive(path);
+            // design-time only
+            Resources.MergedDictionaries.Clear();
 
-            fileListView.SetDataContext(_fileEntries[""].Children.Keys);
+            BeginLoadArchive(path);
+        }
+
+        public double LoadPercent
+        {
+            get => _loadPercent;
+            private set
+            {
+                if (value == _loadPercent) return;
+                _loadPercent = value;
+                OnPropertyChanged();
+            }
         }
 
         public void Dispose()
         {
             GC.SuppressFinalize(this);
 
-            _fileEntries.Clear();
+            _disposed = true;
+
             fileListView.Dispose();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         ~ArchiveInfoPanel()
         {
             Dispose();
         }
 
-        private void LoadArchive(string path)
+        private void BeginLoadArchive(string path)
         {
-            _totalZippedSize = (ulong) new FileInfo(path).Length;
-
-            LoadItemsFromArchive(path);
-
-            var folders = -1; // do not count root node
-            var files = 0;
-            ulong sizeU = 0L;
-            _fileEntries.ForEach(e =>
+            new Task(() =>
             {
-                if (e.Value.IsFolder)
-                    folders++;
+                _totalZippedSize = (ulong) new FileInfo(path).Length;
+
+                var root = new ArchiveFileEntry(Path.GetFileName(path), true);
+                _fileEntries.Add("", root);
+
+                LoadItemsFromArchive(path);
+
+                var folders = -1; // do not count root node
+                var files = 0;
+                ulong sizeU = 0L;
+                _fileEntries.ForEach(e =>
+                {
+                    if (e.Value.IsFolder)
+                        folders++;
+                    else
+                        files++;
+
+                    sizeU += e.Value.Size;
+                });
+
+                string t;
+                var d = folders != 0 ? $"{folders} folders" : string.Empty;
+                var f = files != 0 ? $"{files} files" : string.Empty;
+                if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
+                    t = $", {d} and {f}";
+                else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
+                    t = string.Empty;
                 else
-                    files++;
+                    t = $", {d}{f}";
 
-                sizeU += e.Value.Size;
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    if (_disposed)
+                        return;
 
-            string t;
-            var d = folders != 0 ? $"{folders} folders" : string.Empty;
-            var f = files != 0 ? $"{files} files" : string.Empty;
-            if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
-                t = $", {d} and {f}";
-            else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
-                t = string.Empty;
-            else
-                t = $", {d}{f}";
+                    fileListView.SetDataContext(_fileEntries[""].Children.Keys);
+                    archiveCount.Content =
+                        $"{_type} archive{t}";
+                    archiveSizeC.Content =
+                        $"Compressed size {((long) _totalZippedSize).ToPrettySize(2)}";
+                    archiveSizeU.Content = $"Uncompressed size {((long) sizeU).ToPrettySize(2)}";
+                });
 
-            archiveCount.Content =
-                $"{_type} archive{t}";
-            archiveSizeC.Content =
-                $"Compressed size {((long) _totalZippedSize).ToPrettySize(2)}";
-            archiveSizeU.Content = $"Uncompressed size {((long) sizeU).ToPrettySize(2)}";
+                LoadPercent = 100d;
+            }).Start();
         }
 
         private void LoadItemsFromArchive(string path)
@@ -107,11 +143,13 @@ namespace QuickLook.Plugin.ArchiveViewer
 
                     _type = reader.ArchiveType.ToString();
 
-                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
-                    _fileEntries.Add("", root);
-
                     while (reader.MoveToNextEntry())
+                    {
+                        if (_disposed)
+                            return;
+                        LoadPercent = 100d * stream.Position / stream.Length;
                         ProcessByLevel(reader.Entry);
+                    }
                 }
                 else
                 {
@@ -119,11 +157,13 @@ namespace QuickLook.Plugin.ArchiveViewer
 
                     _type = archive.Type.ToString();
 
-                    var root = new ArchiveFileEntry(Path.GetFileName(path), true);
-                    _fileEntries.Add("", root);
-
                     foreach (var entry in archive.Entries)
+                    {
+                        if (_disposed)
+                            return;
+                        LoadPercent = 100d * stream.Position / stream.Length;
                         ProcessByLevel(entry);
+                    }
                 }
             }
         }
@@ -140,7 +180,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                     if (_fileEntries.ContainsKey(f))
                         return;
 
-                    _fileEntries.TryGetValue(GetDirectoryName(f), out ArchiveFileEntry parent);
+                    _fileEntries.TryGetValue(GetDirectoryName(f), out var parent);
 
                     var afe = new ArchiveFileEntry(Path.GetFileName(f), true, parent);
 
@@ -152,7 +192,7 @@ namespace QuickLook.Plugin.ArchiveViewer
             {
                 var file = pf.Last();
 
-                _fileEntries.TryGetValue(GetDirectoryName(file), out ArchiveFileEntry parent);
+                _fileEntries.TryGetValue(GetDirectoryName(file), out var parent);
 
                 _fileEntries.Add(file, new ArchiveFileEntry(Path.GetFileName(entry.Key), false, parent)
                 {
@@ -178,6 +218,12 @@ namespace QuickLook.Plugin.ArchiveViewer
             var frags = path.Split('\\', '/').Where(f => !string.IsNullOrEmpty(f)).ToArray();
 
             return frags.Select((s, i) => frags.Take(i + 1).Aggregate((a, b) => a + "\\" + b)).ToArray();
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

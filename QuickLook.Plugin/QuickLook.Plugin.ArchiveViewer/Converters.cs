@@ -23,6 +23,40 @@ using QuickLook.ExtensionMethods;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {
+    public class Percent100ToVisibilityVisibleConverter : DependencyObject, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                value = 0;
+
+            var percent = (double) value;
+            return Math.Abs(percent - 100) < 0.00001 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class Percent100ToVisibilityCollapsedConverter : DependencyObject, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                value = 0;
+
+            var percent = (double) value;
+            return Math.Abs(percent - 100) < 0.00001 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class LevelToIndentConverter : DependencyObject, IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

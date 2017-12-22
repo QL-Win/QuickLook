@@ -46,7 +46,7 @@ namespace QuickLook.Plugin.ArchiveViewer
         {
             treeGrid.DataContext = context;
 
-            treeView.Loaded += (sender, e) =>
+            treeView.LayoutUpdated += (sender, e) =>
             {
                 // return when empty
                 if (treeView.Items.Count == 0)
