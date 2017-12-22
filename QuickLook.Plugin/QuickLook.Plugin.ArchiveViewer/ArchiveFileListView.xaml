@@ -90,7 +90,7 @@
 
         <TreeView BorderThickness="0" Focusable="False" Background="Transparent"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <TreeViewItem Focusable="False">
+            <TreeViewItem Focusable="False" Visibility="Collapsed">
                 <TreeViewItem.Header>
                     <Grid ShowGridLines="False">
                         <Grid.ColumnDefinitions>
