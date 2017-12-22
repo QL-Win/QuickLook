@@ -56,8 +56,6 @@ namespace QuickLook.Plugin.PDFViewer
         public ObservableCollection<BitmapSource> PageThumbnails { get; set; } =
             new ObservableCollection<BitmapSource>();
 
-        public PdfDocument PdfHandleForThumbnails { get; private set; }
-
         public PdfDocument PdfHandle { get; private set; }
 
         public int TotalPages => PdfHandle.Pages.Count;
@@ -86,8 +84,6 @@ namespace QuickLook.Plugin.PDFViewer
             }
 
             _pdfLoaded = false;
-            PdfHandleForThumbnails?.Close();
-            PdfHandleForThumbnails = null;
             PdfHandle?.Close();
             PdfHandle = null;
         }
@@ -162,11 +158,20 @@ namespace QuickLook.Plugin.PDFViewer
 
             var pos = pagePanel.GetScrollPosition();
 
-            var factor = pagePanel.ZoomFactor * _viewRenderFactor;
-            factor = Math.Max(factor, MinZoomFactor);
-            factor = Math.Min(factor, MaxZoomFactor);
-            pagePanel.MinZoomFactor = MinZoomFactor / factor;
-            pagePanel.MaxZoomFactor = MaxZoomFactor / factor;
+            double factor;
+            if (pagePanel.ZoomToFit)
+            {
+                factor = Math.Min(pagePanel.ActualHeight / PdfHandle.Pages[CurrentPage].Height,
+                    pagePanel.ActualWidth / PdfHandle.Pages[CurrentPage].Width);
+            }
+            else
+            {
+                factor = pagePanel.ZoomFactor * _viewRenderFactor;
+                factor = Math.Max(factor, MinZoomFactor);
+                factor = Math.Min(factor, MaxZoomFactor);
+                pagePanel.MinZoomFactor = MinZoomFactor / factor;
+                pagePanel.MaxZoomFactor = MaxZoomFactor / factor;
+            }
 
             var image = PdfHandle.Pages[CurrentPage].Render(factor);
 
@@ -242,6 +247,8 @@ namespace QuickLook.Plugin.PDFViewer
 
                         Dispatcher.BeginInvoke(new Action(() => PageThumbnails.Add(bs)));
                     });
+
+                    handle.Close();
                 }
             }).Start();
         }

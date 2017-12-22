@@ -321,7 +321,7 @@ namespace QuickLook.Plugin.ImageViewer
         public void DoZoomToFit()
         {
             UpdateZoomToFitFactor();
-
+            
             Zoom(ZoomToFitFactor, false, true);
         }
 
@@ -342,7 +342,7 @@ namespace QuickLook.Plugin.ImageViewer
         public void ResetZoom()
         {
             ZoomToFitFactor = 1;
-            Zoom(1d, true);
+            Zoom(1d, true, ZoomToFit);
         }
 
         public void Zoom(double factor, bool suppressEvent = false, bool isToFit = false)

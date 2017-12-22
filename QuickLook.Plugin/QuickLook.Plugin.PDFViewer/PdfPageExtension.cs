@@ -39,8 +39,8 @@ namespace QuickLook.Plugin.PDFViewer
             var dpiX = fixDpi ? scale.Horizontal * DpiHelper.DefaultDpi : 96;
             var dpiY = fixDpi ? scale.Vertical * DpiHelper.DefaultDpi : 96;
 
-            var realWidth = (int) Math.Ceiling(page.Width * (dpiX / 72) * factor);
-            var realHeight = (int) Math.Ceiling(page.Height * (dpiY / 72) * factor);
+            var realWidth = (int) Math.Round(page.Width * scale.Horizontal * factor);
+            var realHeight = (int) Math.Round(page.Height * scale.Vertical * factor);
 
             var bitmap = new WriteableBitmap(realWidth, realHeight, dpiX, dpiY, PixelFormats.Bgr24, null);
             page.Render(bitmap,
