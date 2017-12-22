@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -44,12 +45,12 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
             _path = path;
         }
 
-        private Dictionary<string, string> GetSummary()
+        public Dictionary<string, string> GetSummary()
         {
             if (_summary != null)
                 return _summary;
 
-            return _summary = Run($"\"{_path}\"", ":");
+            return _summary = Run($"\"{_path}\"", ": ");
         }
 
         public BitmapSource GetThumbnail(bool autoZoom = false)
@@ -120,7 +121,7 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
 
             try
             {
-                var ori = Run($"-g Exif.Image.Orientation -Pkv \"{_path}\"", "\\s");
+                var ori = Run($"-g Exif.Image.Orientation -Pkv \"{_path}\"", "\\s{1,}");
 
                 if (ori?.ContainsKey("Exif.Image.Orientation") == true)
                     _orientation = (OrientationType) int.Parse(ori["Exif.Image.Orientation"]);
@@ -172,8 +173,8 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
             {
                 if (string.IsNullOrWhiteSpace(l))
                     return;
-                var eles = Regex.Split(l, regexSplit + "{1,}");
-                res.Add(eles[0].Trim(), eles[1].Trim());
+                var eles = Regex.Split(l, regexSplit + "");
+                res.Add(eles[0].Trim(), eles.Skip(1).Aggregate((a, b) => $"{a}{regexSplit}{b}"));
             });
 
             return res;

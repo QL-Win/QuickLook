@@ -8,8 +8,18 @@
              mc:Ignorable="d"
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- only for design -->
+                <ResourceDictionary Source="/QuickLook;component/Styles/MainWindowStyles.xaml" />
+                <ResourceDictionary Source="/QuickLook;component/Styles/MainWindowStyles.Dark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}" RenderOptions.BitmapScalingMode="NearestNeighbor">
+        <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}"
+                   RenderOptions.BitmapScalingMode="NearestNeighbor">
             <Rectangle.Fill>
                 <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background-b.png" AlignmentY="Top"
                             Viewport="0,0,32,32"
@@ -18,15 +28,19 @@
         </Rectangle>
         <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
-            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None" Meta="{Binding Meta, ElementName=imagePanel}"
+            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
+                                         Meta="{Binding Meta, ElementName=imagePanel}"
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
                                          AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
         </ScrollViewer>
-        <Border x:Name="zoomLevelInfo" CornerRadius="5" IsHitTestVisible="False" Opacity="0" Background="Gray" Padding="15,4,15,4" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Foreground="White" FontSize="18" Text="{Binding ElementName=imagePanel, Path=ZoomFactor, StringFormat={}{0:P0}}" />
+        <Border x:Name="zoomLevelInfo" CornerRadius="5" IsHitTestVisible="False" Opacity="0" Background="Gray"
+                Padding="15,4,15,4" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Foreground="White" FontSize="18"
+                       Text="{Binding ElementName=imagePanel, Path=ZoomFactor, StringFormat={}{0:P0}}" />
             <Border.Resources>
                 <Storyboard x:Key="StoryboardShowZoomLevelInfo">
-                    <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference zoomLevelInfo}}" Storyboard.TargetProperty="Opacity">
+                    <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference zoomLevelInfo}}"
+                                                   Storyboard.TargetProperty="Opacity">
                         <DoubleAnimationUsingKeyFrames.KeyFrames>
                             <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.1" />
                             <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.6" />
@@ -36,5 +50,18 @@
                 </Storyboard>
             </Border.Resources>
         </Border>
+
+        <Button x:Name="buttonMeta" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,8,8,0" Content="&#xE946;" />
+
+        <TextBlock x:Name="textMeta" IsHitTestVisible="False" Visibility="Collapsed" HorizontalAlignment="Right"
+                   VerticalAlignment="Top" FontSize="11"
+                   Padding="5,5,5,5" Margin="0,40,8,0" Background="{DynamicResource CaptionBackground}"
+                   Foreground="{DynamicResource WindowTextForeground}">
+            <TextBlock.Inlines>
+                <Run FontWeight="SemiBold">Camera maker</Run><Run>:&#160;</Run><Run>SONY</Run>
+            </TextBlock.Inlines>
+        </TextBlock>
     </Grid>
 </UserControl>

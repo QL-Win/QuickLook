@@ -23,12 +23,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Annotations;
+using QuickLook.ExtensionMethods;
 using QuickLook.Helpers;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
@@ -59,6 +61,13 @@ namespace QuickLook.Plugin.ImageViewer
         {
             InitializeComponent();
 
+            Resources.MergedDictionaries.Clear();
+
+            buttonMeta.Click += (sender, e) =>
+                textMeta.Visibility = textMeta.Visibility == Visibility.Collapsed
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
+
             var scale = DpiHelper.GetCurrentScaleFactor();
             backgroundBrush.Viewport = new Rect(new Size(
                 backgroundBrush.ImageSource.Width / scale.Horizontal,
@@ -78,6 +87,28 @@ namespace QuickLook.Plugin.ImageViewer
         internal ImagePanel(Meta meta) : this()
         {
             Meta = meta;
+
+            ShowMeta();
+        }
+
+        private void ShowMeta()
+        {
+            textMeta.Inlines.Clear();
+            Meta.GetSummary().ForEach(m =>
+            {
+                if (string.IsNullOrWhiteSpace(m.Key) || string.IsNullOrWhiteSpace(m.Value))
+                    return;
+
+                if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
+                    || m.Key == "Image size" || m.Key == "Thumbnail" || m.Key == "Exif comment")
+                    return;
+
+                textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
+                textMeta.Inlines.Add(": ");
+                textMeta.Inlines.Add(m.Value);
+                textMeta.Inlines.Add("\r\n");
+            });
+            textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
         }
 
         public bool ShowZoomLevelInfo
