@@ -116,22 +116,22 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         private static ObjectAnimationUsingKeyFrames LoadFullImageCore(Uri path)
         {
-            var ext = Path.GetExtension(path.LocalPath).ToLower();
+            byte[] sign;
+            using (var reader =
+                new BinaryReader(new FileStream(path.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                sign = reader.BaseStream.Length < 4 ? new byte[] {0, 0, 0, 0} : reader.ReadBytes(4);
+            }
 
             IAnimationProvider provider;
 
-            switch (ext)
-            {
-                case ".gif":
-                    provider = new GIFAnimationProvider();
-                    break;
-                case ".png":
-                    provider = new APNGAnimationProvider();
-                    break;
-                default:
-                    provider = new ImageMagickProvider();
-                    break;
-            }
+            if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
+                provider = new GIFAnimationProvider();
+            else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
+                provider = new APNGAnimationProvider();
+            else
+                provider = new ImageMagickProvider();
+
             var animator = new ObjectAnimationUsingKeyFrames();
             provider.GetAnimator(animator, path.LocalPath);
             animator.Freeze();

@@ -100,7 +100,7 @@ namespace QuickLook.Plugin.ImageViewer
                     return;
 
                 if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
-                    || m.Key == "Image size" || m.Key == "Thumbnail" || m.Key == "Exif comment")
+                    || m.Key == "Thumbnail" || m.Key == "Exif comment")
                     return;
 
                 textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
