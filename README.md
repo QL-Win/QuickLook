@@ -68,6 +68,6 @@ Application icons made by [@QubitsDev](https://twitter.com/qubitsdev). User inte
 
 This project references many other projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
 
-All source codes, except which are from other projects mentioned above, are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
+All source codes are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
 
 If you want make any modification on these source codes while keeping new codes not protected by GPL-3.0, please contact me for a sublicense instead.
