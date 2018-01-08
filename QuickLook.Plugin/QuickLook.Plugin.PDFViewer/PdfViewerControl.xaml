@@ -63,7 +63,7 @@
         </ListBox>
         <Grid Grid.Column="1" Background="#00EFEFEF">
             <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False"
-                                    BackgroundVisibility="Collapsed" />
+                                    BackgroundVisibility="Collapsed" MetaIconVisibility="Collapsed" />
         </Grid>
     </Grid>
 </UserControl>

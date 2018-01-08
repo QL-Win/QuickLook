@@ -48,6 +48,7 @@ namespace QuickLook.Plugin.ImageViewer
         private DateTime _lastZoomTime = DateTime.MinValue;
         private double _maxZoomFactor = 3d;
         private Meta _meta;
+        private Visibility _metaIconVisibility = Visibility.Visible;
         private double _minZoomFactor = 0.1d;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private bool _showZoomLevelInfo = true;
@@ -91,26 +92,6 @@ namespace QuickLook.Plugin.ImageViewer
             ShowMeta();
         }
 
-        private void ShowMeta()
-        {
-            textMeta.Inlines.Clear();
-            Meta.GetSummary().ForEach(m =>
-            {
-                if (string.IsNullOrWhiteSpace(m.Key) || string.IsNullOrWhiteSpace(m.Value))
-                    return;
-
-                if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
-                    || m.Key == "Thumbnail" || m.Key == "Exif comment")
-                    return;
-
-                textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
-                textMeta.Inlines.Add(": ");
-                textMeta.Inlines.Add(m.Value);
-                textMeta.Inlines.Add("\r\n");
-            });
-            textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
-        }
-
         public bool ShowZoomLevelInfo
         {
             get => _showZoomLevelInfo;
@@ -138,6 +119,16 @@ namespace QuickLook.Plugin.ImageViewer
             set
             {
                 _zoomToFit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Visibility MetaIconVisibility
+        {
+            get => _metaIconVisibility;
+            set
+            {
+                _metaIconVisibility = value;
                 OnPropertyChanged();
             }
         }
@@ -241,6 +232,26 @@ namespace QuickLook.Plugin.ImageViewer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void ShowMeta()
+        {
+            textMeta.Inlines.Clear();
+            Meta.GetSummary().ForEach(m =>
+            {
+                if (string.IsNullOrWhiteSpace(m.Key) || string.IsNullOrWhiteSpace(m.Value))
+                    return;
+
+                if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
+                    || m.Key == "Thumbnail" || m.Key == "Exif comment")
+                    return;
+
+                textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
+                textMeta.Inlines.Add(": ");
+                textMeta.Inlines.Add(m.Value);
+                textMeta.Inlines.Add("\r\n");
+            });
+            textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
+        }
 
         public event EventHandler<int> ImageScrolled;
         public event EventHandler DelayedReRender;
@@ -352,7 +363,7 @@ namespace QuickLook.Plugin.ImageViewer
         public void DoZoomToFit()
         {
             UpdateZoomToFitFactor();
-            
+
             Zoom(ZoomToFitFactor, false, true);
         }
 
