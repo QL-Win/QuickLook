@@ -22,7 +22,7 @@ using System.Windows.Data;
 
 namespace QuickLook.Converters
 {
-    public sealed class WindowStateToThicknessConverter : DependencyObject, IValueConverter
+    public sealed class WindowStateNormalToThicknessConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

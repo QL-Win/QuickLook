@@ -43,7 +43,7 @@ namespace QuickLook.Controls
             switch (msg)
             {
                 case 0x0024: /* WM_GETMINMAXINFO */
-                    WindowHelper.WmGetMinMaxInfo(hwnd, lParam);
+                    //WindowHelper.WmGetMinMaxInfo(hwnd, lParam);
                     //handled = true;
                     break;
             }

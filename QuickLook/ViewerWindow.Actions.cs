@@ -263,7 +263,7 @@ namespace QuickLook
 
             // if the this window is hidden in Max state, new show() will results in failure:
             // "Cannot show Window when ShowActivated is false and WindowState is set to Maximized"
-            WindowState = WindowState.Normal;
+            //WindowState = WindowState.Normal;
 
             Hide();
             //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
