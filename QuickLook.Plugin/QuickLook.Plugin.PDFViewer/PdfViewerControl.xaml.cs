@@ -35,13 +35,12 @@ namespace QuickLook.Plugin.PDFViewer
     /// </summary>
     public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDisposable
     {
-        private const double MinZoomFactor = 0.1d;
-        private const double MaxZoomFactor = 5d;
         private int _changePageDeltaSum;
         private bool _initPage = true;
-
+        private double _maxZoomFactor = double.NaN;
+        private double _minZoomFactor = double.NaN;
         private bool _pdfLoaded;
-        private double _viewRenderFactor = 0.5d;
+        private double _viewRenderFactor = double.NaN;
 
         public PdfViewerControl()
         {
@@ -159,7 +158,17 @@ namespace QuickLook.Plugin.PDFViewer
             var pos = pagePanel.GetScrollPosition();
 
             double factor;
-            if (pagePanel.ZoomToFit)
+
+            // First time showing. Set thresholds here.
+            if (double.IsNaN(_minZoomFactor) || double.IsNaN(_maxZoomFactor))
+            {
+                factor = Math.Min(pagePanel.ActualHeight / PdfHandle.Pages[CurrentPage].Height,
+                    pagePanel.ActualWidth / PdfHandle.Pages[CurrentPage].Width);
+                _viewRenderFactor = factor;
+                _minZoomFactor = 0.1 * factor;
+                _maxZoomFactor = 5 * factor;
+            }
+            else if (pagePanel.ZoomToFit)
             {
                 factor = Math.Min(pagePanel.ActualHeight / PdfHandle.Pages[CurrentPage].Height,
                     pagePanel.ActualWidth / PdfHandle.Pages[CurrentPage].Width);
@@ -167,10 +176,10 @@ namespace QuickLook.Plugin.PDFViewer
             else
             {
                 factor = pagePanel.ZoomFactor * _viewRenderFactor;
-                factor = Math.Max(factor, MinZoomFactor);
-                factor = Math.Min(factor, MaxZoomFactor);
-                pagePanel.MinZoomFactor = MinZoomFactor / factor;
-                pagePanel.MaxZoomFactor = MaxZoomFactor / factor;
+                factor = Math.Max(factor, _minZoomFactor);
+                factor = Math.Min(factor, _maxZoomFactor);
+                pagePanel.MinZoomFactor = _minZoomFactor / factor;
+                pagePanel.MaxZoomFactor = _maxZoomFactor / factor;
             }
 
             var image = PdfHandle.Pages[CurrentPage].Render(factor);
@@ -221,7 +230,8 @@ namespace QuickLook.Plugin.PDFViewer
 
                 tempHandle.Close();
             }
-            return size;
+
+            return new Size(size.Width * 3, size.Height * 3);
         }
 
         public void LoadPdf(string path)
