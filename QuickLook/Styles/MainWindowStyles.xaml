@@ -4,17 +4,17 @@
     <Thickness x:Key="MainWindowShadowMarginThickness">1</Thickness>
     <Thickness x:Key="MainWindowResizeThickness">6</Thickness>
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
-    <Color x:Key="MainWindowShadowColor">Gray</Color>
-    <SolidColorBrush x:Key="MainWindowBackground" Color="#FFFAFAFA" />
-    <SolidColorBrush x:Key="WindowTextForeground" Color="#E50E0E0E" />
-    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#E5626262" />
+    <SolidColorBrush x:Key="MainWindowBackground" Color="#BBFAFAFA" />
+    <SolidColorBrush x:Key="MainWindowBackgroundNoTransparent" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="WindowTextForeground" Color="#FF0E0E0E" />
+    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#FF626262" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E50E0E0E" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#44FFFFFF" />
     <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#88FFFFFF" />
     <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
     <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
-    <SolidColorBrush x:Key="CaptionBackground" Color="#FFDADADA" />
+    <SolidColorBrush x:Key="CaptionBackground" Color="#BBDADADA" />
 
     <Style x:Key="CaptionButtonBaseStyle" TargetType="Button">
         <Setter Property="Focusable" Value="False" />

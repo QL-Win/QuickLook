@@ -26,7 +26,7 @@ using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
-    public static class WindowHelper
+    internal static class WindowHelper
     {
         public static Rect GetCurrentWindowRect()
         {
@@ -57,9 +57,8 @@ namespace QuickLook.Helpers
                 window.TransformToPixels(left, top,
                     out pxLeft, out pxTop);
 
-            int pxWidth, pxHeight;
             window.TransformToPixels(width, height,
-                out pxWidth, out pxHeight);
+                out var pxWidth, out var pxHeight);
 
             User32.MoveWindow(new WindowInteropHelper(window).Handle, pxLeft, pxTop, pxWidth, pxHeight, true);
         }
@@ -84,7 +83,7 @@ namespace QuickLook.Helpers
             pixelY = (int) Math.Round(matrix.M22 * unitY);
         }
 
-        internal static bool IsForegroundWindowBelongToSelf()
+        public static bool IsForegroundWindowBelongToSelf()
         {
             var hwnd = User32.GetForegroundWindow();
             if (hwnd == IntPtr.Zero)
@@ -94,59 +93,65 @@ namespace QuickLook.Helpers
             return procId == Process.GetCurrentProcess().Id;
         }
 
-        internal static void SetNoactivate(WindowInteropHelper window)
+        public static void SetNoactivate(WindowInteropHelper window)
         {
             User32.SetWindowLong(window.Handle, User32.GWL_EXSTYLE,
                 User32.GetWindowLong(window.Handle, User32.GWL_EXSTYLE) |
                 User32.WS_EX_NOACTIVATE);
         }
 
-        internal static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
+        public static void EnableBlur(Window window)
         {
-            var mmi = (MinMaxInfo) Marshal.PtrToStructure(lParam, typeof(MinMaxInfo));
+            var accent = new AccentPolicy();
+            var accentStructSize = Marshal.SizeOf(accent);
+            accent.AccentState = AccentState.AccentEnableBlurbehind;
+            accent.AccentFlags = 2;
+            accent.GradientColor = 0x99FFFFFF;
 
-            // Adjust the maximized size and position to fit the work area of the current monitor
-            var currentScreen = Screen.FromHandle(hwnd);
-            var workArea = currentScreen.WorkingArea;
-            var monitorArea = currentScreen.Bounds;
-            mmi.ptMaxPosition.x = Math.Abs(workArea.Left - monitorArea.Left);
-            mmi.ptMaxPosition.y = Math.Abs(workArea.Top - monitorArea.Top);
-            mmi.ptMaxSize.x = Math.Abs(workArea.Right - workArea.Left);
-            mmi.ptMaxSize.y = Math.Abs(workArea.Bottom - workArea.Top);
+            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+            Marshal.StructureToPtr(accent, accentPtr, false);
 
-            Marshal.StructureToPtr(mmi, lParam, true);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MinMaxInfo
-        {
-            public POINT ptReserved;
-            public POINT ptMaxSize;
-            public POINT ptMaxPosition;
-            public POINT ptMinTrackSize;
-            public POINT ptMaxTrackSize;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            /// <summary>
-            ///     x coordinate of point.
-            /// </summary>
-            public int x;
-            /// <summary>
-            ///     y coordinate of point.
-            /// </summary>
-            public int y;
-
-            /// <summary>
-            ///     Construct a point of coordinates (x,y).
-            /// </summary>
-            public POINT(int x, int y)
+            var data = new WindowCompositionAttributeData
             {
-                this.x = x;
-                this.y = y;
-            }
+                Attribute = WindowCompositionAttribute.WcaAccentPolicy,
+                SizeOfData = accentStructSize,
+                Data = accentPtr
+            };
+
+            User32.SetWindowCompositionAttribute(new WindowInteropHelper(window).Handle, ref data);
+
+            Marshal.FreeHGlobal(accentPtr);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WindowCompositionAttributeData
+        {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        internal enum WindowCompositionAttribute
+        {
+            WcaAccentPolicy = 19
+        }
+
+        private enum AccentState
+        {
+            AccentDisabled = 0,
+            AccentEnableGradient = 1,
+            AccentEnableTransparentgradient = 2,
+            AccentEnableBlurbehind = 3,
+            AccentInvalidState = 4
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct AccentPolicy
+        {
+            public AccentState AccentState;
+            public int AccentFlags;
+            public uint GradientColor;
+            public readonly int AnimationId;
         }
     }
 }

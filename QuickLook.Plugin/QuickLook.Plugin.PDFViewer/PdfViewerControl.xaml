@@ -26,7 +26,7 @@
                  VirtualizingPanel.IsVirtualizing="True" Width="150"
                  SelectedIndex="0"
                  Focusable="False"
-                 Background="#00FFFFFF"
+                 Background="Transparent"
                  ItemsSource="{Binding PageThumbnails, ElementName=thisPdfViewer}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
                  ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
@@ -61,7 +61,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Column="1" Background="#00EFEFEF">
+        <Grid Grid.Column="1" Background="#FFFAFAFA">
             <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False"
                                     BackgroundVisibility="Collapsed" MetaIconVisibility="Collapsed" />
         </Grid>

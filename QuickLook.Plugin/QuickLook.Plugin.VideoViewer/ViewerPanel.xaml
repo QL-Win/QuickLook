@@ -21,8 +21,9 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <ffme:MediaElement x:Name="mediaElement" />
-        <Grid x:Name="coverArtPersenter" ClipToBounds="True" Background="{StaticResource MainWindowBackground}">
+        <ffme:MediaElement x:Name="mediaElement" Background="{DynamicResource MainWindowBackgroundNoTransparent}" />
+        <Grid x:Name="coverArtPersenter" ClipToBounds="True"
+              Background="{DynamicResource MainWindowBackgroundNoTransparent}">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -178,8 +179,8 @@
                     </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                        SmallChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" 
-                        LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" 
+                        SmallChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
+                        LargeChange="{Binding FrameStepDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
                         Maximum="{Binding NaturalDuration, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}"
                         Value="{Binding Position, ElementName=mediaElement, Converter={StaticResource TimeSpanToSecondsConverter}}" />
             </DockPanel>
@@ -187,7 +188,7 @@
         <Grid x:Name="volumeSliderLayer" Background="Transparent" Visibility="Collapsed">
             <Grid Height="32" Width="130" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                   Background="{DynamicResource CaptionButtonHoverBackground}" Margin="0,0,0,32">
-                <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="1" 
+                <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="1"
                         Value="{Binding ElementName=mediaElement, Path=Volume}" />
             </Grid>
         </Grid>

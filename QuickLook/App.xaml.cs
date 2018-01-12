@@ -34,10 +34,11 @@ namespace QuickLook
     /// </summary>
     public partial class App : Application
     {
-        public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
-        public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
+        public static readonly bool Is64Bit = Environment.Is64BitProcess;
+        public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
+        public static readonly bool IsWin10 = Environment.OSVersion.Version >= new Version(10, 0);
 
         private bool _isFirstInstance;
         private Mutex _isRunning;
@@ -126,6 +127,7 @@ namespace QuickLook
                 Process.GetCurrentProcess().Kill(); // just kill current process to avoid subsequence executions
                 //return;
             }
+
             Settings.Default.Upgraded = false;
             Settings.Default.Save();
         }

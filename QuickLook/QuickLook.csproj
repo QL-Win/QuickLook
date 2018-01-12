@@ -117,7 +117,6 @@
     <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
       <DependentUpon>GlassLayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MainWindowBase.cs" />
     <Compile Include="Converters\BooleanToKeyTimeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\WindowStateNormalToThicknessConverter.cs" />

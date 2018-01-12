@@ -19,6 +19,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
+using QuickLook.Helpers;
 
 namespace QuickLook.NativeMethods
 {
@@ -68,6 +69,10 @@ namespace QuickLook.NativeMethods
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetParent(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd,
+            ref WindowHelper.WindowCompositionAttributeData data);
 
         internal delegate int KeyboardHookProc(int code, int wParam, ref KeyboardHookStruct lParam);
 

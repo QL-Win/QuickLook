@@ -7,10 +7,9 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.TextViewer"
              mc:Ignorable="d"
              d:DesignHeight="317.974"
-             d:DesignWidth="448.79"
-             UseLayoutRounding="True">
+             d:DesignWidth="448.79">
     <Grid>
-        <avalonEdit:TextEditor x:Name="viewer" Background="#00FFFFFF" FontSize="14" ShowLineNumbers="True"
+        <avalonEdit:TextEditor x:Name="viewer" Background="Transparent" FontSize="14" ShowLineNumbers="True"
                                WordWrap="True" IsReadOnly="True" IsManipulationEnabled="True" />
     </Grid>
 </UserControl>

@@ -20,7 +20,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using QuickLook.Controls;
 using QuickLook.Helpers;
 using QuickLook.Plugin;
 
@@ -29,12 +28,11 @@ namespace QuickLook
     /// <summary>
     ///     Interaction logic for ViewerWindow.xaml
     /// </summary>
-    public partial class ViewerWindow : MainWindowBase
+    public partial class ViewerWindow : Window
     {
         private Size _customWindowSize = Size.Empty;
         private bool _ignoreNextWindowSizeChange;
         private string _path = string.Empty;
-        private bool _restoreForDragMove;
 
         internal ViewerWindow()
         {
@@ -48,10 +46,6 @@ namespace QuickLook
             SizeChanged += SaveWindowSizeOnSizeChanged;
 
             StateChanged += (sender, e) => _ignoreNextWindowSizeChange = true;
-
-            windowCaptionContainer.MouseLeftButtonDown += WindowDragMoveStart;
-            windowCaptionContainer.MouseMove += WindowDragMoving;
-            windowCaptionContainer.MouseLeftButtonUp += WindowDragMoveEnd;
 
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
@@ -93,6 +87,16 @@ namespace QuickLook
             buttonShare.Click += Share;
         }
 
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (SystemParameters.IsGlassEnabled && App.IsWin10)
+                WindowHelper.EnableBlur(this);
+            else
+                Background = (Brush) FindResource("MainWindowBackgroundNoTransparent");
+        }
+
         private void SaveWindowSizeOnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             // first shown?
@@ -131,57 +135,6 @@ namespace QuickLook
             var hide = (Storyboard) windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
 
             hide.Begin();
-        }
-
-        private void WindowDragMoveEnd(object sender, MouseButtonEventArgs e)
-        {
-            _restoreForDragMove = false;
-        }
-
-        private void WindowDragMoving(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton != MouseButtonState.Pressed)
-                return;
-            if (!_restoreForDragMove)
-                return;
-            _restoreForDragMove = false;
-
-            var scale = DpiHelper.GetCurrentScaleFactor();
-            var point = PointToScreen(e.MouseDevice.GetPosition(this));
-            point.X /= scale.Horizontal;
-            point.Y /= scale.Vertical;
-
-            var monitor = WindowHelper.GetCurrentWindowRect();
-            var precentLeft = (point.X - monitor.Left) / monitor.Width;
-            var precentTop = (point.Y - monitor.Top) / monitor.Height;
-
-            Left = point.X - RestoreBounds.Width * precentLeft;
-            Top = point.Y - RestoreBounds.Height * precentTop;
-
-            WindowState = WindowState.Normal;
-
-            if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
-        }
-
-        private void WindowDragMoveStart(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                if (ResizeMode != ResizeMode.CanResize &&
-                    ResizeMode != ResizeMode.CanResizeWithGrip)
-                    return;
-
-                WindowState = WindowState == WindowState.Maximized
-                    ? WindowState.Normal
-                    : WindowState.Maximized;
-            }
-            else
-            {
-                _restoreForDragMove = WindowState == WindowState.Maximized;
-                if (e.LeftButton == MouseButtonState.Pressed)
-                    DragMove();
-            }
         }
     }
 }
