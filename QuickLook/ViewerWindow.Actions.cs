@@ -86,24 +86,9 @@ namespace QuickLook
             size.Width = Math.Max(size.Width, MinWidth);
             size.Height = Math.Max(size.Height, MinHeight);
 
-            if (!IsLoaded)
-            {
-                // if the window is not loaded yet, just leave the problem to WPF
-                Width = size.Width;
-                Height = size.Height;
-                WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
-
-                return;
-            }
-
-            // is the window is now now maximized, do not move it
+            // if the window is now now maximized, do not move it
             if (WindowState == WindowState.Maximized)
                 return;
-
-            // if this is a new window, place it to top
-            if (Visibility != Visibility.Visible)
-                this.BringToFront();
 
             var screen = WindowHelper.GetCurrentWindowRect();
 
@@ -120,7 +105,22 @@ namespace QuickLook
             newLeft = newLeft + size.Width > screen.Right ? screen.Right - size.Width : newLeft; // right
             newTop = newTop + size.Height > screen.Bottom ? screen.Bottom - size.Height : newTop; // bottom
 
-            this.MoveWindow(newLeft, newTop, size.Width, size.Height);
+            if (IsLoaded)
+            {
+                this.MoveWindow(newLeft, newTop, size.Width, size.Height);
+            }
+            else
+            {
+                // MoveWindow does not work for new windows
+                Width = size.Width;
+                Height = size.Height;
+                Left = newLeft;
+                Top = newTop;
+                if (double.IsNaN(Left) || double.IsNaN(Top)) // first time showing
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
+            }
         }
 
         internal void UnloadPlugin()
@@ -143,6 +143,7 @@ namespace QuickLook
             {
                 Debug.WriteLine(e);
             }
+
             Plugin = null;
 
             _path = string.Empty;
@@ -217,12 +218,14 @@ namespace QuickLook
                 AddToInlines("MW_BrowseFolder", Path.GetFileName(_path));
                 return;
             }
+
             var isExe = FileHelper.IsExecutable(_path, out var appFriendlyName);
             if (isExe)
             {
                 AddToInlines("MW_Run", appFriendlyName);
                 return;
             }
+
             // not an exe
             var found = FileHelper.GetAssocApplication(_path, out appFriendlyName);
             if (found)
@@ -230,6 +233,7 @@ namespace QuickLook
                 AddToInlines("MW_OpenWith", appFriendlyName);
                 return;
             }
+
             // assoc not found
             AddToInlines("MW_Open", Path.GetFileName(_path));
 

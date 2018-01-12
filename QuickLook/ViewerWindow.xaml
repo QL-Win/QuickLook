@@ -11,7 +11,6 @@
     UseLayoutRounding="True"
     d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="400" MinHeight="200"
-    WindowStartupLocation="CenterScreen"
     Focusable="False"
     BorderBrush="{DynamicResource CaptionBackground}"
     Background="{DynamicResource MainWindowBackground}"

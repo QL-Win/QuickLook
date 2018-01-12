@@ -40,7 +40,6 @@ namespace QuickLook
         public void Dispose()
         {
             StopFocusMonitor();
-            ClosePreview();
         }
 
         public void RunAndClosePreview()
@@ -96,7 +95,15 @@ namespace QuickLook
         {
             StopFocusMonitor();
 
-            _viewerWindow = new ViewerWindow();
+            var newWindow = new ViewerWindow
+            {
+                Top = _viewerWindow.Top,
+                Left = _viewerWindow.Left,
+                Width = _viewerWindow.Width,
+                Height = _viewerWindow.Height
+            };
+
+            _viewerWindow = newWindow;
         }
 
         public void SwitchPreview(string path)
