@@ -31,6 +31,7 @@ namespace QuickLook
         public const string Switch = "QuickLook.App.PipeMessages.Switch";
         public const string Invoke = "QuickLook.App.PipeMessages.Invoke";
         public const string Toggle = "QuickLook.App.PipeMessages.Toggle";
+        public const string Forget = "QuickLook.App.PipeMessages.Forget";
         public const string Close = "QuickLook.App.PipeMessages.Close";
         public const string Quit = "QuickLook.App.PipeMessages.Quit";
     }
@@ -132,6 +133,11 @@ namespace QuickLook
                 case PipeMessages.Toggle:
                     Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => ViewWindowManager.GetInstance().TogglePreview(lParam)),
+                        DispatcherPriority.ApplicationIdle);
+                    return false;
+                case PipeMessages.Forget:
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ViewWindowManager.GetInstance().ForgetCurrentWindow()),
                         DispatcherPriority.ApplicationIdle);
                     return false;
                 case PipeMessages.Close:

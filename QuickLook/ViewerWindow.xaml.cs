@@ -59,9 +59,7 @@ namespace QuickLook
             {
                 if (Pinned)
                     return;
-
-                Pinned = true;
-                buttonPin.Tag = "Pin";
+                
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 

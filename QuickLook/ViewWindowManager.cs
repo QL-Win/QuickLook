@@ -75,7 +75,7 @@ namespace QuickLook
 
         public void TogglePreview(string path)
         {
-            if (_viewerWindow.Visibility == Visibility.Visible)
+            if (_viewerWindow.Visibility == Visibility.Visible && path == _invokedPath)
                 ClosePreview();
             else
                 InvokePreview(path);
@@ -94,6 +94,8 @@ namespace QuickLook
         internal void ForgetCurrentWindow()
         {
             StopFocusMonitor();
+
+            _viewerWindow.Pinned = true;
 
             var newWindow = new ViewerWindow
             {

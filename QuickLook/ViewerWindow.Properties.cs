@@ -32,12 +32,13 @@ namespace QuickLook
         };
         private bool _canOldPluginResize;
         private bool _pinned;
-        private bool Pinned
+        internal bool Pinned
         {
             get => _pinned;
             set
             {
                 _pinned = value;
+                buttonPin.Tag = "Pin";
                 OnPropertyChanged();
             }
         }

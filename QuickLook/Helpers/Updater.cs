@@ -95,6 +95,7 @@ namespace QuickLook.Helpers
                     File.WriteAllText(changeLogPath, notes);
 
                     PipeServerManager.SendMessage(PipeMessages.Invoke, changeLogPath);
+                    PipeServerManager.SendMessage(PipeMessages.Forget);
                 }
                 catch (Exception e)
                 {
