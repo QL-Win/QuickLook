@@ -31,7 +31,7 @@ namespace QuickLook.Plugin.VideoViewer
         {
             // video
             ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".mts", ".m2ts", ".m4v", ".mkv",
-            ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".vob", ".webm", ".wmv",
+            ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".tp", ".ts", ".vob", ".webm", ".wmv",
             // audio
             ".3gp", ".aa", ".aac", ".aax", ".act", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
             ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
