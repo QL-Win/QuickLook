@@ -39,6 +39,8 @@ namespace QuickLook
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
         public static readonly bool IsWin10 = Environment.OSVersion.Version >= new Version(10, 0);
+        public static readonly string LocalDataPath = Path.GetFullPath(Path.Combine(ConfigurationManager
+            .OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath, @"..\..\"));
 
         private bool _isFirstInstance;
         private Mutex _isRunning;
@@ -47,13 +49,7 @@ namespace QuickLook
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                //MessageBox.Show(((Exception) args.ExceptionObject).ToString());
-
-                const string source = "QuickLook Application Error";
-                if (!EventLog.SourceExists(source))
-                    EventLog.CreateEventSource(source, "Application");
-                EventLog.WriteEntry(source, ((Exception) args.ExceptionObject).ToString(),
-                    EventLogEntryType.Error);
+                ProcessHelper.WriteLog(((Exception) args.ExceptionObject).ToString());
             };
 
             base.OnStartup(e);

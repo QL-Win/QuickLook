@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 using QuickLook.NativeMethods;
 
@@ -58,6 +59,21 @@ namespace QuickLook.Helpers
                 Environment.OSVersion.Version.Minor, 0, 0, out var osType);
 
             return osType == PRODUCT_CLOUD || osType == PRODUCT_CLOUDN;
+        }
+
+        public static void WriteLog(string msg)
+        {
+            var logFilePath = Path.Combine(App.LocalDataPath, @"QuickLook.Exception.log");
+
+            using (var writer = new StreamWriter(new FileStream(logFilePath, FileMode.OpenOrCreate,
+                FileAccess.ReadWrite, FileShare.Read)))
+            {
+                writer.BaseStream.Seek(0, SeekOrigin.End);
+
+                writer.WriteLine($"========{DateTime.Now}========");
+                writer.WriteLine(msg);
+                writer.WriteLine();
+            }
         }
     }
 }

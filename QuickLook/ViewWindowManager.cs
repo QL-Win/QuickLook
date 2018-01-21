@@ -149,19 +149,14 @@ namespace QuickLook
         private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
         {
             var plugin = _viewerWindow.Plugin.GetType();
-
+            
             _viewerWindow.BeginHide();
 
             TrayIconManager.ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
 
             Debug.WriteLine(e.SourceException.ToString());
-            Debug.WriteLine(e.SourceException.StackTrace);
 
-            const string source = "QuickLook Preview Error";
-            if (!EventLog.SourceExists(source))
-                EventLog.CreateEventSource(source, "Application");
-            EventLog.WriteEntry(source, e.SourceException.ToString(),
-                EventLogEntryType.Error);
+            ProcessHelper.WriteLog(e.SourceException.ToString());
 
             if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
                 BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
