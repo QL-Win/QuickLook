@@ -146,21 +146,30 @@ namespace QuickLook.Plugin.VideoViewer
             if (ShowVideo)
                 return;
 
-            using (var h = File.Create(path))
+            try
             {
-                metaTitle.Text = h.Tag.Title;
-                metaArtists.Text = h.Tag.FirstPerformer;
-                metaAlbum.Text = h.Tag.Album;
+                using (var h = File.Create(path))
+                {
+                    metaTitle.Text = !string.IsNullOrWhiteSpace(h.Tag.Title) ? h.Tag.Title : Path.GetFileName(path);
+                    metaArtists.Text = h.Tag.FirstPerformer;
+                    metaAlbum.Text = h.Tag.Album;
 
-                //var cs = h.Tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
-                var cs = h.Tag.Pictures.FirstOrDefault();
-                if (cs != default(IPicture))
-                    using (var ms = new MemoryStream(cs.Data.Data))
-                    {
-                        CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-                        DetermineTheme();
-                    }
+                    //var cs = h.Tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
+                    var cs = h.Tag.Pictures.FirstOrDefault();
+                    if (cs != default(IPicture))
+                        using (var ms = new MemoryStream(cs.Data.Data))
+                        {
+                            CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                            DetermineTheme();
+                        }
+                }
             }
+            catch (Exception e)
+            {
+                metaTitle.Text = Path.GetFileName(path);
+                metaArtists.Text = metaAlbum.Text = string.Empty;
+            }
+
             metaArtists.Visibility = string.IsNullOrEmpty(metaArtists.Text)
                 ? Visibility.Collapsed
                 : Visibility.Visible;
