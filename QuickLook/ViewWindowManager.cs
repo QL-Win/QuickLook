@@ -152,7 +152,7 @@ namespace QuickLook
             
             _viewerWindow.BeginHide();
 
-            TrayIconManager.ShowNotification("", $"Failed to preview {Path.GetFileName(path)}", true);
+            TrayIconManager.ShowNotification("Failed to preview {Path.GetFileName(path)}", $"Consider reporting this incident to QuickLook’s author.", true);
 
             Debug.WriteLine(e.SourceException.ToString());
 
