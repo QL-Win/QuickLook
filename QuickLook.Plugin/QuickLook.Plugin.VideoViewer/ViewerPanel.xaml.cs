@@ -74,7 +74,7 @@ namespace QuickLook.Plugin.VideoViewer
             {
                 if (_wasPlaying) mediaElement.Play();
             };
-            mediaElement.MediaFailed += ShowErrorNotification;
+            //mediaElement.MediaFailed += ShowErrorNotification;
             mediaElement.MediaOpening += (sender, e) => e.Options.EnableHardwareAcceleration = true;
             /*mediaElement.MediaEnded += (s, e) =>
             {
