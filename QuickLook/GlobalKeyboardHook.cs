@@ -48,11 +48,6 @@ namespace QuickLook
         internal event KeyEventHandler KeyDown;
         internal event KeyEventHandler KeyUp;
 
-        ~GlobalKeyboardHook()
-        {
-            Dispose();
-        }
-
         internal static GlobalKeyboardHook GetInstance()
         {
             return _instance ?? (_instance = new GlobalKeyboardHook());

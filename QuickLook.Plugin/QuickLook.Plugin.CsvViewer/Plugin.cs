@@ -58,10 +58,5 @@ namespace QuickLook.Plugin.CsvViewer
 
             _panel = null;
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

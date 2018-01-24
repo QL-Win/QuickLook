@@ -130,11 +130,6 @@ namespace QuickLook.Controls.BusyDecorator
                 Math.Max(ret.Height, _busyHost.RenderSize.Height));
         }
 
-        ~BusyDecorator()
-        {
-            Dispose();
-        }
-
         #region IsBusyIndicatorShowing Property
 
         /// <summary>

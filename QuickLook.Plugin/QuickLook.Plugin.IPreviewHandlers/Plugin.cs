@@ -75,10 +75,5 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _panel?.Dispose();
             _panel = null;
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

@@ -238,11 +238,6 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement.Play();
         }
 
-        ~ViewerPanel()
-        {
-            Dispose();
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

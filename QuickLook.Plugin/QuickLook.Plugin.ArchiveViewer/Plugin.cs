@@ -62,10 +62,5 @@ namespace QuickLook.Plugin.ArchiveViewer
             _panel?.Dispose();
             _panel = null;
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

@@ -152,11 +152,6 @@ namespace QuickLook
             }
         }
 
-        ~PipeServerManager()
-        {
-            Dispose();
-        }
-
         public static PipeServerManager GetInstance()
         {
             return _instance ?? (_instance = new PipeServerManager());

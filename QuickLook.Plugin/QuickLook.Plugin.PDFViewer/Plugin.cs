@@ -103,10 +103,5 @@ namespace QuickLook.Plugin.PDFViewer
         {
             _context.Title = $"{Path.GetFileName(_path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

@@ -63,10 +63,5 @@ namespace QuickLook.Plugin.HtmlViewer
             _panel?.Dispose();
             _panel = null;
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

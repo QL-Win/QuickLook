@@ -81,10 +81,5 @@ namespace QuickLook.Plugin.MailViewer
 
             throw new Exception($"{path} is not a valid msg file.");
         }
-
-        ~Plugin()
-        {
-            Cleanup();
-        }
     }
 }

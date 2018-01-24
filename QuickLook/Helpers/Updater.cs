@@ -85,10 +85,14 @@ namespace QuickLook.Helpers
 
                     var notes = string.Empty;
 
+                    var count = 0;
                     foreach (var item in json)
                     {
                         notes += $"# {item["name"]}\r\n\r\n";
                         notes += item["body"] + "\r\n\r\n";
+
+                        if (count++ > 10)
+                            break;
                     }
 
                     var changeLogPath = Path.GetTempFileName() + ".md";
