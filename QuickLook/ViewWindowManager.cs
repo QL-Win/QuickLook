@@ -75,7 +75,7 @@ namespace QuickLook
 
         public void TogglePreview(string path)
         {
-            if (_viewerWindow.Visibility == Visibility.Visible && path == _invokedPath)
+            if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
                 ClosePreview();
             else
                 InvokePreview(path);

@@ -63,11 +63,6 @@ namespace QuickLook.Plugin.MarkdownViewer
             _panel = null;
         }
 
-        ~Plugin()
-        {
-            Cleanup();
-        }
-
         private string GenerateMarkdownHtml(string path)
         {
             var md = File.ReadAllText(path);

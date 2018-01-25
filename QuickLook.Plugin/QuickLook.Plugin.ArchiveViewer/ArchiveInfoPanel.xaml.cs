@@ -74,11 +74,6 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        ~ArchiveInfoPanel()
-        {
-            Dispose();
-        }
-
         private void BeginLoadArchive(string path)
         {
             new Task(() =>

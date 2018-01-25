@@ -37,11 +37,6 @@ namespace QuickLook.Plugin.ArchiveViewer
             IconManager.ClearCache();
         }
 
-        ~ArchiveFileListView()
-        {
-            Dispose();
-        }
-
         public void SetDataContext(object context)
         {
             treeGrid.DataContext = context;

@@ -1,0 +1,3065 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ffme.win</name>
+    </assembly>
+    <members>
+        <member name="T:Unosquare.FFME.Events.BitmapDataBuffer">
+            <summary>
+            Contains metadata about a raw bitmap back-buffer
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Events.BitmapDataBuffer.#ctor(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.BitmapDataBuffer"/> class.
+            </summary>
+            <param name="scan0">The scan0.</param>
+            <param name="stride">The stride.</param>
+            <param name="bytesPerPixel">The bytes per pixel.</param>
+            <param name="pixelWidth">Width of the pixel.</param>
+            <param name="pixelHeight">Height of the pixel.</param>
+            <param name="dpiX">The dpi x.</param>
+            <param name="dpiY">The dpi y.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.Scan0">
+            <summary>
+            Gets a pointer to the raw pixel data
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.Stride">
+            <summary>
+            Gets the byte width of each row of pixels
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.BitsPerPixel">
+            <summary>
+            Gets the bits per pixel.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.BytesPerPixel">
+            <summary>
+            Gets the bytes per pixel.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.PixelWidth">
+            <summary>
+            Gets width of the bitmap
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.PixelHeight">
+            <summary>
+            Gets height of the bitmap
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.DpiX">
+            <summary>
+            Gets the DPI on the X axis
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.DpiY">
+            <summary>
+            Gets the DPI on the Y axis
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.BitmapDataBuffer.UpdateRect">
+            <summary>
+            Gets the update rect.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Events.BitmapDataBuffer.FromWriteableBitmap(System.Windows.Media.Imaging.WriteableBitmap)">
+            <summary>
+            Creates a buffer reference from the bitmap. Please Lock the bitmap before calling this method.
+            </summary>
+            <param name="w">The w.</param>
+            <returns>The corresponding buffer</returns>
+        </member>
+        <member name="T:Unosquare.FFME.Events.RenderingAudioEventArgs">
+            <summary>
+            Provides the audio samples rendering payload as event arguments.
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.RenderingAudioEventArgs.#ctor(System.IntPtr,System.Int32,Unosquare.FFME.Shared.StreamInfo,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.RenderingAudioEventArgs" /> class.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="length">The length.</param>
+            <param name="stream">The stream.</param>
+            <param name="startTime">The start time.</param>
+            <param name="duration">The duration.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.Buffer">
+            <summary>
+            Gets a pointer to the samples buffer.
+            Samples are provided in PCM 16-bit signed, interleaved stereo.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.BufferLength">
+            <summary>
+            Gets the length in bytes of the samples buffer.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.SampleRate">
+            <summary>
+            Gets the number of samples in 1 second.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.ChannelCount">
+            <summary>
+            Gets the number of channels.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.BitsPerSample">
+            <summary>
+            Gets the number of bits per sample.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.Samples">
+            <summary>
+            Gets the number of samples in the buffer for all channels.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingAudioEventArgs.SamplesPerChannel">
+            <summary>
+            Gets the number of samples in the buffer per channel.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.RenderingEventArgs">
+            <summary>
+            A base class to represent media block
+            rendering event arguments.
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.RenderingEventArgs.#ctor(Unosquare.FFME.Shared.StreamInfo,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.RenderingEventArgs" /> class.
+            </summary>
+            <param name="stream">The stream.</param>
+            <param name="startTime">The position.</param>
+            <param name="duration">The duration.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingEventArgs.Stream">
+            <summary>
+            Provides Stream Information coming from the media container.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingEventArgs.Clock">
+            <summary>
+            Gets the clock position at which the media
+            was called for rendering
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingEventArgs.StartTime">
+            <summary>
+            Gets the starting time at which this media
+            has to be presented.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingEventArgs.Duration">
+            <summary>
+            Gets how long this media has to be presented.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.RenderingSubtitlesEventArgs">
+            <summary>
+            Provides the subtitles rendering payload as event arguments.
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.RenderingSubtitlesEventArgs.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},FFmpeg.AutoGen.AVSubtitleType,Unosquare.FFME.Shared.StreamInfo,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.RenderingSubtitlesEventArgs" /> class.
+            </summary>
+            <param name="text">The text.</param>
+            <param name="originalText">The original text.</param>
+            <param name="format">The format.</param>
+            <param name="stream">The stream.</param>
+            <param name="startTime">The start time.</param>
+            <param name="duration">The duration.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingSubtitlesEventArgs.Text">
+            <summary>
+            Gets the text stripped out of ASS or SRT formatting.
+            This is what the default subtitle renderer will display
+            on the screen.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingSubtitlesEventArgs.OriginalText">
+            <summary>
+            Gets the text as originally decoded including
+            all markup and formatting.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingSubtitlesEventArgs.Format">
+            <summary>
+            Gets the type of subtitle format the original
+            subtitle text is in.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingSubtitlesEventArgs.Cancel">
+            <summary>
+            When set to true, clears the current subtitle and
+            prevents the subtitle block from being rendered.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.RenderingVideoEventArgs">
+            <summary>
+            The video rendering event arguments
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.RenderingVideoEventArgs.#ctor(Unosquare.FFME.Events.BitmapDataBuffer,Unosquare.FFME.Shared.StreamInfo,System.Collections.Generic.List{Unosquare.FFME.ClosedCaptions.ClosedCaptionPacket},System.String,System.Int32,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.RenderingVideoEventArgs" /> class.
+            </summary>
+            <param name="bitmap">The bitmap.</param>
+            <param name="stream">The stream.</param>
+            <param name="closedCaptions">The closed captions.</param>
+            <param name="smtpeTimecode">The smtpe timecode.</param>
+            <param name="pictureNumber">The picture number.</param>
+            <param name="startTime">The start time.</param>
+            <param name="duration">The duration.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingVideoEventArgs.Bitmap">
+            <summary>
+            Gets the writable bitmap filled with the video frame pixels.
+            Feel free to capture or change this buffer.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingVideoEventArgs.ClosedCaptions">
+            <summary>
+            Gets the closed caption decoded packets.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingVideoEventArgs.PictureNumber">
+            <summary>
+            Gets the display picture number (frame number).
+            If not set by the decoder, this attempts to obtain it by dividing the start time by the
+            frame duration
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.RenderingVideoEventArgs.SmtpeTimecode">
+            <summary>
+            Gets the SMTPE time code.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.MediaLogMessageEventArgs">
+            <summary>
+            Contains the Message Logged Event Arguments
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.MediaLogMessageEventArgs.#ctor(Unosquare.FFME.Shared.MediaLogMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.MediaLogMessageEventArgs"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaLogMessageEventArgs.Source">
+            <summary>
+            Gets the intance of the MediaElement that generated this message.
+            When null, it means FFmpeg generated this message.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaLogMessageEventArgs.TimestampUtc">
+            <summary>
+            Gets the timestamp.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaLogMessageEventArgs.MessageType">
+            <summary>
+            Gets the type of the message.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaLogMessageEventArgs.Message">
+            <summary>
+            Gets the contents of the message.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.PositionChangedRoutedEventArgs">
+            <summary>
+            Contains the position changed routed event args
+            </summary>
+            <seealso cref="T:System.Windows.RoutedEventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.PositionChangedRoutedEventArgs.#ctor(System.Windows.RoutedEvent,System.Object,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.PositionChangedRoutedEventArgs"/> class.
+            </summary>
+            <param name="routedEvent">The routed event.</param>
+            <param name="source">The source.</param>
+            <param name="position">The position.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.PositionChangedRoutedEventArgs.Position">
+            <summary>
+            Gets the position.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Events.MediaOpeningRoutedEventArgs">
+            <summary>
+            Represents the event arguments of the MediaOpening routed event.
+            </summary>
+            <seealso cref="T:System.Windows.RoutedEventArgs" />
+        </member>
+        <member name="M:Unosquare.FFME.Events.MediaOpeningRoutedEventArgs.#ctor(System.Windows.RoutedEvent,System.Object,Unosquare.FFME.Shared.MediaOptions,Unosquare.FFME.Shared.MediaInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Events.MediaOpeningRoutedEventArgs" /> class.
+            </summary>
+            <param name="routedEvent">The routed event.</param>
+            <param name="source">The source.</param>
+            <param name="options">The options.</param>
+            <param name="info">The input information.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaOpeningRoutedEventArgs.Options">
+            <summary>
+            Set or change the options before the media is opened.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Events.MediaOpeningRoutedEventArgs.Info">
+            <summary>
+            Provides internal details of the media, inclusing its component streams.
+            Typically, options are set based on what this information contains.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.IGuiContext">
+            <summary>
+            Defines a generic graphical context (compatibility between WPF and WinForms apps)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.IGuiContext.IsInDesignTime">
+            <summary>
+            Gets a value indicating whetherthe context is in design time
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.IGuiContext.IsValid">
+            <summary>
+            Returns true if the graphical context is valid.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.IGuiContext.EnqueueInvoke(System.Windows.Threading.DispatcherPriority,System.Delegate,System.Object[])">
+            <summary>
+            Enqueues a UI call
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="callback">The callback.</param>
+            <param name="arguments">The arguments.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.IGuiContext.Invoke(System.Windows.Threading.DispatcherPriority,System.Action)">
+            <summary>
+            Synchronously invokes the call on the UI thread
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WindowsMediaConnector">
+            <summary>
+            The Media engine connector
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Shared.IMediaConnector" />
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.#ctor(Unosquare.FFME.MediaElement)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Platform.WindowsMediaConnector"/> class.
+            </summary>
+            <param name="control">The control.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnBufferingEnded(System.Object)">
+            <summary>
+            Called when [buffering ended].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnBufferingStarted(System.Object)">
+            <summary>
+            Called when [buffering started].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMediaClosed(System.Object)">
+            <summary>
+            Called when [media closed].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMediaEnded(System.Object)">
+            <summary>
+            Called when [media ended].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMediaFailed(System.Object,System.Exception)">
+            <summary>
+            Called when [media failed].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The e.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMediaOpened(System.Object)">
+            <summary>
+            Called when [media opened].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMediaOpening(System.Object,Unosquare.FFME.Shared.MediaOptions,Unosquare.FFME.Shared.MediaInfo)">
+            <summary>
+            Called when [media opening].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="mediaOptions">The media options.</param>
+            <param name="mediaInfo">The media information.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnMessageLogged(System.Object,Unosquare.FFME.Shared.MediaLogMessage)">
+            <summary>
+            Called when [message logged].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:Unosquare.FFME.Shared.MediaLogMessage" /> instance containing the event data.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnPositionChanged(System.Object,System.TimeSpan)">
+            <summary>
+            Called when [position changed].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="position">The position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnPropertyChanged(System.Object,System.String)">
+            <summary>
+            Called when an underlying media engine property is changed.
+            This is used to handle property change notifications
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="propertyName">Name of the property.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnSeekingEnded(System.Object)">
+            <summary>
+            Called when [seeking ended].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsMediaConnector.OnSeekingStarted(System.Object)">
+            <summary>
+            Called when [seeking started].
+            </summary>
+            <param name="sender">The sender.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WindowsNativeMethods">
+            <summary>
+            Windows-specific native methods
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Unosquare.FFME.Platform.WindowsNativeMethods"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Unosquare.FFME.Platform.WindowsNativeMethods"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsNativeMethods.Instance">
+            <summary>
+            Gets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.CopyMemory(System.IntPtr,System.IntPtr,System.UInt32)">
+            <summary>
+            Fast pointer memory block copy function
+            </summary>
+            <param name="targetAddress">The target address.</param>
+            <param name="sourceAddress">The source address.</param>
+            <param name="copyLength">Length of the copy.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.FillMemory(System.IntPtr,System.UInt32,System.Byte)">
+            <summary>
+            Fills the memory with the specified value repeated.
+            </summary>
+            <param name="startAddress">The start address.</param>
+            <param name="length">The length.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.SetDllDirectory(System.String)">
+            <summary>
+            Sets the DLL directory in which external dependencies can be located.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+            True for success. False for failure
+            </returns>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WindowsNativeMethods.NativeMethods">
+            <summary>
+            Contains Interop native methods
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.NativeMethods.SetDllDirectory(System.String)">
+            <summary>
+            Sets the DLL directory in which external dependencies can be located.
+            </summary>
+            <param name="lpPathName">the full path.</param>
+            <returns>True if set, false if not set</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.NativeMethods.CopyMemory(System.IntPtr,System.IntPtr,System.UInt32)">
+            <summary>
+            Fast pointer memory block copy function
+            </summary>
+            <param name="destination">The destination.</param>
+            <param name="source">The source.</param>
+            <param name="length">The length.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsNativeMethods.NativeMethods.FillMemory(System.IntPtr,System.UInt32,System.Byte)">
+            <summary>
+            Fills the memory.
+            </summary>
+            <param name="destination">The destination.</param>
+            <param name="length">The length.</param>
+            <param name="fill">The fill.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WindowsPlatform">
+            <summary>
+            Root for platform-specific implementations
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Shared.IPlatform" />
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsPlatform.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Unosquare.FFME.Platform.WindowsPlatform"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsPlatform.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Unosquare.FFME.Platform.WindowsPlatform"/> class from being created.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Unable to get a valid GUI context.</exception>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsPlatform.Instance">
+            <summary>
+            Gets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsPlatform.NativeMethods">
+            <summary>
+            Retrieves the platform-specific Native methods
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsPlatform.Gui">
+            <summary>
+            Gets the GUI contaxt implementation.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsPlatform.IsInDebugMode">
+            <summary>
+            Gets a value indicating whether this instance is in debug mode.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WindowsPlatform.IsInDesignTime">
+            <summary>
+            Gets a value indicating whether this instance is in design time.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsPlatform.CreateRenderer(Unosquare.FFME.Shared.MediaType,Unosquare.FFME.MediaEngine)">
+            <summary>
+            Creates a renderer of the specified media type.
+            </summary>
+            <param name="mediaType">Type of the media.</param>
+            <param name="mediaEngine">The media engine.</param>
+            <returns>
+            The renderer
+            </returns>
+            <exception cref="T:System.NotSupportedException">When the media type is not supported</exception>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WindowsPlatform.HandleFFmpegLogMessage(Unosquare.FFME.Shared.MediaLogMessage)">
+            <summary>
+            Handles global FFmpeg library messages
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WinFormsGuiContext">
+            <summary>
+            The Windows forms graphical context
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Platform.IGuiContext" />
+        </member>
+        <member name="F:Unosquare.FFME.Platform.WinFormsGuiContext.WinFormsContext">
+            <summary>
+            The application synchronization context
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WinFormsGuiContext.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Unosquare.FFME.Platform.WinFormsGuiContext"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WinFormsGuiContext.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Unosquare.FFME.Platform.WinFormsGuiContext"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WinFormsGuiContext.Current">
+            <summary>
+            Gets the current.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WinFormsGuiContext.IsInDesignTime">
+            <summary>
+            Gets a value indicating whetherthe context is in design time
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WinFormsGuiContext.IsValid">
+            <summary>
+            Returns true if this context is valid.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WinFormsGuiContext.EnqueueInvoke(System.Windows.Threading.DispatcherPriority,System.Delegate,System.Object[])">
+            <summary>
+            Enqueues a UI call
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="callback">The callback.</param>
+            <param name="arguments">The arguments.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WinFormsGuiContext.Invoke(System.Windows.Threading.DispatcherPriority,System.Action)">
+            <summary>
+            Synchronously invokes the call on the UI thread
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.WpfGuiContext">
+            <summary>
+            The WPF graphical context
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Platform.IGuiContext" />
+        </member>
+        <member name="F:Unosquare.FFME.Platform.WpfGuiContext.GuiDispatcher">
+            <summary>
+            The WPF dispatcher
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WpfGuiContext.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Unosquare.FFME.Platform.WpfGuiContext"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WpfGuiContext.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Unosquare.FFME.Platform.WpfGuiContext"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WpfGuiContext.Current">
+            <summary>
+            Gets the current instance.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WpfGuiContext.IsInDesignTime">
+            <summary>
+            Gets a value indicating whetherthe context is in design time
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.WpfGuiContext.IsValid">
+            <summary>
+            Returns true if this context is valid.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WpfGuiContext.EnqueueInvoke(System.Windows.Threading.DispatcherPriority,System.Delegate,System.Object[])">
+            <summary>
+            Enqueues a UI call
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="callback">The callback.</param>
+            <param name="arguments">The arguments.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.WpfGuiContext.Invoke(System.Windows.Threading.DispatcherPriority,System.Action)">
+            <summary>
+            Synchronously invokes the call on the UI thread
+            </summary>
+            <param name="priority">The priority.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.SoundTouch">
+             <summary>
+             SoundTouch audio processing library wrapper (SoundTouch.cs)
+            
+             Original code by
+             Copyright (c) Olli Parviainen
+             http://www.surina.net/soundtouch
+             LGPL License
+            
+             Modified Code by:
+             Mario Di Vece
+            
+             Changes:
+             Set-prefixed methods to proety setters
+             Native wrappers to NativeMethods class name
+             Adding enum with settings as defined in the header file
+             Setttings getters and setters as indexers
+             Implemented Dispose pattern correctly.
+             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Platform.SoundTouch"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:Unosquare.FFME.Platform.SoundTouch"/> class.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.SoundTouch.Setting">
+            <summary>
+            Settings as defined in SoundTouch.h
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.UseAntiAliasFilter">
+            <summary>
+            Enable/disable anti-alias filter in pitch transposer (0 = disable)
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.AntiAliasFilterLength">
+            <summary>
+            Pitch transposer anti-alias filter length (8 .. 128 taps, default = 32)
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.UseQuickSeek">
+            <summary>
+            Enable/disable quick seeking algorithm in tempo changer routine
+            (enabling quick seeking lowers CPU utilization but causes a minor sound
+             quality compromising)
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.SequenceMilliseconds">
+            <summary>
+            Time-stretch algorithm single processing sequence length in milliseconds. This determines
+            to how long sequences the original sound is chopped in the time-stretch algorithm.
+            See "STTypes.h" or README for more information.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.SeekWindowMilliseconds">
+            <summary>
+            Time-stretch algorithm seeking window length in milliseconds for algorithm that finds the
+            best possible overlapping location. This determines from how wide window the algorithm
+            may look for an optimal joining location when mixing the sound sequences back together.
+            See "STTypes.h" or README for more information.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.OverlapMilliseconds">
+            <summary>
+            Time-stretch algorithm overlap length in milliseconds. When the chopped sound sequences
+            are mixed back together, to form a continuous sound stream, this parameter defines over
+            how long period the two consecutive sequences are let to overlap each other.
+            See "STTypes.h" or README for more information.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.NominalInputSequence">
+             <summary>
+             Call "getSetting" with this ID to query processing sequence size in samples.
+             This value gives approximate value of how many input samples you'll need to
+             feed into SoundTouch after initial buffering to get out a new batch of
+             output samples.
+            
+             This value does not include initial buffering at beginning of a new processing
+             stream, use SETTING_INITIAL_LATENCY to get the initial buffering size.
+            
+             Notices:
+             - This is read-only parameter, i.e. setSetting ignores this parameter
+             - This parameter value is not constant but change depending on
+               tempo/pitch/rate/samplerate settings.
+             </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.NominalOutputSequence">
+             <summary>
+             Call "getSetting" with this ID to query nominal average processing output
+             size in samples. This value tells approcimate value how many output samples
+             SoundTouch outputs once it does DSP processing run for a batch of input samples.
+            
+             Notices:
+             - This is read-only parameter, i.e. setSetting ignores this parameter
+             - This parameter value is not constant but change depending on
+               tempo/pitch/rate/samplerate settings.
+             </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Platform.SoundTouch.Setting.InitialLatency">
+             <summary>
+             Call "getSetting" with this ID to query initial processing latency, i.e.
+             approx. how many samples you'll need to enter to SoundTouch pipeline before
+             you can expect to get first batch of ready output samples out.
+            
+             After the first output batch, you can then expect to get approx.
+             SETTING_NOMINAL_OUTPUT_SEQUENCE ready samples out for every
+             SETTING_NOMINAL_INPUT_SEQUENCE samples that you enter into SoundTouch.
+            
+             Example:
+                 processing with parameter -tempo=5
+                 => initial latency = 5509 samples
+                    input sequence  = 4167 samples
+                    output sequence = 3969 samples
+            
+             Accordingly, you can expect to feed in approx. 5509 samples at beginning of
+             the stream, and then you'll get out the first 3969 samples. After that, for
+             every approx. 4167 samples that you'll put in, you'll receive again approx.
+             3969 samples out.
+            
+             This also means that average latency during stream processing is
+             INITIAL_LATENCY-OUTPUT_SEQUENCE/2, in the above example case 5509-3969/2
+             = 3524 samples
+            
+             Notices:
+             - This is read-only parameter, i.e. setSetting ignores this parameter
+             - This parameter value is not constant but change depending on
+               tempo/pitch/rate/samplerate settings.
+             </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Version">
+            <summary>
+            Get SoundTouch version string
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.IsAvailable">
+            <summary>
+            Gets a value indicating whether the SoundTouch Library (dll) is available
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.AvailableSampleCount">
+            <summary>
+            Returns number of processed samples currently available in SoundTouch for immediate output.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.UnprocessedSampleCount">
+            <summary>
+            Returns number of samples currently unprocessed in SoundTouch internal buffer
+            </summary>
+            <returns>Number of sample frames</returns>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.IsEmpty">
+            <summary>
+            Check if there aren't any samples available for outputting.
+            </summary>
+            <returns>nonzero if there aren't any samples available for outputting</returns>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Channels">
+            <summary>
+            Sets the number of channels
+            Value: 1 = mono, 2 = stereo, n = multichannel
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.SampleRate">
+            <summary>
+            Sets sample rate.
+            Value: Sample rate, e.g. 44100
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Tempo">
+            <summary>
+            Sets new tempo control value.
+            Value: Tempo setting. Normal tempo = 1.0, smaller values
+            represent slower tempo, larger faster tempo.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.TempoChange">
+            <summary>
+            Sets new tempo control value as a difference in percents compared
+            to the original tempo (-50 .. +100 %);
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Rate">
+            <summary>
+            Sets new rate control value.
+            Rate setting. Normal rate = 1.0, smaller values
+            represent slower rate, larger faster rate.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.RateChange">
+            <summary>
+            Sets new rate control value as a difference in percents compared
+            to the original rate (-50 .. +100 %);
+            Value: Rate setting is in %
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Pitch">
+            <summary>
+            Sets new pitch control value.
+            Value: Pitch setting. Original pitch = 1.0, smaller values
+            represent lower pitches, larger values higher pitch.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.PitchOctaves">
+            <summary>
+            Sets pitch change in octaves compared to the original pitch
+            (-1.00 .. +1.00 for +- one octave);
+            Value: Pitch setting in octaves
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.PitchSemiTones">
+            <summary>
+            Sets pitch change in semi-tones compared to the original pitch
+            (-12 .. +12 for +- one octave);
+            Value: Pitch setting in semitones
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Platform.SoundTouch.Item(Unosquare.FFME.Platform.SoundTouch.Setting)">
+            <summary>
+            Changes or gets a setting controlling the processing system behaviour. See the
+            'SETTING_...' defines for available setting ID's.
+            </summary>
+            <value>
+            The <see cref="T:System.Int32"/>.
+            </value>
+            <param name="settingId">The setting identifier.</param>
+            <returns>The value of the setting</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.Flush">
+            <summary>
+            Flushes the last samples from the processing pipeline to the output.
+            Clears also the internal processing buffers.
+            Note: This function is meant for extracting the last samples of a sound
+            stream. This function may introduce additional blank samples in the end
+            of the sound stream, and thus it's not recommended to call this function
+            in the middle of a sound stream.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.Clear">
+            <summary>
+            Clears all the samples in the object's output and internal processing
+            buffers.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.PutSamples(System.Single[],System.UInt32)">
+            <summary>
+            Adds 'numSamples' pcs of samples from the 'samples' memory position into
+            the input of the object. Notice that sample rate _has_to_ be set before
+            calling this function, otherwise throws a runtime_error exception.
+            </summary>
+            <param name="samples">Sample buffer to input</param>
+            <param name="numSamples">Number of sample frames in buffer. Notice
+            that in case of multi-channel sound a single sample frame contains
+            data for all channels</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.PutSamplesI16(System.Int16[],System.UInt32)">
+            <summary>
+            int16 version of putSamples(): This accept int16 (short) sample data
+            and internally converts it to float format before processing
+            </summary>
+            <param name="samples">Sample input buffer.</param>
+            <param name="numSamples">Number of sample frames in buffer. Notice
+            that in case of multi-channel sound a single
+            sample frame contains data for all channels.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.ReceiveSamples(System.Single[],System.UInt32)">
+            <summary>
+            Receive processed samples from the processor.
+            </summary>
+            <param name="outBuffer">Buffer where to copy output samples</param>
+            <param name="maxSamples">Max number of sample frames to receive</param>
+            <returns>The number of samples received</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.ReceiveSamplesI16(System.Int16[],System.UInt32)">
+            <summary>
+            int16 version of receiveSamples(): This converts internal float samples
+            into int16 (short) return data type
+            </summary>
+            <param name="outBuffer">Buffer where to copy output samples.</param>
+            <param name="maxSamples">How many samples to receive at max.</param>
+            <returns>Number of received sample frames</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Platform.SoundTouch.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Platform.SoundTouch.NativeMethods">
+            <summary>
+            Provides direct access to mapped DLL methods
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.MediaElement">
+            <summary>
+            Represents a control that contains audio and/or video.
+            In contrast with System.Windows.Controls.MediaElement, this version uses
+            the FFmpeg library to perform reading and decoding of media streams.
+            </summary>
+            <seealso cref="T:System.Windows.Controls.UserControl" />
+            <seealso cref="T:System.IDisposable" />
+            <seealso cref="T:System.ComponentModel.INotifyPropertyChanged" />
+            <seealso cref="T:System.Windows.Markup.IUriContext" />
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.RenderingVideo">
+            <summary>
+            Occurs right before the video is presented on the screen.
+            You can update the pizels on the bitmap before it is rendered on the screen.
+            Or you could take a screenshot.
+            Ensure you handle this very quickly as it runs on the UI thread.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.RenderingAudio">
+            <summary>
+            Occurs right before the audio is added to the audio buffer.
+            You can update the bytes before they are enqueued.
+            Ensure you handle this quickly before you get choppy audio.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.RenderingSubtitles">
+            <summary>
+            Occurs right before the subtitles are rendered.
+            You can update the text.
+            Ensure you handle this quickly before you get choppy subtitles.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseRenderingVideoEvent(Unosquare.FFME.Shared.VideoBlock,Unosquare.FFME.Events.BitmapDataBuffer,System.TimeSpan)">
+            <summary>
+            Raises the rendering video event.
+            </summary>
+            <param name="videoBlock">The block.</param>
+            <param name="bitmap">The bitmap.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseRenderingAudioEvent(Unosquare.FFME.Shared.AudioBlock,System.TimeSpan)">
+            <summary>
+            Raises the rendering audio event.
+            </summary>
+            <param name="audioBlock">The audio block.</param>
+            <param name="clock">The clock.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseRenderingSubtitlesEvent(Unosquare.FFME.Shared.SubtitleBlock,System.TimeSpan)">
+            <summary>
+            Raises the rendering subtitles event.
+            </summary>
+            <param name="block">The block.</param>
+            <param name="clock">The clock.</param>
+            <returns>True if the rendering should be prevented</returns>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.m_BaseUri">
+            <summary>
+            IUriContext BaseUri backing
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.m_MediaCore">
+            <summary>
+            Holds the Media Engine
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Unosquare.FFME.MediaElement"/> class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.MediaElement" /> class.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.FFmpegMessageLogged">
+            <summary>
+            Occurs when a logging message from the FFmpeg library has been received.
+            This is shared across all instances of Media Elements
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MessageLogged">
+            <summary>
+            Occurs when a logging message has been logged.
+            This does not include FFmpeg messages.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.PropertyChanged">
+            <summary>
+            Multicast event for property change notifications.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.FFmpegDirectory">
+            <summary>
+            Gets or sets the FFmpeg path from which to load the FFmpeg binaries.
+            You must set this path before setting the Source property for the first time on any instance of this control.
+            Settng this property when FFmpeg binaries have been registered will throw an exception.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.FFmpegLoadModeFlags">
+            <summary>
+            Specifies the bitwise flags that correspond to FFmpeg library identifiers.
+            Please use the <see cref="T:Unosquare.FFME.Shared.FFmpegLoadMode"/> class for valid combinations.
+            If FFmpeg is already loaded, the value cannot be changed.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.MediaCore">
+            <summary>
+            Provides access to the underlying media engine driving this control.
+            This property is intender for advance usages only.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.System#Windows#Markup#IUriContext#BaseUri">
+            <summary>
+            Gets or sets the base URI of the current application context.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoView">
+            <summary>
+            This is the image that holds video bitmaps
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.SubtitleView">
+            <summary>
+            A viewbox holding the subtitle text blocks
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.ContentGrid">
+            <summary>
+            Gets the grid control holding the rest of the controls.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsPositionUpdating">
+            <summary>
+            When position is being set from within this control, this field will
+            be set to true. This is useful to detect if the user is setting the position
+            or if the Position property is being driven from within
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.Play">
+            <summary>
+            Begins or resumes playback of the currently loaded media.
+            </summary>
+            <returns>The awaitable command</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.Pause">
+            <summary>
+            Pauses playback of the currently loaded media.
+            </summary>
+            <returns>The awaitable command</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.Stop">
+            <summary>
+            Pauses and rewinds the currently loaded media.
+            </summary>
+            <returns>The awaitable command</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.Close">
+            <summary>
+            Closes the currently loaded media.
+            </summary>
+            <returns>The awaitable command</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Invoked whenever the effective value of any dependency property on this <see cref="T:System.Windows.FrameworkElement" /> has been updated. The specific dependency property that changed is reported in the arguments parameter. Overrides <see cref="M:System.Windows.DependencyObject.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)" />.
+            </summary>
+            <param name="e">The event data that describes the property that changed, as well as old and new values.</param>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.SourceProperty">
+            <summary>
+            DependencyProperty for FFmpegMediaElement Source property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.StretchProperty">
+            <summary>
+            DependencyProperty for Stretch property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.StretchDirectionProperty">
+            <summary>
+            DependencyProperty for StretchDirection property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.BalanceProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.Balance property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.IsMutedProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.IsMuted property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.SpeedRatioProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.SpeedRatio property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.VolumeProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.Volume property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.ScrubbingEnabledProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.ScrubbingEnabled property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.UnloadedBehaviorProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.UnloadedBehavior property.
+            TODO: Currently this property has no effect. Needs implementation.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.LoadedBehaviorProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.LoadedBehavior property.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.PositionProperty">
+            <summary>
+            The DependencyProperty for the MediaElement.Position property.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Source">
+            <summary>
+            Gets/Sets the Source on this MediaElement.
+            The Source property is the Uri of the media to be played.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Stretch">
+            <summary>
+            Gets/Sets the Stretch on this MediaElement.
+            The Stretch property determines how large the MediaElement will be drawn.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.StretchDirection">
+            <summary>
+            Gets/Sets the stretch direction of the Viewbox, which determines the restrictions on
+            scaling that are applied to the content inside the Viewbox.  For instance, this property
+            can be used to prevent the content from being smaller than its native size or larger than
+            its native size.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.LoadedBehavior">
+            <summary>
+            Specifies the behavior that the media element should have when it
+            is loaded. The default behavior is that it is under manual control
+            (i.e. the caller should call methods such as Play in order to play
+            the media). If a source is set, then the default behavior changes to
+            to be playing the media. If a source is set and a loaded behavior is
+            also set, then the loaded behavior takes control.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.SpeedRatio">
+            <summary>
+            Gets/Sets the SpeedRatio property on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.UnloadedBehavior">
+            <summary>
+            Specifies how the underlying media should behave when
+            it has ended. The default behavior is to Close the media.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Volume">
+            <summary>
+            Gets/Sets the Volume property on the MediaElement.
+            Note: Valid values are from 0 to 1
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Balance">
+            <summary>
+            Gets/Sets the Balance property on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsMuted">
+            <summary>
+            Gets/Sets the IsMuted property on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.ScrubbingEnabled">
+            <summary>
+            Gets or sets a value that indicates whether the MediaElement will update frames
+            for seek operations while paused. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Position">
+            <summary>
+            Gets/Sets the Position property on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.Metadata">
+            <summary>
+            Provides key-value pairs of the metadata contained in the media.
+            Returns null when media has not been loaded.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.MediaFormat">
+            <summary>
+            Gets the media format. Returns null when media has not been loaded.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.FrameStepDuration">
+            <summary>
+            Gets the duration of a single frame step.
+            If there is a video component with a framerate, this propery returns the length of a frame.
+            If there is no video component it simply returns a tenth of a second.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.HasAudio">
+            <summary>
+            Returns whether the given media has audio.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.HasVideo">
+            <summary>
+            Returns whether the given media has video. Only valid after the
+            MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoCodec">
+            <summary>
+            Gets the video codec.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoBitrate">
+            <summary>
+            Gets the video bitrate.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.NaturalVideoWidth">
+            <summary>
+            Returns the natural width of the media in the video.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.NaturalVideoHeight">
+            <summary>
+            Returns the natural height of the media in the video.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoFrameRate">
+            <summary>
+            Gets the video frame rate.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoFrameLength">
+            <summary>
+            Gets the duration in seconds of the video frame.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoHardwareDecoder">
+            <summary>
+            Gets the name of the video hardware decoder in use.
+            Enabling hardware acceleration does not guarantee decoding will be performed in hardware.
+            When hardware decoding of frames is in use this will return the name of the HW accelerator.
+            Otherwise it will return an empty string.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.AudioCodec">
+            <summary>
+            Gets the audio codec.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.AudioBitrate">
+            <summary>
+            Gets the audio bitrate.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.AudioChannels">
+            <summary>
+            Gets the audio channels count.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.AudioSampleRate">
+            <summary>
+            Gets the audio sample rate.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.AudioBitsPerSample">
+            <summary>
+            Gets the audio bits per sample.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.NaturalDuration">
+            <summary>
+            Gets the Media's natural duration
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.CanPause">
+            <summary>
+            Returns whether the currently loaded media can be paused.
+            This is only valid after the MediaOpened event has fired.
+            Note that this property is computed based on wether the stream is detected to be a live stream.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsLiveStream">
+            <summary>
+            Returns whether the currently loaded media is live or realtime
+            This is only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsSeekable">
+            <summary>
+            Gets a value indicating whether the currently loaded media can be seeked.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsPlaying">
+            <summary>
+            Gets a value indicating whether the media is playing.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.HasMediaEnded">
+            <summary>
+            Gets a value indicating whether the media has reached its end.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsBuffering">
+            <summary>
+            Get a value indicating whether the media is buffering.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsSeeking">
+            <summary>
+            Gets a value indicating whether the media seeking is in progress.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.VideoSmtpeTimecode">
+            <summary>
+            Returns the current video SMTPE timecode if available.
+            If not available, this property returns an empty string.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.BufferingProgress">
+            <summary>
+            Gets a value that indicates the percentage of buffering progress made.
+            Range is from 0 to 1
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.BufferCacheLength">
+            <summary>
+            The wait packet buffer length.
+            It is adjusted to 1 second if bitrate information is available.
+            Otherwise, it's simply 512KB
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.DownloadProgress">
+            <summary>
+            Gets a value that indicates the percentage of download progress made.
+            Range is from 0 to 1
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.DownloadCacheLength">
+            <summary>
+            Gets the maximum packet buffer length, according to the bitrate (if available).
+            If it's a realtime stream it will return 30 times the buffer cache length.
+            Otherwise, it will return  4 times of the buffer cache length.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsOpening">
+            <summary>
+            Gets a value indicating whether the media is in the process of opening.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.IsOpen">
+            <summary>
+            Gets a value indicating whether this media element
+            currently has an open media url.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaElement.MediaState">
+            <summary>
+            Gets the current playback state.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.BufferingStartedEvent">
+            <summary>
+            BufferingStarted is a routed event
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.BufferingEndedEvent">
+            <summary>
+            BufferingEnded is a routed event
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.SeekingStartedEvent">
+            <summary>
+            SeekingStarted is a routed event
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.SeekingEndedEvent">
+            <summary>
+            SeekingEnded is a routed event
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.MediaFailedEvent">
+            <summary>
+            MediaFailedEvent is a routed event.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.MediaOpenedEvent">
+            <summary>
+            MediaOpened is a routed event.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.MediaClosedEvent">
+            <summary>
+            MediaClosed is a routed event.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.MediaOpeningEvent">
+            <summary>
+            MediaOpeningEvent is a routed event.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.PositionChangedEvent">
+            <summary>
+            PositionChanged is a routed event
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.MediaElement.MediaEndedEvent">
+            <summary>
+            MediaEnded is a routed event
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.BufferingStarted">
+            <summary>
+            Occurs when buffering of packets was started
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.BufferingEnded">
+            <summary>
+            Occurs when buffering of packets was Ended
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.SeekingStarted">
+            <summary>
+            Occurs when Seeking of packets was started
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.SeekingEnded">
+            <summary>
+            Occurs when Seeking of packets was Ended
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MediaFailed">
+            <summary>
+            Raised when the media fails to load or a fatal error has occurred which prevents playback.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MediaOpened">
+            <summary>
+            Raised when the media is opened
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MediaClosed">
+            <summary>
+            Raised when the media is closed
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MediaOpening">
+            <summary>
+            Raised before the input stream of the media is opened.
+            Use this method to modify the input options.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.MediaEnded">
+            <summary>
+            Raised when the corresponding media ends.
+            </summary>
+        </member>
+        <member name="E:Unosquare.FFME.MediaElement.PositionChanged">
+            <summary>
+            Occurs when media position is changed
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.CreateExceptionRoutedEventArgs(System.Windows.RoutedEvent,System.Object,System.Exception)">
+            <summary>
+            Creates a new instance of exception routed event arguments.
+            This method exists because the constructor has not been made public for that class.
+            </summary>
+            <param name="routedEvent">The routed event.</param>
+            <param name="sender">The sender.</param>
+            <param name="errorException">The error exception.</param>
+            <returns>The event arguments</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseFFmpegMessageLogged(System.Object,Unosquare.FFME.Shared.MediaLogMessage)">
+            <summary>
+            Raises the FFmpeg message logged.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:Unosquare.FFME.Shared.MediaLogMessage"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMessageLoggedEvent(Unosquare.FFME.Shared.MediaLogMessage)">
+            <summary>
+            Raises the message logged event.
+            </summary>
+            <param name="e">The <see cref="T:Unosquare.FFME.Shared.MediaLogMessage"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMediaFailedEvent(System.Exception)">
+            <summary>
+            Raises the media failed event.
+            </summary>
+            <param name="ex">The ex.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMediaOpenedEvent">
+            <summary>
+            Raises the media opened event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMediaClosedEvent">
+            <summary>
+            Raises the media closed event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMediaOpeningEvent(Unosquare.FFME.Shared.MediaOptions,Unosquare.FFME.Shared.MediaInfo)">
+            <summary>
+            Raises the media opening event.
+            </summary>
+            <param name="mediaOptions">The media options.</param>
+            <param name="mediaInfo">The media information.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaisePositionChangedEvent(System.TimeSpan)">
+            <summary>
+            Raises the position changed event.
+            </summary>
+            <param name="position">The position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseBufferingStartedEvent">
+            <summary>
+            Raises the buffering started event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseBufferingEndedEvent">
+            <summary>
+            Raises the buffering ended event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseSeekingStartedEvent">
+            <summary>
+            Raises the Seeking started event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseSeekingEndedEvent">
+            <summary>
+            Raises the Seeking ended event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaiseMediaEndedEvent">
+            <summary>
+            Raises the media ended event.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.RaisePropertyChangedEvent(System.String)">
+            <summary>
+            Notifies listeners that a property value has changed.
+            This must be called from a UI thread.
+            </summary>
+            <param name="propertyName">Name of the property used to notify listeners.  This
+            value is optional and can be provided automatically when invoked from compilers
+            that support <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/>.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.LogEventStart(System.Windows.RoutedEvent)">
+            <summary>
+            Logs the start of an event
+            </summary>
+            <param name="e">The event.</param>
+        </member>
+        <member name="M:Unosquare.FFME.MediaElement.LogEventDone(System.Windows.RoutedEvent)">
+            <summary>
+            Logs the end of an event.
+            </summary>
+            <param name="e">The event.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.SubtitleTextBlock">
+            <summary>
+            A control suitable for displaying subtitles.
+            Layout is: UserControl:Viewbox:Grid:TextBlocks
+            </summary>
+            <seealso cref="T:System.Windows.Controls.UserControl" />
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextProperty">
+            <summary>
+            The text dependency property
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextForegroundProperty">
+            <summary>
+            The text foreground dependency property
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextForegroundEffectProperty">
+            <summary>
+            The text foreground effect dependency property
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextOutlineWidthProperty">
+            <summary>
+            The text outline width dependency property
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextOutlineProperty">
+            <summary>
+            The text outline dependency property
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.TextBlocks">
+            <summary>
+            Holds the text blocks that together create an outlined subtitle text display.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.Container">
+            <summary>
+            The container for the outlined text blocks
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleTextBlock.CondenseTransform">
+            <summary>
+            A Layout transform to condense text.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleTextBlock.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.SubtitleTextBlock"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleTextBlock.Text">
+            <summary>
+            Gets or sets the text contents of this text block.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleTextBlock.TextForeground">
+            <summary>
+            Gets or sets the text foreground.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleTextBlock.TextOutline">
+            <summary>
+            Gets or sets the text outline.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleTextBlock.TextOutlineWidth">
+            <summary>
+            Gets or sets the text outline width.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleTextBlock.TextForegroundEffect">
+            <summary>
+            Gets or sets the text foreground effect.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleTextBlock.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Invoked whenever the effective value of any dependency property on this <see cref="T:System.Windows.FrameworkElement" /> has been updated. The specific dependency property that changed is reported in the arguments parameter. Overrides <see cref="M:System.Windows.DependencyObject.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)" />.
+            </summary>
+            <param name="e">The event data that describes the property that changed, as well as old and new values.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleTextBlock.ComputeMargin(Unosquare.FFME.Rendering.SubtitleTextBlock.Block,System.Windows.Thickness)">
+            <summary>
+            Computes the margin according to the block type.
+            </summary>
+            <param name="blockType">Type of the block.</param>
+            <param name="outlineWidth">Width of the outline.</param>
+            <returns>A thickness depending on the block type</returns>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.IWaveProvider">
+            <summary>
+            Generic interface for all WaveProviders.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.IWaveProvider.WaveFormat">
+            <summary>
+            Gets the WaveFormat of this WaveProvider.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.IWaveProvider.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Fill the specified buffer with wave data.
+            </summary>
+            <param name="buffer">The buffer to fill of wave data.</param>
+            <param name="offset">Offset into buffer</param>
+            <param name="count">The number of bytes to read</param>
+            <returns>
+            the number of bytes written to the buffer.
+            </returns>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.MmResult">
+            <summary>
+            Windows multimedia error codes from mmsystem.h.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.NoError">
+            <summary>no error, MMSYSERR_NOERROR</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.UnspecifiedError">
+            <summary>unspecified error, MMSYSERR_ERROR</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.BadDeviceId">
+            <summary>device ID out of range, MMSYSERR_BADDEVICEID</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.NotEnabled">
+            <summary>driver failed enable, MMSYSERR_NOTENABLED</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.AlreadyAllocated">
+            <summary>device already allocated, MMSYSERR_ALLOCATED</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.InvalidHandle">
+            <summary>device handle is invalid, MMSYSERR_INVALHANDLE</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.NoDriver">
+            <summary>no device driver present, MMSYSERR_NODRIVER</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.MemoryAllocationError">
+            <summary>memory allocation error, MMSYSERR_NOMEM</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.NotSupported">
+            <summary>function isn't supported, MMSYSERR_NOTSUPPORTED</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.BadErrorNumber">
+            <summary>error value out of range, MMSYSERR_BADERRNUM</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.InvalidFlag">
+            <summary>invalid flag passed, MMSYSERR_INVALFLAG</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.InvalidParameter">
+            <summary>invalid parameter passed, MMSYSERR_INVALPARAM</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.HandleBusy">
+            <summary>handle being used simultaneously on another thread (eg callback),MMSYSERR_HANDLEBUSY</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.InvalidAlias">
+            <summary>specified alias not found, MMSYSERR_INVALIDALIAS</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.BadRegistryDatabase">
+            <summary>bad registry database, MMSYSERR_BADDB</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.RegistryKeyNotFound">
+            <summary>registry key not found, MMSYSERR_KEYNOTFOUND</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.RegistryReadError">
+            <summary>registry read error, MMSYSERR_READERROR</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.RegistryWriteError">
+            <summary>registry write error, MMSYSERR_WRITEERROR</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.RegistryDeleteError">
+            <summary>registry delete error, MMSYSERR_DELETEERROR</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.RegistryValueNotFound">
+            <summary>registry value not found, MMSYSERR_VALNOTFOUND</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.NoDriverCallback">
+            <summary>driver does not call DriverCallback, MMSYSERR_NODRIVERCB</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.MoreData">
+            <summary>more data to be returned, MMSYSERR_MOREDATA</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.WaveBadFormat">
+            <summary>unsupported wave format, WAVERR_BADFORMAT</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.WaveStillPlaying">
+            <summary>still something playing, WAVERR_STILLPLAYING</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.WaveHeaderUnprepared">
+            <summary>header not prepared, WAVERR_UNPREPARED</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.WaveSync">
+            <summary>device is synchronous, WAVERR_SYNC</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.AcmNotPossible">
+            <summary>Conversion not possible (ACMERR_NOTPOSSIBLE)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.AcmBusy">
+            <summary>Busy (ACMERR_BUSY)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.AcmHeaderUnprepared">
+            <summary>Header Unprepared (ACMERR_UNPREPARED)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.AcmCancelled">
+            <summary>Cancelled (ACMERR_CANCELED)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.MixerInvalidLine">
+            <summary>invalid line (MIXERR_INVALLINE)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.MixerInvalidControl">
+            <summary>invalid control (MIXERR_INVALCONTROL)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.MmResult.MixerInvalidValue">
+            <summary>invalid value (MIXERR_INVALVALUE)</summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.MmTime">
+            <summary>
+            http://msdn.microsoft.com/en-us/library/dd757347(v=VS.85).aspx
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.PlaybackState">
+            <summary>
+            Enumerates the various wave output playback states
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.PlaybackState.Stopped">
+            <summary>
+            Stopped
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.PlaybackState.Playing">
+            <summary>
+            Playing
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.PlaybackState.Paused">
+            <summary>
+            Paused
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat">
+            <summary>
+            Supported wave formats for WaveOutCapabilities
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_1M08">
+            <summary>
+            11.025 kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_1S08">
+            <summary>
+            11.025 kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_1M16">
+            <summary>
+            11.025 kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_1S16">
+            <summary>
+            11.025 kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_2M08">
+            <summary>
+            22.05  kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_2S08">
+            <summary>
+            22.05  kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_2M16">
+            <summary>
+            22.05  kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_2S16">
+            <summary>
+            22.05  kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_4M08">
+            <summary>
+            44.1   kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_4S08">
+            <summary>
+            44.1   kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_4M16">
+            <summary>
+            44.1   kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_4S16">
+            <summary>
+             44.1   kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_44M08">
+            <summary>
+            44.1   kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_44S08">
+            <summary>
+            44.1   kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_44M16">
+            <summary>
+            44.1   kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_44S16">
+            <summary>
+            44.1   kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_48M08">
+            <summary>
+            48     kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_48S08">
+            <summary>
+             48     kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_48M16">
+            <summary>
+            48     kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_48S16">
+            <summary>
+            48     kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_96M08">
+            <summary>
+            96     kHz, Mono,   8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_96S08">
+            <summary>
+            96     kHz, Stereo, 8-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_96M16">
+            <summary>
+            96     kHz, Mono,   16-bit
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.SupportedWaveFormat.WAVE_FORMAT_96S16">
+            <summary>
+            96     kHz, Stereo, 16-bit
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveFormat">
+            <summary>
+            Represents a Wave file format
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.formatTag">
+            <summary>The format tag -- always 0x0001 PCM</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.channels">
+            <summary>number of channels</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.sampleRate">
+            <summary>sample rate</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.averageBytesPerSecond">
+            <summary>for buffer estimation</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.blockAlign">
+            <summary>block size of data</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.bitsPerSample">
+            <summary>number of bits per sample of mono data</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveFormat.extraSize">
+            <summary>number of following bytes</summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WaveFormat"/> class.
+            PCM 48Khz stereo 16 bit signed, interleaved, 2-channel format
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WaveFormat"/> class.
+            </summary>
+            <param name="sampleRate">Sample Rate</param>
+            <param name="channels">Number of channels</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WaveFormat"/> class.
+            </summary>
+            <param name="rate">The rate.</param>
+            <param name="bits">The bits.</param>
+            <param name="channels">The channels.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">channels - channels</exception>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.Channels">
+            <summary>
+            Returns the number of channels (1=mono,2=stereo etc)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.SampleRate">
+            <summary>
+            Returns the sample rate (samples per second)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.AverageBytesPerSecond">
+            <summary>
+            Returns the average number of bytes used per second
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.BlockAlign">
+            <summary>
+            Returns the block alignment
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.BitsPerSample">
+            <summary>
+            Returns the number of bits per sample (usually 16 or 32, sometimes 24 or 8)
+            Can be 0 for some codecs
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveFormat.ExtraSize">
+            <summary>
+            Returns the number of extra bytes used by this waveformat. Often 0,
+            except for compressed formats which store extra data after the WAVEFORMATEX header
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.ConvertLatencyToByteSize(System.Int32)">
+            <summary>
+            Gets the size of a wave buffer equivalent to the latency in milliseconds.
+            </summary>
+            <param name="milliseconds">The milliseconds.</param>
+            <returns>The size</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.ToString">
+            <summary>
+            Reports this WaveFormat as a string
+            </summary>
+            <returns>String describing the wave format</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.Equals(System.Object)">
+            <summary>
+            Compares with another WaveFormat object
+            </summary>
+            <param name="obj">Object to compare to</param>
+            <returns>True if the objects are the same</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveFormat.GetHashCode">
+            <summary>
+            Provides a Hashcode for this WaveFormat
+            </summary>
+            <returns>A hashcode</returns>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveHeader">
+            <summary>
+            WaveHeader interop structure (WAVEHDR)
+            http://msdn.microsoft.com/en-us/library/dd743837%28VS.85%29.aspx
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.DataBuffer">
+            <summary>pointer to locked data buffer (lpData)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.BufferLength">
+            <summary>length of data buffer (dwBufferLength)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.BytesRecorded">
+            <summary>used for input only (dwBytesRecorded)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.UserData">
+            <summary>for client's use (dwUser)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.Flags">
+            <summary>assorted flags (dwFlags)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.Loops">
+            <summary>loop control counter (dwLoops)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.Next">
+            <summary>PWaveHdr, reserved for driver (lpNext)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeader.Reserved">
+            <summary>reserved for driver</summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags">
+            <summary>
+            Wave Header Flags enumeration
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags.BeginLoop">
+            <summary>
+            WHDR_BEGINLOOP
+            This buffer is the first buffer in a loop.  This flag is used only with output buffers.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags.Done">
+            <summary>
+            WHDR_DONE
+            Set by the device driver to indicate that it is finished with the buffer and is returning it to the application.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags.EndLoop">
+            <summary>
+            WHDR_ENDLOOP
+            This buffer is the last buffer in a loop.  This flag is used only with output buffers.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags.InQueue">
+            <summary>
+            WHDR_INQUEUE
+            Set by Windows to indicate that the buffer is queued for playback.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveHeaderFlags.Prepared">
+            <summary>
+            WHDR_PREPARED
+            Set by Windows to indicate that the buffer has been prepared with the waveInPrepareHeader or waveOutPrepareHeader function.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveInterop">
+            <summary>
+            MME Wave function interop
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveInOutOpenFlags.CallbackNull">
+            <summary>
+            CALLBACK_NULL
+            No callback
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveInOutOpenFlags.CallbackFunction">
+            <summary>
+            CALLBACK_FUNCTION
+            dwCallback is a FARPROC
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveInOutOpenFlags.CallbackEvent">
+            <summary>
+            CALLBACK_EVENT
+            dwCallback is an EVENT handle
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveInOutOpenFlags.CallbackWindow">
+            <summary>
+            CALLBACK_WINDOW
+            dwCallback is a HWND
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveInOutOpenFlags.CallbackThread">
+            <summary>
+            CALLBACK_THREAD
+            callback is a thread ID
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveInOpen">
+            <summary>
+            WIM_OPEN
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveInClose">
+            <summary>
+            WIM_CLOSE
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveInData">
+            <summary>
+            WIM_DATA
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveOutClose">
+            <summary>
+            WOM_CLOSE
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveOutDone">
+            <summary>
+            WOM_DONE
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveInterop.WaveMessage.WaveOutOpen">
+            <summary>
+            WOM_OPEN
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.MmException">
+            <summary>
+            A wrapper class for MmException.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.MmException.#ctor(Unosquare.FFME.Rendering.Wave.MmResult,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.MmException"/> class.
+            </summary>
+            <param name="result">The result returned by the Windows API call</param>
+            <param name="function">The name of the Windows API that failed</param>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.MmException.Result">
+            <summary>
+            Returns the Windows API result
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.MmException.Try(Unosquare.FFME.Rendering.Wave.MmResult,System.String)">
+            <summary>
+            Helper function to automatically raise an exception on failure
+            </summary>
+            <param name="result">The result of the API call</param>
+            <param name="function">The API function name</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.MmException.ErrorMessage(Unosquare.FFME.Rendering.Wave.MmResult,System.String)">
+            <summary>
+            Creates an error message base don an erro result.
+            </summary>
+            <param name="result">The result.</param>
+            <param name="function">The function.</param>
+            <returns>A descriptive rror message</returns>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveOutBuffer">
+            <summary>
+            A buffer of Wave samples for streaming to a Wave Output device
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.#ctor(System.IntPtr,System.Int32,Unosquare.FFME.Rendering.Wave.IWaveProvider,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WaveOutBuffer"/> class.
+            </summary>
+            <param name="hWaveOut">WaveOut device to write to</param>
+            <param name="bufferSize">Buffer size in bytes</param>
+            <param name="bufferFillStream">Stream to provide more data</param>
+            <param name="waveOutLock">Lock to protect WaveOut API's from being called on &gt;1 thread</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WaveOutBuffer"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.InQueue">
+            <summary>
+            Whether the header's in queue flag is set
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.BufferSize">
+            <summary>
+            The buffer size in bytes
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.Dispose">
+            <summary>
+            Releases resources held by this WaveBuffer
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.OnDone">
+            <summary>
+            this is called by the Wave callback and should be used to refill the buffer.
+            This calls the .Read method on the stream
+            </summary>
+            <returns>true when bytes were written. False if no bytes were written.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.Dispose(System.Boolean)">
+            <summary>
+            Releases resources held by this WaveBuffer
+            </summary>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutBuffer.WriteToWaveOut">
+            <summary>
+            Writes to wave out.
+            </summary>
+            <exception cref="T:Unosquare.FFME.Rendering.Wave.MmException">waveOutWrite</exception>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities">
+            <summary>
+            WaveOutCapabilities structure (based on WAVEOUTCAPS2 from mmsystem.h)
+            http://msdn.microsoft.com/library/default.asp?url=/library/en-us/multimed/htm/_win32_waveoutcaps_str.asp
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.manufacturerId">
+            <summary>
+            wMid
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.productId">
+            <summary>
+            wPid
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.driverVersion">
+            <summary>
+            vDriverVersion
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.productName">
+            <summary>
+            Product Name (szPname)
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.supportedFormats">
+            <summary>
+            Supported formats (bit flags) dwFormats
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.channels">
+            <summary>
+            Supported channels (1 for mono 2 for stereo) (wChannels)
+            Seems to be set to -1 on a lot of devices
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.reserved">
+            <summary>
+            wReserved1
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.support">
+            <summary>
+            Optional functionality supported by the device
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.Channels">
+            <summary>
+            Number of channels supported
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsPlaybackRateControl">
+            <summary>
+            Whether playback rate control is supported
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsVolumeControl">
+            <summary>
+            Whether volume control is supported
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsChannelVolumeControl">
+            <summary>
+            Gets a value indicating whether this device supports independent channel volume control.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsPitchControl">
+            <summary>
+            Gets a value indicating whether this device supports pitch control.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsSampleAccuratePosition">
+            <summary>
+            Gets a value indicating whether the device returns sample-accurate position information.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.IsSynchronousOutput">
+            <summary>
+            Gets a value indicating whether the driver is synchronous and will block while playing a buffer.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.ProductName">
+            <summary>
+            The product name
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.NameGuid">
+            <summary>
+            The device name Guid (if provided)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.ProductGuid">
+            <summary>
+            The product name Guid (if provided)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.ManufacturerGuid">
+            <summary>
+            The manufacturer guid (if provided)
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WaveOutCapabilities.SupportsWaveFormat(Unosquare.FFME.Rendering.Wave.SupportedWaveFormat)">
+            <summary>
+            Checks to see if a given SupportedWaveFormat is supported
+            </summary>
+            <param name="waveFormat">The SupportedWaveFormat</param>
+            <returns>true if supported</returns>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WaveOutSupport">
+            <summary>
+            Flags indicating what features this WaveOut device supports
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.Pitch">
+            <summary>supports pitch control (WAVECAPS_PITCH)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.PlaybackRate">
+            <summary>supports playback rate control (WAVECAPS_PLAYBACKRATE)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.Volume">
+            <summary>supports volume control (WAVECAPS_VOLUME)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.LRVolume">
+            <summary>supports separate left-right volume control (WAVECAPS_LRVOLUME)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.Sync">
+            <summary>(WAVECAPS_SYNC)</summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.Wave.WaveOutSupport.SampleAccurate">
+            <summary>(WAVECAPS_SAMPLEACCURATE)</summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.Wave.WavePlayer">
+            <summary>
+            A wave player that opens an audio device and continuously feeds it
+            with audio samples using a wave provider.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.#ctor(Unosquare.FFME.Rendering.AudioRenderer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WavePlayer" /> class.
+            </summary>
+            <param name="renderer">The renderer.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:Unosquare.FFME.Rendering.Wave.WavePlayer"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.DesiredLatency">
+            <summary>
+            Gets or sets the desired latency in milliseconds
+            Should be set before a call to Init
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.NumberOfBuffers">
+            <summary>
+            Gets or sets the number of buffers used
+            Should be set before a call to Init
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.DeviceNumber">
+            <summary>
+            Gets or sets the device number
+            Should be set before a call to Init
+            This must be between -1 and <see>DeviceCount</see> - 1.
+            -1 means stick to default device even default device is changed
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.OutputWaveFormat">
+            <summary>
+            Gets a <see cref="T:Unosquare.FFME.Rendering.Wave.WaveFormat"/> instance indicating the format the hardware is using.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.PlaybackState">
+            <summary>
+            Playback State
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.Wave.WavePlayer.Capabilities">
+            <summary>
+            Gets the capabilities.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Init(Unosquare.FFME.Rendering.Wave.IWaveProvider)">
+            <summary>
+            Initializes the specified wave provider.
+            </summary>
+            <param name="waveProvider">The wave provider.</param>
+            <exception cref="T:System.InvalidOperationException">Can't re-initialize during playback</exception>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Play">
+            <summary>
+            Start playing the audio from the WaveStream
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Pause">
+            <summary>
+            Pause the audio
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Stop">
+            <summary>
+            Stop and reset the WaveOut device
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.GetPosition">
+            <summary>
+            Gets the current position in bytes from the wave output device.
+            (n.b. this is not the same thing as the position within your reader
+            stream - it calls directly into waveOutGetPosition)
+            </summary>
+            <returns>Position in bytes</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Dispose">
+            <summary>
+            Closes this WaveOut device
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Dispose(System.Boolean)">
+            <summary>
+            Closes the WaveOut device and disposes of buffers
+            </summary>
+            <param name="alsoManaged">True if called from <see>Dispose</see></param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.Resume">
+            <summary>
+            Resume playing after a pause from the same position
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.StartPlaybackThread">
+            <summary>
+            Starts the playback thread.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.PerformContinuousPlayback">
+            <summary>
+            Performs the continuous playback.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.CloseWaveOut">
+            <summary>
+            Closes the wave device.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.Wave.WavePlayer.DisposeBuffers">
+            <summary>
+            Disposes the buffers.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.AudioRenderer">
+            <summary>
+            Provides Audio Output capabilities by writing samples to the default audio output device.
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Shared.IMediaRenderer" />
+            <seealso cref="T:Unosquare.FFME.Rendering.Wave.IWaveProvider" />
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.#ctor(Unosquare.FFME.MediaEngine)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.AudioRenderer"/> class.
+            </summary>
+            <param name="mediaEngine">The core media engine.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.WaveFormat">
+            <summary>
+            Gets the output format of the audio
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.MediaElement">
+            <summary>
+            Gets the parent media element (platform specific).
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.MediaCore">
+            <summary>
+            Gets the core platform independent player component.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.Volume">
+            <summary>
+            Gets or sets the volume.
+            </summary>
+            <value>
+            The volume.
+            </value>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.Balance">
+            <summary>
+            Gets or sets the balance (-1.0 to 1.0).
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.IsMuted">
+            <summary>
+            Gets or sets a value indicating whether the wave output is muted.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.Latency">
+            <summary>
+            Gets the realtime latency of the audio relative to the internal wall clock.
+            A negative value means audio is ahead of the wall clock.
+            A positive value means audio is behind of the wall clock.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.Position">
+            <summary>
+            Gets current audio the position.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.DesiredLatency">
+            <summary>
+            Gets the desired latency odf the audio device.
+            Value is always positive and typically 200ms. This means audio gets rendered up to this late behind the wall clock.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.AudioRenderer.SpeedRatio">
+            <summary>
+            Gets the speed ratio.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Render(Unosquare.FFME.Shared.MediaBlock,System.TimeSpan)">
+            <summary>
+            Renders the specified media block.
+            </summary>
+            <param name="mediaBlock">The media block.</param>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Update(System.TimeSpan)">
+            <summary>
+            Called on every block rendering clock cycle just in case some update operation needs to be performed.
+            This needs to return immediately so the calling thread is not disturbed.
+            </summary>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Play">
+            <summary>
+            Executed when the Play method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Pause">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Stop">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Close">
+            <summary>
+            Executed when the Close method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Seek">
+            <summary>
+            Executed after a Seek operation is performed on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.WaitForReadyState">
+            <summary>
+            Waits for the renderer to be ready to render.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Called whenever the audio driver requests samples.
+            Do not call this method directly.
+            </summary>
+            <param name="targetBuffer">The render buffer.</param>
+            <param name="targetBufferOffset">The render buffer offset.</param>
+            <param name="requestedBytes">The requested bytes.</param>
+            <returns>The number of bytes that were read.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.OnApplicationExit(System.Object,System.Windows.ExitEventArgs)">
+            <summary>
+            Called when [application exit].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Windows.ExitEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Initialize">
+            <summary>
+            Initializes the audio renderer.
+            Call the Play Method to start reading samples
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Destroy">
+            <summary>
+            Destroys the audio renderer.
+            Makes it useless.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Synchronize(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Synchronizes audio rendering to the wall clock.
+            Returns true if additional samples need to be read.
+            Returns false if silence has been written and no further reading is required.
+            </summary>
+            <param name="targetBuffer">The target buffer.</param>
+            <param name="targetBufferOffset">The target buffer offset.</param>
+            <param name="requestedBytes">The requested bytes.</param>
+            <returns>True to continue processing. False to write silence.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.ReadAndSlowDown(System.Int32)">
+            <summary>
+            Reads from the Audio Buffer and stretches the samples to the required requested bytes.
+            This will make audio samples sound stretched (low pitch).
+            The result is put to the first requestedBytes count of the ReadBuffer.
+            requested
+            </summary>
+            <param name="requestedBytes">The requested bytes.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.ReadAndSpeedUp(System.Int32,System.Boolean)">
+            <summary>
+            Reads from the Audio Buffer and shrinks (averages) the samples to the required requested bytes.
+            This will make audio samples sound shrunken (high pitch).
+            The result is put to the first requestedBytes count of the ReadBuffer.
+            </summary>
+            <param name="requestedBytes">The requested number of bytes.</param>
+            <param name="computeAverage">if set to <c>true</c> average samples per block. Otherwise, take the first sample per block only</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.ReadAndUseAudioProcessor(System.Int32)">
+            <summary>
+            Reads from the Audio Buffer and uses the SoundTouch audio processor to adjust tempo
+            The result is put to the first requestedBytes count of the ReadBuffer.
+            This feature is experimental
+            </summary>
+            <param name="requestedBytes">The requested bytes.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.ApplyVolumeAndBalance(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Applies volume and balance to the audio samples storead in RedBuffer and writes them
+            to the specified target buffer.
+            </summary>
+            <param name="targetBuffer">The target buffer.</param>
+            <param name="targetBufferOffset">The target buffer offset.</param>
+            <param name="requestedBytes">The requested number of bytes.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.AudioRenderer.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="alsoManaged">
+              <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.SubtitleRenderer">
+            <summary>
+            Subtitle Renderer - Does nothing at this point.
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Shared.IMediaRenderer" />
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleRenderer.SyncLock">
+            <summary>
+            The synchronize lock
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleRenderer.BlockText">
+            <summary>
+            Holds the text to be rendered when the Update method is called.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.SubtitleRenderer.RenderedText">
+            <summary>
+            Holds the text that was last rendered when Update was called.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.#ctor(Unosquare.FFME.MediaEngine)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.SubtitleRenderer"/> class.
+            </summary>
+            <param name="mediaEngine">The core media element.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleRenderer.MediaElement">
+            <summary>
+            Gets the parent media element (platform specific).
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.SubtitleRenderer.MediaCore">
+            <summary>
+            Gets the core platform independent player component.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Close">
+            <summary>
+            Executed when the Close method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Pause">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Play">
+            <summary>
+            Executed when the Play method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Stop">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Seek">
+            <summary>
+            Executed after a Seek operation is performed on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.WaitForReadyState">
+            <summary>
+            Waits for the renderer to be ready to render.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Render(Unosquare.FFME.Shared.MediaBlock,System.TimeSpan)">
+            <summary>
+            Renders the specified media block.
+            </summary>
+            <param name="mediaBlock">The media block.</param>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.Update(System.TimeSpan)">
+            <summary>
+            Called when a media block must stop being rendered.
+            This needs to return immediately so the calling thread is not disturbed.
+            </summary>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.SubtitleRenderer.SetText(System.String)">
+            <summary>
+            Sets the text to be rendered on the text blocks.
+            Returns immediately because it enqueues the action on the UI thread.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Rendering.VideoRenderer">
+            <summary>
+            Provides Video Image Rendering via a WPF Writable Bitmap
+            </summary>
+            <seealso cref="T:Unosquare.FFME.Shared.IMediaRenderer" />
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.MediaPixelFormats">
+            <summary>
+            Contains an equivalence lookup of FFmpeg pixel fromat and WPF pixel formats.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.RenderTargetDelegate">
+            <summary>
+            The action to perform when a render is enqueued on the UI thread.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.TargetBitmap">
+            <summary>
+            The bitmap that is presented to the user.
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.IsRenderingInProgress">
+            <summary>
+            Set when a bitmap is being written to the target bitmap
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.LoadBlockBufferOnGui">
+            <summary>
+            The load block buffer on locking
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Rendering.VideoRenderer.RaiseVideoEventOnGui">
+            <summary>
+            The raise video event on GUI
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.#ctor(Unosquare.FFME.MediaEngine)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Rendering.VideoRenderer"/> class.
+            </summary>
+            <param name="mediaEngine">The core media element.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.VideoRenderer.MediaElement">
+            <summary>
+            Gets the parent media element (platform specific).
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.VideoRenderer.MediaCore">
+            <summary>
+            Gets the core platform independent player component.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.VideoRenderer.DpiX">
+            <summary>
+            Gets the DPI along the X axis.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Rendering.VideoRenderer.DpiY">
+            <summary>
+            Gets the DPI along the Y axis.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Play">
+            <summary>
+            Executed when the Play method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Pause">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Stop">
+            <summary>
+            Executed when the Pause method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Seek">
+            <summary>
+            Executed after a Seek operation is performed on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.WaitForReadyState">
+            <summary>
+            Waits for the renderer to be ready to render.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Update(System.TimeSpan)">
+            <summary>
+            Called on every block rendering clock cycle just in case some update operation needs to be performed.
+            This needs to return immediately so the calling thread is not disturbed.
+            </summary>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Render(Unosquare.FFME.Shared.MediaBlock,System.TimeSpan)">
+            <summary>
+            Renders the specified media block.
+            This needs to return immediately so the calling thread is not disturbed.
+            </summary>
+            <param name="mediaBlock">The media block.</param>
+            <param name="clockPosition">The clock position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.Close">
+            <summary>
+            Executed when the Close method is called on the parent MediaElement
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.LockTarget(Unosquare.FFME.Shared.VideoBlock,System.Windows.Threading.DispatcherPriority)">
+            <summary>
+            Initializes the target bitmap if not available and locks it for loading the back-buffer.
+            </summary>
+            <param name="block">The block.</param>
+            <param name="priority">The priority.</param>
+            <returns>
+            The locking result. Returns a null pointer on back buffer for invalid.
+            </returns>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.LoadTarget(Unosquare.FFME.Events.BitmapDataBuffer,Unosquare.FFME.Shared.VideoBlock)">
+            <summary>
+            Loads that target data buffer with block data
+            </summary>
+            <param name="target">The target.</param>
+            <param name="source">The source.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Rendering.VideoRenderer.ApplyScaleTransform(Unosquare.FFME.Shared.VideoBlock)">
+            <summary>
+            Applies the scale transform according to the block's aspect ratio.
+            </summary>
+            <param name="b">The b.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Properties.Resources.FFmpegMediaElementBackground">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

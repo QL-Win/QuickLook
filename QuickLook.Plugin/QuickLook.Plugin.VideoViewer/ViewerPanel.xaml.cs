@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -74,7 +75,7 @@ namespace QuickLook.Plugin.VideoViewer
             {
                 if (_wasPlaying) mediaElement.Play();
             };
-            mediaElement.MediaFailed += ShowErrorNotification;
+            //mediaElement.MediaFailed += ShowErrorNotification;
             mediaElement.MediaOpening += (sender, e) => e.Options.EnableHardwareAcceleration = true;
             /*mediaElement.MediaEnded += (s, e) =>
             {
@@ -110,7 +111,27 @@ namespace QuickLook.Plugin.VideoViewer
             try
             {
                 CoverArt = null;
-                mediaElement?.Dispose();
+                if (mediaElement.IsOpening)
+                {
+                    void DelayedDisposeEvent(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+                    {
+                        var me = (Unosquare.FFME.MediaElement) sender;
+
+                        if (propertyChangedEventArgs.PropertyName != nameof(me.IsPlaying))
+                            return;
+                        if (me.IsPlaying != true)
+                            return;
+
+                        me.PropertyChanged -= DelayedDisposeEvent;
+                        me.IsMuted = true;
+                        Task.Delay(200).ContinueWith(t => me.Dispose());
+                    }
+
+                    mediaElement.PropertyChanged += DelayedDisposeEvent;
+                }
+                else
+                    mediaElement.Dispose();
+
                 mediaElement = null;
             }
             catch (Exception e)
@@ -236,11 +257,6 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement.Volume = 0.5;
 
             mediaElement.Play();
-        }
-
-        ~ViewerPanel()
-        {
-            Dispose();
         }
 
         [NotifyPropertyChangedInvocator]

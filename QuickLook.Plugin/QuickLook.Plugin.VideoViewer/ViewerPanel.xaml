@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme"
+             xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              mc:Ignorable="d"

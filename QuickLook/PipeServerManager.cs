@@ -43,6 +43,8 @@ namespace QuickLook
 
         private NamedPipeServerStream _server;
 
+        private DispatcherOperation _lastOperation;
+
         public PipeServerManager()
         {
             _server = new NamedPipeServerStream(PipeName, PipeDirection.In);
@@ -110,6 +112,12 @@ namespace QuickLook
             if (split == -1)
                 return false;
 
+            if (_lastOperation != null && _lastOperation.Status == DispatcherOperationStatus.Pending)
+            {
+                _lastOperation.Abort();
+                Debug.WriteLine("Dispatcher task canceled");
+            }
+
             var wParam = msg.Substring(0, split);
             var lParam = msg.Substring(split + 1, msg.Length - split - 1);
 
@@ -121,17 +129,17 @@ namespace QuickLook
                         DispatcherPriority.ApplicationIdle);
                     return false;
                 case PipeMessages.Invoke:
-                    Application.Current.Dispatcher.BeginInvoke(
+                    _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => ViewWindowManager.GetInstance().InvokePreview(lParam)),
                         DispatcherPriority.ApplicationIdle);
                     return false;
                 case PipeMessages.Switch:
-                    Application.Current.Dispatcher.BeginInvoke(
+                    _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => ViewWindowManager.GetInstance().SwitchPreview(lParam)),
                         DispatcherPriority.ApplicationIdle);
                     return false;
                 case PipeMessages.Toggle:
-                    Application.Current.Dispatcher.BeginInvoke(
+                    _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => ViewWindowManager.GetInstance().TogglePreview(lParam)),
                         DispatcherPriority.ApplicationIdle);
                     return false;
@@ -150,11 +158,6 @@ namespace QuickLook
                 default:
                     return false;
             }
-        }
-
-        ~PipeServerManager()
-        {
-            Dispose();
         }
 
         public static PipeServerManager GetInstance()

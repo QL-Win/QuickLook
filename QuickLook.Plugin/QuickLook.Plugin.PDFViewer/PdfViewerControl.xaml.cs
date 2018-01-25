@@ -94,11 +94,6 @@ namespace QuickLook.Plugin.PDFViewer
             ReRenderCurrentPage();
         }
 
-        ~PdfViewerControl()
-        {
-            Dispose();
-        }
-
         public event EventHandler CurrentPageChanged;
 
         private void NavigatePage(object sender, int delta)
