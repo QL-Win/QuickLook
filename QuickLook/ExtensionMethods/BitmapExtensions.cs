@@ -135,5 +135,15 @@ namespace QuickLook.ExtensionMethods
 
             return darks > 0.65 * sampleCount;
         }
+
+        public static BitmapImage LoadBitmapImage(this Uri source)
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = source;
+            bitmap.EndInit();
+            return bitmap;
+        }
     }
 }

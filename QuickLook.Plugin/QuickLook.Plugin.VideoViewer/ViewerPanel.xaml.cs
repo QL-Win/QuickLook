@@ -19,12 +19,14 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
 using QuickLook.Annotations;
@@ -39,8 +41,9 @@ namespace QuickLook.Plugin.VideoViewer
     public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChanged
     {
         private readonly ContextObject _context;
+        private BitmapSource _coverArt;
 
-        private Uri _coverArt;
+        private string _coverArtPath = string.Empty;
         private bool _hasAudio;
         private bool _hasEnded;
         private bool _hasVideo;
@@ -147,12 +150,12 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        public Uri CoverArt
+        public BitmapSource CoverArt
         {
             get => _coverArt;
             private set
             {
-                if (value == _coverArt) return;
+                if (ReferenceEquals(value, _coverArt)) return;
                 if (value == null) return;
                 _coverArt = value;
                 OnPropertyChanged();
@@ -172,6 +175,10 @@ namespace QuickLook.Plugin.VideoViewer
                     mediaElement?.Dispose();
                     mediaElement = null;
                 });
+
+                // delete cached cover art
+                if (!string.IsNullOrWhiteSpace(_coverArtPath))
+                    File.Delete(_coverArtPath);
             }
             catch (Exception e)
             {
@@ -245,9 +252,13 @@ namespace QuickLook.Plugin.VideoViewer
             if (HasVideo)
                 return;
 
-            var path = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.ArtworkUrl);
-            if (!string.IsNullOrEmpty(path))
-                CoverArt = new Uri(path);
+            var artUri = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.ArtworkUrl);
+            if (!string.IsNullOrEmpty(artUri))
+            {
+                var u = new Uri(artUri);
+                _coverArtPath = u.LocalPath;
+                CoverArt = u.LoadBitmapImage();
+            }
 
             metaTitle.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Title);
             metaArtists.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Artist);
@@ -270,7 +281,7 @@ namespace QuickLook.Plugin.VideoViewer
                 return;
 
             var dark = false;
-            using (var bitmap = new Bitmap(CoverArt.LocalPath))
+            using (var bitmap = new Bitmap(CoverArt.ToBitmap()))
             {
                 dark = bitmap.IsDarkImage();
             }
