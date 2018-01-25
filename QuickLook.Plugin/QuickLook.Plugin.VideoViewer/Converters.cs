@@ -22,34 +22,6 @@ using System.Windows.Data;
 
 namespace QuickLook.Plugin.VideoViewer
 {
-    public sealed class TimeSpanToSecondsConverter : DependencyObject, IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is TimeSpan span)
-                return span.TotalSeconds;
-            if (value is Duration duration)
-                return duration.HasTimeSpan ? duration.TimeSpan.TotalSeconds : 0d;
-
-            return 0d;
-        }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var span = TimeSpan.Zero;
-
-            if (value != null)
-                span = TimeSpan.FromSeconds((double) value);
-
-            if (targetType == typeof(TimeSpan))
-                return span;
-            if (targetType == typeof(Duration))
-                return new Duration(span);
-
-            return Activator.CreateInstance(targetType);
-        }
-    }
-
     public sealed class TimeSpanToShortStringConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -57,17 +29,13 @@ namespace QuickLook.Plugin.VideoViewer
             if (value == null)
                 return "00:00";
 
-            var span = TimeSpan.Zero;
-            if (value is Duration duration)
-                span = duration.HasTimeSpan ? duration.TimeSpan : TimeSpan.Zero;
-            if (value is TimeSpan timespan)
-                span = timespan;
+            var v = (TimeSpan) value;
 
             var s = string.Empty;
-            if (span.Hours > 0)
-                s += $"{span.Hours:D2}:";
+            if (v.Hours > 0)
+                s += $"{v.Hours:D2}:";
 
-            s += $"{span.Minutes:D2}:{span.Seconds:D2}";
+            s += $"{v.Minutes:D2}:{v.Seconds:D2}";
 
             return s;
         }
@@ -87,9 +55,13 @@ namespace QuickLook.Plugin.VideoViewer
             if (value == null)
                 return Volumes[0];
 
-            var v = (int) Math.Min(100, Math.Max((double) value * 100, 0));
+            var v = (int) value;
+            if (v == 0)
+                return Volumes[0];
 
-            return v == 0 ? Volumes[0] : Volumes[1 + v / 34];
+            v = Math.Min(v, 100);
+
+            return Volumes[1 + v / 34];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

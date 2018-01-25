@@ -1,0 +1,1242 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meta.Vlc.Wpf</name>
+    </assembly>
+    <members>
+        <member name="T:Meta.Vlc.Wpf.ApiManager">
+            <summary>
+                The manager of LibVlc api.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.ApiManager.ReleaseAll">
+            <summary>
+                Release VLC instance.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.ApiManager.LibVlcPath">
+            <summary>
+                The path of LibVlc dlls.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.ApiManager.VlcOption">
+            <summary>
+                The options when initialize LibVlc.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.ApiManager.Vlcs">
+            <summary>
+                The list of VLC.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.ApiManager.DefaultVlc">
+            <summary>
+                Default VLC instance.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.ApiManager.IsInitialized">
+            <summary>
+                The state of VLC initialization.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.ApiManager.Initialize(System.String)">
+            <summary>
+                Initialize the VLC with path of LibVlc.
+            </summary>
+            <param name="libVlcPath"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.ApiManager.Initialize(System.String,System.String[])">
+            <summary>
+                Initialize the VLC with path of LibVlc and options.
+            </summary>
+            <param name="libVlcPath"></param>
+            <param name="vlcOption"></param>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.ChromaType">
+            <summary>
+                Pixel chroma type.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.RV15">
+            <summary>
+                5 bit for each RGB channel, no alpha channel, BGRA5550(15bit / pixel).
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.RV16">
+            <summary>
+                5 bit Red, 6 bit Green and 5 bit Blue, no alpha channel, BGRA5650(16bit / pixel).
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.RV24">
+            <summary>
+                8 bit for each RGB channel, no alpha channel, BGRA8880(24bit / pixel).
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.RV32">
+            <summary>
+                8 bit per RGB channel and 8 bit unused, no alpha channel, BGRA8880(32bit / pixel).
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.RGBA">
+            <summary>
+                8 bit for each BGRA channel, RGBA8888(32bit / pixel).
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.YV12">
+            <summary>
+                12 bits per pixel planar format with Y plane followed by V and U planes.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.I420">
+            <summary>
+                Same as YV12 but V and U are swapped.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.NV12">
+            <summary>
+                12 bits per pixel planar format with Y plane and interleaved UV plane.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.YUY2">
+            <summary>
+                16 bits per pixel packed YUYV array.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.UYVY">
+            <summary>
+                16 bits per pixel packed UYVY array.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.J420">
+            <summary>
+                Same as I420, mainly used with MJPG codecs.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.ChromaType.J422">
+            <summary>
+                Same as YUY2, mainly used with MJPG codecs.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.EndBehavior">
+            <summary>
+                Define the behavior when media is ended.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.EndBehavior.Nothing">
+            <summary>
+                Do nothing, player's state is Ended, you need stop the player to play current media again.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.EndBehavior.Stop">
+            <summary>
+                Stop the player.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.EndBehavior.Repeat">
+            <summary>
+                Play current media again.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.EndBehavior.Default">
+            <summary>
+                Default behavior, same as Stop.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Extension">
+            <summary>
+                Some extension method.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.DefaultValueWhenNull``2(``0,System.Func{``0,``1},``1)">
+            <summary>
+                Return the value from the selector, unless the object is null. Then return the default value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TRet"></typeparam>
+            <param name="value"></param>
+            <param name="selector"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.CombinePath(System.String,System.String)">
+            <summary>
+                Combine path to src path.
+            </summary>
+            <param name="srcPath"></param>
+            <param name="extPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.IsDriveRootDirectory(System.String)">
+            <summary>
+                Check a path is a drive root directory or not.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.ToUri(System.String)">
+            <summary>
+                Convert a path to uri.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.FormatPath(System.String)">
+            <summary>
+                Format a path with '/' and ends with '/'.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Extension.EasyInvoke(System.Action)">
+            <summary>
+                Quickly async invoke a action.
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.CanBeNullAttribute">
+            <summary>
+                Indicates that the value of the marked element could be <c>null</c> sometimes,
+                so the check for <c>null</c> is necessary before its usage.
+            </summary>
+            <example>
+                <code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.NotNullAttribute">
+            <summary>
+                Indicates that the value of the marked element could never be <c>null</c>.
+            </summary>
+            <example>
+                <code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.ItemNotNullAttribute">
+            <summary>
+                Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+                and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+                or of the Lazy.Value property can never be null.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.ItemCanBeNullAttribute">
+            <summary>
+                Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+                and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+                or of the Lazy.Value property can be null.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.StringFormatMethodAttribute">
+            <summary>
+                Indicates that the marked method builds string by format pattern and (optional) arguments.
+                Parameter, which contains format string, should be given in constructor. The format string
+                should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])" />-like form.
+            </summary>
+            <example>
+                <code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+                Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.ValueProviderAttribute">
+            <summary>
+                For a parameter that is expected to be one of the limited set of values.
+                Specify fields of which type should be used as values for this parameter.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.InvokerParameterNameAttribute">
+            <summary>
+                Indicates that the function argument should be string literal and match one
+                of the parameters of the caller function. For example, ReSharper annotates
+                the parameter of <see cref="T:System.ArgumentNullException" />.
+            </summary>
+            <example>
+                <code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+                 Indicates that the method is contained in a type that implements
+                 <c>System.ComponentModel.INotifyPropertyChanged</c> interface and this method
+                 is used to notify that some property value changed.
+             </summary>
+             <remarks>
+                 The method should be non-static and conform to one of the supported signatures:
+                 <list>
+                     <item>
+                         <c>NotifyChanged(string)</c>
+                     </item>
+                     <item>
+                         <c>NotifyChanged(params string[])</c>
+                     </item>
+                     <item>
+                         <c>NotifyChanged{T}(Expression{Func{T}})</c>
+                     </item>
+                     <item>
+                         <c>NotifyChanged{T,U}(Expression{Func{T,U}})</c>
+                     </item>
+                     <item>
+                         <c>SetProperty{T}(ref T, T, string)</c>
+                     </item>
+                 </list>
+             </remarks>
+             <example>
+                 <code>
+              public class Foo : INotifyPropertyChanged {
+                public event PropertyChangedEventHandler PropertyChanged;
+                [NotifyPropertyChangedInvocator]
+                protected virtual void NotifyChanged(string propertyName) { ... }
+            
+                private string _name;
+                public string Name {
+                  get { return _name; }
+                  set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+                }
+              }
+              </code>
+                 Examples of generated notifications:
+                 <list>
+                     <item>
+                         <c>NotifyChanged("Property")</c>
+                     </item>
+                     <item>
+                         <c>NotifyChanged(() =&gt; Property)</c>
+                     </item>
+                     <item>
+                         <c>NotifyChanged((VM x) =&gt; x.Property)</c>
+                     </item>
+                     <item>
+                         <c>SetProperty(ref myField, value, "Property")</c>
+                     </item>
+                 </list>
+             </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.ContractAnnotationAttribute">
+            <summary>
+                Describes dependency between method input and output.
+            </summary>
+            <syntax>
+                <p>Function Definition Table syntax:</p>
+                <list>
+                    <item>FDT      ::= FDTRow [;FDTRow]*</item>
+                    <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+                    <item>Input    ::= ParameterName: Value [, Input]*</item>
+                    <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+                    <item>Value    ::= true | false | null | notnull | canbenull</item>
+                </list>
+                If method has single input parameter, it's name could be omitted.<br />
+                Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+                for method output means that the methos doesn't return normally.<br />
+                <c>canbenull</c> annotation is only applicable for output parameters.<br />
+                You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+                or use single attribute with rows separated by semicolon.<br />
+            </syntax>
+            <examples>
+                <list>
+                    <item>
+                        <code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code>
+                    </item>
+                    <item>
+                        <code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code>
+                    </item>
+                    <item>
+                        <code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code>
+                    </item>
+                    <item>
+                        <code>
+            // A method that returns null if the parameter is null,
+            // and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data)
+            </code>
+                    </item>
+                    <item>
+                        <code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code>
+                    </item>
+                </list>
+            </examples>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.LocalizationRequiredAttribute">
+            <summary>
+                Indicates that marked element should be localized or not.
+            </summary>
+            <example>
+                <code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+                Indicates that the value of the marked type (or its derivatives)
+                cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+                should be used instead. However, using '==' or '!=' for comparison
+                with <c>null</c> is always permitted.
+            </summary>
+            <example>
+                <code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+                When applied to a target attribute, specifies a requirement for any type marked
+                with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example>
+                <code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.UsedImplicitlyAttribute">
+            <summary>
+                Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
+                so this symbol will not be marked as unused (as well as by other usage inspections).
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.MeansImplicitUseAttribute">
+            <summary>
+                Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes
+                as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+                Indicates implicit instantiation of a type with fixed constructor signature.
+                That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type.</summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.ImplicitUseTargetFlags">
+            <summary>
+                Specify what is considered used implicitly when marked
+                with <see cref="T:Meta.Vlc.Wpf.Annotations.MeansImplicitUseAttribute" /> or <see cref="T:Meta.Vlc.Wpf.Annotations.UsedImplicitlyAttribute" />.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used.</summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.PublicAPIAttribute">
+            <summary>
+                This attribute is intended to mark publicly available API
+                which should not be removed and so is treated as used.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.InstantHandleAttribute">
+            <summary>
+                Tells code analysis engine if the parameter is completely handled when the invoked method is on stack.
+                If the parameter is a delegate, indicates that delegate is executed while the method is executed.
+                If the parameter is an enumerable, indicates that it is enumerated while the method is executed.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.PureAttribute">
+            <summary>
+                Indicates that a method does not make any observable state changes.
+                The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
+            </summary>
+            <example>
+                <code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.PathReferenceAttribute">
+            <summary>
+                Indicates that a parameter is a path to a file or a folder within a web project.
+                Path can be relative or absolute, starting from web root (~).
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.SourceTemplateAttribute">
+            <summary>
+                An extension method marked with this attribute is processed by ReSharper code completion
+                as a 'Source Template'. When extension method is completed over some expression, it's source code
+                is automatically expanded like a template at call site.
+            </summary>
+            <remarks>
+                Template method body can contain valid source code and/or special comments starting with '$'.
+                Text inside these comments is added as source code when the template is applied. Template parameters
+                can be used either as additional method parameters or as identifiers wrapped in two '$' signs.
+                Use the <see cref="T:Meta.Vlc.Wpf.Annotations.MacroAttribute" /> attribute to specify macros for parameters.
+            </remarks>
+            <example>
+                In this example, the 'forEach' method is a source template available over all values
+                of enumerable types, producing ordinary C# 'foreach' statement and placing caret inside block:
+                <code>
+            [SourceTemplate]
+            public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; xs) {
+              foreach (var x in xs) {
+                 //$ $END$
+              }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.MacroAttribute">
+            <summary>
+                Allows specifying a macro for a parameter of a <see cref="T:Meta.Vlc.Wpf.Annotations.SourceTemplateAttribute">source template</see>.
+            </summary>
+            <remarks>
+                You can apply the attribute on the whole method or on any of its additional parameters. The macro expression
+                is defined in the <see cref="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Expression" /> property. When applied on a method, the target
+                template parameter is defined in the <see cref="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Target" /> property. To apply the macro silently
+                for the parameter, set the <see cref="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Editable" /> property value = -1.
+            </remarks>
+            <example>
+                Applying the attribute on a source template method:
+                <code>
+            [SourceTemplate, Macro(Target = "item", Expression = "suggestVariableName()")]
+            public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; collection) {
+              foreach (var item in collection) {
+                //$ $END$
+              }
+            }
+            </code>
+                Applying the attribute on a template method parameter:
+                <code>
+            [SourceTemplate]
+            public static void something(this Entity x, [Macro(Expression = "guid()", Editable = -1)] string newguid) {
+              /*$ var $x$Id = "$newguid$" + x.ToString();
+              x.DoSomething($x$Id); */
+            }
+            </code>
+            </example>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Expression">
+            <summary>
+                Allows specifying a macro that will be executed for a <see cref="T:Meta.Vlc.Wpf.Annotations.SourceTemplateAttribute">source template</see>
+                parameter when the template is expanded.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Editable">
+            <summary>
+                Allows specifying which occurrence of the target parameter becomes editable when the template is deployed.
+            </summary>
+            <remarks>
+                If the target parameter is used several times in the template, only one occurrence becomes editable;
+                other occurrences are changed synchronously. To specify the zero-based index of the editable occurrence,
+                use values >= 0. To make the parameter non-editable when the template is expanded, use -1.
+            </remarks>
+            >
+        </member>
+        <member name="P:Meta.Vlc.Wpf.Annotations.MacroAttribute.Target">
+            <summary>
+                Identifies the target parameter of a <see cref="T:Meta.Vlc.Wpf.Annotations.SourceTemplateAttribute">source template</see> if the
+                <see cref="T:Meta.Vlc.Wpf.Annotations.MacroAttribute" /> is applied on a template method.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcActionAttribute">
+            <summary>
+                ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+                is an MVC action. If applied to a method, the MVC action name is calculated
+                implicitly from the context. Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcAreaAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+                Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcControllerAttribute">
+            <summary>
+                ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is
+                an MVC controller. If applied to a method, the MVC controller name is calculated
+                implicitly from the context. Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcMasterAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC Master. Use this attribute
+                for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC model type. Use this attribute
+                for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, Object)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+                ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC
+                partial view. If applied to a method, the MVC partial view name is calculated implicitly
+                from the context. Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+                ASP.NET MVC attribute. Allows disabling inspections for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+                Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+                Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcTemplateAttribute">
+            <summary>
+                ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+                Use this attribute for custom wrappers similar to
+                <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcViewAttribute">
+            <summary>
+                ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+                is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+                from the context. Use this attribute for custom wrappers similar to
+                <c>System.Web.Mvc.Controller.View(Object)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+                ASP.NET MVC attribute. When applied to a parameter of an attribute,
+                indicates that this parameter is an MVC action name.
+            </summary>
+            <example>
+                <code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.RazorSectionAttribute">
+            <summary>
+                Razor attribute. Indicates that a parameter or a method is a Razor section.
+                Use this attribute for custom wrappers similar to
+                <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.CollectionAccessAttribute">
+            <summary>
+                Indicates how method, constructor invocation or property access
+                over collection type affects content of the collection.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.CollectionAccessType.None">
+            <summary>Method does not use or modify content of the collection.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.CollectionAccessType.Read">
+            <summary>Method only reads content of the collection but does not modify it.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.CollectionAccessType.ModifyExistingContent">
+            <summary>Method can change content of the collection but does not add new elements.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.CollectionAccessType.UpdatedContent">
+            <summary>Method can add new elements to the collection.</summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AssertionMethodAttribute">
+            <summary>
+                Indicates that the marked method is assertion method, i.e. it halts control flow if
+                one of the conditions is satisfied. To set the condition, mark one of the parameters with
+                <see cref="T:Meta.Vlc.Wpf.Annotations.AssertionConditionAttribute" /> attribute.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AssertionConditionAttribute">
+            <summary>
+                Indicates the condition parameter of the assertion method. The method itself should be
+                marked by <see cref="T:Meta.Vlc.Wpf.Annotations.AssertionMethodAttribute" /> attribute. The mandatory argument of
+                the attribute is the assertion type.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.AssertionConditionType">
+            <summary>
+                Specifies assertion type. If the assertion method argument satisfies the condition,
+                then the execution continues. Otherwise, execution is assumed to be halted.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.AssertionConditionType.IS_TRUE">
+            <summary>Marked parameter should be evaluated to true.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.AssertionConditionType.IS_FALSE">
+            <summary>Marked parameter should be evaluated to false.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.AssertionConditionType.IS_NULL">
+            <summary>Marked parameter should be evaluated to null value.</summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.Annotations.AssertionConditionType.IS_NOT_NULL">
+            <summary>Marked parameter should be evaluated to not null value.</summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.TerminatesProgramAttribute">
+            <summary>
+                Indicates that the marked method unconditionally terminates control flow execution.
+                For example, it could unconditionally throw exception.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.LinqTunnelAttribute">
+            <summary>
+                Indicates that method is pure LINQ method, with postponed enumeration (like Enumerable.Select,
+                .Where). This annotation allows inference of [InstantHandle] annotation for parameters
+                of delegate type by analyzing LINQ method chains.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.NoEnumerationAttribute">
+            <summary>
+                Indicates that IEnumerable, passed as parameter, is not enumerated.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.RegexPatternAttribute">
+            <summary>
+                Indicates that parameter is regular expression pattern.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.XamlItemsControlAttribute">
+            <summary>
+                XAML attribute. Indicates the type that has <c>ItemsSource</c> property and should be treated
+                as <c>ItemsControl</c>-derived type, to enable inner items <c>DataContext</c> type resolve.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.XamlItemBindingOfItemsControlAttribute">
+            <summary>
+                XAML attibute. Indicates the property of some <c>BindingBase</c>-derived type, that
+                is used to bind some item of <c>ItemsControl</c>-derived type. This annotation will
+                enable the <c>DataContext</c> type resolve for XAML bindings for such properties.
+            </summary>
+            <remarks>
+                Property should have the tree ancestor of the <c>ItemsControl</c> type or
+                marked with the <see cref="T:Meta.Vlc.Wpf.Annotations.XamlItemsControlAttribute" /> attribute.
+            </remarks>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Annotations.NoReorder">
+            <summary>
+                Prevents the Member Reordering feature from tossing members of the marked class.
+            </summary>
+            <remarks>
+                The attribute must be mentioned in your member reordering patterns
+            </remarks>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.VideoDisplayContext">
+            <summary>
+                Context used to render video data.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.SnapshotFormat">
+            <summary>
+                The format of snapshot.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.SnapshotFormat.BMP">
+            <summary>
+                BMP
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.SnapshotFormat.JPG">
+            <summary>
+                Jpeg
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.SnapshotFormat.PNG">
+            <summary>
+                PNG
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.AspectRatio">
+            <summary>
+                Aspect ratio enumeration.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.AspectRatio.Default">
+            <summary>
+                Default aspect ratio.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.AspectRatio._16_9">
+            <summary>
+                16:9
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.AspectRatio._4_3">
+            <summary>
+                4:3
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.Properties.Resources">
+            <summary>
+              一个强类型的资源类，用于查找本地化的字符串等。
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.Properties.Resources.ResourceManager">
+            <summary>
+              返回此类使用的缓存的 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.Properties.Resources.Culture">
+            <summary>
+              使用此强类型资源类，为所有资源查找
+              重写当前线程的 CurrentUICulture 属性。
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.VlcPlayer">
+            <summary>
+                VLC media player.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.#ctor">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.Wpf.VlcPlayer" /> for XAML, you should not use it to create player in your C# code, if you don't
+                want to add it to XAML visual three. use <see cref="M:Meta.Vlc.Wpf.VlcPlayer.#ctor(System.Boolean)" /> and <see cref="M:Meta.Vlc.Wpf.VlcPlayer.#ctor(System.Windows.Threading.Dispatcher)" /> to
+                instead.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.#ctor(System.Boolean)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.Wpf.VlcPlayer" /> for C# code, if you want to display video with
+                <see cref="T:Meta.Vlc.Wpf.ThreadSeparatedImage" />, please set <see cref="!:displayWithThreadSeparatedImage" /> to true, player will
+                generate <see cref="P:Meta.Vlc.Wpf.VlcPlayer.VideoSource" /> on thread of it.
+            </summary>
+            <param name="displayWithThreadSeparatedImage">Do you want to display video with <see cref="T:Meta.Vlc.Wpf.ThreadSeparatedImage" />?</param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.#ctor(System.Windows.Threading.Dispatcher)">
+            <summary>
+                Create a <see cref="T:Meta.Vlc.Wpf.VlcPlayer" /> for C# code, use player will generate <see cref="P:Meta.Vlc.Wpf.VlcPlayer.VideoSource" /> on specified
+                thread.
+            </summary>
+            <param name="customDisplayThreadDispatcher">
+                The dispatcher of thread which you want to generate
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.VideoSource" /> on.
+            </param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Initialize(System.String)">
+            <summary>
+                Initialize VLC player with path of LibVlc.
+            </summary>
+            <param name="libVlcPath"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Initialize(System.String,System.String[])">
+            <summary>
+                Initialize VLC player with path of LibVlc and options.
+            </summary>
+            <param name="libVlcPath"></param>
+            <param name="libVlcOption"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Dispose(System.Boolean)">
+            <summary>
+                Cleanup the player used resource.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Dispose">
+            <summary>
+                Cleanup the player used resource.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.LoadMedia(System.String)">
+            <summary>
+                Load a media by file path.
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.LoadMedia(System.Uri)">
+            <summary>
+                Load a media by uri.
+            </summary>
+            <param name="uri"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.LoadMediaWithOptions(System.String,System.String[])">
+            <summary>
+                Load a media by file path and options.
+            </summary>
+            <param name="path"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.LoadMediaWithOptions(System.Uri,System.String[])">
+            <summary>
+                Load a media by uri and options.
+            </summary>
+            <param name="uri"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Play">
+            <summary>
+                Play media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Pause">
+            <summary>
+                Pause media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Resume">
+            <summary>
+                Resume media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.PauseOrResume">
+            <summary>
+                Pause or resume media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Replay">
+            <summary>
+                Replay media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Stop">
+            <summary>
+                Stop media.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.AddOption(System.String[])">
+            <summary>
+                Add options to media.
+            </summary>
+            <param name="option"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.NextFrame">
+            <summary>
+                Show next frame.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.Navigate(Meta.Vlc.Interop.MediaPlayer.NavigateMode)">
+            <summary>
+                Inactive with DVD menu.
+            </summary>
+            <param name="mode"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.ToggleMute">
+            <summary>
+                Toggle mute mode.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.TakeSnapshot(System.String,Meta.Vlc.Wpf.SnapshotFormat,System.Int32)">
+            <summary>
+                Take a snapshot.
+            </summary>
+            <param name="path"></param>
+            <param name="format"></param>
+            <param name="quality"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.TakeSnapshot(System.String,System.Int32)">
+            <summary>
+                Take a snapshot.
+            </summary>
+            <param name="file"></param>
+            <param name="quality"></param>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.EnumAudioDeviceList">
+            <summary>
+                Gets a list of potential audio output devices.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.GetAudioDeviceList(Meta.Vlc.AudioOutput)">
+            <summary>
+                Gets a list of audio output devices for a given audio output module.
+            </summary>
+            <param name="audioOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.GetAudioOutputList">
+            <summary>
+                Gets the list of available audio output modules.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.SetAudioOutput(Meta.Vlc.AudioOutput)">
+            <summary>
+                Selects an audio output module.
+                Any change will take be effect only after playback is stopped and restarted. Audio output cannot be changed while
+                playing.
+            </summary>
+            <param name="audioOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.GetAudioDevice">
+            <summary>
+                Get the current audio output device identifier.
+            </summary>
+        </member>
+        <member name="M:Meta.Vlc.Wpf.VlcPlayer.SetAudioDevice(Meta.Vlc.AudioOutput,Meta.Vlc.AudioDevice)">
+            <summary>
+                Configures an explicit audio output device. If the module paramater is NULL,
+                audio output will be moved to the device specified by the device identifier string immediately.
+                This is the recommended usage. A list of adequate potential device strings can be obtained with
+                <see cref="M:Meta.Vlc.Wpf.VlcPlayer.EnumAudioDeviceList" />.
+                However passing NULL is supported in LibVLC version 2.2.0 and later only; in earlier versions, this function would
+                have no effects when the module parameter was NULL.
+                If the module parameter is not NULL, the device parameter of the corresponding audio output, if it exists, will be
+                set to the specified string.
+                Note that some audio output modules do not have such a parameter (notably MMDevice and PulseAudio).
+                A list of adequate potential device strings can be obtained with <see cref="M:Meta.Vlc.Wpf.VlcPlayer.GetAudioDeviceList(Meta.Vlc.AudioOutput)" />.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.LibVlcPath">
+            <summary>
+                The path of LibVlc, it is a DependencyProperty.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.VlcOption">
+            <summary>
+                The options of LibVlc, it is a DependencyProperty.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AspectRatio">
+            <summary>
+                The aspect ratio of video, it is a DependencyProperty.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Stretch">
+            <summary>
+                The stretch mode of video.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.StretchDirection">
+            <summary>
+                The stretch direction of video.
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.PositionChanged">
+            <summary>
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.Position" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.TimeChanged">
+            <summary>
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.Time" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.IsMuteChanged">
+            <summary>
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.IsMute" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.IsSeekableChanged">
+            <summary>
+                <see cref="E:Meta.Vlc.Wpf.VlcPlayer.IsSeekableChanged" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.VolumeChanged">
+            <summary>
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.Volume" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.LengthChanged">
+            <summary>
+                <see cref="E:Meta.Vlc.Wpf.VlcPlayer.LengthChanged" />
+            </summary>
+        </member>
+        <member name="E:Meta.Vlc.Wpf.VlcPlayer.StateChanged">
+            <summary>
+                <see cref="P:Meta.Vlc.Wpf.VlcPlayer.State" />
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Position">
+            <summary>
+                Get or set progress of media, between 0 and 1.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Time">
+            <summary>
+                Get or set current time progress of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.FPS">
+            <summary>
+                Get FPS of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.IsMute">
+            <summary>
+                Get or set state of mute.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AudioOutputChannel">
+            <summary>
+                Get or set output channel of audio.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AudioTrackCount">
+            <summary>
+                Get track count of audio.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AudioTrack">
+            <summary>
+                Get or set track index of audio.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AudioTrackDescription">
+            <summary>
+                Get description of audio track.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Rate">
+            <summary>
+                Get or set rate of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Title">
+            <summary>
+                Get or set title index of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.TitleCount">
+            <summary>
+                Get title count of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Chapter">
+            <summary>
+                Get or set chapter index of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.ChapterCount">
+            <summary>
+                Get chapter count of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.IsSeekable">
+            <summary>
+                Checks if media is seekable.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.State">
+            <summary>
+                Get state of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Length">
+            <summary>
+                Get length of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.VlcMediaPlayer">
+            <summary>
+                Get internal VlcMediaPlayer, it is best not to use this, unless you need to customize advanced features.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Vlc">
+            <summary>
+                Get internal Vlc.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.Volume">
+            <summary>
+                Get or set volume of media.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.AudioEqualizer">
+            <summary>
+                Get or set audio equalizer.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VlcPlayer.VideoSource">
+            <summary>
+                The image data of video, it is created on other thread, you can't use it in main thread.
+            </summary>
+        </member>
+        <member name="T:Meta.Vlc.Wpf.PlayerCreateMode">
+            <summary>
+                VlcPlayer create mode.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.PlayerCreateMode.Default">
+            <summary>
+                Create a new <see cref="T:Meta.Vlc.Wpf.VlcPlayer" /> instance with default <see cref="T:Meta.Vlc.Vlc" /> instance.
+            </summary>
+        </member>
+        <member name="F:Meta.Vlc.Wpf.PlayerCreateMode.NewVlcInstance">
+            <summary>
+                Create a new <see cref="T:Meta.Vlc.Wpf.VlcPlayer" /> instance with a new <see cref="T:Meta.Vlc.Vlc" /> instance.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VideoFormatChangingEventArgs.Width">
+            <summary>
+            Width of video.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VideoFormatChangingEventArgs.Height">
+            <summary>
+            Height of video.
+            </summary>
+        </member>
+        <member name="P:Meta.Vlc.Wpf.VideoFormatChangingEventArgs.ChromaType">
+            <summary>
+            Video chroma type.
+            </summary>
+        </member>
+    </members>
+</doc>
