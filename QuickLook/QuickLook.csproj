@@ -98,7 +98,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -262,7 +261,7 @@
     <None Include="Controls\GlassLayer\GaussianBlur.fx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QuickLook.Plugin.IViewerPlugin\QuickLook.Common.csproj">
+    <ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj">
       <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
       <Name>QuickLook.Common</Name>
       <Private>False</Private>

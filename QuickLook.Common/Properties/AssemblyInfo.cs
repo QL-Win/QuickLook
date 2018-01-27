@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("QuickLook.Plugin.IViewerPlugin")]
+[assembly: AssemblyTitle("QuickLook.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("QuickLook.Plugin.IViewerPlugin")]
+[assembly: AssemblyProduct("QuickLook.Common")]
 [assembly: AssemblyCopyright("Copyright © Paddy Xu 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

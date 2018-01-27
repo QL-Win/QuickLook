@@ -68,7 +68,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.CsvViewer"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.MailViewer", "QuickLook.Plugin\QuickLook.Plugin.MailViewer\QuickLook.Plugin.MailViewer.csproj", "{45E94893-3076-4A8E-8969-6955B6340739}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Common", "QuickLook.Plugin.IViewerPlugin\QuickLook.Common.csproj", "{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Common", "QuickLook.Common\QuickLook.Common.csproj", "{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
