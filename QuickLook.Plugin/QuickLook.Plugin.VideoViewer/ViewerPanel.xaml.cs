@@ -168,6 +168,8 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Dispose()
         {
+            _context.SetSetting("Volume", mediaElement.Volume);
+
             try
             {
                 Task.Run(() =>
@@ -317,7 +319,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             mediaElement.LoadMediaWithOptions(path, ":avcodec-hw=dxva2");
-            mediaElement.Volume = 50;
+            mediaElement.Volume = _context.GetSetting("Volume", 50);
 
             mediaElement.Play();
         }
