@@ -75,5 +75,6 @@ void WoW64HookHelper::createJob()
 	JOBOBJECT_EXTENDED_LIMIT_INFORMATION lpJobObjectInfo = {sizeof lpJobObjectInfo};
 	lpJobObjectInfo.BasicLimitInformation = BasicLimitInformation;
 
-	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &lpJobObjectInfo, sizeof JOBOBJECT_EXTENDED_LIMIT_INFORMATION);
+	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &lpJobObjectInfo,
+	                        sizeof JOBOBJECT_EXTENDED_LIMIT_INFORMATION);
 }

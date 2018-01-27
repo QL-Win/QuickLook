@@ -23,9 +23,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
-    internal class FileHelper
+    public class FileHelper
     {
         public static bool IsExecutable(string path, out string appFriendlyName)
         {

@@ -83,6 +83,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
                 context.DrawImage(rawFrame, frameInfo.Rect);
             }
+
             var bitmap = new RenderTargetBitmap(
                 fullImage.PixelWidth, fullImage.PixelHeight,
                 Math.Floor(fullImage.DpiX), Math.Floor(fullImage.DpiY),
@@ -186,6 +187,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 if (value != null)
                     return (T) value;
             }
+
             return null;
         }
     }

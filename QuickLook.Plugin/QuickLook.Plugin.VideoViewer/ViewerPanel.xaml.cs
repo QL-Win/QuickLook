@@ -29,8 +29,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
-using QuickLook.Annotations;
-using QuickLook.ExtensionMethods;
+using QuickLook.Common;
+using QuickLook.Common.Annotations;
+using QuickLook.Common.ExtensionMethods;
 using MediaState = Meta.Vlc.Interop.Media.MediaState;
 
 namespace QuickLook.Plugin.VideoViewer

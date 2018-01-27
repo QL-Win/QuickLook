@@ -20,8 +20,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using QuickLook.Helpers;
-using QuickLook.Plugin;
+using QuickLook.Common;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook
 {
@@ -38,6 +38,8 @@ namespace QuickLook
         {
             // this object should be initialized before loading UI components, because many of which are binding to it.
             ContextObject = new ContextObject();
+
+            ContextObject.PropertyChanged += ContextObject_PropertyChanged;
 
             InitializeComponent();
 
@@ -59,7 +61,7 @@ namespace QuickLook
             {
                 if (Pinned)
                     return;
-                
+
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 

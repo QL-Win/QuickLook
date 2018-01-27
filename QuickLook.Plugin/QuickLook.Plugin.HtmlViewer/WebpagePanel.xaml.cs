@@ -20,7 +20,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using QuickLook.Helpers;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.HtmlViewer
 {

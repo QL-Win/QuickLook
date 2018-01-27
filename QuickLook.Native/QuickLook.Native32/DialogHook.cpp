@@ -99,7 +99,8 @@ void DialogHook::GetSelectedFromWoW64HookHelper(PWCHAR buffer)
 	if (hHelperWnd == nullptr)
 		return;
 
-	auto hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, MAX_PATH * sizeof WCHAR, SHARED_MEM_NAME);
+	auto hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, MAX_PATH * sizeof WCHAR,
+	                                  SHARED_MEM_NAME);
 	if (hMapFile == nullptr)
 		return;
 

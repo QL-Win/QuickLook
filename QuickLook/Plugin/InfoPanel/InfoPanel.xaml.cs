@@ -20,8 +20,8 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using QuickLook.ExtensionMethods;
-using QuickLook.Helpers;
+using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.InfoPanel
 {

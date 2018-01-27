@@ -21,6 +21,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
+using QuickLook.Common;
 using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer

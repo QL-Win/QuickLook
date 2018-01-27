@@ -24,7 +24,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PixelFormat = System.Windows.Media.PixelFormat;
 
-namespace QuickLook.ExtensionMethods
+namespace QuickLook.Common.ExtensionMethods
 {
     public static class BitmapExtensions
     {
@@ -46,6 +46,7 @@ namespace QuickLook.ExtensionMethods
                     data = source.LockBits(new Rectangle(0, 0, source.Width, source.Height),
                         ImageLockMode.ReadOnly, source.PixelFormat);
                 }
+
                 bs = BitmapSource.Create(source.Width, source.Height, Math.Floor(source.HorizontalResolution),
                     Math.Floor(source.VerticalResolution), ConvertPixelFormat(source.PixelFormat), null,
                     data.Scan0, data.Stride * source.Height, data.Stride);
@@ -94,6 +95,7 @@ namespace QuickLook.ExtensionMethods
                 case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
                     return PixelFormats.Bgr32;
             }
+
             return new PixelFormat();
         }
 
@@ -130,6 +132,7 @@ namespace QuickLook.ExtensionMethods
                         darks++;
                 });
             }
+
             image.UnlockBits(data);
             image.Dispose();
 

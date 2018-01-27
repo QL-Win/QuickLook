@@ -27,7 +27,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ImageMagick;
-using QuickLook.ExtensionMethods;
+using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.ImageViewer.Exiv2
 {

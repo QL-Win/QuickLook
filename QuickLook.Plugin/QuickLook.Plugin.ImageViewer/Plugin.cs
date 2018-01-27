@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using ImageMagick;
+using QuickLook.Common;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
@@ -38,9 +39,9 @@ namespace QuickLook.Plugin.ImageViewer
             // animated
             ".png", ".apng", ".gif"
         };
+        private Size _imageSize;
         private ImagePanel _ip;
         private Meta _meta;
-        private Size _imageSize;
 
         public int Priority => int.MaxValue;
 
@@ -62,7 +63,7 @@ namespace QuickLook.Plugin.ImageViewer
                 context.SetPreferredSizeFit(_imageSize, 0.8);
             else
                 context.PreferredSize = new Size(800, 600);
-            
+
             context.UseDarkTheme = true;
         }
 

@@ -34,9 +34,9 @@ HWND hMsgWindow = nullptr;
 UINT WM_HOOK_NOTIFY = 0;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                           _In_opt_ HINSTANCE hPrevInstance,
-                           _In_ LPWSTR lpCmdLine,
-                           _In_ int nCmdShow)
+                           _In_opt_                           HINSTANCE hPrevInstance,
+                           _In_                           LPWSTR lpCmdLine,
+                           _In_                           int nCmdShow)
 {
 	// do not run when double-clicking
 	if (wcsstr(GetCommandLine(), RUN_ARG) == nullptr)

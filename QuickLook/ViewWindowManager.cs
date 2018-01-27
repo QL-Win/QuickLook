@@ -20,8 +20,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using QuickLook.Helpers;
-using QuickLook.Plugin;
+using QuickLook.Common;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook
 {
@@ -149,10 +149,11 @@ namespace QuickLook
         private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
         {
             var plugin = _viewerWindow.Plugin.GetType();
-            
+
             _viewerWindow.BeginHide();
 
-            TrayIconManager.ShowNotification($"Failed to preview {Path.GetFileName(path)}", "Consider reporting this incident to QuickLook’s author.", true);
+            TrayIconManager.ShowNotification($"Failed to preview {Path.GetFileName(path)}",
+                "Consider reporting this incident to QuickLook’s author.", true);
 
             Debug.WriteLine(e.SourceException.ToString());
 

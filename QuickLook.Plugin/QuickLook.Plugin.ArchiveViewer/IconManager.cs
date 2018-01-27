@@ -211,8 +211,10 @@ namespace QuickLook.Plugin.ArchiveViewer
                 public readonly IntPtr hIcon;
                 private readonly int iIcon;
                 private readonly uint dwAttributes;
-                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxPath)] private readonly string szDisplayName;
-                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Namesize)] private readonly string szTypeName;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxPath)]
+                private readonly string szDisplayName;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Namesize)]
+                private readonly string szTypeName;
             }
         }
 

@@ -25,7 +25,7 @@ using System;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace QuickLook.Annotations
+namespace QuickLook.Common.Annotations
 {
     /// <summary>
     ///     Indicates that the value of the marked element could be <c>null</c> sometimes,
@@ -449,10 +449,10 @@ namespace QuickLook.Annotations
         }
 
         [UsedImplicitly]
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        public ImplicitUseKindFlags UseKindFlags { get; }
 
         [UsedImplicitly]
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        public ImplicitUseTargetFlags TargetFlags { get; }
     }
 
     [Flags]

@@ -20,6 +20,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using QuickLook.Common;
 
 namespace QuickLook.Plugin.IPreviewHandlers
 {

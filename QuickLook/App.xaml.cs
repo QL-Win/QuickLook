@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 
 namespace QuickLook
@@ -38,8 +39,6 @@ namespace QuickLook
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
         public static readonly bool IsWin10 = Environment.OSVersion.Version >= new Version(10, 0);
-        public static readonly string LocalDataPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"pooi.moe\QuickLook\");
 
         private bool _isFirstInstance;
         private Mutex _isRunning;

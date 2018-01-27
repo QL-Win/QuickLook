@@ -24,8 +24,8 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
-using QuickLook.Helpers;
-using QuickLook.Plugin;
+using QuickLook.Common;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook
 {
@@ -154,8 +154,6 @@ namespace QuickLook
         {
             _path = path;
             Plugin = matchedPlugin;
-
-            ContextObject.ViewerWindow = this;
 
             // get window size before showing it
             try

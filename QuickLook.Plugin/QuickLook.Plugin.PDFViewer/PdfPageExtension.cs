@@ -19,7 +19,7 @@ using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PDFiumSharp;
-using QuickLook.Helpers;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.PDFViewer
 {

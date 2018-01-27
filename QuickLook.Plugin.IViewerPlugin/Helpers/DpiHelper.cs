@@ -19,7 +19,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
     public static class DpiHelper
     {

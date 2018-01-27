@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace QuickLook.Plugin
+namespace QuickLook.Common
 {
     /// <summary>
     ///     Interface implemented by every QuickLook.Plugin

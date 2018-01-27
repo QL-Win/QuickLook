@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using QuickLook.Common;
 
 namespace QuickLook.Plugin.CsvViewer
 {

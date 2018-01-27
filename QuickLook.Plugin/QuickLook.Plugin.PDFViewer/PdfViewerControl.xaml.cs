@@ -26,7 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using PDFiumSharp;
-using QuickLook.ExtensionMethods;
+using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.PDFViewer
 {

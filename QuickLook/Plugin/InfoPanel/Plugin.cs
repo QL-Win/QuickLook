@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Windows;
+using QuickLook.Common;
 
 namespace QuickLook.Plugin.InfoPanel
 {

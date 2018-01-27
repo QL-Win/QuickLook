@@ -19,9 +19,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
-using QuickLook.NativeMethods;
+using QuickLook.Common.NativeMethods;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
     public class ProcessHelper
     {
@@ -63,7 +63,7 @@ namespace QuickLook.Helpers
 
         public static void WriteLog(string msg)
         {
-            var logFilePath = Path.Combine(App.LocalDataPath, @"QuickLook.Exception.log");
+            var logFilePath = Path.Combine(SettingHelper.LocalDataPath, @"QuickLook.Exception.log");
 
             using (var writer = new StreamWriter(new FileStream(logFilePath, FileMode.OpenOrCreate,
                 FileAccess.ReadWrite, FileShare.Read)))

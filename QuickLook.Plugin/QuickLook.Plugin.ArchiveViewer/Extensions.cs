@@ -47,6 +47,7 @@ namespace QuickLook.Plugin.ArchiveViewer
                 if (foundElement != null)
                     break;
             }
+
             return foundElement;
         }
     }

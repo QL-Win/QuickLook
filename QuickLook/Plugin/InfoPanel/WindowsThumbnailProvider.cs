@@ -118,7 +118,8 @@ namespace QuickLook.Plugin.InfoPanel
         private static IntPtr GetHBitmap(string fileName, int width, int height, ThumbnailOptions options)
         {
             var shellItem2Guid = new Guid(IShellItem2Guid);
-            var retCode = SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out var nativeShellItem);
+            var retCode =
+                SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out var nativeShellItem);
 
             if (retCode != 0)
                 throw Marshal.GetExceptionForHR(retCode);
@@ -132,7 +133,7 @@ namespace QuickLook.Plugin.InfoPanel
             var hr = ((IShellItemImageFactory) nativeShellItem).GetImage(nativeSize, options, out var hBitmap);
 
             Marshal.ReleaseComObject(nativeShellItem);
-            
+
             return hr == HResult.Ok ? hBitmap : IntPtr.Zero;
         }
 

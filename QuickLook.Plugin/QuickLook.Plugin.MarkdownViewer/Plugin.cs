@@ -21,6 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Threading;
+using QuickLook.Common;
 using QuickLook.Plugin.HtmlViewer;
 
 namespace QuickLook.Plugin.MarkdownViewer
@@ -37,7 +38,7 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && new[] {".md", ".rmd", ".maekdown"}.Any(path.ToLower().EndsWith);
+            return !Directory.Exists(path) && new[] {".md", ".rmd", ".markdown"}.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)

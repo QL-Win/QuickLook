@@ -23,10 +23,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
-    internal class SettingHelper
+    public class SettingHelper
     {
+        public static readonly string LocalDataPath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"pooi.moe\QuickLook\");
+
         private static readonly Dictionary<string, XmlDocument> FileCache = new Dictionary<string, XmlDocument>();
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -35,7 +38,7 @@ namespace QuickLook.Helpers
             if (!typeof(T).IsSerializable && !typeof(ISerializable).IsAssignableFrom(typeof(T)))
                 throw new InvalidOperationException("A serializable Type is required");
 
-            var file = Path.Combine(App.LocalDataPath,
+            var file = Path.Combine(LocalDataPath,
                 (calling ?? Assembly.GetCallingAssembly()).GetName().Name + ".config");
 
             var doc = GetConfigFile(file);
@@ -52,7 +55,7 @@ namespace QuickLook.Helpers
             if (!value.GetType().IsSerializable)
                 throw new NotSupportedException("New value if not serializable.");
 
-            var file = Path.Combine(App.LocalDataPath,
+            var file = Path.Combine(LocalDataPath,
                 (calling ?? Assembly.GetCallingAssembly()).GetName().Name + ".config");
 
             WriteSettingToXml(GetConfigFile(file), id, value);

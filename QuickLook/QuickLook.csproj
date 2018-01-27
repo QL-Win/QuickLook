@@ -123,20 +123,12 @@
     <Compile Include="Converters\WindowStateNormalToThicknessConverter.cs" />
     <Compile Include="Converters\WindowStateMaximizedToThicknessConverter.cs" />
     <Compile Include="Converters\ScaledValueConverter.cs" />
-    <Compile Include="ExtensionMethods\BitmapExtensions.cs" />
     <Compile Include="Controls\BusyDecorator\ControlExtensions.cs" />
-    <Compile Include="ExtensionMethods\EnumerableExtensions.cs" />
-    <Compile Include="ExtensionMethods\FileExtensions.cs" />
     <Compile Include="FocusMonitor.cs" />
     <Compile Include="Helpers\AutoStartupHelper.cs" />
     <Compile Include="Controls\BusyDecorator\BackgroundVisualHost.cs" />
     <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
     <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
-    <Compile Include="ExtensionMethods\TypeExtensions.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\ProcessHelper.cs" />
-    <Compile Include="Helpers\SettingHelper.cs" />
-    <Compile Include="Helpers\TranslationHelper.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
@@ -145,11 +137,7 @@
     </Compile>
     <Compile Include="Plugin\InfoPanel\Plugin.cs" />
     <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
-    <Compile Include="Plugin\IViewer.cs" />
-    <Compile Include="Helpers\DpiHelper.cs" />
     <Compile Include="TrayIconManager.cs" />
-    <Compile Include="Plugin\ContextObject.cs" />
-    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Helpers\Updater.cs" />
     <Compile Include="ViewerWindow.Actions.cs" />
     <Compile Include="ViewerWindow.Properties.cs" />
@@ -185,11 +173,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExtensionMethods\DispatcherExtensions.cs" />
     <Compile Include="BackgroundListener.cs" />
-    <Compile Include="NativeMethods\Kernel32.cs" />
-    <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="ViewerWindow.xaml.cs">
       <DependentUpon>ViewerWindow.xaml</DependentUpon>
@@ -276,6 +260,16 @@
   <ItemGroup>
     <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
     <None Include="Controls\GlassLayer\GaussianBlur.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QuickLook.Plugin.IViewerPlugin\QuickLook.Common.csproj">
+      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+      <Name>QuickLook.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

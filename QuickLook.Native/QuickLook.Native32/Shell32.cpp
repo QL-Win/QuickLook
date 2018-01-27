@@ -142,7 +142,8 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	VARIANT pvarLoc;
 	VariantInit(&pvarLoc);
 	long phwnd;
-	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(&pwba))))
+	if (FAILED(psw->FindWindowSW(&pvarLoc, &pvarLoc, SWC_DESKTOP, &phwnd, SWFO_NEEDDISPATCH, reinterpret_cast<IDispatch**>(
+		&pwba))))
 		return;
 
 	if (HelperMethods::IsCursorActivated(reinterpret_cast<HWND>(LongToHandle(phwnd))))

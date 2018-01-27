@@ -98,6 +98,7 @@ namespace QuickLook.NativeMethods
             {
                 Debug.WriteLine(e);
             }
+
             return sb?.ToString() ?? string.Empty;
         }
 

@@ -29,9 +29,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using QuickLook.Annotations;
-using QuickLook.ExtensionMethods;
-using QuickLook.Helpers;
+using QuickLook.Common.Annotations;
+using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
@@ -186,6 +186,7 @@ namespace QuickLook.Plugin.ImageViewer
                     _isZoomFactorFirstSet = false;
                     return;
                 }
+
                 if (ShowZoomLevelInfo)
                     ((Storyboard) zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
             }

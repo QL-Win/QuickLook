@@ -17,7 +17,7 @@
 
 using System;
 
-namespace QuickLook.ExtensionMethods
+namespace QuickLook.Common.ExtensionMethods
 {
     public static class FileExtensions
     {

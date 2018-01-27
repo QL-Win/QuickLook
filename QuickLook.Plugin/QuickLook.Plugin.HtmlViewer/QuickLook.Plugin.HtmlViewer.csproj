@@ -93,8 +93,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\QuickLook.Plugin.IViewerPlugin\QuickLook.Common.csproj">
+      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+      <Name>QuickLook.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
-      <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
+      <Project>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</Project>
       <Name>QuickLook</Name>
       <Private>False</Private>
     </ProjectReference>

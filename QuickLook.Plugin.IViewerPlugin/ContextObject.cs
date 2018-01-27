@@ -21,10 +21,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using QuickLook.Annotations;
-using QuickLook.Helpers;
+using QuickLook.Common.Annotations;
+using QuickLook.Common.Helpers;
 
-namespace QuickLook.Plugin
+namespace QuickLook.Common
 {
     /// <summary>
     ///     A runtime object which allows interaction between this plugin and QuickLook.
@@ -41,11 +41,6 @@ namespace QuickLook.Plugin
         private bool _titlebarOverlap;
         private bool _useDarkTheme;
         private object _viewerContent;
-
-        /// <summary>
-        ///     Get the viewer window.
-        /// </summary>
-        public ViewerWindow ViewerWindow { get; internal set; }
 
         /// <summary>
         ///     Get or set the title of Viewer window.
@@ -181,16 +176,11 @@ namespace QuickLook.Plugin
             set
             {
                 _useDarkTheme = value;
-                ApplyViewerWindowTheme();
+                OnPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void ApplyViewerWindowTheme()
-        {
-            ViewerWindow?.SwitchTheme(UseDarkTheme);
-        }
 
         /// <summary>
         ///     Get a string from translation Xml document.
@@ -220,17 +210,6 @@ namespace QuickLook.Plugin
         }
 
         /// <summary>
-        ///     Show a notification balloon.
-        /// </summary>
-        /// <param name="title">Title of the notification.</param>
-        /// <param name="content">The content.</param>
-        /// <param name="isError">Is this indicates a error?</param>
-        public void ShowNotification(string title, string content, bool isError = false)
-        {
-            TrayIconManager.ShowNotification(title, content, isError);
-        }
-
-        /// <summary>
         ///     Set the size of viewer window, scale or shrink to fit (to screen resolution).
         ///     The window can take maximum (maxRatio*resolution) space.
         /// </summary>
@@ -254,7 +233,7 @@ namespace QuickLook.Plugin
             return ratio;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             Title = string.Empty;
             IsBusy = true;
@@ -269,7 +248,6 @@ namespace QuickLook.Plugin
             TitlebarColourVisibility = true;
 
             ViewerContent = null;
-            ViewerWindow = null;
         }
 
         [NotifyPropertyChangedInvocator]

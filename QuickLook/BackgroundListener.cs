@@ -18,7 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using QuickLook.Helpers;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook
 {

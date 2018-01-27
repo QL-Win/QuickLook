@@ -19,7 +19,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace QuickLook.ExtensionMethods
+namespace QuickLook.Common.ExtensionMethods
 {
     public static class DispatcherExtensions
     {

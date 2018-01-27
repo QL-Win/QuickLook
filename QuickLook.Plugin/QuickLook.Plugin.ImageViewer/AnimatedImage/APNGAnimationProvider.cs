@@ -43,10 +43,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             BitmapSource previousStateRenderedFrame = null;
             foreach (var nextFrame in decoder.Frames)
             {
-                var nextRenderedFrame = MakeNextFrame(header, nextFrame, currentFrame, currentRenderedFrame, previousStateRenderedFrame);
+                var nextRenderedFrame = MakeNextFrame(header, nextFrame, currentFrame, currentRenderedFrame,
+                    previousStateRenderedFrame);
 
                 var delay = TimeSpan.FromSeconds(
-                    (double)nextFrame.fcTLChunk.DelayNum /
+                    (double) nextFrame.fcTLChunk.DelayNum /
                     (nextFrame.fcTLChunk.DelayDen == 0 ? 100 : nextFrame.fcTLChunk.DelayDen));
 
                 animator.KeyFrames.Add(new DiscreteObjectKeyFrame(nextRenderedFrame, clock));
@@ -79,40 +80,35 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
                 {
                     var freeRegion = new CombinedGeometry(GeometryCombineMode.Xor,
-                                                  new RectangleGeometry(fullRect),
-                                                 new RectangleGeometry(frameRect));
-                    context.PushOpacityMask(new DrawingBrush(new GeometryDrawing(Brushes.Transparent, null, freeRegion)));
+                        new RectangleGeometry(fullRect),
+                        new RectangleGeometry(frameRect));
+                    context.PushOpacityMask(
+                        new DrawingBrush(new GeometryDrawing(Brushes.Transparent, null, freeRegion)));
                 }
 
                 if (currentFrame != null && currentRenderedFrame != null)
-                {
                     switch (currentFrame.fcTLChunk.DisposeOp)
                     {
                         case DisposeOps.APNGDisposeOpNone:
                             // restore currentRenderedFrame
-                            if (currentRenderedFrame != null)
-                            {
-                                context.DrawImage(currentRenderedFrame, fullRect);
-                            }
+                            if (currentRenderedFrame != null) context.DrawImage(currentRenderedFrame, fullRect);
                             break;
                         case DisposeOps.APNGDisposeOpPrevious:
                             // restore previousStateRenderedFrame
                             if (previousStateRenderedFrame != null)
-                            {
                                 context.DrawImage(previousStateRenderedFrame, fullRect);
-                            }
                             break;
                         case DisposeOps.APNGDisposeOpBackground:
                             // do nothing
                             break;
                     }
-                }
 
                 // unprotect region and draw the next frame
                 if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
                     context.Pop();
                 context.DrawImage(fs, frameRect);
             }
+
             var bitmap = new RenderTargetBitmap(
                 header.Width, header.Height,
                 Math.Floor(fs.DpiX), Math.Floor(fs.DpiY),

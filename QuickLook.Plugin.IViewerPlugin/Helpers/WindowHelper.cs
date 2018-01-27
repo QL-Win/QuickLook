@@ -22,12 +22,17 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
-using QuickLook.NativeMethods;
+using QuickLook.Common.NativeMethods;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
-    internal static class WindowHelper
+    public static class WindowHelper
     {
+        public enum WindowCompositionAttribute
+        {
+            WcaAccentPolicy = 19
+        }
+
         public static Rect GetCurrentWindowRect()
         {
             var screen = Screen.FromPoint(Cursor.Position).WorkingArea;
@@ -54,10 +59,10 @@ namespace QuickLook.Helpers
         {
             int pxLeft = 0, pxTop = 0;
             if (left != 0 || top != 0)
-                window.TransformToPixels(left, top,
+                TransformToPixels(window, left, top,
                     out pxLeft, out pxTop);
 
-            window.TransformToPixels(width, height,
+            TransformToPixels(window, width, height,
                 out var pxWidth, out var pxHeight);
 
             User32.MoveWindow(new WindowInteropHelper(window).Handle, pxLeft, pxTop, pxWidth, pxHeight, true);
@@ -124,16 +129,11 @@ namespace QuickLook.Helpers
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct WindowCompositionAttributeData
+        public struct WindowCompositionAttributeData
         {
             public WindowCompositionAttribute Attribute;
             public IntPtr Data;
             public int SizeOfData;
-        }
-
-        internal enum WindowCompositionAttribute
-        {
-            WcaAccentPolicy = 19
         }
 
         private enum AccentState

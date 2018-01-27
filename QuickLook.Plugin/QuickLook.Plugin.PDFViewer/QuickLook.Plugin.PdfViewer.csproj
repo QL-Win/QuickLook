@@ -88,9 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
-      <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
-      <Name>QuickLook</Name>
+    <ProjectReference Include="..\..\QuickLook.Plugin.IViewerPlugin\QuickLook.Common.csproj">
+      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+      <Name>QuickLook.Common</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj">

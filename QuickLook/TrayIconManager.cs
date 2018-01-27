@@ -18,6 +18,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.Properties;
 

@@ -19,7 +19,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using QuickLook.ExtensionMethods;
+using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.ArchiveViewer
 {

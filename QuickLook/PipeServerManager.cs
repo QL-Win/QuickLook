@@ -41,9 +41,9 @@ namespace QuickLook
         private const string PipeName = "QuickLook.App.Pipe";
         private static PipeServerManager _instance;
 
-        private NamedPipeServerStream _server;
-
         private DispatcherOperation _lastOperation;
+
+        private NamedPipeServerStream _server;
 
         public PipeServerManager()
         {

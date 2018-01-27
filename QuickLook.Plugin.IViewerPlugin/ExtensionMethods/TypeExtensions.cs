@@ -16,16 +16,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 
-namespace QuickLook.ExtensionMethods
+namespace QuickLook.Common.ExtensionMethods
 {
-    public static class EnumerableExtensions
+    public static class TypeExtensions
     {
-        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        public static T CreateInstance<T>(this Type t)
         {
-            foreach (var item in enumeration)
-                action(item);
+            return (T) Activator.CreateInstance(t);
         }
     }
 }

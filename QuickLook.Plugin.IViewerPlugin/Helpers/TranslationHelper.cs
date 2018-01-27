@@ -22,9 +22,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.XPath;
 
-namespace QuickLook.Helpers
+namespace QuickLook.Common.Helpers
 {
-    internal class TranslationHelper
+    public class TranslationHelper
     {
         private static readonly CultureInfo CurrentCultureInfo = CultureInfo.CurrentUICulture;
         //private static readonly CultureInfo CurrentCultureInfo = CultureInfo.GetCultureInfo("zh-CN");

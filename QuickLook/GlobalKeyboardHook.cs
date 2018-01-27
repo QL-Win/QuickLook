@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
-using QuickLook.NativeMethods;
+using QuickLook.Common.NativeMethods;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using KeyEventHandler = System.Windows.Forms.KeyEventHandler;
 
@@ -89,6 +89,7 @@ namespace QuickLook
                             return 1;
                     }
                 }
+
             return User32.CallNextHookEx(_hhook, code, wParam, ref lParam);
         }
 

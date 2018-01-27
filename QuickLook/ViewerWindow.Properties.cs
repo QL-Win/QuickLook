@@ -19,8 +19,8 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using QuickLook.Annotations;
-using QuickLook.Plugin;
+using QuickLook.Common;
+using QuickLook.Common.Annotations;
 
 namespace QuickLook
 {
@@ -50,6 +50,19 @@ namespace QuickLook
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        private void ContextObject_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ContextObject.UseDarkTheme):
+                    SwitchTheme(ContextObject.UseDarkTheme);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SwitchTheme(bool dark)

@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
+using QuickLook.Common.Helpers;
 using QuickLook.Controls;
 
 namespace QuickLook.Helpers

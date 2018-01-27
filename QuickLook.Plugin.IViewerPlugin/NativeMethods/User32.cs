@@ -19,12 +19,14 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
-using QuickLook.Helpers;
+using QuickLook.Common.Helpers;
 
-namespace QuickLook.NativeMethods
+namespace QuickLook.Common.NativeMethods
 {
-    internal static class User32
+    public static class User32
     {
+        public delegate int KeyboardHookProc(int code, int wParam, ref KeyboardHookStruct lParam);
+
         [DllImport("user32.dll")]
         public static extern int MoveWindow(IntPtr hWnd, int x, int y, int nWidth, int nHeight,
             [MarshalAs(UnmanagedType.Bool)] bool bRepaint);
@@ -34,56 +36,54 @@ namespace QuickLook.NativeMethods
             uint uFlags);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance,
+        public static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance,
             uint threadId);
 
         [DllImport("user32.dll")]
-        internal static extern bool UnhookWindowsHookEx(IntPtr hInstance);
+        public static extern bool UnhookWindowsHookEx(IntPtr hInstance);
 
         [DllImport("user32.dll")]
-        internal static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref KeyboardHookStruct lParam);
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref KeyboardHookStruct lParam);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        public static extern IntPtr SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         [DllImport("user32.dll")]
-        internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetForegroundWindow();
+        public static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr processId);
+        public static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr processId);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+        public static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
+        public static extern IntPtr AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetFocus();
+        public static extern IntPtr GetFocus();
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetParent(IntPtr hWnd);
+        public static extern IntPtr GetParent(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd,
+        public static extern int SetWindowCompositionAttribute(IntPtr hwnd,
             ref WindowHelper.WindowCompositionAttributeData data);
 
-        internal delegate int KeyboardHookProc(int code, int wParam, ref KeyboardHookStruct lParam);
-
         [SuppressMessage("ReSharper", "InconsistentNaming")]
-        internal struct KeyboardHookStruct
+        public struct KeyboardHookStruct
         {
-            internal int vkCode;
-            internal int scanCode;
-            internal int flags;
-            internal int time;
-            internal int dwExtraInfo;
+            public int vkCode;
+            public int scanCode;
+            public int flags;
+            public int time;
+            public int dwExtraInfo;
         }
 
         // ReSharper disable InconsistentNaming

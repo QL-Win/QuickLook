@@ -19,7 +19,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using QuickLook.Helpers;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook.Controls.GlassLayer
 {
