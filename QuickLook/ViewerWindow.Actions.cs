@@ -273,7 +273,6 @@ namespace QuickLook
             //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
 
             ViewWindowManager.GetInstance().ForgetCurrentWindow();
-            BeginClose();
 
             ProcessHelper.PerformAggressiveGC();
         }
@@ -281,7 +280,6 @@ namespace QuickLook
         internal void BeginClose()
         {
             UnloadPlugin();
-            busyDecorator.Dispose();
 
             Close();
 
