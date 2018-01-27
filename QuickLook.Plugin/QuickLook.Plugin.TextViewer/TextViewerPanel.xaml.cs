@@ -22,6 +22,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 using QuickLook.Common;
+using QuickLook.Common.Helpers;
 using UtfUnknown;
 
 namespace QuickLook.Plugin.TextViewer
@@ -41,8 +42,7 @@ namespace QuickLook.Plugin.TextViewer
 
             viewer.PreviewMouseWheel += Viewer_MouseWheel;
 
-            viewer.FontFamily =
-                new FontFamily(context.GetString("Editor_FontFamily"));
+            viewer.FontFamily = new FontFamily(TranslationHelper.Get("Editor_FontFamily"));
 
             LoadFile(path);
         }

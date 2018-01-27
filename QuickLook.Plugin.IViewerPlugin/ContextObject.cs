@@ -17,8 +17,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Common.Annotations;
@@ -181,33 +179,6 @@ namespace QuickLook.Common
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        ///     Get a string from translation Xml document.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null)
-        {
-            return TranslationHelper.Get(id, file, locale, failsafe, Assembly.GetCallingAssembly());
-        }
-
-        /// <summary>
-        ///     Get a setting from Xml document.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public T GetSetting<T>(string id, T failsafe = default(T))
-        {
-            return SettingHelper.Get(id, failsafe, Assembly.GetCallingAssembly());
-        }
-
-        /// <summary>
-        ///     Set a setting from Xml document.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SetSetting(string id, object value)
-        {
-            SettingHelper.Set(id, value, Assembly.GetCallingAssembly());
-        }
 
         /// <summary>
         ///     Set the size of viewer window, scale or shrink to fit (to screen resolution).

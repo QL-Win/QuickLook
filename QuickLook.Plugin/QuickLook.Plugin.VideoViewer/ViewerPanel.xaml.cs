@@ -32,6 +32,7 @@ using Meta.Vlc.Interop.Media;
 using QuickLook.Common;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using MediaState = Meta.Vlc.Interop.Media.MediaState;
 
 namespace QuickLook.Plugin.VideoViewer
@@ -169,7 +170,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Dispose()
         {
-            _context.SetSetting("Volume", mediaElement.Volume);
+            SettingHelper.Set("Volume", mediaElement.Volume);
 
             try
             {
@@ -320,7 +321,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             mediaElement.LoadMediaWithOptions(path, ":avcodec-hw=dxva2");
-            mediaElement.Volume = _context.GetSetting("Volume", 50);
+            mediaElement.Volume = SettingHelper.Get("Volume", 50);
 
             mediaElement.Play();
         }
