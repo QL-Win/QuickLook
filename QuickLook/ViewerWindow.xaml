@@ -71,9 +71,9 @@
                     <DockPanel.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
                     </DockPanel.Effect>
-                    <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
+                    <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow" ToolTip="Close"
                             Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
-                    <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"
+                    <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus" ToolTip="Toggle Maximize and Normal"
                             Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
@@ -95,7 +95,7 @@
                             </TextBlock>
                         </Button.Content>
                     </Button>
-                    <Button DockPanel.Dock="Left" x:Name="buttonTop" Tag="Auto">
+                    <Button DockPanel.Dock="Left" x:Name="buttonTop" Tag="Auto" ToolTip="Stay on Top">
                         <Button.Resources>
                             <Grid x:Key="ContentTop">
                                 <TextBlock>&#xE898;</TextBlock>
@@ -116,7 +116,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button DockPanel.Dock="Left" x:Name="buttonPin" Tag="Auto">
+                    <Button DockPanel.Dock="Left" x:Name="buttonPin" Tag="Auto" ToolTip="Prevent Closing">
                         <Button.Resources>
                             <Grid x:Key="ContentPin">
                                 <TextBlock>&#xE840;</TextBlock>
@@ -138,7 +138,7 @@
                         </Button.Style>
                     </Button>
                     <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
-                            Content="&#xE72D;" />
+                            Content="&#xE72D;" ToolTip="Open With..." />
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
                                    HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"

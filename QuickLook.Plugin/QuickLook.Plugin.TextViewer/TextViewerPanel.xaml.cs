@@ -78,7 +78,7 @@ namespace QuickLook.Plugin.TextViewer
 
         private void LoadFile(string path)
         {
-            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 const int bufferLength = 1 * 1024 * 1024;
                 var buffer = new byte[bufferLength];

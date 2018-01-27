@@ -44,7 +44,7 @@ namespace QuickLook.Plugin.CsvViewer
             const int limit = 10000;
             var binded = false;
 
-            using (var sr = new StreamReader(path))
+            using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
                 using (var parser = new CsvParser(sr))
                 {
