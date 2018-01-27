@@ -41,7 +41,7 @@ namespace QuickLook
 
             InitializeComponent();
 
-            FontFamily = new FontFamily(TranslationHelper.GetString("UI_FontFamily", failsafe: "Segoe UI"));
+            FontFamily = new FontFamily(TranslationHelper.Get("UI_FontFamily", failsafe: "Segoe UI"));
 
             SizeChanged += SaveWindowSizeOnSizeChanged;
 

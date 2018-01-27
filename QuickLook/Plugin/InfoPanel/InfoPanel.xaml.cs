@@ -68,7 +68,7 @@ namespace QuickLook.Plugin.InfoPanel
             filename.Text = string.IsNullOrEmpty(name) ? path : name;
 
             var last = File.GetLastWriteTime(path);
-            modDate.Text = string.Format(TranslationHelper.GetString("InfoPanel_LastModified"),
+            modDate.Text = string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
                 last.ToString(CultureInfo.CurrentCulture));
 
             Stop = false;
@@ -91,7 +91,7 @@ namespace QuickLook.Plugin.InfoPanel
                     Dispatcher.Invoke(() =>
                     {
                         totalSize.Text =
-                            string.Format(TranslationHelper.GetString("InfoPanel_DriveSize"),
+                            string.Format(TranslationHelper.Get("InfoPanel_DriveSize"),
                                 totalSpace.ToPrettySize(2),
                                 totalFreeSpace.ToPrettySize(2));
                     });
@@ -107,16 +107,16 @@ namespace QuickLook.Plugin.InfoPanel
                             string t;
                             var folders = totalDirsL == 0
                                 ? string.Empty
-                                : string.Format(TranslationHelper.GetString(
+                                : string.Format(TranslationHelper.Get(
                                     totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
                             var files = totalFilesL == 0
                                 ? string.Empty
-                                : string.Format(TranslationHelper.GetString(
+                                : string.Format(TranslationHelper.Get(
                                     totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
 
                             if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
                                 t = string.Format(
-                                    TranslationHelper.GetString("InfoPanel_FolderAndFile"), folders, files);
+                                    TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
                             else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
                                 t = string.Empty;
                             else

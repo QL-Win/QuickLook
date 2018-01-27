@@ -30,10 +30,9 @@ namespace QuickLook.Helpers
         //private static readonly CultureInfo CurrentCultureInfo = CultureInfo.GetCultureInfo("zh-CN");
 
         private static readonly Dictionary<string, XPathNavigator> FileCache = new Dictionary<string, XPathNavigator>();
-        private static readonly Dictionary<string, string> StringCache = new Dictionary<string, string>();
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null,
+        public static string Get(string id, string file = null, CultureInfo locale = null, string failsafe = null,
             Assembly calling = null)
         {
             if (file == null)
@@ -69,12 +68,7 @@ namespace QuickLook.Helpers
 
         private static string GetStringFromXml(XPathNavigator nav, string id, CultureInfo locale)
         {
-            var cacheKey = $"{nav.BaseURI.GetHashCode()}::{locale.Name}::{id}";
-            if (StringCache.ContainsKey(cacheKey))
-                return StringCache[cacheKey];
-
             var result = nav.SelectSingleNode($@"/Translations/{locale.Name}/{id}");
-            StringCache.Add(cacheKey, result?.Value);
 
             return result?.Value;
         }

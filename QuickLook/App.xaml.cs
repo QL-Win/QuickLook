@@ -25,7 +25,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using QuickLook.Helpers;
-using QuickLook.Properties;
 
 namespace QuickLook
 {
@@ -39,8 +38,8 @@ namespace QuickLook
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
         public static readonly bool IsWin10 = Environment.OSVersion.Version >= new Version(10, 0);
-        public static readonly string LocalDataPath = Path.GetFullPath(Path.Combine(ConfigurationManager
-            .OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath, @"..\..\"));
+        public static readonly string LocalDataPath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"pooi.moe\QuickLook\");
 
         private bool _isFirstInstance;
         private Mutex _isRunning;
@@ -74,7 +73,7 @@ namespace QuickLook
                     RemoteCallShowPreview(e);
                 // second instance: duplicate
                 else
-                    MessageBox.Show(TranslationHelper.GetString("APP_SECOND"));
+                    MessageBox.Show(TranslationHelper.Get("APP_SECOND"));
 
                 Shutdown();
                 return;
@@ -91,24 +90,23 @@ namespace QuickLook
 
         private void CheckUpdate()
         {
-            if (DateTime.Now - Settings.Default.LastUpdate < TimeSpan.FromDays(7))
+            if (DateTime.Now - SettingHelper.Get<DateTime>("LastUpdate") < TimeSpan.FromDays(7))
                 return;
 
             Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
-            Settings.Default.LastUpdate = DateTime.Now;
-            Settings.Default.Save();
+            SettingHelper.Set("LastUpdate", DateTime.Now);
         }
 
         private void UpgradeSettings()
         {
             try
             {
-                if (!Settings.Default.Upgraded)
+                if (!SettingHelper.Get("Upgraded", true))
                     return;
 
                 Updater.CollectAndShowReleaseNotes();
 
-                Settings.Default.Upgrade();
+                SettingHelper.Set("Upgraded", false);
             }
             catch (ConfigurationErrorsException e)
             {
@@ -124,8 +122,7 @@ namespace QuickLook
                 //return;
             }
 
-            Settings.Default.Upgraded = false;
-            Settings.Default.Save();
+            SettingHelper.Set("Upgraded", false);
         }
 
         private void RemoteCallShowPreview(StartupEventArgs e)
@@ -137,7 +134,7 @@ namespace QuickLook
         {
             TrayIconManager.GetInstance();
             if (!e.Args.Contains("/autorun") && !IsUWP)
-                TrayIconManager.ShowNotification("", TranslationHelper.GetString("APP_START"));
+                TrayIconManager.ShowNotification("", TranslationHelper.Get("APP_START"));
             if (e.Args.Contains("/first"))
                 AutoStartupHelper.CreateAutorunShortcut();
 

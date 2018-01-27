@@ -198,7 +198,25 @@ namespace QuickLook.Plugin
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetString(string id, string file = null, CultureInfo locale = null, string failsafe = null)
         {
-            return TranslationHelper.GetString(id, file, locale, failsafe, Assembly.GetCallingAssembly());
+            return TranslationHelper.Get(id, file, locale, failsafe, Assembly.GetCallingAssembly());
+        }
+
+        /// <summary>
+        ///     Get a setting from Xml document.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public T GetSetting<T>(string id, T failsafe = default(T))
+        {
+            return SettingHelper.Get(id, failsafe, Assembly.GetCallingAssembly());
+        }
+
+        /// <summary>
+        ///     Set a setting from Xml document.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public void SetSetting(string id, object value)
+        {
+            SettingHelper.Set(id, value, Assembly.GetCallingAssembly());
         }
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace QuickLook.Helpers
                         if (!silent)
                             Application.Current.Dispatcher.Invoke(
                                 () => TrayIconManager.ShowNotification("",
-                                    TranslationHelper.GetString("Update_NoUpdate")));
+                                    TranslationHelper.Get("Update_NoUpdate")));
                         return;
                     }
 
@@ -58,7 +58,7 @@ namespace QuickLook.Helpers
                         () =>
                         {
                             TrayIconManager.ShowNotification("",
-                                string.Format(TranslationHelper.GetString("Update_Found"), nVersion),
+                                string.Format(TranslationHelper.Get("Update_Found"), nVersion),
                                 timeout: 20000,
                                 clickEvent:
                                 () => Process.Start(
@@ -70,7 +70,7 @@ namespace QuickLook.Helpers
                     Debug.WriteLine(e.Message);
                     Application.Current.Dispatcher.Invoke(
                         () => TrayIconManager.ShowNotification("",
-                            string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
+                            string.Format(TranslationHelper.Get("Update_Error"), e.Message)));
                 }
             });
         }
@@ -106,7 +106,7 @@ namespace QuickLook.Helpers
                     Debug.WriteLine(e.Message);
                     Application.Current.Dispatcher.Invoke(
                         () => TrayIconManager.ShowNotification("",
-                            string.Format(TranslationHelper.GetString("Update_Error"), e.Message)));
+                            string.Format(TranslationHelper.Get("Update_Error"), e.Message)));
                 }
             });
         }
