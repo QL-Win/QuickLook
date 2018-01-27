@@ -19,8 +19,8 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using QuickLook.Common;
 using QuickLook.Common.Annotations;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook
 {

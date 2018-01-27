@@ -46,7 +46,7 @@
     <Compile Include="..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
-    <Compile Include="ContextObject.cs" />
+    <Compile Include="Plugin\ContextObject.cs" />
     <Compile Include="Helpers\DpiHelper.cs" />
     <Compile Include="ExtensionMethods\BitmapExtensions.cs" />
     <Compile Include="ExtensionMethods\DispatcherExtensions.cs" />
@@ -54,7 +54,7 @@
     <Compile Include="ExtensionMethods\FileExtensions.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="IViewer.cs" />
+    <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -64,5 +64,6 @@
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

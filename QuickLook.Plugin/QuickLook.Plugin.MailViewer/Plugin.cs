@@ -21,7 +21,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using MsgReader;
-using QuickLook.Common;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
 
 namespace QuickLook.Plugin.MailViewer

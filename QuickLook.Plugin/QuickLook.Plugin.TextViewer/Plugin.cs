@@ -18,7 +18,7 @@
 using System.IO;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Highlighting;
-using QuickLook.Common;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.TextViewer
 {

@@ -21,8 +21,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using QuickLook.Common;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook
 {

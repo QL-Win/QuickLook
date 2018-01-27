@@ -21,7 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Threading;
-using QuickLook.Common;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
 
 namespace QuickLook.Plugin.MarkdownViewer

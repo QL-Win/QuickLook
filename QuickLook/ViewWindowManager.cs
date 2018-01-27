@@ -20,8 +20,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using QuickLook.Common;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook
 {

@@ -20,7 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using ImageMagick;
-using QuickLook.Common;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer

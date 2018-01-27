@@ -21,7 +21,7 @@ using System.Linq;
 using Meta.Vlc;
 using Meta.Vlc.Interop.Media;
 using Meta.Vlc.Wpf;
-using QuickLook.Common;
+using QuickLook.Common.Plugin;
 using Size = System.Windows.Size;
 using VideoTrack = Meta.Vlc.VideoTrack;
 

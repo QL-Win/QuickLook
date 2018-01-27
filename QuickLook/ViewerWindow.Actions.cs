@@ -24,8 +24,8 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
-using QuickLook.Common;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook
 {

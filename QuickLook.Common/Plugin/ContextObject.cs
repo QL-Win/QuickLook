@@ -22,7 +22,7 @@ using System.Windows;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 
-namespace QuickLook.Common
+namespace QuickLook.Common.Plugin
 {
     /// <summary>
     ///     A runtime object which allows interaction between this plugin and QuickLook.
