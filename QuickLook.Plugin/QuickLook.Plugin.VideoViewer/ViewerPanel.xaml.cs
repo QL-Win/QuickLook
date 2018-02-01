@@ -111,26 +111,7 @@ namespace QuickLook.Plugin.VideoViewer
             try
             {
                 CoverArt = null;
-                if (mediaElement.IsOpening)
-                {
-                    void DelayedDisposeEvent(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-                    {
-                        var me = (Unosquare.FFME.MediaElement) sender;
-
-                        if (propertyChangedEventArgs.PropertyName != nameof(me.IsPlaying))
-                            return;
-                        if (me.IsPlaying != true)
-                            return;
-
-                        me.PropertyChanged -= DelayedDisposeEvent;
-                        me.IsMuted = true;
-                        Task.Delay(200).ContinueWith(t => me.Dispose());
-                    }
-
-                    mediaElement.PropertyChanged += DelayedDisposeEvent;
-                }
-                else
-                    mediaElement.Dispose();
+                mediaElement.Dispose();
 
                 mediaElement = null;
             }
@@ -252,11 +233,11 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path)
         {
             UpdateMeta(path);
-
-            mediaElement.Source = new Uri(path);
+            
             mediaElement.Volume = 0.5;
+            mediaElement.Source = new Uri(path);
 
-            mediaElement.Play();
+            mediaElement.MediaOpened += (sender, e) => mediaElement?.Play();
         }
 
         [NotifyPropertyChangedInvocator]

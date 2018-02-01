@@ -510,6 +510,17 @@
             in a stream of CC packets.
             </summary>
         </member>
+        <member name="M:Unosquare.FFME.ClosedCaptions.ClosedCaptionCollection.#ctor(System.Collections.Generic.List{Unosquare.FFME.ClosedCaptions.ClosedCaptionPacket})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.ClosedCaptions.ClosedCaptionCollection"/> class.
+            </summary>
+            <param name="closedCaptions">The closed captions.</param>
+        </member>
+        <member name="P:Unosquare.FFME.ClosedCaptions.ClosedCaptionCollection.All">
+            <summary>
+            Gets all the CC packets as originally provided in the constructor.
+            </summary>
+        </member>
         <member name="P:Unosquare.FFME.ClosedCaptions.ClosedCaptionCollection.CC1">
             <summary>
             The CC1 Track Packets
@@ -529,13 +540,6 @@
             <summary>
             The CC4 Track Packets
             </summary>
-        </member>
-        <member name="M:Unosquare.FFME.ClosedCaptions.ClosedCaptionCollection.Add(Unosquare.FFME.ClosedCaptions.ClosedCaptionPacket)">
-            <summary>
-            Adds the specified packet and automatically places it on the right track.
-            If the track requires sorting it does so by reordering packets based on their timestamp.
-            </summary>
-            <param name="item">The item.</param>
         </member>
         <member name="T:Unosquare.FFME.ClosedCaptions.ClosedCaptionPacket">
             <summary>
@@ -863,14 +867,14 @@
             </summary>
             <returns>The awaitable command</returns>
         </member>
-        <member name="M:Unosquare.FFME.Commands.MediaCommandManager.Seek(System.TimeSpan)">
+        <member name="M:Unosquare.FFME.Commands.MediaCommandManager.EnqueueSeek(System.TimeSpan)">
             <summary>
             Seeks to the specified position within the media.
             This command is a queued command
             </summary>
             <param name="position">The position.</param>
         </member>
-        <member name="M:Unosquare.FFME.Commands.MediaCommandManager.SetSpeedRatio(System.Double)">
+        <member name="M:Unosquare.FFME.Commands.MediaCommandManager.EnqueueSpeedRatio(System.Double)">
             <summary>
             Sets the playback speed ratio.
             This command is a queued command
@@ -1346,18 +1350,11 @@
             <param name="errorCode">The code.</param>
             <returns>The decoded error message</returns>
         </member>
-        <member name="M:Unosquare.FFME.Core.FFInterop.PtrToString(System.Byte*)">
-            <summary>
-            Converts a byte pointer to a string
-            </summary>
-            <param name="bytePtr">The byte PTR.</param>
-            <returns>The string</returns>
-        </member>
         <member name="M:Unosquare.FFME.Core.FFInterop.PtrToStringUTF8(System.Byte*)">
             <summary>
             Converts a byte pointer to a UTF8 encoded string.
             </summary>
-            <param name="bytePtr">The byte PTR.</param>
+            <param name="stringAddress">The pointer to the starting character</param>
             <returns>The string</returns>
         </member>
         <member name="T:Unosquare.FFME.Core.FFLibrary">
@@ -1736,6 +1733,12 @@
             <summary>
             Gets or sets the speed ratio at which the clock runs.
             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Core.RealTimeClock.Update(System.TimeSpan)">
+            <summary>
+            Sets a new position value atomically
+            </summary>
+            <param name="value">The new value that the position porperty will hold.</param>
         </member>
         <member name="M:Unosquare.FFME.Core.RealTimeClock.Play">
             <summary>
@@ -2336,13 +2339,6 @@
             <exception cref="T:System.ArgumentException">When the media type is invalid</exception>
             <exception cref="T:System.ArgumentNullException">MediaComponent</exception>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaComponentSet.Remove(Unosquare.FFME.Shared.MediaType)">
-            <summary>
-            Removes the component of specified media type (if registered).
-            It calls the dispose method of the media component too.
-            </summary>
-            <param name="mediaType">Type of the media.</param>
-        </member>
         <member name="M:Unosquare.FFME.Decoding.MediaComponentSet.Dispose">
             <summary>
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -2361,7 +2357,7 @@
             <summary>
             Sends an empty packet to all media components.
             When an EOF/EOS situation is encountered, this forces
-            the decoders to enter drainig mode untill all frames are decoded.
+            the decoders to enter drainig mode until all frames are decoded.
             </summary>
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaComponentSet.ClearPacketQueues">
@@ -2371,6 +2367,13 @@
             This is useful after a seek operation is performed or a stream
             index is changed.
             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Decoding.MediaComponentSet.RemoveComponent(Unosquare.FFME.Shared.MediaType)">
+            <summary>
+            Removes the component of specified media type (if registered).
+            It calls the dispose method of the media component too.
+            </summary>
+            <param name="mediaType">Type of the media.</param>
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaComponentSet.Dispose(System.Boolean)">
             <summary>
@@ -2382,22 +2385,18 @@
             <summary>
             A container capable of opening an input url,
             reading packets from it, decoding frames, seeking, and pausing and resuming network streams
-            Code heavily based on https://raw.githubusercontent.com/FFmpeg/FFmpeg/release/3.2/ffplay.c
+            Code based on https://raw.githubusercontent.com/FFmpeg/FFmpeg/release/3.2/ffplay.c
             The method pipeline should be:
             1. Set Options (or don't, for automatic options) and Initialize,
-            2. Perform continuous Reads,
-            3. Perform continuous Decodes and Converts/Materialize
+            2. Perform continuous packet reads,
+            3. Perform continuous frame decodes
+            4. Perform continuous block materialization
             </summary>
             <seealso cref="T:System.IDisposable" />
         </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.Parent">
+        <member name="F:Unosquare.FFME.Decoding.MediaContainer.ExceptionMessageNoInputContext">
             <summary>
-            The logger
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.InputContext">
-            <summary>
-            Holds a reference to an input context.
+            The exception message no input context
             </summary>
         </member>
         <member name="F:Unosquare.FFME.Decoding.MediaContainer.ReadSyncRoot">
@@ -2415,27 +2414,12 @@
             The convert synchronize root
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.m_Components">
-            <summary>
-            Holds the set of components.
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.m_IsSeeking">
-            <summary>
-            The internal flag that determines if a seek operation is in progress.
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.IsDisposed">
-            <summary>
-            To detect redundat Dispose calls
-            </summary>
-        </member>
         <member name="F:Unosquare.FFME.Decoding.MediaContainer.MediaSeeksByBytes">
             <summary>
             Determines if the stream seeks by bytes always
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.m_RequiresPictureAttachments">
+        <member name="F:Unosquare.FFME.Decoding.MediaContainer.RequiresPictureAttachments">
             <summary>
             Hold the value for the internal property with the same name.
             Picture attachments are required when video streams support them
@@ -2465,25 +2449,23 @@
             If set to true, it will reset the abort requested flag to false.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Decoding.MediaContainer.SignalAbortSeekRequested">
-            <summary>
-            If set to true, an ongoing seek operation will immediately try to return and cancel all reads.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.#ctor(System.String,Unosquare.FFME.Shared.IMediaLogger,System.String)">
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.#ctor(System.String,Unosquare.FFME.Shared.StreamOptions,Unosquare.FFME.Shared.IMediaLogger)">
             <summary>
             Initializes a new instance of the <see cref="T:Unosquare.FFME.Decoding.MediaContainer" /> class.
             </summary>
             <param name="mediaUrl">The media URL.</param>
+            <param name="streamOptions">The stream options.</param>
             <param name="parent">The logger.</param>
-            <param name="protocolPrefix">
-            The protocol prefix. See https://ffmpeg.org/ffmpeg-protocols.html
-            Leave null if setting it is not intended.</param>
             <exception cref="T:System.ArgumentNullException">mediaUrl</exception>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.Finalize">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsDisposed">
             <summary>
-            Finalizes an instance of the <see cref="T:Unosquare.FFME.Decoding.MediaContainer"/> class.
+            To detect redundat Dispose calls
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.Parent">
+            <summary>
+            Logging Messages will be sent to this parent object.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Decoding.MediaContainer.MediaUrl">
@@ -2492,22 +2474,23 @@
             by this container.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.ProtocolPrefix">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StreamOptions">
             <summary>
-            Gets the protocol prefix.
-            Typically async for local files and empty for other types.
+            The stream initialization options.
+            Options are applied when creating the container.
+            After initialization, changing the options has no effect.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Decoding.MediaContainer.MediaOptions">
             <summary>
-            The media initialization options.
-            Options are applied when calling the Initialize method.
-            After initialization, changing the options has no effect.
+            Represetnts options that applied before initializing media components and their corresponding
+            codecs. Once the container has created the media components, changing these options will have no effect.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Decoding.MediaContainer.MediaInfo">
             <summary>
             Provides stream, chapter and program info held by this container.
+            This property is null if the the stream has not been opened.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Decoding.MediaContainer.MediaFormatName">
@@ -2561,10 +2544,16 @@
             Gets a value indicating whether the underlying media is seekable.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsStreamRealtime">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsLiveStream">
             <summary>
-            Gets a value indicating whether this container represents realtime media.
-            If the format name is rtp, rtsp, or sdp or if the url starts with udp: or rtp:
+            Gets a value indicating whether this container represents live media.
+            If the stream is classified as a network stream and it is not seekable, then this property will return true.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsNetworkStream">
+            <summary>
+            Gets a value indicating whether the input stream is a network stream.
+            If the format name is rtp, rtsp, or sdp or if the url starts with udp:, http:, https:, tcp:, or rtp:
             then this property will be set to true.
             </summary>
         </member>
@@ -2578,39 +2567,28 @@
             Gets a value indicating whether reads are in the aborted state.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsSeeking">
-            <summary>
-            Gets a value indicating whether a seek operation is in progress.
-            </summary>
-        </member>
         <member name="P:Unosquare.FFME.Decoding.MediaContainer.MediaStartTimeOffset">
             <summary>
             Gets the media start time by which all component streams are offset.
             Typically 0 but it could be something other than 0.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.SeekStartTimestamp">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.InputContext">
+            <summary>
+            Holds a reference to the input context.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StateStartTimestamp">
             <summary>
             Gets the seek start timestamp.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StreamLastReadTimeUtc">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StateLastReadTimeUtc">
             <summary>
             Gets the time the last packet was read from the input
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.CanReadSuspend">
-            <summary>
-            For RTSP and other realtime streams reads can be suspended.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.IsReadSuspended">
-            <summary>
-            For RTSP and other realtime streams reads can be suspended.
-            This property will return true if reads have been suspended.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.RequiresReadDelay">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StateRequiresReadDelay">
             <summary>
             Gets a value indicating whether a packet read delay witll be enforced.
             RSTP formats or MMSH Urls will have this property set to true.
@@ -2618,7 +2596,7 @@
             This is a hack according to the source code in ffplay.c
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Decoding.MediaContainer.RequiresPictureAttachments">
+        <member name="P:Unosquare.FFME.Decoding.MediaContainer.StateRequiresPictureAttachments">
             <summary>
             Picture attachments are required when video streams support them
             and these attached packets must be read before reading the first frame
@@ -2632,7 +2610,7 @@
             Any Media Options must be set before this method is called.
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.Seek(System.TimeSpan,System.Boolean@)">
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.Seek(System.TimeSpan)">
             <summary>
             Seeks to the specified position in the stream. This method attempts to do so as
             precisely as possible, returning decoded frames of all available media type components
@@ -2641,7 +2619,6 @@
             Pass TimeSpan.Zero to seek to the beginning of the stream.
             </summary>
             <param name="position">The position.</param>
-            <param name="aborted">if set to <c>true</c> [aborted].</param>
             <returns>
             The list of media frames
             </returns>
@@ -2698,14 +2675,6 @@
             or
             input</exception>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.SignalAbortSeek">
-            <summary>
-            Signals the abortion of the current seek operation.
-            </summary>
-            <returns>
-            Returns true if there was a seek operation in progress when this method was called.
-            </returns>
-        </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.SignalAbortReads(System.Boolean)">
             <summary>
             Signals the packet reading operations to abort immediately.
@@ -2725,13 +2694,7 @@
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.Dispose">
             <summary>
-            Releases unmanaged and - optionally - managed resources.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.InitializeInputContext">
-            <summary>
-            Initializes the InputContext and applies format options.
-            https://www.ffmpeg.org/ffmpeg-formats.html#Format-Options
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamInitialize">
@@ -2743,24 +2706,23 @@
             <exception cref="T:System.InvalidOperationException">The input context has already been initialized.</exception>
             <exception cref="T:Unosquare.FFME.Shared.MediaContainerException">When an error initializing the stream occurs.</exception>
         </member>
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamInitializeInputContext">
+            <summary>
+            Initializes the InputContext and applies format options.
+            https://www.ffmpeg.org/ffmpeg-formats.html#Format-Options
+            </summary>
+        </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamOpen">
             <summary>
             Opens the individual stream components to start reading packets.
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamCreateComponents">
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamOpenCreateComponents">
             <summary>
             Creates the stream components by first finding the best available streams.
             Then it initializes the components of the correct type each.
             </summary>
             <exception cref="T:Unosquare.FFME.Shared.MediaContainerException">The exception ifnromation</exception>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamReadInterrupt(System.Void*)">
-            <summary>
-            The interrupt callback to handle stream reading timeouts
-            </summary>
-            <param name="opaque">A pointer to the format input context</param>
-            <returns>0 for OK, 1 for error (timeout)</returns>
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamRead">
             <summary>
@@ -2771,41 +2733,27 @@
             <exception cref="T:System.InvalidOperationException">Initialize</exception>
             <exception cref="T:Unosquare.FFME.Shared.MediaContainerException">Raised when an error reading from the stream occurs.</exception>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamReadSuspend">
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.OnStreamReadInterrupt(System.Void*)">
             <summary>
-            Suspends / pauses network streams
-            This should only be called upon Dispose
+            The interrupt callback to handle stream reading timeouts
             </summary>
+            <param name="opaque">A pointer to the format input context</param>
+            <returns>0 for OK, 1 for error (timeout)</returns>
         </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamReadResume">
-            <summary>
-            Resumes the reads of network streams
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.DropSeekFrames(System.Collections.Generic.List{Unosquare.FFME.Decoding.MediaFrame},System.TimeSpan)">
-            <summary>
-            Drops the seek frames that are no longer needed.
-            Target time should be provided in absolute, 0-based time
-            </summary>
-            <param name="frames">The frames.</param>
-            <param name="targetTime">The target time.</param>
-            <returns>The number of dropped frames</returns>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeekToStart">
-            <summary>
-            Seeks to the position at the start of the stream.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeek(System.TimeSpan,System.Boolean@)">
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeek(System.TimeSpan)">
             <summary>
             Seeks to the exact or prior frame of the main stream.
             Supports byte seeking.
             </summary>
             <param name="targetTime">The target time.</param>
-            <param name="aborted">if set to <c>true</c> [aborted].</param>
             <returns>
             The list of media frames
             </returns>
+        </member>
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeekToStart">
+            <summary>
+            Seeks to the position at the start of the stream.
+            </summary>
         </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeekDecode(System.Collections.Generic.List{Unosquare.FFME.Decoding.MediaFrame},System.TimeSpan,Unosquare.FFME.Decoding.SeekRequirement)">
             <summary>
@@ -2816,12 +2764,20 @@
             <param name="requirement">The requirement.</param>
             <returns>The number of decoded frames</returns>
         </member>
+        <member name="M:Unosquare.FFME.Decoding.MediaContainer.StreamSeekDiscardFrames(System.Collections.Generic.List{Unosquare.FFME.Decoding.MediaFrame},System.TimeSpan)">
+            <summary>
+            Drops the seek frames that are no longer needed.
+            Target time should be provided in absolute, 0-based time
+            </summary>
+            <param name="frames">The frames.</param>
+            <param name="targetTime">The target time.</param>
+            <returns>The number of dropped frames</returns>
+        </member>
         <member name="M:Unosquare.FFME.Decoding.MediaContainer.Dispose(System.Boolean)">
             <summary>
             Releases unmanaged and - optionally - managed resources.
             </summary>
-            <param name="alsoManaged">
-              <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         </member>
         <member name="T:Unosquare.FFME.Decoding.MediaFrame">
             <summary>
@@ -3164,7 +3120,7 @@
             <summary>
             Releases unmanaged and - optionally - managed resources.
             </summary>
-            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         </member>
         <member name="T:Unosquare.FFME.Decoding.VideoComponent">
             <summary>
@@ -3334,7 +3290,7 @@
             <summary>
             Releases unmanaged and - optionally - managed resources.
             </summary>
-            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         </member>
         <member name="T:Unosquare.FFME.MediaEngine">
             <summary>
@@ -3343,16 +3299,6 @@
             </summary>
             <seealso cref="T:Unosquare.FFME.Shared.IMediaLogger" />
             <seealso cref="T:System.IDisposable" />
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.StartBlockRenderingWorker">
-            <summary>
-            Starts the block rendering worker.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.StopBlockRenderingWorker">
-            <summary>
-            Stops the block rendering worker.
-            </summary>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.SendOnMessageLogged(Unosquare.FFME.Shared.MediaLogMessage)">
             <summary>
@@ -3375,6 +3321,13 @@
             <summary>
             Raises the media opened event.
             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.SendOnMediaInitializing(Unosquare.FFME.Shared.StreamOptions,System.String)">
+            <summary>
+            Raises the media initializing event.
+            </summary>
+            <param name="options">The options.</param>
+            <param name="url">The URL.</param>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.SendOnMediaOpening">
             <summary>
@@ -3406,19 +3359,25 @@
             Raises the media ended event.
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.SendOnPositionChanged(System.TimeSpan)">
+        <member name="M:Unosquare.FFME.MediaEngine.SendOnPositionChanged(System.TimeSpan,System.TimeSpan)">
             <summary>
-            Raises the Position Changed event
+            Sends the on position changed.
             </summary>
-            <param name="position">The position.</param>
+            <param name="oldValue">The old value.</param>
+            <param name="newValue">The new value.</param>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.SendOnPropertyChanged(System.String)">
+        <member name="M:Unosquare.FFME.MediaEngine.SendOnMediaStateChanged(Unosquare.FFME.Shared.PlaybackStatus,Unosquare.FFME.Shared.PlaybackStatus)">
             <summary>
-            Notifies the platform connector that a property value has changed.
+            Sends the on media state changed.
             </summary>
-            <param name="propertyName">Name of the property used to notify listeners.  This
-            value is optional and can be provided automatically when invoked from compilers
-            that support <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/>.</param>
+            <param name="oldValue">The old value.</param>
+            <param name="newValue">The new value.</param>
+        </member>
+        <member name="F:Unosquare.FFME.MediaEngine.SynchronousCommandDone">
+            <summary>
+            The open or close command done signalling object.
+            Open and close are synchronous commands.
+            </summary>
         </member>
         <member name="P:Unosquare.FFME.MediaEngine.Commands">
             <summary>
@@ -3436,6 +3395,20 @@
             The underlying media container that provides access to
             individual media component streams
             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.Open(System.Uri)">
+            <summary>
+            Opens the specified URI.
+            </summary>
+            <param name="uri">The URI.</param>
+            <returns>The awaitable task</returns>
+            <exception cref="T:System.InvalidOperationException">Source</exception>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.Close">
+            <summary>
+            Closes the currently loaded media.
+            </summary>
+            <returns>The awaitable task</returns>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.Play">
             <summary>
@@ -3455,115 +3428,32 @@
             </summary>
             <returns>The awaitable command</returns>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.Open(System.Uri)">
-            <summary>
-            Opens the specified URI.
-            </summary>
-            <param name="uri">The URI.</param>
-            <returns>The awaitable task</returns>
-            <exception cref="T:System.InvalidOperationException">Source</exception>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.Close">
-            <summary>
-            Closes the currently loaded media.
-            </summary>
-            <returns>The awaitable task</returns>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.Seek(System.TimeSpan)">
+        <member name="M:Unosquare.FFME.MediaEngine.RequestSeek(System.TimeSpan)">
             <summary>
             Seeks to the specified position.
             </summary>
             <param name="position">New position for the player.</param>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.SetSpeedRatio(System.Double)">
+        <member name="M:Unosquare.FFME.MediaEngine.RequestSpeedRatio(System.Double)">
             <summary>
             Sets the specified playback speed ratio.
             </summary>
             <param name="targetSpeedRatio">New playback speed ratio.</param>
         </member>
-        <member name="P:Unosquare.FFME.MediaEngine.Source">
+        <member name="M:Unosquare.FFME.MediaEngine.BeginSynchronousCommand">
             <summary>
-            Gets or Sets the Source on this MediaElement.
-            The Source property is the Uri of the media to be played.
+            Begins a synchronous command by locking the internal wait handle.
             </summary>
+            <returns>True if successful, false if unsuccessful</returns>
         </member>
-        <member name="P:Unosquare.FFME.MediaEngine.LoadedBehavior">
+        <member name="M:Unosquare.FFME.MediaEngine.EndSynchronousCommand">
             <summary>
-            Specifies the behavior that the media element should have when it
-            is loaded. The default behavior is that it is under manual control
-            (i.e. the caller should call methods such as Play in order to play
-            the media). If a source is set, then the default behavior changes to
-            to be playing the media. If a source is set and a loaded behavior is
-            also set, then the loaded behavior takes control.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.SpeedRatio">
-            <summary>
-            Gets or Sets the SpeedRatio property of the media.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.RealTimeClockSpeedRatio">
-            <summary>
-            Gets the internal real time clock speed ratio.
-            This is different from the regular property as this is the immediate value
-            (i.e. might not yet be applied)
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.UnloadedBehavior">
-            <summary>
-            Specifies how the underlying media should behave when
-            it has ended. The default behavior is to Close the media.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.Volume">
-            <summary>
-            Gets/Sets the Volume property on the MediaElement.
-            Note: Valid values are from 0 to 1
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.Balance">
-            <summary>
-            Gets/Sets the Balance property on the MediaElement.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsMuted">
-            <summary>
-            Gets/Sets the IsMuted property on the MediaElement.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.ScrubbingEnabled">
-            <summary>
-            Gets or sets a value that indicates whether the MediaElement will update frames
-            for seek operations while paused. This is a dependency property.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.Position">
-            <summary>
-            Gets or Sets the Position property on the MediaElement.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.RealTimeClockPosition">
-            <summary>
-            Gets the internal real time clock position.
-            This is different from the regular property as this is the immediate value
-            (i.e. might not yet be applied)
+            Ends a synchronous command by releasing the internal wait handle.
             </summary>
         </member>
         <member name="F:Unosquare.FFME.MediaEngine.m_IsDisposed">
             <summary>
             To detect redundant calls
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.MediaEngine.m_IsPositionUpdating">
-            <summary>
-            When position is being set from within this control, this field will
-            be set to true. This is useful to detect if the user is setting the position
-            or if the Position property is being driven from within
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.MediaEngine.m_IsDisposing">
-            <summary>
-            Flag when disposing process start but not finished yet
             </summary>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.#ctor(System.Object,Unosquare.FFME.Shared.IMediaConnector)">
@@ -3573,6 +3463,29 @@
             <param name="parent">The associated parent object.</param>
             <param name="connector">The parent implementing connector methods.</param>
             <exception cref="T:System.InvalidOperationException">Thrown when the static Initialize method has not been called.</exception>
+        </member>
+        <member name="P:Unosquare.FFME.MediaEngine.State">
+            <summary>
+            Contains the Media Status
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaEngine.WallClock">
+            <summary>
+            Gets the internal real time clock position.
+            This is different from the position property and it is useful
+            in computing things like real-time latency in a render cycle.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaEngine.MediaInfo">
+            <summary>
+            Provides stream, chapter and program info of the underlying media.
+            Returns null when no media is loaded.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.MediaEngine.IsDisposed">
+            <summary>
+            Gets a value indicating whether this instance is disposed.
+            </summary>
         </member>
         <member name="P:Unosquare.FFME.MediaEngine.Parent">
             <summary>
@@ -3584,14 +3497,6 @@
             Gets the event connector (platform specific).
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsDisposed">
-            <summary>
-            Gets a value indicating whether this instance is disposed.
-            </summary>
-            <value>
-              <c>true</c> if this instance is disposed; otherwise, <c>false</c>.
-            </value>
-        </member>
         <member name="M:Unosquare.FFME.MediaEngine.Log(Unosquare.FFME.Shared.MediaLogMessageType,System.String)">
             <summary>
             Logs the specified message into the logger queue.
@@ -3599,55 +3504,10 @@
             <param name="messageType">Type of the message.</param>
             <param name="message">The message.</param>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.RetrieveRenderer(Unosquare.FFME.Shared.MediaType)">
-            <summary>
-            Retrieves the registered renderer for the given media type.
-            </summary>
-            <param name="mediaType">Type of the media.</param>
-            <returns>The media renderer</returns>
-        </member>
         <member name="M:Unosquare.FFME.MediaEngine.Dispose">
             <summary>
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.UpdatePosition(System.TimeSpan)">
-            <summary>
-            Updates the position property signaling the update is
-            coming internally. This is to distinguish between user/binding
-            written value to the Position Porperty and value set by this control's
-            internal clock.
-            </summary>
-            <param name="value">The current position.</param>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.ResetBufferingProperties">
-            <summary>
-            Resets all the buffering properties to their defaults.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.UpdateBufferingProperties">
-            <summary>
-            Updates the buffering properties: IsBuffering, BufferingProgress, DownloadProgress.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.GuessBufferingProperties">
-            <summary>
-            Guesses the bitrate of the input stream.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.SetProperty``1(``0@,``0,System.String)">
-            <summary>
-            Checks if a property already matches a desired value.  Sets the property and
-            notifies listeners only when necessary.
-            </summary>
-            <typeparam name="T">Type of the property.</typeparam>
-            <param name="storage">Reference to a property with both getter and setter.</param>
-            <param name="value">Desired value for the property.</param>
-            <param name="propertyName">Name of the property used to notify listeners.  This
-            value is optional and can be provided automatically when invoked from compilers that
-            support CallerMemberName.</param>
-            <returns>True if the value was changed, false if the existing value matched the
-            desired value.</returns>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.Dispose(System.Boolean)">
             <summary>
@@ -3655,233 +3515,6 @@
             Please not that this call is non-blocking/asynchronous.
             </summary>
             <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.Metadata">
-            <summary>
-            Provides key-value pairs of the metadata contained in the media.
-            Returns null when media has not been loaded.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.MediaFormat">
-            <summary>
-            Gets the media format. Returns null when media has not been loaded.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.MediaInfo">
-            <summary>
-            Provides stream, chapter and program info of the underlying media.
-            Returns null when no media is loaded.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.FrameStepDuration">
-            <summary>
-            Gets the duration of a single frame step.
-            If there is a video component with a framerate, this propery returns the length of a frame.
-            If there is no video component it simply returns a tenth of a second.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.HasAudio">
-            <summary>
-            Returns whether the given media has audio.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.HasVideo">
-            <summary>
-            Returns whether the given media has video. Only valid after the
-            MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoCodec">
-            <summary>
-            Gets the video codec.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoBitrate">
-            <summary>
-            Gets the video bitrate.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.NaturalVideoWidth">
-            <summary>
-            Returns the natural width of the media in the video.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.NaturalVideoHeight">
-            <summary>
-            Returns the natural height of the media in the video.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoFrameRate">
-            <summary>
-            Gets the video frame rate.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoFrameLength">
-            <summary>
-            Gets the duration in seconds of the video frame.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoHardwareDecoder">
-            <summary>
-            Gets the name of the video hardware decoder in use.
-            Enabling hardware acceleration does not guarantee decoding will be performed in hardware.
-            When hardware decoding of frames is in use this will return the name of the HW accelerator.
-            Otherwise it will return an empty string.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.AudioCodec">
-            <summary>
-            Gets the audio codec.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.AudioBitrate">
-            <summary>
-            Gets the audio bitrate.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.AudioChannels">
-            <summary>
-            Gets the audio channels count.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.AudioSampleRate">
-            <summary>
-            Gets the audio sample rate.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.AudioBitsPerSample">
-            <summary>
-            Gets the audio bits per sample.
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.NaturalDuration">
-            <summary>
-            Gets the Media's natural duration
-            Only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.CanPause">
-            <summary>
-            Returns whether the currently loaded media can be paused.
-            This is only valid after the MediaOpened event has fired.
-            Note that this property is computed based on wether the stream is detected to be a live stream.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsLiveStream">
-            <summary>
-            Returns whether the currently loaded media is live or realtime and does not have a set duration
-            This is only valid after the MediaOpened event has fired.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsPositionUpdating">
-            <summary>
-            When position is being set from within this control, this field will
-            be set to true. This is useful to detect if the user is setting the position
-            or if the Position property is being driven from within
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsSeekable">
-            <summary>
-            Gets a value indicating whether the currently loaded media can be seeked.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsPlaying">
-            <summary>
-            Gets a value indicating whether the media is playing.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.HasMediaEnded">
-            <summary>
-            Gets a value indicating whether the media has reached its end.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsBuffering">
-            <summary>
-            Get a value indicating whether the media is buffering.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsSeeking">
-            <summary>
-            Gets a value indicating whether the media seeking is in progress.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.VideoSmtpeTimecode">
-            <summary>
-            Returns the current video SMTPE timecode if available.
-            If not available, this property returns an empty string.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.GuessedByteRate">
-            <summary>
-            Gets the guessed buffered bytes in the packet queue per second.
-            If bitrate information is available, then it returns the bitrate converted to byte rate.
-            Returns null if it has not been guessed.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.BufferingProgress">
-            <summary>
-            Gets a value that indicates the percentage of buffering progress made.
-            Range is from 0 to 1
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.BufferCacheLength">
-            <summary>
-            The packet buffer length.
-            It is adjusted to 1 second if bitrate information is available.
-            Otherwise, it's simply 512KB and it is guessed later on.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.DownloadProgress">
-            <summary>
-            Gets a value that indicates the percentage of download progress made.
-            Range is from 0 to 1
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.DownloadCacheLength">
-            <summary>
-            Gets the maximum packet buffer length, according to the bitrate (if available).
-            If it's a realtime stream it will return 30 times the buffer cache length.
-            Otherwise, it will return  4 times of the buffer cache length.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsOpening">
-            <summary>
-            Gets a value indicating whether the media is in the process of opening.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.IsOpen">
-            <summary>
-            Gets a value indicating whether this media element
-            currently has an open media url.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.MediaEngine.MediaState">
-            <summary>
-            Gets the current playback state.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.NotifyPropertyChanges">
-            <summary>
-            Updates the media properties notifying that there are new values to be read from all of them.
-            Call this method only when necessary because it creates a lot of events.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.ResetControllerProperties">
-            <summary>
-            Resets the controller properies.
-            </summary>
         </member>
         <member name="F:Unosquare.FFME.MediaEngine.InitLock">
             <summary>
@@ -3927,7 +3560,7 @@
             </summary>
             <param name="platform">The platform-specific implementation.</param>
         </member>
-        <member name="F:Unosquare.FFME.MediaEngine.MaxBlocks">
+        <member name="F:Unosquare.FFME.MediaEngine.m_PacketReadingCycle">
             <summary>
             This partial class implements:
             1. Packet reading from the Container
@@ -3937,7 +3570,7 @@
         </member>
         <member name="P:Unosquare.FFME.MediaEngine.Blocks">
             <summary>
-            Holds the blocks
+            Holds the materialized block cache for each media type.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.MediaEngine.PacketReadingCycle">
@@ -3999,20 +3632,6 @@
             That is, if we have packets in the packet buffer or if we are not at the end of the stream.
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.RunPacketReadingWorker">
-            <summary>
-            Runs the read task which keeps a packet buffer as full as possible.
-            It reports on DownloadProgress by enqueueing an update to the property
-            in order to avoid any kind of disruption to this thread caused by the UI thread.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.MediaEngine.RunFrameDecodingWorker">
-            <summary>
-            Continually decodes the available packet buffer to have as
-            many frames as possible in each frame queue and
-            up to the MaxFrames on each component
-            </summary>
-        </member>
         <member name="M:Unosquare.FFME.MediaEngine.StartWorkers">
             <summary>
             Initializes the media block buffers and
@@ -4024,11 +3643,12 @@
             Stops the packet reader, frame decoder, and block renderers
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.MediaEngine.SnapVideoPosition(System.TimeSpan)">
+        <member name="M:Unosquare.FFME.MediaEngine.SnapToFramePosition(System.TimeSpan)">
             <summary>
-            Sets the clock to a discrete video position if possible
+            Returns the value of a discrete video position if possible
             </summary>
             <param name="position">The position.</param>
+            <returns>The snapped position</returns>
         </member>
         <member name="M:Unosquare.FFME.MediaEngine.CanReadMoreFramesOf(Unosquare.FFME.Shared.MediaType)">
             <summary>
@@ -4053,6 +3673,30 @@
             </summary>
             <param name="t">The t.</param>
             <returns>The number of blocks that were added</returns>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.RunFrameDecodingWorker">
+            <summary>
+            Continually decodes the available packet buffer to have as
+            many frames as possible in each frame queue and
+            up to the MaxFrames on each component
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.RunPacketReadingWorker">
+            <summary>
+            Runs the read task which keeps a packet buffer as full as possible.
+            It reports on DownloadProgress by enqueueing an update to the property
+            in order to avoid any kind of disruption to this thread caused by the UI thread.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.StartBlockRenderingWorker">
+            <summary>
+            Starts the block rendering worker.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.MediaEngine.StopBlockRenderingWorker">
+            <summary>
+            Stops the block rendering worker.
+            </summary>
         </member>
         <member name="T:Unosquare.FFME.Primitives.AtomicBoolean">
             <summary>
@@ -4117,6 +3761,54 @@
             <summary>
             Gets or sets the latest value written by any of the processors in the machine
             </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Primitives.Benchmark">
+            <summary>
+            A simple benchmarking class.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.Start(System.String)">
+            <summary>
+            Starts measuring with the given identifier.
+            </summary>
+            <param name="identifier">The identifier.</param>
+            <returns>A disposable object that when disposed, adds a benchmark result.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.Dump">
+            <summary>
+            Outputs the benchmark statistics.
+            </summary>
+            <returns>A string containing human-readable statistics</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.Add(System.String,System.TimeSpan)">
+            <summary>
+            Adds the specified result to the given identifier.
+            </summary>
+            <param name="identifier">The identifier.</param>
+            <param name="elapsed">The elapsed.</param>
+        </member>
+        <member name="T:Unosquare.FFME.Primitives.Benchmark.BenchmarkUnit">
+            <summary>
+            Represents a disposable benchmark unit.
+            </summary>
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.BenchmarkUnit.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Primitives.Benchmark.BenchmarkUnit" /> class.
+            </summary>
+            <param name="identifier">The identifier.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.BenchmarkUnit.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Primitives.Benchmark.BenchmarkUnit.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="alsoManaged"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         </member>
         <member name="T:Unosquare.FFME.Primitives.CircularBuffer">
             <summary>
@@ -4615,6 +4307,11 @@
             The audio bits per sample (1 channel only)
             </summary>
         </member>
+        <member name="F:Unosquare.FFME.Shared.Constants.Audio.BytesPerSample">
+            <summary>
+            The audio bytes per sample
+            </summary>
+        </member>
         <member name="F:Unosquare.FFME.Shared.Constants.Audio.SampleFormat">
             <summary>
             The audio sample format
@@ -4679,6 +4376,38 @@
             <summary>
             Provides various helpers and extension methods.
             </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.PutAudioSample(System.Byte[],System.Int32,System.Int16)">
+            <summary>
+            Puts a short value in the target buffer as bytes
+            </summary>
+            <param name="buffer">The target.</param>
+            <param name="offset">The offset.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.GetAudioSample(System.Byte[],System.Int32)">
+            <summary>
+            Gets the a signed 16 bit integer at the guven offset.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <returns>The signed integer.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.GetAudioSampleAmplitude(System.Byte[],System.Int32)">
+            <summary>
+            Gets the audio sample amplitude (absolute value of the sample).
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <returns>The sample amplitude</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.GetAudioSampleLevel(System.Byte[],System.Int32)">
+            <summary>
+            Gets the audio sample level for 0 to 1.
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <param name="offset">The offset.</param>
+            <returns>The amplitude level</returns>
         </member>
         <member name="M:Unosquare.FFME.Shared.Extensions.Format(System.TimeSpan)">
             <summary>
@@ -4765,6 +4494,23 @@
             <param name="rational">The rational.</param>
             <returns>The value</returns>
         </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.Normalize(System.TimeSpan)">
+            <summary>
+            Normalizes precision of the TimeSpan to the nearest whole millisecond.
+            </summary>
+            <param name="source">The source.</param>
+            <returns>The normalized, whole-milliscond timespan</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.Clamp``1(``0,``0,``0)">
+            <summary>
+            Clamps the specified value between the minimum and the maximum
+            </summary>
+            <typeparam name="T">The type of value to clamp</typeparam>
+            <param name="value">The value.</param>
+            <param name="min">The minimum.</param>
+            <param name="max">The maximum.</param>
+            <returns>A value that indicates the relative order of the objects being compared</returns>
+        </member>
         <member name="M:Unosquare.FFME.Shared.Extensions.IsSet(System.Threading.ManualResetEvent)">
             <summary>
             Determines whether the event is in its set state.
@@ -4830,6 +4576,41 @@
             <param name="all">All.</param>
             <returns>The sum of all values.</returns>
         </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.GetBlockCount(Unosquare.FFME.Primitives.MediaTypeDictionary{Unosquare.FFME.Primitives.MediaBlockBuffer})">
+            <summary>
+            Gets the block count.
+            </summary>
+            <param name="blocks">The blocks.</param>
+            <returns>The block count for all components.</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.GetMinStartTime(Unosquare.FFME.Primitives.MediaTypeDictionary{Unosquare.FFME.Primitives.MediaBlockBuffer})">
+            <summary>
+            Gets the minimum start time.
+            </summary>
+            <param name="blocks">The blocks.</param>
+            <returns>The minimum Range Start Time</returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.ComputePictureNumber(System.TimeSpan,System.TimeSpan,System.Int32)">
+            <summary>
+            Computes the picture number.
+            </summary>
+            <param name="startTime">The start time.</param>
+            <param name="duration">The duration.</param>
+            <param name="startNumber">The start number.</param>
+            <returns>
+            The serial picture number
+            </returns>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.Extensions.ComputeSmtpeTimeCode(System.TimeSpan,System.TimeSpan,FFmpeg.AutoGen.AVRational,System.Int32)">
+            <summary>
+            Computes the smtpe time code.
+            </summary>
+            <param name="streamStartTime">The start time offset.</param>
+            <param name="frameDuration">The duration.</param>
+            <param name="frameTimeBase">The time base.</param>
+            <param name="frameNumber">The display picture number.</param>
+            <returns>The FFmpeg computed SMTPE Timecode</returns>
+        </member>
         <member name="T:Unosquare.FFME.Shared.FFmpegLoadMode">
             <summary>
             The load mode of FFmpeg Libraries
@@ -4857,10 +4638,18 @@
         </member>
         <member name="T:Unosquare.FFME.Shared.IMediaConnector">
             <summary>
-            Connects handlers between the Media Engine and a platfrom-secific implementation
+            Connects handlers between the Media Engine event signals and a platfrom-secific implementation
             </summary>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaOpening(System.Object,Unosquare.FFME.Shared.MediaOptions,Unosquare.FFME.Shared.MediaInfo)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaInitializing(Unosquare.FFME.MediaEngine,Unosquare.FFME.Shared.StreamOptions,System.String)">
+            <summary>
+            Called when [media initializing].
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="streamOptions">The stream options.</param>
+            <param name="mediaUrl">The media URL.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaOpening(Unosquare.FFME.MediaEngine,Unosquare.FFME.Shared.MediaOptions,Unosquare.FFME.Shared.MediaInfo)">
             <summary>
             Called when [media opening].
             </summary>
@@ -4868,76 +4657,77 @@
             <param name="mediaOptions">The media options.</param>
             <param name="mediaInfo">The media information.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaOpened(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaOpened(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [media opened].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaClosed(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaClosed(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [media closed].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaFailed(System.Object,System.Exception)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaFailed(Unosquare.FFME.MediaEngine,System.Exception)">
             <summary>
             Called when [media failed].
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The e.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaEnded(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaEnded(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [media ended].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnBufferingStarted(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnBufferingStarted(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [buffering started].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnBufferingEnded(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnBufferingEnded(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [buffering ended].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnSeekingStarted(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnSeekingStarted(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [seeking started].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnSeekingEnded(System.Object)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnSeekingEnded(Unosquare.FFME.MediaEngine)">
             <summary>
             Called when [seeking ended].
             </summary>
             <param name="sender">The sender.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMessageLogged(System.Object,Unosquare.FFME.Shared.MediaLogMessage)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMessageLogged(Unosquare.FFME.MediaEngine,Unosquare.FFME.Shared.MediaLogMessage)">
             <summary>
             Called when [message logged].
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:Unosquare.FFME.Shared.MediaLogMessage"/> instance containing the event data.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnPositionChanged(System.Object,System.TimeSpan)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnPositionChanged(Unosquare.FFME.MediaEngine,System.TimeSpan,System.TimeSpan)">
             <summary>
             Called when [position changed].
             </summary>
             <param name="sender">The sender.</param>
-            <param name="position">The position.</param>
+            <param name="oldValue">The old value.</param>
+            <param name="newValue">The new value.</param>
         </member>
-        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnPropertyChanged(System.Object,System.String)">
+        <member name="M:Unosquare.FFME.Shared.IMediaConnector.OnMediaStateChanged(Unosquare.FFME.MediaEngine,Unosquare.FFME.Shared.PlaybackStatus,Unosquare.FFME.Shared.PlaybackStatus)">
             <summary>
-            Called when an underlying media engine property is changed.
-            This is used to handle property change notifications
+            Called when [media state changed].
             </summary>
             <param name="sender">The sender.</param>
-            <param name="propertyName">Name of the property.</param>
+            <param name="oldValue">The old value.</param>
+            <param name="newValue">The new value.</param>
         </member>
         <member name="T:Unosquare.FFME.Shared.IMediaLogger">
             <summary>
@@ -5029,7 +4819,7 @@
         </member>
         <member name="M:Unosquare.FFME.Shared.INativeMethods.FillMemory(System.IntPtr,System.UInt32,System.Byte)">
             <summary>
-            Fills the memory with the specified value repeated.
+            Fills the memory with the specified value.
             </summary>
             <param name="startAddress">The start address.</param>
             <param name="length">The length.</param>
@@ -5241,139 +5031,297 @@
         </member>
         <member name="T:Unosquare.FFME.Shared.MediaEngineState">
             <summary>
-            Media States compatible with MediaState enumeration
+            Contains all the status properties of the stream being handled by the media engine.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Shared.MediaEngineState.Manual">
+        <member name="F:Unosquare.FFME.Shared.MediaEngineState.GuessedByteRate">
             <summary>
-            The manual state
+            Gets the guessed buffered bytes in the packet queue per second.
+            If bitrate information is available, then it returns the bitrate converted to byte rate.
+            Returns null if it has not been guessed.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Shared.MediaEngineState.Play">
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.#cctor">
             <summary>
-            The play state
+            Initializes static members of the <see cref="T:Unosquare.FFME.Shared.MediaEngineState" /> class.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Shared.MediaEngineState.Close">
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.#ctor(Unosquare.FFME.MediaEngine)">
             <summary>
-            The close state
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.MediaEngineState" /> class.
+            </summary>
+            <param name="parent">The parent.</param>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.SpeedRatio">
+            <summary>
+            Gets or Sets the SpeedRatio property of the media.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Shared.MediaEngineState.Pause">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.Position">
             <summary>
-            The pause state
+            Gets or Sets the Position property on the MediaElement.
             </summary>
         </member>
-        <member name="F:Unosquare.FFME.Shared.MediaEngineState.Stop">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.Source">
             <summary>
-            The stop state
+            Gets or Sets the Source on this MediaElement.
+            The Source property is the Uri of the media to be played.
             </summary>
         </member>
-        <member name="T:Unosquare.FFME.Shared.MediaFormatOptions">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.Volume">
             <summary>
-            Contains options for the format context as documented:
-            https://ffmpeg.org/ffmpeg-formats.html#Format-Options
-            TODO: There are still quite a bit of options that have not been implemented.
+            Gets/Sets the Volume property on the MediaElement.
+            Note: Valid values are from 0 to 1
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.EnableReducedBuffering">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.Balance">
             <summary>
-            Port of avioflags direct
+            Gets/Sets the Balance property on the MediaElement.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.ProbeSize">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsMuted">
             <summary>
-            Set probing size in bytes, i.e. the size of the data to analyze to get stream information.
-            A higher value will enable detecting more information in case it is dispersed into the stream,
-            but will increase latency. Must be an integer not lesser than 32. It is 5000000 by default.
+            Gets/Sets the IsMuted property on the MediaElement.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.PacketSize">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.Metadata">
             <summary>
-            Set packet size.
+            Provides key-value pairs of the metadata contained in the media.
+            Returns null when media has not been loaded.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagIgnoreIndex">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.MediaFormat">
             <summary>
-            Ignore index.
-            Port of ffflags
+            Gets the media format. Returns null when media has not been loaded.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagEnableFastSeek">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.FrameStepDuration">
             <summary>
-            Enable fast, but inaccurate seeks for some formats.
-            Port of ffflags
+            Gets the duration of a single frame step.
+            If there is a video component with a framerate, this propery returns the length of a frame.
+            If there is no video component it simply returns a tenth of a second.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagGeneratePts">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.HasAudio">
             <summary>
-            Generate PTS.
-            Port of genpts
+            Returns whether the given media has audio.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagEnableNoFillin">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.HasVideo">
             <summary>
-            Do not fill in missing values that can be exactly calculated.
-            Port of ffflags
+            Returns whether the given media has video. Only valid after the
+            MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagIgnoreDts">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoCodec">
             <summary>
-            Ignore DTS.
-            Port of ffflags
+            Gets the video codec.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagDiscardCorrupt">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoBitrate">
             <summary>
-            Discard corrupted frames.
-            Port of ffflags
+            Gets the video bitrate.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagSortDts">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.NaturalVideoWidth">
             <summary>
-            Try to interleave output packets by DTS.
-            Port of ffflags
+            Returns the natural width of the media in the video.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagKeepSideData">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.NaturalVideoHeight">
             <summary>
-            Do not merge side data.
-            Port of ffflags
+            Returns the natural height of the media in the video.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagEnableLatmPayload">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoFrameRate">
             <summary>
-            Enable RTP MP4A-LATM payload.
-            Port of ffflags
+            Gets the video frame rate.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagNoBuffer">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoFrameLength">
             <summary>
-            Reduce the latency introduced by optional buffering
-            Port of ffflags
+            Gets the duration in seconds of the video frame.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.FlagStopAtShortest">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.AudioCodec">
             <summary>
-            Stop muxing at the end of the shortest stream.
-            It may be needed to increase max_interleave_delta to avoid flushing the longer streams before EOF.
-            Port of ffflags
+            Gets the audio codec.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.SeekToAny">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.AudioBitrate">
             <summary>
-            Allow seeking to non-keyframes on demuxer level when supported if set to 1. Default is 0.
+            Gets the audio bitrate.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.MaxAnalyzeDuration">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.AudioChannels">
             <summary>
-            Gets or sets the maximum duration to be analyzed before ifentifying stream information.
-            In realtime streams this can be reduced to reduce latency (i.e. TimeSpan.Zero)
+            Gets the audio channels count.
+            Only valid after the MediaOpened event has fired.
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaFormatOptions.CryptoKey">
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.AudioSampleRate">
             <summary>
-            Set decryption key.
+            Gets the audio sample rate.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.AudioBitsPerSample">
+            <summary>
+            Gets the audio bits per sample.
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.NaturalDuration">
+            <summary>
+            Gets the Media's natural duration
+            Only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.CanPause">
+            <summary>
+            Returns whether the currently loaded media can be paused.
+            This is only valid after the MediaOpened event has fired.
+            Note that this property is computed based on wether the stream is detected to be a live stream.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsLiveStream">
+            <summary>
+            Returns whether the currently loaded media is live or real-time and does not have a set duration
+            This is only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsNetowrkStream">
+            <summary>
+            Returns whether the currently loaded media is a network stream.
+            This is only valid after the MediaOpened event has fired.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsSeekable">
+            <summary>
+            Gets a value indicating whether the currently loaded media can be seeked.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsPlaying">
+            <summary>
+            Gets a value indicating whether the media is playing.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsPaused">
+            <summary>
+            Gets a value indicating whether the media is paused.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsOpen">
+            <summary>
+            Gets a value indicating whether this media element
+            currently has an open media url.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.MediaState">
+            <summary>
+            Gets the current playback state.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.HasMediaEnded">
+            <summary>
+            Gets a value indicating whether the media has reached its end.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsBuffering">
+            <summary>
+            Get a value indicating whether the media is buffering.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsSeeking">
+            <summary>
+            Gets a value indicating whether the media seeking is in progress.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoSmtpeTimecode">
+            <summary>
+            Returns the current video SMTPE timecode if available.
+            If not available, this property returns an empty string.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.VideoHardwareDecoder">
+            <summary>
+            Gets the name of the video hardware decoder in use.
+            Enabling hardware acceleration does not guarantee decoding will be performed in hardware.
+            When hardware decoding of frames is in use this will return the name of the HW accelerator.
+            Otherwise it will return an empty string.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.BufferingProgress">
+            <summary>
+            Gets a value that indicates the percentage of buffering progress made.
+            Range is from 0 to 1
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.BufferCacheLength">
+            <summary>
+            The packet buffer length.
+            It is adjusted to 1 second if bitrate information is available.
+            Otherwise, it's simply 512KB and it is guessed later on.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.DownloadProgress">
+            <summary>
+            Gets a value that indicates the percentage of download progress made.
+            Range is from 0 to 1
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.DownloadCacheLength">
+            <summary>
+            Gets the maximum packet buffer length, according to the bitrate (if available).
+            If it's a realtime stream it will return 30 times the buffer cache length.
+            Otherwise, it will return  4 times of the buffer cache length.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaEngineState.IsOpening">
+            <summary>
+            Gets a value indicating whether the media is in the process of opening.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.UpdatePosition(System.TimeSpan)">
+            <summary>
+            Updates the position.
+            </summary>
+            <param name="position">The position.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.UpdateMediaState(Unosquare.FFME.Shared.PlaybackStatus,System.Nullable{System.TimeSpan})">
+            <summary>
+            Updates the MediaState property.
+            </summary>
+            <param name="mediaState">State of the media.</param>
+            <param name="position">The new position value for this state.</param>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.ResetMediaProperties">
+            <summary>
+            Resets the controller properies.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.InitializeBufferingProperties">
+            <summary>
+            Resets all the buffering properties to their defaults.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.UpdateBufferingProperties">
+            <summary>
+            Updates the buffering properties: IsBuffering, BufferingProgress, DownloadProgress.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.MediaEngineState.GuessBufferingProperties">
+            <summary>
+            Guesses the bitrate of the input stream.
             </summary>
         </member>
         <member name="T:Unosquare.FFME.Shared.MediaInfo">
@@ -5707,29 +5655,6 @@
             Gets the name of the program. Empty if unavailable.
             </summary>
         </member>
-        <member name="T:Unosquare.FFME.Shared.MediaInputOptions">
-            <summary>
-            A dictionary containing generic input options for both:
-            Global Codec Options: https://www.ffmpeg.org/ffmpeg-all.html#Codec-Options
-            Demuxer-Private options: https://ffmpeg.org/ffmpeg-all.html#Demuxers
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Shared.MediaInputOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.MediaInputOptions"/> class.
-            </summary>
-        </member>
-        <member name="T:Unosquare.FFME.Shared.MediaInputOptions.Names">
-            <summary>
-            A collection of well-known demuxer-specific, non-global format options
-            TODO: Implement some of the more common names maybe?
-            </summary>
-        </member>
-        <member name="F:Unosquare.FFME.Shared.MediaInputOptions.Names.ScanAllPmts">
-            <summary>
-            mpegts
-            </summary>
-        </member>
         <member name="T:Unosquare.FFME.Shared.MediaLogMessage">
             <summary>
             Represents the contents of a logging message that was sent to the log manager.
@@ -5801,39 +5726,8 @@
         </member>
         <member name="T:Unosquare.FFME.Shared.MediaOptions">
             <summary>
-            Represents a set of options that are used to initialize a media container.
-            </summary>
-        </member>
-        <member name="M:Unosquare.FFME.Shared.MediaOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.MediaOptions"/> class.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.ForcedInputFormat">
-            <summary>
-            Gets or sets the forced input format. If let null or empty,
-            the input format will be selected automatically.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.EnableLowRes">
-            <summary>
-            Gets or sets a value indicating whether [enable low resource].
-            In theroy this should be 0,1,2,3 for 1, 1/2, 1,4 and 1/8 resolutions.
-            TODO: We are for now just supporting 1/2 rest (true value)
-            Port of lowres.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.EnableFastDecoding">
-            <summary>
-            Gets or sets a value indicating whether [enable fast decoding].
-            Port of fast
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.InputOptions">
-            <summary>
-            A dictionary containing generic input options for both:
-            Global Codec Options: https://www.ffmpeg.org/ffmpeg-all.html#Codec-Options
-            Demuxer-Private Options: https://ffmpeg.org/ffmpeg-all.html#Demuxers
+            Represetnts options that applied before initializing media components and their corresponding
+            codecs. Once the container has created the media components, changing these options will have no effect.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Shared.MediaOptions.CodecOptions">
@@ -5843,21 +5737,24 @@
             Port of codec_opts
             </summary>
         </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.FormatOptions">
+        <member name="P:Unosquare.FFME.Shared.MediaOptions.EnableLowRes">
             <summary>
-            Contains options for the format context as documented:
-            https://ffmpeg.org/ffmpeg-formats.html#Format-Options
+            Gets or sets a value indicating whether [enable low resource].
+            In theroy this should be 0,1,2,3 for 1, 1/2, 1,4 and 1/8 resolutions.
+            TODO: We are for now just supporting 1/2 resolution (true value)
+            Port of lowres.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.MediaOptions.EnableFastDecoding">
+            <summary>
+            Gets or sets a value indicating whether [enable fast decoding].
+            Port of fast
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Shared.MediaOptions.EnableHardwareAcceleration">
             <summary>
             Gets or sets a value indicating whether experimental hardware acceleration is enabled.
             Defaults to false. This feature is experimental.
-            </summary>
-        </member>
-        <member name="P:Unosquare.FFME.Shared.MediaOptions.ReadTimeout">
-            <summary>
-            Gets or sets the amount of time to wait for a an open or read operation to complete.
             </summary>
         </member>
         <member name="P:Unosquare.FFME.Shared.MediaOptions.IsAudioDisabled">
@@ -5934,6 +5831,211 @@
         <member name="F:Unosquare.FFME.Shared.MediaType.Subtitle">
             <summary>
             The subtitle media type (3)
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Shared.PlaybackStatus">
+            <summary>
+            Media States compatible with MediaState enumeration
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.PlaybackStatus.Manual">
+            <summary>
+            The manual status
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.PlaybackStatus.Play">
+            <summary>
+            The play status
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.PlaybackStatus.Close">
+            <summary>
+            The close status
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.PlaybackStatus.Pause">
+            <summary>
+            The pause status
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.PlaybackStatus.Stop">
+            <summary>
+            The stop status
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Shared.StreamFormatOptions">
+            <summary>
+            Contains options for the format context as documented:
+            https://ffmpeg.org/ffmpeg-formats.html#Format-Options
+            TODO: There are still quite a bit of options that have not been implemented.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.StreamFormatOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.StreamFormatOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.EnableReducedBuffering">
+            <summary>
+            Port of avioflags direct
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.ProbeSize">
+            <summary>
+            Set probing size in bytes, i.e. the size of the data to analyze to get stream information.
+            A higher value will enable detecting more information in case it is dispersed into the stream,
+            but will increase latency. Must be an integer not lesser than 32. It is 5000000 by default.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.PacketSize">
+            <summary>
+            Set packet size.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagIgnoreIndex">
+            <summary>
+            Ignore index.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagEnableFastSeek">
+            <summary>
+            Enable fast, but inaccurate seeks for some formats.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagGeneratePts">
+            <summary>
+            Generate PTS.
+            Port of genpts
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagEnableNoFillin">
+            <summary>
+            Do not fill in missing values that can be exactly calculated.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagIgnoreDts">
+            <summary>
+            Ignore DTS.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagDiscardCorrupt">
+            <summary>
+            Discard corrupted frames.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagSortDts">
+            <summary>
+            Try to interleave output packets by DTS.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagKeepSideData">
+            <summary>
+            Do not merge side data.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagEnableLatmPayload">
+            <summary>
+            Enable RTP MP4A-LATM payload.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagNoBuffer">
+            <summary>
+            Reduce the latency introduced by optional buffering
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.FlagStopAtShortest">
+            <summary>
+            Stop muxing at the end of the shortest stream.
+            It may be needed to increase max_interleave_delta to avoid flushing the longer streams before EOF.
+            Port of ffflags
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.SeekToAny">
+            <summary>
+            Allow seeking to non-keyframes on demuxer level when supported if set to 1. Default is 0.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.MaxAnalyzeDuration">
+            <summary>
+            Gets or sets the maximum duration to be analyzed before ifentifying stream information.
+            In realtime streams this can be reduced to reduce latency (i.e. TimeSpan.Zero)
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamFormatOptions.CryptoKey">
+            <summary>
+            Set decryption key.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Shared.StreamInputOptions">
+            <summary>
+            A dictionary containing generic input options for both:
+            Global Codec Options: https://www.ffmpeg.org/ffmpeg-all.html#Codec-Options
+            Demuxer-Private options: https://ffmpeg.org/ffmpeg-all.html#Demuxers
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.StreamInputOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.StreamInputOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamInputOptions.ForcedInputFormat">
+            <summary>
+            Gets or sets the forced input format. If let null or empty,
+            the input format will be selected automatically.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamInputOptions.ReadTimeout">
+            <summary>
+            Gets or sets the amount of time to wait for a an open or read operation to complete.
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Shared.StreamInputOptions.Names">
+            <summary>
+            A collection of well-known demuxer-specific, non-global format options
+            TODO: Implement some of the more common names maybe?
+            </summary>
+        </member>
+        <member name="F:Unosquare.FFME.Shared.StreamInputOptions.Names.ScanAllPmts">
+            <summary>
+            mpegts
+            </summary>
+        </member>
+        <member name="T:Unosquare.FFME.Shared.StreamOptions">
+            <summary>
+            Represents a set of options that are used to initialize a media container before opening the stream.
+            </summary>
+        </member>
+        <member name="M:Unosquare.FFME.Shared.StreamOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Unosquare.FFME.Shared.StreamOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamOptions.Format">
+            <summary>
+            Contains options for the format context as documented:
+            https://ffmpeg.org/ffmpeg-formats.html#Format-Options
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamOptions.Input">
+            <summary>
+            A dictionary containing generic input options for both:
+            Global Codec Options: https://www.ffmpeg.org/ffmpeg-all.html#Codec-Options
+            Demuxer-Private Options: https://ffmpeg.org/ffmpeg-all.html#Demuxers
+            </summary>
+        </member>
+        <member name="P:Unosquare.FFME.Shared.StreamOptions.ProtocolPrefix">
+            <summary>
+            Gets the protocol prefix.
+            Typically async for local files and empty for other types.
             </summary>
         </member>
         <member name="T:Unosquare.FFME.Shared.SubtitleBlock">
