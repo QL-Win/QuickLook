@@ -31,7 +31,7 @@ namespace QuickLook.Common.Plugin
     {
         private bool _canResize = true;
         private bool _fullWindowDragging;
-        private bool _isBusy = true;
+        private bool _isBusy;
         private string _title = string.Empty;
         private bool _titlebarAutoHide;
         private bool _titlebarBlurVisibility;
@@ -207,7 +207,8 @@ namespace QuickLook.Common.Plugin
         public void Reset()
         {
             Title = string.Empty;
-            IsBusy = true;
+            // set to False to prevent showing loading icon
+            IsBusy = false;
             PreferredSize = new Size();
             CanResize = true;
             FullWindowDragging = false;

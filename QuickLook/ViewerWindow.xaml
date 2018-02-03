@@ -152,35 +152,12 @@
                 <ContentControl x:Name="container"
                                 Foreground="{DynamicResource WindowTextForeground}"
                                 Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
-                <DockPanel.Style>
-                    <Style TargetType="{x:Type DockPanel}">
-                        <Setter Property="Visibility" Value="Visible" />
-                        <Style.Triggers>
-                            <DataTrigger
-                                Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
-                                Value="True">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DockPanel.Style>
             </DockPanel>
         </Grid>
-        <Grid x:Name="busyIndicatorLayer" ZIndex="200">
-            <Grid.Style>
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding ContextObject.IsBusy, ElementName=mainWindow}"
-                            Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+        <Grid x:Name="busyIndicatorLayer" ZIndex="200" 
+              Visibility="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
             <busyDecorator:BusyDecorator x:Name="busyDecorator"
-                                         IsBusyIndicatorShowing="True"
+                                         IsBusyIndicatorShowing="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy}"
                                          VerticalAlignment="Center"
                                          HorizontalAlignment="Center" />
         </Grid>

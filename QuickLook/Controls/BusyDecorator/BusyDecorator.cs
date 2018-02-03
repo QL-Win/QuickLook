@@ -70,7 +70,7 @@ namespace QuickLook.Controls.BusyDecorator
         {
             GC.SuppressFinalize(this);
 
-            _busyHost.ThreadedHelper.Exit();
+            _busyHost.ThreadedHelper?.Exit();
         }
 
         protected override Visual GetVisualChild(int index)
