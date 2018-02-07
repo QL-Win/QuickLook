@@ -63,6 +63,7 @@ namespace QuickLook.Plugin.PDFViewer
         {
             _pdfControl = new PdfViewerControl();
             context.ViewerContent = _pdfControl;
+            context.ShowOverlayInfo("");
 
             Exception exception = null;
 

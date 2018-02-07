@@ -6,6 +6,8 @@
     <system:Double x:Key="MainWindowCaptionHeight">32</system:Double>
     <SolidColorBrush x:Key="MainWindowBackground" Color="#BBFAFAFA" />
     <SolidColorBrush x:Key="MainWindowBackgroundNoTransparent" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="OverlayBackgroundSemiTransparent" Color="#77000000" />
+    <SolidColorBrush x:Key="OverlayTextForeground" Color="#FFFEFEFE" />
     <SolidColorBrush x:Key="WindowTextForeground" Color="#FF0E0E0E" />
     <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#FF626262" />
     <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#FF3D3D3D" />

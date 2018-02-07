@@ -63,6 +63,14 @@ namespace QuickLook
                 ViewWindowManager.GetInstance().ForgetCurrentWindow();
             };
 
+            buttonInfo.Click += (sender, e) =>
+            {
+                if (ShowInfo)
+                    return;
+
+                ViewWindowManager.GetInstance().ShowAndHideInfo();
+            };
+
             buttonCloseWindow.Click += (sender, e) =>
             {
                 if (Pinned)

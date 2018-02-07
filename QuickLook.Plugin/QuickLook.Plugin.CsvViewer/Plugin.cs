@@ -47,6 +47,7 @@ namespace QuickLook.Plugin.CsvViewer
 
             context.ViewerContent = _panel;
             context.Title = $"{Path.GetFileName(path)}";
+            context.ShowOverlayInfo("");
             _panel.LoadFile(path);
 
             context.IsBusy = false;

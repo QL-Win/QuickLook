@@ -67,6 +67,7 @@ namespace QuickLook.Plugin.TextViewer
 
             context.ViewerContent = _tvp;
             context.Title = $"{Path.GetFileName(path)}";
+            context.ShowOverlayInfo("");
 
             context.IsBusy = false;
         }

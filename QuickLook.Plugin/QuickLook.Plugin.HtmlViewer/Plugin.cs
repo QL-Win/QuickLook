@@ -51,6 +51,7 @@ namespace QuickLook.Plugin.HtmlViewer
             _panel = new WebpagePanel();
             context.ViewerContent = _panel;
             context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
+            context.ShowOverlayInfo("");
 
             _panel.Navigate(path);
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);

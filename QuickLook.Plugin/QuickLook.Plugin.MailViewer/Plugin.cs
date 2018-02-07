@@ -51,6 +51,7 @@ namespace QuickLook.Plugin.MailViewer
             _panel = new WebpagePanel();
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
+            context.ShowOverlayInfo("");
 
             _panel.Navigate(ExtractMailBody(path));
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);

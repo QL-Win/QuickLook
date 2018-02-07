@@ -21,6 +21,7 @@ using System.Linq;
 using System.Windows;
 using ImageMagick;
 using QuickLook.Plugin.ImageViewer.Exiv2;
+using System.Windows.Controls;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -70,6 +71,15 @@ namespace QuickLook.Plugin.ImageViewer
         {
             _ip = new ImagePanel(_meta);
 
+            var summary = _ip.Meta.GetSummary();
+            string s = "";
+            foreach (var item in summary)
+            {
+                s += String.Format("{0,-30}: ", item.Key.ToString());
+                s += String.Format("{0,-200}", item.Value.ToString());
+                s += "\n";
+            }
+            context.ShowOverlayInfo(s);
             context.ViewerContent = _ip;
             context.Title = _imageSize.IsEmpty
                 ? $"{Path.GetFileName(path)}"

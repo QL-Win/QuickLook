@@ -42,6 +42,18 @@ namespace QuickLook
             StopFocusMonitor();
         }
 
+        public void ShowAndHideInfo(bool show=true)
+        {
+            if(_viewerWindow.containerOverlayFade.Visibility != Visibility.Visible && show==true)
+            {
+                _viewerWindow.containerOverlayFade.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                _viewerWindow.containerOverlayFade.Visibility = Visibility.Collapsed;
+            }
+        }
+
         public void RunAndClosePreview()
         {
             if (_viewerWindow.Visibility != Visibility.Visible)

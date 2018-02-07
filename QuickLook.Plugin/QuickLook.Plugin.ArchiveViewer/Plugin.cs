@@ -51,6 +51,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
             context.ViewerContent = _panel;
             context.Title = $"{Path.GetFileName(path)}";
+            context.ShowOverlayInfo("");
 
             context.IsBusy = false;
         }

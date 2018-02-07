@@ -80,7 +80,6 @@
                 <TextBlock x:Name="metaTitle" Grid.Row="1" FontSize="22" Padding="3"
                            TextWrapping="Wrap"
                            LineHeight="28" MaxHeight="80" TextTrimming="CharacterEllipsis">
-                    ときめきポポロン♪
                 </TextBlock>
                 <TextBlock x:Name="metaArtists" Grid.Row="3" FontSize="14" Padding="3" TextTrimming="CharacterEllipsis"
                            Foreground="{DynamicResource WindowTextForeground}">
@@ -98,7 +97,7 @@
 
         <Grid x:Name="videoControlContainer" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
             <Grid.Resources>
-                <Storyboard x:Key="ShowControlStoryboard" Completed="AutoHideViedoControlContainer">
+                <Storyboard x:Key="ShowControlStoryboard" Completed="AutoHideVideoControlContainer">
                     <DoubleAnimation
                         Storyboard.Target="{Binding Source={x:Reference videoControlContainer}}"
                         Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05" />

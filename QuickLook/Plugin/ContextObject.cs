@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using QuickLook.Annotations;
 using QuickLook.Helpers;
 
@@ -41,6 +42,7 @@ namespace QuickLook.Plugin
         private bool _titlebarOverlap;
         private bool _useDarkTheme;
         private object _viewerContent;
+        private object _viewerOverlayContent;
 
         /// <summary>
         ///     Get the viewer window.
@@ -69,6 +71,19 @@ namespace QuickLook.Plugin
             set
             {
                 _viewerContent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Get or set the viewer content control.
+        /// </summary>
+        public object ViewerOverlayContent
+        {
+            get => _viewerOverlayContent;
+            set
+            {
+                _viewerOverlayContent = value;
                 OnPropertyChanged();
             }
         }
@@ -252,6 +267,23 @@ namespace QuickLook.Plugin
             PreferredSize = new Size {Width = size.Width * ratio, Height = size.Height * ratio};
 
             return ratio;
+        }
+
+        public void ShowOverlayInfo(string infoText = "")
+        {
+            if (infoText != "")
+            {
+                //ViewerOverlayContent = new TextBlock()
+                //{
+                //    Text = infoText
+                //};
+                ViewerOverlayContent = infoText;
+            }
+            else
+            {
+                // possibly hide overlay when empty string is sent
+                ViewWindowManager.GetInstance().ShowAndHideInfo(show:false);
+            }
         }
 
         internal void Reset()

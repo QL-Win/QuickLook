@@ -42,6 +42,17 @@ namespace QuickLook
                 OnPropertyChanged();
             }
         }
+        private bool _showInfo;
+        internal bool ShowInfo
+        {
+            get => _showInfo;
+            set
+            {
+                _showInfo = value;
+                buttonInfo.Tag = "Info";
+                OnPropertyChanged();
+            }
+        }
         public IViewer Plugin { get; private set; }
         public ContextObject ContextObject { get; private set; }
         public event PropertyChangedEventHandler PropertyChanged;

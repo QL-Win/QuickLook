@@ -10,7 +10,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ScrollBarStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Key="SegoeMDL2">./Fonts/#Segoe MDL2 Assets</FontFamily>
+            <!--<FontFamily x:Key="SegoeMDL2">./Fonts/#Segoe MDL2 Assets</FontFamily>-->
+            <FontFamily x:Key="SegoeMDL2">Segoe MDL2 Assets</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

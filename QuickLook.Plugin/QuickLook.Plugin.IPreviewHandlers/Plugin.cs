@@ -62,6 +62,7 @@ namespace QuickLook.Plugin.IPreviewHandlers
             _panel = new PreviewPanel();
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
+            context.ShowOverlayInfo("");
 
             _panel.PreviewFile(path, context);
 

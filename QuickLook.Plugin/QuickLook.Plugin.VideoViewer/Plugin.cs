@@ -104,6 +104,7 @@ namespace QuickLook.Plugin.VideoViewer
             _vp = new ViewerPanel(context, probe.HasVideo());
 
             context.ViewerContent = _vp;
+            context.ShowOverlayInfo(probe.RawResult);
 
             _vp.mediaElement.MediaOpened += MediaElement_MediaOpened;
             _vp.LoadAndPlay(path);

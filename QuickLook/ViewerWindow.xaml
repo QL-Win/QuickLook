@@ -137,6 +137,27 @@
                             </Style>
                         </Button.Style>
                     </Button>
+                    <Button DockPanel.Dock="Left" x:Name="buttonInfo" Tag="Auto">
+                        <Button.Resources>
+                            <Grid x:Key="ContentInfo">
+                                <TextBlock>&#xE946;</TextBlock>
+                                <TextBlock>&#xF167;</TextBlock>
+                            </Grid>
+                        </Button.Resources>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                                <Setter Property="Content" Value="&#xE946;" />
+                                <Style.Triggers>
+                                    <Trigger Property="Tag" Value="Auto">
+                                        <Setter Property="Content" Value="&#xE946;" />
+                                    </Trigger>
+                                    <Trigger Property="Tag" Value="Pin">
+                                        <Setter Property="Content" Value="{StaticResource ContentInfo}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                     <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
                             Content="&#xE72D;" />
                     <Grid x:Name="titleArea" Background="Transparent">
@@ -149,9 +170,28 @@
             <DockPanel x:Name="containerPanel" ZIndex="80">
                 <Grid DockPanel.Dock="Top" Height="{StaticResource MainWindowCaptionHeight}"
                       Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
-                <ContentControl x:Name="container"
-                                Foreground="{DynamicResource WindowTextForeground}"
-                                Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
+                <Grid>
+                    <ContentControl x:Name="container"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Panel.ZIndex="0"
+                                    Foreground="{DynamicResource WindowTextForeground}"
+                                    Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
+                    <Border x:Name="containerOverlayFade"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Panel.ZIndex="100"
+                            Background="{DynamicResource OverlayBackgroundSemiTransparent}"
+                            Padding="20,40,20,20"
+                            Visibility="Collapsed" >
+                        <ScrollViewer>
+                            <TextBlock x:Name="containerOverlayContent"
+                                       Foreground="{DynamicResource OverlayTextForeground}"
+                                       Text="{Binding ContextObject.ViewerOverlayContent, ElementName=mainWindow}"
+                                       FontFamily="Consolas, Courier" />
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
                 <DockPanel.Style>
                     <Style TargetType="{x:Type DockPanel}">
                         <Setter Property="Visibility" Value="Visible" />

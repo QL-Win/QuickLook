@@ -67,9 +67,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetExt>.dll</TargetExt>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include\</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include\</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

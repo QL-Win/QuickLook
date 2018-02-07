@@ -50,6 +50,7 @@ namespace QuickLook.Plugin.MarkdownViewer
             _panel = new WebpagePanel();
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
+            context.ShowOverlayInfo("");
 
             _panel.LoadHtml(GenerateMarkdownHtml(path));
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);

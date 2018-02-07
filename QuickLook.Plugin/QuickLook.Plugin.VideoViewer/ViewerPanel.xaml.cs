@@ -53,8 +53,8 @@ namespace QuickLook.Plugin.VideoViewer
             // apply global theme
             Resources.MergedDictionaries[0].MergedDictionaries.Clear();
 
-            ShowViedoControlContainer(null, null);
-            viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
+            ShowVideoControlContainer(null, null);
+            viewerPanel.PreviewMouseMove += ShowVideoControlContainer;
 
             //mediaElement.PropertyChanged += PlayerPropertyChanged;
             //mediaElement.StateChanged += PlayerStateChanged;
@@ -123,14 +123,14 @@ namespace QuickLook.Plugin.VideoViewer
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void ShowViedoControlContainer(object sender, MouseEventArgs e)
+        private void ShowVideoControlContainer(object sender, MouseEventArgs e)
         {
             var show = (Storyboard) videoControlContainer.FindResource("ShowControlStoryboard");
             if (videoControlContainer.Opacity == 0 || videoControlContainer.Opacity == 1)
                 show.Begin();
         }
 
-        private void AutoHideViedoControlContainer(object sender, EventArgs e)
+        private void AutoHideVideoControlContainer(object sender, EventArgs e)
         {
             if (!ShowVideo)
                 return;
