@@ -76,7 +76,7 @@ namespace QuickLook.Helpers
             });
         }
 
-        public static void CollectAndShowReleaseNotes()
+        private static void CollectAndShowReleaseNotes()
         {
             Task.Run(() =>
             {

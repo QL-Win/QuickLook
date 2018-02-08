@@ -77,8 +77,7 @@ namespace QuickLook
                 Shutdown();
                 return;
             }
-
-            UpgradeSettings();
+            
             CheckUpdate();
             RunListener(e);
 
@@ -94,34 +93,6 @@ namespace QuickLook
 
             Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
             SettingHelper.Set("LastUpdate", DateTime.Now);
-        }
-
-        private void UpgradeSettings()
-        {
-            try
-            {
-                if (!SettingHelper.Get("Upgraded", true))
-                    return;
-
-                Updater.CollectAndShowReleaseNotes();
-
-                SettingHelper.Set("Upgraded", false);
-            }
-            catch (ConfigurationErrorsException e)
-            {
-                if (e.Filename != null)
-                    File.Delete(e.Filename);
-                else if (((ConfigurationErrorsException) e.InnerException)?.Filename != null)
-                    File.Delete(((ConfigurationErrorsException) e.InnerException).Filename);
-
-                MessageBox.Show("Configuration file is currupted and has been reseted. Please restart QuickLook.",
-                    "QuickLook", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                Process.GetCurrentProcess().Kill(); // just kill current process to avoid subsequence executions
-                //return;
-            }
-
-            SettingHelper.Set("Upgraded", false);
         }
 
         private void RemoteCallShowPreview(StartupEventArgs e)
@@ -147,15 +118,15 @@ namespace QuickLook
 
         private void App_OnExit(object sender, ExitEventArgs e)
         {
-            if (_isFirstInstance)
-            {
-                _isRunning.ReleaseMutex();
+            if (!_isFirstInstance)
+                return;
 
-                PipeServerManager.GetInstance().Dispose();
-                TrayIconManager.GetInstance().Dispose();
-                BackgroundListener.GetInstance().Dispose();
-                ViewWindowManager.GetInstance().Dispose();
-            }
+            _isRunning.ReleaseMutex();
+
+            PipeServerManager.GetInstance().Dispose();
+            TrayIconManager.GetInstance().Dispose();
+            BackgroundListener.GetInstance().Dispose();
+            ViewWindowManager.GetInstance().Dispose();
         }
 
         private void EnsureFirstInstance()
