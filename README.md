@@ -66,7 +66,7 @@ See the [Wiki page](https://github.com/xupefei/QuickLook/wiki/Translations).
 
 Application icons made by [@QubitsDev](https://twitter.com/qubitsdev). User interface designed by [@OiCkilL](https://twitter.com/OiCkilL). Thank you!
 
-This project references many other projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
+This project references many other open-source projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
 
 All source codes are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
 
