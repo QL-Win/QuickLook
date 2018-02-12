@@ -50,12 +50,9 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
         public void PreviewFile(string file, ContextObject context)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _control = new PreviewHandlerHost();
-                presenter.Child = _control;
-                _control.Open(file);
-            }), DispatcherPriority.Loaded);
+            _control = new PreviewHandlerHost();
+            presenter.Child = _control;
+            _control.Open(file);
 
             //SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
             //SetActiveWindow(presenter.Handle);
