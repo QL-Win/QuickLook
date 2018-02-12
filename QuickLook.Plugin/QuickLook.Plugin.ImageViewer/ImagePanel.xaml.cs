@@ -18,6 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -252,6 +253,8 @@ namespace QuickLook.Plugin.ImageViewer
                 textMeta.Inlines.Add("\r\n");
             });
             textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
+            if (!textMeta.Inlines.Any())
+                MetaIconVisibility = Visibility.Collapsed;
         }
 
         public event EventHandler<int> ImageScrolled;

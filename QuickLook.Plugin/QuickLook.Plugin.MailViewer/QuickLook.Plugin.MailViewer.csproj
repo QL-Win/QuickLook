@@ -57,19 +57,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Itenso.Rtf.Converter.Html, Version=1.7.0.0, Culture=neutral, PublicKeyToken=d7f23b760ed5c748, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MSGReader.2.1.2\lib\Itenso.Rtf.Converter.Html.dll</HintPath>
+      <HintPath>..\..\packages\MSGReader.2.1.3\lib\Itenso.Rtf.Converter.Html.dll</HintPath>
     </Reference>
     <Reference Include="Itenso.Rtf.Interpreter, Version=1.7.0.0, Culture=neutral, PublicKeyToken=d7f23b760ed5c748, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MSGReader.2.1.2\lib\Itenso.Rtf.Interpreter.dll</HintPath>
+      <HintPath>..\..\packages\MSGReader.2.1.3\lib\Itenso.Rtf.Interpreter.dll</HintPath>
     </Reference>
     <Reference Include="Itenso.Rtf.Parser, Version=1.7.0.0, Culture=neutral, PublicKeyToken=d7f23b760ed5c748, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MSGReader.2.1.2\lib\Itenso.Rtf.Parser.dll</HintPath>
+      <HintPath>..\..\packages\MSGReader.2.1.3\lib\Itenso.Rtf.Parser.dll</HintPath>
     </Reference>
     <Reference Include="Itenso.Sys, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d7f23b760ed5c748, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MSGReader.2.1.2\lib\Itenso.Sys.dll</HintPath>
+      <HintPath>..\..\packages\MSGReader.2.1.3\lib\Itenso.Sys.dll</HintPath>
     </Reference>
-    <Reference Include="MsgReader, Version=2.1.2.0, Culture=neutral, PublicKeyToken=47f99f3a9a2648df, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MSGReader.2.1.2\lib\MsgReader.dll</HintPath>
+    <Reference Include="MsgReader, Version=2.1.3.0, Culture=neutral, PublicKeyToken=47f99f3a9a2648df, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MSGReader.2.1.3\lib\MsgReader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

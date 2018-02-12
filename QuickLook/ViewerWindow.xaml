@@ -71,9 +71,9 @@
                     <DockPanel.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
                     </DockPanel.Effect>
-                    <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow" ToolTip="Close"
+                    <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
                             Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
-                    <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus" ToolTip="Toggle Maximize and Normal"
+                    <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"
                             Visibility="{Binding ContextObject.CanResize, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">

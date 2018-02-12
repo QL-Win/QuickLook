@@ -99,13 +99,13 @@ namespace QuickLook
 
             var newWindow = new ViewerWindow();
 
-            if (_viewerWindow.WindowState != WindowState.Maximized)
+            /*if (_viewerWindow.WindowState != WindowState.Maximized)
             {
                 newWindow.Top = _viewerWindow.Top;
                 newWindow.Left = _viewerWindow.Left;
                 newWindow.Width = _viewerWindow.Width;
                 newWindow.Height = _viewerWindow.Height;
-            }
+            }*/
 
             _viewerWindow = newWindow;
         }
