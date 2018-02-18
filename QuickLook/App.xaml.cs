@@ -88,11 +88,11 @@ namespace QuickLook
 
         private void CheckUpdate()
         {
-            if (DateTime.Now - SettingHelper.Get<DateTime>("LastUpdate") < TimeSpan.FromDays(7))
+            if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(7).Ticks)
                 return;
 
             Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
-            SettingHelper.Set("LastUpdate", DateTime.Now);
+            SettingHelper.Set("LastUpdateTicks", DateTime.Now.Ticks);
         }
 
         private void RemoteCallShowPreview(StartupEventArgs e)

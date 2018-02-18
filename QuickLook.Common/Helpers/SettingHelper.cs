@@ -64,9 +64,16 @@ namespace QuickLook.Common.Helpers
         private static T GetSettingFromXml<T>(XmlDocument doc, string id, T failsafe)
         {
             var v = doc.SelectSingleNode($@"/Settings/{id}");
-            var result = v == null ? failsafe : (T) Convert.ChangeType(v.InnerText, typeof(T));
 
-            return result;
+            try
+            {
+                var result = v == null ? failsafe : (T) Convert.ChangeType(v.InnerText, typeof(T));
+                return result;
+            }
+            catch (Exception)
+            {
+                return failsafe;
+            }
         }
 
         private static void WriteSettingToXml(XmlDocument doc, string id, object value)
@@ -81,7 +88,7 @@ namespace QuickLook.Common.Helpers
             {
                 var node = doc.CreateNode(XmlNodeType.Element, id, doc.NamespaceURI);
                 node.InnerText = value.ToString();
-                doc.SelectSingleNode(@"/Settings").AppendChild(node);
+                doc.SelectSingleNode(@"/Settings")?.AppendChild(node);
             }
 
             doc.Save(new Uri(doc.BaseURI).LocalPath);
@@ -97,7 +104,22 @@ namespace QuickLook.Common.Helpers
                 CreateNewConfig(file);
 
             var doc = new XmlDocument();
-            doc.Load(file);
+            try
+            {
+                doc.Load(file);
+            }
+            catch (XmlException)
+            {
+                CreateNewConfig(file);
+                doc.Load(file);
+            }
+
+            if (doc.SelectSingleNode(@"/Settings") == null)
+            {
+                CreateNewConfig(file);
+                doc.Load(file);
+            }
+
             FileCache.Add(file, doc);
             return doc;
         }
@@ -110,6 +132,8 @@ namespace QuickLook.Common.Helpers
                 writer.WriteStartElement("Settings");
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
+
+                writer.Flush();
             }
         }
     }
