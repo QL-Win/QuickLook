@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+AutoHotkey syntax highlighting
+Written by Ezra Altahan
+Created 19/01/2015 | Updated 7/11/2016
+Version 1.2
+
+Hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="AutoHotkey" extensions=".ahk">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value=";"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+                        
+            <Delimiters>()[]{}@,.`=;+-*/~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+                        
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+                        
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="And"/>
+                <Key word="Break"/>
+                <Key word="Byref"/>
+                <Key word="Catch"/>
+                <Key word="Class"/>
+                <Key word="Continue"/>
+                <Key word="Else"/>
+                <Key word="Exit"/>
+                <Key word="ExitApp"/>
+                <Key word="Extends"/>
+                <Key word="False"/>
+                <Key word="Finally"/>
+                <Key word="For"/>
+                <Key word="Global"/>
+                <Key word="GoSub"/>
+                <Key word="GoTo"/>
+                <Key word="If"/>
+                <Key word="IfEqual"/>
+                <Key word="IfExist"/>
+                <Key word="IfGreater"/>
+                <Key word="IfGreaterOrEqual"/>
+                <Key word="IfInString"/>
+                <Key word="IfLess"/>
+                <Key word="IfLessOrEqual"/>
+                <Key word="IfMsgBox"/>
+                <Key word="IfNotEqual"/>
+                <Key word="IfNotExist"/>
+                <Key word="IfNotInString"/>
+                <Key word="IfWinActive"/>
+                <Key word="IfWinExist"/>
+                <Key word="IfWinNotActive"/>
+                <Key word="IfWinNotExist"/>
+                <Key word="In"/>
+                <Key word="Is"/>
+                <Key word="Local"/>
+                <Key word="Loop"/>
+                <Key word="Not"/>
+                <Key word="OnExit"/>
+                <Key word="Or"/>
+                <Key word="Pause"/>
+                <Key word="Return"/>
+                <Key word="Static"/>
+                <Key word="Throw"/>
+                <Key word="True"/>
+                <Key word="Try"/>
+                <Key word="Until"/>
+                <Key word="While"/>
+            </KeyWords>
+                        
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="ACos"/>
+                <Key word="ASin"/>
+                <Key word="ATan"/>
+                <Key word="Abs"/>
+                <Key word="Asc"/>
+                <Key word="Ceil"/>
+                <Key word="Chr"/>
+                <Key word="Cos"/>
+                <Key word="DllCall"/>
+                <Key word="Exp"/>
+                <Key word="FileExist"/>
+                <Key word="FileOpen"/>
+                <Key word="Floor"/>
+                <Key word="Func"/>
+                <Key word="GetKeyName"/>
+                <Key word="GetKeyState"/>
+                <Key word="InStr"/>
+                <Key word="IsByRef"/>
+                <Key word="IsFunc"/>
+                <Key word="IsLabel"/>
+                <Key word="IsObject"/>
+                <Key word="Ln"/>
+                <Key word="Log"/>
+                <Key word="Mod"/>
+                <Key word="NumGet"/>
+                <Key word="NumPut"/>
+                <Key word="OnMessage"/>
+                <Key word="Ord"/>
+                <Key word="RegExMatch"/>
+                <Key word="RegExReplace"/>
+                <Key word="RegisterCallback"/>
+                <Key word="Round"/>
+                <Key word="Sin"/>
+                <Key word="Sqrt"/>
+                <Key word="StrGet"/>
+                <Key word="StrLen"/>
+                <Key word="StrPut"/>
+                <Key word="StrReplace"/>
+                <Key word="StrSplit"/>
+                <Key word="SubStr"/>
+                <Key word="Tan"/>
+                <Key word="Trim"/>
+                <Key word="VarSetCapacity"/>
+                <Key word="WinActive"/>
+                <Key word="WinExist"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="A_AhkPath"/>
+                <Key word="A_AhkVersion"/>
+                <Key word="A_AppData"/>
+                <Key word="A_AppDataCommon"/>
+                <Key word="A_AutoTrim"/>
+                <Key word="A_BatchLines"/>
+                <Key word="A_CaretX"/>
+                <Key word="A_CaretY"/>
+                <Key word="A_ComputerName"/>
+                <Key word="A_ControlDelay"/>
+                <Key word="A_CoordModeCaret"/>
+                <Key word="A_CoordModeMenu"/>
+                <Key word="A_CoordModeMouse"/>
+                <Key word="A_CoordModePixel"/>
+                <Key word="A_CoordModeToolTip"/>
+                <Key word="A_Cursor"/>
+                <Key word="A_DD"/>
+                <Key word="A_DDD"/>
+                <Key word="A_DDDD"/>
+                <Key word="A_DefaultGui"/>
+                <Key word="A_DefaultListView"/>
+                <Key word="A_DefaultMouseSpeed"/>
+                <Key word="A_DefaultTreeView"/>
+                <Key word="A_Desktop"/>
+                <Key word="A_DesktopCommon"/>
+                <Key word="A_DetectHiddenText"/>
+                <Key word="A_DetectHiddenWindows"/>
+                <Key word="A_EndChar"/>
+                <Key word="A_EventInfo"/>
+                <Key word="A_ExitReason"/>
+                <Key word="A_FileEncoding"/>
+                <Key word="A_FormatFloat"/>
+                <Key word="A_FormatInteger"/>
+                <Key word="A_Gui"/>
+                <Key word="A_GuiControl"/>
+                <Key word="A_GuiControlEvent"/>
+                <Key word="A_GuiEvent"/>
+                <Key word="A_GuiHeight"/>
+                <Key word="A_GuiWidth"/>
+                <Key word="A_GuiX"/>
+                <Key word="A_GuiY"/>
+                <Key word="A_Hour"/>
+                <Key word="A_IPAddress1"/>
+                <Key word="A_IPAddress2"/>
+                <Key word="A_IPAddress3"/>
+                <Key word="A_IPAddress4"/>
+                <Key word="A_IconFile"/>
+                <Key word="A_IconHidden"/>
+                <Key word="A_IconNumber"/>
+                <Key word="A_IconTip"/>
+                <Key word="A_Index"/>
+                <Key word="A_Is64bitOS"/>
+                <Key word="A_IsAdmin"/>
+                <Key word="A_IsCompiled"/>
+                <Key word="A_IsCritical"/>
+                <Key word="A_IsPaused"/>
+                <Key word="A_IsSuspended"/>
+                <Key word="A_IsUnicode"/>
+                <Key word="A_KeyDelay"/>
+                <Key word="A_KeyDelayPlay"/>
+                <Key word="A_KeyDuration"/>
+                <Key word="A_KeyDurationPlay"/>
+                <Key word="A_Language"/>
+                <Key word="A_LastError"/>
+                <Key word="A_LineFile"/>
+                <Key word="A_LineNumber"/>
+                <Key word="A_LoopField"/>
+                <Key word="A_LoopFileAttrib"/>
+                <Key word="A_LoopFileDir"/>
+                <Key word="A_LoopFileExt"/>
+                <Key word="A_LoopFileFullPath"/>
+                <Key word="A_LoopFileLongPath"/>
+                <Key word="A_LoopFileName"/>
+                <Key word="A_LoopFileShortName"/>
+                <Key word="A_LoopFileShortPath"/>
+                <Key word="A_LoopFileSize"/>
+                <Key word="A_LoopFileSizeKB"/>
+                <Key word="A_LoopFileSizeMB"/>
+                <Key word="A_LoopFileTimeAccessed"/>
+                <Key word="A_LoopFileTimeCreated"/>
+                <Key word="A_LoopFileTimeModified"/>
+                <Key word="A_LoopReadLine"/>
+                <Key word="A_LoopRegKey"/>
+                <Key word="A_LoopRegName"/>
+                <Key word="A_LoopRegSubKey"/>
+                <Key word="A_LoopRegTimeModified"/>
+                <Key word="A_LoopRegType"/>
+                <Key word="A_MDAY"/>
+                <Key word="A_MM"/>
+                <Key word="A_MMM"/>
+                <Key word="A_MMMM"/>
+                <Key word="A_MON"/>
+                <Key word="A_MSec"/>
+                <Key word="A_Min"/>
+                <Key word="A_MouseDelay"/>
+                <Key word="A_MouseDelayPlay"/>
+                <Key word="A_MyDocuments"/>
+                <Key word="A_Now"/>
+                <Key word="A_NowUTC"/>
+                <Key word="A_NumBatchLines"/>
+                <Key word="A_OSType"/>
+                <Key word="A_OSVersion"/>
+                <Key word="A_PriorHotkey"/>
+                <Key word="A_PriorKey"/>
+                <Key word="A_ProgramFiles"/>
+                <Key word="A_Programs"/>
+                <Key word="A_ProgramsCommon"/>
+                <Key word="A_PtrSize"/>
+                <Key word="A_RegView"/>
+                <Key word="A_ScreenDPI"/>
+                <Key word="A_ScreenHeight"/>
+                <Key word="A_ScreenWidth"/>
+                <Key word="A_ScriptDir"/>
+                <Key word="A_ScriptFullPath"/>
+                <Key word="A_ScriptHwnd"/>
+                <Key word="A_ScriptName"/>
+                <Key word="A_Sec"/>
+                <Key word="A_SendLevel"/>
+                <Key word="A_SendMode"/>
+                <Key word="A_Space"/>
+                <Key word="A_StartMenu"/>
+                <Key word="A_StartMenuCommon"/>
+                <Key word="A_Startup"/>
+                <Key word="A_StartupCommon"/>
+                <Key word="A_StoreCapslockMode"/>
+                <Key word="A_StringCaseSense"/>
+                <Key word="A_Tab"/>
+                <Key word="A_Temp"/>
+                <Key word="A_ThisFunc"/>
+                <Key word="A_ThisHotkey"/>
+                <Key word="A_ThisLabel"/>
+                <Key word="A_ThisMenu"/>
+                <Key word="A_ThisMenuItem"/>
+                <Key word="A_ThisMenuItemPos"/>
+                <Key word="A_TickCount"/>
+                <Key word="A_TimeIdle"/>
+                <Key word="A_TimeIdlePhysical"/>
+                <Key word="A_TimeSincePriorHotkey"/>
+                <Key word="A_TimeSinceThisHotkey"/>
+                <Key word="A_TitleMatchMode"/>
+                <Key word="A_TitleMatchModeSpeed"/>
+                <Key word="A_UserName"/>
+                <Key word="A_WDay"/>
+                <Key word="A_WinDelay"/>
+                <Key word="A_WinDir"/>
+                <Key word="A_WorkingDir"/>
+                <Key word="A_YDay"/>
+                <Key word="A_YWeek"/>
+                <Key word="A_YYYY"/>
+                <Key word="A_Year"/>
+                <Key word="Clipboard"/>
+                <Key word="ClipboardAll"/>
+                <Key word="ComSpec"/>
+                <Key word="ErrorLevel"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Black" bold="false" italic="true">
+                <Key word="Alt"/>
+                <Key word="AppsKey"/>
+                <Key word="Backspace"/>
+                <Key word="Browser_Back"/>
+                <Key word="Browser_Favorites"/>
+                <Key word="Browser_Forward"/>
+                <Key word="Browser_Home"/>
+                <Key word="Browser_Refresh"/>
+                <Key word="Browser_Search"/>
+                <Key word="Browser_Stop"/>
+                <Key word="CapsLock"/>
+                <Key word="Control"/>
+                <Key word="Ctrl"/>
+                <Key word="CtrlBreak"/>
+                <Key word="Del"/>
+                <Key word="Delete"/>
+                <Key word="Down"/>
+                <Key word="End"/>
+                <Key word="Enter"/>
+                <Key word="Esc"/>
+                <Key word="Escape"/>
+                <Key word="Escape"/>
+                <Key word="F1"/>
+                <Key word="F10"/>
+                <Key word="F11"/>
+                <Key word="F12"/>
+                <Key word="F13"/>
+                <Key word="F14"/>
+                <Key word="F15"/>
+                <Key word="F16"/>
+                <Key word="F17"/>
+                <Key word="F18"/>
+                <Key word="F19"/>
+                <Key word="F2"/>
+                <Key word="F20"/>
+                <Key word="F21"/>
+                <Key word="F22"/>
+                <Key word="F23"/>
+                <Key word="F24"/>
+                <Key word="F4"/>
+                <Key word="F5"/>
+                <Key word="F6"/>
+                <Key word="F7"/>
+                <Key word="F8"/>
+                <Key word="F9"/>
+                <Key word="Home"/>
+                <Key word="Ins"/>
+                <Key word="Insert"/>
+                <Key word="Joy1"/>
+                <Key word="Joy10"/>
+                <Key word="Joy12"/>
+                <Key word="Joy13"/>
+                <Key word="Joy14"/>
+                <Key word="Joy15"/>
+                <Key word="Joy16"/>
+                <Key word="Joy17"/>
+                <Key word="Joy18"/>
+                <Key word="Joy19"/>
+                <Key word="Joy2"/>
+                <Key word="Joy20"/>
+                <Key word="Joy21"/>
+                <Key word="Joy22"/>
+                <Key word="Joy23"/>
+                <Key word="Joy24"/>
+                <Key word="Joy25"/>
+                <Key word="Joy26"/>
+                <Key word="Joy27"/>
+                <Key word="Joy28"/>
+                <Key word="Joy29"/>
+                <Key word="Joy3"/>
+                <Key word="Joy30"/>
+                <Key word="Joy31"/>
+                <Key word="Joy32"/>
+                <Key word="Joy4"/>
+                <Key word="Joy5"/>
+                <Key word="Joy6"/>
+                <Key word="Joy7"/>
+                <Key word="Joy8"/>
+                <Key word="Joy9"/>
+                <Key word="JoyAxes"/>
+                <Key word="JoyButtons"/>
+                <Key word="JoyInfo"/>
+                <Key word="JoyName"/>
+                <Key word="JoyPOV"/>
+                <Key word="JoyR"/>
+                <Key word="JoyU"/>
+                <Key word="JoyV"/>
+                <Key word="JoyX"/>
+                <Key word="JoyY"/>
+                <Key word="JoyZ"/>
+                <Key word="LAlt"/>
+                <Key word="LButton"/>
+                <Key word="LControl"/>
+                <Key word="LCtrl"/>
+                <Key word="LShift"/>
+                <Key word="LWin"/>
+                <Key word="Launch_App1"/>
+                <Key word="Launch_App2"/>
+                <Key word="Launch_Mail"/>
+                <Key word="Launch_Media"/>
+                <Key word="Left"/>
+                <Key word="MButton"/>
+                <Key word="Media_Next"/>
+                <Key word="Media_Play_Pause"/>
+                <Key word="Media_Prev"/>
+                <Key word="Media_Stop"/>
+                <Key word="NumLock"/>
+                <Key word="Numpad0"/>
+                <Key word="Numpad1"/>
+                <Key word="Numpad2"/>
+                <Key word="Numpad3"/>
+                <Key word="Numpad4"/>
+                <Key word="Numpad5"/>
+                <Key word="Numpad6"/>
+                <Key word="Numpad7"/>
+                <Key word="Numpad8"/>
+                <Key word="Numpad9"/>
+                <Key word="NumpadAdd"/>
+                <Key word="NumpadDiv"/>
+                <Key word="NumpadDot"/>
+                <Key word="NumpadEnter"/>
+                <Key word="NumpadMult"/>
+                <Key word="NumpadSub"/>
+                <Key word="PgDn"/>
+                <Key word="PgUp"/>
+                <Key word="PrintScreen"/>
+                <Key word="RAlt"/>
+                <Key word="RButton"/>
+                <Key word="RShift"/>
+                <Key word="RWin"/>
+                <Key word="Right"/>
+                <Key word="ScrollLock"/>
+                <Key word="Shift"/>
+                <Key word="Space"/>
+                <Key word="Tab"/>
+                <Key word="Up"/>
+                <Key word="Volume_Down"/>
+                <Key word="Volume_Mute"/>
+                <Key word="Volume_Up"/>
+                <Key word="WheelDown"/>
+                <Key word="WheelLeft"/>
+                <Key word="WheelRight"/>
+                <Key word="WheelUp"/>
+                <Key word="XButton1"/>
+                <Key word="XButton2"/>            
+            </KeyWords>
+            
+            <KeyWords name="Keywords5" color="Sienna" bold="false" italic="false">
+                <Key word="#AllowSameLineComments"/>
+                <Key word="#ClipboardTimeout"/>
+                <Key word="#CommentFlag"/>
+                <Key word="#ErrorStdOut"/>
+                <Key word="#EscapeChar"/>
+                <Key word="#HotkeyInterval"/>
+                <Key word="#HotkeyModifierTimeout"/>
+                <Key word="#Hotstring"/>
+                <Key word="#If"/>
+                <Key word="#IfTimeout"/>
+                <Key word="#IfWinActive"/>
+                <Key word="#IfWinExist"/>
+                <Key word="#Include"/>
+                <Key word="#IncludeAgain"/>
+                <Key word="#InputLevel"/>
+                <Key word="#InstallKeybdHook"/>
+                <Key word="#InstallMouseHook"/>
+                <Key word="#KeyHistory"/>
+                <Key word="#MaxHotkeysPerInterval"/>
+                <Key word="#MaxMem"/>
+                <Key word="#MaxThreads"/>
+                <Key word="#MaxThreadsBuffer"/>
+                <Key word="#MaxThreadsPerHotkey"/>
+                <Key word="#MenuMaskKey"/>
+                <Key word="#NoEnv"/>
+                <Key word="#NoTrayIcon"/>
+                <Key word="#Persistent"/>
+                <Key word="#SingleInstance"/>
+                <Key word="#UseHook"/>
+                <Key word="#Warn"/>
+                <Key word="#WinActivateForce"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

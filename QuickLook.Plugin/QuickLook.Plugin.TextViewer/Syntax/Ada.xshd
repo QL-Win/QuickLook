@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Ada syntax highlighting
+Written by Ezra Altahan
+Created 15/01/2013 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Ada" extensions=".ada;.ads;.adb">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#CA7000"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>~!@%^*()-+=|\/{}[]:;"'&lt;&gt;,.?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Gray" bold="false" italic="false">
+                <Begin singleword="true">'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="Red" bold="false" italic="false">'</MarkFollowing>
+            <MarkFollowing color="DarkBlue" bold="false" italic="false">procedure</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="abort"/>
+                <Key word="abstract"/>
+                <Key word="accept"/>
+                <Key word="access"/>
+                <Key word="aliased"/>
+                <Key word="all"/>
+                <Key word="array"/>
+                <Key word="boolean"/>
+                <Key word="begin"/>
+                <Key word="body"/>
+                <Key word="case"/>
+                <Key word="character"/>
+                <Key word="constant"/>
+                <Key word="declare"/>
+                <Key word="delay"/>
+                <Key word="delta"/>
+                <Key word="digits"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="elsif"/>
+                <Key word="end"/>
+                <Key word="entry"/>
+                <Key word="exception"/>
+                <Key word="exit"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="function"/>      
+                <Key word="generic"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="integer"/>
+                <Key word="interface"/>
+                <Key word="is"/>
+                <Key word="limited"/>
+                <Key word="loop"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="of"/>
+                <Key word="others"/>
+                <Key word="out"/>
+                <Key word="overriding"/>
+                <Key word="package"/>
+                <Key word="pragma"/>
+                <Key word="private"/>
+                <Key word="procedure"/>
+                <Key word="protected"/>
+                <Key word="raise"/>
+                <Key word="range"/>
+                <Key word="real"/>
+                <Key word="record"/>
+                <Key word="renames"/>
+                <Key word="requeue"/>
+                <Key word="return"/>
+                <Key word="reverse"/>
+                <Key word="select"/>
+                <Key word="separate"/>
+                <Key word="some"/>
+                <Key word="subtype"/>
+                <Key word="synchronized"/>
+                <Key word="tagged"/>
+                <Key word="task"/>
+                <Key word="terminate"/>
+                <Key word="then"/>
+                <Key word="true"/>
+                <Key word="type"/>
+                <Key word="until"/>
+                <Key word="use"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Purple" bold="false" italic="false">
+                <Key word="abs"/>
+                <Key word="and"/>
+                <Key word="at"/>
+                <Key word="mod"/>
+                <Key word="not"/>
+                <Key word="or"/>
+                <Key word="rem"/>
+                <Key word="xor"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

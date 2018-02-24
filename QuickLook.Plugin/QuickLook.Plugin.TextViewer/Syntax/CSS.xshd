@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+CSS syntax highlighting
+Written by Ezra Altahan
+Created 02/08/2010 | Updated 16/10/2016
+Version 1.5
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="CSS" extensions=".css">
+  
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+  
+    <Properties>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+  
+    <RuleSets>
+        <RuleSet ignorecase="false">
+   
+            <Delimiters>:#@.()</Delimiters>
+          
+            <Span name="CSSClass" rule="CSSClass" stopateol="false" color="Black" bold="false" italic="false">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+          
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" color="Brown" stopateol="true" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing markmarker="true" color="DarkViolet" bold="false" italic="false">@</MarkFollowing>
+            <MarkFollowing markmarker="true" color="#BB179A" bold="false" italic="false">#</MarkFollowing>
+        </RuleSet>
+   
+    <RuleSet name="ValueRules" ignorecase="false">
+
+        <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Begin>/*</Begin>
+            <End>*/</End>
+        </Span>
+
+        <Span name="String" color="Brown" stopateol="true" bold="false" italic="false">
+            <Begin>"</Begin>
+            <End>"</End>
+        </Span>
+
+        <Span name="Char" stopateol="true" color="Brown" bold="false" italic="false">
+            <Begin>'</Begin>
+            <End>'</End>
+        </Span>
+
+        <KeyWords name="Flags" color="Brown" bold="true" italic="false">
+            <Key word="!important" />
+        </KeyWords>
+    </RuleSet>
+    
+    <RuleSet name="CSSClass" ignorecase="true">
+        <Delimiters>#</Delimiters>
+    
+        <Span name="Value" rule="ValueRules" stopateol="false" color="#0451A5" bold="false" italic="false">
+            <Begin color="Black">:</Begin>
+            <End color="Black">;</End>
+        </Span>
+
+        <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Begin>/*</Begin>
+            <End>*/</End>
+        </Span>
+        
+        <MarkFollowing color="#BB179A" bold="false" italic="false">#</MarkFollowing>
+        
+        <KeyWords name="Punctuation" color="#BB179A" bold="false">
+           <Key word="#"/>
+        </KeyWords>
+        
+        <KeyWords name="Keywords1" color="#D50000" bold="false" italic="false">
+            <Key word="-khtml-background-clip"/>
+            <Key word="-khtml-background-origin"/>
+            <Key word="-khtml-background-size"/>
+            <Key word="-khtml-border-bottom-left-radius"/>
+            <Key word="-khtml-border-bottom-right-radius"/>
+            <Key word="-khtml-border-radius"/>
+            <Key word="-khtml-border-top-left-radius"/>
+            <Key word="-khtml-border-top-right-radius"/>
+            <Key word="-khtml-opacity"/>
+            <Key word="-khtml-transition"/>
+            <Key word="-moz-align-items"/>
+            <Key word="-moz-align-self"/>
+            <Key word="-moz-animation"/>
+            <Key word="-moz-animation-delay"/>
+            <Key word="-moz-animation-direction"/>
+            <Key word="-moz-animation-duration"/>
+            <Key word="-moz-animation-fill-mode"/>
+            <Key word="-moz-animation-iteration-count"/>
+            <Key word="-moz-animation-name"/>
+            <Key word="-moz-animation-play-state"/>
+            <Key word="-moz-animation-timing-function"/>
+            <Key word="-moz-appearance"/>
+            <Key word="-moz-background-clip"/>
+            <Key word="-moz-background-inline-policy"/>
+            <Key word="-moz-background-origin"/>
+            <Key word="-moz-background-size"/>
+            <Key word="-moz-binding"/>
+            <Key word="-moz-border-bottom-colors"/>
+            <Key word="-moz-border-end"/>
+            <Key word="-moz-border-end-color"/>
+            <Key word="-moz-border-end-style"/>
+            <Key word="-moz-border-end-width"/>
+            <Key word="-moz-border-image"/>
+            <Key word="-moz-border-left-colors"/>
+            <Key word="-moz-border-radius"/>
+            <Key word="-moz-border-radius-bottomleft"/>
+            <Key word="-moz-border-radius-bottomright"/>
+            <Key word="-moz-border-radius-topleft"/>
+            <Key word="-moz-border-radius-topright"/>
+            <Key word="-moz-border-right-colors"/>
+            <Key word="-moz-border-start"/>
+            <Key word="-moz-border-start-color"/>
+            <Key word="-moz-border-start-style"/>
+            <Key word="-moz-border-start-width"/>
+            <Key word="-moz-border-top-colors"/>
+            <Key word="-moz-box-align"/>
+            <Key word="-moz-box-direction"/>
+            <Key word="-moz-box-flex"/>
+            <Key word="-moz-box-flex-group"/>
+            <Key word="-moz-box-flexgroup"/>
+            <Key word="-moz-box-ordinal-group"/>
+            <Key word="-moz-box-orient"/>
+            <Key word="-moz-box-pack"/>
+            <Key word="-moz-box-shadow"/>
+            <Key word="-moz-box-sizing"/>
+            <Key word="-moz-column-count"/>
+            <Key word="-moz-column-gap"/>
+            <Key word="-moz-column-rule"/>
+            <Key word="-moz-column-rule-color"/>
+            <Key word="-moz-column-rule-style"/>
+            <Key word="-moz-column-rule-width"/>
+            <Key word="-moz-column-width"/>
+            <Key word="-moz-flex-direction"/>
+            <Key word="-moz-float-edge"/>
+            <Key word="-moz-force-broken-image-icon"/>
+            <Key word="-moz-hyphens"/>
+            <Key word="-moz-image-region"/>
+            <Key word="-moz-justify-content"/>
+            <Key word="-moz-linear-gradient"/>
+            <Key word="-moz-margin-end"/>
+            <Key word="-moz-margin-start"/>
+            <Key word="-moz-opacity"/>
+            <Key word="-moz-osx-font-smoothing"/>
+            <Key word="-moz-outline"/>
+            <Key word="-moz-outline-color"/>
+            <Key word="-moz-outline-offset"/>
+            <Key word="-moz-outline-radius"/>
+            <Key word="-moz-outline-radius-bottomleft"/>
+            <Key word="-moz-outline-radius-bottomright"/>
+            <Key word="-moz-outline-radius-topleft"/>
+            <Key word="-moz-outline-radius-topright"/>
+            <Key word="-moz-outline-style"/>
+            <Key word="-moz-outline-width"/>
+            <Key word="-moz-padding-end"/>
+            <Key word="-moz-padding-start"/>
+            <Key word="-moz-perspective"/>
+            <Key word="-moz-pointer-events"/>
+            <Key word="-moz-radial-gradient"/>
+            <Key word="-moz-stack-sizing"/>
+            <Key word="-moz-tab-size"/>
+            <Key word="-moz-text-decoration-color"/>
+            <Key word="-moz-text-decoration-line"/>
+            <Key word="-moz-text-decoration-style"/>
+            <Key word="-moz-text-shadow"/>
+            <Key word="-moz-transform"/>
+            <Key word="-moz-transform-origin"/>
+            <Key word="-moz-transition"/>
+            <Key word="-moz-transition-delay"/>
+            <Key word="-moz-transition-duration"/>
+            <Key word="-moz-transition-property"/>
+            <Key word="-moz-transition-timing-function"/>
+            <Key word="-moz-user-focus"/>
+            <Key word="-moz-user-input"/>
+            <Key word="-moz-user-modify"/>
+            <Key word="-moz-user-select"/>
+            <Key word="-moz-window-shadow"/>
+            <Key word="-ms-align-items"/>
+            <Key word="-ms-align-self"/>
+            <Key word="-ms-animation-duration"/>
+            <Key word="-ms-animation-iteration-count"/>
+            <Key word="-ms-animation-name"/>
+            <Key word="-ms-animation-timing-function"/>
+            <Key word="-ms-appearance"/>
+            <Key word="-ms-border-radius"/>
+            <Key word="-ms-box-sizing"/>
+            <Key word="-ms-filter"/>
+            <Key word="-ms-flex"/>
+            <Key word="-ms-flex-align"/>
+            <Key word="-ms-flex-direction"/>
+            <Key word="-ms-flex-order"/>
+            <Key word="-ms-flex-pack"/>
+            <Key word="-ms-flex-preferred-size"/>
+            <Key word="-ms-flex-wrap"/>
+            <Key word="-ms-hyphens"/>
+            <Key word="-ms-justify-content"/>
+            <Key word="-ms-perspective"/>
+            <Key word="-ms-pointer-events"/>
+            <Key word="-ms-text-size-adjust"/>
+            <Key word="-ms-transform"/>
+            <Key word="-ms-transform-origin"/>
+            <Key word="-ms-transition"/>
+            <Key word="-ms-transition-"/>
+            <Key word="-ms-word-break"/>
+            <Key word="-o-border-radius"/>
+            <Key word="-o-box-sizing"/>
+            <Key word="-o-tab-size"/>
+            <Key word="-o-text-overflow"/>
+            <Key word="-o-transform"/>
+            <Key word="-o-transition"/>
+            <Key word="-o-transition-property"/>
+            <Key word="-webkit-align-content"/>
+            <Key word="-webkit-align-items"/>
+            <Key word="-webkit-align-self"/>
+            <Key word="-webkit-animation"/>
+            <Key word="-webkit-animation-delay"/>
+            <Key word="-webkit-animation-direction"/>
+            <Key word="-webkit-animation-duration"/>
+            <Key word="-webkit-animation-fill-mode"/>
+            <Key word="-webkit-animation-iteration-count"/>
+            <Key word="-webkit-animation-name"/>
+            <Key word="-webkit-animation-play-state"/>
+            <Key word="-webkit-animation-timing-function"/>
+            <Key word="-webkit-appearance"/>
+            <Key word="-webkit-backface-visibility"/>
+            <Key word="-webkit-background-clip"/>
+            <Key word="-webkit-background-composite"/>
+            <Key word="-webkit-background-origin"/>
+            <Key word="-webkit-background-size"/>
+            <Key word="-webkit-border-bottom-left-radius"/>
+            <Key word="-webkit-border-bottom-right-radius"/>
+            <Key word="-webkit-border-horizontal-spacing"/>
+            <Key word="-webkit-border-image"/>
+            <Key word="-webkit-border-radius" />
+            <Key word="-webkit-border-top-left-radius"/>
+            <Key word="-webkit-border-top-right-radius"/>
+            <Key word="-webkit-border-vertical-spacing"/>
+            <Key word="-webkit-box-align"/>
+            <Key word="-webkit-box-direction"/>
+            <Key word="-webkit-box-flex"/>
+            <Key word="-webkit-box-flex-group"/>
+            <Key word="-webkit-box-lines"/>
+            <Key word="-webkit-box-ordinal-group"/>
+            <Key word="-webkit-box-orient"/>
+            <Key word="-webkit-box-pack"/>
+            <Key word="-webkit-box-reflect"/>
+            <Key word="-webkit-box-shadow"/>
+            <Key word="-webkit-box-sizing"/>
+            <Key word="-webkit-column-break-after"/>
+            <Key word="-webkit-column-break-before"/>
+            <Key word="-webkit-column-break-inside"/>
+            <Key word="-webkit-column-count"/>
+            <Key word="-webkit-column-gap"/>
+            <Key word="-webkit-column-rule"/>
+            <Key word="-webkit-column-rule-color"/>
+            <Key word="-webkit-column-rule-style"/>
+            <Key word="-webkit-column-rule-width"/>
+            <Key word="-webkit-column-width"/>
+            <Key word="-webkit-columns"/>
+            <Key word="-webkit-dashboard-region"/>
+            <Key word="-webkit-flex"/>
+            <Key word="-webkit-flex-basis"/>
+            <Key word="-webkit-flex-direction"/>
+            <Key word="-webkit-flex-wrap"/>
+            <Key word="-webkit-font-smoothing"/>
+            <Key word="-webkit-gradient"/>
+            <Key word="-webkit-hyphens"/>
+            <Key word="-webkit-justify-content"/>
+            <Key word="-webkit-line-break"/>
+            <Key word="-webkit-linear-gradient"/>
+            <Key word="-webkit-margin-bottom-collapse"/>
+            <Key word="-webkit-margin-collapse"/>
+            <Key word="-webkit-margin-start"/>
+            <Key word="-webkit-margin-top-collapse"/>
+            <Key word="-webkit-marquee"/>
+            <Key word="-webkit-marquee-direction"/>
+            <Key word="-webkit-marquee-increment"/>
+            <Key word="-webkit-marquee-repetition"/>
+            <Key word="-webkit-marquee-speed"/>
+            <Key word="-webkit-marquee-style"/>
+            <Key word="-webkit-mask"/>
+            <Key word="-webkit-mask-attachment"/>
+            <Key word="-webkit-mask-box-image"/>
+            <Key word="-webkit-mask-clip"/>
+            <Key word="-webkit-mask-composite"/>
+            <Key word="-webkit-mask-image"/>
+            <Key word="-webkit-mask-origin"/>
+            <Key word="-webkit-mask-position"/>
+            <Key word="-webkit-mask-position-x"/>
+            <Key word="-webkit-mask-position-y"/>
+            <Key word="-webkit-mask-repeat"/>
+            <Key word="-webkit-mask-size"/>
+            <Key word="-webkit-min-device-pixel-ratio"/>
+            <Key word="-webkit-nbsp-mode"/>
+            <Key word="-webkit-order"/>
+            <Key word="-webkit-padding-start"/>
+            <Key word="-webkit-perspective"/>
+            <Key word="-webkit-perspective-origin"/>
+            <Key word="-webkit-pointer-events"/>
+            <Key word="-webkit-radial-gradient"/>
+            <Key word="-webkit-rtl-ordering"/>
+            <Key word="-webkit-tap-highlight-color"/>
+            <Key word="-webkit-text-fill-color"/>
+            <Key word="-webkit-text-security"/>
+            <Key word="-webkit-text-shadow"/>
+            <Key word="-webkit-text-size-adjust"/>
+            <Key word="-webkit-text-stroke"/>
+            <Key word="-webkit-text-stroke-color"/>
+            <Key word="-webkit-text-stroke-width"/>
+            <Key word="-webkit-touch-callout"/>
+            <Key word="-webkit-transform"/>
+            <Key word="-webkit-transform-origin"/>
+            <Key word="-webkit-transform-origin-x"/>
+            <Key word="-webkit-transform-origin-y"/>
+            <Key word="-webkit-transform-origin-z"/>
+            <Key word="-webkit-transform-style"/>
+            <Key word="-webkit-transition"/>
+            <Key word="-webkit-transition-delay"/>
+            <Key word="-webkit-transition-duration"/>
+            <Key word="-webkit-transition-property"/>
+            <Key word="-webkit-transition-timing-function"/>
+            <Key word="-webkit-user-drag"/>
+            <Key word="-webkit-user-modify"/>
+            <Key word="-webkit-user-select"/>
+            <Key word="@font-face"/>
+            <Key word="@import"/>
+            <Key word="@keyframes"/>
+            <Key word="align-content"/>
+            <Key word="align-items"/>
+            <Key word="align-self"/>
+            <Key word="alignment-adjust"/>
+            <Key word="alignment-baseline"/>
+            <Key word="animation"/>
+            <Key word="animation-delay"/>
+            <Key word="animation-direction"/>
+            <Key word="animation-duration"/>
+            <Key word="animation-fill-mode"/>
+            <Key word="animation-iteration-count"/>
+            <Key word="animation-name"/>
+            <Key word="animation-play-state"/>
+            <Key word="animation-timing-function"/>
+            <Key word="appearance"/>
+            <Key word="azimuth"/>
+            <Key word="backface-visibility"/>
+            <Key word="background"/>
+            <Key word="background-attachment"/>
+            <Key word="background-break"/>
+            <Key word="background-clip"/>
+            <Key word="background-color"/>
+            <Key word="background-image"/>
+            <Key word="background-origin"/>
+            <Key word="background-position"/>
+            <Key word="background-position-x"/>
+            <Key word="background-position-y"/>
+            <Key word="background-repeat"/>
+            <Key word="background-size"/>
+            <Key word="baseline-shift"/>
+            <Key word="behavior"/>
+            <Key word="binding"/>
+            <Key word="bleed"/>
+            <Key word="bookmark-label"/>
+            <Key word="bookmark-level"/>
+            <Key word="bookmark-state"/>
+            <Key word="bookmark-target"/>
+            <Key word="border"/>
+            <Key word="border-bottom"/>
+            <Key word="border-bottom-color"/>
+            <Key word="border-bottom-left-radius"/>
+            <Key word="border-bottom-right-radius"/>
+            <Key word="border-bottom-style"/>
+            <Key word="border-bottom-width"/>
+            <Key word="border-box"/>
+            <Key word="border-collapse"/>
+            <Key word="border-color"/>
+            <Key word="border-image"/>
+            <Key word="border-image-outset"/>
+            <Key word="border-image-repeat"/>
+            <Key word="border-image-slice"/>
+            <Key word="border-image-source"/>
+            <Key word="border-image-width"/>
+            <Key word="border-left"/>
+            <Key word="border-left-color"/>
+            <Key word="border-left-style"/>
+            <Key word="border-left-width"/>
+            <Key word="border-radius"/>
+            <Key word="border-right"/>
+            <Key word="border-right-color"/>
+            <Key word="border-right-style"/>
+            <Key word="border-right-width"/>
+            <Key word="border-spacing"/>
+            <Key word="border-style"/>
+            <Key word="border-top"/>
+            <Key word="border-top-color"/>
+            <Key word="border-top-left-radius"/>
+            <Key word="border-top-right-radius"/>
+            <Key word="border-top-style"/>
+            <Key word="border-top-width"/>
+            <Key word="border-width"/>
+            <Key word="bottom"/>
+            <Key word="box-align"/>
+            <Key word="box-decoration-break"/>
+            <Key word="box-direction"/>
+            <Key word="box-flex"/>
+            <Key word="box-flex-group"/>
+            <Key word="box-lines"/>
+            <Key word="box-ordinal-group"/>
+            <Key word="box-orient"/>
+            <Key word="box-pack"/>
+            <Key word="box-reflect"/>
+            <Key word="box-shadow"/>
+            <Key word="box-sizing"/>
+            <Key word="break-after"/>
+            <Key word="break-before"/>
+            <Key word="break-inside"/>
+            <Key word="caption-side"/>
+            <Key word="cellmargin"/>
+            <Key word="cellspacing"/>
+            <Key word="clear"/>
+            <Key word="clip"/>
+            <Key word="clip-path"/>
+            <Key word="clip-rule"/>
+            <Key word="color"/>
+            <Key word="color-interpolation"/>
+            <Key word="color-interpolation-filters"/>
+            <Key word="color-profile"/>
+            <Key word="color-rendering"/>
+            <Key word="color-stop"/>
+            <Key word="column-count"/>
+            <Key word="column-fill"/>
+            <Key word="column-gap"/>
+            <Key word="column-rule"/>
+            <Key word="column-rule-color"/>
+            <Key word="column-rule-style"/>
+            <Key word="column-rule-width"/>
+            <Key word="column-span"/>
+            <Key word="column-width"/>
+            <Key word="columns"/>
+            <Key word="content"/>
+            <Key word="content-box"/>
+            <Key word="counter-increment"/>
+            <Key word="counter-reset"/>
+            <Key word="crop"/>
+            <Key word="cue"/>
+            <Key word="cue-after"/>
+            <Key word="cue-before"/>
+            <Key word="cursor"/>
+            <Key word="direction"/>
+            <Key word="display"/>
+            <Key word="dominant-baseline"/>
+            <Key word="drop-initial-after-adjust"/>
+            <Key word="drop-initial-after-align"/>
+            <Key word="drop-initial-before-adjust"/>
+            <Key word="drop-initial-before-align"/>
+            <Key word="drop-initial-size"/>
+            <Key word="drop-initial-value"/>
+            <Key word="elevation"/>
+            <Key word="empty-cells"/>
+            <Key word="fill"/>
+            <Key word="fill-opacity"/>
+            <Key word="fill-rule"/>
+            <Key word="filter"/>
+            <Key word="fit"/>
+            <Key word="fit-position"/>
+            <Key word="flex"/>
+            <Key word="flex-basis"/>
+            <Key word="flex-direction"/>
+            <Key word="flex-flow"/>
+            <Key word="flex-grow"/>
+            <Key word="flex-shrink"/>
+            <Key word="flex-wrap"/>
+            <Key word="float"/>
+            <Key word="float-offset"/>
+            <Key word="flood-color"/>
+            <Key word="flood-opacity"/>
+            <Key word="font"/>
+            <Key word="font-effect"/>
+            <Key word="font-emphasize"/>
+            <Key word="font-family"/>
+            <Key word="font-size"/>
+            <Key word="font-size-adjust"/>
+            <Key word="font-stretch"/>
+            <Key word="font-style"/>
+            <Key word="font-variant"/>
+            <Key word="font-weight"/>
+            <Key word="glyph-orientation-horizontal"/>
+            <Key word="glyph-orientation-vertical"/>
+            <Key word="grid-columns"/>
+            <Key word="grid-rows"/>
+            <Key word="hanging-punctuation"/>
+            <Key word="height"/>
+            <Key word="hyphenate-after"/>
+            <Key word="hyphenate-before"/>
+            <Key word="hyphenate-character"/>
+            <Key word="hyphenate-lines"/>
+            <Key word="hyphenate-resource"/>
+            <Key word="hyphens"/>
+            <Key word="icon"/>
+            <Key word="image-orientation"/>
+            <Key word="image-rendering"/>
+            <Key word="image-resolution"/>
+            <Key word="ime-mode"/>
+            <Key word="inline-box-align"/>
+            <Key word="justify-content"/>
+            <Key word="left"/>
+            <Key word="letter-spacing"/>
+            <Key word="lighting-color"/>
+            <Key word="line-height"/>
+            <Key word="line-stacking"/>
+            <Key word="line-stacking-ruby"/>
+            <Key word="line-stacking-shift"/>
+            <Key word="line-stacking-strategy"/>
+            <Key word="linear-gradient"/>
+            <Key word="list-style"/>
+            <Key word="list-style-image"/>
+            <Key word="list-style-position"/>
+            <Key word="list-style-type"/>
+            <Key word="margin"/>
+            <Key word="margin-bottom"/>
+            <Key word="margin-left"/>
+            <Key word="margin-right"/>
+            <Key word="margin-top"/>
+            <Key word="mark"/>
+            <Key word="mark-after"/>
+            <Key word="mark-before"/>
+            <Key word="marker"/>
+            <Key word="marker-end"/>
+            <Key word="marker-mid"/>
+            <Key word="marker-offset"/>
+            <Key word="marker-start"/>
+            <Key word="marks"/>
+            <Key word="marquee"/>
+            <Key word="marquee-direction"/>
+            <Key word="marquee-play-count"/>
+            <Key word="marquee-speed"/>
+            <Key word="marquee-style"/>
+            <Key word="max-height"/>
+            <Key word="max-width"/>
+            <Key word="min-device-pixel-ratio"/>
+            <Key word="min-height"/>
+            <Key word="min-width"/>
+            <Key word="move-to"/>
+            <Key word="nav-down"/>
+            <Key word="nav-index"/>
+            <Key word="nav-left"/>
+            <Key word="nav-right"/>
+            <Key word="nav-up"/>
+            <Key word="opacity"/>
+            <Key word="order"/>
+            <Key word="orientation"/>
+            <Key word="orphans"/>
+            <Key word="outline"/>
+            <Key word="outline-color"/>
+            <Key word="outline-offset"/>
+            <Key word="outline-style"/>
+            <Key word="outline-width"/>
+            <Key word="overflow"/>
+            <Key word="overflow-style"/>
+            <Key word="overflow-x"/>
+            <Key word="overflow-y"/>
+            <Key word="padding"/>
+            <Key word="padding-bottom"/>
+            <Key word="padding-box"/>
+            <Key word="padding-left"/>
+            <Key word="padding-right"/>
+            <Key word="padding-top"/>
+            <Key word="page"/>
+            <Key word="page-break-after"/>
+            <Key word="page-break-before"/>
+            <Key word="page-break-inside"/>
+            <Key word="page-policy"/>
+            <Key word="pause"/>
+            <Key word="pause-after"/>
+            <Key word="pause-before"/>
+            <Key word="perspective"/>
+            <Key word="perspective-origin"/>
+            <Key word="perspective-origin-x"/>
+            <Key word="perspective-origin-y"/>
+            <Key word="phonemes"/>
+            <Key word="pitch"/>
+            <Key word="pitch-range"/>
+            <Key word="play-during"/>
+            <Key word="pointer-events"/>
+            <Key word="position"/>
+            <Key word="presentation-level"/>
+            <Key word="punctuation-trim"/>
+            <Key word="quotes"/>
+            <Key word="rendering-intent"/>
+            <Key word="resize"/>
+            <Key word="rest"/>
+            <Key word="rest-after"/>
+            <Key word="rest-before"/>
+            <Key word="richness"/>
+            <Key word="right"/>
+            <Key word="rotation"/>
+            <Key word="rotation-point"/>
+            <Key word="ruby-align"/>
+            <Key word="ruby-overhang"/>
+            <Key word="ruby-position"/>
+            <Key word="ruby-span"/>
+            <Key word="scrollbar-3d-light-color"/>
+            <Key word="scrollbar-3dlight-color"/>
+            <Key word="scrollbar-arrow-color"/>
+            <Key word="scrollbar-base-color"/>
+            <Key word="scrollbar-dark-shadow-color"/>
+            <Key word="scrollbar-darkshadow-color"/>
+            <Key word="scrollbar-face-color"/>
+            <Key word="scrollbar-highlight-color"/>
+            <Key word="scrollbar-shadow-color"/>
+            <Key word="scrollbar-track-color"/>
+            <Key word="shape-rendering"/>
+            <Key word="size"/>
+            <Key word="speak"/>
+            <Key word="speak-header"/>
+            <Key word="speak-numeral"/>
+            <Key word="speak-punctuation"/>
+            <Key word="speech-rate"/>
+            <Key word="src"/>
+            <Key word="stop-color"/>
+            <Key word="stop-opacity"/>
+            <Key word="stress"/>
+            <Key word="string-set"/>
+            <Key word="stroke"/>
+            <Key word="stroke-dasharray"/>
+            <Key word="stroke-dashoffset"/>
+            <Key word="stroke-linecap"/>
+            <Key word="stroke-linejoin"/>
+            <Key word="stroke-miterlimit"/>
+            <Key word="stroke-opacity"/>
+            <Key word="stroke-width"/>
+            <Key word="tab-size"/>
+            <Key word="table-layout"/>
+            <Key word="target"/>
+            <Key word="target-name"/>
+            <Key word="target-new"/>
+            <Key word="target-position"/>
+            <Key word="text-align"/>
+            <Key word="text-align-last"/>
+            <Key word="text-anchor"/>
+            <Key word="text-decoration"/>
+            <Key word="text-emphasis"/>
+            <Key word="text-height"/>
+            <Key word="text-indent"/>
+            <Key word="text-justify"/>
+            <Key word="text-outline"/>
+            <Key word="text-overflow"/>
+            <Key word="text-rendering"/>
+            <Key word="text-shadow"/>
+            <Key word="text-transform"/>
+            <Key word="text-wrap"/>
+            <Key word="top"/>
+            <Key word="transform"/>
+            <Key word="transform-origin"/>
+            <Key word="transform-origin-x"/>
+            <Key word="transform-origin-y"/>
+            <Key word="transform-origin-z"/>
+            <Key word="transform-style"/>
+            <Key word="transition"/>
+            <Key word="transition-delay"/>
+            <Key word="transition-duration"/>
+            <Key word="transition-property"/>
+            <Key word="transition-timing-function"/>
+            <Key word="unicode-bidi"/>
+            <Key word="unicode-range"/>
+            <Key word="user-select"/>
+            <Key word="vector-effect"/>
+            <Key word="vertical-align"/>
+            <Key word="visibility"/>
+            <Key word="voice-balance"/>
+            <Key word="voice-duration"/>
+            <Key word="voice-family"/>
+            <Key word="voice-pitch"/>
+            <Key word="voice-pitch-range"/>
+            <Key word="voice-rate"/>
+            <Key word="voice-stress"/>
+            <Key word="voice-volume"/>
+            <Key word="volume"/>
+            <Key word="white-space"/>
+            <Key word="white-space-collapse"/>
+            <Key word="widows"/>
+            <Key word="width"/>
+            <Key word="will-change"/>
+            <Key word="word-break"/>
+            <Key word="word-spacing"/>
+            <Key word="word-wrap"/>
+            <Key word="writing-mode"/>
+            <Key word="z-index"/>
+            <Key word="zoom"/>
+        </KeyWords>
+    </RuleSet>
+  </RuleSets>
+</SyntaxDefinition>

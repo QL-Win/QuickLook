@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+TypeScript syntax highlighting
+Written by Ezra Altahan
+Created 19/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="TypeScript" extensions=".ts">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="any"/>
+                <Key word="as"/>
+                <Key word="boolean"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="constructor"/>
+                <Key word="continue"/>
+                <Key word="debugger"/>
+                <Key word="declare"/>
+                <Key word="default"/>
+                <Key word="delete"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="export"/>
+                <Key word="extends"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="from"/>
+                <Key word="function"/>
+                <Key word="get"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="instanceof"/>
+                <Key word="interface"/>
+                <Key word="let"/>
+                <Key word="module"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="number"/>
+                <Key word="of"/>
+                <Key word="package"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="require"/>
+                <Key word="return"/>
+                <Key word="set"/>
+                <Key word="static"/>
+                <Key word="string"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="symbol"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="type"/>
+                <Key word="typeof"/>
+                <Key word="var"/>
+                <Key word="void"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

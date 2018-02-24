@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Verilog syntax highlighting
+Written by Ezra Altahan
+Created 29/06/2014 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Verilog" extensions=".v;.vh">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,.?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+                                
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="always"/>
+                <Key word="and"/>
+                <Key word="assert"/>
+                <Key word="assign"/>
+                <Key word="assume"/>
+                <Key word="begin"/>
+                <Key word="bit"/>
+                <Key word="buf"/>
+                <Key word="bufif0"/>
+                <Key word="bufif1"/>
+                <Key word="byte"/>
+                <Key word="case"/>
+                <Key word="casex"/>
+                <Key word="casez"/>
+                <Key word="checker"/>
+                <Key word="class"/>
+                <Key word="clocking"/>
+                <Key word="cmos"/>
+                <Key word="config"/>
+                <Key word="const"/>
+                <Key word="constraint"/>
+                <Key word="cover"/>
+                <Key word="covergroup"/>
+                <Key word="deassign"/>
+                <Key word="default"/>
+                <Key word="defparam"/>
+                <Key word="disable"/>
+                <Key word="else"/>
+                <Key word="enable"/>
+                <Key word="end"/>
+                <Key word="endcase"/>
+                <Key word="endchecker"/>
+                <Key word="endclass"/>
+                <Key word="endclocking"/>
+                <Key word="endconfig"/>
+                <Key word="endfunction"/>
+                <Key word="endgenerate"/>
+                <Key word="endgroup"/>
+                <Key word="endinterface"/>
+                <Key word="endmodule"/>
+                <Key word="endpackage"/>
+                <Key word="endprimitive"/>
+                <Key word="endprogram"/>
+                <Key word="endproperty"/>
+                <Key word="endsequence"/>
+                <Key word="endspecify"/>
+                <Key word="endtable"/>
+                <Key word="endtask"/>
+                <Key word="enum"/>
+                <Key word="event"/>
+                <Key word="for"/>
+                <Key word="force"/>
+                <Key word="foreach"/>
+                <Key word="forever"/>
+                <Key word="fork"/>
+                <Key word="function"/>
+                <Key word="generate"/>
+                <Key word="highz0"/>
+                <Key word="highz1"/>
+                <Key word="if"/>
+                <Key word="initial"/>
+                <Key word="inout"/>
+                <Key word="input"/>
+                <Key word="int"/>
+                <Key word="integer"/>
+                <Key word="interconnect"/>
+                <Key word="interface"/>
+                <Key word="intersect"/>
+                <Key word="join"/>
+                <Key word="large"/>
+                <Key word="localparam"/>
+                <Key word="logic"/>
+                <Key word="macromodule"/>
+                <Key word="medium"/>
+                <Key word="modport"/>
+                <Key word="module"/>
+                <Key word="nand"/>
+                <Key word="negedge"/>
+                <Key word="nmos"/>
+                <Key word="nor"/>
+                <Key word="not"/>
+                <Key word="notif0"/>
+                <Key word="notif1"/>
+                <Key word="or"/>
+                <Key word="output"/>
+                <Key word="package"/>
+                <Key word="parameter"/>
+                <Key word="pmos"/>
+                <Key word="posedge"/>
+                <Key word="primitive"/>
+                <Key word="priority"/>
+                <Key word="program"/>
+                <Key word="property"/>
+                <Key word="pull0"/>
+                <Key word="pull1"/>
+                <Key word="pulldown"/>
+                <Key word="pullup"/>
+                <Key word="rand"/>
+                <Key word="rcmos"/>
+                <Key word="realtime"/>
+                <Key word="ref"/>
+                <Key word="reg"/>
+                <Key word="release"/>
+                <Key word="repeat"/>
+                <Key word="return"/>
+                <Key word="rnmos"/>
+                <Key word="rpmos"/>
+                <Key word="rtran"/>
+                <Key word="rtranif0"/>
+                <Key word="rtranif1"/>
+                <Key word="scalared"/>
+                <Key word="sequence"/>
+                <Key word="small"/>
+                <Key word="specify"/>
+                <Key word="string"/>
+                <Key word="strong0"/>
+                <Key word="strong1"/>
+                <Key word="supply0"/>
+                <Key word="supply1"/>
+                <Key word="table"/>
+                <Key word="task"/>
+                <Key word="time"/>
+                <Key word="timeunit"/>
+                <Key word="tran"/>
+                <Key word="tranif0"/>
+                <Key word="tranif1"/>
+                <Key word="tri"/>
+                <Key word="tri0"/>
+                <Key word="tri1"/>
+                <Key word="triand"/>
+                <Key word="trior"/>
+                <Key word="trireg"/>
+                <Key word="unique"/>
+                <Key word="vectored"/>
+                <Key word="wait"/>
+                <Key word="wand"/>
+                <Key word="weak0"/>
+                <Key word="weak1"/>
+                <Key word="while"/>
+                <Key word="wire"/>
+                <Key word="wor"/>
+                <Key word="xnor"/>
+                <Key word="xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Maroon" bold="false">
+                <Key word="`accelerate"/>
+                <Key word="`autoexpand_vectornets"/>
+                <Key word="`celldefine"/>
+                <Key word="`default_decay_time"/>
+                <Key word="`default_nettype"/>
+                <Key word="`default_rswitch_strength"/>
+                <Key word="`default_switch_strength"/>
+                <Key word="`default_trireg_strength"/>
+                <Key word="`define"/>
+                <Key word="`delay_mode_distributed"/>
+                <Key word="`delay_mode_path"/>
+                <Key word="`delay_mode_unit"/>
+                <Key word="`delay_mode_zero"/>
+                <Key word="`else"/>
+                <Key word="`end_pre_16a_paths"/>
+                <Key word="`endcelldefine"/>
+                <Key word="`endif"/>
+                <Key word="`endprotect"/>
+                <Key word="`endprotected"/>
+                <Key word="`expand_vectornets"/>
+                <Key word="`ifdef"/>
+                <Key word="`ifndef"/>
+                <Key word="`include"/>
+                <Key word="`noaccelerate"/>
+                <Key word="`noexpand_vectornets"/>
+                <Key word="`noremove_gatename"/>
+                <Key word="`noremove_gatenames"/>
+                <Key word="`noremove_netname"/>
+                <Key word="`noremove_netnames"/>
+                <Key word="`nounconnected_drive"/>
+                <Key word="`pre_16a_paths"/>
+                <Key word="`protect"/>
+                <Key word="`protected"/>
+                <Key word="`remove_gatename"/>
+                <Key word="`remove_gatenames"/>
+                <Key word="`remove_netname"/>
+                <Key word="`remove_netnames"/>
+                <Key word="`resetall"/>
+                <Key word="`signed"/>
+                <Key word="`timescale"/>
+                <Key word="`unconnected_drive"/>
+                <Key word="`undef"/>
+                <Key word="`unprotected"/>
+                <Key word="`unsigned"/>
+                <Key word="`uselib"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="DarkViolet" bold="false">
+                <Key word="$cleartrace"/>
+                <Key word="$display"/>
+                <Key word="$error"/>
+                <Key word="$exit"/>
+                <Key word="$fatal"/>
+                <Key word="$finish"/>
+                <Key word="$info"/>
+                <Key word="$monitoroff"/>
+                <Key word="$monitoron"/>
+                <Key word="$printtimescale"/>
+                <Key word="$random"/>
+                <Key word="$realtime"/>
+                <Key word="$settrace"/>
+                <Key word="$showscopes"/>
+                <Key word="$showvars"/>
+                <Key word="$stable"/>
+                <Key word="$stime"/>
+                <Key word="$stop"/>
+                <Key word="$system"/>
+                <Key word="$time"/>
+                <Key word="$timeformat"/>
+                <Key word="$warning"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+PowerShell syntax highlighting
+Written by Ezra Altahan
+Created 30/05/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="PowerShell" extensions=".ps1;.psm1">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+        <Property name="BlockCommentBegin" value="&lt;#"/>
+        <Property name="BlockCommentEnd" value="#&gt;"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+                        
+            <Delimiters>()[]{}@,.:$`=;+*%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+                            
+            <Span name="BlockComment" rule="PowerShellHelp" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>&lt;#</Begin>
+                <End>#&gt;</End>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String2" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>@@"</Begin>
+                <End>"@@</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing markmarker="true" color="#82751A" bold="false">$</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="begin"/>
+                <Key word="break"/>
+                <Key word="catch"/>
+                <Key word="checkpoint-workflow"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="end"/>
+                <Key word="filter"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="function"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inlinescript"/>
+                <Key word="parallel"/>
+                <Key word="param"/>
+                <Key word="process"/>
+                <Key word="return"/>
+                <Key word="sequence"/>
+                <Key word="suspend-workflow"/>
+                <Key word="switch"/>
+                <Key word="throw"/>
+                <Key word="trap"/>
+                <Key word="try"/>
+                <Key word="until"/>
+                <Key word="where"/>
+                <Key word="while"/>
+                <Key word="workflow"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords2" color="Purple" bold="false" italic="false">
+                <Key word="Add-Computer"/>
+                <Key word="Add-Content"/>
+                <Key word="Add-History"/>
+                <Key word="Add-Member"/>
+                <Key word="Add-PsSnapIn"/>
+                <Key word="Add-Type"/>
+                <Key word="Checkpoint-Computer"/>
+                <Key word="Clear-Content"/>
+                <Key word="Clear-EventLog"/>
+                <Key word="Clear-History"/>
+                <Key word="Clear-Item"/>
+                <Key word="Clear-ItemProperty"/>
+                <Key word="Clear-Variable"/>
+                <Key word="Compare-Object"/>
+                <Key word="Compare-Object"/>
+                <Key word="Complete-Transaction"/>
+                <Key word="Connect-Email"/>
+                <Key word="Connect-FTP"/>
+                <Key word="Connect-IM"/>
+                <Key word="Connect-IMAP"/>
+                <Key word="Connect-LDAP"/>
+                <Key word="Connect-NNTP"/>
+                <Key word="Connect-POP"/>
+                <Key word="Connect-PSSession"/>
+                <Key word="Connect-SMS"/>
+                <Key word="Connect-WSMan"/>
+                <Key word="Convert-Data"/>
+                <Key word="Convert-Path"/>
+                <Key word="ConvertFrom-CSV"/>
+                <Key word="ConvertFrom-Json"/>
+                <Key word="ConvertFrom-SecureString"/>
+                <Key word="ConvertFrom-StringData"/>
+                <Key word="ConvertTo-CSV"/>
+                <Key word="ConvertTo-Html"/>
+                <Key word="ConvertTo-Json"/>
+                <Key word="ConvertTo-SecureString"/>
+                <Key word="ConvertTo-Xml"/>
+                <Key word="Copy-Item"/>
+                <Key word="Copy-ItemProperty"/>
+                <Key word="Debug-Process"/>
+                <Key word="Disable-ComputerRestore"/>
+                <Key word="Disable-PSBreakpoint"/>
+                <Key word="Disable-PSRemoting"/>
+                <Key word="Disable-PSSessionConfiguration"/>
+                <Key word="Disable-WSManCredSSP"/>
+                <Key word="Disconnect-Email"/>
+                <Key word="Disconnect-FTP"/>
+                <Key word="Disconnect-IM"/>
+                <Key word="Disconnect-IMAP"/>
+                <Key word="Disconnect-LDAP"/>
+                <Key word="Disconnect-NNTP"/>
+                <Key word="Disconnect-POP"/>
+                <Key word="Disconnect-PSSession"/>
+                <Key word="Disconnect-SMS"/>
+                <Key word="Disconnect-WSMan"/>
+                <Key word="Enable-ComputerRestore"/>
+                <Key word="Enable-PSBreakpoint"/>
+                <Key word="Enable-PSRemoting"/>
+                <Key word="Enable-PSSessionConfiguration"/>
+                <Key word="Enable-WSManCredSSP"/>
+                <Key word="Enter-PSSession"/>
+                <Key word="Exit-PSSession"/>
+                <Key word="Export-Alias"/>
+                <Key word="Export-CimCommand"/>
+                <Key word="Export-Clixml"/>
+                <Key word="Export-Console"/>
+                <Key word="Export-Counter"/>
+                <Key word="Export-Csv"/>
+                <Key word="Export-FormatData"/>
+                <Key word="Export-ModuleMember"/>
+                <Key word="Export-PSSession"/>
+                <Key word="ForEach-Object"/>
+                <Key word="Format-Custom"/>
+                <Key word="Format-List"/>
+                <Key word="Format-Table"/>
+                <Key word="Format-Wide"/>
+                <Key word="Get-Acl"/>
+                <Key word="Get-Alias"/>
+                <Key word="Get-AuthenticodeSignature"/>
+                <Key word="Get-ChildItem"/>
+                <Key word="Get-ChildItem"/>
+                <Key word="Get-ChildItem"/>
+                <Key word="Get-Command"/>
+                <Key word="Get-Command"/>
+                <Key word="Get-ComputerRestorePoint"/>
+                <Key word="Get-Content"/>
+                <Key word="Get-ControlPanelItem"/>
+                <Key word="Get-Counter"/>
+                <Key word="Get-Credential"/>
+                <Key word="Get-Culture"/>
+                <Key word="Get-DNS"/>
+                <Key word="Get-Date"/>
+                <Key word="Get-Event"/>
+                <Key word="Get-EventSubscriber"/>
+                <Key word="Get-Eventlog"/>
+                <Key word="Get-ExecutionPolicy"/>
+                <Key word="Get-FTP"/>
+                <Key word="Get-FormatData"/>
+                <Key word="Get-HTTP"/>
+                <Key word="Get-Help"/>
+                <Key word="Get-History"/>
+                <Key word="Get-Host"/>
+                <Key word="Get-HotFix"/>
+                <Key word="Get-IMAP"/>
+                <Key word="Get-Item"/>
+                <Key word="Get-Item"/>
+                <Key word="Get-ItemProperty"/>
+                <Key word="Get-Job"/>
+                <Key word="Get-LDAP"/>
+                <Key word="Get-Location"/>
+                <Key word="Get-Member"/>
+                <Key word="Get-Module"/>
+                <Key word="Get-NNTP"/>
+                <Key word="Get-POP"/>
+                <Key word="Get-PSBreakpoint"/>
+                <Key word="Get-PSCallstack"/>
+                <Key word="Get-PSDrive"/>
+                <Key word="Get-PSProvider"/>
+                <Key word="Get-PSSession"/>
+                <Key word="Get-PSSessionConfiguration"/>
+                <Key word="Get-Packet"/>
+                <Key word="Get-Pfxcertificate"/>
+                <Key word="Get-Process"/>
+                <Key word="Get-PsSnapin"/>
+                <Key word="Get-RAS"/>
+                <Key word="Get-RSS"/>
+                <Key word="Get-Random"/>
+                <Key word="Get-S3"/>
+                <Key word="Get-SNMP"/>
+                <Key word="Get-Service"/>
+                <Key word="Get-Syslog"/>
+                <Key word="Get-TFTP"/>
+                <Key word="Get-Time"/>
+                <Key word="Get-Trace"/>
+                <Key word="Get-Tracesource"/>
+                <Key word="Get-Transaction"/>
+                <Key word="Get-Trap"/>
+                <Key word="Get-TypeData"/>
+                <Key word="Get-UDP"/>
+                <Key word="Get-Uiculture"/>
+                <Key word="Get-Unique"/>
+                <Key word="Get-Variable"/>
+                <Key word="Get-WSManCredSSP"/>
+                <Key word="Get-WSManInstance"/>
+                <Key word="Get-WebDAV"/>
+                <Key word="Get-Whois"/>
+                <Key word="Get-WinEvent"/>
+                <Key word="Get-WmiObject"/>
+                <Key word="Group-Object"/>
+                <Key word="Import-Alias"/>
+                <Key word="Import-Clixml"/>
+                <Key word="Import-Counter"/>
+                <Key word="Import-Csv"/>
+                <Key word="Import-LocalizedData"/>
+                <Key word="Import-Module"/>
+                <Key word="Import-PSSession"/>
+                <Key word="Invoke-Command"/>
+                <Key word="Invoke-Command"/>
+                <Key word="Invoke-Expression"/>
+                <Key word="Invoke-History"/>
+                <Key word="Invoke-Item"/>
+                <Key word="Invoke-RestMethod"/>
+                <Key word="Invoke-Rexec"/>
+                <Key word="Invoke-Rshell"/>
+                <Key word="Invoke-SSHExpression"/>
+                <Key word="Invoke-Telnet"/>
+                <Key word="Invoke-WSManAction"/>
+                <Key word="Invoke-WebRequest"/>
+                <Key word="Invoke-WmiMethod"/>
+                <Key word="Join-Path"/>
+                <Key word="Limit-EventLog"/>
+                <Key word="Measure-Command"/>
+                <Key word="Measure-Object"/>
+                <Key word="Move-Item"/>
+                <Key word="Move-ItemProperty"/>
+                <Key word="New-Alias"/>
+                <Key word="New-Event"/>
+                <Key word="New-Eventlog"/>
+                <Key word="New-Item"/>
+                <Key word="New-ItemProperty"/>
+                <Key word="New-Module"/>
+                <Key word="New-ModuleManifest"/>
+                <Key word="New-Object"/>
+                <Key word="New-PSDrive"/>
+                <Key word="New-PSSession"/>
+                <Key word="New-PSSessionConfigurationFile"/>
+                <Key word="New-PSSessionOption"/>
+                <Key word="New-PSTransportOption"/>
+                <Key word="New-Service"/>
+                <Key word="New-Timespan"/>
+                <Key word="New-Variable"/>
+                <Key word="New-WSManInstance"/>
+                <Key word="New-WSManSessionOption"/>
+                <Key word="New-WebServiceProxy"/>
+                <Key word="New-WinEvent"/>
+                <Key word="Out-Default"/>
+                <Key word="Out-File"/>
+                <Key word="Out-GridView"/>
+                <Key word="Out-Host"/>
+                <Key word="Out-Null"/>
+                <Key word="Out-Printer"/>
+                <Key word="Out-String"/>
+                <Key word="Pop-Location"/>
+                <Key word="Pop-Location"/>
+                <Key word="Push-Location"/>
+                <Key word="Push-Location"/>
+                <Key word="Read-Host"/>
+                <Key word="Read-Host"/>
+                <Key word="Read-Zip"/>
+                <Key word="Receive-Job"/>
+                <Key word="Receive-PSSession"/>
+                <Key word="Register-EngineEvent"/>
+                <Key word="Register-JobEvent"/>
+                <Key word="Register-ObjectEvent"/>
+                <Key word="Register-PSSessionConfiguration"/>
+                <Key word="Register-WmiEvent"/>
+                <Key word="Remove-Computer"/>
+                <Key word="Remove-Event"/>
+                <Key word="Remove-EventLog"/>
+                <Key word="Remove-Item"/>
+                <Key word="Remove-Item"/>
+                <Key word="Remove-Item"/>
+                <Key word="Remove-ItemProperty"/>
+                <Key word="Remove-Job"/>
+                <Key word="Remove-Module"/>
+                <Key word="Remove-PSBreakpoint"/>
+                <Key word="Remove-PSDrive"/>
+                <Key word="Remove-PSSession"/>
+                <Key word="Remove-PSSnapin"/>
+                <Key word="Remove-SSHRunspace"/>
+                <Key word="Remove-TypeData"/>
+                <Key word="Remove-Variable"/>
+                <Key word="Remove-WSManInstance"/>
+                <Key word="Remove-WmiObject"/>
+                <Key word="Rename-Computer"/>
+                <Key word="Rename-Item"/>
+                <Key word="Rename-ItemProperty"/>
+                <Key word="Rename-ItemProperty"/>
+                <Key word="Reset-ComputerMachinePassword"/>
+                <Key word="Resolve-Path"/>
+                <Key word="Restart-Computer"/>
+                <Key word="Restart-Service"/>
+                <Key word="Restore-Computer"/>
+                <Key word="Resume-Job"/>
+                <Key word="Resume-Service"/>
+                <Key word="Save-Help"/>
+                <Key word="Select-Object"/>
+                <Key word="Select-Object"/>
+                <Key word="Select-String"/>
+                <Key word="Select-XML"/>
+                <Key word="Send-Email"/>
+                <Key word="Send-FTP"/>
+                <Key word="Send-IM"/>
+                <Key word="Send-MailMessage"/>
+                <Key word="Send-MailMessage"/>
+                <Key word="Send-NNTP"/>
+                <Key word="Send-Page"/>
+                <Key word="Send-Ping"/>
+                <Key word="Send-S3"/>
+                <Key word="Send-SMS"/>
+                <Key word="Send-Syslog"/>
+                <Key word="Send-TFTP"/>
+                <Key word="Send-Trap"/>
+                <Key word="Send-UDP"/>
+                <Key word="Send-WebDAV"/>
+                <Key word="Set-Acl"/>
+                <Key word="Set-Alias"/>
+                <Key word="Set-AuthenticodeSignature"/>
+                <Key word="Set-Content"/>
+                <Key word="Set-Date"/>
+                <Key word="Set-ExecutionPolicy"/>
+                <Key word="Set-IMAP"/>
+                <Key word="Set-Item"/>
+                <Key word="Set-ItemProperty"/>
+                <Key word="Set-LDAP"/>
+                <Key word="Set-Location"/>
+                <Key word="Set-Location"/>
+                <Key word="Set-PSBreakpoint"/>
+                <Key word="Set-PSSessionConfiguration"/>
+                <Key word="Set-PSdebug"/>
+                <Key word="Set-RAS"/>
+                <Key word="Set-SNMP"/>
+                <Key word="Set-Service"/>
+                <Key word="Set-StrictMode"/>
+                <Key word="Set-Tracesource"/>
+                <Key word="Set-Variable"/>
+                <Key word="Set-WSManInstance"/>
+                <Key word="Set-WSManQuickConfig"/>
+                <Key word="Set-WmiInstance"/>
+                <Key word="Show-Command"/>
+                <Key word="Show-ControlPanelItem"/>
+                <Key word="Show-EventLog"/>
+                <Key word="Sort-Object"/>
+                <Key word="Sort-Object"/>
+                <Key word="Split-Path"/>
+                <Key word="Start-Job"/>
+                <Key word="Start-Process"/>
+                <Key word="Start-Service"/>
+                <Key word="Start-Sleep"/>
+                <Key word="Start-Transaction"/>
+                <Key word="Start-Transcript"/>
+                <Key word="Stop-Computer"/>
+                <Key word="Stop-Job"/>
+                <Key word="Stop-Process"/>
+                <Key word="Stop-Process"/>
+                <Key word="Stop-Service"/>
+                <Key word="Stop-Transcript"/>
+                <Key word="Suspend-Job"/>
+                <Key word="Suspend-Service"/>
+                <Key word="Tee-Object"/>
+                <Key word="Test-ComputerSecureChannel"/>
+                <Key word="Test-Connection"/>
+                <Key word="Test-ModuleManifest"/>
+                <Key word="Test-PSSessionConfigurationFile"/>
+                <Key word="Test-Path"/>
+                <Key word="Test-WSMan"/>
+                <Key word="Trace-Command"/>
+                <Key word="Trace-Command"/>
+                <Key word="Unblock-File"/>
+                <Key word="Undo-Transaction"/>
+                <Key word="Unregister-Event"/>
+                <Key word="Unregister-PSSessionConfiguration"/>
+                <Key word="Update-Formatdata"/>
+                <Key word="Update-Help"/>
+                <Key word="Update-List"/>
+                <Key word="Update-TypeData"/>
+                <Key word="Update-Typedata"/>
+                <Key word="Use-Transaction"/>
+                <Key word="Wait-Event"/>
+                <Key word="Wait-Job"/>
+                <Key word="Wait-Process"/>
+                <Key word="Where-Object"/>
+                <Key word="Where-Object"/>
+                <Key word="Write-Debug"/>
+                <Key word="Write-Error"/>
+                <Key word="Write-EventLog"/>
+                <Key word="Write-Host"/>
+                <Key word="Write-Host"/>
+                <Key word="Write-Output"/>
+                <Key word="Write-Progress"/>
+                <Key word="Write-Verbose"/>
+                <Key word="Write-Warning"/>
+                <Key word="Write-Zip"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="ac"/>
+                <Key word="asnp"/>
+                <Key word="cat"/>
+                <Key word="cd"/>
+                <Key word="chdir"/>
+                <Key word="clc"/>
+                <Key word="clear"/>
+                <Key word="cli"/>
+                <Key word="clp"/>
+                <Key word="cls"/>
+                <Key word="clv"/>
+                <Key word="copy"/>
+                <Key word="cp"/>
+                <Key word="cpi"/>
+                <Key word="cpp"/>
+                <Key word="cvpa"/>
+                <Key word="del"/>
+                <Key word="diff"/>
+                <Key word="dir"/>
+                <Key word="echo"/>
+                <Key word="epal"/>
+                <Key word="epcsv"/>
+                <Key word="erase"/>
+                <Key word="fc"/>
+                <Key word="fl"/>
+                <Key word="ft"/>
+                <Key word="fw"/>
+                <Key word="gal"/>
+                <Key word="gc"/>
+                <Key word="gci"/>
+                <Key word="gcm"/>
+                <Key word="gdr"/>
+                <Key word="ghy"/>
+                <Key word="gi"/>
+                <Key word="gl"/>
+                <Key word="gm"/>
+                <Key word="gp"/>
+                <Key word="gps"/>
+                <Key word="group"/>
+                <Key word="gsnp"/>
+                <Key word="gsv"/>
+                <Key word="gu"/>
+                <Key word="gv"/>
+                <Key word="gwmi"/>
+                <Key word="h"/>
+                <Key word="help"/>
+                <Key word="history"/>
+                <Key word="iex"/>
+                <Key word="ihy"/>
+                <Key word="ii"/>
+                <Key word="ipal"/>
+                <Key word="ipcsv"/>
+                <Key word="kill"/>
+                <Key word="lp"/>
+                <Key word="ls"/>
+                <Key word="mi"/>
+                <Key word="mount"/>
+                <Key word="move"/>
+                <Key word="mp"/>
+                <Key word="mv"/>
+                <Key word="nal"/>
+                <Key word="ndr"/>
+                <Key word="ni"/>
+                <Key word="nv"/>
+                <Key word="oh"/>
+                <Key word="popd"/>
+                <Key word="ps"/>
+                <Key word="pushd"/>
+                <Key word="pwd"/>
+                <Key word="r"/>
+                <Key word="rd"/>
+                <Key word="rdr"/>
+                <Key word="ren"/>
+                <Key word="ri"/>
+                <Key word="rm"/>
+                <Key word="rmdir"/>
+                <Key word="rni"/>
+                <Key word="rnp"/>
+                <Key word="rp"/>
+                <Key word="rsnp"/>
+                <Key word="rv"/>
+                <Key word="rvpa"/>
+                <Key word="sal"/>
+                <Key word="sasv"/>
+                <Key word="sc"/>
+                <Key word="select"/>
+                <Key word="set"/>
+                <Key word="si"/>
+                <Key word="sl"/>
+                <Key word="sleep"/>
+                <Key word="sort"/>
+                <Key word="sp"/>
+                <Key word="spps"/>
+                <Key word="spsv"/>
+                <Key word="sv"/>
+                <Key word="tee"/>
+                <Key word="type"/>
+                <Key word="write"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Red" bold="false" italic="false">
+                <Key word="-and"/>
+                <Key word="-as"/>
+                <Key word="-band"/>
+                <Key word="-bnot"/>
+                <Key word="-bor"/>
+                <Key word="-bxor"/>
+                <Key word="-casesensitive"/>
+                <Key word="-ccontains"/>
+                <Key word="-ceq"/>
+                <Key word="-cge"/>
+                <Key word="-cgt"/>
+                <Key word="-cle"/>
+                <Key word="-clike"/>
+                <Key word="-clt"/>
+                <Key word="-cmatch"/>
+                <Key word="-cne"/>
+                <Key word="-cnotcontains"/>
+                <Key word="-cnotlike"/>
+                <Key word="-cnotmatch"/>
+                <Key word="-contains"/>
+                <Key word="-creplace"/>
+                <Key word="-eq"/>
+                <Key word="-exact"/>
+                <Key word="-f"/>
+                <Key word="-file"/>
+                <Key word="-ge"/>
+                <Key word="-gt"/>
+                <Key word="-icontains"/>
+                <Key word="-ieq"/>
+                <Key word="-ige"/>
+                <Key word="-igt"/>
+                <Key word="-ile"/>
+                <Key word="-ilike"/>
+                <Key word="-ilt"/>
+                <Key word="-imatch"/>
+                <Key word="-ine"/>
+                <Key word="-inotcontains"/>
+                <Key word="-inotlike"/>
+                <Key word="-inotmatch"/>
+                <Key word="-ireplace"/>
+                <Key word="-is"/>
+                <Key word="-isnot"/>
+                <Key word="-join"/>
+                <Key word="-le"/>
+                <Key word="-like"/>
+                <Key word="-lt"/>
+                <Key word="-match"/>
+                <Key word="-ne"/>
+                <Key word="-not"/>
+                <Key word="-notcontains"/>
+                <Key word="-notlike"/>
+                <Key word="-notmatch"/>
+                <Key word="-or"/>
+                <Key word="-regex"/>
+                <Key word="-replace"/>
+                <Key word="-split"/>
+                <Key word="-wildcard"/>
+                <Key word="-xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords5" color="Blue" bold="false" italic="false">
+                <Key word="[Array]"/>
+                <Key word="[Boolean]"/>
+                <Key word="[Byte]"/>
+                <Key word="[Char]"/>
+                <Key word="[DateTime]"/>
+                <Key word="[Double]"/>
+                <Key word="[Int]"/>
+                <Key word="[Long]"/>
+                <Key word="[Single]"/>
+                <Key word="[String]"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="PowerShellHelp" ignorecase="true">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , ?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word=".COMPONENT"/>
+                <Key word=".DESCRIPTION"/>
+                <Key word=".EXAMPLE"/>
+                <Key word=".EXTERNALHELP"/>
+                <Key word=".FORWARDHELPCATEGORY"/>
+                <Key word=".FORWARDHELPTARGETNAME"/>
+                <Key word=".FUNCTIONALITY"/>
+                <Key word=".INPUTS"/>
+                <Key word=".LINK"/>
+                <Key word=".NOTES"/>
+                <Key word=".OUTPUTS"/>
+                <Key word=".PARAMETER"/>
+                <Key word=".REMOTEHELPRUNSPACE"/>
+                <Key word=".ROLE"/>
+                <Key word=".SYNOPSIS"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

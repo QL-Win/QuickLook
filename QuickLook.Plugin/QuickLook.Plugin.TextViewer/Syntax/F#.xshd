@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+F# syntax highlighting
+Written by Ezra Altahan
+Created 05/01/2013 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="F#" extensions=".fs;.fsi;.fsx;.fsscript">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="(*"/>
+        <Property name="BlockCommentEnd" value="*)"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+            
+            <Span name="DocComment" rule="FSDoc" stopateol="true" noescapesequences="true" color="Teal" bold="false" italic="false">
+                <Begin>///@!/@</Begin>
+            </Span>
+          
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//@!/@</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>////</Begin>
+            </Span>
+          
+            <Span name="BlockComment" rule="CommentSet1" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+            
+            <Span name="MultiLineString1" stopateol="false" color="Maroon" bold="false" italic="false">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" escapecharacter="\" color="Maroon" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="MultiLineString2" stopateol="false" escapecharacter='"' color="Maroon" bold="false" italic="false">
+                <Begin>@@"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">module</MarkFollowing>
+            <MarkFollowing markmarker="true" color="Sienna" bold="false" italic="false">#</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="abstract"/>
+                <Key word="and"/>
+                <Key word="as"/>
+                <Key word="assert"/>
+                <Key word="begin"/>
+                <Key word="class"/>
+                <Key word="default"/>
+                <Key word="delegate"/>
+                <Key word="do"/>
+                <Key word="done"/>
+                <Key word="downcast"/>
+                <Key word="downto"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="enum"/>
+                <Key word="exception"/>
+                <Key word="extern"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="fun"/>
+                <Key word="function"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inherit"/>
+                <Key word="inline"/>
+                <Key word="interface"/>
+                <Key word="land"/>
+                <Key word="lazy"/>
+                <Key word="let"/>
+                <Key word="match"/>
+                <Key word="member"/>
+                <Key word="module"/>
+                <Key word="mutable"/>
+                <Key word="namespace"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="of"/>
+                <Key word="open"/>
+                <Key word="or"/>
+                <Key word="override"/>
+                <Key word="rec"/>
+                <Key word="return"/>
+                <Key word="seq"/>
+                <Key word="sig"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="type"/>
+                <Key word="upcast"/>
+                <Key word="use"/>
+                <Key word="val"/>
+                <Key word="void"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+          
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="async"/>
+                <Key word="atomic"/>
+                <Key word="break"/>
+                <Key word="checked"/>
+                <Key word="component"/>
+                <Key word="const"/>
+                <Key word="constraint"/>
+                <Key word="constructor"/>
+                <Key word="continue"/>
+                <Key word="decimal"/>
+                <Key word="eager"/>
+                <Key word="event"/>
+                <Key word="external"/>
+                <Key word="fixed"/>
+                <Key word="functor"/>
+                <Key word="include"/>
+                <Key word="method"/>
+                <Key word="mixin"/>
+                <Key word="object"/>
+                <Key word="process"/>
+                <Key word="property"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="pure"/>
+                <Key word="readonly"/>
+                <Key word="sealed"/>
+                <Key word="virtual"/>
+                <Key word="volatile"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="FSDoc" ignorecase="false">
+            <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+            
+            <Span name="XmlTag" rule="XmlDocSet" stopateol="true" color="Gray" bold="false" italic="false">
+                <Begin>&lt;</Begin>
+                <End>&gt;</End>
+            </Span>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="CommentSet1">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="BlockComment" stopateol="false" color="Teal" bold="false" italic="false">
+                <Begin >(*</Begin>
+                <End >*)</End>
+            </Span>
+        </RuleSet>
+        
+        <RuleSet name="XmlDocSet" ignorecase="false">
+            <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+            
+            <Span name="String" bold="true" italic="false" color="Silver" stopateol="true">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Punctuation" bold="true" italic="false" color="Gray">
+                <Key word="/"/>
+                <Key word="|"/>
+                <Key word="="/>
+            </KeyWords>
+            
+            <KeyWords name="SpecialComment" color="Gray" bold="true" italic="false">
+                <Key word="c"/>
+                <Key word="code"/>
+                <Key word="cref"/>
+                <Key word="description"/>
+                <Key word="example"/>
+                <Key word="exception"/>
+                <Key word="item"/>
+                <Key word="list"/>
+                <Key word="listheader"/>
+                <Key word="name"/>
+                <Key word="para"/>
+                <Key word="param"/>
+                <Key word="paramref"/>
+                <Key word="permission"/>
+                <Key word="remarks"/>
+                <Key word="returns"/>
+                <Key word="see"/>
+                <Key word="seealso"/>
+                <Key word="summary"/>
+                <Key word="term"/>
+                <Key word="type"/>
+                <Key word="value"/>     
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

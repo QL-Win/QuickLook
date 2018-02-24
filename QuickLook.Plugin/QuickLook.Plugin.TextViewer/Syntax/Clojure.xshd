@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Clojure syntax highlighting
+Written by Ezra Altahan
+Created 26/07/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Clojure" extensions=".clj">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value=";"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>`*()[]{}+=|\/:;"'</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>#"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String2" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing color="Brown" bold="false" italic="false">:</MarkFollowing>
+            <MarkFollowing color="Teal" bold="false" italic="false">def</MarkFollowing>
+            <MarkFollowing color="Teal" bold="false" italic="false">defn</MarkFollowing>
+            <MarkFollowing color="Teal" bold="false" italic="false">defmacro</MarkFollowing>
+                        
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="agent"/>
+                <Key word="assoc"/>
+                <Key word="await"/>
+                <Key word="catch"/>
+                <Key word="compare-and-set!"/>
+                <Key word="concat"/>
+                <Key word="cond"/>
+                <Key word="conj"/>
+                <Key word="cons"/>
+                <Key word="declare"/>
+                <Key word="def"/>
+                <Key word="defmacro"/>
+                <Key word="defmethod"/>
+                <Key word="defmulti"/>
+                <Key word="defn"/>
+                <Key word="disj"/>
+                <Key word="dissoc"/>
+                <Key word="do"/>
+                <Key word="drop"/>
+                <Key word="eval"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="first"/>
+                <Key word="flatten"/>
+                <Key word="fn"/>
+                <Key word="frest"/>
+                <Key word="hash-map"/>
+                <Key word="if"/>
+                <Key word="if-not"/>
+                <Key word="intern"/>
+                <Key word="into"/>
+                <Key word="iterate"/>
+                <Key word="lazy-cat"/>
+                <Key word="lazy-cons"/>
+                <Key word="let"/>
+                <Key word="list"/>
+                <Key word="loop"/>
+                <Key word="macroexpand"/>
+                <Key word="macroexpand-1"/>
+                <Key word="map"/>
+                <Key word="monitor-enter"/>
+                <Key word="monitor-exit"/>
+                <Key word="new"/>
+                <Key word="nil"/>
+                <Key word="print"/>
+                <Key word="println"/>
+                <Key word="prn"/>
+                <Key word="quote"/>
+                <Key word="range"/>
+                <Key word="recur"/>
+                <Key word="rest"/>
+                <Key word="rrest"/>
+                <Key word="second"/>
+                <Key word="set!"/>
+                <Key word="str"/>
+                <Key word="swap!"/>
+                <Key word="take"/>
+                <Key word="throw"/>
+                <Key word="touch"/>
+                <Key word="trampoline"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="var"/>
+                <Key word="vector"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="aget"/>
+                <Key word="alter"/>
+                <Key word="and"/>
+                <Key word="apply"/>
+                <Key word="aset"/>
+                <Key word="associative?"/>
+                <Key word="atom"/>
+                <Key word="binding"/>
+                <Key word="branch?"/>
+                <Key word="butlast"/>
+                <Key word="class"/>
+                <Key word="class?"/>
+                <Key word="coll?"/>
+                <Key word="commute"/>
+                <Key word="compare"/>
+                <Key word="contains?"/>
+                <Key word="count"/>
+                <Key word="cycle"/>
+                <Key word="dec"/>
+                <Key word="decimal?"/>
+                <Key word="defonce"/>
+                <Key word="defstruct"/>
+                <Key word="deftest"/>
+                <Key word="delay"/>
+                <Key word="delay?"/>
+                <Key word="difference"/>
+                <Key word="distinct"/>
+                <Key word="distinct?"/>
+                <Key word="doall"/>
+                <Key word="dorun"/>
+                <Key word="doseq"/>
+                <Key word="dosync"/>
+                <Key word="dotimes"/>
+                <Key word="doto"/>
+                <Key word="drop-last"/>
+                <Key word="drop-while"/>
+                <Key word="empty?"/>
+                <Key word="end?"/>
+                <Key word="enumeration-seq"/>
+                <Key word="even?"/>
+                <Key word="every?"/>
+                <Key word="false?"/>
+                <Key word="ffirst"/>
+                <Key word="file-seq"/>
+                <Key word="filter"/>
+                <Key word="float?"/>
+                <Key word="fn?"/>
+                <Key word="fnseq"/>
+                <Key word="for"/>
+                <Key word="format"/>
+                <Key word="gen-and-load-class"/>
+                <Key word="gen-and-save-class"/>
+                <Key word="gen-class"/>
+                <Key word="gensym"/>
+                <Key word="get"/>
+                <Key word="identical?"/>
+                <Key word="if-let"/>
+                <Key word="ifn?"/>
+                <Key word="import"/>
+                <Key word="in-ns"/>
+                <Key word="inc"/>
+                <Key word="instance?"/>
+                <Key word="integer?"/>
+                <Key word="interleave"/>
+                <Key word="interpose"/>
+                <Key word="intersection"/>
+                <Key word="into-array"/>
+                <Key word="isa?"/>
+                <Key word="iterator-seq"/>
+                <Key word="keys"/>
+                <Key word="keyword?"/>
+                <Key word="last"/>
+                <Key word="line-seq"/>
+                <Key word="list?"/>
+                <Key word="load"/>
+                <Key word="locking"/>
+                <Key word="map?"/>
+                <Key word="mapcat"/>
+                <Key word="merge"/>
+                <Key word="name"/>
+                <Key word="neg?"/>
+                <Key word="next"/>
+                <Key word="nil?"/>
+                <Key word="not"/>
+                <Key word="not-any?"/>
+                <Key word="not-empty"/>
+                <Key word="not-every?"/>
+                <Key word="ns"/>
+                <Key word="nth"/>
+                <Key word="nthrest"/>
+                <Key word="number?"/>
+                <Key word="odd?"/>
+                <Key word="or"/>
+                <Key word="partition"/>
+                <Key word="pos?"/>
+                <Key word="proxy"/>
+                <Key word="ratio?"/>
+                <Key word="rational?"/>
+                <Key word="re-find"/>
+                <Key word="re-seq"/>
+                <Key word="reduce"/>
+                <Key word="ref-set"/>
+                <Key word="refer"/>
+                <Key word="remove"/>
+                <Key word="repeat"/>
+                <Key word="repeatedly"/>
+                <Key word="replace"/>
+                <Key word="replicate"/>
+                <Key word="require"/>
+                <Key word="resultset-seq"/>
+                <Key word="reverse"/>
+                <Key word="reversible?"/>
+                <Key word="rfirst"/>
+                <Key word="rseq"/>
+                <Key word="rsubseq"/>
+                <Key word="send"/>
+                <Key word="send-off"/>
+                <Key word="seq"/>
+                <Key word="seq?"/>
+                <Key word="sequential?"/>
+                <Key word="set"/>
+                <Key word="set?"/>
+                <Key word="some"/>
+                <Key word="sort"/>
+                <Key word="sort-by"/>
+                <Key word="sorted?"/>
+                <Key word="special-symbol?"/>
+                <Key word="split-at"/>
+                <Key word="split-with"/>
+                <Key word="string?"/>
+                <Key word="struct"/>
+                <Key word="struct-map"/>
+                <Key word="subseq"/>
+                <Key word="symbol?"/>
+                <Key word="sync"/>
+                <Key word="take-nth"/>
+                <Key word="take-while"/>
+                <Key word="time"/>
+                <Key word="to-array-2d"/>
+                <Key word="tree-seq"/>
+                <Key word="true?"/>
+                <Key word="true?"/>
+                <Key word="true?"/>
+                <Key word="update-in"/>
+                <Key word="use"/>
+                <Key word="val"/>
+                <Key word="vals"/>
+                <Key word="var?"/>
+                <Key word="var?"/>
+                <Key word="var?"/>
+                <Key word="vec"/>
+                <Key word="vector?"/>
+                <Key word="when"/>
+                <Key word="when-first"/>
+                <Key word="when-let"/>
+                <Key word="when-not"/>
+                <Key word="with-local-vars"/>
+                <Key word="with-meta"/>
+                <Key word="with-open"/>
+                <Key word="xml-seq"/>
+                <Key word="zero?"/>
+                <Key word="zipmap"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

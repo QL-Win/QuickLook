@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding ="utf-8"?>
+
+<!-- 
+Haskell syntax highlighting
+Written by Ezra Altahan
+Created 11/01/2013 | Updated 16/10/2016
+Version 1.2
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Haskell" extensions=".hs;.lhs">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+        <Property name="BlockCommentBegin" value="{-"/>
+        <Property name="BlockCommentEnd" value="-}"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>=+-*/()`,#":;.@|^$&gt;&lt;[]{}</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>{-</Begin>
+                <End>-}</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing markmarker="true" color="Sienna" bold="false" italic="false">#</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="_"/>
+                <Key word="as"/>
+                <Key word="case"/>
+                <Key word="class"/>
+                <Key word="data"/>
+                <Key word="default"/>
+                <Key word="deriving"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="export"/>
+                <Key word="factorial"/>
+                <Key word="fib"/>
+                <Key word="hiding"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="infix"/>
+                <Key word="infixl"/>
+                <Key word="infixr"/>
+                <Key word="instance"/>
+                <Key word="let"/>
+                <Key word="module"/>
+                <Key word="newtype"/>
+                <Key word="of"/>
+                <Key word="primitive"/>
+                <Key word="qualified"/>
+                <Key word="then"/>
+                <Key word="type"/>
+                <Key word="where"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="abs"/>
+                <Key word="absReal"/>
+                <Key word="accept"/>
+                <Key word="accumulate"/>
+                <Key word="acos"/>
+                <Key word="acosh"/>
+                <Key word="all"/>
+                <Key word="and"/>
+                <Key word="any"/>
+                <Key word="appendFile"/>
+                <Key word="appendText"/>
+                <Key word="applyM"/>
+                <Key word="approxRational"/>
+                <Key word="asTypeOf"/>
+                <Key word="asciiTab"/>
+                <Key word="asin"/>
+                <Key word="asinh"/>
+                <Key word="atan"/>
+                <Key word="atan2"/>
+                <Key word="atanh"/>
+                <Key word="basicIORun"/>
+                <Key word="break"/>
+                <Key word="button"/>
+                <Key word="catch"/>
+                <Key word="ceiling"/>
+                <Key word="chr"/>
+                <Key word="colorDialog"/>
+                <Key word="compare"/>
+                <Key word="concat"/>
+                <Key word="concatMap"/>
+                <Key word="connectTo"/>
+                <Key word="const"/>
+                <Key word="cos"/>
+                <Key word="cosh"/>
+                <Key word="curry"/>
+                <Key word="cycle"/>
+                <Key word="decodeFloat"/>
+                <Key word="denominator"/>
+                <Key word="digitToInt"/>
+                <Key word="div"/>
+                <Key word="divMod"/>
+                <Key word="doubleToFloat"/>
+                <Key word="doubleToRatio"/>
+                <Key word="doubleToRational"/>
+                <Key word="drop"/>
+                <Key word="dropWhile"/>
+                <Key word="either"/>
+                <Key word="elem"/>
+                <Key word="encodeFloat"/>
+                <Key word="enumFrom"/>
+                <Key word="enumFromThen"/>
+                <Key word="enumFromThenTo"/>
+                <Key word="enumFromTo"/>
+                <Key word="error"/>
+                <Key word="even"/>
+                <Key word="exp"/>
+                <Key word="exponent"/>
+                <Key word="fail"/>
+                <Key word="filter"/>
+                <Key word="flip"/>
+                <Key word="floatDigits"/>
+                <Key word="floatProperFraction"/>
+                <Key word="floatRadix"/>
+                <Key word="floatRange"/>
+                <Key word="floatToDigits"/>
+                <Key word="floatToRational"/>
+                <Key word="floor"/>
+                <Key word="fmap"/>
+                <Key word="fmap"/>
+                <Key word="foldl"/>
+                <Key word="foldl'"/>
+                <Key word="foldl1"/>
+                <Key word="foldr"/>
+                <Key word="foldr1"/>
+                <Key word="fontDialog"/>
+                <Key word="forkIO"/>
+                <Key word="forkOS"/>
+                <Key word="frameFixed"/>
+                <Key word="fromDouble"/>
+                <Key word="fromEnum"/>
+                <Key word="fromInt"/>
+                <Key word="fromInteger"/>
+                <Key word="fromIntegral"/>
+                <Key word="fromRat"/>
+                <Key word="fromRational"/>
+                <Key word="fromRealFrac"/>
+                <Key word="fst"/>
+                <Key word="gcd"/>
+                <Key word="get"/>
+                <Key word="getArgs"/>
+                <Key word="getChar"/>
+                <Key word="getClockTime"/>
+                <Key word="getContents"/>
+                <Key word="getHostByName"/>
+                <Key word="getLine"/>
+                <Key word="getProgName"/>
+                <Key word="guard"/>
+                <Key word="hClose"/>
+                <Key word="hFlush"/>
+                <Key word="hGetContents"/>
+                <Key word="hGetLine"/>
+                <Key word="hPutStr"/>
+                <Key word="hPutStrLn"/>
+                <Key word="hReady"/>
+                <Key word="head"/>
+                <Key word="hostAddresses"/>
+                <Key word="hugsIORun"/>
+                <Key word="hugsPutStr"/>
+                <Key word="id"/>
+                <Key word="inRange"/>
+                <Key word="index"/>
+                <Key word="inet_ntoa"/>
+                <Key word="init"/>
+                <Key word="intToDigit"/>
+                <Key word="intToRatio"/>
+                <Key word="interact"/>
+                <Key word="ioError"/>
+                <Key word="ioeGetErrorString"/>
+                <Key word="isAlpha"/>
+                <Key word="isAlphaNum"/>
+                <Key word="isAlphanum"/>
+                <Key word="isAscii"/>
+                <Key word="isControl"/>
+                <Key word="isDenormalized"/>
+                <Key word="isDigit"/>
+                <Key word="isEmptyMVar"/>
+                <Key word="isHexDigit"/>
+                <Key word="isIEEE"/>
+                <Key word="isInfinite"/>
+                <Key word="isLower"/>
+                <Key word="isNaN"/>
+                <Key word="isNegativeZero"/>
+                <Key word="isOctDigit"/>
+                <Key word="isPrint"/>
+                <Key word="isSpace"/>
+                <Key word="isUpper"/>
+                <Key word="iterate"/>
+                <Key word="last"/>
+                <Key word="lcm"/>
+                <Key word="length"/>
+                <Key word="lex"/>
+                <Key word="lexDigits"/>
+                <Key word="lexLitChar"/>
+                <Key word="lexmatch"/>
+                <Key word="lines"/>
+                <Key word="listenOn"/>
+                <Key word="log"/>
+                <Key word="logBase"/>
+                <Key word="logMessage"/>
+                <Key word="lookup"/>
+                <Key word="main"/>
+                <Key word="map"/>
+                <Key word="mapM"/>
+                <Key word="mapM_"/>
+                <Key word="max"/>
+                <Key word="maxBound"/>
+                <Key word="maximum"/>
+                <Key word="maybe"/>
+                <Key word="min"/>
+                <Key word="minBound"/>
+                <Key word="minimum"/>
+                <Key word="mod"/>
+                <Key word="negate"/>
+                <Key word="newEmptyMVar"/>
+                <Key word="newMVar"/>
+                <Key word="nonnull"/>
+                <Key word="not"/>
+                <Key word="notElem"/>
+                <Key word="null"/>
+                <Key word="numerator"/>
+                <Key word="numericEnumFrom"/>
+                <Key word="numericEnumFromThen"/>
+                <Key word="numericEnumFromThenTo"/>
+                <Key word="numericEnumFromTo"/>
+                <Key word="odd"/>
+                <Key word="openDir"/>
+                <Key word="openFile"/>
+                <Key word="or"/>
+                <Key word="ord"/>
+                <Key word="otherwise"/>
+                <Key word="pi"/>
+                <Key word="pred"/>
+                <Key word="primAcosDouble"/>
+                <Key word="primAcosFloat"/>
+                <Key word="primAsinDouble"/>
+                <Key word="primAsinFloat"/>
+                <Key word="primAtanDouble"/>
+                <Key word="primAtanFloat"/>
+                <Key word="primCharToInt"/>
+                <Key word="primCmpChar"/>
+                <Key word="primCmpDouble"/>
+                <Key word="primCmpFloat"/>
+                <Key word="primCmpInt"/>
+                <Key word="primCmpInteger"/>
+                <Key word="primCompAux"/>
+                <Key word="primCosDouble"/>
+                <Key word="primCosFloat"/>
+                <Key word="primDivDouble"/>
+                <Key word="primDivFloat"/>
+                <Key word="primDivInt"/>
+                <Key word="primDoubleDecode"/>
+                <Key word="primDoubleDigits"/>
+                <Key word="primDoubleEncode"/>
+                <Key word="primDoubleMaxExp"/>
+                <Key word="primDoubleMinExp"/>
+                <Key word="primDoubleRadix"/>
+                <Key word="primEqChar"/>
+                <Key word="primEqDouble"/>
+                <Key word="primEqFloat"/>
+                <Key word="primEqInt"/>
+                <Key word="primEqInteger"/>
+                <Key word="primEvenInt"/>
+                <Key word="primEvenInteger"/>
+                <Key word="primExitWith"/>
+                <Key word="primExpDouble"/>
+                <Key word="primExpFloat"/>
+                <Key word="primFloatDecode"/>
+                <Key word="primFloatDigits"/>
+                <Key word="primFloatEncode"/>
+                <Key word="primFloatMaxExp"/>
+                <Key word="primFloatMinExp"/>
+                <Key word="primFloatRadix"/>
+                <Key word="primIntToChar"/>
+                <Key word="primIntToDouble"/>
+                <Key word="primIntToFloat"/>
+                <Key word="primIntToInteger"/>
+                <Key word="primIntegerToDouble"/>
+                <Key word="primIntegerToFloat"/>
+                <Key word="primIntegerToInt"/>
+                <Key word="primLogDouble"/>
+                <Key word="primLogFloat"/>
+                <Key word="primMaxInt"/>
+                <Key word="primMinInt"/>
+                <Key word="primMinusDouble"/>
+                <Key word="primMinusFloat"/>
+                <Key word="primMinusInt"/>
+                <Key word="primMinusInteger"/>
+                <Key word="primModInt"/>
+                <Key word="primMulDouble"/>
+                <Key word="primMulFloat"/>
+                <Key word="primMulInt"/>
+                <Key word="primMulInteger"/>
+                <Key word="primNegDouble"/>
+                <Key word="primNegFloat"/>
+                <Key word="primNegInt"/>
+                <Key word="primNegInteger"/>
+                <Key word="primPiDouble"/>
+                <Key word="primPiFloat"/>
+                <Key word="primPlusDouble"/>
+                <Key word="primPlusFloat"/>
+                <Key word="primPlusInt"/>
+                <Key word="primPlusInteger"/>
+                <Key word="primPmFlt"/>
+                <Key word="primPmInt"/>
+                <Key word="primPmInteger"/>
+                <Key word="primPmNpk"/>
+                <Key word="primPmSub"/>
+                <Key word="primQrmInt"/>
+                <Key word="primQrmInteger"/>
+                <Key word="primQuotInt"/>
+                <Key word="primRationalToDouble"/>
+                <Key word="primRationalToFloat"/>
+                <Key word="primRemInt"/>
+                <Key word="primShowsDouble"/>
+                <Key word="primShowsFloat"/>
+                <Key word="primShowsInt"/>
+                <Key word="primShowsInteger"/>
+                <Key word="primSinDouble"/>
+                <Key word="primSinFloat"/>
+                <Key word="primSqrtDouble"/>
+                <Key word="primSqrtFloat"/>
+                <Key word="primTanDouble"/>
+                <Key word="primTanFloat"/>
+                <Key word="primbindIO"/>
+                <Key word="primretIO"/>
+                <Key word="print"/>
+                <Key word="product"/>
+                <Key word="properFraction"/>
+                <Key word="protectEsc"/>
+                <Key word="putChar"/>
+                <Key word="putMVar"/>
+                <Key word="putStr"/>
+                <Key word="putStrLn"/>
+                <Key word="quot"/>
+                <Key word="quotRem"/>
+                <Key word="range"/>
+                <Key word="rangeSize"/>
+                <Key word="rationalToDouble"/>
+                <Key word="rationalToFloat"/>
+                <Key word="rationalToRealFloat"/>
+                <Key word="read"/>
+                <Key word="readDec"/>
+                <Key word="readField"/>
+                <Key word="readFile"/>
+                <Key word="readFloat"/>
+                <Key word="readHex"/>
+                <Key word="readIO"/>
+                <Key word="readInt"/>
+                <Key word="readList"/>
+                <Key word="readLitChar"/>
+                <Key word="readLn"/>
+                <Key word="readMVar"/>
+                <Key word="readOct"/>
+                <Key word="readParen"/>
+                <Key word="readSigned"/>
+                <Key word="reads"/>
+                <Key word="readsPrec"/>
+                <Key word="realFloatToRational"/>
+                <Key word="realToFrac"/>
+                <Key word="recip"/>
+                <Key word="reduce"/>
+                <Key word="rem"/>
+                <Key word="repeat"/>
+                <Key word="replicate"/>
+                <Key word="return"/>
+                <Key word="reverse"/>
+                <Key word="round"/>
+                <Key word="scaleFloat"/>
+                <Key word="scanl"/>
+                <Key word="scanl1"/>
+                <Key word="scanr"/>
+                <Key word="scanr1"/>
+                <Key word="seq"/>
+                <Key word="sequence"/>
+                <Key word="sequence_"/>
+                <Key word="set"/>
+                <Key word="show"/>
+                <Key word="showChar"/>
+                <Key word="showEFloat"/>
+                <Key word="showFFloat"/>
+                <Key word="showField"/>
+                <Key word="showFloat"/>
+                <Key word="showGFloat"/>
+                <Key word="showHex"/>
+                <Key word="showInt"/>
+                <Key word="showIntAtBase"/>
+                <Key word="showList"/>
+                <Key word="showLitChar"/>
+                <Key word="showOct"/>
+                <Key word="showParen"/>
+                <Key word="showSigned"/>
+                <Key word="showString"/>
+                <Key word="shows"/>
+                <Key word="showsPrec"/>
+                <Key word="significand"/>
+                <Key word="signum"/>
+                <Key word="signumReal"/>
+                <Key word="sin"/>
+                <Key word="sinh"/>
+                <Key word="snd"/>
+                <Key word="span"/>
+                <Key word="splitAt"/>
+                <Key word="sqrt"/>
+                <Key word="start"/>
+                <Key word="staticText"/>
+                <Key word="strict"/>
+                <Key word="subtract"/>
+                <Key word="succ"/>
+                <Key word="sum"/>
+                <Key word="swapMVar"/>
+                <Key word="tail"/>
+                <Key word="take"/>
+                <Key word="takeMVar"/>
+                <Key word="takeWhile"/>
+                <Key word="tan"/>
+                <Key word="tanh"/>
+                <Key word="textCtrlAppendText"/>
+                <Key word="textCtrlRich"/>
+                <Key word="textCtrlSetEditable"/>
+                <Key word="textEntry"/>
+                <Key word="threadDelay"/>
+                <Key word="threadToIOResult"/>
+                <Key word="throw"/>
+                <Key word="toCalendarTime"/>
+                <Key word="toEnum"/>
+                <Key word="toInt"/>
+                <Key word="toInteger"/>
+                <Key word="toLower"/>
+                <Key word="toRational"/>
+                <Key word="toUpper"/>
+                <Key word="truncate"/>
+                <Key word="try"/>
+                <Key word="tryPutMVar"/>
+                <Key word="tryTakeMVar"/>
+                <Key word="uncurry"/>
+                <Key word="undefined"/>
+                <Key word="unlines"/>
+                <Key word="until"/>
+                <Key word="unwords"/>
+                <Key word="unzip"/>
+                <Key word="unzip3"/>
+                <Key word="userError"/>
+                <Key word="varCreate"/>
+                <Key word="varGet"/>
+                <Key word="withSocketsDo"/>
+                <Key word="words"/>
+                <Key word="writeFile"/>
+                <Key word="zero"/>
+                <Key word="zip"/>
+                <Key word="zip3"/>
+                <Key word="zipWith"/>
+                <Key word="zipWith3"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="EQ"/>
+                <Key word="False"/>
+                <Key word="GT"/>
+                <Key word="Just"/>
+                <Key word="LT"/>
+                <Key word="Left"/>
+                <Key word="Nothing"/>
+                <Key word="Right"/>
+                <Key word="True"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

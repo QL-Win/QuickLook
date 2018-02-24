@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Just BASIC syntax highlighting
+Written by Ezra Altahan
+Created 15/05/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Just BASIC" extensions=".bas">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="'"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>=+-*/(),#";:.|^$&gt;&lt;[]</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>'</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="as"/>
+                <Key word="beep"/>
+                <Key word="bmpbutton"/>
+                <Key word="bmpsave"/>
+                <Key word="button"/>
+                <Key word="byref"/>
+                <Key word="call"/>
+                <Key word="case"/>
+                <Key word="checkbox"/>
+                <Key word="close"/>
+                <Key word="cls"/>
+                <Key word="combobox"/>
+                <Key word="confirm"/>
+                <Key word="data"/>
+                <Key word="dim"/>
+                <Key word="do"/>
+                <Key word="dump"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="error"/>
+                <Key word="exit"/>
+                <Key word="field"/>
+                <Key word="filedialog"/>
+                <Key word="files"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="get"/>
+                <Key word="global"/>
+                <Key word="gosub"/>
+                <Key word="goto"/>
+                <Key word="graphicbox"/>
+                <Key word="groupbox"/>
+                <Key word="if"/>
+                <Key word="input"/>
+                <Key word="kill"/>
+                <Key word="let"/>
+                <Key word="line"/>
+                <Key word="listbox"/>
+                <Key word="loadbmp"/>
+                <Key word="locate"/>
+                <Key word="loop"/>
+                <Key word="lprint"/>
+                <Key word="mainwin"/>
+                <Key word="menu"/>
+                <Key word="mod"/>
+                <Key word="name"/>
+                <Key word="next"/>
+                <Key word="nomainwin"/>
+                <Key word="not"/>
+                <Key word="notice"/>
+                <Key word="on"/>
+                <Key word="oncomerror"/>
+                <Key word="open"/>
+                <Key word="or"/>
+                <Key word="playwave"/>
+                <Key word="playmidi"/>
+                <Key word="print"/>
+                <Key word="prompt"/>
+                <Key word="put"/>
+                <Key word="radiobutton"/>
+                <Key word="randomize"/>
+                <Key word="read"/>
+                <Key word="redim"/>
+                <Key word="rem"/>
+                <Key word="restore"/>
+                <Key word="return"/>
+                <Key word="run"/>
+                <Key word="scan"/>
+                <Key word="seek"/>
+                <Key word="select"/>
+                <Key word="statictext"/>
+                <Key word="step"/>
+                <Key word="stop"/>
+                <Key word="stopmidi"/>
+                <Key word="sub"/>
+                <Key word="textbox"/>
+                <Key word="texteditor"/>
+                <Key word="then"/>
+                <Key word="timer"/>
+                <Key word="to"/>
+                <Key word="unloadbmp"/>
+                <Key word="until"/>
+                <Key word="wait"/>
+                <Key word="wend"/>
+                <Key word="while"/>
+                <Key word="xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#AD0080" bold="false" italic="false">
+                <Key word="BackgroundColor"/>
+                <Key word="ComError"/>
+                <Key word="ComErrorNumber"/>
+                <Key word="ComPortNumber"/>
+                <Key word="ComboboxColor"/>
+                <Key word="CommandLine"/>
+                <Key word="DefaultDir"/>
+                <Key word="DisplayHeight"/>
+                <Key word="DisplayWidth"/>
+                <Key word="Drives"/>
+                <Key word="Err"/>
+                <Key word="ForegroundColor"/>
+                <Key word="HIDE"/>
+                <Key word="Inkey"/>
+                <Key word="Joy1button1"/>
+                <Key word="Joy1button2"/>
+                <Key word="Joy1x"/>
+                <Key word="Joy1y"/>
+                <Key word="Joy1z"/>
+                <Key word="Joy2button1"/>
+                <Key word="Joy2button2"/>
+                <Key word="Joy2x"/>
+                <Key word="Joy2y"/>
+                <Key word="Joy2z"/>
+                <Key word="LL"/>
+                <Key word="LR"/>
+                <Key word="ListboxColor"/>
+                <Key word="MINIMIZE"/>
+                <Key word="Platform"/>
+                <Key word="PrinterFont"/>
+                <Key word="SHOW"/>
+                <Key word="SHOWMAXIMIZED"/>
+                <Key word="SHOWMINIMIZED"/>
+                <Key word="SHOWMINNOACTIVE"/>
+                <Key word="SHOWNA"/>
+                <Key word="SHOWNOACTIVE"/>
+                <Key word="SHOWNORMAL"/>
+                <Key word="TextboxColor"/>
+                <Key word="TexteditorColor"/>
+                <Key word="UL"/>
+                <Key word="UR"/>
+                <Key word="UpperLeftX"/>
+                <Key word="UpperLeftY"/>
+                <Key word="Version"/>
+                <Key word="WindowHeight"/>
+                <Key word="WindowWidth"/>
+                <Key word="abs"/>
+                <Key word="acs"/>
+                <Key word="append"/>
+                <Key word="asc"/>
+                <Key word="asn"/>
+                <Key word="atn"/>
+                <Key word="binary"/>
+                <Key word="chr"/>
+                <Key word="cos"/>
+                <Key word="date"/>
+                <Key word="dialog"/>
+                <Key word="dialog_fs"/>
+                <Key word="dialog_modal"/>
+                <Key word="dialog_nf"/>
+                <Key word="dialog_nf_fs"/>
+                <Key word="dialog_nf_modal"/>
+                <Key word="eof"/>
+                <Key word="exp"/>
+                <Key word="graphics"/>
+                <Key word="graphics_fs"/>
+                <Key word="graphics_fs_nsb"/>
+                <Key word="graphics_nf_nsb"/>
+                <Key word="graphics_nsb"/>
+                <Key word="instr"/>
+                <Key word="int"/>
+                <Key word="left"/>
+                <Key word="len"/>
+                <Key word="loc"/>
+                <Key word="lof"/>
+                <Key word="log"/>
+                <Key word="lower"/>
+                <Key word="mid"/>
+                <Key word="midipos"/>
+                <Key word="mkdir"/>
+                <Key word="output"/>
+                <Key word="random"/>
+                <Key word="right"/>
+                <Key word="rmdir"/>
+                <Key word="rnd"/>
+                <Key word="sin"/>
+                <Key word="space"/>
+                <Key word="sqr"/>
+                <Key word="str"/>
+                <Key word="tab"/>
+                <Key word="tan"/>
+                <Key word="text"/>
+                <Key word="text_fs"/>
+                <Key word="text_nsb"/>
+                <Key word="text_nsb_ins"/>
+                <Key word="time"/>
+                <Key word="trim"/>
+                <Key word="txcount"/>
+                <Key word="upper"/>
+                <Key word="using"/>
+                <Key word="val"/>
+                <Key word="window"/>
+                <Key word="window_nf"/>             
+                <Key word="word"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

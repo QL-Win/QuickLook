@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Dart syntax highlighting
+Written by Ezra Altahan
+Created 12/02/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Dart" extensions=".dart">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>()[]{},:.`#=;+-*@/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+               
+            <Span name="String" rule="StringFormatting" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char1" rule="StringFormatting" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'''</Begin>
+                <End>'''</End>
+            </Span>
+            
+            <Span name="Char2" rule="StringFormatting" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="true">void</MarkFollowing>
+            <MarkFollowing markmarker="true" color="#B35F00" bold="false">@</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="abstract"/>
+                <Key word="as"/>
+                <Key word="async"/>
+                <Key word="async"/>
+                <Key word="await"/>
+                <Key word="await"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="deferred"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="export"/>
+                <Key word="extends"/>
+                <Key word="external"/>
+                <Key word="factory"/>
+                <Key word="final"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="get"/>
+                <Key word="hide"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="interface"/>
+                <Key word="library"/>
+                <Key word="native"/>
+                <Key word="new"/>
+                <Key word="of"/>
+                <Key word="on"/>
+                <Key word="operator"/>
+                <Key word="part"/>
+                <Key word="rethrow"/>
+                <Key word="return"/>
+                <Key word="set"/>
+                <Key word="show"/>
+                <Key word="static"/>
+                <Key word="switch"/>
+                <Key word="throw"/>
+                <Key word="try"/>
+                <Key word="typedef"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="List"/>
+                <Key word="Map"/>
+                <Key word="String"/>
+                <Key word="bool"/>
+                <Key word="double"/>
+                <Key word="dynamic"/>
+                <Key word="int"/>
+                <Key word="num"/>
+                <Key word="var"/>
+                <Key word="void"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="false"/>
+                <Key word="null"/>
+                <Key word="true"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="StringFormatting">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+            
+            <Span name="Formatting" stopateol="false" color="#993366" bold="false" italic="false">
+                <Begin >${</Begin>
+                <End >}</End>
+            </Span>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+VB.NET syntax highlighting
+Written by Ezra Altahan
+Created 07/04/2011 | Updated 16/10/2016
+Version 1.3
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="VB.NET" extensions=".vb">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="'"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase = "true">
+        
+            <Delimiters>~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,.?</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>'</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin singleword="true">REM@C</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="Preprocessor" rule="PreprocessorSet" stopateol="true" color="Maroon" bold="false" italic="false">
+                <Begin startofline="true">#</Begin>
+            </Span>
+            
+            <Span name="DateLiteral" stopateol="true" color="Blue" bold="false" italic="false">
+                <Begin startofline="false">#</Begin>
+                <End>#</End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            <MarkFollowing color="Black" bold="false" italic="true">interface</MarkFollowing>
+            <MarkFollowing color="Black" bold="false" italic="true">module</MarkFollowing>
+            <MarkFollowing color="Black" bold="false" italic="true">structure</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="AddHandler"/>
+                <Key word="AddressOf"/>
+                <Key word="Alias"/>
+                <Key word="And"/>
+                <Key word="AndAlso"/>
+                <Key word="As"/>
+                <Key word="Assembly"/>
+                <Key word="Attribute"/>
+                <Key word="Begin"/>
+                <Key word="Boolean"/>
+                <Key word="ByRef"/>
+                <Key word="ByVal"/>
+                <Key word="Byte"/>
+                <Key word="CBool"/>
+                <Key word="CByte"/>
+                <Key word="CChar"/>
+                <Key word="CDate"/>
+                <Key word="CDbl"/>
+                <Key word="CDec"/>
+                <Key word="CInt"/>
+                <Key word="CLng"/>
+                <Key word="CObj"/>
+                <Key word="CSByte"/>
+                <Key word="CShort"/>
+                <Key word="CSng"/>
+                <Key word="CStr"/>
+                <Key word="CType"/>
+                <Key word="CUInt"/>
+                <Key word="CULng"/>
+                <Key word="CUShort"/>
+                <Key word="Call"/>
+                <Key word="Case"/>
+                <Key word="Catch"/>
+                <Key word="Char"/>
+                <Key word="Class"/>
+                <Key word="Compare"/>
+                <Key word="Const"/>
+                <Key word="Continue"/>
+                <Key word="Currency"/>
+                <Key word="Custom"/>
+                <Key word="Date"/>
+                <Key word="Decimal"/>
+                <Key word="Declare"/>
+                <Key word="Default"/>
+                <Key word="Delegate"/>
+                <Key word="Dim"/>
+                <Key word="DirectCast"/>
+                <Key word="Do"/>
+                <Key word="Double"/>
+                <Key word="Each"/>
+                <Key word="Else"/>
+                <Key word="ElseIf"/>
+                <Key word="End"/>
+                <Key word="EndIf"/>
+                <Key word="Enum"/>
+                <Key word="Erase"/>
+                <Key word="Event"/>
+                <Key word="Exit"/>
+                <Key word="Explicit"/>
+                <Key word="False"/>
+                <Key word="Finally"/>
+                <Key word="For"/>
+                <Key word="Friend"/>
+                <Key word="Function"/>
+                <Key word="Get"/>
+                <Key word="GetType"/>
+                <Key word="Global"/>
+                <Key word="GoSub"/>
+                <Key word="GoTo"/>
+                <Key word="Handles"/>
+                <Key word="If"/>
+                <Key word="Implement"/>
+                <Key word="Implements"/>
+                <Key word="Imports"/>
+                <Key word="In"/>
+                <Key word="Inherits"/>
+                <Key word="Integer"/>
+                <Key word="Interface"/>
+                <Key word="Is"/>
+                <Key word="IsNot"/>
+                <Key word="Let"/>
+                <Key word="Lib"/>
+                <Key word="Like"/>
+                <Key word="Long"/>
+                <Key word="Loop"/>
+                <Key word="Me"/>
+                <Key word="Mod"/>
+                <Key word="Module"/>
+                <Key word="MustInherit"/>
+                <Key word="MustOverride"/>
+                <Key word="MyBase"/>
+                <Key word="MyClass"/>
+                <Key word="Namespace"/>
+                <Key word="Narrowing"/>
+                <Key word="New"/>
+                <Key word="New"/>
+                <Key word="Next"/>  
+                <Key word="Not"/>
+                <Key word="NotInheritable"/>
+                <Key word="NotOverridable"/>
+                <Key word="Nothing"/>
+                <Key word="Object"/>
+                <Key word="Of"/>
+                <Key word="On"/>
+                <Key word="Operator"/>
+                <Key word="Option"/>
+                <Key word="Optional"/>
+                <Key word="Or"/>
+                <Key word="OrElse"/>
+                <Key word="Overloads"/>
+                <Key word="Overridable"/>
+                <Key word="Overrides"/>
+                <Key word="ParamArray"/>
+                <Key word="Partial"/>
+                <Key word="Preserve"/>
+                <Key word="Private"/>
+                <Key word="Property"/>
+                <Key word="Protected"/>
+                <Key word="Public"/>
+                <Key word="RaiseEvent"/>
+                <Key word="ReDim"/>
+                <Key word="ReadOnly"/>
+                <Key word="RemoveHandler"/>
+                <Key word="Resume"/>
+                <Key word="Return"/>
+                <Key word="SByte"/>
+                <Key word="Select"/>
+                <Key word="Set"/>
+                <Key word="Shadows"/>
+                <Key word="Shared"/>
+                <Key word="Short"/>
+                <Key word="Single"/>
+                <Key word="Static"/>
+                <Key word="Step"/>
+                <Key word="Stop"/>
+                <Key word="String"/>
+                <Key word="Structure"/>
+                <Key word="Sub"/>
+                <Key word="SyncLock"/>
+                <Key word="Then"/>
+                <Key word="Throw"/>
+                <Key word="To"/>
+                <Key word="True"/>
+                <Key word="Try"/>
+                <Key word="TryCast"/>
+                <Key word="TypeOf"/>
+                <Key word="UInteger"/>
+                <Key word="ULong"/>
+                <Key word="UShort"/>
+                <Key word="Until"/>
+                <Key word="Using"/>
+                <Key word="Variant"/>
+                <Key word="Wend"/>
+                <Key word="When"/>
+                <Key word="While"/>
+                <Key word="Widening"/>
+                <Key word="With"/>
+                <Key word="WithEvents"/>
+                <Key word="WriteOnly"/>
+                <Key word="Xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Teal" bold="false">
+                <Key word="Bindable"/>
+                <Key word="Browsable"/>
+                <Key word="DefaultEvent"/>
+                <Key word="Description"/>
+                <Key word="DllImport"/>
+                <Key word="MarshalAs"/>
+                <Key word="STAThread"/>
+                <Key word="StructLayout"/>
+                <Key word="VBFixedString"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="PreprocessorSet" ignorecase="true">
+            <Delimiters>~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,.?</Delimiters>
+            
+            <KeyWords name="PreProcessor" color="Maroon" bold="false">
+                <Key word="Const"/>
+                <Key word="If"/>
+                <Key word="ElseIf"/> 
+                <Key word="Else"/>
+                <Key word="End"/>
+                <Key word="ExternalSource"/>
+                <Key word="Region"/>
+                <Key word="ExternalChecksum"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

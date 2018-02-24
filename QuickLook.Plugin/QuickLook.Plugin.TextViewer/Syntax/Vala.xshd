@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Vala syntax highlighting
+Written by Ezra Altahan
+Created 04/05/2016 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Vala" extensions=".vala">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}#@!,:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" rule="ValaDoc" stopateol="true" color="Green">
+                <Begin>//</Begin>
+            </Span>
+                        
+            <Span name="MultiLineComment" rule="ValaDoc" stopateol="false" color="Green">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+                        
+            <Span name="String2" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String3" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>@@"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing markmarker="true" color="Sienna" bold="false" italic="false">#</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="abstract"/>
+                <Key word="as"/>
+                <Key word="async"/>
+                <Key word="base"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="construct"/>
+                <Key word="continue"/>
+                <Key word="default "/>
+                <Key word="default"/>
+                <Key word="delegate"/>
+                <Key word="delete"/>
+                <Key word="do"/>
+                <Key word="dynamic"/>
+                <Key word="else"/>
+                <Key word="ensures"/>
+                <Key word="enum"/>
+                <Key word="errordomain"/>
+                <Key word="extern"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="get"/>
+                <Key word="global"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inline"/>
+                <Key word="interface"/>
+                <Key word="internal"/>
+                <Key word="is"/>
+                <Key word="lock"/>
+                <Key word="namespace"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="out"/>
+                <Key word="override"/>
+                <Key word="owned"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="ref"/>
+                <Key word="requires"/>
+                <Key word="return"/>
+                <Key word="set"/>
+                <Key word="signal"/>
+                <Key word="sizeof"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typeof"/>
+                <Key word="unowned"/>
+                <Key word="using"/>
+                <Key word="value"/>
+                <Key word="var"/>
+                <Key word="virtual"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="weak"/>
+                <Key word="while"/>
+                <Key word="yield"/>
+            </KeyWords>
+                                    
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="bool"/>
+                <Key word="char"/>
+                <Key word="double"/>
+                <Key word="float"/>
+                <Key word="int"/>
+                <Key word="int16"/>
+                <Key word="int32"/>
+                <Key word="int64"/>
+                <Key word="int8"/>
+                <Key word="long"/>
+                <Key word="short"/>
+                <Key word="size_t"/>
+                <Key word="ssize_t"/>
+                <Key word="string"/>
+                <Key word="uchar"/>
+                <Key word="uint"/>
+                <Key word="uint16"/>
+                <Key word="uint32"/>
+                <Key word="uint64"/>
+                <Key word="uint8"/>
+                <Key word="ulong"/>
+                <Key word="unichar"/>
+                <Key word="ushort"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="ValaDoc" ignorecase="true">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@deprecated"/>
+                <Key word="@see"/>
+                <Key word="@param"/>
+                <Key word="@since"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@return"/>
+                <Key word="@throws"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

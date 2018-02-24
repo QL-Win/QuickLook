@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding ="utf-8"?>
+
+<!-- 
+Rexx syntax highlighting
+Written by Ezra Altahan
+Created 29/11/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Rexx" extensions=".rex">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>=+-*/`,#":;.@|^$&gt;&lt;[]{}()</Delimiters>
+            
+            <Span name="BlockComment" rule="CommentSet1" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#808080" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="address"/>
+                <Key word="arg"/>
+                <Key word="by"/>
+                <Key word="call"/>
+                <Key word="do"/>
+                <Key word="drop"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="exist"/>
+                <Key word="exit"/>
+                <Key word="expose"/>
+                <Key word="for"/>
+                <Key word="forever"/>
+                <Key word="forward"/>
+                <Key word="guard"/>
+                <Key word="if"/>
+                <Key word="interpret"/>
+                <Key word="iterate"/>
+                <Key word="leave"/>
+                <Key word="loop"/>
+                <Key word="lower"/>
+                <Key word="nop"/>
+                <Key word="numeric"/>
+                <Key word="options"/>
+                <Key word="otherwise"/>
+                <Key word="parse"/>
+                <Key word="procedure"/>
+                <Key word="pull"/>
+                <Key word="push"/>
+                <Key word="queue"/>
+                <Key word="raise"/>
+                <Key word="reply"/>
+                <Key word="return"/>
+                <Key word="say"/>
+                <Key word="select"/>
+                <Key word="signal"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="trace"/>
+                <Key word="until"/>
+                <Key word="upper"/>
+                <Key word="use"/>
+                <Key word="value"/>
+                <Key word="var"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="CommentSet1">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin >/*</Begin>
+                <End >*/</End>
+            </Span>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

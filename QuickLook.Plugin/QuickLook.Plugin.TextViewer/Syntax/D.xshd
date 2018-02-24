@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+D syntax highlighting
+Written by Ezra Altahan
+Created 15/01/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="D" extensions=".d">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="MultiLineString" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkPrevious color="Purple" bold ="false">!</MarkPrevious>
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            <MarkFollowing color="#82751A" bold="false" italic="false">void</MarkFollowing>
+            <MarkFollowing color="MidnightBlue" bold="false" italic="false">function</MarkFollowing>
+            
+            <KeyWords name="Punctuation" color="Purple" bold="false">
+                <Key word="!"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="@disable"/>
+                <Key word="@nogc"/>
+                <Key word="@property"/>
+                <Key word="@safe"/>
+                <Key word="@system"/>
+                <Key word="@trusted"/>
+                <Key word="Object"/>
+                <Key word="abstract"/>
+                <Key word="alias"/>
+                <Key word="align"/>
+                <Key word="asm"/>
+                <Key word="assert"/>
+                <Key word="auto"/>
+                <Key word="bit"/>
+                <Key word="body"/>
+                <Key word="bool"/>
+                <Key word="break"/>
+                <Key word="byte"/>
+                <Key word="case"/>
+                <Key word="cast"/>
+                <Key word="catch"/>
+                <Key word="cdouble"/>
+                <Key word="cent"/>
+                <Key word="cfloat"/>
+                <Key word="char"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="contained"/>
+                <Key word="continue"/>
+                <Key word="creal"/>
+                <Key word="dchar"/>
+                <Key word="debug"/>
+                <Key word="default"/>
+                <Key word="delegate"/>
+                <Key word="delete"/>
+                <Key word="deprecated"/>
+                <Key word="do"/>
+                <Key word="double"/>
+                <Key word="dstring"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="export"/>
+                <Key word="extern"/>
+                <Key word="false"/>
+                <Key word="final"/>
+                <Key word="finally"/>
+                <Key word="float"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="foreach_reverse"/>
+                <Key word="function"/>
+                <Key word="goto"/>
+                <Key word="idouble"/>
+                <Key word="if"/>
+                <Key word="ifloat"/>
+                <Key word="immutable"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="inout"/>
+                <Key word="int"/>
+                <Key word="interface"/>
+                <Key word="invariant"/>
+                <Key word="ireal"/>
+                <Key word="is"/>
+                <Key word="lazy"/>
+                <Key word="long"/>
+                <Key word="macro"/>
+                <Key word="mixin"/>
+                <Key word="module"/>
+                <Key word="native"/>
+                <Key word="new"/>
+                <Key word="nothrow"/>
+                <Key word="null"/>
+                <Key word="out"/>
+                <Key word="override"/>
+                <Key word="package"/>
+                <Key word="pragma"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="pure"/>
+                <Key word="real"/>
+                <Key word="ref"/>
+                <Key word="return"/>
+                <Key word="scope"/>
+                <Key word="shared"/>
+                <Key word="short"/>
+                <Key word="static"/>
+                <Key word="string"/>
+                <Key word="struct"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="synchronized"/>
+                <Key word="template"/>
+                <Key word="this"/>
+                <Key word="threadsafe"/>
+                <Key word="throw"/>
+                <Key word="transient"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typedef"/>
+                <Key word="typeid"/>
+                <Key word="typeof"/>
+                <Key word="ubyte"/>
+                <Key word="ucent"/>
+                <Key word="ulong"/>
+                <Key word="union"/>
+                <Key word="unittest"/>
+                <Key word="version"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="wchar"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="wstring"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Teal" bold="false">
+                <Key word="opNeg"/>
+                <Key word="opCom"/>
+                <Key word="opPostInc"/>
+                <Key word="opPostDec"/>
+                <Key word="opCast"/>
+                <Key word="opAdd"/>
+                <Key word="opSub"/>
+                <Key word="opSub_r"/>
+                <Key word="opMul"/>
+                <Key word="opDiv"/>
+                <Key word="opDiv_r"/>
+                <Key word="opMod"/>
+                <Key word="opMod_r"/>
+                <Key word="opAnd"/>
+                <Key word="opOr"/>
+                <Key word="opXor"/>
+                <Key word="opShl"/>
+                <Key word="opShl_r"/>
+                <Key word="opShr"/>
+                <Key word="opShr_r"/>
+                <Key word="opUShr"/>
+                <Key word="opUShr_r"/>
+                <Key word="opCat"/>
+                <Key word="opCat_r"/>
+                <Key word="opEquals"/>
+                <Key word="opCmp"/>
+                <Key word="opAssign"/>
+                <Key word="opAddAssign"/>
+                <Key word="opSubAssign"/>
+                <Key word="opMulAssign"/>
+                <Key word="opDivAssign"/>
+                <Key word="opModAssign"/>
+                <Key word="opAndAssign"/>
+                <Key word="opOrAssign"/>
+                <Key word="opXorAssign"/>
+                <Key word="opShlAssign"/>
+                <Key word="opShrAssign"/>
+                <Key word="opUShrAssign"/>
+                <Key word="opCatAssign"/>
+                <Key word="opIndex"/>
+                <Key word="opIndexAssign"/>
+                <Key word="opIndexOpAssign"/>
+                <Key word="opCall"/>
+                <Key word="opSlice"/>
+                <Key word="opSliceAssign"/>
+                <Key word="opSliceOpAssign"/>
+                <Key word="opPos"/>
+                <Key word="opAdd_r"/>
+                <Key word="opMul_r"/>
+                <Key word="opAnd_r"/>
+                <Key word="opOr_r"/>
+                <Key word="opXor_r"/>
+                <Key word="opIn"/>
+                <Key word="opIn_r"/>
+                <Key word="opPow"/>
+                <Key word="opDispatch"/>
+                <Key word="opStar"/>
+                <Key word="opDot"/>
+                <Key word="opApply"/>
+                <Key word="opApplyReverse"/>
+                <Key word="opDollar"/>
+                <Key word="opUnary"/>
+                <Key word="opIndexUnary"/>
+                <Key word="opSliceUnary"/>
+                <Key word="opBinary"/>
+                <Key word="opBinaryRight"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Purple" bold="false">
+                <Key word="blkcnt_t"/>
+                <Key word="blksize_t"/>
+                <Key word="caddr_t"/>
+                <Key word="clock_t"/>
+                <Key word="daddr_t"/>
+                <Key word="dev_t"/>
+                <Key word="equals_t"/>
+                <Key word="fixpt_t"/>
+                <Key word="gid_t"/>
+                <Key word="hash_t"/>
+                <Key word="id_t"/>
+                <Key word="id_t"/>
+                <Key word="in_addr_t"/>
+                <Key word="in_port_t"/>
+                <Key word="ino_t"/>
+                <Key word="int16_t"/>
+                <Key word="int32_t"/>
+                <Key word="int64_t"/>
+                <Key word="int8_t"/>
+                <Key word="int_fast16_t"/>
+                <Key word="int_fast32_t"/>
+                <Key word="int_fast64_t"/>
+                <Key word="int_fast8_t"/>
+                <Key word="int_least16_t"/>
+                <Key word="int_least32_t"/>
+                <Key word="int_least64_t"/>
+                <Key word="int_least8_t"/>
+                <Key word="intmax_t"/>
+                <Key word="intmax_t"/>
+                <Key word="intptr_t"/>
+                <Key word="key_t"/>
+                <Key word="mode_t"/>
+                <Key word="nlink_t"/>
+                <Key word="off_t"/>
+                <Key word="pid_t"/>
+                <Key word="pthread_attr_t"/>
+                <Key word="pthread_cond_t"/>
+                <Key word="pthread_condattr_t"/>
+                <Key word="pthread_key_t"/>
+                <Key word="pthread_mutex_t"/>
+                <Key word="pthread_mutexattr_t"/>
+                <Key word="pthread_once_t"/>
+                <Key word="pthread_rwlock_t"/>
+                <Key word="pthread_rwlockattr_t"/>
+                <Key word="pthread_t"/>
+                <Key word="ptrdiff_t"/>
+                <Key word="qaddr_t"/>
+                <Key word="quad_t"/>
+                <Key word="segsz_t"/>
+                <Key word="size_t"/>
+                <Key word="sizediff_t"/>
+                <Key word="ssize_t"/>
+                <Key word="suseconds_t"/>
+                <Key word="swblk_t"/>
+                <Key word="time_t"/>
+                <Key word="u_char"/>
+                <Key word="u_int"/>
+                <Key word="u_long"/>
+                <Key word="u_quad_t"/>
+                <Key word="u_short"/>
+                <Key word="uid_t"/>
+                <Key word="uint"/>
+                <Key word="uint16_t"/>
+                <Key word="uint32_t"/>
+                <Key word="uint64_t"/>
+                <Key word="uint8_t"/>
+                <Key word="uint_fast16_t"/>
+                <Key word="uint_fast32_t"/>
+                <Key word="uint_fast64_t"/>
+                <Key word="uint_fast8_t"/>
+                <Key word="uint_least16_t"/>
+                <Key word="uint_least32_t"/>
+                <Key word="uint_least64_t"/>
+                <Key word="uint_least8_t"/>
+                <Key word="uintmax_t"/>
+                <Key word="uintmax_t"/>
+                <Key word="uintptr_t"/>
+                <Key word="useconds_t"/>
+                <Key word="ushort"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Navy" bold="true">
+                <Key word="__FILE__"/>
+                <Key word="__LINE__"/>
+                <Key word="__EOF__"/>
+                <Key word="__VERSION__"/>
+                <Key word="__DATE__"/>
+                <Key word="__TIME__"/>
+                <Key word="__TIMESTAMP__"/>
+                <Key word="__VENDOR__"/>
+                <Key word="__MODULE__"/>
+                <Key word="__FUNCTION__"/>
+                <Key word="__PRETTY_FUNCTION__"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+XC syntax highlighting
+Written by Ezra Altahan
+Created 09/05/2014 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="XC" extensions=".xc">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+                        
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="Sienna" bold="false" italic="false">
+                <Begin>#include</Begin>
+            </Span>
+                        
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="auto"/>
+                <Key word="break"/>
+                <Key word="buffered"/>
+                <Key word="case"/>
+                <Key word="clock"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="dafault"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="extern"/>
+                <Key word="for"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inline"/>
+                <Key word="isnull"/>
+                <Key word="master"/>
+                <Key word="null"/>
+                <Key word="on"/>
+                <Key word="out"/>
+                <Key word="par"/>
+                <Key word="register"/>
+                <Key word="return"/>
+                <Key word="select"/>
+                <Key word="service"/>
+                <Key word="slave"/>
+                <Key word="static"/>
+                <Key word="streaming"/>
+                <Key word="struct"/>
+                <Key word="switch"/>
+                <Key word="transaction"/>
+                <Key word="typedef"/>
+                <Key word="union"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="when"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic ="false">
+                <Key word="chan"/>
+                <Key word="chanend"/>
+                <Key word="char"/>
+                <Key word="core"/>
+                <Key word="int"/>
+                <Key word="long"/>
+                <Key word="port"/>
+                <Key word="short"/>
+                <Key word="signed"/>
+                <Key word="sizeof"/>
+                <Key word="timer"/>
+                <Key word="unsigned"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Sienna" bold="false" italic ="false">
+                <Key word="#define"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

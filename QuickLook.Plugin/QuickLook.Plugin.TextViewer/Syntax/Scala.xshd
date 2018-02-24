@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Scala syntax highlighting
+Written by Ezra Altahan
+Created 09/07/2015 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Scala" extensions=".scala">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}@!,:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green">
+                <Begin>//</Begin>
+            </Span>
+                        
+            <Span name="MultiLineComment" stopateol="false" color="Green">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+                        
+            <Span name="String2" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="#804000" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <MarkFollowing color="#247B95" bold="false" italic="false">def</MarkFollowing>
+            <MarkFollowing color="#804000" bold="false" italic="false">val</MarkFollowing>
+            <MarkFollowing color="#804000" bold="false" italic="false">var</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="AllRef"/>
+                <Key word="Any"/>
+                <Key word="AnyRef"/>
+                <Key word="Array"/>
+                <Key word="Attribute"/>
+                <Key word="Boolean"/>
+                <Key word="Buffer"/>
+                <Key word="Byte"/>
+                <Key word="Char"/>
+                <Key word="Collection"/>
+                <Key word="Console"/>
+                <Key word="Double"/>
+                <Key word="Elem"/>
+                <Key word="Float"/>
+                <Key word="Int"/>
+                <Key word="Iterable"/>
+                <Key word="Iterator"/>
+                <Key word="LinkedList"/>
+                <Key word="List"/>
+                <Key word="Long"/>
+                <Key word="Map"/>
+                <Key word="Nil"/>
+                <Key word="None"/>
+                <Key word="Option"/>
+                <Key word="Predef"/>
+                <Key word="Set"/>
+                <Key word="Short"/>
+                <Key word="Some"/>
+                <Key word="SortedMap"/>
+                <Key word="SortedSet"/>
+                <Key word="Stack"/>
+                <Key word="String"/>
+                <Key word="System"/>
+                <Key word="TreeMap"/>
+                <Key word="TreeSet"/>
+                <Key word="Unit"/>
+                <Key word="abstract"/>
+                <Key word="boolean"/>
+                <Key word="break"/>
+                <Key word="byte"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="char"/>
+                <Key word="class"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="delegate"/>
+                <Key word="do"/>
+                <Key word="double"/>
+                <Key word="else"/>
+                <Key word="extends"/>
+                <Key word="false"/>
+                <Key word="final"/>
+                <Key word="finally"/>
+                <Key word="float"/>
+                <Key word="for"/>
+                <Key word="forSome"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="instanceof"/>
+                <Key word="int"/>
+                <Key word="interface"/>
+                <Key word="long"/>
+                <Key word="native"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="package"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="return"/>
+                <Key word="short"/>
+                <Key word="static"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="synchronized"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="transient"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="while"/>
+            </KeyWords>
+                        
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="def"/>
+                <Key word="implicit"/>
+                <Key word="lazy"/>
+                <Key word="match"/>
+                <Key word="object"/>
+                <Key word="override"/>
+                <Key word="requires"/>
+                <Key word="sealed"/>
+                <Key word="trait"/>
+                <Key word="type"/>
+                <Key word="val"/>
+                <Key word="var"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

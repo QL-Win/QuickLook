@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Resource syntax highlighting
+Written by Ezra Altahan
+Created 13/08/2015 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Resource" extensions=".rc">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#EAEAEA"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+
+    <Digits name="Digits" color="Red"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name ="MultiLineString" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="#804000" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <KeyWords name="Punctuation" color="DarkBlue" bold="false">
+                <Key word="!"/>
+                <Key word="%"/>
+                <Key word="^"/>
+                <Key word="&amp;"/>
+                <Key word="*"/>
+                <Key word="+"/>
+                <Key word="-"/>
+                <Key word="="/>
+                <Key word="&lt;"/>
+                <Key word="&gt;"/>
+                <Key word=";"/>
+                <Key word=":"/>
+                <Key word="."/>
+                <Key word="|"/>
+            </KeyWords>
+            
+            <KeyWords name ="Keywords1" color="Blue" bold="false">
+                <Key word="ALT"/>
+                <Key word="AUTO3STATE"/>
+                <Key word="AUTOCHECKBOX"/>
+                <Key word="AUTORADIOBUTTON"/>
+                <Key word="BEGIN"/>
+                <Key word="BITMAP"/>
+                <Key word="BLOCK"/>
+                <Key word="BUTTON"/>
+                <Key word="CAPTION"/>
+                <Key word="CHARACTERISTICS"/>
+                <Key word="CHECKBOX"/>
+                <Key word="CLASS"/>
+                <Key word="COMBOBOX"/>
+                <Key word="CONTROL"/>
+                <Key word="CTEXT"/>
+                <Key word="CURSOR"/>
+                <Key word="DEFPUSHBUTTON"/>
+                <Key word="DIALOG"/>
+                <Key word="DIALOGEX"/>
+                <Key word="DISCARDABLE"/>
+                <Key word="EDITTEXT"/>
+                <Key word="END"/>
+                <Key word="EXSTYLE"/>
+                <Key word="FILEOS"/>
+                <Key word="FILETYPE"/>
+                <Key word="FILEVERSION"/>
+                <Key word="FONT"/>
+                <Key word="GROUPBOX"/>
+                <Key word="HTML"/>
+                <Key word="ICON"/>
+                <Key word="LANGUAGE"/>
+                <Key word="LISTBOX"/>
+                <Key word="LTEXT"/>
+                <Key word="MENU"/>
+                <Key word="MENUEX"/>
+                <Key word="MENUITEM"/>
+                <Key word="MESSAGETABLE"/>
+                <Key word="PLUGPLAY"/>
+                <Key word="POPUP"/>
+                <Key word="PRODUCTVERSION"/>
+                <Key word="PUSHBOX"/>
+                <Key word="PUSHBUTTON"/>
+                <Key word="RADIOBUTTON"/>
+                <Key word="RCDATA"/>
+                <Key word="RTEXT"/>
+                <Key word="SCROLLBAR"/>
+                <Key word="SEPARATOR"/>
+                <Key word="SHIFT"/>
+                <Key word="STATE3"/>
+                <Key word="STATIC"/>
+                <Key word="STRINGTABLE"/>
+                <Key word="STYLE"/>
+                <Key word="TEXTINCLUDE"/>
+                <Key word="TYPELIB"/>
+                <Key word="VALUE"/>
+                <Key word="VERSION"/>
+                <Key word="VERSIONINFO"/>
+                <Key word="VIRTKEY"/>
+                <Key word="ACCELERATORS"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

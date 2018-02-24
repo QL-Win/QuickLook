@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+OCaml syntax highlighting
+Written by Ezra Altahan
+Created 02/02/2012 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="OCaml" extensions=".ml;.mli">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="BlockCommentBegin" value="(*"/>
+        <Property name="BlockCommentEnd" value="*)"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   ?</Delimiters>
+          
+            <Span name="BlockComment" rule="CommentSet1" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" escapecharacter="\" color="Maroon" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="as"/>
+                <Key word="assert"/>
+                <Key word="begin"/>
+                <Key word="class"/>
+                <Key word="constraint"/>
+                <Key word="do"/>
+                <Key word="done"/>
+                <Key word="downto"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="exception"/>
+                <Key word="external"/>
+                <Key word="for"/>
+                <Key word="fun"/>
+                <Key word="function"/>
+                <Key word="functor"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="include"/>
+                <Key word="inherit"/>
+                <Key word="initializer"/>
+                <Key word="lazy"/>
+                <Key word="let"/>
+                <Key word="match"/>
+                <Key word="method"/>
+                <Key word="module"/>
+                <Key word="mutable"/>
+                <Key word="new"/>
+                <Key word="object"/>
+                <Key word="of"/>
+                <Key word="open"/>
+                <Key word="private"/>
+                <Key word="rec"/>
+                <Key word="sig"/>
+                <Key word="struct"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="try"/>
+                <Key word="type"/>
+                <Key word="val"/>
+                <Key word="virtual"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="array"/>
+                <Key word="asr"/>
+                <Key word="bool"/>
+                <Key word="char"/>
+                <Key word="false"/>
+                <Key word="float"/>
+                <Key word="ignore"/>
+                <Key word="int"/>
+                <Key word="land"/>
+                <Key word="list"/>
+                <Key word="lnot"/>
+                <Key word="lor"/>
+                <Key word="lsl"/>
+                <Key word="lsr"/>
+                <Key word="lxor"/>
+                <Key word="mod"/>
+                <Key word="option"/>
+                <Key word="or"/>
+                <Key word="ref"/>
+                <Key word="string"/>
+                <Key word="true"/>
+                <Key word="unit"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="CommentSet1">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin >(*</Begin>
+                <End >*)</End>
+            </Span>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

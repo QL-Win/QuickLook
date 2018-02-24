@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Lua syntax highlighting
+Written by Ezra Altahan
+Created 10/02/2013 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Lua" extensions=".lua">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+        <Property name="BlockCommentBegin" value="--[["/>
+        <Property name="BlockCommentEnd" value="]]"/>
+    </Properties>
+    
+<Digits name="Digits" color="#DF7000"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\/{}[]:;"' ,    ?</Delimiters>
+            
+            <Span name="BlockComment" rule="Luadoc" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>--[[</Begin>
+                <End>]]</End>
+            </Span>
+        
+            <Span name="LineComment" rule="Luadoc" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="MultiLineString" stopateol="false" color="#95004A" bold="false" italic="false" escapecharacter='"'>
+                <Begin>[[</Begin>
+                <End>]]</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="#884400" bold="false" italic="false">
+                <Begin startofline="true">$</Begin>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="and"/>
+                <Key word="break"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="end"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="local"/>
+                <Key word="nil"/>
+                <Key word="not"/>
+                <Key word="or"/>
+                <Key word="repeat"/>
+                <Key word="return"/>
+                <Key word="then"/>
+                <Key word="true"/>
+                <Key word="until"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#BF382A" bold="false">
+                <Key word="_ALERT"/>
+                <Key word="_ENV"/>
+                <Key word="_ERRORMESSAGE"/>
+                <Key word="_G"/>
+                <Key word="_INPUT"/>
+                <Key word="_OUTPUT"/>
+                <Key word="_PROMPT"/>
+                <Key word="_STDERR"/>
+                <Key word="_STDIN"/>
+                <Key word="_STDOUT"/>
+                <Key word="_VERSION"/>
+                <Key word="__add"/>
+                <Key word="__call"/>
+                <Key word="__concat"/>
+                <Key word="__div"/>
+                <Key word="__eq"/>
+                <Key word="__gc"/>
+                <Key word="__index"/>
+                <Key word="__le"/>
+                <Key word="__len"/>
+                <Key word="__lt"/>
+                <Key word="__mod"/>
+                <Key word="__mode"/>
+                <Key word="__mul"/>
+                <Key word="__newindex"/>
+                <Key word="__pow"/>
+                <Key word="__sub"/>
+                <Key word="__unm"/>
+                <Key word="assert"/>
+                <Key word="bit32"/>
+                <Key word="call"/>
+                <Key word="collectgarbage"/>
+                <Key word="coroutine"/>
+                <Key word="debug"/>
+                <Key word="dofile"/>
+                <Key word="dostring"/>
+                <Key word="error"/>
+                <Key word="foreach"/>
+                <Key word="foreachi"/>
+                <Key word="gcinfo"/>
+                <Key word="getfenv"/>
+                <Key word="getmetatable"/>
+                <Key word="getn"/>
+                <Key word="globals"/>
+                <Key word="io"/>
+                <Key word="ipairs"/>
+                <Key word="load"/>
+                <Key word="loadfile"/>
+                <Key word="loadlib"/>
+                <Key word="loadstring"/>
+                <Key word="math"/>
+                <Key word="module"/>
+                <Key word="newtype"/>
+                <Key word="next"/>
+                <Key word="os"/>
+                <Key word="package"/>
+                <Key word="pairs"/>
+                <Key word="pcall"/>
+                <Key word="print"/>
+                <Key word="rawequal"/>
+                <Key word="rawget"/>
+                <Key word="rawlen"/>
+                <Key word="rawset"/>
+                <Key word="require"/>
+                <Key word="select"/>
+                <Key word="setfenv"/>
+                <Key word="setmetatable"/>
+                <Key word="sort"/>
+                <Key word="string"/>
+                <Key word="table"/>
+                <Key word="tinsert"/>
+                <Key word="tonumber"/>
+                <Key word="tostring"/>
+                <Key word="tremove"/>
+                <Key word="type"/>
+                <Key word="unpack"/>
+                <Key word="xpcall"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="DarkViolet" bold="false">
+                <Key word="abs"/>
+                <Key word="acos"/>
+                <Key word="arshift"/>
+                <Key word="asin"/>
+                <Key word="atan"/>
+                <Key word="atan2"/>
+                <Key word="band"/>
+                <Key word="bit32.arshift"/>
+                <Key word="bit32.band"/>
+                <Key word="bit32.bnot"/>
+                <Key word="bit32.bor"/>
+                <Key word="bit32.btest"/>
+                <Key word="bit32.bxor"/>
+                <Key word="bit32.extract"/>
+                <Key word="bit32.lrotate"/>
+                <Key word="bit32.lshift"/>
+                <Key word="bit32.replace"/>
+                <Key word="bit32.rrotate"/>
+                <Key word="bit32.rshift"/>
+                <Key word="bnot"/>
+                <Key word="bor"/>
+                <Key word="btest"/>
+                <Key word="bxor"/>
+                <Key word="byte"/>
+                <Key word="ceil"/>
+                <Key word="char"/>
+                <Key word="cos"/>
+                <Key word="cosh"/>
+                <Key word="deg"/>
+                <Key word="dump"/>
+                <Key word="exp"/>
+                <Key word="extract"/>
+                <Key word="find"/>
+                <Key word="floor"/>
+                <Key word="fmod"/>
+                <Key word="format"/>
+                <Key word="frexp"/>
+                <Key word="gmatch"/>
+                <Key word="gsub"/>
+                <Key word="ldexp"/>
+                <Key word="len"/>
+                <Key word="log"/>
+                <Key word="log10"/>
+                <Key word="lower"/>
+                <Key word="lrotate"/>
+                <Key word="lshift"/>
+                <Key word="match"/>
+                <Key word="math.abs"/>
+                <Key word="math.acos"/>
+                <Key word="math.asin"/>
+                <Key word="math.atan"/>
+                <Key word="math.atan2"/>
+                <Key word="math.ceil"/>
+                <Key word="math.cos"/>
+                <Key word="math.cosh"/>
+                <Key word="math.def"/>
+                <Key word="math.deg"/>
+                <Key word="math.exp"/>
+                <Key word="math.floor"/>
+                <Key word="math.fmod"/>
+                <Key word="math.frexp"/>
+                <Key word="math.huge"/>
+                <Key word="math.ldexp"/>
+                <Key word="math.log"/>
+                <Key word="math.log10"/>
+                <Key word="math.max"/>
+                <Key word="math.min"/>
+                <Key word="math.mod"/>
+                <Key word="math.modf"/>
+                <Key word="math.pi"/>
+                <Key word="math.pow"/>
+                <Key word="math.rad"/>
+                <Key word="math.random"/>
+                <Key word="math.randomseed"/>
+                <Key word="math.sin"/>
+                <Key word="math.sinh"/>
+                <Key word="math.sqrt"/>
+                <Key word="math.tan"/>
+                <Key word="math.tanh"/>
+                <Key word="max"/>
+                <Key word="min"/>
+                <Key word="mod"/>
+                <Key word="modf"/>
+                <Key word="pow"/>
+                <Key word="rad"/>
+                <Key word="random"/>
+                <Key word="randomseed"/>
+                <Key word="rep"/>
+                <Key word="replace"/>
+                <Key word="reverse"/>
+                <Key word="rrotate"/>
+                <Key word="rshift"/>
+                <Key word="shift"/>
+                <Key word="sin"/>
+                <Key word="sinh"/>
+                <Key word="sqrt"/>
+                <Key word="strbyte"/>
+                <Key word="strchar"/>
+                <Key word="strfind"/>
+                <Key word="string.byte"/>
+                <Key word="string.char"/>
+                <Key word="string.dump"/>
+                <Key word="string.find"/>
+                <Key word="string.format"/>
+                <Key word="string.gfind"/>
+                <Key word="string.gmatch"/>
+                <Key word="string.gsub"/>
+                <Key word="string.len"/>
+                <Key word="string.lower"/>
+                <Key word="string.match"/>
+                <Key word="string.rep"/>
+                <Key word="string.reverse"/>
+                <Key word="string.sub"/>
+                <Key word="string.upper"/>
+                <Key word="strlen"/>
+                <Key word="strlower"/>
+                <Key word="strrep"/>
+                <Key word="strsub"/>
+                <Key word="strupper"/>
+                <Key word="sub"/>
+                <Key word="table.concat"/>
+                <Key word="table.foreach"/>
+                <Key word="table.foreachi"/>
+                <Key word="table.getn"/>
+                <Key word="table.insert"/>
+                <Key word="table.maxn"/>
+                <Key word="table.pack"/>
+                <Key word="table.remove"/>
+                <Key word="table.setn"/>
+                <Key word="table.sort"/>
+                <Key word="table.unpack"/>
+                <Key word="tan"/>
+                <Key word="tanh"/>
+                <Key word="upper"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="MidnightBlue" bold="false">    
+                <Key word="appendto"/>
+                <Key word="clock"/>
+                <Key word="close"/>
+                <Key word="closefile"/>
+                <Key word="coroutine.create"/>
+                <Key word="coroutine.resume"/>
+                <Key word="coroutine.running"/>
+                <Key word="coroutine.status"/>
+                <Key word="coroutine.wrap"/>
+                <Key word="coroutine.yield"/>
+                <Key word="date"/>
+                <Key word="debug.debug"/>
+                <Key word="debug.getfenv"/>
+                <Key word="debug.gethook"/>
+                <Key word="debug.getinfo"/>
+                <Key word="debug.getlocal"/>
+                <Key word="debug.getmetatable"/>
+                <Key word="debug.getregistry"/>
+                <Key word="debug.getupvalue"/>
+                <Key word="debug.getuservalue"/>
+                <Key word="debug.setfenv"/>
+                <Key word="debug.sethook"/>
+                <Key word="debug.setlocal"/>
+                <Key word="debug.setmetatable"/>
+                <Key word="debug.setupvalue"/>
+                <Key word="debug.setuservalue"/>
+                <Key word="debug.traceback"/>
+                <Key word="debug.upvalueid"/>
+                <Key word="debug.upvaluejoin"/>
+                <Key word="difftime"/>
+                <Key word="execute"/>
+                <Key word="exit"/>
+                <Key word="flush"/>
+                <Key word="getenv"/>
+                <Key word="io.close"/>
+                <Key word="io.flush"/>
+                <Key word="io.input"/>
+                <Key word="io.lines"/>
+                <Key word="io.open"/>
+                <Key word="io.output"/>
+                <Key word="io.popen"/>
+                <Key word="io.read"/>
+                <Key word="io.stderr"/>
+                <Key word="io.stdin"/>
+                <Key word="io.stdout"/>
+                <Key word="io.tmpfile"/>
+                <Key word="io.type"/>
+                <Key word="io.write"/>
+                <Key word="lines"/>
+                <Key word="openfile"/>
+                <Key word="os.clock"/>
+                <Key word="os.date"/>
+                <Key word="os.difftime"/>
+                <Key word="os.execute"/>
+                <Key word="os.exit"/>
+                <Key word="os.getenv"/>
+                <Key word="os.remove"/>
+                <Key word="os.rename"/>
+                <Key word="os.setlocale"/>
+                <Key word="os.time"/>
+                <Key word="os.tmpname"/>
+                <Key word="package.cpath"/>
+                <Key word="package.loaded"/>
+                <Key word="package.loaders"/>
+                <Key word="package.loadlib"/>
+                <Key word="package.path"/>
+                <Key word="package.preload"/>
+                <Key word="package.seeall"/>
+                <Key word="read"/>
+                <Key word="readfrom"/>
+                <Key word="remove"/>
+                <Key word="rename"/>
+                <Key word="seek"/>
+                <Key word="setlocale"/>
+                <Key word="setvbuf"/>
+                <Key word="time"/>
+                <Key word="tmpfile"/>
+                <Key word="tmpname"/>
+                <Key word="write"/>
+                <Key word="writeto"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="Luadoc" ignorecase="true">
+            <Delimiters>~!%^*()-+=|\#/{}[]:;"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@author"/>
+                <Key word="@class"/>
+                <Key word="@copyright"/>
+                <Key word="@field"/>
+                <Key word="@name"/>
+                <Key word="@param"/>
+                <Key word="@release"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@usage"/>
+                <Key word="FIXME"/>
+                <Key word="TODO"/>
+                <Key word="XXX"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

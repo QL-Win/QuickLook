@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+ILYC syntax highlighting
+Written by Ezra Altahan
+Created 27/02/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="ILYC" extensions=".ilc">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="default"/>
+                <Key word="delegate"/>
+                <Key word="do"/>
+                <Key word="done"/>
+                <Key word="downto"/>
+                <Key word="else"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="from"/>
+                <Key word="function"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="include"/>
+                <Key word="loop"/>
+                <Key word="new"/>
+                <Key word="once"/>
+                <Key word="procedure"/>
+                <Key word="ref"/>
+                <Key word="return"/>
+                <Key word="struct"/>
+                <Key word="switch"/>
+                <Key word="then"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="to"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="until"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic ="false">
+                <Key word="bool"/>
+                <Key word="float"/>
+                <Key word="int"/>
+                <Key word="string"/>
+                <Key word="void"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="free"/>
+                <Key word="iif"/>
+                <Key word="print"/>
+                <Key word="puts"/>
+                <Key word="readc"/>
+                <Key word="reads"/>
+                <Key word="tobool"/>
+                <Key word="tofloat"/>
+                <Key word="toint"/>
+                <Key word="tostring"/>
+                <Key word="typeof"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="#643626" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="in"/>
+                <Key word="not"/>
+                <Key word="or"/>
+                <Key word="xor"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Haxe syntax highlighting
+Written by Ezra Altahan
+Created 25/06/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Haxe" extensions=".hx">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#E0E0E5"/>
+        <SpaceMarkers color="#E0E0E5"/>
+        <TabMarkers color="#E0E0E5"/>
+        <InvalidLines color="#E0E0E5"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>()[]{},:.`#=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+                        
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="#B75B00" bold="false" italic="false">
+                <Begin startofline="true">#</Begin>
+            </Span>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="$type"/>
+                <Key word="__cpp__"/>
+                <Key word="__cs__"/>
+                <Key word="__global__"/>
+                <Key word="__java__"/>
+                <Key word="__js__"/>
+                <Key word="__new__"/>
+                <Key word="__php__"/>
+                <Key word="abstract"/>
+                <Key word="break"/>
+                <Key word="arguments"/>
+                <Key word="callback"/>
+                <Key word="case"/>
+                <Key word="cast"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="dynamic"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="extends"/>
+                <Key word="extern"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="inline"/>
+                <Key word="instanceof"/>
+                <Key word="int"/>
+                <Key word="interface"/>
+                <Key word="macro"/>
+                <Key word="new"/>
+                <Key word="override"/>
+                <Key word="package"/>
+                <Key word="private"/>
+                <Key word="public"/>
+                <Key word="return"/>
+                <Key word="static"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="trace"/>
+                <Key word="transient"/>
+                <Key word="try"/>
+                <Key word="typedef"/>
+                <Key word="typeof"/>
+                <Key word="untyped"/>
+                <Key word="using"/>
+                <Key word="var"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Teal" bold="false" italic="false">
+                <Key word="Array"/>
+                <Key word="ArrayAccess"/>
+                <Key word="Class"/>
+                <Key word="Date"/>
+                <Key word="DateTools"/>
+                <Key word="EReg"/>
+                <Key word="Hash"/>
+                <Key word="IntHash"/>
+                <Key word="IntIter"/>
+                <Key word="Iterable"/>
+                <Key word="Iterator"/>
+                <Key word="Lambda"/>
+                <Key word="List"/>
+                <Key word="Math"/>
+                <Key word="Null"/>
+                <Key word="Protected"/>
+                <Key word="Reflect"/>
+                <Key word="Std"/>
+                <Key word="StringBuf"/>
+                <Key word="StringTools"/>
+                <Key word="Type"/>
+                <Key word="UInt"/>
+                <Key word="ValueType"/>
+                <Key word="Xml"/>
+                <Key word="XmlType"/>
+            </KeyWords>
+                        
+            <KeyWords name="Keywords3" color="DarkViolet" bold="false" italic ="false">
+                <Key word="Bool"/>
+                <Key word="Dynamic"/>
+                <Key word="Enum"/>
+                <Key word="EnumValue"/>
+                <Key word="Float"/>
+                <Key word="Int"/>
+                <Key word="String"/>
+                <Key word="Void"/>
+                <Key word="false"/>
+                <Key word="null"/>
+                <Key word="true"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

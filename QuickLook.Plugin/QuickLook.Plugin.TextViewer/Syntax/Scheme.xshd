@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Scheme syntax highlighting
+Written by Ezra Altahan
+Created 30/11/2016
+Version 1.0
+
+HazelDev@outlook.com
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Scheme" extensions=".scm;.ss">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value=";"/>
+        <Property name="BlockCommentBegin" value="#|"/>
+        <Property name="BlockCommentEnd" value="|#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>`()[]{}|\:;"'</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>#|</Begin>
+                <End>|#</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin singleword="true">"</Begin>
+                <End>"</End>
+            </Span>
+                                          
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="abs"/>
+                <Key word="acos"/>
+                <Key word="and"/>
+                <Key word="angle"/>
+                <Key word="append"/>
+                <Key word="apply"/>
+                <Key word="asin"/>
+                <Key word="assoc"/>
+                <Key word="assq"/>
+                <Key word="assv"/>
+                <Key word="atan"/>
+                <Key word="begin"/>
+                <Key word="boolean?"/>
+                <Key word="caaaar"/>
+                <Key word="caaadr"/>
+                <Key word="caaar"/>
+                <Key word="caadar"/>
+                <Key word="caaddr"/>
+                <Key word="caadr"/>
+                <Key word="caar"/>
+                <Key word="cadaar"/>
+                <Key word="cadadr"/>
+                <Key word="cadar"/>
+                <Key word="caddar"/>
+                <Key word="cadddr"/>
+                <Key word="caddr"/>
+                <Key word="cadr"/>
+                <Key word="call-with-current-continuation"/>
+                <Key word="call-with-input-file"/>
+                <Key word="call-with-input-file"/>
+                <Key word="call-with-output-file"/>
+                <Key word="call-with-output-file"/>
+                <Key word="call-with-values"/>
+                <Key word="call/cc"/>
+                <Key word="car"/>
+                <Key word="case"/>
+                <Key word="case-lambda"/>
+                <Key word="cdaaar"/>
+                <Key word="cdaadr"/>
+                <Key word="cdaar"/>
+                <Key word="cdadar"/>
+                <Key word="cdaddr"/>
+                <Key word="cdadr"/>
+                <Key word="cdar"/>
+                <Key word="cddaar"/>
+                <Key word="cddadr"/>
+                <Key word="cddar"/>
+                <Key word="cdddar"/>
+                <Key word="cddddr"/>
+                <Key word="cdddr"/>
+                <Key word="cddr"/>
+                <Key word="cdr"/>
+                <Key word="ceiling"/>
+                <Key word="char&gt;=?"/>
+                <Key word="char&gt;?"/>
+                <Key word="char&lt;=?"/>
+                <Key word="char&lt;?"/>
+                <Key word="char->integer"/>
+                <Key word="char-alphabetic?"/>
+                <Key word="char-ci&gt;=?"/>
+                <Key word="char-ci&gt;?"/>
+                <Key word="char-ci&lt;=?"/>
+                <Key word="char-ci&lt;?"/>
+                <Key word="char-ci=?"/>
+                <Key word="char-downcase"/>
+                <Key word="char-lower-case?"/>
+                <Key word="char-numeric?"/>
+                <Key word="char-ready?"/>
+                <Key word="char-upcase"/>
+                <Key word="char-upper-case?"/>
+                <Key word="char-whitespace?"/>
+                <Key word="char=?"/>
+                <Key word="char?"/>
+                <Key word="class"/>
+                <Key word="close-input-port"/>
+                <Key word="close-output-port"/>
+                <Key word="complex?"/>
+                <Key word="cond"/>
+                <Key word="cons"/>
+                <Key word="cos"/>
+                <Key word="current-input-port"/>
+                <Key word="current-output-port"/>
+                <Key word="define"/>
+                <Key word="define-class"/>
+                <Key word="define-syntax"/>
+                <Key word="delay"/>
+                <Key word="denominator"/>
+                <Key word="display"/>
+                <Key word="do"/>
+                <Key word="dynamic-wind"/>
+                <Key word="else"/>
+                <Key word="eof-object?"/>
+                <Key word="eq?"/>
+                <Key word="equal?"/>
+                <Key word="eqv?"/>
+                <Key word="eval"/>
+                <Key word="even?"/>
+                <Key word="exact->inexact"/>
+                <Key word="exact?"/>
+                <Key word="exit-handler"/>
+                <Key word="exp"/>
+                <Key word="expt"/>
+                <Key word="field"/>
+                <Key word="floor"/>
+                <Key word="for-each"/>
+                <Key word="force"/>
+                <Key word="gcd"/>
+                <Key word="if"/>
+                <Key word="imag-part"/>
+                <Key word="import"/>
+                <Key word="inexact->exact"/>
+                <Key word="inexact?"/>
+                <Key word="inherit"/>
+                <Key word="init-field"/>
+                <Key word="input-port?"/>
+                <Key word="integer->char"/>
+                <Key word="integer?"/>
+                <Key word="interaction-environment"/>
+                <Key word="interface"/>
+                <Key word="lambda"/>
+                <Key word="lcm"/>
+                <Key word="length"/>
+                <Key word="let"/>
+                <Key word="let*"/>
+                <Key word="let*-values"/>
+                <Key word="let-syntax"/>
+                <Key word="let-values"/>
+                <Key word="let/ec"/>
+                <Key word="letrec"/>
+                <Key word="letrec-syntax"/>
+                <Key word="list"/>
+                <Key word="list->string"/>
+                <Key word="list->vector"/>
+                <Key word="list-head"/>
+                <Key word="list-ref"/>
+                <Key word="list-tail"/>
+                <Key word="list?"/>
+                <Key word="load"/>
+                <Key word="log"/>
+                <Key word="magnitude"/>
+                <Key word="make-polar"/>
+                <Key word="make-rectangular"/>
+                <Key word="make-string"/>
+                <Key word="make-vector"/>
+                <Key word="map"/>
+                <Key word="max"/>
+                <Key word="member"/>
+                <Key word="memq"/>
+                <Key word="memv"/>
+                <Key word="min"/>
+                <Key word="mixin"/>
+                <Key word="modulo"/>
+                <Key word="negative?"/>
+                <Key word="newline"/>
+                <Key word="not"/>
+                <Key word="null-environment"/>
+                <Key word="null?"/>
+                <Key word="number->string"/>
+                <Key word="number?"/>
+                <Key word="numerator"/>
+                <Key word="odd?"/>
+                <Key word="open-input-file"/>
+                <Key word="open-output-file"/>
+                <Key word="opt-lambda"/>
+                <Key word="or"/>
+                <Key word="output-port?"/>
+                <Key word="override"/>
+                <Key word="pair?"/>
+                <Key word="peek-char"/>
+                <Key word="port?"/>
+                <Key word="positive?"/>
+                <Key word="procedure?"/>
+                <Key word="protect"/>
+                <Key word="provide"/>
+                <Key word="public"/>
+                <Key word="quasiquote"/>
+                <Key word="quote"/>
+                <Key word="quotient"/>
+                <Key word="rational?"/>
+                <Key word="rationalize"/>
+                <Key word="read"/>
+                <Key word="read-char"/>
+                <Key word="real-part"/>
+                <Key word="real?"/>
+                <Key word="remainder"/>
+                <Key word="rename"/>
+                <Key word="require"/>
+                <Key word="require-for-syntax"/>
+                <Key word="reverse"/>
+                <Key word="round"/>
+                <Key word="scheme-report-environment"/>
+                <Key word="set!"/>
+                <Key word="set-car!"/>
+                <Key word="set-cdr!"/>
+                <Key word="sin"/>
+                <Key word="sqrt"/>
+                <Key word="string"/>
+                <Key word="string&gt;=?"/>
+                <Key word="string&gt;?"/>
+                <Key word="string&lt;=?"/>
+                <Key word="string&lt;?"/>
+                <Key word="string-&gt;list"/>
+                <Key word="string-&gt;number"/>
+                <Key word="string-&gt;symbol"/>
+                <Key word="string-append"/>
+                <Key word="string-ci&gt;=?"/>
+                <Key word="string-ci&gt;?"/>
+                <Key word="string-ci&lt;=?"/>
+                <Key word="string-ci&lt;?"/>
+                <Key word="string-ci=?"/>
+                <Key word="string-copy"/>
+                <Key word="string-fill!"/>
+                <Key word="string-length"/>
+                <Key word="string-ref"/>
+                <Key word="string-set!"/>
+                <Key word="string=?"/>
+                <Key word="string?"/>
+                <Key word="substring"/>
+                <Key word="symbol->string"/>
+                <Key word="symbol?"/>
+                <Key word="syntax"/>
+                <Key word="syntax-case"/>
+                <Key word="syntax-error"/>
+                <Key word="syntax-rules"/>
+                <Key word="transcript-off"/>
+                <Key word="transcript-on"/>
+                <Key word="truncate"/>
+                <Key word="unit/sig"/>
+                <Key word="unless"/>
+                <Key word="values"/>
+                <Key word="vector"/>
+                <Key word="vector->list"/>
+                <Key word="vector-fill!"/>
+                <Key word="vector-length"/>
+                <Key word="vector-ref"/>
+                <Key word="vector-set!"/>
+                <Key word="when"/>
+                <Key word="with-input-from-file"/>
+                <Key word="with-output-to-file"/>
+                <Key word="with-syntax"/>
+                <Key word="write"/>
+                <Key word="write-char"/>
+                <Key word="zero?"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

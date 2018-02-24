@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Gui4Cli syntax highlighting
+Written by Ezra Altahan
+Created 09/04/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Gui4Cli" extensions=".gui;.gc">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&amp;&lt;&gt;~!^*()-+=|\/{}[];"' ,  ?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" escapecharacter="\" color="Maroon" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" escapecharacter="\" color="Maroon" bold="false" italic="false">
+                <Begin>&apos;</Begin>
+                <End>&apos;</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="AND"/>
+                <Key word="ANDIFEXISTS"/>
+                <Key word="BRANCH"/>
+                <Key word="BREAK"/>
+                <Key word="CASE"/>
+                <Key word="DOCASE"/>
+                <Key word="ELSE"/>
+                <Key word="ELSEIF"/>
+                <Key word="ELSEIFEXISTS"/>
+                <Key word="ENDCASE"/>
+                <Key word="ENDFOR"/>
+                <Key word="ENDIF"/>
+                <Key word="ENDWHILE"/>
+                <Key word="FOR"/>
+                <Key word="GOSUB"/>
+                <Key word="GOTO"/>
+                <Key word="IF"/>
+                <Key word="IFEXISTS"/>
+                <Key word="LABEL"/>
+                <Key word="OR"/>
+                <Key word="ORIFEXISTS"/>
+                <Key word="RETURN"/>
+                <Key word="STOP"/>
+                <Key word="WHILE"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="ADDCODE"/>
+                <Key word="ADDRESS"/>
+                <Key word="APPEND"/>
+                <Key word="APPVAR"/>
+                <Key word="ASSIGN"/>
+                <Key word="AVI.ADD"/>
+                <Key word="AVI.ADDWAV"/>
+                <Key word="AVI.CLOSE"/>
+                <Key word="AVI.CREATE"/>
+                <Key word="AVI.GETCOMPRESSION"/>
+                <Key word="AWIN"/>
+                <Key word="BEEP"/>
+                <Key word="BROWSER"/>
+                <Key word="BUFFER"/>
+                <Key word="CALENDAR"/>
+                <Key word="CALL"/>
+                <Key word="CD"/>
+                <Key word="COMBO"/>
+                <Key word="COMMAND"/>
+                <Key word="COPY"/>
+                <Key word="CREATELINK"/>
+                <Key word="CURL.CREATE"/>
+                <Key word="CURL.DATAFILE"/>
+                <Key word="CURL.ENUM"/>
+                <Key word="CURL.ENUMABORT"/>
+                <Key word="CURL.FREE"/>
+                <Key word="CURL.PERFORM"/>
+                <Key word="CURL.ROUTINE"/>
+                <Key word="CURL.SET"/>
+                <Key word="CURL.USE"/>
+                <Key word="CURSOR"/>
+                <Key word="CUTVAR"/>
+                <Key word="DDEXEC"/>
+                <Key word="DDUSE"/>
+                <Key word="DEC"/>
+                <Key word="DELAY"/>
+                <Key word="DELETE"/>
+                <Key word="DELETEFILE"/>
+                <Key word="DOS.ABORT"/>
+                <Key word="DOS.INPUT"/>
+                <Key word="DOS.LAUNCH"/>
+                <Key word="DOS.RUN"/>
+                <Key word="DOS.SET"/>
+                <Key word="DX.CLEAR"/>
+                <Key word="DX.PAN"/>
+                <Key word="DX.ROUTINE"/>
+                <Key word="DX.SET"/>
+                <Key word="DX.SHOWIMAGE"/>
+                <Key word="DX.STOP"/>
+                <Key word="EDBOX"/>
+                <Key word="EMPTYBIN"/>
+                <Key word="ENUM"/>
+                <Key word="EVENT"/>
+                <Key word="EXTRACT"/>
+                <Key word="FILE"/>
+                <Key word="FREEFONT"/>
+                <Key word="FREEICON"/>
+                <Key word="FTP"/>
+                <Key word="G4C_CMD.CPUINFO"/>
+                <Key word="G4C_CMD.MEMORY"/>
+                <Key word="G4C_CMD.MEMORYCOMMIT"/>
+                <Key word="G4C_CMD.MEMORYLOAD"/>
+                <Key word="G4C_CMD.MEMORYNONPAGED"/>
+                <Key word="G4C_CMD.MEMORYPAGED"/>
+                <Key word="G4C_CMD.MEMORYPHYSICAL"/>
+                <Key word="G4C_GPROGRESS.CONTROL"/>
+                <Key word="G4C_PROGRESS.CONTROL"/>
+                <Key word="G4C_RPROGRESS.CONTROL"/>
+                <Key word="GCWIN"/>
+                <Key word="GETCLIP"/>
+                <Key word="GETCOLOR"/>
+                <Key word="GETFONT"/>
+                <Key word="GRAB.PAUSE"/>
+                <Key word="GRAB.RESUME"/>
+                <Key word="GRAB.SCREEN"/>
+                <Key word="GRAB.SET"/>
+                <Key word="GRAB.STOP"/>
+                <Key word="GUI"/>
+                <Key word="GUICLOSE"/>
+                <Key word="GUILOAD"/>
+                <Key word="GUIOPEN"/>
+                <Key word="GUIQUIT"/>
+                <Key word="GUIRENAME"/>
+                <Key word="GUIWINDOW"/>
+                <Key word="HTMLHELP"/>
+                <Key word="ICON"/>
+                <Key word="IMAGE"/>
+                <Key word="INC"/>
+                <Key word="INI"/>
+                <Key word="INPUT"/>
+                <Key word="JOINFILE"/>
+                <Key word="LAUNCH"/>
+                <Key word="LISTVIEW"/>
+                <Key word="LOADFONT"/>
+                <Key word="LOADICON"/>
+                <Key word="LOADINI"/>
+                <Key word="LV"/>
+                <Key word="LVACTION"/>
+                <Key word="LVCLIP"/>
+                <Key word="LVREP"/>
+                <Key word="LVSEARCH"/>
+                <Key word="LVSUM"/>
+                <Key word="LVSWITCH"/>
+                <Key word="MAKEDIR"/>
+                <Key word="MCI"/>
+                <Key word="MENU"/>
+                <Key word="MNSPEC"/>
+                <Key word="MOVE"/>
+                <Key word="MOVEEVENT"/>
+                <Key word="MOVEWINDOW"/>
+                <Key word="MSGBOX"/>
+                <Key word="NET"/>
+                <Key word="PACK.ADD"/>
+                <Key word="PACK.CLOSE"/>
+                <Key word="PACK.CREATE"/>
+                <Key word="PACK.DECRYPTFILE"/>
+                <Key word="PACK.ENCRYPTFILE"/>
+                <Key word="PACK.GETZIP"/>
+                <Key word="PACK.OPEN"/>
+                <Key word="PACK.PASSWORD"/>
+                <Key word="PACK.UNZIP"/>
+                <Key word="PACK.UNZIPITEM"/>
+                <Key word="PACK.USE"/>
+                <Key word="PACK.ZIP"/>
+                <Key word="PACK.ZUILOAD"/>
+                <Key word="PAN.ADD"/>
+                <Key word="PAN.CLEAR"/>
+                <Key word="PAN.DXSHOW"/>
+                <Key word="PAN.SET"/>
+                <Key word="PARSEVAR"/>
+                <Key word="PIPE.INFO"/>
+                <Key word="PIPE.OPEN"/>
+                <Key word="PIPE.PEEK"/>
+                <Key word="PIPE.QUIT"/>
+                <Key word="PIPE.READ"/>
+                <Key word="PIPE.SEND"/>
+                <Key word="PIPE.TEST"/>
+                <Key word="PIPE.WAIT"/>
+                <Key word="PIXEL"/>
+                <Key word="POPMENU"/>
+                <Key word="PRINT"/>
+                <Key word="PUMPMESSAGES"/>
+                <Key word="PURGEFILES"/>
+                <Key word="QUICKMENU"/>
+                <Key word="QUIT"/>
+                <Key word="RANDOM"/>
+                <Key word="REGCREATE"/>
+                <Key word="REGDELETE"/>
+                <Key word="REGGET"/>
+                <Key word="REGSET"/>
+                <Key word="RENAME"/>
+                <Key word="REPVAR"/>
+                <Key word="REQFILE"/>
+                <Key word="RES"/>
+                <Key word="RICHEDIT"/>
+                <Key word="RUN"/>
+                <Key word="SAVEINI"/>
+                <Key word="SAY"/>
+                <Key word="SCI.EXEC"/>
+                <Key word="SCI.IO"/>
+                <Key word="SCI.MAKECOLOR"/>
+                <Key word="SCI.PRINT"/>
+                <Key word="SCI.PRINTSETUP"/>
+                <Key word="SCI.SET"/>
+                <Key word="SCRIPT"/>
+                <Key word="SEARCHVAR"/>
+                <Key word="SEND"/>
+                <Key word="SENDKEY"/>
+                <Key word="SENDMOUSE"/>
+                <Key word="SET"/>
+                <Key word="SETATTR"/>
+                <Key word="SETCLIP"/>
+                <Key word="SETEVENT"/>
+                <Key word="SETICON"/>
+                <Key word="SETPOINTER"/>
+                <Key word="SETSTRUCT"/>
+                <Key word="SETVAR"/>
+                <Key word="SETWINATTR"/>
+                <Key word="SETWINTITLE"/>
+                <Key word="SLEEP"/>
+                <Key word="SQL.CLOSE"/>
+                <Key word="SQL.EXEC"/>
+                <Key word="SQL.OPEN"/>
+                <Key word="SQL.STOP"/>
+                <Key word="SQL.USE"/>
+                <Key word="SQL3.BINDBLOB"/>
+                <Key word="SQL3.BINDSTR"/>
+                <Key word="SQL3.CLOSE"/>
+                <Key word="SQL3.DEBUG"/>
+                <Key word="SQL3.DOWNLOAD_XBUF"/>
+                <Key word="SQL3.EXEC"/>
+                <Key word="SQL3.FINALIZE"/>
+                <Key word="SQL3.OPEN"/>
+                <Key word="SQL3.PREPARE"/>
+                <Key word="SQL3.RETURN_BLOB"/>
+                <Key word="SQL3.RETURN_VAR"/>
+                <Key word="SQL3.STEP"/>
+                <Key word="SQL3.STOP"/>
+                <Key word="SQL3.STOP"/>
+                <Key word="SQL3.UPLOAD_XBUF"/>
+                <Key word="SQL3.USE"/>
+                <Key word="STATUS"/>
+                <Key word="SYSDLL"/>
+                <Key word="SYSTEM"/>
+                <Key word="TAB"/>
+                <Key word="TERMINATEPROC"/>
+                <Key word="TEST.LIST"/>
+                <Key word="TEST.TWICE"/>
+                <Key word="TOOLBAR"/>
+                <Key word="TREEVIEW"/>
+                <Key word="TRIMVAR"/>
+                <Key word="TV"/>
+                <Key word="TVSEARCH"/>
+                <Key word="TVSEARCHVAR"/>
+                <Key word="UPDATE"/>
+                <Key word="UPDOWN"/>
+                <Key word="USE"/>
+                <Key word="VAR"/>
+                <Key word="WAIT"/>
+                <Key word="WIN"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="G4C_GPROGRESS.XCONTROL"/>
+                <Key word="G4C_PROGRESS.XCONTROL"/>
+                <Key word="G4C_RPROGRESS.XCONTROL"/>
+                <Key word="PAN.XPAN"/>
+                <Key word="SCI.XONSCI"/>
+                <Key word="SCI.XONSCI"/>
+                <Key word="SCI.XSCI"/>
+                <Key word="SCI.XSCI"/>
+                <Key word="TEST.XANACLOCK"/>
+                <Key word="TEST.XCOUNTER"/>
+                <Key word="TEST.XNOTHING"/>
+                <Key word="XAREA"/>
+                <Key word="XATTR"/>
+                <Key word="XBEFORECLOSE"/>
+                <Key word="XBORDERBUTTON"/>
+                <Key word="XBROWSER"/>
+                <Key word="XBUFFER"/>
+                <Key word="XBUTTON"/>
+                <Key word="XCALENDAR"/>
+                <Key word="XCHECKBOX"/>
+                <Key word="XCOMBO"/>
+                <Key word="XEDBOX"/>
+                <Key word="XENUM"/>
+                <Key word="XGROUPBOX"/>
+                <Key word="XHOTKEY"/>
+                <Key word="XIBUTTON"/>
+                <Key word="XICON"/>
+                <Key word="XIMAGE"/>
+                <Key word="XLISTVIEW"/>
+                <Key word="XMENU"/>
+                <Key word="XONACTIVE"/>
+                <Key word="XONBROWSER"/>
+                <Key word="XONCLOSE"/>
+                <Key word="XONDOUBLECLICK"/>
+                <Key word="XONDROP"/>
+                <Key word="XONDROPFAIL"/>
+                <Key word="XONFAIL"/>
+                <Key word="XONHELP"/>
+                <Key word="XONINACTIVE"/>
+                <Key word="XONKEY"/>
+                <Key word="XONLISTVIEW"/>
+                <Key word="XONLMB"/>
+                <Key word="XONLOAD"/>
+                <Key word="XONLVCLICK"/>
+                <Key word="XONLVDIR"/>
+                <Key word="XONMARK"/>
+                <Key word="XONMMB"/>
+                <Key word="XONMOUSE"/>
+                <Key word="XONOPEN"/>
+                <Key word="XONQUIT"/>
+                <Key word="XONRDOUBLECLICK"/>
+                <Key word="XONRELOAD"/>
+                <Key word="XONRESIZE"/>
+                <Key word="XONRETURN"/>
+                <Key word="XONRICHEDIT"/>
+                <Key word="XONRMB"/>
+                <Key word="XONTEXTIN"/>
+                <Key word="XONTREEVIEW"/>
+                <Key word="XONWARN"/>
+                <Key word="XONWHEELDOWN"/>
+                <Key word="XONWHEELUP"/>
+                <Key word="XPROGRESS"/>
+                <Key word="XRADIO"/>
+                <Key word="XREBAR"/>
+                <Key word="XREQFILE"/>
+                <Key word="XRICHEDIT"/>
+                <Key word="XROUTINE"/>
+                <Key word="XSCRIPT"/>
+                <Key word="XSPLITER"/>
+                <Key word="XSTATUS"/>
+                <Key word="XSYSMENU"/>
+                <Key word="XTAB"/>
+                <Key word="XTBARICON"/>
+                <Key word="XTEXTBOX"/>
+                <Key word="XTEXTFILE"/>
+                <Key word="XTEXTIN"/>
+                <Key word="XTIMER"/>
+                <Key word="XTOOLBAR"/>
+                <Key word="XTRACKBAR"/>
+                <Key word="XTREEVIEW"/>
+                <Key word="XUPDOWN"/>
+                <Key word="XVARIABLE"/>
+                <Key word="XWAIT"/>
+                <Key word="XX"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="#82751A" bold="false" italic="false">
+                <Key word="ATTR"/>
+                <Key word="ID"/>
+                <Key word="LOCAL"/>
+                <Key word="WINATTR"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords5" color="Sienna" bold="false" italic="false">
+                <Key word="G4C"/>
+                <Key word="NEWFILE"/>
+                <Key word="TEXTFILE"/>
+                <Key word="WINDOW"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

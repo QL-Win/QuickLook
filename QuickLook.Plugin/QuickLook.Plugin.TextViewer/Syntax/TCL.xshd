@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+TCL syntax highlighting
+Written by Ezra Altahan
+Created 19/10/2016
+Version 1.0
+
+HazelDev@outlook.com
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="TCL" extensions=".tcl">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            
+            <Delimiters>()[]{}$,.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+           
+            <MarkFollowing markmarker="true" color="Black" bold="false">$</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="after"/>
+                <Key word="append"/>
+                <Key word="array"/>
+                <Key word="auto_execok"/>
+                <Key word="auto_import"/>
+                <Key word="auto_load"/>
+                <Key word="auto_load_index"/>
+                <Key word="auto_qualify"/>
+                <Key word="bgerror"/>
+                <Key word="binary"/>
+                <Key word="break"/>
+                <Key word="catch"/>
+                <Key word="cd"/>
+                <Key word="clock"/>
+                <Key word="close"/>
+                <Key word="concat"/>
+                <Key word="continue"/>
+                <Key word="dde"/>
+                <Key word="default"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="encoding"/>
+                <Key word="eof"/>
+                <Key word="error"/>
+                <Key word="eval"/>
+                <Key word="exec"/>
+                <Key word="exit"/>
+                <Key word="expr"/>
+                <Key word="fblocked"/>
+                <Key word="fconfigure"/>
+                <Key word="fcopy"/>
+                <Key word="file"/>
+                <Key word="fileevent"/>
+                <Key word="flush"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="format"/>
+                <Key word="gets"/>
+                <Key word="glob"/>
+                <Key word="global"/>
+                <Key word="history"/>
+                <Key word="if"/>
+                <Key word="incr"/>
+                <Key word="info"/>
+                <Key word="interp"/>
+                <Key word="join"/>
+                <Key word="lappend"/>
+                <Key word="lindex"/>
+                <Key word="linsert"/>
+                <Key word="list"/>
+                <Key word="llength"/>
+                <Key word="load"/>
+                <Key word="lrange"/>
+                <Key word="lreplace"/>
+                <Key word="lsearch"/>
+                <Key word="lsort"/>
+                <Key word="namespace"/>
+                <Key word="open"/>
+                <Key word="package"/>
+                <Key word="pid"/>
+                <Key word="pkg_mkIndex"/>
+                <Key word="proc"/>
+                <Key word="puts"/>
+                <Key word="pwd"/>
+                <Key word="read"/>
+                <Key word="regexp"/>
+                <Key word="regsub"/>
+                <Key word="rename"/>
+                <Key word="resource"/>
+                <Key word="return"/>
+                <Key word="scan"/>
+                <Key word="seek"/>
+                <Key word="set"/>
+                <Key word="socket"/>
+                <Key word="source"/>
+                <Key word="split"/>
+                <Key word="string"/>
+                <Key word="subst"/>
+                <Key word="switch"/>
+                <Key word="tclLog"/>
+                <Key word="tell"/>
+                <Key word="time"/>
+                <Key word="trace"/>
+                <Key word="unknown"/>
+                <Key word="unset"/>
+                <Key word="update"/>
+                <Key word="uplevel"/>
+                <Key word="upvar"/>
+                <Key word="variable"/>
+                <Key word="vwait"/>
+                <Key word="while"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

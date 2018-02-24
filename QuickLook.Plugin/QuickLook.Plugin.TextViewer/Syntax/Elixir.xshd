@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Elixir syntax highlighting
+Written by Ezra Altahan
+Created 02/10/2014 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Elixir" extensions=".ex;.exs">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#BF382A"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,    ?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing color="Purple" bold="false">def</MarkFollowing>
+            <MarkFollowing color="Purple" bold="false">defp</MarkFollowing>
+            <MarkFollowing color="#804000" bold="false">defmodule</MarkFollowing>
+            
+            <KeyWords name="Punctuation" color="#BF382A" bold="false">
+                <Key word="!"/>
+                <Key word="+"/>
+                <Key word="\"/>
+                <Key word="|"/>
+                <Key word="~"/>
+                <Key word="&amp;"/>
+                <Key word="&gt;"/>
+                <Key word="&lt;"/>
+                <Key word="*"/>
+                <Key word="-"/>
+                <Key word="/"/>
+                <Key word="="/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="fn"/>
+                <Key word="do"/>
+                <Key word="end"/>
+                <Key word="after"/>
+                <Key word="else"/>
+                <Key word="rescue"/>
+                <Key word="catch"/>
+                <Key word="not"/>
+                <Key word="and"/>
+                <Key word="or"/>
+                <Key word="when"/>
+                <Key word="in"/>
+                <Key word="case"/>
+                <Key word="cond"/>
+                <Key word="for"/>
+                <Key word="if"/>
+                <Key word="unless"/>
+                <Key word="try"/>
+                <Key word="receive"/>
+                <Key word="raise"/>
+                <Key word="quote"/>
+                <Key word="unquote"/>
+                <Key word="throw"/>
+                <Key word="super"/>
+                <Key word="def"/>
+                <Key word="defp"/>
+                <Key word="defmodule"/>
+                <Key word="defprotocol"/>
+                <Key word="defmacro"/>
+                <Key word="defmacrop"/>
+                <Key word="defdelegate"/>
+                <Key word="defexception"/>
+                <Key word="defstruct"/>
+                <Key word="defimpl"/>
+                <Key word="defcallback"/>
+                <Key word="import"/>
+                <Key word="require"/>
+                <Key word="use"/>
+                <Key word="alias"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="nil"/>
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="DimGray" bold="false">
+                <Key word="@before_compile"/>
+                <Key word="@behaviour"/>
+                <Key word="@doc"/>
+                <Key word="@moduledoc"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

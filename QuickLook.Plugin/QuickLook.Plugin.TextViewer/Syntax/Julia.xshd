@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Julia syntax highlighting
+Written by Ezra Altahan
+Created 07/03/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Julia" extensions=".jl">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="#"/>
+        <Property name="BlockCommentBegin" value="#="/>
+        <Property name="BlockCommentEnd" value="=#"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}#@!,.`'=:;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="BlockComment" rule="CommentSet1" stopateol="false" color="Green">
+                <Begin>#=</Begin>
+                <End>=#</End>
+            </Span>
+            
+            <Span name="LineComment" stopateol="true" color="Green">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+            
+            <Span name="String2" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin singleword="true">'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Backtick" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>`</Begin>
+                <End>`</End>
+            </Span>
+            
+            <MarkFollowing markmarker="true" color="Sienna" bold="false" italic="false">@</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="abstract"/>
+                <Key word="baremodule"/>
+                <Key word="begin"/>
+                <Key word="bitstype"/>
+                <Key word="break"/>
+                <Key word="catch"/>
+                <Key word="ccall"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="end"/>
+                <Key word="export"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="global"/>
+                <Key word="if"/>
+                <Key word="immutable"/>
+                <Key word="import"/>
+                <Key word="importall"/>
+                <Key word="in"/>
+                <Key word="let"/>
+                <Key word="local"/>
+                <Key word="macro"/>
+                <Key word="module"/>
+                <Key word="new"/>
+                <Key word="quote"/>
+                <Key word="return"/>
+                <Key word="try"/>
+                <Key word="type"/>
+                <Key word="typealias"/>
+                <Key word="using"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="close"/>
+                <Key word="enumerate"/>
+                <Key word="error"/>
+                <Key word="false"/>
+                <Key word="info"/>
+                <Key word="open"/>
+                <Key word="print"/>
+                <Key word="println"/>
+                <Key word="read"/>
+                <Key word="true"/>
+                <Key word="warn"/>
+                <Key word="write"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="#BF382A" bold="false">
+                <Key word="ASCIIString"/>
+                <Key word="AbstractArray"/>
+                <Key word="AbstractMatrix"/>
+                <Key word="AbstractSparseMatrix"/>
+                <Key word="AbstractString"/>
+                <Key word="AbstractVector"/>
+                <Key word="Any"/>
+                <Key word="ArgumentError"/>
+                <Key word="Array"/>
+                <Key word="Associative"/>
+                <Key word="AsyncStream"/>
+                <Key word="BigFloat"/>
+                <Key word="BigInt"/>
+                <Key word="BitArray"/>
+                <Key word="BitMatrix"/>
+                <Key word="BitVector"/>
+                <Key word="Bool"/>
+                <Key word="BunchKaufman"/>
+                <Key word="ByteString"/>
+                <Key word="Cchar"/>
+                <Key word="Cdouble"/>
+                <Key word="Cfloat"/>
+                <Key word="Char"/>
+                <Key word="CharString"/>
+                <Key word="CholeskyDense"/>
+                <Key word="CholeskyPivotedDense"/>
+                <Key word="Cint"/>
+                <Key word="Cintmax_t"/>
+                <Key word="Clong"/>
+                <Key word="Clonglong"/>
+                <Key word="Colon"/>
+                <Key word="Complex"/>
+                <Key word="Complex128"/>
+                <Key word="Complex64"/>
+                <Key word="ComplexPair"/>
+                <Key word="Cptrdiff_t"/>
+                <Key word="Cshort"/>
+                <Key word="Csize_t"/>
+                <Key word="Cuchar"/>
+                <Key word="Cuint"/>
+                <Key word="Cuintmax_t"/>
+                <Key word="Culong"/>
+                <Key word="Culonglong"/>
+                <Key word="Cushort"/>
+                <Key word="DArray"/>
+                <Key word="Dict"/>
+                <Key word="Dims"/>
+                <Key word="DirectIndexString"/>
+                <Key word="DisconnectException"/>
+                <Key word="EOFError"/>
+                <Key word="EachLine"/>
+                <Key word="EnvHash"/>
+                <Key word="ErrorException"/>
+                <Key word="Exception"/>
+                <Key word="Expr"/>
+                <Key word="Factorization"/>
+                <Key word="Filter"/>
+                <Key word="Float"/>
+                <Key word="Float32"/>
+                <Key word="Float64"/>
+                <Key word="Function"/>
+                <Key word="GSVDDense"/>
+                <Key word="IO"/>
+                <Key word="IOBuffer"/>
+                <Key word="IOStream"/>
+                <Key word="ImaginaryUnit"/>
+                <Key word="InsertionSort"/>
+                <Key word="Int"/>
+                <Key word="Int128"/>
+                <Key word="Int16"/>
+                <Key word="Int32"/>
+                <Key word="Int64"/>
+                <Key word="Int8"/>
+                <Key word="IntSet"/>
+                <Key word="Integer"/>
+                <Key word="KeyError"/>
+                <Key word="LDLTTridiagonal"/>
+                <Key word="LUDense"/>
+                <Key word="LUTridiagonal"/>
+                <Key word="LoadError"/>
+                <Key word="LocalProcess"/>
+                <Key word="Matrix"/>
+                <Key word="MergeSort"/>
+                <Key word="MethodError"/>
+                <Key word="NTuple"/>
+                <Key word="Number"/>
+                <Key word="ObjectIdDict"/>
+                <Key word="ObjectIdDict"/>
+                <Key word="OrdinalRange"/>
+                <Key word="ParseError"/>
+                <Key word="PipeBuffer"/>
+                <Key word="ProcessGroup"/>
+                <Key word="Ptr"/>
+                <Key word="QRDense"/>
+                <Key word="QRPivotedDense"/>
+                <Key word="QuickSort"/>
+                <Key word="Range"/>
+                <Key word="Range1"/>
+                <Key word="RangeIndex"/>
+                <Key word="Ranges"/>
+                <Key word="Rational"/>
+                <Key word="Real"/>
+                <Key word="Regex"/>
+                <Key word="RegexMatch"/>
+                <Key word="RegexMatchIterator"/>
+                <Key word="RemoteRef"/>
+                <Key word="RepString"/>
+                <Key word="RevString"/>
+                <Key word="Reverse"/>
+                <Key word="RopeString"/>
+                <Key word="SVDDense"/>
+                <Key word="Set"/>
+                <Key word="Signed"/>
+                <Key word="SparseMatrixCSC"/>
+                <Key word="SpawnNullStream"/>
+                <Key word="Stat"/>
+                <Key word="StridedArray"/>
+                <Key word="StridedMatrix"/>
+                <Key word="StridedVecOrMat"/>
+                <Key word="StridedVector"/>
+                <Key word="SubArray"/>
+                <Key word="SubDArray"/>
+                <Key word="SubOrDArray"/>
+                <Key word="SubString"/>
+                <Key word="SymTridiagonal"/>
+                <Key word="Symbol"/>
+                <Key word="SystemError"/>
+                <Key word="TCPSocket"/>
+                <Key word="Task"/>
+                <Key word="TimSort"/>
+                <Key word="Tridiagonal"/>
+                <Key word="Tuple"/>
+                <Key word="Type"/>
+                <Key word="TypeError"/>
+                <Key word="UInt"/>
+                <Key word="UInt128"/>
+                <Key word="UInt16"/>
+                <Key word="UInt32"/>
+                <Key word="UInt64"/>
+                <Key word="UInt8"/>
+                <Key word="UTF8String"/>
+                <Key word="UVError"/>
+                <Key word="Union"/>
+                <Key word="Unsigned"/>
+                <Key word="VecOrMat"/>
+                <Key word="Vector"/>
+                <Key word="VersionNumber"/>
+                <Key word="Void"/>
+                <Key word="WeakKeyDict"/>
+                <Key word="WeakRef"/>
+                <Key word="Zip"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="CommentSet1">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin >#=</Begin>
+                <End >=#</End>
+            </Span>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

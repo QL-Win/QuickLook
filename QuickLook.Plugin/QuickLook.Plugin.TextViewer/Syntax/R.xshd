@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+R syntax highlighting
+Written by Ezra Altahan
+Created 13/5/2009 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="R" extensions=".r">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#A0911F"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   ?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="MultiLineString" color="#808080" bold="false" italic="false" stopateol="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Variable" stopateol="true" color="#82751A" bold="false" italic="false">
+                <Begin>%</Begin>
+                <End>%</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="FALSE"/>
+                <Key word="Inf"/>
+                <Key word="NA"/>
+                <Key word="NaN"/>
+                <Key word="TRUE"/>
+                <Key word="break"/>
+                <Key word="else"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="in"/>
+                <Key word="invisible"/>
+                <Key word="next"/>
+                <Key word="repeat"/>
+                <Key word="return"/>
+                <Key word="switch"/>
+                <Key word="while"/>
+                <Key word="NULL"/>
+                <Key word="if"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="abbreviate"/>
+                <Key word="abs"/>
+                <Key word="acos"/>
+                <Key word="acosh"/>
+                <Key word="agrep"/>
+                <Key word="alist"/>
+                <Key word="all"/>
+                <Key word="any"/>
+                <Key word="aperm"/>
+                <Key word="append"/>
+                <Key word="apply"/>
+                <Key word="approx"/>
+                <Key word="approxfun"/>
+                <Key word="args"/>
+                <Key word="array"/>
+                <Key word="asin"/>
+                <Key word="asinh"/>
+                <Key word="assign"/>
+                <Key word="atan"/>
+                <Key word="atan2"/>
+                <Key word="atanh"/>
+                <Key word="attach"/>
+                <Key word="attr"/>
+                <Key word="attributes"/>
+                <Key word="autoload"/>
+                <Key word="autoloader"/>
+                <Key word="backsolve"/>
+                <Key word="basename"/>
+                <Key word="beta"/>
+                <Key word="body"/>
+                <Key word="bquote"/>
+                <Key word="browser"/>
+                <Key word="builtins"/>
+                <Key word="by"/>
+                <Key word="bzfile"/>
+                <Key word="c"/>
+                <Key word="call"/>
+                <Key word="capabilities"/>
+                <Key word="casefold"/>
+                <Key word="cat"/>
+                <Key word="category"/>
+                <Key word="cbind"/>
+                <Key word="ceiling"/>
+                <Key word="character"/>
+                <Key word="charmatch"/>
+                <Key word="chartr"/>
+                <Key word="chol"/>
+                <Key word="chol2inv"/>
+                <Key word="choose"/>
+                <Key word="chull"/>
+                <Key word="citation"/>
+                <Key word="class"/>
+                <Key word="cm"/>
+                <Key word="codes"/>
+                <Key word="col"/>
+                <Key word="colnames"/>
+                <Key word="comment"/>
+                <Key word="complex"/>
+                <Key word="conflicts"/>
+                <Key word="contributors"/>
+                <Key word="convolve"/>
+                <Key word="cos"/>
+                <Key word="cosh"/>
+                <Key word="crossprod"/>
+                <Key word="cummax"/>
+                <Key word="cummin"/>
+                <Key word="cumprod"/>
+                <Key word="cumsum"/>
+                <Key word="cut"/>
+                <Key word="data"/>
+                <Key word="data.class"/>
+                <Key word="data.frame"/>
+                <Key word="data.matrix"/>
+                <Key word="date"/>
+                <Key word="debug"/>
+                <Key word="delay"/>
+                <Key word="deparse"/>
+                <Key word="det"/>
+                <Key word="detach"/>
+                <Key word="determinant"/>
+                <Key word="dget"/>
+                <Key word="diag"/>
+                <Key word="diff"/>
+                <Key word="difftime"/>
+                <Key word="digamma"/>
+                <Key word="dim"/>
+                <Key word="dimnames"/>
+                <Key word="dir"/>
+                <Key word="dirname"/>
+                <Key word="double"/>
+                <Key word="dput"/>
+                <Key word="drop"/>
+                <Key word="dump"/>
+                <Key word="duplicated"/>
+                <Key word="ecdf"/>
+                <Key word="eigen"/>
+                <Key word="environment"/>
+                <Key word="eval"/>
+                <Key word="evalq"/>
+                <Key word="exists"/>
+                <Key word="exp"/>
+                <Key word="expression"/>
+                <Key word="factor"/>
+                <Key word="factorial"/>
+                <Key word="fft"/>
+                <Key word="fifo"/>
+                <Key word="file"/>
+                <Key word="floor"/>
+                <Key word="flush"/>
+                <Key word="force"/>
+                <Key word="formals"/>
+                <Key word="format"/>
+                <Key word="forwardsolve"/>
+                <Key word="gamma"/>
+                <Key word="gc"/>
+                <Key word="gcinfo"/>
+                <Key word="gctorture"/>
+                <Key word="get"/>
+                <Key word="getenv"/>
+                <Key word="geterrmessage"/>
+                <Key word="getwd"/>
+                <Key word="globalenv"/>
+                <Key word="grep"/>
+                <Key word="gsub"/>
+                <Key word="gzcon"/>
+                <Key word="gzfile"/>
+                <Key word="httpclient"/>
+                <Key word="identical"/>
+                <Key word="ifelse"/>
+                <Key word="inherits"/>
+                <Key word="integer"/>
+                <Key word="interaction"/>
+                <Key word="interactive"/>
+                <Key word="intersect"/>
+                <Key word="jitter"/>
+                <Key word="julian"/>
+                <Key word="kappa"/>
+                <Key word="kronecker"/>
+                <Key word="labels"/>
+                <Key word="lapply"/>
+                <Key word="lbeta"/>
+                <Key word="lchoose"/>
+                <Key word="legend"/>
+                <Key word="length"/>
+                <Key word="letters"/>
+                <Key word="levels"/>
+                <Key word="lfactorial"/>
+                <Key word="lgamma"/>
+                <Key word="library"/>
+                <Key word="list"/>
+                <Key word="load"/>
+                <Key word="local"/>
+                <Key word="log"/>
+                <Key word="log10"/>
+                <Key word="log1p"/>
+                <Key word="log2"/>
+                <Key word="logb"/>
+                <Key word="logical"/>
+                <Key word="ls"/>
+                <Key word="machine"/>
+                <Key word="mapply"/>
+                <Key word="match"/>
+                <Key word="match.arg"/>
+                <Key word="match.call"/>
+                <Key word="match.fun"/>
+                <Key word="matrix"/>
+                <Key word="max"/>
+                <Key word="mean"/>
+                <Key word="merge"/>
+                <Key word="mget"/>
+                <Key word="min"/>
+                <Key word="missing"/>
+                <Key word="mode"/>
+                <Key word="months"/>
+                <Key word="mvfft"/>
+                <Key word="names"/>
+                <Key word="nargs"/>
+                <Key word="nchar"/>
+                <Key word="ncol"/>
+                <Key word="nextn"/>
+                <Key word="nlevels"/>
+                <Key word="noquote"/>
+                <Key word="nrow"/>
+                <Key word="numeric"/>
+                <Key word="objects"/>
+                <Key word="open"/>
+                <Key word="options"/>
+                <Key word="order"/>
+                <Key word="ordered"/>
+                <Key word="outer"/>
+                <Key word="pairlist"/>
+                <Key word="par"/>
+                <Key word="parse"/>
+                <Key word="paste"/>
+                <Key word="pentagamma"/>
+                <Key word="pi"/>
+                <Key word="piechart"/>
+                <Key word="pipe"/>
+                <Key word="plot"/>
+                <Key word="pmatch"/>
+                <Key word="pmax"/>
+                <Key word="pmin"/>
+                <Key word="polyroot"/>
+                <Key word="pretty"/>
+                <Key word="print"/>
+                <Key word="prmatrix"/>
+                <Key word="prod"/>
+                <Key word="provide"/>
+                <Key word="psigamma"/>
+                <Key word="q"/>
+                <Key word="qr"/>
+                <Key word="quarters"/>
+                <Key word="quit"/>
+                <Key word="quote"/>
+                <Key word="range"/>
+                <Key word="rank"/>
+                <Key word="rbind"/>
+                <Key word="read.00Index"/>
+                <Key word="read.csv"/>
+                <Key word="read.csv2"/>
+                <Key word="read.dcf"/>
+                <Key word="read.delim"/>
+                <Key word="read.delim2"/>
+                <Key word="read.table"/>
+                <Key word="read.table.url"/>
+                <Key word="readline"/>
+                <Key word="real"/>
+                <Key word="regexpr"/>
+                <Key word="remove"/>
+                <Key word="rep"/>
+                <Key word="replace"/>
+                <Key word="replicate"/>
+                <Key word="require"/>
+                <Key word="restart"/>
+                <Key word="rev"/>
+                <Key word="rle"/>
+                <Key word="rm"/>
+                <Key word="rnorm"/>
+                <Key word="round"/>
+                <Key word="row"/>
+                <Key word="rownames"/>
+                <Key word="rowsum"/>
+                <Key word="sample"/>
+                <Key word="sapply"/>
+                <Key word="save"/>
+                <Key word="scale"/>
+                <Key word="scan"/>
+                <Key word="sd"/>
+                <Key word="search"/>
+                <Key word="searchpaths"/>
+                <Key word="seek"/>
+                <Key word="seq"/>
+                <Key word="sequence"/>
+                <Key word="serialize"/>
+                <Key word="setdiff"/>
+                <Key word="setequal"/>
+                <Key word="setwd"/>
+                <Key word="shell"/>
+                <Key word="sign"/>
+                <Key word="signif"/>
+                <Key word="sin"/>
+                <Key word="single"/>
+                <Key word="sinh"/>
+                <Key word="sink"/>
+                <Key word="solve"/>
+                <Key word="sort"/>
+                <Key word="source"/>
+                <Key word="split"/>
+                <Key word="sprintf"/>
+                <Key word="sqrt"/>
+                <Key word="stack"/>
+                <Key word="stderr"/>
+                <Key word="stdin"/>
+                <Key word="stdout"/>
+                <Key word="stop"/>
+                <Key word="stopifnot"/>
+                <Key word="strftime"/>
+                <Key word="strptime"/>
+                <Key word="strsplit"/>
+                <Key word="structure"/>
+                <Key word="strwrap"/>
+                <Key word="sub"/>
+                <Key word="subset"/>
+                <Key word="substitute"/>
+                <Key word="substr"/>
+                <Key word="substr"/>
+                <Key word="substring"/>
+                <Key word="sum"/>
+                <Key word="summary"/>
+                <Key word="svd"/>
+                <Key word="sweep"/>
+                <Key word="system"/>
+                <Key word="system.time"/>
+                <Key word="t"/>
+                <Key word="table"/>
+                <Key word="tabulate"/>
+                <Key word="tan"/>
+                <Key word="tanh"/>
+                <Key word="tapply"/>
+                <Key word="tempdir"/>
+                <Key word="tempfile"/>
+                <Key word="tetragamma"/>
+                <Key word="text"/>
+                <Key word="tolower"/>
+                <Key word="topenv"/>
+                <Key word="toupper"/>
+                <Key word="trace"/>
+                <Key word="traceback"/>
+                <Key word="transform"/>
+                <Key word="trigamma"/>
+                <Key word="trunc"/>
+                <Key word="truncate"/>
+                <Key word="try"/>
+                <Key word="typeof"/>
+                <Key word="unclass"/>
+                <Key word="undebug"/>
+                <Key word="union"/>
+                <Key word="unique"/>
+                <Key word="unix"/>
+                <Key word="unlink"/>
+                <Key word="unlist"/>
+                <Key word="unname"/>
+                <Key word="unserialize"/>
+                <Key word="unsplit"/>
+                <Key word="unstack"/>
+                <Key word="untrace"/>
+                <Key word="unz"/>
+                <Key word="url"/>
+                <Key word="vector"/>
+                <Key word="warning"/>
+                <Key word="warnings"/>
+                <Key word="weekdays"/>
+                <Key word="which"/>
+                <Key word="with"/>
+                <Key word="write"/>
+                <Key word="write"/>
+                <Key word="write.dcf"/>
+                <Key word="write.table"/>
+                <Key word="xinch"/>
+                <Key word="xor"/>
+                <Key word="xyinch"/>
+                <Key word="yinch"/>
+                <Key word="zapsmall"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

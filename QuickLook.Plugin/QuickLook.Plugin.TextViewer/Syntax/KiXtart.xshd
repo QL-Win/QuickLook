@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+KiXtart syntax highlighting
+Written by Ezra Altahan
+Created 11/04/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="KiXtart" extensions=".kix">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value=";"/>
+    </Properties>
+
+    <Digits name="Digits" color="Red" bold="false" italic="false"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&amp;&lt;&gt;~!$%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+
+            <Span name="String1" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Label" stopateol="true" color="#FF0000" bgcolor="#FFFF80" bold="false" italic="false">
+                <Begin startofline="true">:</Begin>
+            </Span>
+
+            <MarkFollowing markmarker="true" color="#82751A" bold="false" italic="false">$</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="beep"/>
+                <Key word="big"/>
+                <Key word="break"/>
+                <Key word="call"/>
+                <Key word="case"/>
+                <Key word="cd"/>
+                <Key word="cls"/>
+                <Key word="color"/>
+                <Key word="cookie1"/>
+                <Key word="copy"/>
+                <Key word="debug"/>
+                <Key word="del"/>
+                <Key word="dim"/>
+                <Key word="display"/>
+                <Key word="do"/>
+                <Key word="each"/>
+                <Key word="else"/>
+                <Key word="endfunction"/>
+                <Key word="endif"/>
+                <Key word="endselect"/>
+                <Key word="exit"/>
+                <Key word="flushkb"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="get"/>
+                <Key word="gets"/>
+                <Key word="global"/>
+                <Key word="go"/>
+                <Key word="gosub"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="list"/>
+                <Key word="loop"/>
+                <Key word="md"/>
+                <Key word="mod"/>
+                <Key word="next"/>
+                <Key word="off"/>
+                <Key word="on"/>
+                <Key word="optional"/>
+                <Key word="or"/>
+                <Key word="password"/>
+                <Key word="play"/>
+                <Key word="quit"/>
+                <Key word="rd"/>
+                <Key word="redim"/>
+                <Key word="return"/>
+                <Key word="run"/>
+                <Key word="select"/>
+                <Key word="set"/>
+                <Key word="setl"/>
+                <Key word="setm"/>
+                <Key word="settime"/>
+                <Key word="shell"/>
+                <Key word="sleep"/>
+                <Key word="small"/>
+                <Key word="to"/>
+                <Key word="until"/>
+                <Key word="use"/>
+                <Key word="while"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="abs"/>
+                <Key word="addkey"/>
+                <Key word="addprinterconnection"/>
+                <Key word="addprogramgroup"/>
+                <Key word="addprogramitem"/>
+                <Key word="asc"/>
+                <Key word="ascan"/>
+                <Key word="at"/>
+                <Key word="backupeventlog"/>
+                <Key word="box"/>
+                <Key word="cdbl"/>
+                <Key word="chr"/>
+                <Key word="cint"/>
+                <Key word="cleareventlog"/>
+                <Key word="close"/>
+                <Key word="comparefiletimes"/>
+                <Key word="createobject"/>
+                <Key word="cstr"/>
+                <Key word="dectohex"/>
+                <Key word="delkey"/>
+                <Key word="delprinterconnection"/>
+                <Key word="delprogramgroup"/>
+                <Key word="delprogramitem"/>
+                <Key word="deltree"/>
+                <Key word="delvalue"/>
+                <Key word="dir"/>
+                <Key word="enumgroup"/>
+                <Key word="enumipinfo"/>
+                <Key word="enumkey"/>
+                <Key word="enumlocalgroup"/>
+                <Key word="enumvalue"/>
+                <Key word="execute"/>
+                <Key word="exist"/>
+                <Key word="existkey"/>
+                <Key word="expandenvironmentvars"/>
+                <Key word="fix"/>
+                <Key word="formatnumber"/>
+                <Key word="freefilehandle"/>
+                <Key word="getdiskspace"/>
+                <Key word="getfileattr"/>
+                <Key word="getfilesize"/>
+                <Key word="getfiletime"/>
+                <Key word="getfileversion"/>
+                <Key word="getobject"/>
+                <Key word="iif"/>
+                <Key word="ingroup"/>
+                <Key word="instr"/>
+                <Key word="instrrev"/>
+                <Key word="int"/>
+                <Key word="isdeclared"/>
+                <Key word="join"/>
+                <Key word="kbhit"/>
+                <Key word="keyexist"/>
+                <Key word="lcase"/>
+                <Key word="left"/>
+                <Key word="len"/>
+                <Key word="loadhive"/>
+                <Key word="loadkey"/>
+                <Key word="logevent"/>
+                <Key word="logoff"/>
+                <Key word="ltrim"/>
+                <Key word="memorysize"/>
+                <Key word="messagebox"/>
+                <Key word="open"/>
+                <Key word="readline"/>
+                <Key word="readprofilestring"/>
+                <Key word="readtype"/>
+                <Key word="readvalue"/>
+                <Key word="redirectoutput"/>
+                <Key word="right"/>
+                <Key word="rnd"/>
+                <Key word="round"/>
+                <Key word="rtrim"/>
+                <Key word="savekey"/>
+                <Key word="sendkeys"/>
+                <Key word="sendmessage"/>
+                <Key word="setascii"/>
+                <Key word="setconsole"/>
+                <Key word="setdefaultprinter"/>
+                <Key word="setfileattr"/>
+                <Key word="setfocus"/>
+                <Key word="setoption"/>
+                <Key word="setsystemstate"/>
+                <Key word="settitle"/>
+                <Key word="setwallpaper"/>
+                <Key word="showprogramgroup"/>
+                <Key word="shutdown"/>
+                <Key word="sidtoname"/>
+                <Key word="split"/>
+                <Key word="srnd"/>
+                <Key word="substr"/>
+                <Key word="trim"/>
+                <Key word="ubound"/>
+                <Key word="ucase"/>
+                <Key word="unloadhive"/>
+                <Key word="val"/>
+                <Key word="vartype"/>
+                <Key word="vartypename"/>
+                <Key word="writeline"/>
+                <Key word="writeprofilestring"/>
+                <Key word="writevalue"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="@address"/>
+                <Key word="@build"/>
+                <Key word="@color"/>
+                <Key word="@comment"/>
+                <Key word="@cpu"/>
+                <Key word="@crlf"/>
+                <Key word="@csd"/>
+                <Key word="@curdir"/>
+                <Key word="@date"/>
+                <Key word="@day"/>
+                <Key word="@domain"/>
+                <Key word="@dos"/>
+                <Key word="@error"/>
+                <Key word="@fullname"/>
+                <Key word="@homedir"/>
+                <Key word="@homedrive"/>
+                <Key word="@homeshr"/>
+                <Key word="@hostname"/>
+                <Key word="@inwin"/>
+                <Key word="@ipaddress0"/>
+                <Key word="@ipaddress1"/>
+                <Key word="@ipaddress2"/>
+                <Key word="@ipaddress3"/>
+                <Key word="@kix"/>
+                <Key word="@lanroot"/>
+                <Key word="@ldomain"/>
+                <Key word="@ldrive"/>
+                <Key word="@lm"/>
+                <Key word="@logonmode"/>
+                <Key word="@longhomedir"/>
+                <Key word="@lserver"/>
+                <Key word="@maxpwage"/>
+                <Key word="@mdayno"/>
+                <Key word="@mhz"/>
+                <Key word="@month"/>
+                <Key word="@monthno"/>
+                <Key word="@msecs"/>
+                <Key word="@pid"/>
+                <Key word="@primarygroup"/>
+                <Key word="@priv"/>
+                <Key word="@productsuite"/>
+                <Key word="@producttype"/>
+                <Key word="@pwage"/>
+                <Key word="@ras"/>
+                <Key word="@result"/>
+                <Key word="@rserver"/>
+                <Key word="@scriptdir"/>
+                <Key word="@scriptexe"/>
+                <Key word="@scriptname"/>
+                <Key word="@serror"/>
+                <Key word="@sid"/>
+                <Key word="@site"/>
+                <Key word="@startdir"/>
+                <Key word="@syslang"/>
+                <Key word="@ticks"/>
+                <Key word="@time"/>
+                <Key word="@userid"/>
+                <Key word="@userlang"/>
+                <Key word="@wdayno"/>
+                <Key word="@wksta"/>
+                <Key word="@wuserid"/>
+                <Key word="@ydayno"/>
+                <Key word="@year"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

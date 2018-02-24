@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding ="utf-8"?>
+
+<!-- 
+Eiffel syntax highlighting
+Written by Ezra Altahan
+Created 30/04/2013 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Eiffel" extensions=".e">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Red"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   .?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" italic="false" color="Green">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#008080" bold="false" italic="false" escapecharacter="%">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#008080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="Current"/>
+                <Key word="False"/>
+                <Key word="True"/>
+                <Key word="Void"/>
+                <Key word="Precursor"/>
+                <Key word="Result"/>
+            </KeyWords>
+            
+            <KeyWords name ="Keywords2" color="#AD0080" bold="false">
+                <Key word="BIT"/>
+                <Key word="across"/>
+                <Key word="agent"/>
+                <Key word="alias"/>
+                <Key word="all"/>
+                <Key word="and"/>
+                <Key word="as"/>
+                <Key word="assign"/>
+                <Key word="attached"/>
+                <Key word="attribute"/>
+                <Key word="check"/>
+                <Key word="class"/>
+                <Key word="convert"/>
+                <Key word="create"/>
+                <Key word="creation"/>
+                <Key word="debug"/>
+                <Key word="deferred"/>
+                <Key word="detachable"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="end"/>
+                <Key word="ensure"/>
+                <Key word="expanded"/>
+                <Key word="export"/>
+                <Key word="external"/>
+                <Key word="feature"/>
+                <Key word="from"/>
+                <Key word="frozen"/>
+                <Key word="if"/>
+                <Key word="implies"/>
+                <Key word="include"/>
+                <Key word="indexing"/>
+                <Key word="infix"/>
+                <Key word="inherit"/>
+                <Key word="insert"/>
+                <Key word="inspect"/>
+                <Key word="invariant"/>
+                <Key word="is"/>
+                <Key word="like"/>
+                <Key word="local"/>
+                <Key word="loop"/>
+                <Key word="not"/>
+                <Key word="note"/>
+                <Key word="obsolete"/>
+                <Key word="old"/>
+                <Key word="once"/>
+                <Key word="or"/>
+                <Key word="prefix"/>
+                <Key word="pure"/>
+                <Key word="redefine"/>
+                <Key word="reference"/>
+                <Key word="rename"/>
+                <Key word="require"/>
+                <Key word="rescue"/>
+                <Key word="retry"/>
+                <Key word="select"/>
+                <Key word="separate"/>
+                <Key word="shared"/>
+                <Key word="some"/>
+                <Key word="strip"/>
+                <Key word="then"/>
+                <Key word="trigger"/>
+                <Key word="undefine"/>
+                <Key word="unique"/>
+                <Key word="until"/>
+                <Key word="variant"/>
+                <Key word="when"/>
+                <Key word="xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="#804000" bold="false">
+                <Key word="ABSTRACT_SPECIAL"/>
+                <Key word="ACTION_SEQUENCE"/>
+                <Key word="ACTIVE"/>
+                <Key word="ACTIVE_INTEGER_INTERVAL"/>
+                <Key word="ACTIVE_LIST"/>
+                <Key word="ADDRESS_APPLIED_TO_MELTED_FEATURE"/>
+                <Key word="ANY"/>
+                <Key word="APPLICATION"/>
+                <Key word="ARGUMENTS"/>
+                <Key word="ARRAY"/>
+                <Key word="ARRAY2"/>
+                <Key word="ARRAYED_CIRCULAR"/>
+                <Key word="ARRAYED_LIST"/>
+                <Key word="ARRAYED_LIST_CURSOR"/>
+                <Key word="ARRAYED_QUEUE"/>
+                <Key word="ARRAYED_SET"/>
+                <Key word="ARRAYED_STACK"/>
+                <Key word="ARRAYED_TREE"/>
+                <Key word="ASCII"/>
+                <Key word="ASSERTION_VIOLATION"/>
+                <Key word="BAD_INSPECT_VALUE"/>
+                <Key word="BAG"/>
+                <Key word="BASIC_ROUTINES"/>
+                <Key word="BILINEAR"/>
+                <Key word="BINARY_SEARCH_TREE"/>
+                <Key word="BINARY_SEARCH_TREE"/>
+                <Key word="BINARY_TREE"/>
+                <Key word="BIT_REF"/>
+                <Key word="BI_LINKABLE"/>
+                <Key word="BOOLEAN"/>
+                <Key word="BOOLEAN_REF"/>
+                <Key word="BOOL_STRING"/>
+                <Key word="BOUNDED"/>
+                <Key word="BOUNDED_QUEUE"/>
+                <Key word="BOUNDED_STACK"/>
+                <Key word="BOX"/>
+                <Key word="CELL"/>
+                <Key word="CHAIN"/>
+                <Key word="CHARACTER"/>
+                <Key word="CHARACTER_32"/>
+                <Key word="CHARACTER_32_REF"/>
+                <Key word="CHARACTER_8"/>
+                <Key word="CHARACTER_8_REF"/>
+                <Key word="CHARACTER_REF"/>
+                <Key word="CHECK_VIOLATION"/>
+                <Key word="CIRCLE"/>
+                <Key word="CIRCULAR"/>
+                <Key word="CIRCULAR_CURSOR"/>
+                <Key word="CLASS_NAME_TRANSLATIONS"/>
+                <Key word="COLLECTION"/>
+                <Key word="COMPACT_CURSOR_TREE"/>
+                <Key word="COMPACT_TREE_CURSOR"/>
+                <Key word="COMPARABLE"/>
+                <Key word="COMPARABLE_SET"/>
+                <Key word="COMPARABLE_STRUCT"/>
+                <Key word="COM_FAILURE"/>
+                <Key word="CONSOLE"/>
+                <Key word="CONTAINER"/>
+                <Key word="COUNTABLE"/>
+                <Key word="COUNTABLE_SEQUENCE"/>
+                <Key word="CREATE_ON_DEFERRED"/>
+                <Key word="CURSOR"/>
+                <Key word="CURSOR_STRUCTURE"/>
+                <Key word="CURSOR_TREE"/>
+                <Key word="CURSOR_TREE_ITERATOR"/>
+                <Key word="C_STRING"/>
+                <Key word="DATA_EXCEPTION"/>
+                <Key word="DEBUG_OUTPUT"/>
+                <Key word="DECLARATOR"/>
+                <Key word="DEVELOPER_EXCEPTION"/>
+                <Key word="DIRECTORY"/>
+                <Key word="DIRECTORY_NAME"/>
+                <Key word="DISPENSER"/>
+                <Key word="DISPOSABLE"/>
+                <Key word="DOUBLE"/>
+                <Key word="DOUBLE_MATH"/>
+                <Key word="DOUBLE_REF"/>
+                <Key word="DYNAMIC_CHAIN"/>
+                <Key word="DYNAMIC_CIRCULAR"/>
+                <Key word="DYNAMIC_LIST"/>
+                <Key word="DYNAMIC_TREE"/>
+                <Key word="ECMA_INTERNAL"/>
+                <Key word="EIFFELSTUDIO_SPECIFIC_LANGUAGE_EXCEPTION"/>
+                <Key word="EIFFEL_RUNTIME_EXCEPTION"/>
+                <Key word="EIFFEL_RUNTIME_PANIC"/>
+                <Key word="EIF_EXCEPTION"/>
+                <Key word="EXCEPTION"/>
+                <Key word="EXCEPTIONS"/>
+                <Key word="EXCEPTION_IN_SIGNAL_HANDLER_FAILURE"/>
+                <Key word="EXCEPTION_MANAGER"/>
+                <Key word="EXCEPTION_MANAGER_FACTORY"/>
+                <Key word="EXCEP_CONST"/>
+                <Key word="EXECUTION_ENVIRONMENT"/>
+                <Key word="EXTERNAL_FAILURE"/>
+                <Key word="FIBONACCI"/>
+                <Key word="FILE"/>
+                <Key word="FILE_COMPARER"/>
+                <Key word="FILE_NAME"/>
+                <Key word="FINITE"/>
+                <Key word="FIXED"/>
+                <Key word="FIXED_LIST"/>
+                <Key word="FIXED_TREE"/>
+                <Key word="FLOATING_POINT_FAILURE"/>
+                <Key word="FORMAT_DOUBLE"/>
+                <Key word="FORMAT_INTEGER"/>
+                <Key word="FUNCTION"/>
+                <Key word="GC_INFO"/>
+                <Key word="HARDWARE_EXCEPTION"/>
+                <Key word="HASHABLE"/>
+                <Key word="HASH_TABLE"/>
+                <Key word="HASH_TABLE_CURSOR"/>
+                <Key word="HEAP_PRIORITY_QUEUE"/>
+                <Key word="HIERARCHICAL"/>
+                <Key word="IDENTIFIED"/>
+                <Key word="IDENTIFIED_CONTROLLER"/>
+                <Key word="IDENTIFIED_ROUTINES"/>
+                <Key word="IMMUTABLE_STRING_32"/>
+                <Key word="IMMUTABLE_STRING_8"/>
+                <Key word="IMMUTABLE_STRING_GENERAL"/>
+                <Key word="INDEXABLE"/>
+                <Key word="INDEXABLE_ITERATION_CURSOR"/>
+                <Key word="INFINITE"/>
+                <Key word="INTEGER"/>
+                <Key word="INTEGER_16"/>
+                <Key word="INTEGER_16_REF"/>
+                <Key word="INTEGER_32"/>
+                <Key word="INTEGER_32_REF"/>
+                <Key word="INTEGER_64"/>
+                <Key word="INTEGER_64_REF"/>
+                <Key word="INTEGER_8"/>
+                <Key word="INTEGER_8_REF"/>
+                <Key word="INTEGER_INTERVAL"/>
+                <Key word="INTEGER_OVERFLOW_CHECKER"/>
+                <Key word="INTEGER_REF"/>
+                <Key word="INTERACTIVE_LIST"/>
+                <Key word="INTERNAL"/>
+                <Key word="INTERNAL_HELPER"/>
+                <Key word="INVARIANT_VIOLATION"/>
+                <Key word="IO_FAILURE"/>
+                <Key word="IO_MEDIUM"/>
+                <Key word="ISE_EXCEPTION_MANAGER"/>
+                <Key word="ISE_RUNTIME"/>
+                <Key word="ITERABLE"/>
+                <Key word="ITERATION_CURSOR"/>
+                <Key word="ITERATOR"/>
+                <Key word="LANGUAGE_EXCEPTION"/>
+                <Key word="LINEAR"/>
+                <Key word="LINEAR_ITERATOR"/>
+                <Key word="LINEAR_SUBSET"/>
+                <Key word="LINKABLE"/>
+                <Key word="LINKED_CIRCULAR"/>
+                <Key word="LINKED_CURSOR_TREE"/>
+                <Key word="LINKED_CURSOR_TREE_CURSOR"/>
+                <Key word="LINKED_LIST"/>
+                <Key word="LINKED_LIST_CURSOR"/>
+                <Key word="LINKED_PRIORITY_QUEUE"/>
+                <Key word="LINKED_QUEUE"/>
+                <Key word="LINKED_SET"/>
+                <Key word="LINKED_STACK"/>
+                <Key word="LINKED_TREE"/>
+                <Key word="LINKED_TREE_CURSOR"/>
+                <Key word="LIST"/>
+                <Key word="LOOP_INVARIANT_VIOLATION"/>
+                <Key word="MACHINE_EXCEPTION"/>
+                <Key word="MANAGED_POINTER"/>
+                <Key word="MATH_CONST"/>
+                <Key word="MEMORY"/>
+                <Key word="MEMORY_STREAM"/>
+                <Key word="MEMORY_STRUCTURE"/>
+                <Key word="MEM_CONST"/>
+                <Key word="MEM_INFO"/>
+                <Key word="MISMATCH_CORRECTOR"/>
+                <Key word="MISMATCH_FAILURE"/>
+                <Key word="MISMATCH_INFORMATION"/>
+                <Key word="MULTAR_LIST_CURSOR"/>
+                <Key word="MULTI_ARRAY_LIST"/>
+                <Key word="NATIVE_ARRAY"/>
+                <Key word="NATURAL"/>
+                <Key word="NATURAL_16"/>
+                <Key word="NATURAL_16_REF"/>
+                <Key word="NATURAL_32"/>
+                <Key word="NATURAL_32_REF"/>
+                <Key word="NATURAL_64"/>
+                <Key word="NATURAL_64_REF"/>
+                <Key word="NATURAL_8"/>
+                <Key word="NATURAL_8_REF"/>
+                <Key word="NONE"/>
+                <Key word="NO_MORE_MEMORY"/>
+                <Key word="NUMERIC"/>
+                <Key word="NUMERIC_INFORMATION"/>
+                <Key word="OBJECT_GRAPH_BREADTH_FIRST_TRAVERSABLE"/>
+                <Key word="OBJECT_GRAPH_DEPTH_FIRST_TRAVERSABLE"/>
+                <Key word="OBJECT_GRAPH_TRAVERSABLE"/>
+                <Key word="OBSOLETE_EXCEPTION"/>
+                <Key word="OLD_VIOLATION"/>
+                <Key word="OPERATING_ENVIRONMENT"/>
+                <Key word="OPERATING_SYSTEM_EXCEPTION"/>
+                <Key word="OPERATING_SYSTEM_FAILURE"/>
+                <Key word="OPERATING_SYSTEM_SIGNAL_FAILURE"/>
+                <Key word="PART_COMPARABLE"/>
+                <Key word="PART_SORTED_LIST"/>
+                <Key word="PART_SORTED_SET"/>
+                <Key word="PART_SORTED_TWO_WAY_LIST"/>
+                <Key word="PATH_NAME"/>
+                <Key word="PLAIN_TEXT_FILE"/>
+                <Key word="PLATFORM"/>
+                <Key word="POINT"/>
+                <Key word="POINTER"/>
+                <Key word="POINTER_REF"/>
+                <Key word="POSTCONDITION_VIOLATION"/>
+                <Key word="PRECONDITION_VIOLATION"/>
+                <Key word="PREDICATE"/>
+                <Key word="PRIMES"/>
+                <Key word="PRIORITY_QUEUE"/>
+                <Key word="PROCEDURE"/>
+                <Key word="PROFILING_SETTING"/>
+                <Key word="PROXY_COMPARABLE"/>
+                <Key word="QUEUE"/>
+                <Key word="RANDOM"/>
+                <Key word="RAW_FILE"/>
+                <Key word="READABLE_INDEXABLE"/>
+                <Key word="READABLE_STRING_32"/>
+                <Key word="READABLE_STRING_8"/>
+                <Key word="READABLE_STRING_GENERAL"/>
+                <Key word="REAL"/>
+                <Key word="REAL_32"/>
+                <Key word="REAL_32_REF"/>
+                <Key word="REAL_64"/>
+                <Key word="REAL_64_REF"/>
+                <Key word="REAL_REF"/>
+                <Key word="RECURSIVE_CURSOR_TREE"/>
+                <Key word="RECURSIVE_TREE_CURSOR"/>
+                <Key word="REFACTORING_HELPER"/>
+                <Key word="RESCUE_FAILURE"/>
+                <Key word="RESIZABLE"/>
+                <Key word="RESUMPTION_FAILURE"/>
+                <Key word="ROUTINE"/>
+                <Key word="ROUTINE_FAILURE"/>
+                <Key word="SED_ABSTRACT_OBJECTS_TABLE"/>
+                <Key word="SED_BASIC_DESERIALIZER"/>
+                <Key word="SED_BASIC_SERIALIZER"/>
+                <Key word="SED_BINARY_READER_WRITER"/>
+                <Key word="SED_ERROR"/>
+                <Key word="SED_ERROR_FACTORY"/>
+                <Key word="SED_INDEPENDENT_DESERIALIZER"/>
+                <Key word="SED_INDEPENDENT_SERIALIZER"/>
+                <Key word="SED_MEDIUM_READER_WRITER"/>
+                <Key word="SED_MEDIUM_READER_WRITER_1"/>
+                <Key word="SED_MEMORY_READER_WRITER"/>
+                <Key word="SED_META_MODEL"/>
+                <Key word="SED_MULTI_OBJECT_SERIALIZATION"/>
+                <Key word="SED_OBJECTS_TABLE"/>
+                <Key word="SED_READER_WRITER"/>
+                <Key word="SED_SESSION_DESERIALIZER"/>
+                <Key word="SED_SESSION_SERIALIZER"/>
+                <Key word="SED_STORABLE_FACILITIES"/>
+                <Key word="SED_UTILITIES"/>
+                <Key word="SEQUENCE"/>
+                <Key word="SEQ_STRING"/>
+                <Key word="SERIALIZATION_FAILURE"/>
+                <Key word="SET"/>
+                <Key word="SET"/>
+                <Key word="SINGLE_MATH"/>
+                <Key word="SORTED_LIST"/>
+                <Key word="SORTED_STRUCT"/>
+                <Key word="SORTED_TWO_WAY_LIST"/>
+                <Key word="SPECIAL"/>
+                <Key word="STACK"/>
+                <Key word="STD_FILES"/>
+                <Key word="STORABLE"/>
+                <Key word="STREAM"/>
+                <Key word="STRING"/>
+                <Key word="STRING_32"/>
+                <Key word="STRING_8"/>
+                <Key word="STRING_GENERAL"/>
+                <Key word="STRING_HANDLER"/>
+                <Key word="STRING_SEARCHER"/>
+                <Key word="STRING_TO_INTEGER_CONVERTOR"/>
+                <Key word="STRING_TO_NUMERIC_CONVERTOR"/>
+                <Key word="STRING_TO_REAL_CONVERTOR"/>
+                <Key word="STRING_TRACING_HANDLER"/>
+                <Key word="SUBSET"/>
+                <Key word="SUBSET_STRATEGY"/>
+                <Key word="SUBSET_STRATEGY_GENERIC"/>
+                <Key word="SUBSET_STRATEGY_HASHABLE"/>
+                <Key word="SUBSET_STRATEGY_TREE"/>
+                <Key word="SYSTEM_STRING"/>
+                <Key word="SYSTEM_STRING_FACTORY"/>
+                <Key word="SYS_EXCEPTION"/>
+                <Key word="TABLE"/>
+                <Key word="TEST_CASE"/>
+                <Key word="TO_SPECIAL"/>
+                <Key word="TRACING_HANDLER"/>
+                <Key word="TRACING_SETTING"/>
+                <Key word="TRAVERSABLE"/>
+                <Key word="TRAVERSABLE_SUBSET"/>
+                <Key word="TREE"/>
+                <Key word="TUPLE"/>
+                <Key word="TWO_WAY_CHAIN_ITERATOR"/>
+                <Key word="TWO_WAY_CIRCULAR"/>
+                <Key word="TWO_WAY_CURSOR_TREE"/>
+                <Key word="TWO_WAY_CURSOR_TREE_CURSOR"/>
+                <Key word="TWO_WAY_LIST"/>
+                <Key word="TWO_WAY_LIST_CURSOR"/>
+                <Key word="TWO_WAY_SORTED_SET"/>
+                <Key word="TWO_WAY_TREE"/>
+                <Key word="TWO_WAY_TREE_CURSOR"/>
+                <Key word="TYPE"/>
+                <Key word="TYPED_POINTER"/>
+                <Key word="UNBOUNDED"/>
+                <Key word="UNIX_FILE_INFO"/>
+                <Key word="UNIX_SIGNALS"/>
+                <Key word="VARIANT_VIOLATION"/>
+                <Key word="VERSIONABLE"/>
+                <Key word="VOID_ASSIGNED_TO_EXPANDED"/>
+                <Key word="VOID_TARGET"/>
+                <Key word="WIDE_CHARACTER"/>
+                <Key word="WIDE_CHARACTER_REF"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Red" bold="false">
+                <Key word="as_attached"/>
+                <Key word="conforms_to"/>
+                <Key word="copy"/>
+                <Key word="deep_copy"/>
+                <Key word="deep_equal"/>
+                <Key word="deep_twin"/>
+                <Key word="default"/>
+                <Key word="default_create"/>
+                <Key word="default_pointer"/>
+                <Key word="default_rescue"/>
+                <Key word="do_nothing"/>
+                <Key word="equal"/>
+                <Key word="generating_type"/>
+                <Key word="generator"/>
+                <Key word="io"/>
+                <Key word="is_deep_equal"/>
+                <Key word="is_equal"/>
+                <Key word="out"/>
+                <Key word="print"/>
+                <Key word="same_type"/>
+                <Key word="standard_copy"/>
+                <Key word="standard_equal"/>
+                <Key word="standard_is_equal"/>
+                <Key word="standard_twin"/>
+                <Key word="tagged_out"/>
+                <Key word="twin"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

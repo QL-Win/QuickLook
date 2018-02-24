@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Fortran95 syntax highlighting
+Written by Ezra Altahan
+Created 19/05/2010 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Fortran 95" extensions=".f90;.f95;.f03">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="!"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   ?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>!</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" noescapesequences="true" color="Maroon" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" noescapesequences="true" color="Maroon" bold="false" italic="false">
+                <Begin>&apos;</Begin>
+                <End>&apos;</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word=".and."/>
+                <Key word=".eq."/>
+                <Key word=".eqv."/>
+                <Key word=".false."/>
+                <Key word=".ge."/>
+                <Key word=".gt."/>
+                <Key word=".le."/>
+                <Key word=".lt."/>
+                <Key word=".ne."/>
+                <Key word=".neqv."/>
+                <Key word=".not."/>
+                <Key word=".or."/>
+                <Key word=".true."/>
+                <Key word=".xor."/>
+                <Key word="abs"/>
+                <Key word="abstract"/>
+                <Key word="access"/>
+                <Key word="achar"/>
+                <Key word="acos"/>
+                <Key word="action"/>
+                <Key word="adjustl"/>
+                <Key word="adjustr"/>
+                <Key word="advance"/>
+                <Key word="aimag"/>
+                <Key word="aint"/>
+                <Key word="algama"/>
+                <Key word="all"/>
+                <Key word="allocatable"/>
+                <Key word="allocate"/>
+                <Key word="allocated"/>
+                <Key word="alog"/>
+                <Key word="alog10"/>
+                <Key word="amax0"/>
+                <Key word="amax1"/>
+                <Key word="amin0"/>
+                <Key word="amin1"/>
+                <Key word="amod"/>
+                <Key word="anint"/>
+                <Key word="any"/>
+                <Key word="asin"/>
+                <Key word="assign"/>
+                <Key word="assignment"/>
+                <Key word="associated"/>
+                <Key word="atan"/>
+                <Key word="atan2"/>
+                <Key word="backspace"/>
+                <Key word="bit_size"/>
+                <Key word="blank"/>
+                <Key word="block"/>
+                <Key word="btest"/>
+                <Key word="byte"/>
+                <Key word="cabs"/>
+                <Key word="call"/>
+                <Key word="case"/>
+                <Key word="char"/>
+                <Key word="character"/>
+                <Key word="class"/>
+                <Key word="close"/>
+                <Key word="command_argument_count"/>
+                <Key word="common"/>
+                <Key word="complex"/>
+                <Key word="conjg"/>
+                <Key word="contains"/>
+                <Key word="continue"/>
+                <Key word="cos"/>
+                <Key word="cosh"/>
+                <Key word="count"/>
+                <Key word="cycle"/>
+                <Key word="dabs"/>
+                <Key word="dacos"/>
+                <Key word="dasin"/>
+                <Key word="data"/>
+                <Key word="data"/>
+                <Key word="datan"/>
+                <Key word="datan2"/>
+                <Key word="date_and_time"/>
+                <Key word="dble"/>
+                <Key word="dcmplx"/>
+                <Key word="dconjg"/>
+                <Key word="dcos"/>
+                <Key word="dcosh"/>
+                <Key word="ddim"/>
+                <Key word="deallocate"/>
+                <Key word="default"/>
+                <Key word="delim"/>
+                <Key word="derf"/>
+                <Key word="derfc"/>
+                <Key word="dexp"/>
+                <Key word="dfloat"/>
+                <Key word="dgamma"/>
+                <Key word="digits"/>
+                <Key word="dim"/>
+                <Key word="dimag"/>
+                <Key word="dimension"/>
+                <Key word="dint"/>
+                <Key word="direct"/>
+                <Key word="dlgama"/>
+                <Key word="dlog"/>
+                <Key word="dlog10"/>
+                <Key word="dmax1"/>
+                <Key word="dmin1"/>
+                <Key word="dmod"/>
+                <Key word="dnint"/>
+                <Key word="do"/>
+                <Key word="dot_product"/>
+                <Key word="double complex"/>
+                <Key word="double precision"/>
+                <Key word="dprod"/>
+                <Key word="dsign"/>
+                <Key word="dsin"/>
+                <Key word="dsinh"/>
+                <Key word="dsqrt"/>
+                <Key word="dtan"/>
+                <Key word="dtanh"/>
+                <Key word="elemental"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="elsewhere"/>
+                <Key word="end"/>
+                <Key word="end"/>
+                <Key word="enddo"/>
+                <Key word="endfile"/>
+                <Key word="endif"/>
+                <Key word="endselect"/>
+                <Key word="entry"/>
+                <Key word="eor"/>
+                <Key word="eoshift"/>
+                <Key word="epsilon"/>
+                <Key word="equivalence"/>
+                <Key word="erf"/>
+                <Key word="erfc"/>
+                <Key word="err"/>
+                <Key word="exist"/>
+                <Key word="exit"/>
+                <Key word="exp"/>
+                <Key word="exponent"/>
+                <Key word="external"/>
+                <Key word="external"/>
+                <Key word="file"/>
+                <Key word="float"/>
+                <Key word="floor"/>
+                <Key word="fmt"/>
+                <Key word="forall"/>
+                <Key word="form"/>
+                <Key word="format"/>
+                <Key word="formatted"/>
+                <Key word="fraction"/>
+                <Key word="function"/>
+                <Key word="gamma"/>
+                <Key word="get_command"/>
+                <Key word="get_command_argument"/>
+                <Key word="get_environment_variable"/>
+                <Key word="getarg"/>
+                <Key word="goto"/>
+                <Key word="huge"/>
+                <Key word="iabs"/>
+                <Key word="iachar"/>
+                <Key word="iand"/>
+                <Key word="iargc"/>
+                <Key word="ibclr"/>
+                <Key word="ibits"/>
+                <Key word="ibset"/>
+                <Key word="ichar"/>
+                <Key word="idim"/>
+                <Key word="idint"/>
+                <Key word="idnint"/>
+                <Key word="ieor"/>
+                <Key word="if"/>
+                <Key word="ifix"/>
+                <Key word="implicit"/>
+                <Key word="in"/>
+                <Key word="include"/>
+                <Key word="index"/>
+                <Key word="inout"/>
+                <Key word="inquire"/>
+                <Key word="int"/>
+                <Key word="integer"/>
+                <Key word="intent"/>
+                <Key word="interface"/>
+                <Key word="interface"/>
+                <Key word="intrinsic"/>
+                <Key word="intrinsic"/>
+                <Key word="iolength"/>
+                <Key word="ior"/>
+                <Key word="iostat"/>
+                <Key word="iqint"/>
+                <Key word="is_iostat_end"/>
+                <Key word="is_iostat_eor"/>
+                <Key word="ishft"/>
+                <Key word="ishftc"/>
+                <Key word="isign"/>
+                <Key word="kind"/>
+                <Key word="kind"/>
+                <Key word="lbound"/>
+                <Key word="len"/>
+                <Key word="len"/>
+                <Key word="len_trim"/>
+                <Key word="lge"/>
+                <Key word="lgt"/>
+                <Key word="lle"/>
+                <Key word="llt"/>
+                <Key word="loc"/>
+                <Key word="log"/>
+                <Key word="log10"/>
+                <Key word="logical"/>
+                <Key word="logical"/>
+                <Key word="matmul"/>
+                <Key word="max"/>
+                <Key word="max0"/>
+                <Key word="max1"/>
+                <Key word="maxexponent"/>
+                <Key word="maxloc"/>
+                <Key word="maxval"/>
+                <Key word="merge"/>
+                <Key word="min"/>
+                <Key word="min0"/>
+                <Key word="min1"/>
+                <Key word="minexponent"/>
+                <Key word="minloc"/>
+                <Key word="minval"/>
+                <Key word="mod"/>
+                <Key word="module"/>
+                <Key word="modulo"/>
+                <Key word="move_alloc"/>
+                <Key word="mvbits"/>
+                <Key word="name"/>
+                <Key word="named"/>
+                <Key word="namelist"/>
+                <Key word="nearest"/>
+                <Key word="new_line"/>
+                <Key word="nextrec"/>
+                <Key word="nint"/>
+                <Key word="nml"/>
+                <Key word="none"/>
+                <Key word="norm2"/>
+                <Key word="not"/>
+                <Key word="null"/>
+                <Key word="nullify"/>
+                <Key word="number"/>
+                <Key word="only"/>
+                <Key word="open"/>
+                <Key word="opened"/>
+                <Key word="operator"/>
+                <Key word="optional"/>
+                <Key word="or"/>
+                <Key word="out"/>
+                <Key word="pack"/>
+                <Key word="pad"/>
+                <Key word="parameter"/>
+                <Key word="pause"/>
+                <Key word="pointer"/>
+                <Key word="position"/>
+                <Key word="precision"/>
+                <Key word="present"/>
+                <Key word="print"/>
+                <Key word="private"/>
+                <Key word="private"/>
+                <Key word="procedure"/>
+                <Key word="product"/>
+                <Key word="program"/>
+                <Key word="public"/>
+                <Key word="public"/>
+                <Key word="pure"/>
+                <Key word="radix"/>
+                <Key word="random_number"/>
+                <Key word="random_seed"/>
+                <Key word="range"/>
+                <Key word="read"/>
+                <Key word="readwrite"/>
+                <Key word="real"/>
+                <Key word="real"/>
+                <Key word="rec"/>
+                <Key word="recl"/>
+                <Key word="record"/>
+                <Key word="recursive"/>
+                <Key word="repeat"/>
+                <Key word="reshape"/>
+                <Key word="result"/>
+                <Key word="return"/>
+                <Key word="rewind"/>
+                <Key word="rrspacing"/>
+                <Key word="save"/>
+                <Key word="save"/>
+                <Key word="scale"/>
+                <Key word="scan"/>
+                <Key word="select"/>
+                <Key word="selected_char_kind"/>
+                <Key word="selected_int_kind"/>
+                <Key word="selected_real_kind"/>
+                <Key word="sequential"/>
+                <Key word="set_exponent"/>
+                <Key word="shape"/>
+                <Key word="sign"/>
+                <Key word="sin"/>
+                <Key word="sinh"/>
+                <Key word="size"/>
+                <Key word="sngl"/>
+                <Key word="spacing"/>
+                <Key word="spread"/>
+                <Key word="sqrt"/>
+                <Key word="status"/>
+                <Key word="stop"/>
+                <Key word="structure"/>
+                <Key word="subroutine"/>
+                <Key word="sum"/>
+                <Key word="system_clock"/>
+                <Key word="tan"/>
+                <Key word="tanh"/>
+                <Key word="target"/>
+                <Key word="then"/>
+                <Key word="tiny"/>
+                <Key word="transfer"/>
+                <Key word="transpose"/>
+                <Key word="trim"/>
+                <Key word="type"/>
+                <Key word="ubound"/>
+                <Key word="unformatted"/>
+                <Key word="unit"/>
+                <Key word="unpack"/>
+                <Key word="use"/>
+                <Key word="verify"/>
+                <Key word="where"/>
+                <Key word="while"/>
+                <Key word="write"/>
+                <Key word="write"/>
+                <Key word="zabs"/>
+                <Key word="zcos"/>
+                <Key word="zexp"/>
+                <Key word="zlog"/>
+                <Key word="zsin"/>
+                <Key word="zsqrt"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="ccos"/>
+                <Key word="cdabs"/>
+                <Key word="cdcos"/>
+                <Key word="cdexp"/>
+                <Key word="cdlog"/>
+                <Key word="cdsin"/>
+                <Key word="cdsqrt"/>
+                <Key word="ceiling"/>
+                <Key word="cexp"/>
+                <Key word="clog"/>
+                <Key word="cmplx"/>
+                <Key word="cpu_time"/>
+                <Key word="cqabs"/>
+                <Key word="cqcos"/>
+                <Key word="cqexp"/>
+                <Key word="cqlog"/>
+                <Key word="cqsin"/>
+                <Key word="cqsqrt"/>
+                <Key word="cshift"/>
+                <Key word="csin"/>
+                <Key word="csqrt"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+                <Key word="qabs"/>
+                <Key word="qacos"/>
+                <Key word="qasin"/>
+                <Key word="qatan"/>
+                <Key word="qatan2"/>
+                <Key word="qcmplx"/>
+                <Key word="qconjg"/>
+                <Key word="qcos"/>
+                <Key word="qcosh"/>
+                <Key word="qdim"/>
+                <Key word="qerf"/>
+                <Key word="qerfc"/>
+                <Key word="qexp"/>
+                <Key word="qgamma"/>
+                <Key word="qimag"/>
+                <Key word="qlgama"/>
+                <Key word="qlog"/>
+                <Key word="qlog10"/>
+                <Key word="qmax1"/>
+                <Key word="qmin1"/>
+                <Key word="qmod"/>
+                <Key word="qnint"/>
+                <Key word="qsign"/>
+                <Key word="qsin"/>
+                <Key word="qsinh"/>
+                <Key word="qsqrt"/>
+                <Key word="qtan"/>
+                <Key word="qtanh"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

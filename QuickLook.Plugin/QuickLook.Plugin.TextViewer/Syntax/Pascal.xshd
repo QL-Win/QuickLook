@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Pascal syntax highlighting
+Written by Ezra Altahan
+Created 04/04/2013 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Pascal" extensions=".pas">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="{"/>
+        <Property name="BlockCommentEnd" value="}"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  ?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+
+            <Span name="BlockComment1" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+           
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkPrevious color="SteelBlue" bold="false">(</MarkPrevious>
+      
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="absolute"/>
+                <Key word="and"/>
+                <Key word="array"/>
+                <Key word="asm"/>
+                <Key word="assembler"/>
+                <Key word="begin"/>
+                <Key word="case"/>
+                <Key word="cdecl"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="constructor"/>
+                <Key word="default"/>
+                <Key word="destructor"/>
+                <Key word="div"/>
+                <Key word="do"/>
+                <Key word="downto"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="end."/>
+                <Key word="except"/>
+                <Key word="exports"/>
+                <Key word="external"/>
+                <Key word="far"/>
+                <Key word="file"/>
+                <Key word="finalization"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="forward"/>
+                <Key word="function"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="implementation"/>
+                <Key word="in"/>
+                <Key word="index"/>
+                <Key word="inherited"/>
+                <Key word="initialization"/>
+                <Key word="inline"/>
+                <Key word="input"/>
+                <Key word="interface"/>
+                <Key word="interrupt"/>
+                <Key word="label"/>
+                <Key word="library"/>
+                <Key word="maxint"/>
+                <Key word="message"/>
+                <Key word="mod"/>
+                <Key word="near"/>
+                <Key word="nil"/>
+                <Key word="not"/>
+                <Key word="object"/>
+                <Key word="of"/>
+                <Key word="on"/>
+                <Key word="operator"/>
+                <Key word="or"/>
+                <Key word="out"/>
+                <Key word="output"/>        
+                <Key word="overload"/>
+                <Key word="override"/>
+                <Key word="packed"/>
+                <Key word="packed"/>
+                <Key word="pascal"/>
+                <Key word="pointer"/>
+                <Key word="private"/>
+                <Key word="procedure"/>
+                <Key word="program"/>
+                <Key word="property"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="published"/>
+                <Key word="raise"/>
+                <Key word="record"/>
+                <Key word="register"/>
+                <Key word="repeat"/>
+                <Key word="resourcestring"/>
+                <Key word="safecall"/>
+                <Key word="self"/>
+                <Key word="set"/>
+                <Key word="shl"/>
+                <Key word="shr"/>
+                <Key word="stdcall"/>
+                <Key word="stored"/>
+                <Key word="string"/>
+                <Key word="text"/>
+                <Key word="then"/>
+                <Key word="threadvar"/>
+                <Key word="to"/>
+                <Key word="try"/>
+                <Key word="type"/>
+                <Key word="unit"/>
+                <Key word="until"/>
+                <Key word="uses"/>
+                <Key word="var"/>
+                <Key word="variant"/>
+                <Key word="virtual"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Teal" bold="false">
+                <Key word="Addr"/>
+                <Key word="Append"/>
+                <Key word="Arctan"/>
+                <Key word="Assign"/>
+                <Key word="Assigned"/>
+                <Key word="BinStr"/>
+                <Key word="Blockread"/>
+                <Key word="Blockwrite"/>
+                <Key word="Break"/>
+                <Key word="CSeg"/>
+                <Key word="Chdir"/>
+                <Key word="Chr"/>
+                <Key word="Close"/>
+                <Key word="CompareByte"/>
+                <Key word="CompareChar"/>
+                <Key word="CompareDWord"/>
+                <Key word="CompareWord"/>
+                <Key word="Concat"/>
+                <Key word="Continue"/>
+                <Key word="Copy"/>
+                <Key word="Cos"/>
+                <Key word="DSeg"/>
+                <Key word="Dec"/>
+                <Key word="Delete"/>
+                <Key word="Eof"/>
+                <Key word="Eoln"/>
+                <Key word="Erase"/>
+                <Key word="Exp"/>
+                <Key word="Filepos"/>
+                <Key word="Filesize"/>
+                <Key word="FillByte"/>
+                <Key word="FillDWord"/>
+                <Key word="Fillchar"/>
+                <Key word="Fillword"/>
+                <Key word="Flush"/>
+                <Key word="Frac"/>
+                <Key word="Freemem"/>
+                <Key word="GetMemoryManager"/>
+                <Key word="Getdir"/>
+                <Key word="Getmem"/>
+                <Key word="Halt"/>
+                <Key word="HexStr"/>
+                <Key word="Hi"/>
+                <Key word="High"/>
+                <Key word="IOresult"/>
+                <Key word="Inc"/>
+                <Key word="Insert"/>
+                <Key word="Int"/>
+                <Key word="IsMemoryManagerSet"/>
+                <Key word="Length"/>
+                <Key word="Ln"/>
+                <Key word="Lo"/>
+                <Key word="LongJmp"/>
+                <Key word="Low"/>
+                <Key word="Lowercase"/>
+                <Key word="Mark"/>
+                <Key word="Maxavail"/>
+                <Key word="Memavail"/>
+                <Key word="Mkdir"/>
+                <Key word="Move"/>
+                <Key word="MoveCharNull"/>
+                <Key word="Odd"/>
+                <Key word="Ofs"/>
+                <Key word="Ord"/>
+                <Key word="Paramcount"/>
+                <Key word="Paramstr"/>
+                <Key word="Pi"/>
+                <Key word="Pos"/>
+                <Key word="Power"/>
+                <Key word="Pred"/>
+                <Key word="Ptr"/>
+                <Key word="Random"/>
+                <Key word="Randomize"/>
+                <Key word="Read"/>
+                <Key word="Readln"/>
+                <Key word="Release"/>
+                <Key word="Rename"/>
+                <Key word="Reset"/>
+                <Key word="Rewrite"/>
+                <Key word="Rmdir"/>
+                <Key word="Round"/>
+                <Key word="Runerror"/>
+                <Key word="SSeg"/>
+                <Key word="Seek"/>
+                <Key word="SeekEof"/>
+                <Key word="SeekEoln"/>
+                <Key word="Seg"/>
+                <Key word="SetJmp"/>
+                <Key word="SetLength"/>
+                <Key word="SetMemoryManager"/>
+                <Key word="SetTextBuf"/>
+                <Key word="Sin"/>
+                <Key word="SizeOf"/>
+                <Key word="Sptr"/>
+                <Key word="Sqr"/>
+                <Key word="Sqrt"/>
+                <Key word="Str"/>
+                <Key word="StringOfChar"/>
+                <Key word="Succ"/>
+                <Key word="Swap"/>
+                <Key word="Trunc"/>
+                <Key word="Truncate"/>
+                <Key word="Upcase"/>
+                <Key word="Val"/>
+                <Key word="Write"/>
+                <Key word="WriteLn"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="DarkViolet" bold="false">
+                <Key word="Boolean"/>
+                <Key word="Byte"/>
+                <Key word="ByteBool"/>
+                <Key word="Cardinal"/>
+                <Key word="Char"/>
+                <Key word="Comp"/>
+                <Key word="Double"/>
+                <Key word="Extended"/>
+                <Key word="Int64"/>
+                <Key word="Integer"/>
+                <Key word="LongBool"/>
+                <Key word="LongWord"/>
+                <Key word="Longint"/>
+                <Key word="PChar"/>
+                <Key word="QWord"/>
+                <Key word="Real"/>
+                <Key word="Shortint"/>
+                <Key word="Single"/>
+                <Key word="SmallInt"/>
+                <Key word="Word"/>
+                <Key word="WordBool"/>
+                <Key word="dispose"/>
+                <Key word="exit"/>
+                <Key word="false"/>
+                <Key word="new"/>
+                <Key word="true"/>
+            </KeyWords>
+        </RuleSet>  
+    </RuleSets>
+</SyntaxDefinition>

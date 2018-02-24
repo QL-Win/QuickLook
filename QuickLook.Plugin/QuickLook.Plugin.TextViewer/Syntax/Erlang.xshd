@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Erlang syntax highlighting
+Written by Ezra Altahan
+Created 27/06/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Erlang" extensions=".erl;.hrl">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="%"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>&amp;&lt;&gt;@~%^*().+=!|\/{}[]:;"' ,   ?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>%</Begin>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="after"/>
+                <Key word="and"/>
+                <Key word="band"/>
+                <Key word="begin"/>
+                <Key word="bnot"/>
+                <Key word="bor"/>
+                <Key word="bsl"/>
+                <Key word="bsr"/>
+                <Key word="bxor"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="cond"/>
+                <Key word="div"/>
+                <Key word="end"/>
+                <Key word="andalso"/>
+                <Key word="orelse"/>
+                <Key word="fun"/>
+                <Key word="if"/>
+                <Key word="let"/>
+                <Key word="not"/>
+                <Key word="of"/>
+                <Key word="or"/>
+                <Key word="query"/>
+                <Key word="receive"/>
+                <Key word="rem"/>
+                <Key word="try"/>
+                <Key word="when"/>
+                <Key word="xor"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="-author"/>
+                <Key word="-compile"/>
+                <Key word="-copyright"/>
+                <Key word="-define"/>
+                <Key word="-doc"/>
+                <Key word="-else"/>
+                <Key word="-endif"/>
+                <Key word="-export"/>
+                <Key word="-file"/>
+                <Key word="-ifdef"/>
+                <Key word="-ifndef"/>
+                <Key word="-import"/>
+                <Key word="-include"/>
+                <Key word="-include_lib"/>
+                <Key word="-module"/>
+                <Key word="-record"/>
+                <Key word="-spec"/>
+                <Key word="-type"/>
+                <Key word="-undef"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

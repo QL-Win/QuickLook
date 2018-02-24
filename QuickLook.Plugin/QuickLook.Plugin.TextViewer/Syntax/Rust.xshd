@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Rust syntax highlighting
+Written by Ezra Altahan
+Created 07/03/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Rust" extensions=".rs">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="DarkViolet"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&lt;&gt;&amp;~!%^*()-_+=|\#/{}[]:;"' ,  ?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="MultiLineString" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkPrevious color="#BB179A" bold="false">!</MarkPrevious>
+            <MarkFollowing color="Red" bold="false">'</MarkFollowing>
+            <MarkFollowing color="Purple" bold="true">enum</MarkFollowing>
+            <MarkFollowing color="Purple" bold="true">type</MarkFollowing>
+                
+            <KeyWords name="Punctuation" color="#666666" bold="false">
+                <Key word="!"/>
+                <Key word="$"/>
+                <Key word="%"/>
+                <Key word="^"/>
+                <Key word="&amp;"/>
+                <Key word="*"/>
+                <Key word="-"/>
+                <Key word="_"/>
+                <Key word="+"/>
+                <Key word="="/>
+                <Key word="/"/>
+                <Key word="|"/>
+                <Key word="&lt;"/>
+                <Key word="&gt;"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="abstract"/>
+                <Key word="abstract"/>
+                <Key word="alignof"/>
+                <Key word="as"/>
+                <Key word="become"/>
+                <Key word="box"/>
+                <Key word="Box"/>
+                <Key word="break"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="crate"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="extern"/>
+                <Key word="false"/>
+                <Key word="final"/>
+                <Key word="fn"/>
+                <Key word="for"/>
+                <Key word="if"/>
+                <Key word="impl"/>
+                <Key word="in"/>
+                <Key word="let"/>
+                <Key word="loop"/>
+                <Key word="macro"/>
+                <Key word="match"/>
+                <Key word="mod"/>
+                <Key word="move"/>
+                <Key word="mut"/>
+                <Key word="offsetof"/>
+                <Key word="override"/>
+                <Key word="priv"/>
+                <Key word="proc"/>
+                <Key word="pub"/>
+                <Key word="pure"/>
+                <Key word="ref"/>
+                <Key word="return"/>
+                <Key word="self"/>
+                <Key word="Self"/>
+                <Key word="sizeof"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="super"/>
+                <Key word="trait"/>
+                <Key word="true"/>
+                <Key word="type"/>
+                <Key word="typeof"/>
+                <Key word="unsafe"/>
+                <Key word="unsized"/>
+                <Key word="use"/>
+                <Key word="virtual"/>
+                <Key word="where"/>
+                <Key word="while"/>
+                <Key word="yield"/>
+                <Key word="Vec"/>
+                <Key word="Option"/>
+                <Key word="Path"/>
+                <Key word="PathBuf"/>
+                <Key word="Result"/>
+                <Key word="String"/>
+                <Key word="Some"/>
+                <Key word="None"/>
+                <Key word="Ok"/>
+                <Key word="Err"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="bool"/>
+                <Key word="char"/>
+                <Key word="f32"/>
+                <Key word="f64"/>
+                <Key word="i16"/>
+                <Key word="i32"/>
+                <Key word="i64"/>
+                <Key word="i8"/>
+                <Key word="isize"/>
+                <Key word="str"/>
+                <Key word="u16"/>
+                <Key word="u32"/>
+                <Key word="u64"/>
+                <Key word="u8"/>
+                <Key word="usize"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Teal" bold="false">
+                <Key word="Copy"/>
+                <Key word="Send"/>
+                <Key word="Sized"/>
+                <Key word="Sync"/>
+                <Key word="Drop"/>
+                <Key word="Fn"/>
+                <Key word="FnMut"/>
+                <Key word="FnOnce"/>
+                <Key word="Clone"/>
+                <Key word="PartialEq"/>
+                <Key word="PartialOrd"/>
+                <Key word="Eq"/>
+                <Key word="Ord"/>
+                <Key word="Read"/>
+                <Key word="Write"/>
+                <Key word="Seek"/>
+                <Key word="BufRead"/>
+                <Key word="DoubleEndedIterator"/>
+                <Key word="ExactSizeIterator"/>
+                <Key word="Iterator"/>
+                <Key word="Extend"/>
+                <Key word="AsPath"/>
+                <Key word="AsSlice"/>
+                <Key word="Str"/>
+                <Key word="ToString"/>
+            </KeyWords>
+        </RuleSet>  
+    </RuleSets>
+</SyntaxDefinition>

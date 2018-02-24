@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- syntaxdefinition for Coco/R 2003 by Mike Krueger -->
+<!-- Revised by HazelDev 08/08/2014 -->
+
+<SyntaxDefinition name="Cocoa" extensions=".atg">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" bold="false" italic="false" color="DarkBlue"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Gray" bold="false" italic="true">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Gray" bold="false" italic="true">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="CSharpCode2" rule="CSharp" stopateol="false" color="Black" bold="false" italic="false">
+                <Begin color="Blue" bold="true">COMPILER</Begin>
+                <End color="Blue" bold="true">TOKENNAMES</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="DarkGreen" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="DarkGreen" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="paramlist" rule="ParamList" stopateol="true" color="Black" bold="false" italic="false">
+                <Begin bold="true" color="Black" >&lt;</Begin>
+                <End bold="true" color="Black" >&gt;</End>
+            </Span>
+            
+            <Span name="CSharpCode" rule="CSharp" stopateol="false" color="DarkSlateGray" bold="false" italic="false">
+                <Begin color="Green" bold="true" italic="true">(.</Begin>
+                <End color="Green" bold="true" italic="true">.)</End>
+            </Span>
+            
+            <KeyWords name="KeyWords" color="Blue" bold="true" italic="false">
+                <Key word="ANY"/>
+                <Key word="CHARACTERS"/>
+                <Key word="COMMENTS"/>
+                <Key word="COMPILER"/>
+                <Key word="CONTEXT"/>
+                <Key word="END"/>
+                <Key word="FROM"/>
+                <Key word="IF"/>
+                <Key word="IGNORE"/>
+                <Key word="NAMESPACE"/>
+                <Key word="NESTED"/>
+                <Key word="PRAGMAS"/>
+                <Key word="PRODUCTIONS"/>
+                <Key word="SYNC"/>
+                <Key word="TO"/>
+                <Key word="TOKENS"/>
+                <Key word="TOKENNAMES"/>
+                <Key word="WEAK"/>
+                <Key word="using"/>
+            </KeyWords>     
+        </RuleSet>
+
+        <RuleSet name="CSharp" reference="C#" ignorecase="false">
+        </RuleSet>
+        
+        <RuleSet name="ParamList" reference="C#" ignorecase="false">
+        </RuleSet>
+        
+        <RuleSet name="RuleDefinition" ignorecase="false">  
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

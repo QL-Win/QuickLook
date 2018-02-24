@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Cool syntax highlighting
+Written by Ezra Altahan
+Created 07/03/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Cool" extensions=".cl">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+        <Property name="BlockCommentBegin" value="(*"/>
+        <Property name="BlockCommentEnd" value="*)"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Red"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{}#@!,:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="MultiLineComment" stopateol="false" color="Green">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <MarkFollowing color="Sienna" bold="false" italic="false">class</MarkFollowing>
+            <MarkFollowing color="Sienna" bold="false" italic="false">inherits</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="SELF_TYPE"/>
+                <Key word="case"/>
+                <Key word="class"/>
+                <Key word="else"/>
+                <Key word="esac"/>
+                <Key word="fi"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inherits"/>
+                <Key word="isvoid"/>
+                <Key word="let"/>
+                <Key word="loop"/>
+                <Key word="new"/>
+                <Key word="not"/>
+                <Key word="of"/>
+                <Key word="pool"/>
+                <Key word="self"/>
+                <Key word="then"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="false"/>
+                <Key word="true"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

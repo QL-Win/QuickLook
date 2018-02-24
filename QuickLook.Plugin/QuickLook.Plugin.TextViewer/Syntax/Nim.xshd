@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Nim syntax highlighting
+Original syntax keywords provided by Konstantin Zaitsev for VSCode
+Modified by Ezra Altahan
+Created 27/06/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Nim" extensions=".nim">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="addr"/>
+                <Key word="as"/>
+                <Key word="assert"/>
+                <Key word="atomic"/>
+                <Key word="await"/>
+                <Key word="bind"/>
+                <Key word="block"/>
+                <Key word="break"/>
+                <Key word="byte"/>
+                <Key word="case"/>
+                <Key word="cast"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="converter"/>
+                <Key word="countdown"/>
+                <Key word="countup"/>
+                <Key word="declared"/>
+                <Key word="defer"/>
+                <Key word="defined"/>
+                <Key word="discard"/>
+                <Key word="distinct"/>
+                <Key word="div"/>
+                <Key word="do"/>
+                <Key word="echo"/>
+                <Key word="elif"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="enum"/>
+                <Key word="except"/>
+                <Key word="export"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="from"/>
+                <Key word="generic"/>
+                <Key word="high"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="include"/>
+                <Key word="inf"/>
+                <Key word="interface"/>
+                <Key word="iterator"/>
+                <Key word="lambda"/>
+                <Key word="let"/>
+                <Key word="low"/>
+                <Key word="macro"/>
+                <Key word="method"/>
+                <Key word="mixin"/>
+                <Key word="mod"/>
+                <Key word="natural"/>
+                <Key word="new"/>
+                <Key word="newException"/>
+                <Key word="nil"/>
+                <Key word="object"/>
+                <Key word="of"/>
+                <Key word="out"/>
+                <Key word="proc"/>
+                <Key word="ptr"/>
+                <Key word="raise"/>
+                <Key word="range"/>
+                <Key word="ref"/>
+                <Key word="return"/>
+                <Key word="shared"/>
+                <Key word="shl"/>
+                <Key word="shr"/>
+                <Key word="static"/>
+                <Key word="template"/>
+                <Key word="tobject"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="tuple"/>
+                <Key word="type"/>
+                <Key word="typed"/> 
+                <Key word="untyped"/>
+                <Key word="var"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="without"/>
+                <Key word="yield"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="any"/>
+                <Key word="array"/>
+                <Key word="auto"/>
+                <Key word="bool"/>
+                <Key word="char"/>
+                <Key word="cstring"/>
+                <Key word="expr"/>
+                <Key word="float"/>
+                <Key word="float16"/>
+                <Key word="float32"/>
+                <Key word="float64"/>
+                <Key word="float8"/>
+                <Key word="int"/>
+                <Key word="int16"/>
+                <Key word="int32"/>
+                <Key word="int64"/>
+                <Key word="int8"/>
+                <Key word="openarray"/>
+                <Key word="pointer"/>
+                <Key word="seq"/>
+                <Key word="set"/>
+                <Key word="stmt"/>
+                <Key word="string"/>
+                <Key word="typedesc"/>
+                <Key word="uint"/>
+                <Key word="uint16"/>
+                <Key word="uint32"/>
+                <Key word="uint64"/>
+                <Key word="uint8"/>
+                <Key word="varargs"/>
+                <Key word="void"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

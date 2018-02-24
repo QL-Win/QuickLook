@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Objective-C syntax highlighting
+Written by Ezra Altahan
+Created 20/01/2014 | Updated 20/11/2016
+Version 1.2
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Objective-C" extensions=".m">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#CC3A4A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment1" rule="Doxygen" stopateol="false" color="Teal" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="MultiLineString" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
+                <Begin>@@"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="Brown" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="NULL"/>
+                <Key word="__asm"/>
+                <Key word="__based"/>
+                <Key word="__cdecl"/>
+                <Key word="__cplusplus"/>
+                <Key word="__emit"/>
+                <Key word="__export"/>
+                <Key word="__far"/>
+                <Key word="__fastcall"/>
+                <Key word="__fortran"/>
+                <Key word="__huge"/>
+                <Key word="__inline"/>
+                <Key word="__interrupt"/>
+                <Key word="__loadds"/>
+                <Key word="__near"/>
+                <Key word="__pascal"/>
+                <Key word="__saveregs"/>
+                <Key word="__segment"/>
+                <Key word="__segname"/>
+                <Key word="__self"/>
+                <Key word="__stdcall"/>
+                <Key word="__syscall"/>
+                <Key word="argc"/>
+                <Key word="argv"/>
+                <Key word="auto"/>
+                <Key word="break"/>
+                <Key word="bycopy"/>
+                <Key word="byref"/>
+                <Key word="case"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="envp"/>
+                <Key word="extern"/>
+                <Key word="for"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="in"/>
+                <Key word="inout"/>
+                <Key word="main"/>
+                <Key word="nil"/>
+                <Key word="oneway"/>
+                <Key word="out"/>
+                <Key word="register"/>
+                <Key word="restrict"/>
+                <Key word="return"/>
+                <Key word="self"/>
+                <Key word="sizeof"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="typedef"/>
+                <Key word="union"/>
+                <Key word="volatile"/>
+                <Key word="wchar_t"/>
+                <Key word="while"/>
+            </KeyWords>
+                        
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="BOOL"/>
+                <Key word="Class"/>
+                <Key word="IBAction"/>
+                <Key word="IBOutlet"/>
+                <Key word="IMP"/>
+                <Key word="Protocol"/>
+                <Key word="SEL"/>
+                <Key word="bool"/>
+                <Key word="catch"/>
+                <Key word="char"/>
+                <Key word="const_cast"/>
+                <Key word="delete"/>
+                <Key word="double"/>
+                <Key word="dynamic_cast"/>
+                <Key word="explicit"/>
+                <Key word="false"/>
+                <Key word="float"/>
+                <Key word="friend"/>
+                <Key word="id"/>
+                <Key word="inline"/>
+                <Key word="int"/>
+                <Key word="long"/>
+                <Key word="mutable"/>
+                <Key word="namespace"/>
+                <Key word="new"/>
+                <Key word="operator"/>
+                <Key word="reinterpret_cast"/>
+                <Key word="retval_t"/>
+                <Key word="short"/>
+                <Key word="signed"/>
+                <Key word="static_cast"/>
+                <Key word="template"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typeid"/>
+                <Key word="typename"/>
+                <Key word="unichar"/>
+                <Key word="unsigned"/>
+                <Key word="using"/>
+                <Key word="virtual"/>
+                <Key word="void"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Sienna" bold="false">
+                <Key word="@autoreleasepool"/>
+                <Key word="@catch"/>
+                <Key word="@class"/>
+                <Key word="@compatibility_alias"/>
+                <Key word="@defs"/>
+                <Key word="@dynamic"/>
+                <Key word="@encode"/>
+                <Key word="@end"/>
+                <Key word="@finally"/>
+                <Key word="@implementation"/>
+                <Key word="@interface"/>
+                <Key word="@optional"/>
+                <Key word="@package"/>
+                <Key word="@private"/>
+                <Key word="@property"/>
+                <Key word="@protected"/>
+                <Key word="@protocol"/>
+                <Key word="@public"/>
+                <Key word="@public"/>
+                <Key word="@selector"/>
+                <Key word="@synchronized"/>
+                <Key word="@synthesize"/>
+                <Key word="@throw"/>
+                <Key word="@try"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="Doxygen" ignorecase="false">
+            <Delimiters>~!%^*()+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@exception"/>
+                <Key word="@param"/>
+                <Key word="@result"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@verbatim"/>
+                <Key word="@warning"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

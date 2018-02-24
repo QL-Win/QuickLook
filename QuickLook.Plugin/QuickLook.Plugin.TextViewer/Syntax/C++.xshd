@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+C++ syntax highlighting
+Written by Ezra Altahan
+Created 03/05/2011 Updated 30/12/2016
+Version 1.3
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="C++" extensions=".c;.h;.cc;.C;.cpp;.cxx;.hpp">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>~!%^*()-+=|\/{}[]:;"'&lt;&gt; , .?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic ="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment1" rule="Doxygen" stopateol="false" color="Teal" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic ="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+               
+            <Span name="String" stopateol="true" color="#808080" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#808080" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="Sienna" bold="false" italic="false">
+                <Begin>#include</Begin>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="NULL"/>
+                <Key word="alignof"/>
+                <Key word="and"/>
+                <Key word="and_eq"/>
+                <Key word="bitand"/>
+                <Key word="bitor"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="compl"/>
+                <Key word="const_cast"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="delete"/>
+                <Key word="dllexport"/>
+                <Key word="dllimport"/>
+                <Key word="do"/>
+                <Key word="dynamic_cast"/>
+                <Key word="else"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="namespace"/>
+                <Key word="new"/>
+                <Key word="not"/>
+                <Key word="not_eq"/>
+                <Key word="nullptr"/>
+                <Key word="operator"/>
+                <Key word="or"/>
+                <Key word="or_eq"/>
+                <Key word="reinterpret_cast"/>
+                <Key word="return"/>
+                <Key word="sizeof"/>
+                <Key word="static_assert"/>
+                <Key word="static_cast"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typedef"/>
+                <Key word="typeid"/>
+                <Key word="using"/>
+                <Key word="while"/>
+                <Key word="xor"/>
+                <Key word="xor_eq"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="alignas"/>
+                <Key word="asm"/>
+                <Key word="auto"/>
+                <Key word="blkcnt_t"/>
+                <Key word="blksize_t"/>
+                <Key word="bool"/>
+                <Key word="caddr_t"/>
+                <Key word="char"/>
+                <Key word="char16_t"/>
+                <Key word="char32_t"/>
+                <Key word="class"/>
+                <Key word="clock_t"/>
+                <Key word="const"/>
+                <Key word="constexpr"/>
+                <Key word="daddr_t"/>
+                <Key word="decltype"/>
+                <Key word="dev_t"/>
+                <Key word="div_t"/>
+                <Key word="double"/>
+                <Key word="enum"/>
+                <Key word="explicit"/>
+                <Key word="export"/>
+                <Key word="extern"/>
+                <Key word="final"/>
+                <Key word="fixpt_t"/>
+                <Key word="float"/>
+                <Key word="fpos_t"/>
+                <Key word="friend"/>
+                <Key word="gid_t"/>
+                <Key word="id_t"/>
+                <Key word="id_t"/>
+                <Key word="in_addr_t"/>
+                <Key word="in_port_t"/>
+                <Key word="inline"/>
+                <Key word="ino_t"/>
+                <Key word="int"/>
+                <Key word="int16_t"/>
+                <Key word="int32_t"/>
+                <Key word="int64_t"/>
+                <Key word="int8_t"/>
+                <Key word="int_fast16_t"/>
+                <Key word="int_fast32_t"/>
+                <Key word="int_fast64_t"/>
+                <Key word="int_fast8_t"/>
+                <Key word="int_least16_t"/>
+                <Key word="int_least32_t"/>
+                <Key word="int_least64_t"/>
+                <Key word="int_least8_t"/>
+                <Key word="interface"/>
+                <Key word="intmax_t"/>
+                <Key word="intptr_t"/>
+                <Key word="ipv4_t"/>
+                <Key word="jmp_buf"/>
+                <Key word="key_t"/>
+                <Key word="ldiv_t"/>
+                <Key word="long"/>
+                <Key word="mode_t"/>
+                <Key word="mutable"/>
+                <Key word="nlink_t"/>
+                <Key word="noexcept"/>
+                <Key word="off_t"/>
+                <Key word="override"/>
+                <Key word="pid_t"/>
+                <Key word="port_t"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="pthread_attr_t"/>
+                <Key word="pthread_cond_t"/>
+                <Key word="pthread_condattr_t"/>
+                <Key word="pthread_key_t"/>
+                <Key word="pthread_mutex_t"/>
+                <Key word="pthread_mutexattr_t"/>
+                <Key word="pthread_once_t"/>
+                <Key word="pthread_rwlock_t"/>
+                <Key word="pthread_rwlockattr_t"/>
+                <Key word="pthread_t"/>
+                <Key word="ptrdiff_t"/>
+                <Key word="public"/>
+                <Key word="qaddr_t"/>
+                <Key word="quad_t"/>
+                <Key word="register"/>
+                <Key word="restrict"/>
+                <Key word="segsz_t"/>
+                <Key word="short"/>
+                <Key word="signed"/>
+                <Key word="size_t"/>
+                <Key word="ssize_t"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="suseconds_t"/>
+                <Key word="swblk_t"/>
+                <Key word="template"/>
+                <Key word="thread_local"/>
+                <Key word="time_t"/>
+                <Key word="typename"/>
+                <Key word="u_char"/>
+                <Key word="u_int"/>
+                <Key word="u_long"/>
+                <Key word="u_quad_t"/>
+                <Key word="u_short"/>
+                <Key word="uid_t"/>
+                <Key word="uint"/>
+                <Key word="uint16_t"/>
+                <Key word="uint32_t"/>
+                <Key word="uint64_t"/>
+                <Key word="uint8_t"/>
+                <Key word="uint_fast16_t"/>
+                <Key word="uint_fast32_t"/>
+                <Key word="uint_fast64_t"/>
+                <Key word="uint_fast8_t"/>
+                <Key word="uint_least16_t"/>
+                <Key word="uint_least32_t"/>
+                <Key word="uint_least64_t"/>
+                <Key word="uint_least8_t"/>
+                <Key word="uintmax_t"/>
+                <Key word="uintptr_t"/>
+                <Key word="union"/>
+                <Key word="unsigned"/>
+                <Key word="useconds_t"/>
+                <Key word="ushort"/>
+                <Key word="va_list"/>
+                <Key word="virtual"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="wchar_t"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Sienna" bold="false" italic="false">
+                <Key word="#define"/>
+                <Key word="#defined"/>
+                <Key word="#elif"/>
+                <Key word="#else"/>
+                <Key word="#endif"/>
+                <Key word="#if"/>
+                <Key word="#ifdef"/>
+                <Key word="#ifndef"/>
+                <Key word="#line"/>
+                <Key word="#pragma"/>
+                <Key word="#undef"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="Doxygen" ignorecase="false">
+            <Delimiters>~!%^*()+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@author"/>
+                <Key word="@b"/>
+                <Key word="@brief"/>
+                <Key word="@c"/>
+                <Key word="@code"/>
+                <Key word="@date"/>
+                <Key word="@endcode"/>
+                <Key word="@endverbatim"/>
+                <Key word="@file"/>
+                <Key word="@note"/>
+                <Key word="@p"/>
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@verbatim"/>
+                <Key word="@warning"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

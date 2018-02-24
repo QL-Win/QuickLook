@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Fantom syntax highlighting
+Written by Ezra Altahan
+Created 14/09/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Fantom" extensions=".fan">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="Black"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>**</Begin>
+            </Span>
+                        
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String1" rule="StringFormatting" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String2" rule="StringFormatting" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>`</Begin>
+                <End>`</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="Brown" bold="false" italic="false">
+                <Begin>#!</Begin>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            <MarkFollowing markmarker="true" color="#82751A" bold="false" italic="false">@</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+                <Key word="abstract"/>
+                <Key word="as"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="facet"/> 
+                <Key word="false"/>
+                <Key word="final"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="if"/>
+                <Key word="internal"/>
+                <Key word="it"/>
+                <Key word="mixin"/>
+                <Key word="native"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="override"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="readonly"/>
+                <Key word="return"/>
+                <Key word="static"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="using"/>
+                <Key word="virtual"/>
+                <Key word="volatile"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic ="false">
+                <Key word="Bool"/>
+                <Key word="Decimal"/>
+                <Key word="Duration"/>
+                <Key word="Float"/>
+                <Key word="Int"/>
+                <Key word="List"/>
+                <Key word="Map"/>
+                <Key word="Range"/>
+                <Key word="Slot"/>
+                <Key word="Str"/>
+                <Key word="Type"/>
+                <Key word="Uri"/>
+                <Key word="Void"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="StringFormatting">
+            <Delimiters>&amp;&lt;&gt;~$!@%^*()-+=|\#/{}[]:;"' , ?</Delimiters>
+            
+            <Span name="Formatting" stopateol="false" color="#993366" bold="false" italic="false">
+                <Begin >${</Begin>
+                <End >}</End>
+            </Span>
+            
+            <MarkFollowing color="#993366" bold="false" italic="false">$</MarkFollowing>
+            
+            <KeyWords name="Punctuation" color="#993366" bold="false">
+                <Key word="$"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Java syntax highlighting
+Written by Ezra Altahan
+Created 01/06/2013 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Java" extensions=".java">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="DarkBlue" bold="false" italic="false"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[]:;"'&lt;&gt; , .?</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment1" rule="Javadoc" stopateol="false" color="Teal" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+                                
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="assert"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="extends"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="instanceof"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="return"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="abstract"/>
+                <Key word="boolean"/>
+                <Key word="byte"/>
+                <Key word="char"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="double"/>
+                <Key word="enum"/>
+                <Key word="final"/>
+                <Key word="float"/>
+                <Key word="int"/>
+                <Key word="interface"/>
+                <Key word="long"/>
+                <Key word="native"/>
+                <Key word="object"/>
+                <Key word="package"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="short"/>
+                <Key word="static"/>
+                <Key word="strictfp"/>
+                <Key word="synchronized"/>
+                <Key word="transient"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="Javadoc" ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@author"/>
+                <Key word="@deprecated"/>
+                <Key word="@exception"/>
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@serial"/>
+                <Key word="@serialData"/>
+                <Key word="@serialField"/>
+                <Key word="@since"/>
+                <Key word="@throws"/>
+                <Key word="@version"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

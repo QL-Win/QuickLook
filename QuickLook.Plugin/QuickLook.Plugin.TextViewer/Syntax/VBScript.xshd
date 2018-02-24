@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+VBScript syntax highlighting
+Written by Ezra Altahan
+Created 06/03/2009 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="VBScript" extensions=".vbs">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="'"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Maroon"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,.?</Delimiters>
+        
+            <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>'</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>REM </Begin>
+            </Span>
+            
+            <Span name="String" bold="false" italic="false" color="#808080" stopateol="true" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+                        
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="Abs"/>
+                <Key word="Anchor"/>
+                <Key word="Array"/>
+                <Key word="As"/>
+                <Key word="Asc"/>
+                <Key word="Atn"/>
+                <Key word="ByRef"/>
+                <Key word="ByVal"/>
+                <Key word="CBool"/>
+                <Key word="CByte"/>
+                <Key word="CCur"/>
+                <Key word="CDate"/>
+                <Key word="CDbl"/>
+                <Key word="CInt"/>
+                <Key word="CLng"/>
+                <Key word="CSng"/>
+                <Key word="CStr"/>
+                <Key word="Call"/>
+                <Key word="Case"/>
+                <Key word="Chr"/>
+                <Key word="Class"/>
+                <Key word="Clear"/>
+                <Key word="Const"/>
+                <Key word="Conversions"/>
+                <Key word="Cos"/>
+                <Key word="CreateObject"/>
+                <Key word="Date"/>
+                <Key word="DateAdd"/>
+                <Key word="DateDiff"/>
+                <Key word="DatePart"/>
+                <Key word="DateSerial"/>
+                <Key word="DateValue"/>
+                <Key word="Day"/>
+                <Key word="Debug"/>
+                <Key word="Derived"/>
+                <Key word="Description"/>
+                <Key word="Dictionary"/>
+                <Key word="Dim"/>
+                <Key word="Do"/>
+                <Key word="Document"/>
+                <Key word="Each"/>
+                <Key word="Element"/>
+                <Key word="Else"/>
+                <Key word="ElseIf"/>
+                <Key word="Empty"/>
+                <Key word="End"/>
+                <Key word="Erase"/>
+                <Key word="Error"/>
+                <Key word="Escape"/>
+                <Key word="Eval"/>
+                <Key word="Execute"/>
+                <Key word="ExecuteGlobal"/>
+                <Key word="Exit"/>
+                <Key word="Exp"/>
+                <Key word="Explicit"/>
+                <Key word="False"/>
+                <Key word="FileSystemObject"/>
+                <Key word="Filter"/>
+                <Key word="FirstIndex"/>
+                <Key word="Fix"/>
+                <Key word="For"/>
+                <Key word="For"/>
+                <Key word="Form"/>
+                <Key word="FormatCurrency"/>
+                <Key word="FormatDateTime"/>
+                <Key word="FormatNumber"/>
+                <Key word="FormatPercent"/>
+                <Key word="Function"/>
+                <Key word="Get"/>
+                <Key word="GetLocale"/>
+                <Key word="GetObject"/>
+                <Key word="GetRef"/>
+                <Key word="Global"/>
+                <Key word="Goto"/>
+                <Key word="HelpContext"/>
+                <Key word="HelpFile"/>
+                <Key word="Hex"/>
+                <Key word="History"/>
+                <Key word="Hour"/>
+                <Key word="If"/>
+                <Key word="IgnoreCase"/>
+                <Key word="In"/>
+                <Key word="InStr"/>
+                <Key word="InStrRev"/>
+                <Key word="InputBox"/>
+                <Key word="Int"/>
+                <Key word="IsArray"/>
+                <Key word="IsDate"/>
+                <Key word="IsEmpty"/>
+                <Key word="IsNull"/>
+                <Key word="IsNumeric"/>
+                <Key word="IsObject"/>
+                <Key word="Join"/>
+                <Key word="LBound"/>
+                <Key word="LCase"/>
+                <Key word="LTrim"/>
+                <Key word="Left"/>
+                <Key word="Len"/>
+                <Key word="Length"/>
+                <Key word="Let"/>
+                <Key word="Link"/>
+                <Key word="LoadPicture"/>
+                <Key word="Location"/>
+                <Key word="Log"/>
+                <Key word="Loop"/>
+                <Key word="Match"/>
+                <Key word="Matches"/>
+                <Key word="Math"/>
+                <Key word="Maths"/>
+                <Key word="Mid"/>
+                <Key word="Minute"/>
+                <Key word="Month"/>
+                <Key word="MonthName"/>
+                <Key word="MsgBox"/>
+                <Key word="Navigator"/>
+                <Key word="New"/>
+                <Key word="Next"/>
+                <Key word="Nothing"/>
+                <Key word="Now"/>
+                <Key word="Null"/>
+                <Key word="Number"/>
+                <Key word="Oct"/>
+                <Key word="On"/>
+                <Key word="Option"/>
+                <Key word="Pattern"/>
+                <Key word="Preserve"/>
+                <Key word="Private"/>
+                <Key word="Property"/>
+                <Key word="Public"/>
+                <Key word="RGB"/>
+                <Key word="RTrim"/>
+                <Key word="Raise"/>
+                <Key word="Randomize"/>
+                <Key word="ReDim"/>
+                <Key word="RegExp"/>
+                <Key word="Replace"/>
+                <Key word="Resume"/>
+                <Key word="Right"/>
+                <Key word="Rnd"/>
+                <Key word="Round"/>
+                <Key word="ScriptEngine"/>
+                <Key word="ScriptEngineBuildVersion"/>
+                <Key word="ScriptEngineMajorVersion"/>
+                <Key word="ScriptEngineMinorVersion"/>
+                <Key word="Second"/>
+                <Key word="Select"/>
+                <Key word="Set"/>
+                <Key word="SetLocale"/>
+                <Key word="Sgn"/>
+                <Key word="Sin"/>
+                <Key word="Source"/>
+                <Key word="Space"/>
+                <Key word="Split"/>
+                <Key word="Sqr"/>
+                <Key word="Step"/>
+                <Key word="Stop"/>
+                <Key word="StrComp"/>
+                <Key word="StrReverse"/>
+                <Key word="String"/>
+                <Key word="Sub"/>
+                <Key word="SubMatches"/>
+                <Key word="Tan"/>
+                <Key word="Test"/>
+                <Key word="TextStream"/>
+                <Key word="Then"/>
+                <Key word="Time"/>
+                <Key word="TimeSerial"/>
+                <Key word="TimeValue"/>
+                <Key word="Timer"/>
+                <Key word="To"/>
+                <Key word="Trim"/>
+                <Key word="True"/>
+                <Key word="TypeName"/>
+                <Key word="UBound"/>
+                <Key word="UCase"/>
+                <Key word="Unescape"/>
+                <Key word="Until"/>
+                <Key word="Value"/>
+                <Key word="VarType"/>
+                <Key word="Weekday"/>
+                <Key word="WeekdayName"/>
+                <Key word="Wend"/>
+                <Key word="While"/>
+                <Key word="Window"/>
+                <Key word="With"/>
+                <Key word="Write"/>
+                <Key word="WriteLine"/>
+                <Key word="Year"/>
+                <Key word="vbAbort"/>
+                <Key word="vbAbortRetryIgnore"/>
+                <Key word="vbApplicationModal"/>
+                <Key word="vbArray"/>
+                <Key word="vbBinaryCompare"/>
+                <Key word="vbBlack"/>
+                <Key word="vbBlue"/>
+                <Key word="vbBoolean"/>
+                <Key word="vbByte"/>
+                <Key word="vbCancel"/>
+                <Key word="vbCr"/>
+                <Key word="vbCrLf"/>
+                <Key word="vbCritical"/>
+                <Key word="vbCurrency"/>
+                <Key word="vbCyan"/>
+                <Key word="vbDataObject"/>
+                <Key word="vbDate"/>
+                <Key word="vbDecimal"/>
+                <Key word="vbDefaultButton1"/>
+                <Key word="vbDefaultButton2"/>
+                <Key word="vbDefaultButton3"/>
+                <Key word="vbDefaultButton4"/>
+                <Key word="vbDouble"/>
+                <Key word="vbEmpty"/>
+                <Key word="vbError"/>
+                <Key word="vbExclamation"/>
+                <Key word="vbFalse"/>
+                <Key word="vbFirstFourDays"/>
+                <Key word="vbFirstFullWeek"/>
+                <Key word="vbFirstJan1"/>
+                <Key word="vbFormFeed"/>
+                <Key word="vbFriday"/>
+                <Key word="vbGeneralDate"/>
+                <Key word="vbGreen"/>
+                <Key word="vbIgnore"/>
+                <Key word="vbInformation"/>
+                <Key word="vbInteger"/>
+                <Key word="vbLf"/>
+                <Key word="vbLong"/>
+                <Key word="vbLongDate"/>
+                <Key word="vbLongTime"/>
+                <Key word="vbMagenta"/>
+                <Key word="vbMonday"/>
+                <Key word="vbNewLine"/>
+                <Key word="vbNo"/>
+                <Key word="vbNull"/>
+                <Key word="vbNullChar"/>
+                <Key word="vbNullString"/>
+                <Key word="vbOK"/>
+                <Key word="vbOKCancel"/>
+                <Key word="vbOKOnly"/>
+                <Key word="vbObject"/>
+                <Key word="vbObjectError"/>
+                <Key word="vbQuestion"/>
+                <Key word="vbRed"/>
+                <Key word="vbRetry"/>
+                <Key word="vbRetryCancel"/>
+                <Key word="vbSaturday"/>
+                <Key word="vbShortDate"/>
+                <Key word="vbShortTime"/>
+                <Key word="vbSingle"/>
+                <Key word="vbSingle"/>
+                <Key word="vbString"/>
+                <Key word="vbSunday"/>
+                <Key word="vbSystemModal"/>
+                <Key word="vbTab"/>
+                <Key word="vbTextCompare"/>
+                <Key word="vbThursday"/>
+                <Key word="vbTrue"/>
+                <Key word="vbTuesday"/>
+                <Key word="vbUseDefault"/>
+                <Key word="vbUseSystem"/>
+                <Key word="vbUseSystemDayOfWeek"/>
+                <Key word="vbVariant"/>
+                <Key word="vbVerticalTab"/>
+                <Key word="vbWednesday"/>
+                <Key word="vbWhite"/>
+                <Key word="vbYellow"/>
+                <Key word="vbYes"/>
+                <Key word="vbYesNo"/>
+                <Key word="vbYesNoCancel"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#AD0080" bold="false">
+                <Key word="And"/>
+                <Key word="Eqv"/>
+                <Key word="Err"/>
+                <Key word="Imp"/>
+                <Key word="Is"/>
+                <Key word="Mod"/>
+                <Key word="Not"/>
+                <Key word="Or"/>
+                <Key word="Xor"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

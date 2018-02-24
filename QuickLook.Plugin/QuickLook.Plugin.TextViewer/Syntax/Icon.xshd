@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Icon syntax highlighting
+Written by Ezra Altahan
+Created 03/02/2016 | Updated 16/10/2016
+Version 1.0
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="Icon" extensions=".icn">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Red"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+            <Delimiters>-+|#[]()',.</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+                        
+            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+                    
+            <MarkFollowing color="Purple" bold="true" italic="false">procedure</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$if</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$ifdef</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$ifndef</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$elif</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$else</MarkFollowing>
+            <MarkFollowing color="#DF7000" bold="false" italic="false">$endif</MarkFollowing>
+
+            <KeyWords name="Preprocessor" color="Teal" bold="false" italic="false">
+                <Key word="$if"/>
+                <Key word="$ifdef"/>
+                <Key word="$ifndef"/>
+                <Key word="$elif"/>
+                <Key word="$else"/>
+                <Key word="$endif"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords1" color="Brown" bold="false" italic="false">
+                <Key word="local"/>
+                <Key word="record"/>
+                <Key word="static"/>
+                <Key word="global"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="Blue" bold="false" italic="false">
+                <Key word="break"/>
+                <Key word="by"/>
+                <Key word="case"/>
+                <Key word="create"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="every"/>
+                <Key word="fail"/>
+                <Key word="if"/>
+                <Key word="initial"/>
+                <Key word="link"/>
+                <Key word="next"/>
+                <Key word="not"/>
+                <Key word="of"/>
+                <Key word="procedure"/>
+                <Key word="repeat"/>
+                <Key word="return"/>
+                <Key word="suspend"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="until"/>
+                <Key word="while"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="DarkBlue" bold="false" italic="false">
+                <Key word="abs"/>
+                <Key word="acos"/>
+                <Key word="any"/>
+                <Key word="args"/>
+                <Key word="asin"/>
+                <Key word="atan"/>
+                <Key word="bal"/>
+                <Key word="callout"/>
+                <Key word="center"/>
+                <Key word="char"/>
+                <Key word="chdir"/>
+                <Key word="close"/>
+                <Key word="co-expression"/>
+                <Key word="collect"/>
+                <Key word="copy"/>
+                <Key word="cos"/>
+                <Key word="cset"/>
+                <Key word="delay"/>
+                <Key word="delete"/>
+                <Key word="detab"/>
+                <Key word="display"/>
+                <Key word="dtor"/>
+                <Key word="entab"/>
+                <Key word="errorclear"/>
+                <Key word="exit"/>
+                <Key word="exp"/>
+                <Key word="file"/>
+                <Key word="find"/>
+                <Key word="flush"/>
+                <Key word="function"/>
+                <Key word="get"/>
+                <Key word="getch"/>
+                <Key word="getche"/>
+                <Key word="getenv"/>
+                <Key word="iand"/>
+                <Key word="icom"/>
+                <Key word="image"/>
+                <Key word="insert"/>
+                <Key word="integer"/>
+                <Key word="ior"/>
+                <Key word="ishift"/>
+                <Key word="ixor"/>
+                <Key word="kbhit"/>
+                <Key word="key"/>
+                <Key word="left"/>
+                <Key word="list"/>
+                <Key word="loadfunc"/>
+                <Key word="log"/>
+                <Key word="many"/>
+                <Key word="map"/>
+                <Key word="match"/>
+                <Key word="member"/>
+                <Key word="move"/>
+                <Key word="name"/>
+                <Key word="null"/>
+                <Key word="numeric"/>
+                <Key word="open"/>
+                <Key word="ord"/>
+                <Key word="pop"/>
+                <Key word="pos"/>
+                <Key word="proc"/>
+                <Key word="pull"/>
+                <Key word="push"/>
+                <Key word="put"/>
+                <Key word="read"/>
+                <Key word="reads"/>
+                <Key word="real"/>
+                <Key word="remove"/>
+                <Key word="rename"/>
+                <Key word="repl"/>
+                <Key word="reverse"/>
+                <Key word="right"/>
+                <Key word="rtod"/>
+                <Key word="runerr"/>
+                <Key word="save"/>
+                <Key word="seek"/>
+                <Key word="seq"/>
+                <Key word="set"/>
+                <Key word="sin"/>
+                <Key word="sort"/>
+                <Key word="sortf"/>
+                <Key word="sqrt"/>
+                <Key word="stop"/>
+                <Key word="string"/>
+                <Key word="system"/>
+                <Key word="tab"/>
+                <Key word="table"/>
+                <Key word="tan"/>
+                <Key word="trim"/>
+                <Key word="type"/>
+                <Key word="upto"/>
+                <Key word="variable"/>
+                <Key word="where"/>
+                <Key word="write"/>
+                <Key word="writes"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Teal" bold="false" italic="false">
+                <Key word="&amp;allocated"/>
+                <Key word="&amp;ascii"/>
+                <Key word="&amp;clock"/>
+                <Key word="&amp;collections"/>
+                <Key word="&amp;cset"/>
+                <Key word="&amp;current"/>
+                <Key word="&amp;date"/>
+                <Key word="&amp;dateline"/>
+                <Key word="&amp;digits"/>
+                <Key word="&amp;dump"/>
+                <Key word="&amp;e"/>
+                <Key word="&amp;error"/>
+                <Key word="&amp;errornumber"/>
+                <Key word="&amp;errortext"/>
+                <Key word="&amp;errorvalue"/>
+                <Key word="&amp;errout"/>
+                <Key word="&amp;fail"/>
+                <Key word="&amp;features"/>
+                <Key word="&amp;file"/>
+                <Key word="&amp;host"/>
+                <Key word="&amp;input"/>
+                <Key word="&amp;lcase"/>
+                <Key word="&amp;letters"/>
+                <Key word="&amp;level"/>
+                <Key word="&amp;line"/>
+                <Key word="&amp;main"/>
+                <Key word="&amp;null"/>
+                <Key word="&amp;output"/>
+                <Key word="&amp;phi"/>
+                <Key word="&amp;pi"/>
+                <Key word="&amp;pos"/>
+                <Key word="&amp;progname"/>
+                <Key word="&amp;random"/>
+                <Key word="&amp;regions"/>
+                <Key word="&amp;source"/>
+                <Key word="&amp;storage"/>
+                <Key word="&amp;subject"/>
+                <Key word="&amp;time"/>
+                <Key word="&amp;trace"/>
+                <Key word="&amp;ucase"/>
+                <Key word="&amp;version"/>
+            </KeyWords>
+        </RuleSet>  
+    </RuleSets>
+</SyntaxDefinition>

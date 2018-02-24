@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+VHDL syntax highlighting
+Written by Ezra Altahan
+Created 07/02/2013 | Updated 16/10/2016
+Version 1.1
+
+hello@exr.be
+https://github.com/ei
+-->
+
+<SyntaxDefinition name="VHDL" extensions=".vhd;.vhdl">
+    
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="--"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Black"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>&amp;~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>--</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+                                
+            <KeyWords name="Keywords1" color="Blue" bold="false">
+                <Key word="access"/>
+                <Key word="after"/>
+                <Key word="alias"/>
+                <Key word="all"/>
+                <Key word="architecture"/>
+                <Key word="array"/>
+                <Key word="assert"/>
+                <Key word="attribute"/>
+                <Key word="begin"/>
+                <Key word="block"/>
+                <Key word="body"/>
+                <Key word="buffer"/>
+                <Key word="bus"/>
+                <Key word="case"/>
+                <Key word="component"/>
+                <Key word="configuration"/>
+                <Key word="constant"/>
+                <Key word="disconnect"/>
+                <Key word="downto"/>
+                <Key word="else"/>
+                <Key word="elsif"/>
+                <Key word="end"/>
+                <Key word="entity"/>
+                <Key word="exit"/>
+                <Key word="file"/>
+                <Key word="for"/>
+                <Key word="function"/>
+                <Key word="generate"/>
+                <Key word="generic"/>
+                <Key word="group"/>
+                <Key word="guarded"/>
+                <Key word="if"/>
+                <Key word="impure"/>
+                <Key word="in"/>
+                <Key word="inertial"/>
+                <Key word="inout"/>
+                <Key word="is"/>
+                <Key word="label"/>
+                <Key word="library"/>
+                <Key word="linkage"/>
+                <Key word="literal"/>
+                <Key word="loop"/>
+                <Key word="map"/>
+                <Key word="new"/>
+                <Key word="next"/>
+                <Key word="null"/>
+                <Key word="of"/>
+                <Key word="on"/>
+                <Key word="open"/>
+                <Key word="others"/>
+                <Key word="out"/>
+                <Key word="package"/>
+                <Key word="port"/>
+                <Key word="postponed"/>
+                <Key word="procedure"/>
+                <Key word="process"/>
+                <Key word="protected"/>
+                <Key word="pure"/>
+                <Key word="range"/>
+                <Key word="record"/>
+                <Key word="register"/>
+                <Key word="reject"/>
+                <Key word="report"/>
+                <Key word="return"/>
+                <Key word="select"/>
+                <Key word="severity"/>
+                <Key word="shared"/>
+                <Key word="signal"/>
+                <Key word="subtype"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="transport"/>
+                <Key word="type"/>
+                <Key word="unaffected"/>
+                <Key word="units"/>
+                <Key word="until"/>
+                <Key word="use"/>
+                <Key word="variable"/>
+                <Key word="wait"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
+                <Key word="abs"/>
+                <Key word="and"/>
+                <Key word="mod"/>
+                <Key word="nand"/>
+                <Key word="nor"/>
+                <Key word="not"/>
+                <Key word="or"/>
+                <Key word="rem"/>
+                <Key word="rol"/>
+                <Key word="ror"/>
+                <Key word="sla"/>
+                <Key word="sll"/>
+                <Key word="sra"/>
+                <Key word="srl"/>
+                <Key word="xnor"/>
+                <Key word="xor"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
