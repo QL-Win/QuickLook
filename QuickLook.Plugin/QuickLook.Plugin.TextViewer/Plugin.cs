@@ -15,9 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.TextViewer
@@ -30,6 +35,26 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Init()
         {
+            var hlm = HighlightingManager.Instance;
+
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (string.IsNullOrEmpty(assemblyPath)) return;
+
+            var syntaxPath = Path.Combine(assemblyPath, "Syntax");
+            if (!Directory.Exists(syntaxPath)) return;
+
+            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
+            {
+                var ext = Path.GetFileNameWithoutExtension(file);
+                using (Stream s = File.OpenRead(Path.GetFullPath(file)))
+                using (var reader = new XmlTextReader(s))
+                {
+                    var xshd = HighlightingLoader.LoadXshd(reader);
+                    var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                    if (xshd.Extensions.Count > 0)
+                        hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
+                }
+            }
         }
 
         public bool CanHandle(string path)
@@ -37,23 +62,21 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            const long maxSize = 20 * 1024 * 1024;
-
             if (path.ToLower().EndsWith(".txt"))
-                return new FileInfo(path).Length <= maxSize;
+                return true;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
             if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-                return new FileInfo(path).Length <= maxSize;
+                return true;
 
-            // otherwise, read the first 512KB, check if we can get something. 
-            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            // otherwise, read the first 16KB, check if we can get something. 
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                const int bufferLength = 512 * 1024;
+                const int bufferLength = 16 * 1024;
                 var buffer = new byte[bufferLength];
                 var size = s.Read(buffer, 0, bufferLength);
 
-                return IsText(buffer, size) && new FileInfo(path).Length <= maxSize;
+                return IsText(buffer, size);
             }
         }
 
@@ -68,16 +91,15 @@ namespace QuickLook.Plugin.TextViewer
 
             context.ViewerContent = _tvp;
             context.Title = $"{Path.GetFileName(path)}";
-
-            context.IsBusy = false;
         }
 
         public void Cleanup()
         {
-            _tvp.viewer = null;
+            _tvp?.Dispose();
+            _tvp = null;
         }
 
-        private bool IsText(byte[] buffer, int size)
+        private static bool IsText(IReadOnlyList<byte> buffer, int size)
         {
             for (var i = 1; i < size; i++)
                 if (buffer[i - 1] == 0 && buffer[i] == 0)
