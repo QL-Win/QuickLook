@@ -1,3 +1,4 @@
+
 ![QuickLook icon](https://user-images.githubusercontent.com/1687847/29485863-8cd61b7c-84e2-11e7-97d5-eacc2ba10d28.png)
 
 # QuickLook
@@ -52,19 +53,26 @@ I am aware that several alternatives are already available on the Internet (e.g.
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
  - <kbd>Wheel</kbd> Increase/decrease volume
 
-## More Information
+## Supported file types, file manager intergation, etc.
 
-See the [Wiki page](https://github.com/xupefei/QuickLook/wiki).
+See the [Wiki page](https://github.com/xupefei/QuickLook/wiki)
 
 ## Translations
 
-See the [Wiki page](https://github.com/xupefei/QuickLook/wiki/Translations).
+See the [Translation guide](https://github.com/xupefei/QuickLook/wiki/Translations)
+
+## Thanks to
+
+ - Many [open-source projects](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) and their contributors
+ - Our UI designers [@OiCkilL](https://twitter.com/OiCkilL) (“Fluent” user interface since v0.3) and [@QubitsDev](https://twitter.com/qubitsdev) (application icon since v0.3)
+ - [Our contributers](https://github.com/xupefei/QuickLook/graphs/contributors) who
+	 - teach QuickLook speaks *your* language
+	 - send pull requests, report bugs or give suggestions
+ - ... and you 😊
 
 ## Licenses
 
 ![GPL-v3](https://www.gnu.org/graphics/gplv3-127x51.png)
-
-Application icons made by [@QubitsDev](https://twitter.com/qubitsdev). User interface designed by [@OiCkilL](https://twitter.com/OiCkilL). Thank you!
 
 This project references many other open-source projects. See [here](https://github.com/xupefei/QuickLook/wiki/On-the-Shoulders-of-Giants) for the full list.
 
