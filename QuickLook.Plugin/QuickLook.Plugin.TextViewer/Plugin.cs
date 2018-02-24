@@ -15,9 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.TextViewer
@@ -30,6 +35,26 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Init()
         {
+            HighlightingManager hlm = HighlightingManager.Instance;
+
+            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (string.IsNullOrEmpty(assemblyPath)) return;
+
+            string syntaxPath = Path.Combine(assemblyPath, "Syntax");
+            if (!Directory.Exists(syntaxPath)) return;
+
+            foreach (string file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
+            {
+                string lang = Path.GetFileNameWithoutExtension(file);
+                using (Stream s = File.OpenRead(Path.GetFullPath(file)))
+                using (XmlTextReader reader = new XmlTextReader(s))
+                {
+                    XshdSyntaxDefinition xshd = HighlightingLoader.LoadXshd(reader);
+                    IHighlightingDefinition highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                    if (xshd.Extensions.Count > 0)
+                        hlm.RegisterHighlighting(lang, xshd.Extensions.ToArray(), highlightingDefinition);
+                }
+            }
         }
 
         public bool CanHandle(string path)
