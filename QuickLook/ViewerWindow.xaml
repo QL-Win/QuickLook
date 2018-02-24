@@ -23,6 +23,7 @@
             <converters:WindowStateMaximizedToThicknessConverter x:Key="WindowStateMaximizedToThicknessConverter" />
             <converters:WindowStateNormalToThicknessConverter x:Key="WindowStateNormalToThicknessConverter" />
             <converters:BooleanToVisibilityCollapsedConverter x:Key="BooleanToVisibilityCollapsedConverter" />
+            <converters:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
@@ -150,6 +151,7 @@
                 <Grid DockPanel.Dock="Top" Height="{StaticResource MainWindowCaptionHeight}"
                       Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
                 <ContentControl x:Name="container"
+                                Visibility="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
                                 Foreground="{DynamicResource WindowTextForeground}"
                                 Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}" />
             </DockPanel>

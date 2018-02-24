@@ -118,6 +118,7 @@
       <DependentUpon>GlassLayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToKeyTimeConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityHiddenConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\WindowStateNormalToThicknessConverter.cs" />
     <Compile Include="Converters\WindowStateMaximizedToThicknessConverter.cs" />
