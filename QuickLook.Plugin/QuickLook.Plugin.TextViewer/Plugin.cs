@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -35,24 +35,24 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Init()
         {
-            HighlightingManager hlm = HighlightingManager.Instance;
+            var hlm = HighlightingManager.Instance;
 
-            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(assemblyPath)) return;
 
-            string syntaxPath = Path.Combine(assemblyPath, "Syntax");
+            var syntaxPath = Path.Combine(assemblyPath, "Syntax");
             if (!Directory.Exists(syntaxPath)) return;
 
-            foreach (string file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
+            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
             {
-                string lang = Path.GetFileNameWithoutExtension(file);
+                var ext = Path.GetFileNameWithoutExtension(file);
                 using (Stream s = File.OpenRead(Path.GetFullPath(file)))
-                using (XmlTextReader reader = new XmlTextReader(s))
+                using (var reader = new XmlTextReader(s))
                 {
-                    XshdSyntaxDefinition xshd = HighlightingLoader.LoadXshd(reader);
-                    IHighlightingDefinition highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                    var xshd = HighlightingLoader.LoadXshd(reader);
+                    var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
                     if (xshd.Extensions.Count > 0)
-                        hlm.RegisterHighlighting(lang, xshd.Extensions.ToArray(), highlightingDefinition);
+                        hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
                 }
             }
         }
@@ -62,23 +62,21 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            const long maxSize = 20 * 1024 * 1024;
-
             if (path.ToLower().EndsWith(".txt"))
-                return new FileInfo(path).Length <= maxSize;
+                return true;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
             if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-                return new FileInfo(path).Length <= maxSize;
+                return true;
 
-            // otherwise, read the first 512KB, check if we can get something. 
-            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            // otherwise, read the first 16KB, check if we can get something. 
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                const int bufferLength = 512 * 1024;
+                const int bufferLength = 16 * 1024;
                 var buffer = new byte[bufferLength];
                 var size = s.Read(buffer, 0, bufferLength);
 
-                return IsText(buffer, size) && new FileInfo(path).Length <= maxSize;
+                return IsText(buffer, size);
             }
         }
 
@@ -93,16 +91,15 @@ namespace QuickLook.Plugin.TextViewer
 
             context.ViewerContent = _tvp;
             context.Title = $"{Path.GetFileName(path)}";
-
-            context.IsBusy = false;
         }
 
         public void Cleanup()
         {
-            _tvp.viewer = null;
+            _tvp?.Dispose();
+            _tvp = null;
         }
 
-        private bool IsText(byte[] buffer, int size)
+        private static bool IsText(IReadOnlyList<byte> buffer, int size)
         {
             for (var i = 1; i < size; i++)
                 if (buffer[i - 1] == 0 && buffer[i] == 0)
