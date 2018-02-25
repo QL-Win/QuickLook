@@ -97,7 +97,7 @@ namespace QuickLook
 
         private void RemoteCallShowPreview(StartupEventArgs e)
         {
-            PipeServerManager.SendMessage(PipeMessages.Invoke, e.Args.First());
+            PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
         }
 
         private void RunListener(StartupEventArgs e)
