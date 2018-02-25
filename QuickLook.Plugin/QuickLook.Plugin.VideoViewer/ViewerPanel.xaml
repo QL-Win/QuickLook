@@ -122,7 +122,7 @@
                     </Style>
                 </glassLayer:GlassLayer.Style>
             </glassLayer:GlassLayer>
-            <DockPanel>
+            <DockPanel Margin="8,0,8,0">
                 <Button x:Name="buttonPlayPause" DockPanel.Dock="Left">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">

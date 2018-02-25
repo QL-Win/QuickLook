@@ -12,6 +12,7 @@
     d:DesignWidth="624" d:DesignHeight="700"
     MinWidth="400" MinHeight="200"
     Focusable="False"
+    ResizeMode="CanResizeWithGrip"
     BorderBrush="{DynamicResource CaptionBackground}"
     Background="{DynamicResource MainWindowBackground}"
     ShowActivated="False" ShowInTaskbar="False">
