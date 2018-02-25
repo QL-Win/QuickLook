@@ -9,10 +9,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <DataGrid x:Name="dataGrid" AlternationCount="2" BorderThickness="0" Background="Transparent"
-                  RowBackground="Transparent" GridLinesVisibility="None"
-                  IsReadOnly="True" HeadersVisibility="None"
-                  AutoGenerateColumns="False" CanUserReorderColumns="False"
-                  ItemsSource="{Binding Path=Rows,ElementName=csvViewer}" AlternatingRowBackground="#99ECECEC" />
+                  RowBackground="Transparent" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" 
+                  CanUserReorderColumns="False" ItemsSource="{Binding Path=Rows,ElementName=csvViewer}" 
+                  AlternatingRowBackground="#99D8D8D8" HorizontalGridLinesBrush="#FFBDBDBD" VerticalGridLinesBrush="#FFBDBDBD" />
 
     </Grid>
 </UserControl>
