@@ -180,9 +180,10 @@ namespace QuickLook.Plugin.VideoViewer
                     mediaElement = null;
                 });
 
+                // disabled because https://github.com/xupefei/QuickLook/issues/195 reports that VLC uses existing files such as folder.jpg
                 // delete cached cover art
-                if (!string.IsNullOrWhiteSpace(_coverArtPath))
-                    File.Delete(_coverArtPath);
+                //if (!string.IsNullOrWhiteSpace(_coverArtPath))
+                //    File.Delete(_coverArtPath);
             }
             catch (Exception e)
             {
