@@ -150,7 +150,7 @@ namespace QuickLook
 
         private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
         {
-            var plugin = _viewerWindow.Plugin.GetType();
+            var plugin = _viewerWindow.Plugin?.GetType();
 
             _viewerWindow.BeginHide();
 
