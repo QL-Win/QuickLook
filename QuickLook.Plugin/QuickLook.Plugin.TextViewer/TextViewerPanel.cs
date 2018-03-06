@@ -98,9 +98,11 @@ namespace QuickLook.Plugin.TextViewer
             {
                 const int maxLength = 50 * 1024 * 1024;
                 var buffer = new MemoryStream();
+                bool tooLong;
 
                 using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
+                    tooLong = s.Length > maxLength;
                     while (s.Position < s.Length && buffer.Length < maxLength)
                     {
                         if (_disposed)
@@ -115,12 +117,16 @@ namespace QuickLook.Plugin.TextViewer
                 if (_disposed)
                     return;
 
-                _context.Title += " (0 ~ 50MB)";
+                if (tooLong)
+                    _context.Title += " (0 ~ 50MB)";
 
-                var encoding = CharsetDetector.DetectFromBytes(buffer.GetBuffer()).Detected?.Encoding ??
+                var bufferCopy = buffer.ToArray();
+                buffer.Dispose();
+
+                var encoding = CharsetDetector.DetectFromBytes(bufferCopy).Detected?.Encoding ??
                                Encoding.Default;
 
-                var doc = new TextDocument(encoding.GetString(buffer.GetBuffer()));
+                var doc = new TextDocument(encoding.GetString(bufferCopy));
                 doc.SetOwnerThread(Dispatcher.Thread);
 
                 if (_disposed)
