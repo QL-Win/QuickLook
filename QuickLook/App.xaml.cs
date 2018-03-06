@@ -72,7 +72,8 @@ namespace QuickLook
                     RemoteCallShowPreview(e);
                 // second instance: duplicate
                 else
-                    MessageBox.Show(TranslationHelper.Get("APP_SECOND"));
+                    MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
+                        MessageBoxButton.OK, MessageBoxImage.Information);
 
                 Shutdown();
                 return;

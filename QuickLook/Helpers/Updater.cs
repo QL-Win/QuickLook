@@ -33,7 +33,12 @@ namespace QuickLook.Helpers
         public static void CheckForUpdates(bool silent = false)
         {
             if (App.IsUWP)
+            {
+                if (!silent)
+                    Process.Start("ms-windows-store://pdp/?productid=9NV4BS3L1H4S");
+
                 return;
+            }
 
             Task.Run(() =>
             {
