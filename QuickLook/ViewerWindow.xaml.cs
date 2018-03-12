@@ -18,10 +18,13 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using Brush = System.Windows.Media.Brush;
+using FontFamily = System.Windows.Media.FontFamily;
+using Size = System.Windows.Size;
 
 namespace QuickLook
 {
@@ -42,6 +45,8 @@ namespace QuickLook
             ContextObject.PropertyChanged += ContextObject_PropertyChanged;
 
             InitializeComponent();
+
+            Icon = (App.IsWin10 ? Properties.Resources.app_white_png : Properties.Resources.app_png).ToBitmapSource();
 
             FontFamily = new FontFamily(TranslationHelper.Get("UI_FontFamily", failsafe: "Segoe UI"));
 

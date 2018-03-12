@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E50E0E0E" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#44FFFFFF" />
     <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#88FFFFFF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverForeground" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
     <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
     <SolidColorBrush x:Key="CaptionBackground" Color="#BBDADADA" />
@@ -81,6 +82,7 @@
     <Style x:Key="CaptionCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource CaptionCloseButtonHoverForeground}" />
                 <Setter Property="Background" Value="{DynamicResource CaptionCloseButtonHoverBackground}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">

@@ -32,7 +32,7 @@ namespace QuickLook
         };
         private bool _canOldPluginResize;
         private bool _pinned;
-        internal bool Pinned
+        public bool Pinned
         {
             get => _pinned;
             set

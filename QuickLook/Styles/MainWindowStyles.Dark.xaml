@@ -8,6 +8,7 @@
     <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#22FFFFFF" />
     <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#44FFFFFF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverForeground" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
     <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
     <SolidColorBrush x:Key="CaptionBackground" Color="#CC0E0E0E" />

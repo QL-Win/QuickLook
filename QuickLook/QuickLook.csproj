@@ -193,6 +193,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Resource Include="Resources\app.png" />
+    <Resource Include="Resources\app_white.png" />
     <None Include="packages.config" />
     <None Include="Resources\app_white_16.ico" />
     <None Include="Resources\app_16.ico" />
