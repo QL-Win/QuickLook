@@ -31,7 +31,7 @@
           <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
           <RegistryValue
             Root="HKCU"
-            Key="Software/QuickLook"
+            Key="Software\QuickLook"
             Name="installed"
             Type="integer"
             Value="1"
@@ -48,7 +48,7 @@
           <RemoveFolder Id="DesktopFolder" On="uninstall" />
           <RegistryValue
             Root="HKCU"
-            Key="Software/QuickLook"
+            Key="Software\QuickLook"
             Name="installed"
             Type="integer"
             Value="1"
