@@ -56,9 +56,13 @@ namespace QuickLook
 
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
+            Topmost = SettingHelper.Get("Topmost", false);
+            buttonTop.Tag = Topmost ? "Top" : "Auto";
+
             buttonTop.Click += (sender, e) =>
             {
                 Topmost = !Topmost;
+                SettingHelper.Set("Topmost", Topmost);
                 buttonTop.Tag = Topmost ? "Top" : "Auto";
             };
 
