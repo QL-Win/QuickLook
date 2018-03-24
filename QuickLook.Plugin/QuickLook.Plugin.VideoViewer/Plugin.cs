@@ -123,7 +123,9 @@ namespace QuickLook.Plugin.VideoViewer
                     var tracks = media.GetTracks();
                     var video = tracks.FirstOrDefault(mt => mt.Type == TrackType.Video) as VideoTrack;
 
-                    size = video == null ? Size.Empty : new Size(video.Width, video.Height);
+                    size = video == null
+                        ? Size.Empty
+                        : new Size(Math.Max(1366, video.Width), Math.Max(768, video.Height));
 
                     return video != null;
                 }

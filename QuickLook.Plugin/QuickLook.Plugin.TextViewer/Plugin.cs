@@ -66,8 +66,8 @@ namespace QuickLook.Plugin.TextViewer
                 return true;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
-            if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-                return true;
+            //if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
+            //    return true;
 
             // otherwise, read the first 16KB, check if we can get something. 
             using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
