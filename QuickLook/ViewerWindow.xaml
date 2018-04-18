@@ -22,7 +22,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/MainWindowStyles.xaml" />
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:WindowStateMaximizedToThicknessConverter x:Key="WindowStateMaximizedToThicknessConverter" />
             <converters:WindowStateNormalToThicknessConverter x:Key="WindowStateNormalToThicknessConverter" />

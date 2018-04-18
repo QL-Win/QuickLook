@@ -12,8 +12,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- only for design -->
-                <ResourceDictionary Source="/QuickLook;component/Styles/MainWindowStyles.xaml" />
-                <ResourceDictionary Source="/QuickLook;component/Styles/MainWindowStyles.Dark.xaml" />
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.Dark.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>

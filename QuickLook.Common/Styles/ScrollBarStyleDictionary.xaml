@@ -98,7 +98,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border Grid.RowSpan="3" CornerRadius="2" Background="#F0F0F0" />
+            <Border Grid.RowSpan="3" CornerRadius="2" Background="Transparent" />
             <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
@@ -124,7 +124,7 @@
             <Border
                 Grid.ColumnSpan="3"
                 CornerRadius="2"
-                Background="#F0F0F0" />
+                Background="Transparent" />
             <Track
                 x:Name="PART_Track"
                 Grid.Column="0"

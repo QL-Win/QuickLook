@@ -37,7 +37,7 @@ namespace QuickLook.Common.Plugin
         private bool _titlebarBlurVisibility;
         private bool _titlebarColourVisibility = true;
         private bool _titlebarOverlap;
-        private bool _useDarkTheme;
+        private Themes _theme = Themes.None;
         private object _viewerContent;
 
         /// <summary>
@@ -168,12 +168,12 @@ namespace QuickLook.Common.Plugin
         /// <summary>
         ///     Switch to dark theme?
         /// </summary>
-        public bool UseDarkTheme
+        public Themes Theme
         {
-            get => _useDarkTheme;
+            get => _theme;
             set
             {
-                _useDarkTheme = value;
+                _theme = value;
                 OnPropertyChanged();
             }
         }
@@ -213,7 +213,7 @@ namespace QuickLook.Common.Plugin
             CanResize = true;
             FullWindowDragging = false;
 
-            UseDarkTheme = false;
+            Theme = Themes.None;
             TitlebarOverlap = false;
             TitlebarAutoHide = false;
             TitlebarBlurVisibility = false;

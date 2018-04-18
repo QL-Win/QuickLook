@@ -64,7 +64,7 @@ namespace QuickLook.Plugin.ImageViewer
             else
                 context.PreferredSize = new Size(800, 600);
 
-            context.UseDarkTheme = true;
+            context.Theme = Themes.Dark;
         }
 
         public void View(string path, ContextObject context)

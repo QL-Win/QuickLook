@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
                 <ResourceDictionary Source="ListBoxItemStyleNoFocusedBorder.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -26,9 +27,9 @@
                  VirtualizingPanel.IsVirtualizing="True" Width="150"
                  SelectedIndex="0"
                  Focusable="False"
-                 Background="Transparent"
+                 Background="Transparent" BorderThickness="0"
                  ItemsSource="{Binding PageThumbnails, ElementName=thisPdfViewer}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0,0,1,0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -44,7 +45,7 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="10" />
                         </Grid.RowDefinitions>
-                        <Border x:Name="bbd" Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#FFE1E1E1">
+                        <Border x:Name="bbd" Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#33FFFFFF">
                             <Image Source="{Binding}" />
                         </Border>
                         <!--
@@ -55,13 +56,13 @@
                         <DataTrigger
                             Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
                             Value="True">
-                            <Setter TargetName="bbd" Property="BorderBrush" Value="#FF0040FF" />
+                            <Setter TargetName="bbd" Property="BorderBrush" Value="#DD0027FF" />
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Column="1" Background="#FFFAFAFA">
+        <Grid Grid.Column="1" Background="#33FFFFFF">
             <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False"
                                     BackgroundVisibility="Collapsed" MetaIconVisibility="Collapsed" />
         </Grid>

@@ -57,6 +57,7 @@
     <Compile Include="Plugin\IViewer.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Plugin\Themes.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\SettingHelper.cs" />
@@ -64,6 +65,19 @@
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Styles\MainWindowStyles.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MainWindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ScrollBarStyleDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

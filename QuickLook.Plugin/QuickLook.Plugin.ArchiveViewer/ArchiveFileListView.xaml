@@ -130,13 +130,13 @@
 
         <TreeView Grid.Row="1"
                   x:Name="treeView"
-                  BorderThickness="0" Background="Transparent"
+                  BorderThickness="0" Background="Transparent" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:ArchiveFileListView}}"
                   ItemsSource="{Binding}">
-            <!--<TreeView.ItemContainerStyle>
+            <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding Level, Converter={StaticResource LevelToBooleanConverter}}" />
+                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TreeView}}" />
                 </Style>
-            </TreeView.ItemContainerStyle>-->
+            </TreeView.ItemContainerStyle>
         </TreeView>
     </Grid>
 </UserControl>

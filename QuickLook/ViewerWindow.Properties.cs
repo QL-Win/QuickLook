@@ -19,6 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Microsoft.Win32;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Plugin;
 
@@ -28,7 +29,7 @@ namespace QuickLook
     {
         private readonly ResourceDictionary _darkDict = new ResourceDictionary
         {
-            Source = new Uri("pack://application:,,,/QuickLook;component/Styles/MainWindowStyles.Dark.xaml")
+            Source = new Uri("pack://application:,,,/QuickLook.Common;component/Styles/MainWindowStyles.Dark.xaml")
         };
         private bool _canOldPluginResize;
         private bool _pinned;
@@ -57,17 +58,33 @@ namespace QuickLook
         {
             switch (e.PropertyName)
             {
-                case nameof(ContextObject.UseDarkTheme):
-                    SwitchTheme(ContextObject.UseDarkTheme);
+                case nameof(ContextObject.Theme):
+                    SwitchTheme(ContextObject.Theme);
                     break;
                 default:
                     break;
             }
         }
 
-        public void SwitchTheme(bool dark)
+        public void SwitchTheme(Themes theme)
         {
-            if (dark)
+            var isDark = false;
+
+            switch (theme)
+            {
+                case Themes.None:
+                    var t = Registry.GetValue(
+                        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                        "AppsUseLightTheme", 1);
+                    isDark = t != null && (int) t == 0;
+                    break;
+                case Themes.Dark:
+                case Themes.Light:
+                    isDark = theme == Themes.Dark;
+                    break;
+            }
+
+            if (isDark)
             {
                 if (!Resources.MergedDictionaries.Contains(_darkDict))
                     Resources.MergedDictionaries.Add(_darkDict);

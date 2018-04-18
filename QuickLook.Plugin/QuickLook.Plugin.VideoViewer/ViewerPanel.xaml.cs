@@ -285,13 +285,10 @@ namespace QuickLook.Plugin.VideoViewer
             if (CoverArt == null)
                 return;
 
-            var dark = false;
             using (var bitmap = new Bitmap(CoverArt.ToBitmap()))
             {
-                dark = bitmap.IsDarkImage();
+                _context.Theme = bitmap.IsDarkImage() ? Themes.Dark : Themes.Light;
             }
-
-            _context.UseDarkTheme = dark;
         }
 
         private void ChangeVolume(double delta)

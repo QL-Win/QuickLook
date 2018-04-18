@@ -8,7 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/ScrollBarStyleDictionary.xaml" />
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/ScrollBarStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="SegoeMDL2">./Fonts/#Segoe MDL2 Assets</FontFamily>
         </ResourceDictionary>

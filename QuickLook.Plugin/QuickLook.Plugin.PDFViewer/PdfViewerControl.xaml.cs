@@ -46,6 +46,9 @@ namespace QuickLook.Plugin.PDFViewer
         {
             InitializeComponent();
 
+            // remove theme used in designer
+            Resources.MergedDictionaries.RemoveAt(0);
+
             listThumbnails.SelectionChanged += UpdatePageViewWhenSelectionChanged;
 
             pagePanel.DelayedReRender += ReRenderCurrentPageDelayed;

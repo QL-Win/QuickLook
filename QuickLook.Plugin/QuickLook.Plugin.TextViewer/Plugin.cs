@@ -82,6 +82,8 @@ namespace QuickLook.Plugin.TextViewer
 
         public void Prepare(string path, ContextObject context)
         {
+            context.Theme = Themes.Light;
+
             context.PreferredSize = new Size {Width = 800, Height = 600};
         }
 
