@@ -16,7 +16,7 @@
     BorderBrush="{DynamicResource CaptionBackground}"
     Foreground="{DynamicResource WindowTextForeground}"
     Background="{DynamicResource MainWindowBackground}"
-    ShowInTaskbar="{Binding ElementName=mainWindow, Path=Pinned}"
+    ShowInTaskbar="False"
     Title="{Binding ElementName=titleAreaText, Path=Text}"
     ShowActivated="False">
     <Window.Resources>
