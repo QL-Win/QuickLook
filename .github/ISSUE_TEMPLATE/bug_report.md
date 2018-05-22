@@ -4,6 +4,8 @@ about: Create a report to help us improve
 
 ---
 
+*You can use either Chinese or English when filling this issue. 你可以使用中文或英语填写以下问题。*
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
