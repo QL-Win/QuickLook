@@ -142,7 +142,7 @@
                         </Button.Style>
                     </Button>
                     <Button DockPanel.Dock="Left" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
-                            Content="&#xE7AC;" ToolTip="Open With..." />
+                            Content="&#xE72D;" ToolTip="Open With..." />
                     <Grid x:Name="titleArea" Background="Transparent">
                         <TextBlock x:Name="titleAreaText" Text="{Binding ContextObject.Title, ElementName=mainWindow}" FontSize="12"
                                    HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"

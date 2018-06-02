@@ -26,30 +26,12 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
     public partial class ViewerWindow
     {
-        internal void RunWith(string with, string arg)
-        {
-            if (string.IsNullOrEmpty(_path))
-                return;
-
-            try
-            {
-                Process.Start(new ProcessStartInfo(with)
-                {
-                    Arguments = arg,
-                    WorkingDirectory = Path.GetDirectoryName(_path)
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-        }
-
         internal void Run()
         {
             if (string.IsNullOrEmpty(_path))
@@ -288,7 +270,7 @@ namespace QuickLook
 
         internal void Share(object sender, RoutedEventArgs e)
         {
-            RunWith("rundll32.exe", $"shell32.dll,OpenAs_RunDLL {_path}");
+            ShareHelper.Share(_path, this);
         }
     }
 }
