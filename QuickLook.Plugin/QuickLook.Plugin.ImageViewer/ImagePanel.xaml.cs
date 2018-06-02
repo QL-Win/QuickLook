@@ -33,6 +33,7 @@ using System.Windows.Threading;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
@@ -42,6 +43,7 @@ namespace QuickLook.Plugin.ImageViewer
     /// </summary>
     public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
+        private readonly ContextObject _context;
         private Visibility _backgroundVisibility = Visibility.Visible;
         private Point? _dragInitPos;
         private Uri _imageSource;
@@ -70,10 +72,7 @@ namespace QuickLook.Plugin.ImageViewer
                     ? Visibility.Visible
                     : Visibility.Collapsed;
 
-            var scale = DpiHelper.GetCurrentScaleFactor();
-            backgroundBrush.Viewport = new Rect(new Size(
-                backgroundBrush.ImageSource.Width / scale.Horizontal,
-                backgroundBrush.ImageSource.Height / scale.Vertical));
+            buttonBackgroundColour.Click += OnBackgroundColourOnClick;
 
             SizeChanged += ImagePanel_SizeChanged;
 
@@ -86,11 +85,13 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
         }
 
-        internal ImagePanel(Meta meta) : this()
+        internal ImagePanel(ContextObject context, Meta meta) : this()
         {
+            _context = context;
             Meta = meta;
 
             ShowMeta();
+            Theme = _context.Theme;
         }
 
         public bool ShowZoomLevelInfo
@@ -100,6 +101,16 @@ namespace QuickLook.Plugin.ImageViewer
             {
                 if (value == _showZoomLevelInfo) return;
                 _showZoomLevelInfo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Themes Theme
+        {
+            get => _context?.Theme ?? Themes.Dark;
+            set
+            {
+                _context.Theme = value;
                 OnPropertyChanged();
             }
         }
@@ -234,6 +245,13 @@ namespace QuickLook.Plugin.ImageViewer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnBackgroundColourOnClick(object sender, RoutedEventArgs e)
+        {
+            Theme = Theme == Themes.Dark ? Themes.Light : Themes.Dark;
+
+            SettingHelper.Set("LastTheme", (int) Theme);
+        }
 
         private void ShowMeta()
         {

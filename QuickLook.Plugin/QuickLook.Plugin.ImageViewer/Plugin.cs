@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using ImageMagick;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
@@ -64,12 +65,12 @@ namespace QuickLook.Plugin.ImageViewer
             else
                 context.PreferredSize = new Size(800, 600);
 
-            context.Theme = Themes.Dark;
+            context.Theme = (Themes) SettingHelper.Get("LastTheme", 1);
         }
 
         public void View(string path, ContextObject context)
         {
-            _ip = new ImagePanel(_meta);
+            _ip = new ImagePanel(context, _meta);
 
             context.ViewerContent = _ip;
             context.Title = _imageSize.IsEmpty

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.ImageViewer"
              xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
+             xmlns:plugin="clr-namespace:QuickLook.Common.Plugin;assembly=QuickLook.Common"
              mc:Ignorable="d"
              x:Name="imagePanel"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -20,11 +21,32 @@
     <Grid>
         <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}"
                    RenderOptions.BitmapScalingMode="NearestNeighbor">
-            <Rectangle.Fill>
-                <ImageBrush x:Name="backgroundBrush" ImageSource="Resources/background-b.png" AlignmentY="Top"
-                            Viewport="0,0,32,32"
-                            ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
-            </Rectangle.Fill>
+            <Rectangle.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}" Value="{x:Static plugin:Themes.Dark}">
+                            <Setter Property="Rectangle.Fill">
+                                <Setter.Value>
+                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                ImageSource="Resources/background-b.png"
+                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile">
+                                    </ImageBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}" Value="{x:Static plugin:Themes.Light}">
+                            <Setter Property="Rectangle.Fill">
+                                <Setter.Value>
+                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                ImageSource="Resources/background.png"
+                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile">
+                                    </ImageBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
         </Rectangle>
         <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
@@ -55,6 +77,11 @@
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}"
                 Margin="0,8,8,0" Content="&#xE946;" />
+
+        <Button x:Name="buttonBackgroundColour" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}"
+                Margin="0,8,40,0" Content="&#xEF1F;" />
 
         <TextBlock x:Name="textMeta" IsHitTestVisible="False" Visibility="Collapsed" HorizontalAlignment="Right"
                    VerticalAlignment="Top" FontSize="11"
