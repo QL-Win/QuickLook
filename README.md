@@ -49,7 +49,7 @@ I am aware that several alternatives are already available on the Internet (e.g.
  - <kbd>Spacebar</kbd> Show/Hide the preview window
  - <kbd>Esc</kbd> Hide the preview window
  - <kbd>Enter</kbd> Open/Execute current file
- - <kbd>Mouse️</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
+ - <kbd>Mouse</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
  - <kbd>Ctrl-Wheel</kbd> Zoom in/out images
  - <kbd>Wheel</kbd> Increase/decrease volume
 
