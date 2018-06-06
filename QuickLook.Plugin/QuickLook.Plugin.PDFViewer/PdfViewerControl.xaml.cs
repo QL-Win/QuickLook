@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -19,13 +19,14 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using PDFiumSharp;
+using PdfiumViewer;
 using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.PDFViewer
@@ -39,7 +40,10 @@ namespace QuickLook.Plugin.PDFViewer
         private bool _initPage = true;
         private double _maxZoomFactor = double.NaN;
         private double _minZoomFactor = double.NaN;
+
+        private PdfDocument _pdfHandle;
         private bool _pdfLoaded;
+        private Stream _pdfStream;
         private double _viewRenderFactor = double.NaN;
 
         public PdfViewerControl()
@@ -58,9 +62,7 @@ namespace QuickLook.Plugin.PDFViewer
         public ObservableCollection<BitmapSource> PageThumbnails { get; set; } =
             new ObservableCollection<BitmapSource>();
 
-        public PdfDocument PdfHandle { get; private set; }
-
-        public int TotalPages => PdfHandle.Pages.Count;
+        public int TotalPages => _pdfHandle.PageCount;
 
         public int CurrentPage
         {
@@ -86,8 +88,9 @@ namespace QuickLook.Plugin.PDFViewer
             }
 
             _pdfLoaded = false;
-            PdfHandle?.Close();
-            PdfHandle = null;
+            _pdfHandle?.Dispose();
+            _pdfHandle = null;
+            _pdfStream.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -160,16 +163,16 @@ namespace QuickLook.Plugin.PDFViewer
             // First time showing. Set thresholds here.
             if (double.IsNaN(_minZoomFactor) || double.IsNaN(_maxZoomFactor))
             {
-                factor = Math.Min(pagePanel.ActualHeight / PdfHandle.Pages[CurrentPage].Height,
-                    pagePanel.ActualWidth / PdfHandle.Pages[CurrentPage].Width);
+                factor = Math.Min(pagePanel.ActualHeight / _pdfHandle.PageSizes[CurrentPage].Height,
+                    pagePanel.ActualWidth / _pdfHandle.PageSizes[CurrentPage].Width);
                 _viewRenderFactor = factor;
                 _minZoomFactor = 0.1 * factor;
                 _maxZoomFactor = 5 * factor;
             }
             else if (pagePanel.ZoomToFit)
             {
-                factor = Math.Min(pagePanel.ActualHeight / PdfHandle.Pages[CurrentPage].Height,
-                    pagePanel.ActualWidth / PdfHandle.Pages[CurrentPage].Width);
+                factor = Math.Min(pagePanel.ActualHeight / _pdfHandle.PageSizes[CurrentPage].Height,
+                    pagePanel.ActualWidth / _pdfHandle.PageSizes[CurrentPage].Width);
             }
             else
             {
@@ -180,7 +183,7 @@ namespace QuickLook.Plugin.PDFViewer
                 pagePanel.MaxZoomFactor = _maxZoomFactor / factor;
             }
 
-            var image = PdfHandle.Pages[CurrentPage].Render(factor);
+            var image = _pdfHandle.Render(CurrentPage, factor);
 
             pagePanel.Source = image;
             pagePanel.ResetZoom();
@@ -214,19 +217,21 @@ namespace QuickLook.Plugin.PDFViewer
         public static Size GetDesiredControlSizeByFirstPage(string path)
         {
             Size size;
-            using (var tempHandle = new PdfDocument(path))
+
+            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                size = new Size(0, 0);
-                tempHandle.Pages.Take(5).ForEach(p =>
+                using (var tempHandle = PdfDocument.Load(s))
                 {
-                    size.Width = Math.Max(size.Width, p.Width);
-                    size.Height = Math.Max(size.Height, p.Height);
-                });
+                    size = new Size(0, 0);
+                    tempHandle.PageSizes.Take(5).ForEach(p =>
+                    {
+                        size.Width = Math.Max(size.Width, p.Width);
+                        size.Height = Math.Max(size.Height, p.Height);
+                    });
 
-                if (tempHandle.Pages.Count > 1)
-                    size.Width += /*listThumbnails.ActualWidth*/ 150;
-
-                tempHandle.Close();
+                    if (tempHandle.PageCount > 1)
+                        size.Width += /*listThumbnails.ActualWidth*/ 150;
+                }
             }
 
             return new Size(size.Width * 3, size.Height * 3);
@@ -234,12 +239,13 @@ namespace QuickLook.Plugin.PDFViewer
 
         public void LoadPdf(string path)
         {
-            PdfHandle = new PdfDocument(path);
+            _pdfStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            _pdfHandle = PdfDocument.Load(_pdfStream);
             _pdfLoaded = true;
 
             BeginLoadThumbnails(path);
 
-            if (PdfHandle.Pages.Count < 2)
+            if (_pdfHandle.PageCount < 2)
                 listThumbnails.Visibility = Visibility.Collapsed;
         }
 
@@ -247,16 +253,19 @@ namespace QuickLook.Plugin.PDFViewer
         {
             new Task(() =>
             {
-                using (var handle = new PdfDocument(path, password))
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    handle.Pages.ForEach(p =>
+                    using (var handle = PdfDocument.Load(stream, password))
                     {
-                        var bs = p.RenderThumbnail();
+                        for (var p = 0; p < handle.PageCount; p++)
+                        {
+                            var bs = handle.RenderThumbnail(p);
 
-                        Dispatcher.BeginInvoke(new Action(() => PageThumbnails.Add(bs)));
-                    });
+                            Dispatcher.BeginInvoke(new Action(() => PageThumbnails.Add(bs)));
+                        }
 
-                    handle.Close();
+                        handle.Dispose();
+                    }
                 }
             }).Start();
         }

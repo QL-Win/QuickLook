@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -16,39 +16,43 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Windows.Media;
+using System.Drawing;
 using System.Windows.Media.Imaging;
-using PDFiumSharp;
+using PdfiumViewer;
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.PDFViewer
 {
     internal static class PdfPageExtension
     {
-        public static BitmapSource RenderThumbnail(this PdfPage page)
+        public static BitmapSource RenderThumbnail(this PdfDocument doc, int page)
         {
-            var factorX = 130d / page.Width;
-            var factorY = 210d / page.Height;
+            var size = doc.PageSizes[page];
+            var factorX = 130d / size.Width;
+            var factorY = 210d / size.Height;
 
-            return page.Render(Math.Min(factorX, factorY), false);
+            return doc.Render(page, Math.Min(factorX, factorY), false);
         }
 
-        public static BitmapSource Render(this PdfPage page, double factor, bool fixDpi = true)
+        public static BitmapSource Render(this PdfDocument doc, int page, double factor, bool fixDpi = true)
         {
+            var size = doc.PageSizes[page];
             var scale = DpiHelper.GetCurrentScaleFactor();
             var dpiX = fixDpi ? scale.Horizontal * DpiHelper.DefaultDpi : 96;
             var dpiY = fixDpi ? scale.Vertical * DpiHelper.DefaultDpi : 96;
 
-            var realWidth = (int) Math.Round(page.Width * scale.Horizontal * factor);
-            var realHeight = (int) Math.Round(page.Height * scale.Vertical * factor);
+            var realWidth = (int) Math.Round(size.Width * scale.Horizontal * factor);
+            var realHeight = (int) Math.Round(size.Height * scale.Vertical * factor);
 
-            var bitmap = new WriteableBitmap(realWidth, realHeight, dpiX, dpiY, PixelFormats.Bgr24, null);
-            page.Render(bitmap,
-                flags: RenderingFlags.LimitImageCache | RenderingFlags.Annotations | RenderingFlags.DontCatch |
-                       RenderingFlags.LcdText);
+            var bitmap = doc.Render(page, realWidth, realHeight, dpiX, dpiY,
+                PdfRenderFlags.LimitImageCacheSize | PdfRenderFlags.LcdText | PdfRenderFlags.Annotations|PdfRenderFlags.ForPrinting) as Bitmap;
 
-            bitmap.Freeze();
-            return bitmap;
+            var bs = bitmap?.ToBitmapSource();
+            bitmap?.Dispose();
+
+            bs?.Freeze();
+            return bs;
         }
     }
 }
