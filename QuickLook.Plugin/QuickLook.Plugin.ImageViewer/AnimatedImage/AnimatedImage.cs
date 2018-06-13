@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -17,12 +17,9 @@
 
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Threading;
-using QuickLook.Common.Helpers;
 using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
@@ -30,17 +27,14 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
     public class AnimatedImage : Image, IDisposable
     {
         private AnimationProvider _animation;
-        private bool _disposed;
 
         public void Dispose()
         {
             BeginAnimation(AnimationFrameIndexProperty, null);
             Source = null;
+
+            _animation?.Dispose();
             _animation = null;
-
-            _disposed = true;
-
-            Task.Delay(500).ContinueWith(t => ProcessHelper.PerformAggressiveGC());
         }
 
         private static void LoadFullImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
@@ -48,11 +42,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (!(obj is AnimatedImage instance))
                 return;
 
-            instance._animation = LoadFullImageCore((Uri) ev.NewValue);
+            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Dispatcher);
             instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
         }
 
-        private static AnimationProvider LoadFullImageCore(Uri path)
+        private static AnimationProvider LoadFullImageCore(Uri path, Dispatcher uiDispatcher)
         {
             byte[] sign;
             using (var reader =
@@ -64,7 +58,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             AnimationProvider provider = null;
 
             if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
-                provider = new GIFAnimationProvider(path.LocalPath);
+                provider = new GifAnimationProvider(path.LocalPath, uiDispatcher);
             //else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
             //    provider = new APNGAnimationProvider();
             //else
@@ -122,13 +116,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (!(obj is AnimatedImage instance))
                 return;
 
-            new Task(() =>
-            {
-                var image = instance._animation.GetRenderedFrame((int) ev.NewValue);
-
-                instance.Dispatcher.BeginInvoke(
-                    new Action(() => { instance.Source = image; }), DispatcherPriority.Loaded);
-            }).Start();
+            var image = instance._animation.GetRenderedFrame((int) ev.NewValue);
+            //if (!ReferenceEquals(instance.Source, image))
+            instance.Source = image;
         }
 
         #endregion DependencyProperty

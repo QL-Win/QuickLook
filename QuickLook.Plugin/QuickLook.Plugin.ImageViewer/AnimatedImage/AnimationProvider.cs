@@ -15,23 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal abstract class AnimationProvider
+    internal abstract class AnimationProvider : IDisposable
     {
-        public AnimationProvider(string path)
+        protected AnimationProvider(string path, Dispatcher uiDispatcher)
         {
             Path = path;
+            Dispatcher = uiDispatcher;
         }
+
+        public Dispatcher Dispatcher { get; }
 
         public string Path { get; }
 
         public Int32Animation Animator { get; protected set; }
 
-        public abstract DrawingImage GetRenderedFrame(int index);
+        public abstract void Dispose();
+
+        public abstract ImageSource GetRenderedFrame(int index);
     }
 }

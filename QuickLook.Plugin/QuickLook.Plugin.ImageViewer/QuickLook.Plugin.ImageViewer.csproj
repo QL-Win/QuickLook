@@ -79,7 +79,7 @@
     </Compile>
     <Compile Include="AnimatedImage\AnimatedImage.cs" />
     <None Include="AnimatedImage\APNGAnimationProvider.cs" />
-    <Compile Include="AnimatedImage\GIFAnimationProvider.cs" />
+    <Compile Include="AnimatedImage\GifAnimationProvider.cs" />
     <Compile Include="AnimatedImage\AnimationProvider.cs" />
     <None Include="AnimatedImage\ImageMagickProvider.cs" />
     <Compile Include="exiv2\Meta.cs" />

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -84,6 +84,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Cleanup()
         {
+            _ip?.Dispose();
             _ip = null;
         }
 
