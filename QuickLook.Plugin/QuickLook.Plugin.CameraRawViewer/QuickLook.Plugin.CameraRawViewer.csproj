@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE5A5111-9607-4721-A7BE-422754002ED8}</ProjectGuid>
+    <ProjectGuid>{BD58F3FC-7601-47BA-AAA1-D8A9D54A33DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuickLook.Plugin.ImageViewer</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.ImageViewer</AssemblyName>
+    <RootNamespace>QuickLook.Plugin.CameraRawViewer</RootNamespace>
+    <AssemblyName>QuickLook.Plugin.CameraRawViewer</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -17,7 +17,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -25,7 +25,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,7 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -59,17 +59,10 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibAPNG">
-      <HintPath>.\LibAPNG.dll</HintPath>
-    </Reference>
-    <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.4.6.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.7.4.6\lib\net40\Magick.NET-Q8-AnyCPU.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -77,16 +70,7 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
-    <Compile Include="AnimatedImage\AnimatedImage.cs" />
-    <None Include="AnimatedImage\APNGAnimationProvider.cs" />
-    <Compile Include="AnimatedImage\GIFAnimationProvider.cs" />
-    <Compile Include="AnimatedImage\AnimationProvider.cs" />
-    <None Include="AnimatedImage\ImageMagickProvider.cs" />
-    <Compile Include="exiv2\Meta.cs" />
-    <Compile Include="ImageFileHelper.cs" />
-    <Compile Include="ImagePanel.xaml.cs">
-      <DependentUpon>ImagePanel.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="DCraw.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -96,33 +80,19 @@
       <Name>QuickLook.Common</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj">
+      <Project>{fe5a5111-9607-4721-a7be-422754002ed8}</Project>
+      <Name>QuickLook.Plugin.ImageViewer</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ImagePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\background-b.png" />
-    <Resource Include="Resources\background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="exiv2\exiv2.dll">
+    <Content Include="dcraw32.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="exiv2\exiv2.exe">
+    <Content Include="dcraw64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="exiv2\expat.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="exiv2\zlib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

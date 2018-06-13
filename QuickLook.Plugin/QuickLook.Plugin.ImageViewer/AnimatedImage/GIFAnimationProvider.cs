@@ -16,86 +16,91 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal class GIFAnimationProvider : IAnimationProvider
+    internal class GIFAnimationProvider : AnimationProvider
     {
-        public void GetAnimator(ObjectAnimationUsingKeyFrames animator, string path)
+        private readonly List<FrameInfo> _decodedFrames;
+        private readonly int _lastRenderedFrameIndex;
+        private readonly DrawingGroup renderedFrame;
+
+        public GIFAnimationProvider(string path) : base(path)
         {
-            var decoder =
-                new GifBitmapDecoder(new Uri(path), BitmapCreateOptions.PreservePixelFormat,
-                    BitmapCacheOption.OnLoad);
+            var decoder = new GifBitmapDecoder(new Uri(path), BitmapCreateOptions.PreservePixelFormat,
+                BitmapCacheOption.OnLoad);
 
-            var clock = TimeSpan.Zero;
-            BitmapSource prevFrame = null;
-            FrameInfo prevInfo = null;
-            BitmapSource prevprevFrame = null;
-            foreach (var rawFrame in decoder.Frames)
+            _decodedFrames = new List<FrameInfo>(decoder.Frames.Count);
+            decoder.Frames.ForEach(f => _decodedFrames.Add(GetFrameInfo(f)));
+
+            renderedFrame = new DrawingGroup();
+            _lastRenderedFrameIndex = -1;
+
+            var delay = _decodedFrames[0].Delay.TotalMilliseconds;
+
+            Animator = new Int32Animation(0, decoder.Frames.Count - 1,
+                new Duration(TimeSpan.FromMilliseconds(delay * (decoder.Frames.Count - 1))))
             {
-                var info = GetFrameInfo(rawFrame);
-                var frame = MakeFrame(decoder.Frames[0], rawFrame, info, prevFrame, prevInfo, prevprevFrame);
-                prevprevFrame = prevFrame;
-                prevFrame = frame;
-                prevInfo = info;
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+        }
 
-                animator.KeyFrames.Add(new DiscreteObjectKeyFrame(frame, clock));
-                clock += info.Delay;
-            }
+        public override DrawingImage GetRenderedFrame(int index)
+        {
+            for (var i = _lastRenderedFrameIndex + 1; i < index; i++)
+                MakeFrame(renderedFrame, _decodedFrames[i], i > 0 ? _decodedFrames[i - 1] : null);
 
-            animator.Duration = clock;
-            animator.RepeatBehavior = RepeatBehavior.Forever;
+            MakeFrame(
+                renderedFrame,
+                _decodedFrames[index],
+                index > 0 ? _decodedFrames[index - 1] : null);
+            
+            var di=new DrawingImage(renderedFrame);
+            di.Freeze();
+
+            return di;
         }
 
         #region private methods
 
-        private static BitmapSource MakeFrame(
-            BitmapSource fullImage,
-            BitmapSource rawFrame, FrameInfo frameInfo,
-            BitmapSource previousFrame, FrameInfo previousFrameInfo,
-            BitmapSource previouspreviousFrame)
+        private static void MakeFrame(
+            DrawingGroup renderedFrame,
+            FrameInfo currentFrame,
+            FrameInfo previousFrame)
         {
-            var visual = new DrawingVisual();
-            using (var context = visual.RenderOpen())
-            {
-                if (previousFrameInfo != null && previousFrame != null)
+            if (previousFrame == null)
+                renderedFrame.Children.Clear();
+            else
+                switch (previousFrame.DisposalMethod)
                 {
-                    var fullRect = new Rect(0, 0, fullImage.PixelWidth, fullImage.PixelHeight);
-
-                    switch (previousFrameInfo.DisposalMethod)
-                    {
-                        case FrameDisposalMethod.Unspecified:
-                        case FrameDisposalMethod.Combine:
-                            context.DrawImage(previousFrame, fullRect);
-                            break;
-                        case FrameDisposalMethod.RestorePrevious:
-                            if (previouspreviousFrame != null)
-                                context.DrawImage(previouspreviousFrame, fullRect);
-                            break;
-                        case FrameDisposalMethod.RestoreBackground:
-                            break;
-                    }
+                    case FrameDisposalMethod.Unspecified:
+                    case FrameDisposalMethod.Combine:
+                        break;
+                    case FrameDisposalMethod.RestorePrevious:
+                        renderedFrame.Children.RemoveAt(renderedFrame.Children.Count - 1);
+                        break;
+                    case FrameDisposalMethod.RestoreBackground:
+                        var bg = renderedFrame.Children.First();
+                        renderedFrame.Children.Clear();
+                        renderedFrame.Children.Add(bg);
+                        break;
                 }
 
-                context.DrawImage(rawFrame, frameInfo.Rect);
-            }
-
-            var bitmap = new RenderTargetBitmap(
-                fullImage.PixelWidth, fullImage.PixelHeight,
-                Math.Floor(fullImage.DpiX), Math.Floor(fullImage.DpiY),
-                PixelFormats.Pbgra32);
-            bitmap.Render(visual);
-            return bitmap;
+            renderedFrame.Children.Add(new ImageDrawing(currentFrame.Frame, currentFrame.Rect));
         }
 
         private static FrameInfo GetFrameInfo(BitmapFrame frame)
         {
             var frameInfo = new FrameInfo
             {
+                Frame = frame,
                 Delay = TimeSpan.FromMilliseconds(100),
                 DisposalMethod = FrameDisposalMethod.Unspecified,
                 Width = frame.PixelWidth,
@@ -153,14 +158,15 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         private class FrameInfo
         {
-            public TimeSpan Delay { get; set; }
+            public BitmapSource Frame { get; set; }
             public FrameDisposalMethod DisposalMethod { get; set; }
+            public TimeSpan Delay { get; set; }
+            public Rect Rect => new Rect(Left, Top, Width, Height);
+
             public double Width { private get; set; }
             public double Height { private get; set; }
             public double Left { private get; set; }
             public double Top { private get; set; }
-
-            public Rect Rect => new Rect(Left, Top, Width, Height);
         }
 
         private enum FrameDisposalMethod

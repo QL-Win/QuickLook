@@ -16,13 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
+using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Common.Helpers;
 using QuickLook.Plugin.ImageViewer.Exiv2;
@@ -31,15 +29,68 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     public class AnimatedImage : Image, IDisposable
     {
+        private AnimationProvider _animation;
+        private bool _disposed;
+
+        public void Dispose()
+        {
+            BeginAnimation(AnimationFrameIndexProperty, null);
+            Source = null;
+            _animation = null;
+
+            _disposed = true;
+
+            Task.Delay(500).ContinueWith(t => ProcessHelper.PerformAggressiveGC());
+        }
+
+        private static void LoadFullImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
+        {
+            if (!(obj is AnimatedImage instance))
+                return;
+
+            instance._animation = LoadFullImageCore((Uri) ev.NewValue);
+            instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
+        }
+
+        private static AnimationProvider LoadFullImageCore(Uri path)
+        {
+            byte[] sign;
+            using (var reader =
+                new BinaryReader(new FileStream(path.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                sign = reader.BaseStream.Length < 4 ? new byte[] {0, 0, 0, 0} : reader.ReadBytes(4);
+            }
+
+            AnimationProvider provider = null;
+
+            if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
+                provider = new GIFAnimationProvider(path.LocalPath);
+            //else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
+            //    provider = new APNGAnimationProvider();
+            //else
+            //    provider = new ImageMagickProvider();
+
+            return provider;
+        }
+
+        #region DependencyProperty
+
+        public static readonly DependencyProperty AnimationFrameIndexProperty =
+            DependencyProperty.Register("AnimationFrameIndex", typeof(int), typeof(AnimatedImage),
+                new UIPropertyMetadata(-1, AnimationFrameIndexChanged));
+
         public static readonly DependencyProperty AnimationUriProperty =
             DependencyProperty.Register("AnimationUri", typeof(Uri), typeof(AnimatedImage),
-                new UIPropertyMetadata(null, LoadImage));
+                new UIPropertyMetadata(null, AnimationUriChanged));
 
         public static readonly DependencyProperty MetaProperty =
             DependencyProperty.Register("Meta", typeof(Meta), typeof(AnimatedImage));
 
-        private ObjectAnimationUsingKeyFrames _animator = new ObjectAnimationUsingKeyFrames();
-        private bool _disposed;
+        public int AnimationFrameIndex
+        {
+            get => (int) GetValue(AnimationFrameIndexProperty);
+            set => SetValue(AnimationFrameIndexProperty, value);
+        }
 
         public Uri AnimationUri
         {
@@ -53,90 +104,33 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             set => SetValue(MetaProperty, value);
         }
 
-        public void Dispose()
+        private static void AnimationUriChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
         {
-            BeginAnimation(SourceProperty, null);
-            Source = null;
-            _animator.KeyFrames.Clear();
-
-            _disposed = true;
-        }
-
-        private static void LoadImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
-        {
-            var instance = obj as AnimatedImage;
-            if (instance == null)
+            if (!(obj is AnimatedImage instance))
                 return;
 
-            var thumbnail = instance.Meta?.GetThumbnail(true);
-            instance.Source = thumbnail;
+            //var thumbnail = instance.Meta?.GetThumbnail(true);
+            //instance.Source = thumbnail;
 
-            if (thumbnail != null)
-                LoadFullImageAsync(obj, ev);
-            else
-                LoadFullImage(obj, ev);
+            LoadFullImage(obj, ev);
+
+            instance.AnimationFrameIndex = 0;
         }
 
-        private static void LoadFullImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
+        private static void AnimationFrameIndexChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
         {
-            var instance = obj as AnimatedImage;
-            if (instance == null)
+            if (!(obj is AnimatedImage instance))
                 return;
 
-            instance._animator = LoadFullImageCore((Uri) ev.NewValue);
-            instance.BeginAnimation(SourceProperty, instance._animator);
-        }
-
-        private static void LoadFullImageAsync(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
-        {
-            Task.Run(() =>
+            new Task(() =>
             {
-                var instance = obj as AnimatedImage;
-                if (instance == null)
-                    return;
+                var image = instance._animation.GetRenderedFrame((int) ev.NewValue);
 
-                var animator = LoadFullImageCore((Uri) ev.NewValue);
-
-                instance.Dispatcher.Invoke(DispatcherPriority.Render,
-                    new Action(() =>
-                    {
-                        if (instance._disposed)
-                        {
-                            ProcessHelper.PerformAggressiveGC();
-                            return;
-                        }
-
-                        instance._animator = animator;
-                        instance.BeginAnimation(SourceProperty, instance._animator);
-
-                        Debug.WriteLine($"LoadFullImageAsync {Thread.CurrentThread.ManagedThreadId}");
-                    }));
-            });
+                instance.Dispatcher.BeginInvoke(
+                    new Action(() => { instance.Source = image; }), DispatcherPriority.Loaded);
+            }).Start();
         }
 
-        private static ObjectAnimationUsingKeyFrames LoadFullImageCore(Uri path)
-        {
-            byte[] sign;
-            using (var reader =
-                new BinaryReader(new FileStream(path.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            {
-                sign = reader.BaseStream.Length < 4 ? new byte[] {0, 0, 0, 0} : reader.ReadBytes(4);
-            }
-
-            IAnimationProvider provider;
-
-            if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
-                provider = new GIFAnimationProvider();
-            else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
-                provider = new APNGAnimationProvider();
-            else
-                provider = new ImageMagickProvider();
-
-            var animator = new ObjectAnimationUsingKeyFrames();
-            provider.GetAnimator(animator, path.LocalPath);
-            animator.Freeze();
-
-            return animator;
-        }
+        #endregion DependencyProperty
     }
 }

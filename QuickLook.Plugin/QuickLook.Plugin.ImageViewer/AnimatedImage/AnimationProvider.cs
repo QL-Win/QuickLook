@@ -15,12 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal interface IAnimationProvider
+    internal abstract class AnimationProvider
     {
-        void GetAnimator(ObjectAnimationUsingKeyFrames animator, string path);
+        public AnimationProvider(string path)
+        {
+            Path = path;
+        }
+
+        public string Path { get; }
+
+        public Int32Animation Animator { get; protected set; }
+
+        public abstract DrawingImage GetRenderedFrame(int index);
     }
 }
