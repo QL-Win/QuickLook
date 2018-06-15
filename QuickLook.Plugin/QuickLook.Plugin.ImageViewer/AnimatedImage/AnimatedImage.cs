@@ -27,23 +27,17 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
     public class AnimatedImage : Image, IDisposable
     {
         private AnimationProvider _animation;
+        private bool _disposing;
 
         public void Dispose()
         {
+            _disposing = true;
+
             BeginAnimation(AnimationFrameIndexProperty, null);
             Source = null;
 
             _animation?.Dispose();
             _animation = null;
-        }
-
-        private static void LoadFullImage(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
-        {
-            if (!(obj is AnimatedImage instance))
-                return;
-
-            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Dispatcher);
-            instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
         }
 
         private static AnimationProvider LoadFullImageCore(Uri path, Dispatcher uiDispatcher)
@@ -55,14 +49,14 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 sign = reader.BaseStream.Length < 4 ? new byte[] {0, 0, 0, 0} : reader.ReadBytes(4);
             }
 
-            AnimationProvider provider = null;
+            AnimationProvider provider;
 
             if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
                 provider = new GifAnimationProvider(path.LocalPath, uiDispatcher);
-            //else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
-            //    provider = new APNGAnimationProvider();
-            //else
-            //    provider = new ImageMagickProvider();
+            else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
+                provider = new APNGAnimationProvider(path.LocalPath, uiDispatcher);
+            else
+                provider = new ImageMagickProvider(path.LocalPath, uiDispatcher);
 
             return provider;
         }
@@ -106,8 +100,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             //var thumbnail = instance.Meta?.GetThumbnail(true);
             //instance.Source = thumbnail;
 
-            LoadFullImage(obj, ev);
+            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Dispatcher);
 
+            instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
             instance.AnimationFrameIndex = 0;
         }
 
@@ -116,9 +111,25 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (!(obj is AnimatedImage instance))
                 return;
 
-            var image = instance._animation.GetRenderedFrame((int) ev.NewValue);
-            //if (!ReferenceEquals(instance.Source, image))
-            instance.Source = image;
+            if (instance._disposing)
+                return;
+
+            var task = instance._animation.GetRenderedFrame((int) ev.NewValue);
+
+            if (instance.Source == null && (int) ev.NewValue == 0) // this is the first image. Run it synchronously.
+            {
+                task.Start();
+                task.Wait(5000);
+            }
+
+            if (task.IsCompleted)
+            {
+                instance.Source = task.Result;
+                return;
+            }
+
+            task.ContinueWith(t => { instance.Dispatcher.Invoke(() => instance.Source = t.Result); });
+            task.Start();
         }
 
         #endregion DependencyProperty

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -16,105 +16,180 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using LibAPNG;
+using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal class APNGAnimationProvider : IAnimationProvider
+    internal class APNGAnimationProvider : AnimationProvider
     {
-        public void GetAnimator(ObjectAnimationUsingKeyFrames animator, string path)
+        private readonly List<FrameInfo> _frames;
+        private readonly List<BitmapSource> _renderedFrames;
+        private ImageMagickProvider _imageMagickProvider;
+        private int _lastEffecitvePreviousPreviousFrameIndex;
+
+        public APNGAnimationProvider(string path, Dispatcher uiDispatcher) : base(path, uiDispatcher)
         {
             var decoder = new APNGBitmap(path);
 
             if (decoder.IsSimplePNG)
             {
-                new ImageMagickProvider().GetAnimator(animator, path);
+                _imageMagickProvider = new ImageMagickProvider(path, uiDispatcher);
                 return;
             }
 
-            var clock = TimeSpan.Zero;
-            var header = decoder.IHDRChunk;
-            Frame currentFrame = null;
-            BitmapSource currentRenderedFrame = null;
-            BitmapSource previousStateRenderedFrame = null;
-            foreach (var nextFrame in decoder.Frames)
+            _frames = new List<FrameInfo>(decoder.Frames.Length);
+            _renderedFrames = new List<BitmapSource>(decoder.Frames.Length);
+            Enumerable.Repeat(0, decoder.Frames.Length).ForEach(_ => _renderedFrames.Add(null));
+
+            Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
+
+            var wallclock = TimeSpan.Zero;
+
+            for (var i = 0; i < decoder.Frames.Length; i++)
             {
-                var nextRenderedFrame = MakeNextFrame(header, nextFrame, currentFrame, currentRenderedFrame,
-                    previousStateRenderedFrame);
+                var frame = decoder.Frames[i];
 
-                var delay = TimeSpan.FromSeconds(
-                    (double) nextFrame.fcTLChunk.DelayNum /
-                    (nextFrame.fcTLChunk.DelayDen == 0 ? 100 : nextFrame.fcTLChunk.DelayDen));
+                _frames.Add(new FrameInfo(decoder.IHDRChunk, frame));
 
-                animator.KeyFrames.Add(new DiscreteObjectKeyFrame(nextRenderedFrame, clock));
-                clock += delay;
-
-                // the "previous state" of a "DisposeOpPrevious" frame is its previous frame, so we do not record it
-                if (currentFrame != null && currentFrame.fcTLChunk.DisposeOp != DisposeOps.APNGDisposeOpPrevious)
-                    previousStateRenderedFrame = currentRenderedFrame;
-                currentRenderedFrame = nextRenderedFrame;
-                currentFrame = nextFrame;
+                Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(i, KeyTime.FromTimeSpan(wallclock)));
+                wallclock += _frames[i].Delay;
             }
-
-            animator.Duration = clock;
-            animator.RepeatBehavior = RepeatBehavior.Forever;
         }
 
-        private static BitmapSource MakeNextFrame(IHDRChunk header, Frame nextFrame, Frame currentFrame,
-            BitmapSource currentRenderedFrame, BitmapSource previousStateRenderedFrame)
+        public override Task<BitmapSource> GetRenderedFrame(int index)
         {
-            var fullRect = new Rect(0, 0, header.Width, header.Height);
-            var frameRect = new Rect(nextFrame.fcTLChunk.XOffset, nextFrame.fcTLChunk.YOffset,
-                nextFrame.fcTLChunk.Width, nextFrame.fcTLChunk.Height);
+            if (_imageMagickProvider != null)
+                return _imageMagickProvider.GetRenderedFrame(index);
 
-            var fs = nextFrame.GetBitmapSource();
+            if (_renderedFrames[index] != null)
+                return new Task<BitmapSource>(() => _renderedFrames[index]);
+
+            return new Task<BitmapSource>(() =>
+            {
+                var rendered = Render(index);
+                _renderedFrames[index] = rendered;
+
+                return rendered;
+            });
+        }
+
+        public override void Dispose()
+        {
+            if (_imageMagickProvider != null)
+            {
+                _imageMagickProvider.Dispose();
+                _imageMagickProvider = null;
+                return;
+            }
+
+            _frames.Clear();
+            _renderedFrames.Clear();
+        }
+
+        private BitmapSource Render(int index)
+        {
+            var currentFrame = _frames[index];
+            FrameInfo previousFrame = null;
+            BitmapSource previousRendered = null;
+            BitmapSource previousPreviousRendered = null;
+
+            if (index > 0)
+            {
+                if (_renderedFrames[index - 1] == null)
+                    _renderedFrames[index - 1] = Render(index - 1);
+
+                previousFrame = _frames[index - 1];
+                previousRendered = _renderedFrames[index - 1];
+            }
+
+            // when saying APNGDisposeOpPrevious, we need to find the last frame not having APNGDisposeOpPrevious.
+            // Only [index-2] is not correct here since that frame may also have APNGDisposeOpPrevious.
+            if (index > 1)
+                previousPreviousRendered = _renderedFrames[_lastEffecitvePreviousPreviousFrameIndex];
+            if (_frames[index].DisposeOp != DisposeOps.APNGDisposeOpPrevious)
+                _lastEffecitvePreviousPreviousFrameIndex = Math.Max(_lastEffecitvePreviousPreviousFrameIndex, index);
+
             var visual = new DrawingVisual();
 
             using (var context = visual.RenderOpen())
             {
                 // protect region
-                if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
+                if (currentFrame.BlendOp == BlendOps.APNGBlendOpSource)
                 {
                     var freeRegion = new CombinedGeometry(GeometryCombineMode.Xor,
-                        new RectangleGeometry(fullRect),
-                        new RectangleGeometry(frameRect));
+                        new RectangleGeometry(currentFrame.FrameRect),
+                        new RectangleGeometry(currentFrame.FrameRect));
                     context.PushOpacityMask(
                         new DrawingBrush(new GeometryDrawing(Brushes.Transparent, null, freeRegion)));
                 }
 
-                if (currentFrame != null && currentRenderedFrame != null)
-                    switch (currentFrame.fcTLChunk.DisposeOp)
+                if (previousFrame != null)
+                    switch (previousFrame.DisposeOp)
                     {
                         case DisposeOps.APNGDisposeOpNone:
-                            // restore currentRenderedFrame
-                            if (currentRenderedFrame != null) context.DrawImage(currentRenderedFrame, fullRect);
+                            if (previousRendered != null)
+                                context.DrawImage(previousRendered, currentFrame.FullRect);
                             break;
                         case DisposeOps.APNGDisposeOpPrevious:
-                            // restore previousStateRenderedFrame
-                            if (previousStateRenderedFrame != null)
-                                context.DrawImage(previousStateRenderedFrame, fullRect);
+                            if (previousPreviousRendered != null)
+                                context.DrawImage(previousPreviousRendered, currentFrame.FullRect);
                             break;
                         case DisposeOps.APNGDisposeOpBackground:
                             // do nothing
                             break;
                     }
 
-                // unprotect region and draw the next frame
-                if (nextFrame.fcTLChunk.BlendOp == BlendOps.APNGBlendOpSource)
+                // unprotect region and draw current frame
+                if (currentFrame.BlendOp == BlendOps.APNGBlendOpSource)
                     context.Pop();
-                context.DrawImage(fs, frameRect);
+                context.DrawImage(currentFrame.Pixels, currentFrame.FrameRect);
             }
 
             var bitmap = new RenderTargetBitmap(
-                header.Width, header.Height,
-                Math.Floor(fs.DpiX), Math.Floor(fs.DpiY),
+                (int) currentFrame.FullRect.Width, (int) currentFrame.FullRect.Height,
+                Math.Floor(currentFrame.Pixels.DpiX), Math.Floor(currentFrame.Pixels.DpiY),
                 PixelFormats.Pbgra32);
             bitmap.Render(visual);
+
+            bitmap.Freeze();
             return bitmap;
+        }
+
+        private class FrameInfo
+        {
+            public readonly BlendOps BlendOp;
+            public readonly TimeSpan Delay;
+            public readonly DisposeOps DisposeOp;
+            public readonly Rect FrameRect;
+            public readonly Rect FullRect;
+            public readonly BitmapSource Pixels;
+
+            public FrameInfo(IHDRChunk header, Frame frame)
+            {
+                FullRect = new Rect(0, 0, header.Width, header.Height);
+                FrameRect = new Rect(frame.fcTLChunk.XOffset, frame.fcTLChunk.YOffset,
+                    frame.fcTLChunk.Width, frame.fcTLChunk.Height);
+
+                BlendOp = frame.fcTLChunk.BlendOp;
+                DisposeOp = frame.fcTLChunk.DisposeOp;
+
+                Pixels = frame.GetBitmapSource();
+                Pixels.Freeze();
+
+                Delay = TimeSpan.FromSeconds((double) frame.fcTLChunk.DelayNum /
+                                             (frame.fcTLChunk.DelayDen == 0
+                                                 ? 100
+                                                 : frame.fcTLChunk.DelayDen));
+            }
         }
     }
 }

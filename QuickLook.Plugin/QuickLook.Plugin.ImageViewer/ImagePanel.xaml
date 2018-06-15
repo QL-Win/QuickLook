@@ -24,23 +24,25 @@
             <Rectangle.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}" Value="{x:Static plugin:Themes.Dark}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}"
+                                     Value="{x:Static plugin:Themes.Dark}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
-                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32"
+                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
                                                 ImageSource="Resources/background-b.png"
-                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile">
-                                    </ImageBrush>
+                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}" Value="{x:Static plugin:Themes.Light}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}"
+                                     Value="{x:Static plugin:Themes.Light}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
-                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32"
+                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
                                                 ImageSource="Resources/background.png"
-                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile">
-                                    </ImageBrush>
+                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -16,25 +16,56 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using ImageMagick;
+using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal class ImageMagickProvider : IAnimationProvider
+    internal class ImageMagickProvider : AnimationProvider
     {
-        public void GetAnimator(ObjectAnimationUsingKeyFrames animator, string path)
-        {
-            using (var image = new MagickImage(path))
-            {
-                image.AddProfile(ColorProfile.SRGB);
-                image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
-                image.AutoOrient();
+        private readonly string _path;
+        private readonly BitmapSource _thumbnail;
 
-                animator.KeyFrames.Add(new DiscreteObjectKeyFrame(image.ToBitmapSource(), TimeSpan.Zero));
-                animator.Duration = Duration.Forever;
-            }
+        public ImageMagickProvider(string path, Dispatcher uiDispatcher) : base(path, uiDispatcher)
+        {
+            _path = path;
+            _thumbnail = new Meta(path).GetThumbnail(true);
+
+            Animator = new Int32AnimationUsingKeyFrames();
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
+                KeyTime.FromTimeSpan(TimeSpan.Zero))); // thumbnail/full image
+
+            if (_thumbnail != null)
+                Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1,
+                    KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.20)))); // full image
+        }
+
+        public override Task<BitmapSource> GetRenderedFrame(int index)
+        {
+            // the first image is always returns synchronously.
+            if (index == 0 && _thumbnail != null) return new Task<BitmapSource>(() => _thumbnail);
+
+            return new Task<BitmapSource>(() =>
+            {
+                using (var image = new MagickImage(_path))
+                {
+                    image.AddProfile(ColorProfile.SRGB);
+                    image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
+                    image.AutoOrient();
+
+                    var bs = image.ToBitmapSource();
+                    bs.Freeze();
+                    return bs;
+                }
+            });
+        }
+
+        public override void Dispose()
+        {
         }
     }
 }

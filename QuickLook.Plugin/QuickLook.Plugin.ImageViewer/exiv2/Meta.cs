@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -83,8 +83,10 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
                         return image.ToBitmapSource();
 
                     var size = GetSize();
-                    return new TransformedBitmap(image.ToBitmapSource(),
+                    var bitmap = new TransformedBitmap(image.ToBitmapSource(),
                         new ScaleTransform(size.Width / image.Width, size.Height / image.Height));
+                    bitmap.Freeze();
+                    return bitmap;
                 }
             }
             catch (Exception)

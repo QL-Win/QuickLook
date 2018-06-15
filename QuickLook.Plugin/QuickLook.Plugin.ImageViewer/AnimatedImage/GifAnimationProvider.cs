@@ -17,8 +17,7 @@
 
 using System;
 using System.Drawing;
-using System.Windows;
-using System.Windows.Media;
+using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -37,10 +36,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _frame = (Bitmap) Image.FromFile(path);
             _frameSource = _frame.ToBitmapSource();
 
-            Animator = new Int32Animation(0, 1, new Duration(TimeSpan.FromMilliseconds(50)))
-            {
-                RepeatBehavior = RepeatBehavior.Forever
-            };
+            Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
+
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10))));
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(20))));
         }
 
         public override void Dispose()
@@ -55,7 +55,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _frameSource = null;
         }
 
-        public override ImageSource GetRenderedFrame(int index)
+        public override Task<BitmapSource> GetRenderedFrame(int index)
         {
             if (!_isPlaying)
             {
@@ -63,7 +63,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 ImageAnimator.Animate(_frame, OnFrameChanged);
             }
 
-            return _frameSource;
+            return new Task<BitmapSource>(() => _frameSource);
         }
 
         private void OnFrameChanged(object sender, EventArgs e)

@@ -16,8 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Windows.Media;
+using System.Threading.Tasks;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
@@ -34,10 +35,10 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public string Path { get; }
 
-        public Int32Animation Animator { get; protected set; }
+        public Int32AnimationUsingKeyFrames Animator { get; protected set; }
 
         public abstract void Dispose();
 
-        public abstract ImageSource GetRenderedFrame(int index);
+        public abstract Task<BitmapSource> GetRenderedFrame(int index);
     }
 }
