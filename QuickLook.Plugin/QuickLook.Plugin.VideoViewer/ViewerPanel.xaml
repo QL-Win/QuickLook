@@ -42,10 +42,10 @@
                     <BlurEffect Radius="100" />
                 </Rectangle.Effect>
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="{Binding ElementName=viewerPanel, Path=CoverArt}" Stretch="UniformToFill"
-                                Opacity="0.9" />
+                    <ImageBrush ImageSource="{Binding ElementName=viewerPanel, Path=CoverArt}" Stretch="UniformToFill" />
                 </Rectangle.Fill>
             </Rectangle>
+            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Fill="{DynamicResource MainWindowBackground}" Opacity="0.6" />
             <Image Grid.Column="0" x:Name="imageCoverArt" Margin="20,40,20,40">
                 <Image.Effect>
                     <DropShadowEffect Direction="0" BlurRadius="6" Color="#FF898989" ShadowDepth="0" />

@@ -237,7 +237,6 @@ namespace QuickLook.Plugin.VideoViewer
                     break;
                 case MediaState.Playing:
                     UpdateMeta();
-                    DetermineTheme();
                     HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
                     HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
                     IsPlaying = true;
@@ -275,20 +274,6 @@ namespace QuickLook.Plugin.VideoViewer
             metaAlbum.Visibility = string.IsNullOrEmpty(metaAlbum.Text)
                 ? Visibility.Collapsed
                 : Visibility.Visible;
-        }
-
-        private void DetermineTheme()
-        {
-            if (HasVideo)
-                return;
-
-            if (CoverArt == null)
-                return;
-
-            using (var bitmap = new Bitmap(CoverArt.ToBitmap()))
-            {
-                _context.Theme = bitmap.IsDarkImage() ? Themes.Dark : Themes.Light;
-            }
         }
 
         private void ChangeVolume(double delta)
