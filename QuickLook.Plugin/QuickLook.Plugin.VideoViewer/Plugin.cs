@@ -80,6 +80,7 @@ namespace QuickLook.Plugin.VideoViewer
             else
             {
                 context.TitlebarAutoHide = true;
+                context.Theme = Themes.Dark;
                 context.TitlebarBlurVisibility = true;
             }
         }

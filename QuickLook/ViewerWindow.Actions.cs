@@ -171,7 +171,7 @@ namespace QuickLook
             if (Visibility != Visibility.Visible)
                 Show();
 
-            ShowWindowCaptionContainer(null, null);
+            //ShowWindowCaptionContainer(null, null);
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
             // load plugin, do not block UI
@@ -221,7 +221,7 @@ namespace QuickLook
             {
                 // limit str length
                 if (replaceWith.Length > 16)
-                    replaceWith = replaceWith.Substring(0, 14) + "…" + replaceWith.Substring(replaceWith.Length - 2);
+                    replaceWith = replaceWith.Substring(0, 8) + "…" + replaceWith.Substring(replaceWith.Length - 8);
 
                 str = TranslationHelper.Get(str);
                 var elements = str.Split(new[] {"{0}"}, StringSplitOptions.None).ToList();

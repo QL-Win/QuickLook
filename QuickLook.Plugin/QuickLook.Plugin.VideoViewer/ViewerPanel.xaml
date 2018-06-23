@@ -90,6 +90,16 @@
         </Grid>
 
         <Grid x:Name="videoControlContainer" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Opacity" Value="1" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasVideo, ElementName=viewerPanel}" Value="True">
+                            <Setter Property="Opacity" Value="0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.Resources>
                 <Storyboard x:Key="ShowControlStoryboard" Completed="AutoHideViedoControlContainer">
                     <DoubleAnimation

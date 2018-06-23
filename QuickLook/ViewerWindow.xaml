@@ -48,6 +48,16 @@
             <Grid x:Name="windowCaptionContainer" Height="{StaticResource MainWindowCaptionHeight}"
                   VerticalAlignment="Top"
                   ZIndex="100">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Opacity" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ContextObject.TitlebarAutoHide, ElementName=mainWindow}" Value="True">
+                                <Setter Property="Opacity" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.Resources>
                     <Storyboard x:Key="ShowCaptionContainerStoryboard" Completed="AutoHideCaptionContainer">
                         <DoubleAnimation

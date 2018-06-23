@@ -60,7 +60,7 @@ namespace QuickLook.Plugin.VideoViewer
             // apply global theme
             Resources.MergedDictionaries[0].MergedDictionaries.Clear();
 
-            ShowViedoControlContainer(null, null);
+            //ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
 
             mediaElement.PropertyChanged += PlayerPropertyChanged;
