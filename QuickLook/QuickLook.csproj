@@ -143,6 +143,7 @@
     <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
     <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
     <Compile Include="Helpers\ShareHelper.cs" />
+    <Compile Include="Helpers\ShellLinkHelper.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />

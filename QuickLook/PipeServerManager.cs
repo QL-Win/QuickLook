@@ -22,6 +22,7 @@ using System.IO.Pipes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
@@ -120,6 +121,8 @@ namespace QuickLook
 
             var wParam = msg.Substring(0, split);
             var lParam = msg.Substring(split + 1, msg.Length - split - 1);
+
+            lParam = ShellLinkHelper.GetTarget(lParam);
 
             switch (wParam)
             {

@@ -36,10 +36,7 @@ namespace QuickLook.Helpers
             {
                 File.Create(StartupFullPath).Close();
 
-                var shl = new Shell();
-                var dir = shl.NameSpace(Path.GetDirectoryName(StartupFullPath));
-                var itm = dir.Items().Item(Path.GetFileName(StartupFullPath));
-                var lnk = (ShellLinkObject) itm.GetLink;
+                var lnk = ShellLinkHelper.OpenShellLink(StartupFullPath);
 
                 lnk.Path = App.AppFullPath;
                 lnk.Arguments = "/autorun"; // silent
