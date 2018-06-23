@@ -101,7 +101,7 @@ namespace QuickLook
                 if (double.IsNaN(Left) || double.IsNaN(Top)) // first time showing
                     WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-                Dispatcher.BeginInvoke(new Action(this.BringToFront), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
             }
         }
 

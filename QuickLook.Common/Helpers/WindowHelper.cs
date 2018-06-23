@@ -42,13 +42,15 @@ namespace QuickLook.Common.Helpers
                 new Size(screen.Width / scale.Horizontal, screen.Height / scale.Vertical));
         }
 
-        public static void BringToFront(this Window window)
+        public static void BringToFront(this Window window, bool keep)
         {
             var handle = new WindowInteropHelper(window).Handle;
             User32.SetWindowPos(handle, User32.HWND_TOPMOST, 0, 0, 0, 0,
                 User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOACTIVATE);
-            User32.SetWindowPos(handle, User32.HWND_NOTOPMOST, 0, 0, 0, 0,
-                User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOACTIVATE);
+
+            if (!keep)
+                User32.SetWindowPos(handle, User32.HWND_NOTOPMOST, 0, 0, 0, 0,
+                    User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOACTIVATE);
         }
 
         public static void MoveWindow(this Window window,
