@@ -40,7 +40,7 @@ namespace QuickLook.Plugin.TextViewer
         {
             _context = context;
 
-            Background = Brushes.Transparent;
+            Background = new SolidColorBrush(Color.FromArgb(0xAA, 255, 255, 255));
             FontSize = 14;
             ShowLineNumbers = true;
             WordWrap = true;
