@@ -176,6 +176,8 @@ namespace QuickLook.Plugin.ImageViewer.Exiv2
                 if (string.IsNullOrWhiteSpace(l))
                     return;
                 var eles = Regex.Split(l, regexSplit + "");
+                if (eles.Length < 2)
+                    return;
                 res.Add(eles[0].Trim(), eles.Skip(1).Aggregate((a, b) => $"{a}{regexSplit}{b}"));
             });
 
