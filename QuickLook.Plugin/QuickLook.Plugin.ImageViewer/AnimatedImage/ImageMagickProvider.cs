@@ -53,7 +53,15 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             {
                 using (var image = new MagickImage(_path))
                 {
-                    image.AddProfile(ColorProfile.SRGB);
+                    try
+                    {
+                        image.AddProfile(ColorProfile.SRGB);
+                    }
+                    catch (MagickResourceLimitErrorException)
+                    {
+                        // https://github.com/xupefei/QuickLook/issues/292: ColorspaceColorProfileMismatch
+                    }
+
                     image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
                     image.AutoOrient();
 
