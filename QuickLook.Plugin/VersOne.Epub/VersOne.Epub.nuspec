@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>VersOne.Epub</id>
+        <version>2.0.4</version>
+        <title>EPUB reader</title>
+        <description>.NET library for reading EPUB files</description>
+        <authors>vers</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <licenseUrl>https://github.com/vers-one/EpubReader/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/vers-one/EpubReader</projectUrl>
+        <releaseNotes>.NET Standard 1.3 support.</releaseNotes>
+        <copyright>Unlicense &lt;http://unlicense.org&gt;</copyright>
+        <tags>epub</tags>
+        <dependencies>
+            <group targetFramework="net45">
+            </group>
+            <group targetFramework="netcoreapp1.0">
+                <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework="netstandard1.3">
+                <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\Release\net45\VersOne.Epub.dll" target="lib\net45" />
+        <file src="bin\Release\netcoreapp1.0\VersOne.Epub.dll" target="lib\netcoreapp1.0" />
+        <file src="bin\Release\netstandard1.3\VersOne.Epub.dll" target="lib\netstandard1.3" />
+    </files>
+</package>

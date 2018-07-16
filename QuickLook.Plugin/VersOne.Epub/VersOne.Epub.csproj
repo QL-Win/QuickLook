@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net45;netcoreapp1.0;netstandard1.3</TargetFrameworks>
+        <Authors>vers</Authors>
+        <Company />
+        <Product />
+        <Description />
+        <Copyright>vers, 2015-2018</Copyright>
+        <Version>2.0.4</Version>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    </ItemGroup>
+</Project>

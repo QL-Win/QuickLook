@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="QuickLook.Plugin.EpubViewer.EpubViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuickLook.Plugin.EpubViewer"
+             xmlns:htmlViewer="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid KeyDown="Grid_KeyDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock FontSize="14" 
+                       Text="{Binding Chapter, Mode=OneWay}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Padding="4"/>
+            <StackPanel Orientation="Horizontal"                    
+                    HorizontalAlignment="Right">
+                <Button VerticalAlignment="Stretch"                        
+                        Margin="0,0,2,0"
+                        Content="&lt;"
+                        Click="PrevButton_Click"
+                        Style="{DynamicResource CaptionTextButtonStyle}"/>
+                <Button VerticalAlignment="Stretch"                        
+                        Content="&gt;"
+                        Click="NextButton_Click"
+                        Style="{DynamicResource CaptionTextButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+        <htmlViewer:HtmlPanel x:Name="pagePanel"
+                              Grid.Row="1"/>
+    </Grid>
+</UserControl>
