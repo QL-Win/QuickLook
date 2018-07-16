@@ -42,6 +42,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +60,58 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="EpubReader\Entities\EpubBook.cs" />
+    <Compile Include="EpubReader\Entities\EpubByteContentFile.cs" />
+    <Compile Include="EpubReader\Entities\EpubChapter.cs" />
+    <Compile Include="EpubReader\Entities\EpubContent.cs" />
+    <Compile Include="EpubReader\Entities\EpubContentFile.cs" />
+    <Compile Include="EpubReader\Entities\EpubContentType.cs" />
+    <Compile Include="EpubReader\Entities\EpubSchema.cs" />
+    <Compile Include="EpubReader\Entities\EpubTextContentFile.cs" />
+    <Compile Include="EpubReader\EpubReader.cs" />
+    <Compile Include="EpubReader\Readers\BookCoverReader.cs" />
+    <Compile Include="EpubReader\Readers\ChapterReader.cs" />
+    <Compile Include="EpubReader\Readers\ContentReader.cs" />
+    <Compile Include="EpubReader\Readers\NavigationReader.cs" />
+    <Compile Include="EpubReader\Readers\PackageReader.cs" />
+    <Compile Include="EpubReader\Readers\RootFilePathReader.cs" />
+    <Compile Include="EpubReader\Readers\SchemaReader.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubBookRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubByteContentFileRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubChapterRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubContentFileRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubContentRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubTextContentFileRef.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigation.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationContent.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationDocAuthor.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationDocTitle.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationHead.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationHeadMeta.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationLabel.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationList.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationMap.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageList.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageTarget.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageTargetType.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPoint.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationTarget.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubGuide.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubGuideReference.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubManifest.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubManifestItem.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadata.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataContributor.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataCreator.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataDate.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataIdentifier.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataMeta.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubPackage.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubSpine.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubSpineItemRef.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubVersion.cs" />
+    <Compile Include="EpubReader\Utils\XmlUtils.cs" />
+    <Compile Include="EpubReader\Utils\ZipPathUtils.cs" />
     <Compile Include="EpubViewerControl.xaml.cs">
       <DependentUpon>EpubViewerControl.xaml</DependentUpon>
     </Compile>
@@ -70,10 +126,6 @@
     <ProjectReference Include="..\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.csproj">
       <Project>{ce22a1f3-7f2c-4ec8-bfde-b58d0eb625fc}</Project>
       <Name>QuickLook.Plugin.HtmlViewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VersOne.Epub\VersOne.Epub.csproj">
-      <Project>{8bfc120e-7e59-437c-9196-595ab00025e1}</Project>
-      <Name>VersOne.Epub</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
