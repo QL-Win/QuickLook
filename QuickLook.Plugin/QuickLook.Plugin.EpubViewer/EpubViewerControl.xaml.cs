@@ -4,17 +4,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using VersOne.Epub;
 
 namespace QuickLook.Plugin.EpubViewer
@@ -24,13 +16,15 @@ namespace QuickLook.Plugin.EpubViewer
     /// </summary>
     public partial class EpubViewerControl : UserControl, INotifyPropertyChanged
     {
+        public event EventHandler<ChapterChangedEventArgs> ChapterChanged;
+
         private EpubBookRef epubBook;
         private List<EpubChapterRef> chapterRefs;
         private int currChapter;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Chapter => $"{chapterRefs?[currChapter].Title} ({currChapter + 1}/{chapterRefs?.Count})";
+        public string Chapter => chapterRefs != null ? $"{chapterRefs?[currChapter].Title} ({currChapter + 1}/{chapterRefs?.Count})" : "";
 
         public EpubViewerControl()
         {
@@ -46,10 +40,9 @@ namespace QuickLook.Plugin.EpubViewer
         {
             this.epubBook = epubBook;
             this.chapterRefs = Flatten(epubBook.GetChapters());
-            this.currChapter = 0;
+            this.currChapter = -1;
             this.pagePanel.EpubBook = epubBook;
-            this.pagePanel.ChapterRef = chapterRefs[currChapter];
-            OnPropertyChanged("Chapter");
+            this.NextChapter();
         }
 
         private List<EpubChapterRef> Flatten(List<EpubChapterRef> list)
@@ -72,14 +65,14 @@ namespace QuickLook.Plugin.EpubViewer
                 {
                     this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
                 }
-                OnPropertyChanged("Chapter");
             }
             catch (Exception ex)
-            {                
-                this.pagePanel.Text = "<div>Invalid chapter.</div>";
-                OnPropertyChanged("Chapter");
+            {
                 Debug.WriteLine(ex);
+                this.pagePanel.Text = "<div>Invalid chapter.</div>";                
             }
+            OnPropertyChanged("Chapter");
+            OnChapterChanged();
         }
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
@@ -97,14 +90,14 @@ namespace QuickLook.Plugin.EpubViewer
                 {
                     this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
                 }
-                OnPropertyChanged("Chapter");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                this.pagePanel.Text = "<div>Invalid chapter.</div>";
-                OnPropertyChanged("Chapter");
+                this.pagePanel.Text = "<div>Invalid chapter.</div>";                
             }
+            OnPropertyChanged("Chapter");
+            OnChapterChanged();
         }
 
         // Create the OnPropertyChanged method to raise the event
@@ -113,9 +106,13 @@ namespace QuickLook.Plugin.EpubViewer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        protected void OnChapterChanged()
+        {
+            ChapterChanged?.Invoke(this, new ChapterChangedEventArgs(currChapter));
+        }
+
         private void Grid_KeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.Key == Key.Left)
             {
                 this.PrevChapter();
@@ -130,6 +127,16 @@ namespace QuickLook.Plugin.EpubViewer
             {
                 e.Handled = false;
             }
+        }
+
+        public class ChapterChangedEventArgs : EventArgs
+        {
+            public ChapterChangedEventArgs(int currChapter)
+            {
+                this.NewChapter = currChapter;
+            }
+
+            public int NewChapter { get; set; }
         }
     }
 }

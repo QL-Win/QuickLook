@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
@@ -46,15 +43,22 @@ namespace QuickLook.Plugin.EpubViewer
             {
                 using (MemoryStream imageStream = new MemoryStream(await imageContent.ReadContentAsBytesAsync()))
                 {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = imageStream;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
-                    args.Callback(bitmapImage);
-                }
-                args.Handled = true;
+                    try
+                    {
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.StreamSource = imageStream;
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.EndInit();
+                        bitmapImage.Freeze();
+                        args.Callback(bitmapImage);
+                        args.Handled = true;
+                    }
+                    catch
+                    {
+                        Debug.WriteLine($"Failed to load image: {args.Src}");
+                    }
+                }                
             }
         }
 

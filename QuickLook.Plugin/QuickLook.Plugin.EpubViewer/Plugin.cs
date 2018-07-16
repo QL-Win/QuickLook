@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.HtmlViewer;
 using VersOne.Epub;
 
 namespace QuickLook.Plugin.EpubViewer
 {
     public class Plugin : IViewer
     {
-        private EpubViewerControl _panel;
+        private ContextObject _context;
+        private EpubViewerControl _epubControl;
         public int Priority => int.MaxValue;
 
         public void Init()
@@ -30,28 +26,30 @@ namespace QuickLook.Plugin.EpubViewer
 
         public void Cleanup()
         {
+            _epubControl = null;
+            _context = null;
         }
 
         public void Prepare(string path, ContextObject context)
         {
-            context.PreferredSize = new Size { Width = 1000, Height = 600 };
+            _context = context;
+            context.SetPreferredSizeFit(new Size { Width = 1000, Height = 600 }, 0.8);
         }
 
         public void View(string path, ContextObject context)
         {
-            _panel = new EpubViewerControl();
-            context.ViewerContent = _panel;
+            _epubControl = new EpubViewerControl();
+            context.ViewerContent = _epubControl;
             Exception exception = null;
 
-            _panel.Dispatcher.BeginInvoke(new Action(() =>
+            _epubControl.Dispatcher.BeginInvoke(new Action(() =>
             {
                 try
                 {
                     // Opens a book
                     EpubBookRef epubBook = EpubReader.OpenBook(path);
                     context.Title = epubBook.Title;
-                    _panel.SetContent(epubBook);
-
+                    _epubControl.SetContent(epubBook);
                     context.IsBusy = false;
                 }
                 catch (Exception e)
