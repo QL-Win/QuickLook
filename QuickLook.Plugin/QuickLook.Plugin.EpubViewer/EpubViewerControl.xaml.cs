@@ -40,32 +40,6 @@ namespace QuickLook.Plugin.EpubViewer
             Resources.MergedDictionaries.Clear();
 
             this.DataContext = this;
-            this.pagePanel.ImageLoad += PagePanel_ImageLoad;
-        }
-
-        private void PagePanel_ImageLoad(object sender, TheArtOfDev.HtmlRenderer.WPF.RoutedEvenArgs<TheArtOfDev.HtmlRenderer.Core.Entities.HtmlImageLoadEventArgs> args)
-        {
-            var key = this.epubBook.Content.Images.Keys.FirstOrDefault(k => args.Data.Src.IndexOf(k, StringComparison.InvariantCultureIgnoreCase) >= 0);
-            if (key != null)
-            {
-                var img = ImageFromStream(this.epubBook.Content.Images[key].GetContentStream());
-                args.Data.Callback(img);
-                args.Handled = true;
-            }
-        }
-
-        /// <summary>
-        /// Get image by resource key.
-        /// </summary>
-        public static BitmapImage ImageFromStream(Stream stream)
-        {
-            var bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = stream;
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitmapImage.EndInit();
-            // bitmapImage.Freeze();
-            return bitmapImage;
         }
 
         internal void SetContent(EpubBookRef epubBook)
@@ -73,7 +47,8 @@ namespace QuickLook.Plugin.EpubViewer
             this.epubBook = epubBook;
             this.chapterRefs = Flatten(epubBook.GetChapters());
             this.currChapter = 0;
-            this.pagePanel.Text = chapterRefs[currChapter].ReadHtmlContent();
+            this.pagePanel.EpubBook = epubBook;
+            this.pagePanel.ChapterRef = chapterRefs[currChapter];
             OnPropertyChanged("Chapter");
         }
 
@@ -87,12 +62,12 @@ namespace QuickLook.Plugin.EpubViewer
             this.NextChapter();
         }
 
-        private async void NextChapter()
+        private void NextChapter()
         {
             try
             {
                 this.currChapter = Math.Min(this.currChapter + 1, chapterRefs.Count - 1);
-                this.pagePanel.Text = await chapterRefs[currChapter].ReadHtmlContentAsync();
+                this.pagePanel.ChapterRef = chapterRefs[currChapter];
                 if (chapterRefs[currChapter].Anchor != null)
                 {
                     this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
@@ -112,12 +87,12 @@ namespace QuickLook.Plugin.EpubViewer
             this.PrevChapter();
         }
 
-        private async void PrevChapter()
+        private void PrevChapter()
         {
             try
             {
                 this.currChapter = Math.Max(this.currChapter - 1, 0);
-                this.pagePanel.Text = await chapterRefs[currChapter].ReadHtmlContentAsync();
+                this.pagePanel.ChapterRef = chapterRefs[currChapter];
                 if (chapterRefs[currChapter].Anchor != null)
                 {
                     this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);

@@ -63,6 +63,7 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="BookHtmlContent.cs" />
     <Compile Include="EpubReader\Entities\EpubBook.cs" />
     <Compile Include="EpubReader\Entities\EpubByteContentFile.cs" />
     <Compile Include="EpubReader\Entities\EpubChapter.cs" />

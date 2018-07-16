@@ -39,7 +39,7 @@
                         Style="{DynamicResource CaptionTextButtonStyle}"/>
             </StackPanel>
         </Grid>
-        <htmlViewer:HtmlPanel x:Name="pagePanel"
-                              Grid.Row="1"/>
+        <local:BookHtmlContent x:Name="pagePanel"
+                               Grid.Row="1"/>
     </Grid>
 </UserControl>
