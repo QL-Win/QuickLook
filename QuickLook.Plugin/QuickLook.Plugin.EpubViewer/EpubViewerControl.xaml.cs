@@ -24,7 +24,7 @@ namespace QuickLook.Plugin.EpubViewer
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Chapter => chapterRefs != null ? $"{chapterRefs?[currChapter].Title} ({currChapter + 1}/{chapterRefs?.Count})" : "";
+        public string Chapter => chapterRefs != null && currChapter >= 0 ? $"{chapterRefs?[currChapter].Title} ({currChapter + 1}/{chapterRefs?.Count})" : "";
 
         public EpubViewerControl()
         {
@@ -42,7 +42,7 @@ namespace QuickLook.Plugin.EpubViewer
             this.chapterRefs = Flatten(epubBook.GetChapters());
             this.currChapter = -1;
             this.pagePanel.EpubBook = epubBook;
-            this.NextChapter();
+            this.UpdateChapter();
         }
 
         private List<EpubChapterRef> Flatten(List<EpubChapterRef> list)
@@ -60,16 +60,12 @@ namespace QuickLook.Plugin.EpubViewer
             try
             {
                 this.currChapter = Math.Min(this.currChapter + 1, chapterRefs.Count - 1);
-                this.pagePanel.ChapterRef = chapterRefs[currChapter];
-                if (chapterRefs[currChapter].Anchor != null)
-                {
-                    this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
-                }
+                this.UpdateChapter();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                this.pagePanel.Text = "<div>Invalid chapter.</div>";                
+                this.pagePanel.Text = "<div>Invalid chapter.</div>";
             }
             OnPropertyChanged("Chapter");
             OnChapterChanged();
@@ -84,12 +80,8 @@ namespace QuickLook.Plugin.EpubViewer
         {
             try
             {
-                this.currChapter = Math.Max(this.currChapter - 1, 0);
-                this.pagePanel.ChapterRef = chapterRefs[currChapter];
-                if (chapterRefs[currChapter].Anchor != null)
-                {
-                    this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
-                }
+                this.currChapter = Math.Max(this.currChapter - 1, -1);
+                this.UpdateChapter();
             }
             catch (Exception ex)
             {
@@ -137,6 +129,27 @@ namespace QuickLook.Plugin.EpubViewer
             }
 
             public int NewChapter { get; set; }
+        }
+
+        private void UpdateChapter()
+        {
+            if (currChapter < 0)
+            {
+                this.pagePanel.ChapterRef = null;
+                this.pagePanel.Text = string.Format(@"
+                <div style=""margin:4pt; text-align: center;"">
+                    <img src=""COVER"" alt=""COVER"" style=""height:500px;""/>
+                    <div style=""word-wrap: break-word;"">{0}</div>
+                </div>", epubBook.Title);
+            }
+            else
+            {
+                this.pagePanel.ChapterRef = chapterRefs[currChapter];
+                if (chapterRefs[currChapter].Anchor != null)
+                {
+                    this.pagePanel.ScrollToElement(chapterRefs[currChapter].Anchor);
+                }
+            }            
         }
     }
 }

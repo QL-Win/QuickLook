@@ -38,10 +38,20 @@ namespace QuickLook.Plugin.EpubViewer
 
         protected override async void OnImageLoad(HtmlImageLoadEventArgs args)
         {
-            string imageFilePath = GetFullPath(ChapterRef.ContentFileName, args.Src);
-            if (EpubBook.Content.Images.TryGetValue(imageFilePath, out EpubByteContentFileRef imageContent))
+            string imageFilePath = ChapterRef != null ? GetFullPath(ChapterRef.ContentFileName, args.Src) : null;
+            byte[] imageBytes = null;
+            if (args.Src == "COVER")
             {
-                using (MemoryStream imageStream = new MemoryStream(await imageContent.ReadContentAsBytesAsync()))
+                imageBytes = await EpubBook.ReadCoverAsync();
+            }
+            else if (EpubBook.Content.Images.TryGetValue(imageFilePath, out EpubByteContentFileRef imageContent))
+            {
+                imageBytes = await imageContent.ReadContentAsBytesAsync();
+            }
+
+            if (imageBytes != null)
+            {
+                using (MemoryStream imageStream = new MemoryStream(imageBytes))
                 {
                     try
                     {
@@ -58,7 +68,7 @@ namespace QuickLook.Plugin.EpubViewer
                     {
                         Debug.WriteLine($"Failed to load image: {args.Src}");
                     }
-                }                
+                }
             }
         }
 
