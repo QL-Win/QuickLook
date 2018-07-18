@@ -85,7 +85,7 @@ namespace QuickLook.Plugin.EpubViewer
                 basePath = System.IO.Path.GetDirectoryName(basePath);
             }
             string fullPath = String.Concat(basePath.Replace('\\', '/'), '/', relativePath);
-            return fullPath.Length > 1 ? fullPath.Substring(1) : String.Empty;
+            return fullPath.StartsWith("/") ? fullPath.Length > 1 ? fullPath.Substring(1) : String.Empty : fullPath;
         }
 
         private static async void OnChapterRefChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
