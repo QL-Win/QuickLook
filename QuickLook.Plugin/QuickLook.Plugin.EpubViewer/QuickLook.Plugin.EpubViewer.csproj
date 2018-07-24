@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{260C9E70-0582-471F-BFB5-022CFE7984C8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QuickLook.Plugin.EpubViewer</RootNamespace>
+    <AssemblyName>QuickLook.Plugin.EpubViewer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.EpubViewer\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\GitVersion.cs">
+      <Link>Properties\GitVersion.cs</Link>
+    </Compile>
+    <Compile Include="BookHtmlContent.cs" />
+    <Compile Include="EpubReader\Entities\EpubBook.cs" />
+    <Compile Include="EpubReader\Entities\EpubByteContentFile.cs" />
+    <Compile Include="EpubReader\Entities\EpubChapter.cs" />
+    <Compile Include="EpubReader\Entities\EpubContent.cs" />
+    <Compile Include="EpubReader\Entities\EpubContentFile.cs" />
+    <Compile Include="EpubReader\Entities\EpubContentType.cs" />
+    <Compile Include="EpubReader\Entities\EpubSchema.cs" />
+    <Compile Include="EpubReader\Entities\EpubTextContentFile.cs" />
+    <Compile Include="EpubReader\EpubReader.cs" />
+    <Compile Include="EpubReader\Readers\BookCoverReader.cs" />
+    <Compile Include="EpubReader\Readers\ChapterReader.cs" />
+    <Compile Include="EpubReader\Readers\ContentReader.cs" />
+    <Compile Include="EpubReader\Readers\NavigationReader.cs" />
+    <Compile Include="EpubReader\Readers\PackageReader.cs" />
+    <Compile Include="EpubReader\Readers\RootFilePathReader.cs" />
+    <Compile Include="EpubReader\Readers\SchemaReader.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubBookRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubByteContentFileRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubChapterRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubContentFileRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubContentRef.cs" />
+    <Compile Include="EpubReader\RefEntities\EpubTextContentFileRef.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigation.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationContent.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationDocAuthor.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationDocTitle.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationHead.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationHeadMeta.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationLabel.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationList.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationMap.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageList.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageTarget.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPageTargetType.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationPoint.cs" />
+    <Compile Include="EpubReader\Schema\Navigation\EpubNavigationTarget.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubGuide.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubGuideReference.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubManifest.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubManifestItem.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadata.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataContributor.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataCreator.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataDate.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataIdentifier.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubMetadataMeta.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubPackage.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubSpine.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubSpineItemRef.cs" />
+    <Compile Include="EpubReader\Schema\Opf\EpubVersion.cs" />
+    <Compile Include="EpubReader\Utils\XmlUtils.cs" />
+    <Compile Include="EpubReader\Utils\ZipPathUtils.cs" />
+    <Compile Include="EpubViewerControl.xaml.cs">
+      <DependentUpon>EpubViewerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
+      <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
+      <Name>QuickLook.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="EpubViewerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
