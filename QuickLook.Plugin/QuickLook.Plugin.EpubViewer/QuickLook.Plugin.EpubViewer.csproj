@@ -41,7 +41,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
     </Reference>
@@ -49,13 +48,8 @@
     <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -126,10 +120,6 @@
     <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
       <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
       <Name>QuickLook.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.csproj">
-      <Project>{ce22a1f3-7f2c-4ec8-bfde-b58d0eb625fc}</Project>
-      <Name>QuickLook.Plugin.HtmlViewer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,20 @@
-﻿using System;
+﻿// Copyright © 2018 Marco Gavelli and Paddy Xu
+// 
+// This file is part of QuickLook program.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -11,7 +27,7 @@ namespace VersOne.Epub
     public static class EpubReader
     {
         /// <summary>
-        /// Opens the book synchronously without reading its whole content. Holds the handle to the EPUB file.
+        ///     Opens the book synchronously without reading its whole content. Holds the handle to the EPUB file.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
@@ -21,7 +37,7 @@ namespace VersOne.Epub
         }
 
         /// <summary>
-        /// Opens the book synchronously without reading its whole content.
+        ///     Opens the book synchronously without reading its whole content.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
@@ -31,21 +47,18 @@ namespace VersOne.Epub
         }
 
         /// <summary>
-        /// Opens the book asynchronously without reading its whole content. Holds the handle to the EPUB file.
+        ///     Opens the book asynchronously without reading its whole content. Holds the handle to the EPUB file.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
         public static Task<EpubBookRef> OpenBookAsync(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException("Specified epub file not found.", filePath);
-            }
+            if (!File.Exists(filePath)) throw new FileNotFoundException("Specified epub file not found.", filePath);
             return OpenBookAsync(GetZipArchive(filePath));
         }
 
         /// <summary>
-        /// Opens the book asynchronously without reading its whole content.
+        ///     Opens the book asynchronously without reading its whole content.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
@@ -55,7 +68,8 @@ namespace VersOne.Epub
         }
 
         /// <summary>
-        /// Opens the book synchronously and reads all of its content into the memory. Does not hold the handle to the EPUB file.
+        ///     Opens the book synchronously and reads all of its content into the memory. Does not hold the handle to the EPUB
+        ///     file.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
@@ -65,7 +79,8 @@ namespace VersOne.Epub
         }
 
         /// <summary>
-        /// Opens the book synchronously and reads all of its content into the memory. Does not hold the handle to the EPUB file.
+        ///     Opens the book synchronously and reads all of its content into the memory. Does not hold the handle to the EPUB
+        ///     file.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
@@ -75,24 +90,25 @@ namespace VersOne.Epub
         }
 
         /// <summary>
-        /// Opens the book asynchronously and reads all of its content into the memory. Does not hold the handle to the EPUB file.
+        ///     Opens the book asynchronously and reads all of its content into the memory. Does not hold the handle to the EPUB
+        ///     file.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
         public static async Task<EpubBook> ReadBookAsync(string filePath)
         {
-            EpubBookRef epubBookRef = await OpenBookAsync(filePath).ConfigureAwait(false);
+            var epubBookRef = await OpenBookAsync(filePath).ConfigureAwait(false);
             return await ReadBookAsync(epubBookRef).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Opens the book asynchronously and reads all of its content into the memory.
+        ///     Opens the book asynchronously and reads all of its content into the memory.
         /// </summary>
         /// <param name="filePath">path to the EPUB file</param>
         /// <returns></returns>
         public static async Task<EpubBook> ReadBookAsync(Stream stream)
         {
-            EpubBookRef epubBookRef = await OpenBookAsync(stream).ConfigureAwait(false);
+            var epubBookRef = await OpenBookAsync(stream).ConfigureAwait(false);
             return await ReadBookAsync(epubBookRef).ConfigureAwait(false);
         }
 
@@ -104,9 +120,9 @@ namespace VersOne.Epub
                 result = new EpubBookRef(zipArchive);
                 result.FilePath = filePath;
                 result.Schema = await SchemaReader.ReadSchemaAsync(zipArchive).ConfigureAwait(false);
-                result.Title = result.Schema.Package.Metadata.Titles.FirstOrDefault() ?? String.Empty;
+                result.Title = result.Schema.Package.Metadata.Titles.FirstOrDefault() ?? string.Empty;
                 result.AuthorList = result.Schema.Package.Metadata.Creators.Select(creator => creator.Creator).ToList();
-                result.Author = String.Join(", ", result.AuthorList);
+                result.Author = string.Join(", ", result.AuthorList);
                 result.Content = await Task.Run(() => ContentReader.ParseContentMap(result)).ConfigureAwait(false);
                 return result;
             }
@@ -119,7 +135,7 @@ namespace VersOne.Epub
 
         private static async Task<EpubBook> ReadBookAsync(EpubBookRef epubBookRef)
         {
-            EpubBook result = new EpubBook();
+            var result = new EpubBook();
             using (epubBookRef)
             {
                 result.FilePath = epubBookRef.FilePath;
@@ -129,9 +145,10 @@ namespace VersOne.Epub
                 result.Author = epubBookRef.Author;
                 result.Content = await ReadContent(epubBookRef.Content).ConfigureAwait(false);
                 result.CoverImage = await epubBookRef.ReadCoverAsync().ConfigureAwait(false);
-                List<EpubChapterRef> chapterRefs = await epubBookRef.GetChaptersAsync().ConfigureAwait(false);
+                var chapterRefs = await epubBookRef.GetChaptersAsync().ConfigureAwait(false);
                 result.Chapters = await ReadChapters(chapterRefs).ConfigureAwait(false);
             }
+
             return result;
         }
 
@@ -147,36 +164,30 @@ namespace VersOne.Epub
 
         private static async Task<EpubContent> ReadContent(EpubContentRef contentRef)
         {
-            EpubContent result = new EpubContent();
+            var result = new EpubContent();
             result.Html = await ReadTextContentFiles(contentRef.Html).ConfigureAwait(false);
             result.Css = await ReadTextContentFiles(contentRef.Css).ConfigureAwait(false);
             result.Images = await ReadByteContentFiles(contentRef.Images).ConfigureAwait(false);
             result.Fonts = await ReadByteContentFiles(contentRef.Fonts).ConfigureAwait(false);
             result.AllFiles = new Dictionary<string, EpubContentFile>();
-            foreach (KeyValuePair<string, EpubTextContentFile> textContentFile in result.Html.Concat(result.Css))
-            {
+            foreach (var textContentFile in result.Html.Concat(result.Css))
                 result.AllFiles.Add(textContentFile.Key, textContentFile.Value);
-            }
-            foreach (KeyValuePair<string, EpubByteContentFile> byteContentFile in result.Images.Concat(result.Fonts))
-            {
+            foreach (var byteContentFile in result.Images.Concat(result.Fonts))
                 result.AllFiles.Add(byteContentFile.Key, byteContentFile.Value);
-            }
-            foreach (KeyValuePair<string, EpubContentFileRef> contentFileRef in contentRef.AllFiles)
-            {
+            foreach (var contentFileRef in contentRef.AllFiles)
                 if (!result.AllFiles.ContainsKey(contentFileRef.Key))
-                {
-                    result.AllFiles.Add(contentFileRef.Key, await ReadByteContentFile(contentFileRef.Value).ConfigureAwait(false));
-                }
-            }
+                    result.AllFiles.Add(contentFileRef.Key,
+                        await ReadByteContentFile(contentFileRef.Value).ConfigureAwait(false));
             return result;
         }
 
-        private static async Task<Dictionary<string, EpubTextContentFile>> ReadTextContentFiles(Dictionary<string, EpubTextContentFileRef> textContentFileRefs)
+        private static async Task<Dictionary<string, EpubTextContentFile>> ReadTextContentFiles(
+            Dictionary<string, EpubTextContentFileRef> textContentFileRefs)
         {
-            Dictionary<string, EpubTextContentFile> result = new Dictionary<string, EpubTextContentFile>();
-            foreach (KeyValuePair<string, EpubTextContentFileRef> textContentFileRef in textContentFileRefs)
+            var result = new Dictionary<string, EpubTextContentFile>();
+            foreach (var textContentFileRef in textContentFileRefs)
             {
-                EpubTextContentFile textContentFile = new EpubTextContentFile
+                var textContentFile = new EpubTextContentFile
                 {
                     FileName = textContentFileRef.Value.FileName,
                     ContentType = textContentFileRef.Value.ContentType,
@@ -185,22 +196,23 @@ namespace VersOne.Epub
                 textContentFile.Content = await textContentFileRef.Value.ReadContentAsTextAsync().ConfigureAwait(false);
                 result.Add(textContentFileRef.Key, textContentFile);
             }
+
             return result;
         }
 
-        private static async Task<Dictionary<string, EpubByteContentFile>> ReadByteContentFiles(Dictionary<string, EpubByteContentFileRef> byteContentFileRefs)
+        private static async Task<Dictionary<string, EpubByteContentFile>> ReadByteContentFiles(
+            Dictionary<string, EpubByteContentFileRef> byteContentFileRefs)
         {
-            Dictionary<string, EpubByteContentFile> result = new Dictionary<string, EpubByteContentFile>();
-            foreach (KeyValuePair<string, EpubByteContentFileRef> byteContentFileRef in byteContentFileRefs)
-            {
-                result.Add(byteContentFileRef.Key, await ReadByteContentFile(byteContentFileRef.Value).ConfigureAwait(false));
-            }
+            var result = new Dictionary<string, EpubByteContentFile>();
+            foreach (var byteContentFileRef in byteContentFileRefs)
+                result.Add(byteContentFileRef.Key,
+                    await ReadByteContentFile(byteContentFileRef.Value).ConfigureAwait(false));
             return result;
         }
 
         private static async Task<EpubByteContentFile> ReadByteContentFile(EpubContentFileRef contentFileRef)
         {
-            EpubByteContentFile result = new EpubByteContentFile
+            var result = new EpubByteContentFile
             {
                 FileName = contentFileRef.FileName,
                 ContentType = contentFileRef.ContentType,
@@ -212,10 +224,10 @@ namespace VersOne.Epub
 
         private static async Task<List<EpubChapter>> ReadChapters(List<EpubChapterRef> chapterRefs)
         {
-            List<EpubChapter> result = new List<EpubChapter>();
-            foreach (EpubChapterRef chapterRef in chapterRefs)
+            var result = new List<EpubChapter>();
+            foreach (var chapterRef in chapterRefs)
             {
-                EpubChapter chapter = new EpubChapter
+                var chapter = new EpubChapter
                 {
                     Title = chapterRef.Title,
                     ContentFileName = chapterRef.ContentFileName,
@@ -225,6 +237,7 @@ namespace VersOne.Epub
                 chapter.SubChapters = await ReadChapters(chapterRef.SubChapters).ConfigureAwait(false);
                 result.Add(chapter);
             }
+
             return result;
         }
     }

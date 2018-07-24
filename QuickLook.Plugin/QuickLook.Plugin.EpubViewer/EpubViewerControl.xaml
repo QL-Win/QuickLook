@@ -1,11 +1,10 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.EpubViewer.EpubViewerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.EpubViewer"
-             xmlns:htmlViewer="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
 
     <UserControl.Resources>
@@ -16,31 +15,14 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid KeyDown="Grid_KeyDown">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <TextBlock FontSize="14" 
-                       Text="{Binding Chapter, Mode=OneWay}"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Padding="4"/>
-            <StackPanel Orientation="Horizontal"                    
-                    HorizontalAlignment="Right">
-                <Button VerticalAlignment="Stretch"                        
-                        Margin="0,0,2,0"
-                        Content="&lt;"
-                        Click="PrevButton_Click"
-                        Style="{DynamicResource CaptionTextButtonStyle}"/>
-                <Button VerticalAlignment="Stretch"                        
-                        Content="&gt;"
-                        Click="NextButton_Click"
-                        Style="{DynamicResource CaptionTextButtonStyle}"/>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="1">
-            <local:BookHtmlContent x:Name="pagePanel"/>
-        </Grid>
+        <local:BookHtmlContent x:Name="pagePanel" Background="#AAFFFFFF" />
+
+        <Button x:Name="buttonPrevChapter" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,8,50,0" Content="&#xE76B;" />
+
+        <Button x:Name="buttonNextChapter" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,8,18,0" Content="&#xE76C;" />
     </Grid>
 </UserControl>

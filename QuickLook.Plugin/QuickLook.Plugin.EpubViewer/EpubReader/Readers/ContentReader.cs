@@ -1,5 +1,21 @@
-﻿using System.Collections.Generic;
-using VersOne.Epub.Schema;
+﻿// Copyright © 2018 Marco Gavelli and Paddy Xu
+// 
+// This file is part of QuickLook program.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using System.Collections.Generic;
 
 namespace VersOne.Epub.Internal
 {
@@ -7,7 +23,7 @@ namespace VersOne.Epub.Internal
     {
         public static EpubContentRef ParseContentMap(EpubBookRef bookRef)
         {
-            EpubContentRef result = new EpubContentRef
+            var result = new EpubContentRef
             {
                 Html = new Dictionary<string, EpubTextContentFileRef>(),
                 Css = new Dictionary<string, EpubTextContentFileRef>(),
@@ -15,11 +31,11 @@ namespace VersOne.Epub.Internal
                 Fonts = new Dictionary<string, EpubByteContentFileRef>(),
                 AllFiles = new Dictionary<string, EpubContentFileRef>()
             };
-            foreach (EpubManifestItem manifestItem in bookRef.Schema.Package.Manifest)
+            foreach (var manifestItem in bookRef.Schema.Package.Manifest)
             {
-                string fileName = manifestItem.Href;
-                string contentMimeType = manifestItem.MediaType;
-                EpubContentType contentType = GetContentTypeByContentMimeType(contentMimeType);
+                var fileName = manifestItem.Href;
+                var contentMimeType = manifestItem.MediaType;
+                var contentType = GetContentTypeByContentMimeType(contentMimeType);
                 switch (contentType)
                 {
                     case EpubContentType.XHTML_1_1:
@@ -29,7 +45,7 @@ namespace VersOne.Epub.Internal
                     case EpubContentType.XML:
                     case EpubContentType.DTBOOK:
                     case EpubContentType.DTBOOK_NCX:
-                        EpubTextContentFileRef epubTextContentFile = new EpubTextContentFileRef(bookRef)
+                        var epubTextContentFile = new EpubTextContentFileRef(bookRef)
                         {
                             FileName = fileName,
                             ContentMimeType = contentMimeType,
@@ -44,10 +60,11 @@ namespace VersOne.Epub.Internal
                                 result.Css[fileName] = epubTextContentFile;
                                 break;
                         }
+
                         result.AllFiles[fileName] = epubTextContentFile;
                         break;
                     default:
-                        EpubByteContentFileRef epubByteContentFile = new EpubByteContentFileRef(bookRef)
+                        var epubByteContentFile = new EpubByteContentFileRef(bookRef)
                         {
                             FileName = fileName,
                             ContentMimeType = contentMimeType,
@@ -66,10 +83,12 @@ namespace VersOne.Epub.Internal
                                 result.Fonts[fileName] = epubByteContentFile;
                                 break;
                         }
+
                         result.AllFiles[fileName] = epubByteContentFile;
                         break;
                 }
             }
+
             return result;
         }
 
