@@ -10,7 +10,7 @@
 
 *This project is currently under heavy development. Come back often to see what's new.*
 
-<img src="http://pooi.moe/QuickLook/sample.gif?3" width="400">
+<img src="https://ql-win.github.io/QuickLook/sample.gif?3" width="400">
 
 ## Background
 One of the few features I missed from Mac OS X is [Quick Look](https://en.wikipedia.org/wiki/Quick_Look). It allows user peek into a file content in a lightening speed by just pressing the <kbd>Space</kbd> key. Windows, on the other hand, does not has this handy feature ... until now.
