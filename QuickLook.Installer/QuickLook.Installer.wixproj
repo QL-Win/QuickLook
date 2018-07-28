@@ -39,9 +39,7 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>powershell -file "$(SolutionDir)Scripts\sign-msi.ps1"
-
-powershell -file "$(SolutionDir)Scripts\rename-msi.ps1"
+    <PostBuildEvent>powershell -file "$(SolutionDir)Scripts\rename-msi.ps1"
 
 powershell -file "$(SolutionDir)Scripts\pack-zip.ps1"</PostBuildEvent>
   </PropertyGroup>
@@ -49,8 +47,6 @@ powershell -file "$(SolutionDir)Scripts\pack-zip.ps1"</PostBuildEvent>
     <PreBuildEvent>rmdir /S /Q "$(SolutionDir)Build\Package"
 
 robocopy "$(SolutionDir)Build\$(Configuration)" "$(SolutionDir)Build\Package" %2a.%2a /e /njh /njs /ndl /nfl /nc /ns /np /xf %2a.pdb /xf %2a.obj /xf %2a.ipdb /xf %2a.iobj /xf %2a.exp /xf %2a.lib /xf %2a.ilk /xf %2a.xml
-
-powershell -file "$(SolutionDir)Scripts\sign-package.ps1"
 
 "$(WIX)bin\heat" dir "$(SolutionDir)Build\Package" -dr INSTALLFOLDER -cg QuickLookComponents -gg -g1 -sf -srd -sreg -var "var.PackageDir" -out "$(ProjectDir)C_QuickLookComponents.wxs"</PreBuildEvent>
   </PropertyGroup>
