@@ -18,12 +18,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using Meta.Vlc;
-using Meta.Vlc.Interop.Media;
-using Meta.Vlc.Wpf;
+using System.Windows;
 using QuickLook.Common.Plugin;
-using Size = System.Windows.Size;
-using VideoTrack = Meta.Vlc.VideoTrack;
+using TagLib;
+using File = TagLib.File;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -41,6 +39,7 @@ namespace QuickLook.Plugin.VideoViewer
         };
 
         private ContextObject _context;
+        private File _det;
 
         private ViewerPanel _vp;
 
@@ -48,7 +47,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Init()
         {
-            ApiManager.Initialize(VlcSettings.LibVlcPath, VlcSettings.VlcOptions);
+            QLVRegistry.Register();
         }
 
         public bool CanHandle(string path)
@@ -60,28 +59,38 @@ namespace QuickLook.Plugin.VideoViewer
         {
             _context = context;
 
-            var def = new Size(500, 300);
-
-            var hasVideo = HasVideoStream(path, out var mediaSize);
-
-            var windowSize = mediaSize == Size.Empty ? def : mediaSize;
-            windowSize.Width = Math.Max(def.Width, windowSize.Width);
-            windowSize.Height = Math.Max(def.Height, windowSize.Height);
-
-            context.SetPreferredSizeFit(windowSize, 0.8);
-            context.TitlebarOverlap = true;
-            if (!hasVideo)
+            try
             {
+                _det = File.Create(path);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            context.TitlebarOverlap = true;
+
+            if ((_det?.Properties.MediaTypes ?? MediaTypes.Video).HasFlag(MediaTypes.Video)) // video
+            {
+                var windowSize = new Size
+                {
+                    Width = Math.Max(1366, _det?.Properties.VideoWidth ?? 1366),
+                    Height = Math.Max(768, _det?.Properties.VideoHeight ?? 768)
+                };
+                context.SetPreferredSizeFit(windowSize, 0.8);
+
+                context.TitlebarAutoHide = true;
+                context.Theme = Themes.Dark;
+                context.TitlebarBlurVisibility = true;
+            }
+            else // audio
+            {
+                context.PreferredSize = new Size(500, 300);
+
                 context.CanResize = false;
                 context.TitlebarAutoHide = false;
                 context.TitlebarBlurVisibility = false;
                 context.TitlebarColourVisibility = false;
-            }
-            else
-            {
-                context.TitlebarAutoHide = true;
-                context.Theme = Themes.Dark;
-                context.TitlebarBlurVisibility = true;
             }
         }
 
@@ -91,45 +100,20 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.ViewerContent = _vp;
 
-            _vp.mediaElement.VlcMediaPlayer.Opening += MarkReady;
-
-            _vp.LoadAndPlay(path);
-
             context.Title = $"{Path.GetFileName(path)}";
+
+            _vp.LoadAndPlay(path, _det);
         }
 
         public void Cleanup()
         {
-            if (_vp != null)
-                _vp.mediaElement.VlcMediaPlayer.Opening -= MarkReady;
             _vp?.Dispose();
             _vp = null;
 
+            _det?.Dispose();
+            _det = null;
+
             _context = null;
-        }
-
-        private void MarkReady(object sender, ObjectEventArgs<MediaState> e)
-        {
-            _context.IsBusy = false;
-        }
-
-        private static bool HasVideoStream(string path, out Size size)
-        {
-            using (var vlc = new Vlc(VlcSettings.VlcOptions))
-            {
-                using (var media = vlc.CreateMediaFromPath(path))
-                {
-                    media.Parse();
-                    var tracks = media.GetTracks();
-                    var video = tracks.FirstOrDefault(mt => mt.Type == TrackType.Video) as VideoTrack;
-
-                    size = video == null
-                        ? Size.Empty
-                        : new Size(Math.Max(1366, video.Width), Math.Max(768, video.Height));
-
-                    return video != null;
-                }
-            }
         }
     }
 }

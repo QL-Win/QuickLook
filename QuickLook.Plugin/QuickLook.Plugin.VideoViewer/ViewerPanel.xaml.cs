@@ -18,8 +18,8 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,13 +27,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using Meta.Vlc;
-using Meta.Vlc.Interop.Media;
 using QuickLook.Common.Annotations;
-using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using MediaState = Meta.Vlc.Interop.Media.MediaState;
+using TagLib;
+using WPFMediaKit.DirectShow.Controls;
+using WPFMediaKit.DirectShow.MediaPlayers;
+using File = TagLib.File;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -45,11 +45,8 @@ namespace QuickLook.Plugin.VideoViewer
         private readonly ContextObject _context;
         private BitmapSource _coverArt;
 
-        private string _coverArtPath = string.Empty;
-        private bool _hasAudio;
         private bool _hasEnded;
         private bool _hasVideo;
-        private bool _isMuted;
         private bool _isPlaying;
         private bool _wasPlaying;
 
@@ -60,13 +57,18 @@ namespace QuickLook.Plugin.VideoViewer
             // apply global theme
             Resources.MergedDictionaries[0].MergedDictionaries.Clear();
 
+            _context = context;
+
+            mediaElement.MediaUriPlayer.LAVFilterDirectory =
+                IntPtr.Size == 8 ? "LAVFilters-0.72-x64\\" : "LAVFilters-0.72-x86\\";
+
             //ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
 
-            mediaElement.PropertyChanged += PlayerPropertyChanged;
-            mediaElement.StateChanged += PlayerStateChanged;
-
-            _context = context;
+            mediaElement.MediaUriPlayer.PlayerStateChanged += PlayerStateChanged;
+            mediaElement.MediaOpened += MediaOpened;
+            mediaElement.MediaEnded += MediaEnded;
+            mediaElement.MediaFailed += MediaFailed;
 
             buttonPlayPause.Click += TogglePlayPause;
             buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
@@ -75,7 +77,7 @@ namespace QuickLook.Plugin.VideoViewer
 
             sliderProgress.PreviewMouseDown += (sender, e) =>
             {
-                _wasPlaying = mediaElement.VlcMediaPlayer.IsPlaying;
+                _wasPlaying = mediaElement.IsPlaying;
                 mediaElement.Pause();
             };
             sliderProgress.PreviewMouseUp += (sender, e) =>
@@ -83,51 +85,7 @@ namespace QuickLook.Plugin.VideoViewer
                 if (_wasPlaying) mediaElement.Play();
             };
 
-            /*mediaElement.MediaEnded += (s, e) =>
-            {
-                if (mediaElement.IsOpen)
-                    if (!mediaElement.NaturalDuration.HasTimeSpan)
-                    {
-                        mediaElement.Stop();
-                        mediaElement.Play();
-                    }
-            };*/
-
-            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 4);
-        }
-
-        public bool IsMuted
-        {
-            get => _isMuted;
-            set
-            {
-                if (value == _isMuted) return;
-                _isMuted = value;
-                mediaElement.IsMute = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool HasEnded
-        {
-            get => _hasEnded;
-            private set
-            {
-                if (value == _hasEnded) return;
-                _hasEnded = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool HasAudio
-        {
-            get => _hasAudio;
-            private set
-            {
-                if (value == _hasAudio) return;
-                _hasAudio = value;
-                OnPropertyChanged();
-            }
+            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 0.04);
         }
 
         public bool HasVideo
@@ -164,26 +122,19 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        public string LibVlcPath { get; } = VlcSettings.LibVlcPath;
-
-        public string[] VlcOption { get; } = VlcSettings.VlcOptions;
-
         public void Dispose()
         {
-            SettingHelper.Set("Volume", mediaElement.Volume);
+            SettingHelper.Set("VolumeDouble", mediaElement.Volume);
 
             try
             {
+                mediaElement?.Close();
+
                 Task.Run(() =>
                 {
-                    mediaElement?.Dispose();
+                    mediaElement?.MediaUriPlayer.Dispose();
                     mediaElement = null;
                 });
-
-                // disabled because https://github.com/xupefei/QuickLook/issues/195 reports that VLC uses existing files such as folder.jpg
-                // delete cached cover art
-                //if (!string.IsNullOrWhiteSpace(_coverArtPath))
-                //    File.Delete(_coverArtPath);
             }
             catch (Exception e)
             {
@@ -192,6 +143,31 @@ namespace QuickLook.Plugin.VideoViewer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void MediaOpened(object o, RoutedEventArgs args)
+        {
+            HasVideo = mediaElement.HasVideo;
+
+            _context.IsBusy = false;
+        }
+
+        private void MediaFailed(object sender, MediaFailedEventArgs e)
+        {
+            ((MediaUriElement) sender).Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _context.ViewerContent =
+                    new Label {Content = e.Exception, VerticalAlignment = VerticalAlignment.Center};
+                _context.IsBusy = false;
+            }));
+        }
+
+        private void MediaEnded(object sender, RoutedEventArgs e)
+        {
+            IsPlaying = false;
+
+            mediaElement.MediaPosition = 0;
+            mediaElement.Pause();
+        }
 
         private void ShowViedoControlContainer(object sender, MouseEventArgs e)
         {
@@ -213,60 +189,48 @@ namespace QuickLook.Plugin.VideoViewer
             hide.Begin();
         }
 
-        private void PlayerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void PlayerStateChanged(PlayerState oldState, PlayerState newState)
         {
-            var prop = e.PropertyName;
-
-            switch (prop)
+            switch (newState)
             {
-                case nameof(mediaElement.IsMute):
-                    IsMuted = mediaElement.IsMute;
-                    break;
-            }
-        }
-
-        private void PlayerStateChanged(object sender, ObjectEventArgs<MediaState> e)
-        {
-            var state = e.Value;
-
-            switch (state)
-            {
-                case MediaState.Opening:
-                    HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
-                    HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
-                    break;
-                case MediaState.Playing:
-                    UpdateMeta();
-                    HasVideo = mediaElement.VlcMediaPlayer.VideoTrackCount > 0;
-                    HasAudio = mediaElement.VlcMediaPlayer.AudioTrackCount > 0;
+                case PlayerState.Playing:
                     IsPlaying = true;
                     break;
-                case MediaState.Paused:
+                case PlayerState.Paused:
+                case PlayerState.Stopped:
+                case PlayerState.Closed:
                     IsPlaying = false;
-                    break;
-                case MediaState.Ended:
-                    IsPlaying = false;
-                    HasEnded = true;
                     break;
             }
         }
 
-        private void UpdateMeta()
+        private void UpdateMeta(string path, File det)
         {
             if (HasVideo)
                 return;
 
-            var artUri = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.ArtworkUrl);
-            if (!string.IsNullOrEmpty(artUri))
+            try
             {
-                var u = new Uri(artUri);
-                _coverArtPath = u.LocalPath;
-                CoverArt = u.LoadBitmapImage();
-            }
+                if (det == null)
+                    throw new NullReferenceException();
 
-            metaTitle.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Title);
-            metaArtists.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Artist);
-            metaAlbum.Text = mediaElement.VlcMediaPlayer.Media.GetMeta(MetaDataType.Album);
+                metaTitle.Text = !string.IsNullOrWhiteSpace(det.Tag.Title) ? det.Tag.Title : Path.GetFileName(path);
+                metaArtists.Text = det.Tag.FirstPerformer;
+                metaAlbum.Text = det.Tag.Album;
+
+                //var cs = h.Tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
+                var cs = det.Tag.Pictures.FirstOrDefault();
+                if (cs != default(IPicture))
+                    using (var ms = new MemoryStream(cs.Data.Data))
+                    {
+                        CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                    }
+            }
+            catch (Exception)
+            {
+                metaTitle.Text = Path.GetFileName(path);
+                metaArtists.Text = metaAlbum.Text = string.Empty;
+            }
 
             metaArtists.Visibility = string.IsNullOrEmpty(metaArtists.Text)
                 ? Visibility.Collapsed
@@ -278,33 +242,27 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void ChangeVolume(double delta)
         {
-            IsMuted = false;
-
-            var newVol = mediaElement.Volume + (int) delta;
+            var newVol = mediaElement.Volume + delta;
             newVol = Math.Max(newVol, 0);
-            newVol = Math.Min(newVol, 100);
+            newVol = Math.Min(newVol, 1);
 
             mediaElement.Volume = newVol;
         }
 
         private void TogglePlayPause(object sender, EventArgs e)
         {
-            if (mediaElement.VlcMediaPlayer.IsPlaying)
-            {
+            if (mediaElement.IsPlaying)
                 mediaElement.Pause();
-            }
             else
-            {
-                if (HasEnded)
-                    mediaElement.Stop();
                 mediaElement.Play();
-            }
         }
 
-        public void LoadAndPlay(string path)
+        public void LoadAndPlay(string path, File det)
         {
-            mediaElement.LoadMediaWithOptions(path, ":avcodec-hw=dxva2");
-            mediaElement.Volume = SettingHelper.Get("Volume", 50);
+            UpdateMeta(path, det);
+
+            mediaElement.Source = new Uri(path);
+            mediaElement.Volume = SettingHelper.Get("VolumeDouble", 0.7);
 
             mediaElement.Play();
         }
