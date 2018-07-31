@@ -19,6 +19,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -39,7 +40,7 @@ namespace QuickLook
 
     internal class PipeServerManager : IDisposable
     {
-        private const string PipeName = "QuickLook.App.Pipe";
+        private static readonly string PipeName = "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value;
         private static PipeServerManager _instance;
 
         private DispatcherOperation _lastOperation;
