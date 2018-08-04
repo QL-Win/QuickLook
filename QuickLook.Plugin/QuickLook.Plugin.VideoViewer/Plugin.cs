@@ -18,10 +18,10 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
+using MediaInfo;
 using QuickLook.Common.Plugin;
-using TagLib;
-using File = TagLib.File;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -39,7 +39,7 @@ namespace QuickLook.Plugin.VideoViewer
         };
 
         private ContextObject _context;
-        private File _det;
+        private MediaInfo.MediaInfo _mediaInfo;
 
         private ViewerPanel _vp;
 
@@ -61,22 +61,38 @@ namespace QuickLook.Plugin.VideoViewer
 
             try
             {
-                _det = File.Create(path);
+                _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
+                _mediaInfo.Option("Cover_Data", "base64");
+
+                _mediaInfo.Open(path);
+
             }
             catch (Exception)
             {
-                // ignored
+                _mediaInfo?.Dispose();
+                _mediaInfo = null;
             }
 
             context.TitlebarOverlap = true;
 
-            if ((_det?.Properties.MediaTypes ?? MediaTypes.Video).HasFlag(MediaTypes.Video)) // video
+            if (_mediaInfo == null ||
+                !string.IsNullOrEmpty(_mediaInfo.Get(StreamKind.General, 0, "VideoCount"))) // video
             {
+                int.TryParse(_mediaInfo?.Get(StreamKind.Audio, 0, "Width"), out var width);
+                int.TryParse(_mediaInfo?.Get(StreamKind.Audio, 0, "Height"), out var height);
+                double.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+                
                 var windowSize = new Size
                 {
-                    Width = Math.Max(1366, _det?.Properties.VideoWidth ?? 1366),
-                    Height = Math.Max(768, _det?.Properties.VideoHeight ?? 768)
+                    Width = Math.Max(1366, width == 0 ? 1366 : width),
+                    Height = Math.Max(768, height == 0 ? 768 : height)
                 };
+
+                if (rotation % 180 != 0)
+                    windowSize = new Size(windowSize.Height, windowSize.Width);
+
                 context.SetPreferredSizeFit(windowSize, 0.8);
 
                 context.TitlebarAutoHide = true;
@@ -102,7 +118,7 @@ namespace QuickLook.Plugin.VideoViewer
 
             context.Title = $"{Path.GetFileName(path)}";
 
-            _vp.LoadAndPlay(path, _det);
+            _vp.LoadAndPlay(path, _mediaInfo);
         }
 
         public void Cleanup()
@@ -110,8 +126,8 @@ namespace QuickLook.Plugin.VideoViewer
             _vp?.Dispose();
             _vp = null;
 
-            _det?.Dispose();
-            _det = null;
+            _mediaInfo?.Dispose();
+            _mediaInfo = null;
 
             _context = null;
         }

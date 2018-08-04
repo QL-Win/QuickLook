@@ -25,15 +25,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using MediaInfo;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using TagLib;
 using WPFMediaKit.DirectShow.Controls;
 using WPFMediaKit.DirectShow.MediaPlayers;
-using File = TagLib.File;
 
 namespace QuickLook.Plugin.VideoViewer
 {
@@ -204,24 +204,27 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        private void UpdateMeta(string path, File det)
+        private void UpdateMeta(string path, MediaInfo.MediaInfo info)
         {
             if (HasVideo)
                 return;
 
             try
             {
-                if (det == null)
+                if (info == null)
                     throw new NullReferenceException();
 
-                metaTitle.Text = !string.IsNullOrWhiteSpace(det.Tag.Title) ? det.Tag.Title : Path.GetFileName(path);
-                metaArtists.Text = det.Tag.FirstPerformer;
-                metaAlbum.Text = det.Tag.Album;
+                var title = info.Get(StreamKind.General, 0, "Title");
+                var artist = info.Get(StreamKind.General, 0, "Performer");
+                var album = info.Get(StreamKind.General, 0, "Album");
 
-                //var cs = h.Tag.Pictures.FirstOrDefault(p => p.Type == TagLib.PictureType.FrontCover);
-                var cs = det.Tag.Pictures.FirstOrDefault();
-                if (cs != default(IPicture))
-                    using (var ms = new MemoryStream(cs.Data.Data))
+                metaTitle.Text = !string.IsNullOrWhiteSpace(title) ? title : Path.GetFileName(path);
+                metaArtists.Text = artist;
+                metaAlbum.Text = album;
+
+                var cs = info.Get(StreamKind.General, 0, "Cover_Data");
+                if (!string.IsNullOrEmpty(cs))
+                    using (var ms = new MemoryStream(Convert.FromBase64String(cs)))
                     {
                         CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                     }
@@ -257,9 +260,14 @@ namespace QuickLook.Plugin.VideoViewer
                 mediaElement.Play();
         }
 
-        public void LoadAndPlay(string path, File det)
+        public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
         {
-            UpdateMeta(path, det);
+            UpdateMeta(path, info);
+            
+            // detect rotation
+            double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+            if (Math.Abs(rotation) > 0.1)
+                mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5, 0.5);
 
             mediaElement.Source = new Uri(path);
             mediaElement.Volume = SettingHelper.Get("VolumeDouble", 0.7);
