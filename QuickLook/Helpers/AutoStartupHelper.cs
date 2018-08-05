@@ -17,7 +17,7 @@
 
 using System;
 using System.IO;
-using Shell32;
+using QuickLook.Common.Helpers;
 
 namespace QuickLook.Helpers
 {
@@ -45,8 +45,9 @@ namespace QuickLook.Helpers
 
                 lnk.Save(StartupFullPath);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                ProcessHelper.WriteLog(e.ToString());
                 TrayIconManager.ShowNotification("", "Failed to add QuickLook to Startup folder.");
             }
         }
