@@ -27,10 +27,17 @@ namespace QuickLook.Plugin.InfoPanel
         {
             totalSpace = totalFreeSpace = 0L;
 
-            var root = new DriveInfo(Path.GetPathRoot(path));
+            try
+            {
+                var root = new DriveInfo(Path.GetPathRoot(path));
 
-            totalSpace = root.TotalSize;
-            totalFreeSpace = root.AvailableFreeSpace;
+                totalSpace = root.TotalSize;
+                totalFreeSpace = root.AvailableFreeSpace;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         public static void CountFolder(string root, ref bool stop, out long totalDirs, out long totalFiles,
