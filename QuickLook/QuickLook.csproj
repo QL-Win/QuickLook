@@ -143,7 +143,7 @@
     <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
     <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
     <Compile Include="Helpers\ShareHelper.cs" />
-    <Compile Include="Helpers\ShellLinkHelper.cs" />
+    <Compile Include="NativeMethods\ShellLink.cs" />
     <Compile Include="PipeServerManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
@@ -244,17 +244,6 @@
       <Link>LICENSE-GPL.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Shell32">
-      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Translations.config">

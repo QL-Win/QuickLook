@@ -17,7 +17,9 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using QuickLook.Common.Helpers;
+using QuickLook.NativeMethods;
 
 namespace QuickLook.Helpers
 {
@@ -34,16 +36,15 @@ namespace QuickLook.Helpers
 
             try
             {
-                File.Create(StartupFullPath).Close();
+                RemoveAutorunShortcut();
 
-                var lnk = ShellLinkHelper.OpenShellLink(StartupFullPath);
+                var lnk = (IShellLinkW) new ShellLink();
 
-                lnk.Path = App.AppFullPath;
-                lnk.Arguments = "/autorun"; // silent
+                lnk.SetPath(App.AppFullPath);
+                lnk.SetArguments("/autorun"); // silent
                 lnk.SetIconLocation(App.AppFullPath, 0);
-                lnk.WorkingDirectory = App.AppPath;
-
-                lnk.Save(StartupFullPath);
+                lnk.SetWorkingDirectory(App.AppPath);
+                ((IPersistFile) lnk).Save(StartupFullPath, false);
             }
             catch (Exception e)
             {
@@ -57,7 +58,15 @@ namespace QuickLook.Helpers
             if (App.IsUWP)
                 return;
 
-            File.Delete(StartupFullPath);
+            try
+            {
+                File.Delete(StartupFullPath);
+            }
+            catch (Exception e)
+            {
+                ProcessHelper.WriteLog(e.ToString());
+                TrayIconManager.ShowNotification("", "Failed to delete QuickLook startup shortcut.");
+            }
         }
 
         internal static bool IsAutorun()
