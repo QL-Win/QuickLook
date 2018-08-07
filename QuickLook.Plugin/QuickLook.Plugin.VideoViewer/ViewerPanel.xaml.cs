@@ -124,6 +124,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Dispose()
         {
+            // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
             SettingHelper.Set("VolumeDouble", mediaElement.Volume);
 
             try
@@ -270,7 +271,8 @@ namespace QuickLook.Plugin.VideoViewer
                 mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5, 0.5);
 
             mediaElement.Source = new Uri(path);
-            mediaElement.Volume = SettingHelper.Get("VolumeDouble", 0.7);
+            // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
+            mediaElement.Volume = SettingHelper.Get("VolumeDouble", 1d);
 
             mediaElement.Play();
         }
