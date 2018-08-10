@@ -293,3 +293,7 @@ __pycache__/
 !/Build/AppxManifest.*
 !/Build/assetslayout.resfiles
 !/Build/priconfig.xml
+update-version.ps1
+Scripts/update-version.ps1
+Scripts/update-version.ps1
+*.ps1

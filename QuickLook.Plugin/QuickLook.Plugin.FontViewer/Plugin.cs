@@ -18,10 +18,10 @@
 using System;
 using System.IO;
 using System.Windows;
-using System.Text;
 using QuickLook.Common.Plugin;
 using System.Windows.Media;
 using System.Linq;
+using System.Globalization;
 
 namespace QuickLook.Plugin.FontViewer
 {
@@ -52,12 +52,14 @@ namespace QuickLook.Plugin.FontViewer
         {
           
             GlyphTypeface gf = new GlyphTypeface(new Uri(path));
-            
+
+            String FontFamilyName = gf.FamilyNames[CultureInfo.CurrentCulture] != null ? gf.FamilyNames[CultureInfo.CurrentCulture] : gf.FamilyNames.Values.FirstOrDefault();
+            String FontFaceName = gf.FaceNames[CultureInfo.CurrentCulture] != null ? gf.FaceNames[CultureInfo.CurrentCulture] : gf.FaceNames.Values.FirstOrDefault();
+
             _fontPanel = new FontViewerPanel();
             context.ViewerContent = _fontPanel;
-            context.Title = gf.FamilyNames.ToArray()[0].Value + " " + gf.FaceNames.ToArray()[0].Value;
+            context.Title = FontFamilyName + " " + FontFaceName;
 
-            
             _fontPanel.LoadFont(path);
 
             context.IsBusy = false;
