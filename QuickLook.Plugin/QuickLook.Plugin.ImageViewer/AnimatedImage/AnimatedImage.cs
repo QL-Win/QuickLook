@@ -20,7 +20,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -40,7 +39,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _animation = null;
         }
 
-        private static AnimationProvider LoadFullImageCore(Uri path, Dispatcher uiDispatcher)
+        private static AnimationProvider LoadFullImageCore(Uri path, NConvert meta, Dispatcher uiDispatcher)
         {
             byte[] sign;
             using (var reader =
@@ -52,11 +51,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             AnimationProvider provider;
 
             if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
-                provider = new GifAnimationProvider(path.LocalPath, uiDispatcher);
+                provider = new GifAnimationProvider(path.LocalPath, meta, uiDispatcher);
             else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
-                provider = new APNGAnimationProvider(path.LocalPath, uiDispatcher);
+                provider = new APNGAnimationProvider(path.LocalPath, meta, uiDispatcher);
             else
-                provider = new ImageMagickProvider(path.LocalPath, uiDispatcher);
+                provider = new ImageMagickProvider(path.LocalPath, meta, uiDispatcher);
 
             return provider;
         }
@@ -72,7 +71,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 new UIPropertyMetadata(null, AnimationUriChanged));
 
         public static readonly DependencyProperty MetaProperty =
-            DependencyProperty.Register("Meta", typeof(Meta), typeof(AnimatedImage));
+            DependencyProperty.Register("Meta", typeof(NConvert), typeof(AnimatedImage));
 
         public int AnimationFrameIndex
         {
@@ -86,9 +85,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             set => SetValue(AnimationUriProperty, value);
         }
 
-        public Meta Meta
+        public NConvert Meta
         {
-            private get => (Meta) GetValue(MetaProperty);
+            private get => (NConvert) GetValue(MetaProperty);
             set => SetValue(MetaProperty, value);
         }
 
@@ -100,7 +99,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             //var thumbnail = instance.Meta?.GetThumbnail(true);
             //instance.Source = thumbnail;
 
-            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Dispatcher);
+            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Meta, instance.Dispatcher);
 
             instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
             instance.AnimationFrameIndex = 0;

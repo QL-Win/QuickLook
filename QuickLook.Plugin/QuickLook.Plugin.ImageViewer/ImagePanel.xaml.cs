@@ -34,7 +34,6 @@ using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -50,7 +49,7 @@ namespace QuickLook.Plugin.ImageViewer
         private bool _isZoomFactorFirstSet = true;
         private DateTime _lastZoomTime = DateTime.MinValue;
         private double _maxZoomFactor = 3d;
-        private Meta _meta;
+        private NConvert _meta;
         private Visibility _metaIconVisibility = Visibility.Visible;
         private double _minZoomFactor = 0.1d;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
@@ -85,7 +84,7 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
         }
 
-        internal ImagePanel(ContextObject context, Meta meta) : this()
+        internal ImagePanel(ContextObject context, NConvert meta) : this()
         {
             _context = context;
             Meta = meta;
@@ -227,7 +226,7 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        public Meta Meta
+        public NConvert Meta
         {
             get => _meta;
             set
@@ -256,18 +255,18 @@ namespace QuickLook.Plugin.ImageViewer
         private void ShowMeta()
         {
             textMeta.Inlines.Clear();
-            Meta.GetSummary().ForEach(m =>
+            Meta.GetExif().ForEach(m =>
             {
-                if (string.IsNullOrWhiteSpace(m.Key) || string.IsNullOrWhiteSpace(m.Value))
+                if (string.IsNullOrWhiteSpace(m.Item1) || string.IsNullOrWhiteSpace(m.Item2))
                     return;
 
-                if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
-                    || m.Key == "Thumbnail" || m.Key == "Exif comment")
+                if (m.Item1 == "File name" || m.Item1 == "File size" || m.Item1 == "MIME type" || m.Item1 == "Exif comment"
+                    || m.Item1 == "Thumbnail" || m.Item1 == "Exif comment")
                     return;
 
-                textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
+                textMeta.Inlines.Add(new Run(m.Item1) {FontWeight = FontWeights.SemiBold});
                 textMeta.Inlines.Add(": ");
-                textMeta.Inlines.Add(m.Value);
+                textMeta.Inlines.Add(m.Item2);
                 textMeta.Inlines.Add("\r\n");
             });
             textMeta.Inlines.Remove(textMeta.Inlines.LastInline);

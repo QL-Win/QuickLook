@@ -1,0 +1,827 @@
+** NCONVERT v7.20 (c) 1991-2017 Pierre-E Gougelet (May 31 2018/13:57:24) **
+        Version for Windows NT/9x/2000/Xp/Vista/7  (All rights reserved)
+** Site license for Kabam Games Inc
+
+The JPEG code is based in part on the work of the Independent JPEG Group's software.
+The PNG code is based in part on the work of the Group 42, Inc.
+This software is based in part on compression library of Jean-loup Gailly and Mark Adler
+
+Usage : nconvert [options] file ...
+
+        Options :
+          -quiet            : Quiet mode
+          -info             : Display informations only
+          -fullinfo         : Display informations & metadata only
+          -v[.]             : Verbose
+          -in format        : Input format number or -1
+          -page num         : Page/image number
+          -xall             : Extract all images
+          -multi            : Create a multi-page (TIFF/DCX/LDF/PDF only)
+          -npcd num         : PCD 0:192x128, 1:384x256, 2:768x512 (default)
+          -ngrb npic        : HP-48 number of grey : 1, 2 or 4 (default : 1)
+          -no#              : # not used for numeric operator
+          -org_depth        : Load with original depth
+          -older n          : Convert only if older than n days
+          -clipboard        : Import from clipboard
+          -overwrite        : Overwrite existing file
+          -ignore_errors    : Ignore errors
+          -no_auto_ext      : Don't add extension to output filename
+          -ctype type       : Channel Type (Raw)
+              grey  : Greyscale (default)
+              rgb   : Red,Green,Blue
+              bgr   : Blue,Green,Red
+              rgba  : Red,Green,Blue,Alpha
+              abgr  : Alpha,Blue,Green,Red
+              cmy   : Cyan,Magenta,Yellow
+              cmyk  : Cyan,Magenta,Yellow,Black
+          -corder order     : Channel Order (Raw)
+              inter : Interleaved (default)
+              seq   : Sequential 
+              sep   : Separate
+          -size geometry    : Width and height (Raw/YUV)
+                Geometry is widthxheight+offset
+          -l file : Use file as filelist
+          -n start end step : Begin End Step (for image sequence)
+          -t start step : Begin Step (for # in output filename)
+          -o filename       : Output filename
+              Use # to specify position of numeric enumerator
+              Use % to specify source filename
+              Use $ to specify full source pathname
+              Use $$ to specify source folder name
+              Use $EXIF:DateModified[date format] to specify EXIF date modified
+              Use $EXIF:DateTaken[date format] to specify EXIF date taken
+									Date format: Please check documentation of strftime
+          -out format       : Output format name
+          -D                : Delete original picture
+          -c value          : Compression number
+              default : 0 (uncompressed)
+              PDF    : 1 (Fax), 2 (Rle), 3 (LZW), 4(ZIP), 5 (JPEG)
+              TIFF   : 1 (Rle), 2 (LZW), 3 (LZW+Prediction)
+                       4 (ZLIB)
+                       5 (CCITT G3), 6 (CCITT G3-2D), 7 (CCITT G4) only B/W
+                       8 (JPEG) only 24/32 bits
+              TARGA, Softimage, SGI, PCX, IFF, BMP : 1 (Rle)
+          -c_bw value       : Compression number for black&white picture (default : 0)
+          -c_grey value     : Compression number for greyscale picture (default : 0)
+          -c_rgb value      : Compression number for color picture (default : 0)
+          -q value          : JPEG/FPX/WIC/PDF quality (default : 85)
+          -clevel value     : PNG Compression level (default : 6)
+          -i                : Interlaced GIF / Progressive JPEG
+          -icc              : Use ICC Profile
+          -keep_icc         : Keep ICC Profile from original file
+          -icc_in filename  : Input color profile
+          -icc_out filename : Output color profile
+          -icc_intent value : Intent value
+          -icc_bcp          : Black point compensation
+          -icc_ie           : Ignore embedded ICC profile
+          -add_alpha value  : Add alpha channel (24bits)
+          -merge_alpha      : Merge alpha by using 'transparent color' (32bits)
+          -set_alpha        : Add alpha by using 'transparent color' (32bits)
+          -transparent value: Transparency index (GIF/PNG)
+          -transpcolor red green blue: Transparency color (GIF/PNG)
+          -opthuff          : Optimize Huffman Table (JPEG)
+          -dct value         : DCT method
+              0  : Slow
+              1  : Fast
+              2  : Float
+          -smoothingf value  : Smoothing factor (0-10)
+          -subsampling value : Subsampling factor
+              0  : 2x2,1x1,1x1
+              1  : 2x1,1x1,1x1
+              2  : 1x1,1x1,1x1
+          -comp_ratio value: Compress ratio (JPEG2K)
+          -max_filesize value: Maximum filesize (JPEG2K)
+          -bgcolor red green blue: Background color (for rotate/canvas)
+          -dpi res_dpi      : Set the resolution in DPI
+          -keepdocsize      : Resize bitmap function of the old and new DPI value
+          -keepfiledate     : Keep original file data/time
+          -keepcspace       : Keep original color space if possible
+          -cmyk_space       : Convert if possible in CMYK space
+          -jpegtrans op     : JPEG lossless transformations
+              rot90  : Rotate 90 degrees
+              rot180 : Rotate 180 degrees
+              rot270 : Rotate 270 degrees
+              exif   : Use orientation EXIF tag
+              vflip  : Flip vertical
+              hflip  : Flip horizontal
+          -jpegcrop x y w h : JPEG lossless crop
+          -clean value  : JPEG Clean Metadata (EXIF/IPTC/...)
+              1      : Comment
+              2      : EXIF
+              4      : XMP
+              8      : EXIF thumbnail
+              16     : IPTC
+              32     : ICC Profile
+              64     : Other markers
+          -rmeta  : Remove Metadata (EXIF/IPTC/...)
+          -rexifthumb  : Remove EXIF thumbnail
+          -buildexifthumb  : Try to rebuild EXIF thumbnail
+          -exif_orient value : Set EXIF orientation value
+              1 = Horizontal
+              2 = Mirror horizontal
+              3 = Rotate 180
+              4 = Mirror vertical
+              5 = Mirror horizontal and rotate 270 CW
+              6 = Rotate 90 CW
+              7 = Mirror horizontal and rotate 90 CW
+              8 = Rotate 270 CW
+          -iptc_print tag  : Print IPTC tag value
+          -iptc_clear tag  : Erase IPTC tag
+          -iptc_set tag value : Set value to IPTC tag
+          -iptc_add tag value : Add value to IPTC tag
+          -thumb width height : Extract thumbnail
+          -use_cie   : Use CIE Colors (PS/EPS/PDF ghostscript)
+          -wflag flag       : Write flag
+              os2    : Write OS/2 bmp
+              gif87  : Write GIF87a
+              hp49   : Write HP49
+          -half_res             : Load half resolution (Camera RAW)
+          -embedded_jpeg        : Load embedded jpeg (Camera RAW)
+          -ascii                : Ascii (PPM)
+          -one_strip            : One strip (TIFF)
+          -jxr_color value      : JpegXR color format (yuv444, yuv422, yuv420)
+          -jxr_filter value     : JpegXR block filtering
+              0: off, 1: HP, 2:all
+          -gam value            : Gamma (EXR, HDRI), default=1.0
+          -raw_autobalance      : Auto balance (Camera RAW)
+          -raw_camerabalance    : Camera balance (Camera RAW)
+          -raw_autobright       : Auto brightness (Camera RAW)
+          -raw_gamma value      : Gamma (Camera RAW), default=0.6
+          -raw_brightness value : Brighness (Camera RAW), default=0.8
+          -raw_redscale value   : Red scaling (Camera RAW)
+          -raw_bluescale value  : Blue scaling (Camera RAW)
+          -ilut file        : Input LUT file (DPX/Cineon)
+          -olut file        : Output LUT file (DPX/Cineon)
+          -wmfile file      : Watermark file (Must be after other -wm commands)
+          -wmpos x y        : Watermark position
+          -wmflag flag      : Watermark position
+              top-left, top-center, top-right
+              center-left, center, center-right
+              bottom-left, bottom-center, bottom-right
+          -wmopacity value  : Watermark opacity (0-100)
+          -wmstretch        : Stretch image
+
+        Process :
+          -32bits           : Convert in 32bits
+          -average size     : Average (3,5,7,9,11,13)
+          -autocrop tol r g b : Auto Crop
+          -autocontrast     : Auto Contrast
+          -autodeskew r g b : Auto Deskew
+          -autolevels       : Auto Levels
+          -balance r g b    : Color balance
+          -binary dither    : Convert in Binary
+              pattern : Ordered pattern
+              floyd   : Floyd steinberg
+              halft45 : Halftone 45
+              halft90 : Halftone 90
+              nodither : No dithering
+          -blur percent     : Blur (1...100)
+          -brightness value : Modify brightness (-100...100)
+          -canvas w h pos   : Resize canvas
+              w h can be percent (ex: -canvas 100% 200%)
+              or #x #y for offset
+              pos top-left, top-center, top-right
+                  center-left, center, center-right
+                  bottom-left, bottom-center, bottom-right
+          -conbright value  : Modify brightness (-100...100)
+          -colours num
+          -colors num       : Convert in Indexed Colors (256, 216, 128, 64, 32, 16 or 8)
+          -contrast value   : Modify contrast (-100...100)
+          -crop x y w h     : Crop
+          -dither           : Use Bayer dithering for conversion (Colors and Grey only)
+          -deinter k n      : De-interlace
+              k : even or odd
+              n : dup or int
+          -edetail          : Enhance detail
+          -eedge percent    : Enhance edges (1...100)
+          -edgedetect type  : Edge detect
+              light/medium/heavy
+          -efocus           : Enhance focus
+          -emboss           : Emboss 
+          -embossmore       : Emboss more
+          -equalize         : Equalize
+          -floyd            : Use floydSteinberg dithering for conversion (Colors and Grey only)
+          -frestore         : Focus restoration
+          -gamma value      : Modify gamma (0.01<->5.0
+          -gammasat value   : Modify gamma (0.01<->5.0
+          -gauss size       : Blur gaussian (3,5,7,9,11,13)
+          -grey num         : Convert in Grey Scale (256, 128, 64, 32, 16, 8 or 4)
+          -hls h l s        : Adjust Hue Lightness Saturation
+          -lens percent     : Lens (1...100)
+          -levels b w       : Levels
+          -log              : Apply logarithmic correction
+          -maximum size     : Maximum filter (3,5,7,9,11,13)
+          -medianb size     : Median Box filter (3,5,7,9,11,13)
+          -medianc size     : Median Cross filter (3,5,7,9,11,13)
+          -minimum size     : Minimum filter (3,5,7,9,11,13)
+          -mosaic size      : Mosaic (1...64)
+          -negate           : Negate
+          -new bpp w h      : Create new bitmap
+          -noise reduce     : Reduce noise
+          -noise type value 
+              uniform   : Add uniform noise
+              gaussian  : Add gaussian noise
+              laplacian : Add laplacian noise
+              poisson   : Add poisson noise
+          -normalize        : Normalize
+          -oil size         : Oilify (1...16)
+          -posterize count  : Posterize (2...256)
+          -ratio            : Keep the aspect ratio for scaling
+          -replace r g b r g b : Replace color
+          -rtype            : Type of resampling
+              quick    : Quick resize
+              linear   : Bi-linear (linear)
+              hermite  : Hermite
+              gaussian : Gaussian
+              bell     : Bell
+              bspline  : Bspline
+              mitchell : Mitchell
+              lanczos  : Lanczos
+          -rflag            : Flag for resizing
+              incr   : Increase only
+              decr   : Decrease only
+              orient : Follow orientation
+          -resize w h      : Scale width-height
+              w h can be percent (ex: -resize 100% 200%)
+          -resize fill w h    : Scale by filling the box wxh
+          -resize longest size    : Scale longest side
+          -resize shortest size   : Scale shortest side
+          -rotate_flag      : Rotate flags
+              smooth : Use smooth rotate
+          -rotate degrees   : Rotate
+          -saturation red green blue cyan magenta yellow : Saturation (-100...100)
+          -sepia percent    : Sepia
+          -sharpen percent  : Sharpen (1...100)
+          -shear            : Shear
+          -slice            : Slice
+          -soften percent   : Soften (1...100)
+          -solarize value   : Solarize (1...255)
+          -spread amount    : Spread (1...32)
+          -swap type        : Swap component
+              rbg   : RGB->RBG
+              bgr   : RGB->BGR
+              brg   : RGB->BRG
+              grb   : RGB->GRB
+              gbr   : RGB->GBR
+          -swirl degrees    : Swirl (1...360)
+          -text string      : Add a text
+          -text_font name size  : Font name and size
+          -text_color r g b : Text color
+          -text_back r g b  : Text background color
+          -text_flag pos    : Position of text
+              top-left, top-center, top-right
+              center-left, center, center-right
+              bottom-left, bottom-center, bottom-right
+          -text_pos x y     : Position or offset
+          -text_rotation degrees : Rotation
+          -text_border size red green blue : Add a border
+          -tile size        : Tile (1...64)
+          -truecolors
+          -truecolours      : Convert in True Colors
+          -xflip            : Flip horizontal
+          -yflip            : Flip vertical
+          -waves wavelength phase amount : Waves
+              wavelength   : (1.0 50.0)
+              phase        : (0.0 360.0)
+              amount       : (0.0 100.0)
+
+        Available format:
+               Name     Write  Description
+                -1            : Automatic (Only for input)
+               [*       ]     : JFIF based file 
+               [2bp     ]     : Pocket PC Bitmap 
+               [2d      ]     : Amapi 
+               [3fr     ]     : Hasselblad RAW 
+               [411     ]     : Mavica 
+               [a64     ]     : Artist 64 
+               [abmp    ]     : Alpha Microsystems BMP 
+               [abr     ]     : PS Brush 
+               [abs     ]     : Optocat 
+               [acc     ]     : Access 
+               [ace     ]     : ACE texture 
+               [aces    ]     : Aces200 
+               [acorn   ]     : Acorn Sprite 
+               [adex    ]     : ADEX 
+               [adt     ]     : AdTech perfectfax 
+               [afdesign’]     : Affinity designer 
+               [afphoto ]     : Affinity photo 
+               [afx     ]     : Auto F/X 
+               [ai      ]     : Adobe Illustrator 
+               [aim     ]     : AIM Grey Scale 
+               [aip     ]     : Starlight Xpress SX 500x291 RAW 
+               [aipd    ]     : AIPD image 
+               [alias   ]  *  : Alias Image File 
+               [ami     ]     : Amica Paint 
+               [ani     ]     : Windows Animated Cursor 
+               [anv     ]     : AirNav 
+               [aphp    ]     : Adobe PhotoParade (images) 
+               [apx     ]     : Ability Photopaint Image 
+               [arcib   ]  *  : ArcInfo Binary 
+               [arf     ]     : ARF 
+               [arn     ]     : Astronomical Research Network 
+               [art     ]     : Artisan 
+               [artdir  ]     : Art Director 
+               [arw     ]     : Sony RAW 
+               [atk     ]     : Andrew Toolkit raster object 
+               [att     ]     : AT&T Group 4 
+               [aurora  ]     : Aurora 
+               [avs     ]     : Stardent AVS X 
+               [avw     ]     : Analyze 
+               [az7     ]     : Analyze-7 
+               [b16     ]     : PCO 
+               [b3d     ]     : B3D (images) 
+               [bdr     ]     : Brender 
+               [bfli    ]     : BFLI 
+               [bfx     ]     : Bfx Bitware 
+               [bga     ]     : Os/2 Warp 
+               [bias    ]     : BIAS FringeProcessor 
+               [bif     ]     : byLight 
+               [biorad  ]  *  : Bio-Rad confocal 
+               [bip     ]     : Character Studio (thumbnail) 
+               [bld     ]     : MegaPaint 
+               [blend   ]     : Blender thumbnail 
+               [blp     ]     : BLP textures 
+               [bmc     ]     : Embroidery 
+               [bmg     ]     : Bert's Coloring 
+               [bmp     ]  *  : Windows Bitmap 
+               [bms     ]     : Playback Bitmap Sequence 
+               [bmx     ]     : Siemens Mobile 
+               [bob     ]     : Bob Raytracer 
+               [bpr     ]     : AAA logo 
+               [brk     ]     : Brooktrout 301 
+               [bsg     ]     : Fontasy Grafik 
+               [btn     ]     : JustButtons animated bitmap 
+               [bum     ]     : Poser Bump 
+               [byusir  ]     : BYU SIR 
+               [c4      ]     : Edmics 
+               [cadc    ]     : Autocad CAD-Camera 
+               [cals    ]     : CALS Raster 
+               [cam     ]     : Casio QV-10/100 Camera 
+               [can     ]     : Canon Navigator Fax 
+               [car     ]     : NeoBook Cartoon 
+               [cart    ]     : Crayola 
+               [cat     ]     : Photomatrix 
+               [cbmf    ]     : Corel Flow (preview) 
+               [cdr     ]     : Corel Draw Bitmap (preview) 
+               [cdu     ]     : CDU Paint 
+               [ce      ]     : Computer Eyes, Digital Vision 
+               [ce1     ]     : ComputerEyes Raw 
+               [cel     ]     : Kiss Cel 
+               [cft     ]     : Optigraphics 
+               [cgm     ]     : CGM 
+               [che     ]     : Cheese 
+               [cin     ]  *  : Kodak Cineon 
+               [cip     ]     : Cisco IP Phone 
+               [ciph    ]     : InterPaint (Hires) 
+               [cipt    ]     : InterPaint (Multicolor) 
+               [cish    ]     : Image System (Hires) 
+               [cism    ]     : Image System (Multicolor) 
+               [cloe    ]     : Cloe Ray-Tracer 
+               [clp     ]     : Windows Clipboard 
+               [cmt     ]     : Chinon ES-1000 digital camera 
+               [cmu     ]     : CMU Window Manager 
+               [cmx     ]     : Corel Metafile Exchange (preview) 
+               [cncd    ]     : CoverDesigner (images) 
+               [cnct    ]     : CoverDesigner Template (images) 
+               [cp8     ]     : CP8 256 Gray Scale 
+               [cpa     ]     : Prism 
+               [cpat    ]     : Corel Draw Pattern (preview) 
+               [cpc     ]     : Amstrad Cpc Screen 
+               [cpt     ]     : Corel PhotoPaint 6.0 
+               [cr2     ]     : Canon EOS-1D Mark II RAW 
+               [craw    ]     : Camera RAW 
+               [crd     ]     : PowerCard maker 
+               [crg     ]     : Calamus 
+               [crw     ]     : Canon PowerShot 
+               [csv     ]  *  : CSV 
+               [ct      ]     : Iris CT 
+               [cur     ]     : Windows Cursor 
+               [cut     ]     : Dr Halo 
+               [cvp     ]     : Portrait 
+               [cwg     ]     : CreateWithGarfield 
+               [d3d     ]     : TopDesign Thumbnail 
+               [dali    ]     : Dali Raw 
+               [dbw     ]     : DBW Render 
+               [dcmp    ]     : Discorp CMP Image 
+               [dcpy    ]     : Datacopy 
+               [dcr     ]     : Kodak Pro Digital RAW 
+               [dcx     ]  *  : Zsoft Multi-page Paintbrush 
+               [dd      ]     : Doodle C64 
+               [dds     ]  *  : Direct Draw Surface 
+               [degas   ]  *  : Degas & Degas Elite 
+               [dib     ]     : Windows DIB 
+               [dicom   ]     : Dicom 
+               [dkb     ]  *  : DKB Ray-Tracer 
+               [dng     ]     : DNG 
+               [dol     ]     : DolphinEd 
+               [doodle  ]     : Doodle Atari 
+               [dpx     ]  *  : DPX 
+               [drz     ]     : Draz Paint 
+               [dsi     ]     : CImage 
+               [dta     ]     : Zeiss BIVAS 
+               [dwg     ]     : DWG preview 
+               [dwg     ]     : AutoCAD DWG 
+               [ecc     ]     : Ecchi 
+               [efx     ]     : Everex Everfax 
+               [eidi    ]     : Electric Image 
+               [eif     ]     : Eroiica 
+               [emf     ]  *  : Windows Enhanced Metafile 
+               [emz     ]     : Windows Comp. Enhanced Metafile 
+               [epa     ]     : Award Bios Logo 
+               [epi     ]     : EPS Interchange Format 
+               [eps     ]     : Encapsulated Postscript 
+               [epsp    ]     : Encapsulated Postscript(Preview) 
+               [erf     ]     : Epson RAW 
+               [esm     ]     : Enhance Simplex 
+               [esmp    ]     : ESM Software Pix 
+               [eyes    ]     : Microtek Eyestar 
+               [f96     ]     : Fremont Fax96 
+               [face    ]     : Usenix FaceServer 
+               [fax     ]     : Fax Group 3 
+               [fbm     ]     : Fuzzy bitmap 
+               [fcx     ]     : Faxable PCX 
+               [fff     ]     : Maggi Hairstyles & Cosmetics 
+               [fff     ]     : Imacon/Hasselblad RAW 
+               [ffpg    ]     : Fenix Multi Map 
+               [fgs     ]     : Fun Graphics Machine Hires 
+               [fi      ]     : Flash Image 
+               [fit     ]     : FIT 
+               [fits    ]  *  : Flexible Image Transport System 
+               [fli     ]     : Autodesk Animator 
+               [fmag    ]     : FileMagic 
+               [fmap    ]     : Fenix Map 
+               [fmf     ]     : Fax man 
+               [fp2     ]     : Fun Painter II 
+               [fpg     ]     : DIV Game Studio Multi Map 
+               [fpr     ]     : Fun Photor 
+               [fpt     ]     : Face Painter 
+               [fre     ]     : Male Normal CT 
+               [frm     ]     : PhotoFrame 
+               [frm2    ]     : Album bébé 
+               [fsh     ]     : EA Sports FSH 
+               [fsy     ]     : PhotoFantasy Image 
+               [ftf     ]     : Faxable TIFF 
+               [fx3     ]     : Fugawi Map 
+               [fxs     ]     : WinFAX 
+               [g16     ]     : GRS16 
+               [g3n     ]     : Imaging Fax 
+               [gaf     ]     : Total Annihilation 
+               [gbr     ]  *  : Gimp Brush 
+               [gcd     ]     : Gigacad (Hires) 
+               [gem     ]     : Digital Research (GEM Paint) 
+               [geo     ]     : GeoPaint 
+               [gfaray  ]     : Gfa Raytrace 
+               [gg      ]     : Koala Paint (Compressed) 
+               [gicon   ]     : Gimp Icon 
+               [gif     ]  *  : CompuServe GIF 
+               [gig     ]     : GigaPaint Multi 
+               [gih     ]     : GigaPaint Hi-res 
+               [gm      ]     : Autologic 
+               [gmf     ]     : Gamma Fax 
+               [god     ]     : GoDot 
+               [gpat    ]  *  : Gimp Pattern 
+               [gpb     ]     : Sharp GPB 
+               [grob    ]  *  : HP-48/49 GROB 
+               [gun     ]     : GunPaint 
+               [hdri    ]     : HDRI 
+               [hdru    ]     : Apollo HDRU 
+               [hed     ]     : Hi-Eddi 
+               [hf      ]     : HF 
+               [hir     ]     : Hires C64 
+               [hpgl    ]     : HPGL-2 
+               [hpi     ]     : Hemera Photo Image 
+               [hr      ]     : TRS 80 
+               [hru     ]  *  : HRU 
+               [hrz     ]     : Slow Scan Television 
+               [hsi     ]     : HSI Raw 
+               [hta     ]     : Hemera Thumbs 
+               [iam     ]     : Inventor Assembly thumbnail 
+               [icb     ]     : Image Capture Board 
+               [icd     ]     : Core IDC 
+               [icl     ]     : Icon Library 
+               [icn     ]     : AT&T multigen 
+               [icns    ]     : Mac icon 
+               [ico     ]  *  : Windows Icon 
+               [icon    ]     : Sun Icon/Cursor 
+               [iff     ]  *  : Amiga IFF 
+               [ifx     ]     : IcoFX 
+               [iim     ]     : Inshape 
+               [iimg    ]     : Interleaf 
+               [ilab    ]     : ImageLab 
+               [im5     ]     : IM5 (Visilog) 
+               [img     ]     : Img Software Set 
+               [imgt    ]     : Imaging Technology 
+               [imi     ]     : TMSat image 
+               [imt     ]     : IMNET Image 
+               [indd    ]     : InDesign thumbnail 
+               [info    ]     : Amiga icon 
+               [ingr    ]     : Intergraph Format 
+               [ioca    ]     : IOCA 
+               [ipg     ]     : Mindjongg Format 
+               [ipl     ]     : IPLab 
+               [ipl2    ]     : IPLab 
+               [ipn     ]     : Inventor Presentation thumbnail 
+               [ipseq   ]     : ImagePro Sequence 
+               [ipt     ]     : Inventor Fusion thumbnail 
+               [iris    ]     : Iris Graphics 
+               [ish     ]     : Image Speeder 
+               [iss     ]     : ISS 
+               [j6i     ]     : Ricoh Digital Camera 
+               [jbf     ]     : PaintShopPro Browser Cache File 
+               [jbr     ]     : PaintShopPro Brush 
+               [jif     ]  *  : Jeff's Image Format 
+               [jig     ]     : Jigsaw 
+               [jig2    ]     : Weekly Puzzle 
+               [jj      ]     : Doodle C64 (Compressed) 
+               [jls     ]     : Jpeg-LS 
+               [jpeg    ]  *  : JPEG / JFIF 
+               [jps     ]     : Stereo Image 
+               [jtf     ]     : Hayes JTFax 
+               [jxr     ]  *  : JPEG XR 
+               [k25     ]     : Kodak DC25 Camera 
+               [k25b    ]     : Kodak DC25 Camera 
+               [kdc     ]     : Kodak DC120 Digital Camera 
+               [kdc2    ]     : Kodak DC120 Digital Camera 
+               [kfx     ]     : Kofax Group 4 
+               [kntr    ]     : KONTRON 
+               [koa     ]     : Koala Paint 
+               [kps     ]     : IBM Kips 
+               [kqp     ]     : Konica Camera File 
+               [kro     ]  *  : Kolor Raw Format 
+               [kskn    ]     : KinuPix Skin 
+               [lbm     ]     : Deluxe Paint, Electronic Arts 
+               [lcel    ]     : Lumena CEL 
+               [lda     ]     : LaserData 
+               [lff     ]     : LucasFilm Format 
+               [lif     ]     : Homeworld Texture 
+               [lsm     ]     : Zeiss LSM 
+               [lss     ]     : LSS16 
+               [lvp     ]     : LView Pro 
+               [lwi     ]     : Light Work Image 
+               [m8      ]     : Heretic II MipMap 
+               [mac     ]     : Mac Paint 
+               [mag     ]     : MAKIchan Graphics 
+               [map     ]     : DIV Game Studio Map 
+               [mbig    ]     : Cartes Michelin 
+               [mdl     ]     : Half-Life Model 
+               [mef     ]     : Mamiya RAW 
+               [mfrm    ]     : Megalux Frame 
+               [mgr     ]     : MGR bitmap 
+               [mh      ]     : Teli Fax 
+               [miff    ]  *  : Image Magick file 
+               [mil     ]     : Micro Illustrator Uncompressed 
+               [mjpg    ]     : JPEG 8BIM header (Mac) 
+               [mkcf    ]     : MonkeyCard 
+               [mklg    ]     : MonkeyLogo 
+               [mng     ]     : Multiple Network Graphics 
+               [mon     ]     : Mono Magic 
+               [mos     ]     : Leaf RAW 
+               [mph     ]     : MonkeyPhoto 
+               [mpo     ]     : Multiple Picture 
+               [mrc     ]     : MRC (Medical Research Council) 
+               [mrf     ]     : Marks Russel File 
+               [mrw     ]     : Minolta DiMAGE RAW 
+               [msp     ]     : Microsoft Paint 
+               [msx2    ]     : Msx 2 Screen 
+               [mtv     ]  *  : MTV Ray-Tracer 
+               [mtx     ]     : Maw-Ware Textures 
+               [ncr     ]     : NCR Image 
+               [ncy     ]     : FlashCam Frame 
+               [ncy     ]     : FlashCam frame 
+               [nef     ]     : Nikon RAW 
+               [neo     ]     : Neochrome (ST & TT) 
+               [ngg     ]  *  : Nokia Group Graphics 
+               [nifti   ]     : Nifti 
+               [nist    ]     : NIST ihdr 
+               [nitf    ]     : National Imagery Transmission F. 
+               [nlm     ]  *  : Nokia Logo File 
+               [nol     ]  *  : Nokia Operator Logo 
+               [npm     ]     : Neopaint Mask 
+               [nrw     ]     : Nikon RAW 
+               [nsr     ]     : NewsRoom 
+               [oaz     ]     : OAZ Fax 
+               [ocp     ]     : Advanced Art Studio 
+               [of      ]     : HP-49 OpenFire 
+               [ofx     ]     : Olicom Fax 
+               [ohir    ]     : Oric Hires 
+               [oil     ]     : Open Image Library Format 
+               [ols     ]     : Olympus Scan 
+               [orf     ]     : Olympus RAW 
+               [os2     ]     : OS/2 Bitmap 
+               [otap    ]     : Oric TAP 
+               [otb     ]  *  : Nokia OTA bitmap 
+               [p64     ]     : Picasso 64 
+               [p7      ]     : XV Visual Schnauzer 
+               [pabx    ]  *  : PABX background 
+               [palm    ]  *  : Palm Pilot 
+               [pam     ]     : Portable Arbitrary Map 
+               [pan     ]     : SmoothMove Pan Viewer 
+               [patps   ]     : Photoshop Pattern 
+               [pbm     ]  *  : Portable Bitmap 
+               [pbt     ]     : Micro Dynamics MARS 
+               [pcd     ]     : Kodak Photo CD 
+               [pcl     ]  *  : Page Control Language 
+               [pcp     ]     : Atari grafik 
+               [pcx     ]  *  : Zsoft Publisher's Paintbrush 
+               [pd      ]     : Male MRI 
+               [pdd     ]     : Photo Deluxe 
+               [pdf     ]  *  : Portable Document Format 
+               [pds     ]     : Planetary Data System 
+               [pdx     ]     : Mayura Draw 
+               [pef     ]     : Pentax *ist D 
+               [pegs    ]     : Pegs 
+               [pfi     ]     : Photo Filtre Studio 
+               [pfm     ]     : PFM graphic 
+               [pfs     ]     : Pfs Art Publisher 
+               [pgc     ]     : Portfolio Graphics Compressed 
+               [pgf     ]     : Portfolio Graphics 
+               [pgm     ]  *  : Portable Greyscale 
+               [pi      ]     : Blazing Paddles 
+               [pic     ]     : PC Paint / Pictor Page 
+               [pict    ]     : Macintosh Quickdraw/Pict 
+               [pig     ]     : Ricoh IS30 
+               [pixi    ]     : Pixibox 
+               [pixp    ]     : Pixel Power Collage 
+               [pld     ]     : PhotoLine (preview) 
+               [pm      ]     : Print Master 
+               [pm      ]     : PM 
+               [pmg     ]     : Paint Magic 
+               [pmp     ]     : Sony DSC-F1 Cyber-shot 
+               [pmsk    ]     : PaintShopPro Mask 
+               [png     ]  *  : Portable Network Graphics 
+               [pnm     ]  *  : Portable Image 
+               [pp4     ]     : Micrografx Picture Publisher 4.0 
+               [pp5     ]     : Micrografx Picture Publisher 5.0 
+               [ppm     ]  *  : Portable Pixmap 
+               [ppp     ]     : Punk Productions Picture 
+               [pps     ]     : PowerPoint (images) 
+               [ppt     ]     : PowerPoint Presentation (images) 
+               [prc     ]  *  : Picture Gear Pocket 
+               [prf     ]     : Polychrome Recursive Format 
+               [prisms  ]     : Prisms 
+               [prx     ]     : Printfox/Pagefox 
+               [ps      ]  *  : Postscript 
+               [psa     ]     : Print Shop 
+               [psb     ]     : Adobe Photoshop (large) 
+               [psd     ]  *  : Adobe Photoshop 
+               [pseg    ]     : IBM Printer Page Segment 
+               [psf     ]     : PhotoStudio File 
+               [psion3  ]  *  : Psion Series 3 Bitmap 
+               [psion5  ]  *  : Psion Series 5 Bitmap 
+               [psp     ]     : PaintShopPro Image 
+               [pspb    ]     : PaintShopPro Brush 
+               [pspf    ]     : PaintShopPro Frame 
+               [pspm    ]     : PaintShopPro Mask 
+               [pspp    ]     : PaintShopPro Pattern 
+               [pspt    ]     : PaintShopPro Texture 
+               [ptg     ]     : Artrage 
+               [pwp     ]     : Seattle Film Works multi-image 
+               [pxa     ]     : Pixia 
+               [pxr     ]     : Pixar picture file 
+               [pzl     ]     : Puzzle 
+               [pzp     ]     : MGI Photosuite Project (images) 
+               [q0      ]     : Q0 
+               [qcad    ]     : Autodesk QuickCAD thumbnail 
+               [qdv     ]     : Qdv (Random Dot Software) 
+               [qrt     ]  *  : Qrt Ray-Tracer 
+               [qtif    ]     : QuickTime Image Format 
+               [rad     ]  *  : Radiance 
+               [raf     ]     : Fuji S2 RAW 
+               [ras     ]     : Sun Rasterfile 
+               [raw     ]  *  : Raw 
+               [raw1    ]     : Sinar RAW 
+               [raw2    ]     : AVT RAW 
+               [raw3    ]     : Casio RAW 
+               [raw4    ]     : Contax RAW 
+               [raw5    ]     : Creative PC-CAM RAW 
+               [raw6    ]     : Foculus RAW 
+               [raw7    ]     : Leica RAW 
+               [raw8    ]     : Micron RAW 
+               [raw9    ]     : Panasonic RAW 
+               [rawa    ]     : RoverShot RAW 
+               [rawb    ]     : ST Micro RAW 
+               [rawdvr  ]     : RAW DVR 
+               [rawe    ]  *  : Raw 
+               [ray     ]  *  : Rayshade 
+               [rdc     ]     : Rollei RAW 
+               [rfa     ]     : Mobile FAX 
+               [rfax    ]     : Ricoh Fax 
+               [ript    ]     : RIPTerm Image 
+               [rix     ]     : ColoRIX 
+               [rla     ]  *  : Wavefront Raster file 
+               [rlc2    ]     : Image Systems RLC2 Graphic 
+               [rle     ]     : Utah raster image 
+               [rp      ]     : Rainbow Painter 
+               [rpm     ]     : RunPaint (Multicolor) 
+               [rsb     ]     : Red Storm File Format 
+               [rsrc    ]     : Mac OSX Resource 
+               [rw2     ]     : Panasonic LX3 RAW 
+               [rwl     ]     : Leica RAW 
+               [sar     ]     : Saracen Paint 
+               [sci     ]     : SciFax 
+               [sct     ]  *  : SciTex Continuous Tone 
+               [sdg     ]     : Star Office Gallery 
+               [sdt     ]     : SmartDraw 6 template 
+               [sfax    ]     : SmartFax 
+               [sfw     ]     : Seattle Film Works 
+               [sgi     ]  *  : Silicon Graphics RGB 
+               [sif     ]     : SIF MICHEL-Soft 
+               [sir     ]     : Solitaire Image Recorder 
+               [sj1     ]     : Sega SJ-1 DIGIO 
+               [skf     ]     : Autodesk SKETCH thumbnail 
+               [skn     ]     : Skantek 
+               [skp     ]     : Autodesk SketchUp component 
+               [smp     ]     : Xionics SMP 
+               [soft    ]  *  : Softimage 
+               [spc     ]     : Spectrum 512 (Compressed) 
+               [spot    ]     : SPOT 
+               [sps     ]     : Spectrum 512 (Smooshed) 
+               [spu     ]     : Spectrum 512 
+               [srf     ]     : Panasonic DMC-LC1 RAW 
+               [srf2    ]     : Sony DSC-F828 RAW 
+               [srw     ]     : Samsung RAW 
+               [ssi     ]     : SriSun 
+               [ssp     ]     : Axialis Screensaver (images) 
+               [sst     ]     : AVHRR Image 
+               [st4     ]     : SBIG CCD camera ST-4 
+               [stad    ]     : Stad 
+               [star    ]     : Starbase 
+               [stm     ]     : PhotoStudio Stamp 
+               [stw     ]     : Neopaint Stamp 
+               [stx     ]     : SBIG CCD camera ST-X 
+               [svg     ]     : SVG 
+               [syj     ]     : Syberia texture 
+               [synu    ]     : Synthetic Universe 
+               [taac    ]     : Sun TAAC file 
+               [tdi     ]  *  : Explore (TDI) & Maya 
+               [tdim    ]     : Digital F/X 
+               [teal    ]     : TealPaint 
+               [tg4     ]     : TG4 
+               [tga     ]  *  : Truevision Targa 
+               [thmb    ]     : IPod thumb 
+               [ti      ]  *  : TI Bitmap 
+               [tiff    ]  *  : TIFF Revision 6 
+               [til     ]     : Buttonz & Tilez texture 
+               [tile    ]     : Eclipse 
+               [tim     ]     : Sony Playstation TIM 
+               [tim2    ]     : Sony PS2 TIM 
+               [tiny    ]     : Tiny 
+               [tjp     ]     : TilePic 
+               [tnl     ]     : Thumbnail 
+               [trup    ]     : Egg Paint 
+               [tsk     ]     : Pocket PC Themes (images) 
+               [ttf     ]     : Optigraphics Tiled 
+               [tub     ]     : PaintShopPro Picture Tube 
+               [txc     ]     : PS2 TXC 
+               [uni     ]     : Brother Fax 
+               [upe4    ]     : Ulead Texture (images) 
+               [upi     ]     : Ulead PhotoImpact 
+               [upst    ]     : Ulead Pattern 
+               [uyvy    ]  *  : YUV 16Bits 
+               [uyvyi   ]  *  : YUV 16Bits Interleaved 
+               [v       ]     : VIPS Image 
+               [vda     ]     : Video Display Adapter 
+               [vfx     ]     : Venta Fax 
+               [vi      ]     : Jovian VI 
+               [vicar   ]     : Vicar 
+               [vid     ]     : Vidcom 64 
+               [vif     ]     : Verity 
+               [viff    ]     : Khoros Visualization Image file 
+               [vista   ]  *  : Vista 
+               [vit     ]     : VITec 
+               [vivid   ]  *  : Vivid Ray-Tracer 
+               [vob     ]     : Vue d'esprit 
+               [vort    ]     : Vort 
+               [vpb     ]     : Quantel VPB 
+               [wad     ]     : WAD (Half life) 
+               [wal     ]     : Quake Texture 
+               [wbc     ]     : WebShots (images) 
+               [wbmp    ]  *  : Wireless Bitmap (level 0) 
+               [webp    ]  *  : WebP 
+               [wfx     ]     : Worldport Fax 
+               [winm    ]     : WinMIPS 
+               [wmf     ]     : Windows & Aldus Metafile 
+               [wmz     ]     : Windows Compressed Metafile 
+               [wpg     ]     : Word Perfect Graphics (images) 
+               [wrl     ]  *  : VRML2 
+               [wzl     ]     : Winzle Puzzle 
+               [x3f     ]     : Sigma RAW 
+               [xar     ]     : Xara (images) 
+               [xbm     ]  *  : X11 Bitmap 
+               [xcf     ]     : Gimp Bitmap 
+               [xif     ]     : Xerox DIFF 
+               [xim     ]     : Ximage 
+               [xnf     ]     : XnView Frame 
+               [xp0     ]     : SecretPhotos puzzle 
+               [xpm     ]  *  : X11 Pixmap 
+               [xwd     ]     : X Windows System dump 
+               [xyz     ]     : Rm2K XYZ 
+               [yuv411  ]     : YUV 4:1:1 
+               [yuv422  ]     : YUV 4:2:2 
+               [yuv444  ]     : YUV 4:4:4 
+               [zbr     ]     : Zoner Zebra Metafile (preview) 
+               [zmf     ]     : Zoner Callisto Metafile (preview) 
+               [zxhob   ]     : ZX Spectrum Hobetta 
+               [zxscr   ]     : ZX Spectrum standard screen 
+               [zxsna   ]     : ZX Spectrum Snapshot 
+               [zzrough ]     : ZZ Rough 

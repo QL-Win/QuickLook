@@ -31,7 +31,8 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private BitmapSource _frameSource;
         private bool _isPlaying;
 
-        public GifAnimationProvider(string path, Dispatcher uiDispatcher) : base(path, uiDispatcher)
+        public GifAnimationProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta,
+            uiDispatcher)
         {
             _frame = (Bitmap) Image.FromFile(path);
             _frameSource = _frame.ToBitmapSource();

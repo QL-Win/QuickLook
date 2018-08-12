@@ -16,32 +16,34 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Threading.Tasks;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
+using System.IO;
+using System.Text;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using QuickLook.Common.Helpers;
 
-namespace QuickLook.Plugin.ImageViewer.AnimatedImage
+namespace QuickLook.Plugin.HtmlViewer
 {
-    internal abstract class AnimationProvider : IDisposable
+    public class WebpagePanel : WpfWebBrowserWrapper
     {
-        protected AnimationProvider(string path, NConvert meta, Dispatcher uiDispatcher)
+        public WebpagePanel()
         {
-            Path = path;
-            Meta = meta;
-            Dispatcher = uiDispatcher;
+            Zoom = (int) (100 * DpiHelper.GetCurrentScaleFactor().Vertical);
         }
 
-        public Dispatcher Dispatcher { get; }
+        public void LoadFile(string path)
+        {
+            if (Path.IsPathRooted(path))
+                path = Helper.FilePathToFileUrl(path);
 
-        public string Path { get; }
+            Dispatcher.Invoke(() => { base.Navigate(path); }, DispatcherPriority.Loaded);
+        }
 
-        public NConvert Meta { get; }
+        public void LoadHtml(string html)
+        {
+            var s = new MemoryStream(Encoding.UTF8.GetBytes(html ?? ""));
 
-        public Int32AnimationUsingKeyFrames Animator { get; protected set; }
-
-        public abstract void Dispose();
-
-        public abstract Task<BitmapSource> GetRenderedFrame(int index);
+            Dispatcher.Invoke(() => { base.Navigate(s); }, DispatcherPriority.Loaded);
+        }
     }
 }

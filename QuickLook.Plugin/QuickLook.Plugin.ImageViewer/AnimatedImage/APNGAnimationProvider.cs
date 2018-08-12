@@ -36,13 +36,14 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private ImageMagickProvider _imageMagickProvider;
         private int _lastEffecitvePreviousPreviousFrameIndex;
 
-        public APNGAnimationProvider(string path, Dispatcher uiDispatcher) : base(path, uiDispatcher)
+        public APNGAnimationProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta,
+            uiDispatcher)
         {
             var decoder = new APNGBitmap(path);
 
             if (decoder.IsSimplePNG)
             {
-                _imageMagickProvider = new ImageMagickProvider(path, uiDispatcher);
+                _imageMagickProvider = new ImageMagickProvider(path, meta, uiDispatcher);
                 return;
             }
 

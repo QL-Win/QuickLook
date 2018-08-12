@@ -20,54 +20,32 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using ImageMagick;
-using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal class ImageMagickProvider : AnimationProvider
     {
-        private readonly string _path;
-        private readonly BitmapSource _thumbnail;
-
-        public ImageMagickProvider(string path, Dispatcher uiDispatcher) : base(path, uiDispatcher)
+        public ImageMagickProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta, uiDispatcher)
         {
-            _path = path;
-            _thumbnail = new Meta(path).GetThumbnail(true);
-
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
                 KeyTime.FromTimeSpan(TimeSpan.Zero))); // thumbnail/full image
-
-            if (_thumbnail != null)
-                Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1,
-                    KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.20)))); // full image
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
-            // the first image is always returns synchronously.
-            if (index == 0 && _thumbnail != null) return new Task<BitmapSource>(() => _thumbnail);
-
             return new Task<BitmapSource>(() =>
             {
-                using (var image = new MagickImage(_path))
+                using (var ms = Meta.GetPngStream())
                 {
-                    try
-                    {
-                        image.AddProfile(ColorProfile.SRGB);
-                    }
-                    catch (MagickResourceLimitErrorException)
-                    {
-                        // https://github.com/xupefei/QuickLook/issues/292: ColorspaceColorProfileMismatch
-                    }
+                    var img = new BitmapImage();
+                    img.BeginInit();
+                    img.StreamSource = ms;
+                    img.CacheOption = BitmapCacheOption.OnLoad;
+                    img.EndInit();
+                    img.Freeze();
 
-                    image.Density = new Density(Math.Floor(image.Density.X), Math.Floor(image.Density.Y));
-                    image.AutoOrient();
-
-                    var bs = image.ToBitmapSource();
-                    bs.Freeze();
-                    return bs;
+                    return img;
                 }
             });
         }

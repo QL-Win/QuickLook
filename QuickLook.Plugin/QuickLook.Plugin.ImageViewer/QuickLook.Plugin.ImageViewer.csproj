@@ -62,9 +62,6 @@
     <Reference Include="LibAPNG">
       <HintPath>.\LibAPNG.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.4.6.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.7.4.6\lib\net40\Magick.NET-Q8-AnyCPU.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -82,11 +79,10 @@
     <Compile Include="AnimatedImage\GifAnimationProvider.cs" />
     <Compile Include="AnimatedImage\AnimationProvider.cs" />
     <Compile Include="AnimatedImage\ImageMagickProvider.cs" />
-    <Compile Include="exiv2\Meta.cs" />
-    <Compile Include="ImageFileHelper.cs" />
     <Compile Include="ImagePanel.xaml.cs">
       <DependentUpon>ImagePanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NConvert.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -108,21 +104,33 @@
     <Resource Include="Resources\background.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="exiv2\exiv2.dll">
+    <Content Include="NConvert\docs\Formats.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="exiv2\exiv2.exe">
+    <Content Include="NConvert\docs\help.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="exiv2\expat.dll">
+    <Content Include="NConvert\docs\license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="exiv2\zlib.dll">
+    <Content Include="NConvert\docs\Plugins.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="NConvert\docs\ReadMe.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NConvert\docs\Usage.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NConvert\docs\WhatsNew.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NConvert\nconvert.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NConvert\Plugins\libwebp.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
