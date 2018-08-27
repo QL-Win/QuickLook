@@ -82,9 +82,6 @@
                                        GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        NoiseVisibility="Visible" />
                 <DockPanel>
-                    <DockPanel.Effect>
-                        <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.7" Color="#B2FFFFFF" />
-                    </DockPanel.Effect>
                     <Button DockPanel.Dock="Right" x:Name="buttonCloseWindow"
                             Style="{StaticResource CaptionCloseButtonStyle}" Content="&#xE894;" />
                     <Button DockPanel.Dock="Right" x:Name="buttonWindowStatus"

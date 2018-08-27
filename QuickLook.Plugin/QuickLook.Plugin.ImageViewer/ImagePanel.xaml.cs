@@ -42,7 +42,8 @@ namespace QuickLook.Plugin.ImageViewer
     /// </summary>
     public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
-        private readonly ContextObject _context;
+        private ContextObject _contextObject;
+
         private Visibility _backgroundVisibility = Visibility.Visible;
         private Point? _dragInitPos;
         private Uri _imageSource;
@@ -74,6 +75,8 @@ namespace QuickLook.Plugin.ImageViewer
             buttonBackgroundColour.Click += OnBackgroundColourOnClick;
 
             SizeChanged += ImagePanel_SizeChanged;
+            viewPanelImage.DoZoomToFit += (sender, e) => DoZoomToFit();
+            viewPanelImage.ImageLoaded += (sender, e) => ContextObject.IsBusy = false;
 
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
@@ -86,11 +89,11 @@ namespace QuickLook.Plugin.ImageViewer
 
         internal ImagePanel(ContextObject context, NConvert meta) : this()
         {
-            _context = context;
+            ContextObject = context;
             Meta = meta;
 
             ShowMeta();
-            Theme = _context.Theme;
+            Theme = ContextObject.Theme;
         }
 
         public bool ShowZoomLevelInfo
@@ -106,10 +109,10 @@ namespace QuickLook.Plugin.ImageViewer
 
         public Themes Theme
         {
-            get => _context?.Theme ?? Themes.Dark;
+            get => ContextObject?.Theme ?? Themes.Dark;
             set
             {
-                _context.Theme = value;
+                ContextObject.Theme = value;
                 OnPropertyChanged();
             }
         }
@@ -199,7 +202,7 @@ namespace QuickLook.Plugin.ImageViewer
                 }
 
                 if (ShowZoomLevelInfo)
-                    ((Storyboard) zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
+                    ((Storyboard)zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
             }
         }
 
@@ -209,6 +212,7 @@ namespace QuickLook.Plugin.ImageViewer
             set
             {
                 _imageSource = value;
+
                 OnPropertyChanged();
             }
         }
@@ -223,6 +227,16 @@ namespace QuickLook.Plugin.ImageViewer
 
                 if (ImageUriSource == null)
                     viewPanelImage.Source = _source;
+            }
+        }
+
+        public ContextObject ContextObject
+        {
+            get => _contextObject;
+            set
+            {
+                _contextObject = value;
+                OnPropertyChanged();
             }
         }
 
@@ -249,7 +263,7 @@ namespace QuickLook.Plugin.ImageViewer
         {
             Theme = Theme == Themes.Dark ? Themes.Light : Themes.Dark;
 
-            SettingHelper.Set("LastTheme", (int) Theme);
+            SettingHelper.Set("LastTheme", (int)Theme);
         }
 
         private void ShowMeta()
@@ -264,7 +278,7 @@ namespace QuickLook.Plugin.ImageViewer
                     || m.Item1 == "Thumbnail" || m.Item1 == "Exif comment")
                     return;
 
-                textMeta.Inlines.Add(new Run(m.Item1) {FontWeight = FontWeights.SemiBold});
+                textMeta.Inlines.Add(new Run(m.Item1) { FontWeight = FontWeights.SemiBold });
                 textMeta.Inlines.Add(": ");
                 textMeta.Inlines.Add(m.Item2);
                 textMeta.Inlines.Add("\r\n");
@@ -390,7 +404,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         private void UpdateZoomToFitFactor()
         {
-            if (viewPanelImage.Source == null)
+            if (viewPanelImage?.Source == null)
             {
                 ZoomToFitFactor = 1d;
                 return;
@@ -410,7 +424,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Zoom(double factor, bool suppressEvent = false, bool isToFit = false)
         {
-            if (viewPanelImage.Source == null)
+            if (viewPanelImage?.Source == null)
                 return;
 
             // pause when fit width

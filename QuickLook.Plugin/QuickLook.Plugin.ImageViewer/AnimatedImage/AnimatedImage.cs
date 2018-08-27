@@ -15,8 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Annotations;
+using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Plugin;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -25,8 +32,14 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     public class AnimatedImage : Image, IDisposable
     {
+        // List<Pair<formats, type>>
+        public static List<KeyValuePair<string[], Type>> Providers = new List<KeyValuePair<string[], Type>>();
+
         private AnimationProvider _animation;
         private bool _disposing;
+
+        public event EventHandler ImageLoaded;
+        public event EventHandler DoZoomToFit;
 
         public void Dispose()
         {
@@ -39,23 +52,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _animation = null;
         }
 
-        private static AnimationProvider LoadFullImageCore(Uri path, NConvert meta, Dispatcher uiDispatcher)
+        private static AnimationProvider LoadFullImageCore(Uri path)
         {
-            byte[] sign;
-            using (var reader =
-                new BinaryReader(new FileStream(path.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            {
-                sign = reader.BaseStream.Length < 4 ? new byte[] {0, 0, 0, 0} : reader.ReadBytes(4);
-            }
+            var ext = Path.GetExtension(path.LocalPath).ToLower();
+            var type = Providers.First(p => p.Key.Contains(ext) || p.Key.Contains("*")).Value;
 
-            AnimationProvider provider;
-
-            if (sign[0] == 'G' && sign[1] == 'I' && sign[2] == 'F' && sign[3] == '8')
-                provider = new GifAnimationProvider(path.LocalPath, meta, uiDispatcher);
-            else if (sign[0] == 0x89 && sign[1] == 'P' && sign[2] == 'N' && sign[3] == 'G')
-                provider = new APNGAnimationProvider(path.LocalPath, meta, uiDispatcher);
-            else
-                provider = new ImageMagickProvider(path.LocalPath, meta, uiDispatcher);
+            var provider = type.CreateInstance<AnimationProvider>(path.LocalPath);
 
             return provider;
         }
@@ -64,7 +66,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public static readonly DependencyProperty AnimationFrameIndexProperty =
             DependencyProperty.Register("AnimationFrameIndex", typeof(int), typeof(AnimatedImage),
-                new UIPropertyMetadata(-1, AnimationFrameIndexChanged));
+                new UIPropertyMetadata(-2, AnimationFrameIndexChanged));
 
         public static readonly DependencyProperty AnimationUriProperty =
             DependencyProperty.Register("AnimationUri", typeof(Uri), typeof(AnimatedImage),
@@ -73,22 +75,31 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         public static readonly DependencyProperty MetaProperty =
             DependencyProperty.Register("Meta", typeof(NConvert), typeof(AnimatedImage));
 
+        public static readonly DependencyProperty ContextObjectProperty =
+            DependencyProperty.Register("ContextObject", typeof(ContextObject), typeof(AnimatedImage));
+
         public int AnimationFrameIndex
         {
-            get => (int) GetValue(AnimationFrameIndexProperty);
+            get => (int)GetValue(AnimationFrameIndexProperty);
             set => SetValue(AnimationFrameIndexProperty, value);
         }
 
         public Uri AnimationUri
         {
-            get => (Uri) GetValue(AnimationUriProperty);
+            get => (Uri)GetValue(AnimationUriProperty);
             set => SetValue(AnimationUriProperty, value);
         }
 
         public NConvert Meta
         {
-            private get => (NConvert) GetValue(MetaProperty);
+            private get => (NConvert)GetValue(MetaProperty);
             set => SetValue(MetaProperty, value);
+        }
+
+        public ContextObject ContextObject
+        {
+            private get => (ContextObject)GetValue(ContextObjectProperty);
+            set => SetValue(ContextObjectProperty, value);
         }
 
         private static void AnimationUriChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
@@ -99,10 +110,10 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             //var thumbnail = instance.Meta?.GetThumbnail(true);
             //instance.Source = thumbnail;
 
-            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Meta, instance.Dispatcher);
+            instance._animation = LoadFullImageCore((Uri)ev.NewValue);
 
             instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation.Animator);
-            instance.AnimationFrameIndex = 0;
+            instance.AnimationFrameIndex = -1;
         }
 
         private static void AnimationFrameIndexChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
@@ -113,22 +124,32 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             if (instance._disposing)
                 return;
 
-            var task = instance._animation.GetRenderedFrame((int) ev.NewValue);
 
-            if (instance.Source == null && (int) ev.NewValue == 0) // this is the first image. Run it synchronously.
+            if ((int)ev.NewValue == -1) // get thumbnail
             {
+                var task = instance._animation.GetThumbnail(instance.ContextObject.PreferredSize, instance.Meta.GetSize());
+
+                if (task != null)
+                {
+                    task.ContinueWith(_ => instance.Dispatcher.Invoke(() =>
+                    {
+                        instance.Source = _.Result;
+                        instance.DoZoomToFit?.Invoke(instance, new EventArgs());
+                        instance.ImageLoaded?.Invoke(instance, new EventArgs());
+                    }));
+                    task.Start();
+                }
+            }
+            else // begin to loop in the animator
+            {
+                var task = instance._animation.GetRenderedFrame((int)ev.NewValue);
+
+                task.ContinueWith(_ => instance.Dispatcher.Invoke(() =>
+                {
+                    instance.Source = _.Result;
+                }));
                 task.Start();
-                task.Wait(5000);
             }
-
-            if (task.IsCompleted)
-            {
-                instance.Source = task.Result;
-                return;
-            }
-
-            task.ContinueWith(t => { instance.Dispatcher.Invoke(() => instance.Source = t.Result); });
-            task.Start();
         }
 
         #endregion DependencyProperty

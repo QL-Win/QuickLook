@@ -33,17 +33,16 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
     {
         private readonly List<FrameInfo> _frames;
         private readonly List<BitmapSource> _renderedFrames;
-        private ImageMagickProvider _imageMagickProvider;
+        private NETImageProvider _imageMagickProvider;
         private int _lastEffecitvePreviousPreviousFrameIndex;
 
-        public APNGAnimationProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta,
-            uiDispatcher)
+        public APNGAnimationProvider(string path) : base(path)
         {
             var decoder = new APNGBitmap(path);
 
             if (decoder.IsSimplePNG)
             {
-                _imageMagickProvider = new ImageMagickProvider(path, meta, uiDispatcher);
+                _imageMagickProvider = new NETImageProvider(path);
                 return;
             }
 
@@ -64,6 +63,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(i, KeyTime.FromTimeSpan(wallclock)));
                 wallclock += _frames[i].Delay;
             }
+        }
+
+        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
+        {
+            throw new NotImplementedException();
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)

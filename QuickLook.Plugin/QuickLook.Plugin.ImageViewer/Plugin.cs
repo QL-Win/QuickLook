@@ -19,8 +19,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Collections.Generic;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.AnimatedImage;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -45,6 +47,9 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Init()
         {
+            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { ".apng", ".png" }, typeof(APNGAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { ".gif" }, typeof(GifAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { "*" }, typeof(NETImageProvider)));
         }
 
         public bool CanHandle(string path)
@@ -76,20 +81,13 @@ namespace QuickLook.Plugin.ImageViewer
                 ? $"{Path.GetFileName(path)}"
                 : $"{Path.GetFileName(path)} ({size.Width}×{size.Height})";
 
-            LoadImage(_ip, path);
-
-            context.IsBusy = false;
+            _ip.ImageUriSource = new Uri(path);
         }
 
         public void Cleanup()
         {
             _ip?.Dispose();
             _ip = null;
-        }
-
-        private void LoadImage(ImagePanel ui, string path)
-        {
-            ui.ImageUriSource = new Uri(path);
         }
     }
 }

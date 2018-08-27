@@ -18,6 +18,7 @@
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -27,50 +28,58 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal class GifAnimationProvider : AnimationProvider
     {
-        private Bitmap _frame;
-        private BitmapSource _frameSource;
+        private Bitmap _fileHandle;
+        private BitmapSource _frame;
         private bool _isPlaying;
 
-        public GifAnimationProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta,
-            uiDispatcher)
+        public GifAnimationProvider(string path) : base(path)
         {
-            _frame = (Bitmap) Image.FromFile(path);
-            _frameSource = _frame.ToBitmapSource();
+            _fileHandle = (Bitmap)Image.FromFile(path);
 
-            Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
-
+            Animator = new Int32AnimationUsingKeyFrames { RepeatBehavior = RepeatBehavior.Forever };
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
-            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(50))));
-            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(100))));
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10))));
+            Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(20))));
         }
 
         public override void Dispose()
         {
-            if (_frame == null)
+            if (_fileHandle == null)
                 return;
 
-            ImageAnimator.StopAnimate(_frame, OnFrameChanged);
-            _frame.Dispose();
+            ImageAnimator.StopAnimate(_fileHandle, OnFrameChanged);
+            _fileHandle.Dispose();
 
+            _fileHandle = null;
             _frame = null;
-            _frameSource = null;
+        }
+
+        public override Task<BitmapSource> GetThumbnail(System.Windows.Size size, System.Windows.Size fullSize)
+        {
+            return new Task<BitmapSource>(() =>
+            {
+                return _fileHandle.ToBitmapSource();
+            });
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
-            if (!_isPlaying)
+            return new Task<BitmapSource>(() =>
             {
-                _isPlaying = true;
-                ImageAnimator.Animate(_frame, OnFrameChanged);
-            }
+                if (!_isPlaying)
+                {
+                    _isPlaying = true;
+                    ImageAnimator.Animate(_fileHandle, OnFrameChanged);
+                }
 
-            return new Task<BitmapSource>(() => _frameSource);
+                return _frame;
+            });
         }
 
         private void OnFrameChanged(object sender, EventArgs e)
         {
             ImageAnimator.UpdateFrames();
-            _frameSource = _frame.ToBitmapSource();
+            _frame = _fileHandle.ToBitmapSource();
         }
     }
 }

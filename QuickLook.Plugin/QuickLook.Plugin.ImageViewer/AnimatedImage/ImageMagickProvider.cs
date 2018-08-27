@@ -17,36 +17,55 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal class ImageMagickProvider : AnimationProvider
+    internal class NETImageProvider : AnimationProvider
     {
-        public ImageMagickProvider(string path, NConvert meta, Dispatcher uiDispatcher) : base(path, meta, uiDispatcher)
+        public NETImageProvider(string path) : base(path)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
-                KeyTime.FromTimeSpan(TimeSpan.Zero))); // thumbnail/full image
+                KeyTime.FromTimeSpan(TimeSpan.Zero)));
+        }
+
+        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
+        {
+            var factor = Math.Min(size.Width / 2 / fullSize.Width, size.Height / 2 / fullSize.Height);
+            var decode_width = fullSize.Width * factor;
+
+            return new Task<BitmapSource>(() =>
+            {
+                var img = new BitmapImage();
+                img.BeginInit();
+                img.UriSource = new Uri(Path);
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.DecodePixelWidth = (int)Math.Floor(decode_width);
+                img.EndInit();
+
+                var scaled = new TransformedBitmap(img, new ScaleTransform(1d / factor, 1d / factor));
+                scaled.Freeze();
+                return scaled;
+            });
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
             return new Task<BitmapSource>(() =>
             {
-                using (var ms = Meta.GetPngStream())
-                {
-                    var img = new BitmapImage();
-                    img.BeginInit();
-                    img.StreamSource = ms;
-                    img.CacheOption = BitmapCacheOption.OnLoad;
-                    img.EndInit();
-                    img.Freeze();
+                var img = new BitmapImage();
+                img.BeginInit();
+                img.UriSource = new Uri(Path);
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.EndInit();
 
-                    return img;
-                }
+                img.Freeze();
+                return img;
             });
         }
 

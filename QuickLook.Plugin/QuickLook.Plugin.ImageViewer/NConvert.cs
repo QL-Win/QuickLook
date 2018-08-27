@@ -59,13 +59,13 @@ namespace QuickLook.Plugin.ImageViewer
             return _metaExif;
         }
 
-        public MemoryStream GetPngStream()
+        public MemoryStream GetPngStream(bool thumbnail)
         {
             var temp = Path.GetTempFileName();
             File.Delete(temp);
 
-            // 
-            var d = RunInternal($"-quiet -embedded_jpeg -out png -o \"{temp}\" \"{_path}\"", 10000);
+            var thumb = thumbnail ? "-embedded_jpeg" : "";
+            var d = RunInternal($"-quiet {thumb} -out tiff -o \"{temp}\" \"{_path}\"", 10000);
 
             var ms = new MemoryStream(File.ReadAllBytes(temp));
 
