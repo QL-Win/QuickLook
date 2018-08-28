@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
         private WebpagePanel _panel;
 
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

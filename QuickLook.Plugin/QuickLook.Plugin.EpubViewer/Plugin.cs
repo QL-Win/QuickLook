@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.EpubViewer
     {
         private ContextObject _context;
         private EpubViewerControl _epubControl;
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

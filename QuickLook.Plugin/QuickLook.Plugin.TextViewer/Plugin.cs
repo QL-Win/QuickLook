@@ -31,7 +31,7 @@ namespace QuickLook.Plugin.TextViewer
     {
         private TextViewerPanel _tvp;
 
-        public int Priority => 0;
+        public int Priority => -5;
 
         public void Init()
         {

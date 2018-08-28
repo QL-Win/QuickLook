@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.ArchiveViewer
 
         private ArchiveInfoPanel _panel;
 
-        public int Priority => 0;
+        public int Priority => -5;
 
         public void Init()
         {
