@@ -1,0 +1,40 @@
+version: '{build}'
+branches:
+  only:
+  - master
+skip_branch_with_pr: true
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+cache:
+- packages -> **\packages.config
+- '%USERPROFILE%\.nuget\packages -> **\project.json'
+before_build:
+- ps: >-
+    $env:GIT_TAG = git describe --always --tags
+
+    nuget restore
+build:
+  verbosity: minimal
+after_build:
+- ps: >-
+    Get-Content GitVersion.cs
+
+    Move-Item Build\QuickLook-$env:GIT_TAG.msi QuickLook-$env:GIT_TAG.msi
+    
+    Move-Item Build\QuickLook-$env:GIT_TAG.zip QuickLook-$env:GIT_TAG.zip
+
+artifacts:
+- path: QuickLook-%GIT_TAG%.zip
+  name: QuickLook-%GIT_TAG%
+- path: QuickLook-%GIT_TAG%.msi
+  name: QuickLook-%GIT_TAG%
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: YwPL9DCYIWsHKBT7WMnx+IHTWph9fEOUBpnfZhZMTgz6VzWem01X+l/vZPlFxCG/
+  artifact: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
+  draft: true
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
