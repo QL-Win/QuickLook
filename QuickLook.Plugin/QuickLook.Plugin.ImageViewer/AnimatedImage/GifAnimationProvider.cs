@@ -18,11 +18,10 @@
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using QuickLook.Common.ExtensionMethods;
+using Size = System.Windows.Size;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
@@ -32,11 +31,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private BitmapSource _frame;
         private bool _isPlaying;
 
-        public GifAnimationProvider(string path) : base(path)
+        public GifAnimationProvider(string path, NConvert meta) : base(path, meta)
         {
-            _fileHandle = (Bitmap)Image.FromFile(path);
+            _fileHandle = (Bitmap) Image.FromFile(path);
 
-            Animator = new Int32AnimationUsingKeyFrames { RepeatBehavior = RepeatBehavior.Forever };
+            Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10))));
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(20))));
@@ -54,11 +53,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _frame = null;
         }
 
-        public override Task<BitmapSource> GetThumbnail(System.Windows.Size size, System.Windows.Size fullSize)
+        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
         {
             return new Task<BitmapSource>(() =>
             {
-                return _fileHandle.ToBitmapSource();
+                _frame = _fileHandle.ToBitmapSource();
+                return _frame;
             });
         }
 

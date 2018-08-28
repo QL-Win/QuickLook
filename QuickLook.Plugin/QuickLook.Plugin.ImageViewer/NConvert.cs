@@ -19,9 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 
 namespace QuickLook.Plugin.ImageViewer
@@ -43,9 +41,9 @@ namespace QuickLook.Plugin.ImageViewer
     {
         private static readonly string NConvertPath =
             Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "NConvert\\nconvert.exe");
+        private readonly List<Tuple<string, string>> _metaBasic = new List<Tuple<string, string>>();
+        private readonly List<Tuple<string, string>> _metaExif = new List<Tuple<string, string>>();
         private readonly string _path;
-        private List<Tuple<string, string>> _metaBasic = new List<Tuple<string, string>>();
-        private List<Tuple<string, string>> _metaExif = new List<Tuple<string, string>>();
 
         public NConvert(string path)
         {
@@ -59,13 +57,16 @@ namespace QuickLook.Plugin.ImageViewer
             return _metaExif;
         }
 
-        public MemoryStream GetPngStream(bool thumbnail)
+        public MemoryStream GetTiffStream(bool thumbnail)
         {
             var temp = Path.GetTempFileName();
             File.Delete(temp);
 
+            var sony = Path.GetExtension(_path)?.ToLower() == ".arw" ? "-autolevels" : "";
             var thumb = thumbnail ? "-embedded_jpeg" : "";
-            var d = RunInternal($"-quiet {thumb} -out tiff -o \"{temp}\" \"{_path}\"", 10000);
+            var d = RunInternal(
+                $"-quiet {thumb} {sony} -raw_camerabalance -raw_autobright -icc -out tiff -o \"{temp}\" \"{_path}\"",
+                10000);
 
             var ms = new MemoryStream(File.ReadAllBytes(temp));
 
@@ -99,10 +100,7 @@ namespace QuickLook.Plugin.ImageViewer
         public Orientation GetOrientation()
         {
             var o = _metaExif.Find(t => t.Item1 == "Orientation")?.Item2;
-            if (!string.IsNullOrEmpty(o))
-            {
-                return (Orientation) int.Parse(o.Substring(o.Length - 2, 1));
-            }
+            if (!string.IsNullOrEmpty(o)) return (Orientation) int.Parse(o.Substring(o.Length - 2, 1));
 
             return Orientation.TopLeft;
         }
@@ -184,10 +182,7 @@ namespace QuickLook.Plugin.ImageViewer
             {
                 var buffer = new byte[8192];
                 int count;
-                while ((count = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, count);
-                }
+                while ((count = stream.Read(buffer, 0, buffer.Length)) > 0) ms.Write(buffer, 0, count);
 
                 return ms.ToArray();
             }

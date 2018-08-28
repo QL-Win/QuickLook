@@ -75,10 +75,11 @@
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
     <Compile Include="AnimatedImage\AnimatedImage.cs" />
-    <Compile Include="AnimatedImage\APNGAnimationProvider.cs" />
+    <Compile Include="AnimatedImage\APngAnimationProvider.cs" />
     <Compile Include="AnimatedImage\GifAnimationProvider.cs" />
     <Compile Include="AnimatedImage\AnimationProvider.cs" />
-    <Compile Include="AnimatedImage\ImageMagickProvider.cs" />
+    <Compile Include="AnimatedImage\NConvertImageProvider.cs" />
+    <Compile Include="AnimatedImage\NativeImageProvider.cs" />
     <Compile Include="ImagePanel.xaml.cs">
       <DependentUpon>ImagePanel.xaml</DependentUpon>
     </Compile>

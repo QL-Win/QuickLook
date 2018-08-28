@@ -17,35 +17,38 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using LibAPNG;
 using QuickLook.Common.ExtensionMethods;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
-    internal class APNGAnimationProvider : AnimationProvider
+    internal class APngAnimationProvider : AnimationProvider
     {
+        private readonly Frame _baseFrame;
         private readonly List<FrameInfo> _frames;
         private readonly List<BitmapSource> _renderedFrames;
-        private NETImageProvider _imageMagickProvider;
-        private int _lastEffecitvePreviousPreviousFrameIndex;
+        private int _lastEffectivePreviousPreviousFrameIndex;
+        private NativeImageProvider _nativeImageProvider;
 
-        public APNGAnimationProvider(string path) : base(path)
+        public APngAnimationProvider(string path, NConvert meta) : base(path, meta)
         {
-            var decoder = new APNGBitmap(path);
-
-            if (decoder.IsSimplePNG)
+            if (!IsAnimatedPng(path))
             {
-                _imageMagickProvider = new NETImageProvider(path);
+                _nativeImageProvider = new NativeImageProvider(path, meta);
+                Animator = _nativeImageProvider.Animator;
                 return;
             }
 
+            var decoder = new APNGBitmap(path);
+
+            _baseFrame = decoder.DefaultImage;
             _frames = new List<FrameInfo>(decoder.Frames.Length);
             _renderedFrames = new List<BitmapSource>(decoder.Frames.Length);
             Enumerable.Repeat(0, decoder.Frames.Length).ForEach(_ => _renderedFrames.Add(null));
@@ -67,13 +70,16 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
         {
-            throw new NotImplementedException();
+            if (_nativeImageProvider != null)
+                return _nativeImageProvider.GetThumbnail(size, fullSize);
+
+            return new Task<BitmapSource>(() => _baseFrame.GetBitmapSource());
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
-            if (_imageMagickProvider != null)
-                return _imageMagickProvider.GetRenderedFrame(index);
+            if (_nativeImageProvider != null)
+                return _nativeImageProvider.GetRenderedFrame(index);
 
             if (_renderedFrames[index] != null)
                 return new Task<BitmapSource>(() => _renderedFrames[index]);
@@ -89,10 +95,10 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public override void Dispose()
         {
-            if (_imageMagickProvider != null)
+            if (_nativeImageProvider != null)
             {
-                _imageMagickProvider.Dispose();
-                _imageMagickProvider = null;
+                _nativeImageProvider.Dispose();
+                _nativeImageProvider = null;
                 return;
             }
 
@@ -119,9 +125,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             // when saying APNGDisposeOpPrevious, we need to find the last frame not having APNGDisposeOpPrevious.
             // Only [index-2] is not correct here since that frame may also have APNGDisposeOpPrevious.
             if (index > 1)
-                previousPreviousRendered = _renderedFrames[_lastEffecitvePreviousPreviousFrameIndex];
+                previousPreviousRendered = _renderedFrames[_lastEffectivePreviousPreviousFrameIndex];
             if (_frames[index].DisposeOp != DisposeOps.APNGDisposeOpPrevious)
-                _lastEffecitvePreviousPreviousFrameIndex = Math.Max(_lastEffecitvePreviousPreviousFrameIndex, index);
+                _lastEffectivePreviousPreviousFrameIndex = Math.Max(_lastEffectivePreviousPreviousFrameIndex, index);
 
             var visual = new DrawingVisual();
 
@@ -167,6 +173,27 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             bitmap.Freeze();
             return bitmap;
+        }
+
+        private static bool IsAnimatedPng(string path)
+        {
+            using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                while (br.BaseStream.Length - br.BaseStream.Position >= 4)
+                {
+                    var window = br.ReadBytes(4);
+
+                    if (window[0] == 'I' && window[1] == 'D' && window[2] == 'A' && window[3] == 'T')
+                        return false;
+
+                    if (window[0] == 'a' && window[1] == 'c' && window[2] == 'T' && window[3] == 'L')
+                        return true;
+
+                    br.BaseStream.Position -= 3;
+                }
+
+                return false;
+            }
         }
 
         private class FrameInfo

@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Collections.Generic;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.AnimatedImage;
@@ -47,9 +47,18 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Init()
         {
-            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { ".apng", ".png" }, typeof(APNGAnimationProvider)));
-            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { ".gif" }, typeof(GifAnimationProvider)));
-            AnimatedImage.AnimatedImage.Providers.Add(new KeyValuePair<string[], Type>(new[] { "*" }, typeof(NETImageProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".apng", ".png"},
+                    typeof(APngAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".gif"},
+                    typeof(GifAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".tif", ".tiff"},
+                    typeof(NativeImageProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {"*"},
+                    typeof(NConvertImageProvider)));
         }
 
         public bool CanHandle(string path)

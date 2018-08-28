@@ -31,7 +31,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Common.Annotations;
-using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 
@@ -42,17 +41,16 @@ namespace QuickLook.Plugin.ImageViewer
     /// </summary>
     public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
-        private ContextObject _contextObject;
-
         private Visibility _backgroundVisibility = Visibility.Visible;
+        private ContextObject _contextObject;
         private Point? _dragInitPos;
         private Uri _imageSource;
         private bool _isZoomFactorFirstSet = true;
         private DateTime _lastZoomTime = DateTime.MinValue;
-        private double _maxZoomFactor = 3d;
+        private double _maxZoomFactor;
         private NConvert _meta;
         private Visibility _metaIconVisibility = Visibility.Visible;
-        private double _minZoomFactor = 0.1d;
+        private double _minZoomFactor;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private bool _showZoomLevelInfo = true;
         private BitmapSource _source;
@@ -91,6 +89,10 @@ namespace QuickLook.Plugin.ImageViewer
         {
             ContextObject = context;
             Meta = meta;
+
+            var s = meta.GetSize();
+            _minZoomFactor = Math.Min(200d / s.Height, 400d / s.Width);
+            _maxZoomFactor = Math.Min(9000d / s.Height, 9000d / s.Width);
 
             ShowMeta();
             Theme = ContextObject.Theme;
@@ -202,7 +204,7 @@ namespace QuickLook.Plugin.ImageViewer
                 }
 
                 if (ShowZoomLevelInfo)
-                    ((Storyboard)zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
+                    ((Storyboard) zoomLevelInfo.FindResource("StoryboardShowZoomLevelInfo")).Begin();
             }
         }
 
@@ -263,7 +265,7 @@ namespace QuickLook.Plugin.ImageViewer
         {
             Theme = Theme == Themes.Dark ? Themes.Light : Themes.Dark;
 
-            SettingHelper.Set("LastTheme", (int)Theme);
+            SettingHelper.Set("LastTheme", (int) Theme);
         }
 
         private void ShowMeta()
@@ -274,11 +276,12 @@ namespace QuickLook.Plugin.ImageViewer
                 if (string.IsNullOrWhiteSpace(m.Item1) || string.IsNullOrWhiteSpace(m.Item2))
                     return;
 
-                if (m.Item1 == "File name" || m.Item1 == "File size" || m.Item1 == "MIME type" || m.Item1 == "Exif comment"
+                if (m.Item1 == "File name" || m.Item1 == "File size" || m.Item1 == "MIME type" ||
+                    m.Item1 == "Exif comment"
                     || m.Item1 == "Thumbnail" || m.Item1 == "Exif comment")
                     return;
 
-                textMeta.Inlines.Add(new Run(m.Item1) { FontWeight = FontWeights.SemiBold });
+                textMeta.Inlines.Add(new Run(m.Item1) {FontWeight = FontWeights.SemiBold});
                 textMeta.Inlines.Add(": ");
                 textMeta.Inlines.Add(m.Item2);
                 textMeta.Inlines.Add("\r\n");
@@ -459,7 +462,7 @@ namespace QuickLook.Plugin.ImageViewer
 
             viewPanel.InvalidateMeasure();
 
-            // critical for calcuating offset
+            // critical for calculating offset
             viewPanel.ScrollToHorizontalOffset(0);
             viewPanel.ScrollToVerticalOffset(0);
             UpdateLayout();
