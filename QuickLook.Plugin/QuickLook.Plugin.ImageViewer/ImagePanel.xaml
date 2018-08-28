@@ -54,6 +54,7 @@
                       VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
             <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
                                          Meta="{Binding Meta, ElementName=imagePanel}"
+                                         ContextObject="{Binding ContextObject, ElementName=imagePanel}"
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
                                          AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
         </ScrollViewer>

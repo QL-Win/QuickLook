@@ -17,27 +17,29 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal abstract class AnimationProvider : IDisposable
     {
-        protected AnimationProvider(string path, Dispatcher uiDispatcher)
+        protected AnimationProvider(string path, NConvert meta)
         {
             Path = path;
-            Dispatcher = uiDispatcher;
+            Meta = meta;
         }
 
-        public Dispatcher Dispatcher { get; }
-
         public string Path { get; }
+
+        public NConvert Meta { get; }
 
         public Int32AnimationUsingKeyFrames Animator { get; protected set; }
 
         public abstract void Dispose();
+
+        public abstract Task<BitmapSource> GetThumbnail(Size size, Size fullSize);
 
         public abstract Task<BitmapSource> GetRenderedFrame(int index);
     }

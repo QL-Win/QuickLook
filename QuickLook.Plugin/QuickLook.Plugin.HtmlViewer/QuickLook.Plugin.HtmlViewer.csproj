@@ -72,20 +72,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WebpagePanel.cs" />
     <Compile Include="WpfBrowserWrapper.cs" />
-    <Page Include="WebpagePanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="WebpagePanel.xaml.cs">
-      <DependentUpon>WebpagePanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

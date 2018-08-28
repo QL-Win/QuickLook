@@ -16,13 +16,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using ImageMagick;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer.Exiv2;
+using QuickLook.Plugin.ImageViewer.AnimatedImage;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -40,15 +40,25 @@ namespace QuickLook.Plugin.ImageViewer
             // animated
             ".png", ".apng", ".gif"
         };
-        private Size _imageSize;
         private ImagePanel _ip;
-        private Meta _meta;
+        private NConvert _meta;
 
         public int Priority => int.MaxValue;
 
         public void Init()
         {
-            new MagickImage().Dispose();
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".apng", ".png"},
+                    typeof(APngAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".gif"},
+                    typeof(GifAnimationProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".tif", ".tiff"},
+                    typeof(NativeImageProvider)));
+            AnimatedImage.AnimatedImage.Providers.Add(
+                new KeyValuePair<string[], Type>(new[] {"*"},
+                    typeof(NConvertImageProvider)));
         }
 
         public bool CanHandle(string path)
@@ -58,10 +68,12 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            _imageSize = ImageFileHelper.GetImageSize(path, _meta = new Meta(path));
+            _meta = new NConvert(path);
 
-            if (!_imageSize.IsEmpty)
-                context.SetPreferredSizeFit(_imageSize, 0.8);
+            var size = _meta.GetSize();
+
+            if (!size.IsEmpty)
+                context.SetPreferredSizeFit(size, 0.8);
             else
                 context.PreferredSize = new Size(800, 600);
 
@@ -71,26 +83,20 @@ namespace QuickLook.Plugin.ImageViewer
         public void View(string path, ContextObject context)
         {
             _ip = new ImagePanel(context, _meta);
+            var size = _meta.GetSize();
 
             context.ViewerContent = _ip;
-            context.Title = _imageSize.IsEmpty
+            context.Title = size.IsEmpty
                 ? $"{Path.GetFileName(path)}"
-                : $"{Path.GetFileName(path)} ({_imageSize.Width}×{_imageSize.Height})";
+                : $"{Path.GetFileName(path)} ({size.Width}×{size.Height})";
 
-            LoadImage(_ip, path);
-
-            context.IsBusy = false;
+            _ip.ImageUriSource = new Uri(path);
         }
 
         public void Cleanup()
         {
             _ip?.Dispose();
             _ip = null;
-        }
-
-        private void LoadImage(ImagePanel ui, string path)
-        {
-            ui.ImageUriSource = new Uri(path);
         }
     }
 }

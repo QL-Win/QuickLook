@@ -53,14 +53,12 @@ namespace QuickLook.Plugin.HtmlViewer
             context.ViewerContent = _panel;
             context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
 
-            _panel.Navigate(path);
+            _panel.LoadFile(path);
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
         }
 
         public void Cleanup()
         {
-            GC.SuppressFinalize(this);
-
             _panel?.Dispose();
             _panel = null;
         }

@@ -31,10 +31,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QuickLook.Common.Annotations;
-using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer.Exiv2;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -43,16 +41,16 @@ namespace QuickLook.Plugin.ImageViewer
     /// </summary>
     public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
     {
-        private readonly ContextObject _context;
         private Visibility _backgroundVisibility = Visibility.Visible;
+        private ContextObject _contextObject;
         private Point? _dragInitPos;
         private Uri _imageSource;
         private bool _isZoomFactorFirstSet = true;
         private DateTime _lastZoomTime = DateTime.MinValue;
-        private double _maxZoomFactor = 3d;
-        private Meta _meta;
+        private double _maxZoomFactor;
+        private NConvert _meta;
         private Visibility _metaIconVisibility = Visibility.Visible;
-        private double _minZoomFactor = 0.1d;
+        private double _minZoomFactor;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private bool _showZoomLevelInfo = true;
         private BitmapSource _source;
@@ -75,6 +73,8 @@ namespace QuickLook.Plugin.ImageViewer
             buttonBackgroundColour.Click += OnBackgroundColourOnClick;
 
             SizeChanged += ImagePanel_SizeChanged;
+            viewPanelImage.DoZoomToFit += (sender, e) => DoZoomToFit();
+            viewPanelImage.ImageLoaded += (sender, e) => ContextObject.IsBusy = false;
 
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
@@ -85,13 +85,17 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
         }
 
-        internal ImagePanel(ContextObject context, Meta meta) : this()
+        internal ImagePanel(ContextObject context, NConvert meta) : this()
         {
-            _context = context;
+            ContextObject = context;
             Meta = meta;
 
+            var s = meta.GetSize();
+            _minZoomFactor = Math.Min(200d / s.Height, 400d / s.Width);
+            _maxZoomFactor = Math.Min(9000d / s.Height, 9000d / s.Width);
+
             ShowMeta();
-            Theme = _context.Theme;
+            Theme = ContextObject.Theme;
         }
 
         public bool ShowZoomLevelInfo
@@ -107,10 +111,10 @@ namespace QuickLook.Plugin.ImageViewer
 
         public Themes Theme
         {
-            get => _context?.Theme ?? Themes.Dark;
+            get => ContextObject?.Theme ?? Themes.Dark;
             set
             {
-                _context.Theme = value;
+                ContextObject.Theme = value;
                 OnPropertyChanged();
             }
         }
@@ -210,6 +214,7 @@ namespace QuickLook.Plugin.ImageViewer
             set
             {
                 _imageSource = value;
+
                 OnPropertyChanged();
             }
         }
@@ -227,7 +232,17 @@ namespace QuickLook.Plugin.ImageViewer
             }
         }
 
-        public Meta Meta
+        public ContextObject ContextObject
+        {
+            get => _contextObject;
+            set
+            {
+                _contextObject = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public NConvert Meta
         {
             get => _meta;
             set
@@ -256,18 +271,19 @@ namespace QuickLook.Plugin.ImageViewer
         private void ShowMeta()
         {
             textMeta.Inlines.Clear();
-            Meta.GetSummary().ForEach(m =>
+            Meta.GetExif().ForEach(m =>
             {
-                if (string.IsNullOrWhiteSpace(m.Key) || string.IsNullOrWhiteSpace(m.Value))
+                if (string.IsNullOrWhiteSpace(m.Item1) || string.IsNullOrWhiteSpace(m.Item2))
                     return;
 
-                if (m.Key == "File name" || m.Key == "File size" || m.Key == "MIME type" || m.Key == "Exif comment"
-                    || m.Key == "Thumbnail" || m.Key == "Exif comment")
+                if (m.Item1 == "File name" || m.Item1 == "File size" || m.Item1 == "MIME type" ||
+                    m.Item1 == "Exif comment"
+                    || m.Item1 == "Thumbnail" || m.Item1 == "Exif comment")
                     return;
 
-                textMeta.Inlines.Add(new Run(m.Key) {FontWeight = FontWeights.SemiBold});
+                textMeta.Inlines.Add(new Run(m.Item1) {FontWeight = FontWeights.SemiBold});
                 textMeta.Inlines.Add(": ");
-                textMeta.Inlines.Add(m.Value);
+                textMeta.Inlines.Add(m.Item2);
                 textMeta.Inlines.Add("\r\n");
             });
             textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
@@ -391,7 +407,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         private void UpdateZoomToFitFactor()
         {
-            if (viewPanelImage.Source == null)
+            if (viewPanelImage?.Source == null)
             {
                 ZoomToFitFactor = 1d;
                 return;
@@ -411,7 +427,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Zoom(double factor, bool suppressEvent = false, bool isToFit = false)
         {
-            if (viewPanelImage.Source == null)
+            if (viewPanelImage?.Source == null)
                 return;
 
             // pause when fit width
@@ -446,7 +462,7 @@ namespace QuickLook.Plugin.ImageViewer
 
             viewPanel.InvalidateMeasure();
 
-            // critical for calcuating offset
+            // critical for calculating offset
             viewPanel.ScrollToHorizontalOffset(0);
             viewPanel.ScrollToVerticalOffset(0);
             UpdateLayout();
