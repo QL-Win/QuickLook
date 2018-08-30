@@ -47,10 +47,10 @@ namespace QuickLook.Plugin.ImageViewer
         private Uri _imageSource;
         private bool _isZoomFactorFirstSet = true;
         private DateTime _lastZoomTime = DateTime.MinValue;
-        private double _maxZoomFactor;
+        private double _maxZoomFactor = 3d;
         private NConvert _meta;
         private Visibility _metaIconVisibility = Visibility.Visible;
-        private double _minZoomFactor;
+        private double _minZoomFactor = 0.1d;
         private BitmapScalingMode _renderMode = BitmapScalingMode.HighQuality;
         private bool _showZoomLevelInfo = true;
         private BitmapSource _source;
