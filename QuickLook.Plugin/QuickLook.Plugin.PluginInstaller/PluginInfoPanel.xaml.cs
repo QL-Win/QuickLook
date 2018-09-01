@@ -16,19 +16,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.PluginInstaller
 {
     public partial class PluginInfoPanel : UserControl
     {
+        private readonly ContextObject _context;
         private readonly string _path;
+        private string _namespace;
 
-        public PluginInfoPanel(string path)
+        public PluginInfoPanel(string path, ContextObject context)
         {
             InitializeComponent();
 
@@ -36,19 +41,87 @@ namespace QuickLook.Plugin.PluginInstaller
             Resources.MergedDictionaries[0].Clear();
 
             _path = path;
+            _context = context;
             ReadInfo();
+
+            btnInstall.Click += BtnInstall_Click;
         }
+
+        private void BtnInstall_Click(object sender, RoutedEventArgs e)
+        {
+            btnInstall.Content = "Installing ...";
+            btnInstall.IsEnabled = false;
+
+            var t=DoInstall();
+            t.ContinueWith(_ =>
+                Dispatcher.BeginInvoke(new Action(() => btnInstall.Content = "Done! Please restart QuickLook.")));
+            t.Start();
+        }
+
+        private Task DoInstall()
+        {
+            var targetFolder = Path.Combine(App.UserPluginPath, _namespace);
+            return new Task(() =>
+            {
+                CleanUp();
+
+                try
+                {
+                    ZipFile.ExtractToDirectory(_path, targetFolder);
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.BeginInvoke(new Action(() => description.Text = ex.Message));
+                    CleanUp();
+                }
+            });
+
+            void CleanUp()
+            {
+                if (!Directory.Exists(targetFolder))
+                {
+                    Directory.CreateDirectory(targetFolder);
+                    return;
+                }
+
+                try
+                {
+                    Directory.GetFiles(targetFolder, "*", SearchOption.AllDirectories)
+                        .ForEach(file => File.Move(file, new Guid() + ".to_be_deleted"));
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.BeginInvoke(new Action(() => description.Text = ex.Message));
+                }
+            }
+        }
+
 
         private void ReadInfo()
         {
             filename.Text = Path.GetFileNameWithoutExtension(_path);
 
-            var xml = LoadXml(GetFileFromZip(_path, "Metadata.config"));
+            var xml = LoadXml(GetFileFromZip(_path, "QuickLook.Plugin.Metadata.config"));
+
+            _namespace = GetString(xml, @"/Metadata/Namespace");
+
+            var okay = _namespace != null && _namespace.StartsWith("QuickLook.Plugin.");
+
+            filename.Text = okay ? _namespace : "Invalid plugin.";
+            description.Text = GetString(xml, @"/Metadata/Description", string.Empty);
+
+            btnInstall.Visibility = okay ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private XmlDocument LoadXml(Stream data)
+        private static string GetString(XmlNode xml, string xpath, string def = null)
         {
+            var n = xml?.SelectSingleNode(xpath);
 
+            return n?.InnerText;
+        }
+
+        private static XmlDocument LoadXml(Stream data)
+        {
             var doc = new XmlDocument();
             try
             {
@@ -61,18 +134,26 @@ namespace QuickLook.Plugin.PluginInstaller
             }
         }
 
-        private Stream GetFileFromZip(string archive, string entry)
+        private static MemoryStream GetFileFromZip(string archive, string entry)
         {
             var ms = new MemoryStream();
 
-            using (var zip = ZipFile.Open(archive, ZipArchiveMode.Read))
+            try
             {
-                using (var s = zip.GetEntry(entry)?.Open())
+                using (var zip = ZipFile.Open(archive, ZipArchiveMode.Read))
                 {
-                    s?.CopyTo(ms);
+                    using (var s = zip?.GetEntry(entry)?.Open())
+                    {
+                        s?.CopyTo(ms);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                return ms;
+            }
 
+            ms.Position = 0;
             return ms;
         }
     }

@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
@@ -63,6 +64,8 @@ namespace QuickLook.Common.Helpers
 
         public static void WriteLog(string msg)
         {
+            Debug.WriteLine(msg);
+
             var logFilePath = Path.Combine(SettingHelper.LocalDataPath, @"QuickLook.Exception.log");
 
             using (var writer = new StreamWriter(new FileStream(logFilePath, FileMode.OpenOrCreate,

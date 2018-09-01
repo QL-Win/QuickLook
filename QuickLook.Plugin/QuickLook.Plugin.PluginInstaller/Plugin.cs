@@ -33,12 +33,12 @@ namespace QuickLook.Plugin.PluginInstaller
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && path.ToLower().EndsWith(".qlviewer");
+            return !Directory.Exists(path) && path.ToLower().EndsWith(".qlplugin");
         }
 
         public void Prepare(string path, ContextObject context)
         {
-            context.PreferredSize = new Size { Width = 400, Height = 172 };
+            context.PreferredSize = new Size { Width = 460, Height = 200 };
 
             context.Title = "";
             context.TitlebarOverlap = false;
@@ -50,7 +50,7 @@ namespace QuickLook.Plugin.PluginInstaller
 
         public void View(string path, ContextObject context)
         {
-            context.ViewerContent = new PluginInfoPanel(path);
+            context.ViewerContent = new PluginInfoPanel(path, context);
 
             context.IsBusy = false;
         }
