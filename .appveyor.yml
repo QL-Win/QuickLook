@@ -7,7 +7,14 @@ image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
 clone_script:
-- ps: git submodule update --init --recursive
+- ps: >-
+    git clone -q --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+    
+    cd %APPVEYOR_BUILD_FOLDER%
+    
+    git checkout -qf %APPVEYOR_REPO_COMMIT%
+    
+    git submodule update --init --recursive
 cache:
 - packages -> **\packages.config
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
