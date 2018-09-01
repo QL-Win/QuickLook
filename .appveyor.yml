@@ -12,7 +12,9 @@ cache:
 before_build:
 - ps: >-
     $env:GIT_TAG = git describe --always --tags
-
+    
+    git submodule update --init --recursive
+    
     nuget restore
 build:
   verbosity: minimal
