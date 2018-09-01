@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -21,21 +21,10 @@ using System.Linq;
 using System.Windows;
 using QuickLook.Common.Plugin;
 
-namespace QuickLook.Plugin.IPreviewHandlers
+namespace QuickLook.Plugin.PluginInstaller
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] Extensions =
-        {
-            ".doc", ".docx", ".docm",
-            ".xls", ".xlsx", ".xlsm", ".xlsb",
-            /*".vsd", ".vsdx",*/
-            ".ppt", ".pptx",
-            ".odt", ".ods", ".odp"
-        };
-
-        private PreviewPanel _panel;
-
         public int Priority => int.MaxValue;
 
         public void Init()
@@ -44,37 +33,30 @@ namespace QuickLook.Plugin.IPreviewHandlers
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
-                return false;
-
-            if (Extensions.Any(path.ToLower().EndsWith))
-                return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
-
-            return false;
+            return !Directory.Exists(path) && path.ToLower().EndsWith(".qlplugin");
         }
 
         public void Prepare(string path, ContextObject context)
         {
-            context.SetPreferredSizeFit(new Size {Width = 800, Height = 800}, 0.8);
+            context.PreferredSize = new Size { Width = 460, Height = 200 };
+
+            context.Title = "";
+            context.TitlebarOverlap = false;
+            context.TitlebarBlurVisibility = false;
+            context.TitlebarColourVisibility = false;
+            context.CanResize = false;
+            context.FullWindowDragging = true;
         }
 
         public void View(string path, ContextObject context)
         {
-            _panel = new PreviewPanel();
-            context.ViewerContent = _panel;
-            context.Title = Path.GetFileName(path);
-
-            _panel.PreviewFile(path, context);
+            context.ViewerContent = new PluginInfoPanel(path, context);
 
             context.IsBusy = false;
         }
 
         public void Cleanup()
         {
-            GC.SuppressFinalize(this);
-
-            _panel?.Dispose();
-            _panel = null;
         }
     }
 }

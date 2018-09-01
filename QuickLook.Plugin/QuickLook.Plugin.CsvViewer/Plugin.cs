@@ -26,7 +26,7 @@ namespace QuickLook.Plugin.CsvViewer
     {
         private CsvViewerPanel _panel;
 
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

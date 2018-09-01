@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook
@@ -32,7 +33,10 @@ namespace QuickLook
 
         private PluginManager()
         {
-            LoadPlugins();
+            CleanupOldPlugins(App.UserPluginPath);
+            LoadPlugins(App.UserPluginPath);
+            LoadPlugins(Path.Combine(App.AppPath, "QuickLook.Plugin\\"));
+            InitLoadedPlugins();
         }
 
         internal IViewer DefaultPlugin { get; } = new Plugin.InfoPanel.Plugin();
@@ -74,9 +78,12 @@ namespace QuickLook
             return (matched ?? DefaultPlugin).GetType().CreateInstance<IViewer>();
         }
 
-        private void LoadPlugins()
+        private void LoadPlugins(string folder)
         {
-            Directory.GetFiles(Path.Combine(App.AppPath, "QuickLook.Plugin\\"), "QuickLook.Plugin.*.dll",
+            if (!Directory.Exists(folder))
+                return;
+
+            Directory.GetFiles(folder, "QuickLook.Plugin.*.dll",
                     SearchOption.AllDirectories)
                 .ToList()
                 .ForEach(
@@ -90,7 +97,10 @@ namespace QuickLook
                     });
 
             LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
+        }
 
+        private void InitLoadedPlugins()
+        {
             LoadedPlugins.ForEach(i =>
             {
                 try
@@ -99,7 +109,25 @@ namespace QuickLook
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e);
+                    ProcessHelper.WriteLog(e.ToString());
+                }
+            });
+        }
+
+        private static void CleanupOldPlugins(string folder)
+        {
+            if (!Directory.Exists(folder))
+                return;
+
+            Directory.GetFiles(folder, "*.to_be_deleted", SearchOption.AllDirectories).ForEach(file =>
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception)
+                {
+                    // ignored
                 }
             });
         }

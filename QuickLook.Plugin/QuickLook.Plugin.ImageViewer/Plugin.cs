@@ -43,7 +43,7 @@ namespace QuickLook.Plugin.ImageViewer
         private ImagePanel _ip;
         private NConvert _meta;
 
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

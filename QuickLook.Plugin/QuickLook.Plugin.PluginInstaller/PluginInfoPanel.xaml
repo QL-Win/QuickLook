@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="QuickLook.Plugin.PluginInstaller.PluginInfoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             FontSize="14"
+             mc:Ignorable="d" Width="460" Height="200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="15" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
+                       TextWrapping="Wrap"
+                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
+                QuickLook.Plugin.PluginInstaller
+            </TextBlock>
+            <TextBlock x:Name="description" Grid.Row="3" Grid.Column="1" Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
+                I am a potato.
+            </TextBlock>
+            <Button x:Name="btnInstall" Content="Click here to install this plugin." Grid.Column="1" Grid.Row="4" 
+                    
+                    FontWeight="SemiBold" Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                    Style="{StaticResource CaptionTextButtonStyle}" HorizontalAlignment="Right" Margin="0,0,20,0" />
+        </Grid>
+    </Grid>
+</UserControl>

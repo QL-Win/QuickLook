@@ -1,0 +1,3 @@
+[submodule "QuickLook.Common"]
+	path = QuickLook.Common
+	url = git@github.com:QL-Win/QuickLook.Common.git

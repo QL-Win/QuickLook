@@ -43,7 +43,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         private ViewerPanel _vp;
 
-        public int Priority => 0 - 10; // make it lower than TextViewer
+        public int Priority => -10; // make it lower than TextViewer
 
         public void Init()
         {

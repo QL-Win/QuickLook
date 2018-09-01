@@ -31,7 +31,7 @@ namespace QuickLook.Plugin.MailViewer
         private WebpagePanel _panel;
         private string _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

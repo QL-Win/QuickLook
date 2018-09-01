@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.PDFViewer
         private string _path;
         private PdfViewerControl _pdfControl;
 
-        public int Priority => int.MaxValue;
+        public int Priority => 0;
 
         public void Init()
         {

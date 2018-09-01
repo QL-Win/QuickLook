@@ -34,6 +34,7 @@ namespace QuickLook
     /// </summary>
     public partial class App : Application
     {
+        public static readonly string UserPluginPath = Path.Combine(SettingHelper.LocalDataPath, "QuickLook.Plugin\\");
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
