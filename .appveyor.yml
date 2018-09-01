@@ -6,14 +6,14 @@ skip_branch_with_pr: true
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
+clone_script:
+- ps: git submodule update --init --recursive
 cache:
 - packages -> **\packages.config
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
 - ps: >-
     $env:GIT_TAG = git describe --always --tags
-    
-    git submodule update --init --recursive
     
     nuget restore
 build:
