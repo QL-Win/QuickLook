@@ -88,6 +88,7 @@
     <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
       <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
       <Name>QuickLook</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
