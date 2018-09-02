@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.PluginInstaller
@@ -29,6 +30,7 @@ namespace QuickLook.Plugin.PluginInstaller
 
         public void Init()
         {
+            CleanupOldPlugins(App.UserPluginPath);
         }
 
         public bool CanHandle(string path)
@@ -57,6 +59,24 @@ namespace QuickLook.Plugin.PluginInstaller
 
         public void Cleanup()
         {
+        }
+
+        private static void CleanupOldPlugins(string folder)
+        {
+            if (!Directory.Exists(folder))
+                return;
+
+            Directory.GetFiles(folder, "*.to_be_deleted", SearchOption.AllDirectories).ForEach(file =>
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            });
         }
     }
 }

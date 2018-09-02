@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+      <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
       <Name>QuickLook.Common</Name>
       <Private>False</Private>
     </ProjectReference>

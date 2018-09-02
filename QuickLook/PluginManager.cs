@@ -33,7 +33,6 @@ namespace QuickLook
 
         private PluginManager()
         {
-            CleanupOldPlugins(App.UserPluginPath);
             LoadPlugins(App.UserPluginPath);
             LoadPlugins(Path.Combine(App.AppPath, "QuickLook.Plugin\\"));
             InitLoadedPlugins();
@@ -110,24 +109,6 @@ namespace QuickLook
                 catch (Exception e)
                 {
                     ProcessHelper.WriteLog(e.ToString());
-                }
-            });
-        }
-
-        private static void CleanupOldPlugins(string folder)
-        {
-            if (!Directory.Exists(folder))
-                return;
-
-            Directory.GetFiles(folder, "*.to_be_deleted", SearchOption.AllDirectories).ForEach(file =>
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception)
-                {
-                    // ignored
                 }
             });
         }

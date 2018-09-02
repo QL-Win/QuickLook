@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.PluginInstaller
             btnInstall.Content = "Installing ...";
             btnInstall.IsEnabled = false;
 
-            var t=DoInstall();
+            var t = DoInstall();
             t.ContinueWith(_ =>
                 Dispatcher.BeginInvoke(new Action(() => btnInstall.Content = "Done! Please restart QuickLook.")));
             t.Start();
@@ -72,6 +72,7 @@ namespace QuickLook.Plugin.PluginInstaller
                 catch (Exception ex)
                 {
                     Dispatcher.BeginInvoke(new Action(() => description.Text = ex.Message));
+                    Dispatcher.BeginInvoke(new Action(() => btnInstall.Content = "Installation failed."));
                     CleanUp();
                 }
             });
@@ -87,11 +88,13 @@ namespace QuickLook.Plugin.PluginInstaller
                 try
                 {
                     Directory.GetFiles(targetFolder, "*", SearchOption.AllDirectories)
-                        .ForEach(file => File.Move(file, new Guid() + ".to_be_deleted"));
+                        .ForEach(file => File.Move(file,
+                            Path.Combine(Path.GetDirectoryName(file), Guid.NewGuid() + ".to_be_deleted")));
                 }
                 catch (Exception ex)
                 {
                     Dispatcher.BeginInvoke(new Action(() => description.Text = ex.Message));
+                    Dispatcher.BeginInvoke(new Action(() => btnInstall.Content = "Installation failed."));
                 }
             }
         }
