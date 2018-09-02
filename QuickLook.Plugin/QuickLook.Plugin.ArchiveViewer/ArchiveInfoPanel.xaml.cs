@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
@@ -83,7 +84,16 @@ namespace QuickLook.Plugin.ArchiveViewer
                 var root = new ArchiveFileEntry(Path.GetFileName(path), true);
                 _fileEntries.Add("", root);
 
-                LoadItemsFromArchive(path);
+                try
+                {
+                    LoadItemsFromArchive(path);
+                }
+                catch (Exception e)
+                {
+                    ProcessHelper.WriteLog(e.ToString());
+                    Dispatcher.Invoke(() => { lblLoading.Content = "Preview failed. See log for more details."; });
+                    return;
+                }
 
                 var folders = -1; // do not count root node
                 var files = 0;

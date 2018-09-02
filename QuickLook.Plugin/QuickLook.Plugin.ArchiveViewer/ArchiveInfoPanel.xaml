@@ -21,7 +21,7 @@
         <Grid ZIndex="9999"
               Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource WindowTextForeground}">Loading archive ...</Label>
+                <Label x:Name="lblLoading" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource WindowTextForeground}">Loading archive ...</Label>
                 <ProgressBar Height="13" Width="150"
                              Value="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay}" />
             </StackPanel>
