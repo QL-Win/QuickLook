@@ -22,21 +22,27 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="10" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
                        TextWrapping="Wrap"
                        LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
                 QuickLook.Plugin.PluginInstaller
             </TextBlock>
-            <TextBlock x:Name="description" Grid.Row="3" Grid.Column="1" Padding="3"
+            <TextBlock x:Name="version" Grid.Row="3" Grid.Column="1" Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
+                Version 0
+            </TextBlock>
+            <TextBlock x:Name="description" Grid.Row="5" Grid.Column="1" Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 I am a potato.
             </TextBlock>
-            <Button x:Name="btnInstall" Content="Click here to install this plugin." Grid.Column="1" Grid.Row="4" 
+            <Button x:Name="btnInstall" Content="Click here to install this plugin." Grid.Column="1" Grid.Row="6" 
                     
                     FontWeight="SemiBold" Foreground="{DynamicResource WindowTextForegroundAlternative}"
                     Style="{StaticResource CaptionTextButtonStyle}" HorizontalAlignment="Right" Margin="0,0,20,0" />

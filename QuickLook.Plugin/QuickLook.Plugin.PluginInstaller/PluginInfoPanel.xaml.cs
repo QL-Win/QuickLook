@@ -111,6 +111,7 @@ namespace QuickLook.Plugin.PluginInstaller
             var okay = _namespace != null && _namespace.StartsWith("QuickLook.Plugin.");
 
             filename.Text = okay ? _namespace : "Invalid plugin.";
+            version.Text = "Version " + GetString(xml, @"/Metadata/Version", "not defined");
             description.Text = GetString(xml, @"/Metadata/Description", string.Empty);
 
             btnInstall.Visibility = okay ? Visibility.Visible : Visibility.Collapsed;
@@ -120,7 +121,7 @@ namespace QuickLook.Plugin.PluginInstaller
         {
             var n = xml?.SelectSingleNode(xpath);
 
-            return n?.InnerText;
+            return n?.InnerText ?? def;
         }
 
         private static XmlDocument LoadXml(Stream data)
