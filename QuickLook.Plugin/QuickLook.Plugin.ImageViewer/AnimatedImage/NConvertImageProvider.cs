@@ -36,6 +36,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
         {
+            var decodeWidth = (int) Math.Round(fullSize.Width *
+                                               Math.Min(size.Width / 2 / fullSize.Width,
+                                                   size.Height / 2 / fullSize.Height));
+            var decodeHeight = (int) Math.Round(fullSize.Height / fullSize.Width * decodeWidth);
+
             return new Task<BitmapSource>(() =>
             {
                 try
@@ -46,11 +51,14 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                         img.BeginInit();
                         img.StreamSource = ms;
                         img.CacheOption = BitmapCacheOption.OnLoad;
+                        img.DecodePixelWidth = decodeWidth;
+                        img.DecodePixelHeight = decodeHeight; // specific size to avoid .net's double to int conversion
                         img.EndInit();
 
                         var scaled = new TransformedBitmap(img,
                             new ScaleTransform(fullSize.Width / img.PixelWidth, fullSize.Height / img.PixelHeight));
                         scaled.Freeze();
+
                         return scaled;
                     }
                 }

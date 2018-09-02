@@ -88,7 +88,7 @@ namespace QuickLook.Plugin.ImageViewer
             context.ViewerContent = _ip;
             context.Title = size.IsEmpty
                 ? $"{Path.GetFileName(path)}"
-                : $"{Path.GetFileName(path)} ({size.Width}×{size.Height})";
+                : $"{size.Width}×{size.Height}: {Path.GetFileName(path)}";
 
             _ip.ImageUriSource = new Uri(path);
         }

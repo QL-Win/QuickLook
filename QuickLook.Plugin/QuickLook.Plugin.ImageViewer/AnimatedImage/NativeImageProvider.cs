@@ -49,13 +49,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     img.BeginInit();
                     img.UriSource = new Uri(Path);
                     img.CacheOption = BitmapCacheOption.OnLoad;
-                    img.DecodePixelWidth = (int) decodeWidth;
-                    img.DecodePixelHeight =
-                        (int) decodeHeight; // specific size to avoid .net's double to int conversion
+                    img.DecodePixelWidth = decodeWidth;
+                    img.DecodePixelHeight = decodeHeight; // specific size to avoid .net's double to int conversion
                     img.EndInit();
 
                     var scaled = new TransformedBitmap(img,
-                        new ScaleTransform(fullSize.Width / decodeWidth, fullSize.Height / decodeHeight));
+                        new ScaleTransform(fullSize.Width / img.PixelWidth, fullSize.Height / img.PixelHeight));
                     scaled.Freeze();
                     return scaled;
                 }
