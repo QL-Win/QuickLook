@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Xml;
+using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using QuickLook.Common.Plugin;
@@ -55,6 +56,9 @@ namespace QuickLook.Plugin.TextViewer
                         hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
                 }
             }
+
+            // pre-load
+            var _ = new TextEditor();
         }
 
         public bool CanHandle(string path)
