@@ -249,6 +249,21 @@ namespace QuickLook.Plugin.PDFViewer
                 listThumbnails.Visibility = Visibility.Collapsed;
         }
 
+        public void LoadPdf(MemoryStream stream)
+        {
+            _pdfStream = new MemoryStream();
+            stream.WriteTo(_pdfStream);
+            _pdfStream.Position = 0;
+
+            _pdfHandle = PdfDocument.Load(_pdfStream);
+            _pdfLoaded = true;
+
+            BeginLoadThumbnails(stream);
+
+            if (_pdfHandle.PageCount < 2)
+                listThumbnails.Visibility = Visibility.Collapsed;
+        }
+
         private void BeginLoadThumbnails(string path, string password = null)
         {
             new Task(() =>
@@ -266,6 +281,28 @@ namespace QuickLook.Plugin.PDFViewer
 
                         handle.Dispose();
                     }
+                }
+            }).Start();
+        }
+
+        private void BeginLoadThumbnails(MemoryStream stream, string password = null)
+        {
+            var localStream = new MemoryStream();
+            stream.WriteTo(localStream);
+            localStream.Position = 0;
+
+            new Task(() =>
+            {
+                using (var handle = PdfDocument.Load(localStream, password))
+                {
+                    for (var p = 0; p < handle.PageCount; p++)
+                    {
+                        var bs = handle.RenderThumbnail(p);
+
+                        Dispatcher.BeginInvoke(new Action(() => PageThumbnails.Add(bs)));
+                    }
+
+                    handle.Dispose();
                 }
             }).Start();
         }

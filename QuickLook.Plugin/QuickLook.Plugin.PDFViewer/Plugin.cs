@@ -73,9 +73,9 @@ namespace QuickLook.Plugin.PDFViewer
                 {
                     _pdfControl.LoadPdf(path);
 
-                    context.Title = $"{Path.GetFileName(path)} (1 / {_pdfControl.TotalPages})";
+                    context.Title = $"1 / {_pdfControl.TotalPages}: {Path.GetFileName(path)}";
 
-                    _pdfControl.CurrentPageChanged += UpdateVindowCaption;
+                    _pdfControl.CurrentPageChanged += UpdateWindowCaption;
                     context.IsBusy = false;
                 }
                 catch (Exception e)
@@ -91,18 +91,16 @@ namespace QuickLook.Plugin.PDFViewer
         public void Cleanup()
         {
             GC.SuppressFinalize(this);
-
-            if (_pdfControl != null)
-                _pdfControl.CurrentPageChanged -= UpdateVindowCaption;
+            
             _pdfControl?.Dispose();
             _pdfControl = null;
 
             _context = null;
         }
 
-        private void UpdateVindowCaption(object sender, EventArgs e2)
+        private void UpdateWindowCaption(object sender, EventArgs e2)
         {
-            _context.Title = $"{Path.GetFileName(_path)} ({_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages})";
+            _context.Title = $"{_pdfControl.CurrentPage + 1} / {_pdfControl.TotalPages}: {Path.GetFileName(_path)}";
         }
     }
 }
