@@ -35,7 +35,7 @@ namespace QuickLook.Plugin.ImageViewer
             ".iiq", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf", ".pef", ".ptx",
             ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw", ".x3f",
             // normal
-            ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".svg", ".wdp", ".tif", ".tiff", ".tga", ".webp", ".pbm",
+            ".bmp", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".wdp", ".tif", ".tiff", ".tga", ".webp", ".pbm",
             ".pgm", ".ppm", ".pnm",
             // animated
             ".png", ".apng", ".gif"
