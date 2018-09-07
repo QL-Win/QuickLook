@@ -26,27 +26,45 @@ namespace QuickLook.Plugin.PDFViewer
 {
     internal static class PdfPageExtension
     {
-        public static BitmapSource RenderThumbnail(this PdfDocument doc, int page)
+        private static int _renderCount;
+        private static readonly object LockObj = new object();
+
+        public static BitmapSource RenderThumbnail(this PdfDocumentWrapper doc, int page)
         {
-            var size = doc.PageSizes[page];
-            var factorX = 130d / size.Width;
-            var factorY = 210d / size.Height;
+            lock (LockObj)
+            {
+                if (_renderCount++ == 50)
+                {
+                    doc.Refresh();
+                    _renderCount = 0;
+                }
+            }
+
+            var size = doc.PdfDocument.PageSizes[page];
+            var factorX = 60d / size.Width;
+            var factorY = 120d / size.Height;
 
             return doc.Render(page, Math.Min(factorX, factorY), false);
         }
 
-        public static BitmapSource Render(this PdfDocument doc, int page, double factor, bool fixDpi = true)
+        public static BitmapSource Render(this PdfDocumentWrapper doc, int page, double factor, bool fixDpi = true)
         {
-            var size = doc.PageSizes[page];
             var scale = DpiHelper.GetCurrentScaleFactor();
             var dpiX = fixDpi ? scale.Horizontal * DpiHelper.DefaultDpi : 96;
             var dpiY = fixDpi ? scale.Vertical * DpiHelper.DefaultDpi : 96;
 
-            var realWidth = (int) Math.Round(size.Width * scale.Horizontal * factor);
-            var realHeight = (int) Math.Round(size.Height * scale.Vertical * factor);
+            Bitmap bitmap;
 
-            var bitmap = doc.Render(page, realWidth, realHeight, dpiX, dpiY,
-                PdfRenderFlags.LimitImageCacheSize | PdfRenderFlags.LcdText | PdfRenderFlags.Annotations|PdfRenderFlags.ForPrinting) as Bitmap;
+            lock (LockObj)
+            {
+                var size = doc.PdfDocument.PageSizes[page];
+                var realWidth = (int) Math.Round(size.Width * scale.Horizontal * factor);
+                var realHeight = (int) Math.Round(size.Height * scale.Vertical * factor);
+
+                bitmap = doc.PdfDocument.Render(page, realWidth, realHeight, dpiX, dpiY,
+                    PdfRenderFlags.LimitImageCacheSize | PdfRenderFlags.LcdText | PdfRenderFlags.Annotations |
+                    PdfRenderFlags.ForPrinting) as Bitmap;
+            }
 
             var bs = bitmap?.ToBitmapSource();
             bitmap?.Dispose();

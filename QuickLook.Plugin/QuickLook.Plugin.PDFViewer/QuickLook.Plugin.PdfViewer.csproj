@@ -81,6 +81,9 @@
     <Compile Include="..\..\GitVersion.cs">
       <Link>Properties\GitVersion.cs</Link>
     </Compile>
+    <Compile Include="AsyncPageToThumbnailConverter.cs" />
+    <Compile Include="NotifyTaskCompletion.cs" />
+    <Compile Include="PdfDocumentWrapper.cs" />
     <Compile Include="PdfViewerControl.xaml.cs">
       <DependentUpon>PdfViewerControl.xaml</DependentUpon>
     </Compile>
@@ -112,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\loading.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
