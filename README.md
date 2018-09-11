@@ -13,9 +13,9 @@
 <img src="http://pooi.moe/QuickLook/sample.gif?3" width="400">
 
 ## Background
-One of the few features I missed from macOS is [Quick Look](https://en.wikipedia.org/wiki/Quick_Look). It allows user peek into a file content in a lightening speed by just pressing the <kbd>Space</kbd> key. Windows, on the other hand, does not have this handy feature ... until now.
+One of the few features I missed from macOS is [Quick Look](https://en.wikipedia.org/wiki/Quick_Look). It allows user peek into a file content in lightning speed by just pressing the <kbd>Space</kbd> key. Windows, on the other hand, does not have this handy feature ... until now.
 
-I am aware that several alternatives are already available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer)). Despite these options, I still decided to craft another one by myself, because they are either not being actively developed, lack of variety, or ask for a amount of $$$.
+I am aware that several alternatives are already available on the Internet (e.g. [WinQuickLook](https://github.com/shibayan/WinQuickLook) and [Seer](https://github.com/ccseer/Seer)). Despite these options, I still decided to craft another one by myself, because they are either not being actively developed, lack of variety, or ask for an amount of $$$.
 
 ## Highlights
 
@@ -44,10 +44,10 @@ Get it from one of the following sources:
 ### Typical usecase
 
 1. Run `QuickLook.exe` (only necessary if autostart is disabled)
-1. Select any file or folder (on the Desktop, in a File Explorer window, in an *Open* or *Save-File* dialog, doesn't matter)
+1. Select any file or folder (on the Desktop, in a File Explorer window, in an *Open* or *Save-File* dialogue, doesn't matter)
 1. Press <kbd>Spacebar</kbd>
-1. Enjoy preview and interact with it
-1. Preview next file by clicking on it or using arrow-keys (arrow-keys move selection in the background if the preview hasn't been klicked)
+1. Enjoy the preview and interact with it
+1. Preview next file by clicking on it or using arrow-keys (arrow-keys move selection in the background if the preview window is not in focus)
 1. When you're done close it by either hitting <kbd>Spacebar</kbd> again, pressing <kbd>Esc</kbd> or clicking the `⨉` button
 
 ### Hotkeys and buttons
@@ -72,8 +72,8 @@ See the [Translation guide](https://github.com/QL-Win/QuickLook/wiki/Translation
  - Many [open-source projects](https://github.com/QL-Win/QuickLook/wiki/On-the-Shoulders-of-Giants) and their contributors
  - Our UI designers [@OiCkilL](https://twitter.com/OiCkilL) (“Fluent” user interface since v0.3) and [@QubitsDev](https://twitter.com/qubitsdev) (application icon since v0.3)
  - [Our contributers](https://github.com/QL-Win/QuickLook/graphs/contributors) who
-	 - teach QuickLook speaks *your* language
-	 - send pull requests, report bugs or give suggestions
+     - teach QuickLook speaks *your* language
+     - send pull requests, report bugs or give suggestions
  - ... and you 😊
 
 ## Licenses
@@ -84,4 +84,4 @@ This project references many other open-source projects. See [here](https://gith
 
 All source codes are licensed under [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
 
-If you want make any modification on these source codes while keeping new codes not protected by GPL-3.0, please contact me for a sublicense instead.
+If you want to make any modification on these source codes while keeping new codes not protected by GPL-3.0, please contact me for a sublicense instead.
