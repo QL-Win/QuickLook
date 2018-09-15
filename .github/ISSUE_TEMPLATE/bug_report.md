@@ -6,6 +6,8 @@ about: Create a report to help us improve
 
 *For all's convenience, please use English to fill this issue.*
 
+*Please search within existing issues before the submission. Has this issue already been reported?*
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
