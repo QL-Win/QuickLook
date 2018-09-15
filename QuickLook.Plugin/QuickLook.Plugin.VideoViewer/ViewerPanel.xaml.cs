@@ -44,8 +44,7 @@ namespace QuickLook.Plugin.VideoViewer
     {
         private readonly ContextObject _context;
         private BitmapSource _coverArt;
-
-        private bool _hasEnded;
+        
         private bool _hasVideo;
         private bool _isPlaying;
         private bool _wasPlaying;
@@ -147,6 +146,9 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void MediaOpened(object o, RoutedEventArgs args)
         {
+            if (mediaElement == null)
+                return;
+
             HasVideo = mediaElement.HasVideo;
 
             _context.IsBusy = false;
@@ -164,6 +166,9 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void MediaEnded(object sender, RoutedEventArgs e)
         {
+            if (mediaElement == null)
+                return;
+
             IsPlaying = false;
 
             mediaElement.MediaPosition = 0;
