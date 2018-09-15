@@ -153,11 +153,9 @@ namespace QuickLook
             // revert UI changes
             ContextObject.IsBusy = true;
 
-            var margin = windowFrameContainer.Margin.Top * 2;
-
-            var newHeight = ContextObject.PreferredSize.Height + margin +
+            var newHeight = ContextObject.PreferredSize.Height + BorderThickness.Top + BorderThickness.Bottom +
                             (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
-            var newWidth = ContextObject.PreferredSize.Width + margin;
+            var newWidth = ContextObject.PreferredSize.Width + BorderThickness.Left + BorderThickness.Right;
 
             var newSize = new Size(newWidth, newHeight);
             // if use has adjusted the window size, keep it
