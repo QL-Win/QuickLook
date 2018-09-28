@@ -1,6 +1,6 @@
 ---
 name: Create a report to help us improve
-about: NOTE: YOUR ISSUE WILL BE CLOSE IF NOT FOLLOWING THIS TEMPLATE
+about: Please follow this templete or your issue will be closed
 
 ---
 
