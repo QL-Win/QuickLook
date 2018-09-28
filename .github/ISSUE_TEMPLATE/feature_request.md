@@ -1,6 +1,6 @@
 ---
 name: Suggest an idea for this project
-about: NOTE THAT YOUR ISSUE WILL BE CLOSE IF NOT FOLLOWING THIS TEMPLATE
+about: Please follow this templete or your issue will be closed
 
 ---
 
