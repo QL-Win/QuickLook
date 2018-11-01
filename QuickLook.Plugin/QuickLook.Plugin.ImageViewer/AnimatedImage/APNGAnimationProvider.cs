@@ -179,9 +179,18 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         {
             using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
-                while (br.BaseStream.Length - br.BaseStream.Position >= 4)
+                if (br.BaseStream.Length < 8 + 4)
+                    return false;
+
+                uint nextChunk = 8; // skip header
+
+                while (nextChunk > 0 && nextChunk < br.BaseStream.Length)
                 {
-                    var window = br.ReadBytes(4);
+                    br.BaseStream.Position = nextChunk;
+
+                    var data_size = ToUInt32BE(br.ReadBytes(4)); // data size in BE
+
+                    var window = br.ReadBytes(4); // label
 
                     if (window[0] == 'I' && window[1] == 'D' && window[2] == 'A' && window[3] == 'T')
                         return false;
@@ -189,10 +198,17 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     if (window[0] == 'a' && window[1] == 'c' && window[2] == 'T' && window[3] == 'L')
                         return true;
 
-                    br.BaseStream.Position -= 3;
+                    // *[Data Size] + Data Size + Label + CRC
+                    nextChunk += data_size + 4 + 4 + 4;
                 }
 
                 return false;
+            }
+
+            uint ToUInt32BE(byte[] data)
+            {
+                Array.Reverse(data);
+                return BitConverter.ToUInt32(data, 0);
             }
         }
 
