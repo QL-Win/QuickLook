@@ -32,7 +32,7 @@ Supported formats                                 Extension                 Rema
 [psd]      Adobe Photoshop                          psd 
 [ocp]      Advanced Art Studio                      ocp art pic 
 [anv]      AirNav                                   anv 
-[frm2]     Album bï¿½bï¿½                               frm 
+[frm2]     Album bébé                               frm 
 [alias]    Alias Image File                         pix als alias 
 [abmp]     Alpha Microsystems BMP                   bmp 
 [2d]       Amapi                                    2d 

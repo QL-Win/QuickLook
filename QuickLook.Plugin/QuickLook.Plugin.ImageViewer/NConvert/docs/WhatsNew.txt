@@ -1,8 +1,20 @@
                              NConvert v7.20
-                              XnView v2.45
+                              XnView v2.46
 
                    Copyright (c) 1991-2018 Pierre-E Gougelet
                            All Rights Reserved.
+
+
+XnView v2.46 (LIBFORMAT v7.20) 05/09/2018:
+
+     * JPEG2000 YCC - https://newsgroup.xnview.com/viewtopic.php?f=35&t=37806
+     * Bad loading for ARW - https://newsgroup.xnview.com/viewtopic.php?f=36&t=37683
+     * TIFF with JPEG compression - https://newsgroup.xnview.com/viewtopic.php?f=35&t=37585
+     * Adjust dialog clipped - https://newsgroup.xnview.com/viewtopic.php?f=36&t=32011
+     * PDF version 1.4 output
+     * Sqlite 2.24.0
+     * RLE & ICO vulnerabilities Cody Sixteen from STM Solutions 
+     * NConvert: stdout problem on windows - https://newsgroup.xnview.com/viewtopic.php?f=57&t=37810
 
 
 XnView v2.45 (LIBFORMAT v7.20) 31/05/2018:

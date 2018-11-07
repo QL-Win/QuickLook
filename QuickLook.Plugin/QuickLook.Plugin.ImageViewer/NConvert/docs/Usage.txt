@@ -1,5 +1,5 @@
                              NConvert v7.20
-                              XnView v2.45
+                              XnView v2.46
 
                    Copyright (c) 1991-2018 Pierre-E Gougelet
                            All Rights Reserved.

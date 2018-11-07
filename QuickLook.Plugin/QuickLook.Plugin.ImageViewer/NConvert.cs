@@ -61,11 +61,10 @@ namespace QuickLook.Plugin.ImageViewer
         {
             var temp = Path.GetTempFileName();
             File.Delete(temp);
-
-            var sony = Path.GetExtension(_path)?.ToLower() == ".arw" ? "-autolevels" : "";
+            
             var thumb = thumbnail ? "-embedded_jpeg" : "";
             var d = RunInternal(
-                $"-quiet {thumb} {sony} -raw_camerabalance -raw_autobright -icc -out tiff -o \"{temp}\" \"{_path}\"",
+                $"-quiet {thumb} -raw_camerabalance -raw_autobright -icc -out tiff -o \"{temp}\" \"{_path}\"",
                 10000);
 
             var ms = new MemoryStream(File.ReadAllBytes(temp));
