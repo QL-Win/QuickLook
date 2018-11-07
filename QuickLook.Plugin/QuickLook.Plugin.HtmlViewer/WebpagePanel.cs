@@ -15,12 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.IO;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Common.Helpers;
 
@@ -30,8 +27,7 @@ namespace QuickLook.Plugin.HtmlViewer
     {
         public WebpagePanel()
         {
-            var factor = VisualTreeHelper.GetDpi(this);
-            Zoom = (int)(factor.DpiScaleX*100);
+            Zoom = (int)(100 * DpiHelper.GetCurrentScaleFactor().Vertical);
         }
 
         // adjust zoom when DPI changes.
