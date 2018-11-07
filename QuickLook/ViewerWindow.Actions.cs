@@ -189,7 +189,11 @@ namespace QuickLook
 
         private void SetOpenWithButtonAndPath()
         {
-            buttonOpenWithText.Inlines.Clear();
+            // share icon
+            buttonShare.Visibility = ShareHelper.IsShareSupported(_path) ? Visibility.Visible : Visibility.Collapsed;
+
+            // open icon
+            buttonOpenText.Inlines.Clear();
 
             if (Directory.Exists(_path))
             {
@@ -226,11 +230,11 @@ namespace QuickLook
                 while (elements.Count < 2)
                     elements.Add(string.Empty);
 
-                buttonOpenWithText.Inlines.Add(
+                buttonOpenText.Inlines.Add(
                     new Run(elements[0]) {FontWeight = FontWeights.Normal}); // text beforehand
-                buttonOpenWithText.Inlines.Add(
+                buttonOpenText.Inlines.Add(
                     new Run(replaceWith) {FontWeight = FontWeights.SemiBold}); // appFriendlyName
-                buttonOpenWithText.Inlines.Add(
+                buttonOpenText.Inlines.Add(
                     new Run(elements[1]) {FontWeight = FontWeights.Normal}); // text afterward
             }
         }
@@ -264,11 +268,6 @@ namespace QuickLook
             Close();
 
             ProcessHelper.PerformAggressiveGC();
-        }
-
-        internal void Share(object sender, RoutedEventArgs e)
-        {
-            ShareHelper.Share(_path, this);
         }
     }
 }

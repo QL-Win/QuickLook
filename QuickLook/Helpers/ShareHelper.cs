@@ -34,20 +34,25 @@ namespace QuickLook.Helpers
     {
         private static string _sharingPath = string.Empty;
 
-        internal static void Share(string path, Window parent)
+        internal static bool IsShareSupported(string path)
+        {
+            return !Directory.Exists(path) && App.IsWin10 && Environment.OSVersion.Version >= new Version("10.0.16299.0");
+        }
+
+        internal static void Share(string path, Window parent, bool forceOpenWith = false)
         {
             if (string.IsNullOrEmpty(path))
                 return;
 
             _sharingPath = path;
 
-            if (!Directory.Exists(path) && App.IsWin10 && Environment.OSVersion.Version >= new Version("10.0.16299.0"))
+            if (!forceOpenWith && IsShareSupported(path))
                 ShowShareUI(parent);
             else
-                RunWith();
+                ShowRunWithUI();
         }
 
-        private static void RunWith()
+        private static void ShowRunWithUI()
         {
             try
             {

@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Helpers;
 using Brush = System.Windows.Media.Brush;
 using FontFamily = System.Windows.Media.FontFamily;
 using Size = System.Windows.Size;
@@ -55,7 +56,7 @@ namespace QuickLook
             StateChanged += (sender, e) => _ignoreNextWindowSizeChange = true;
 
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
-
+            
             Topmost = SettingHelper.Get("Topmost", false);
             buttonTop.Tag = Topmost ? "Top" : "Auto";
 
@@ -82,7 +83,7 @@ namespace QuickLook
                     ViewWindowManager.GetInstance().ClosePreview();
             };
 
-            buttonOpenWith.Click += (sender, e) =>
+            buttonOpen.Click += (sender, e) =>
             {
                 if (Pinned)
                     RunAndClose();
@@ -93,7 +94,8 @@ namespace QuickLook
             buttonWindowStatus.Click += (sender, e) =>
                 WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-            buttonShare.Click += Share;
+            buttonShare.Click += (sender, e) => ShareHelper.Share(_path, this);
+            buttonOpenWith.Click += (sender, e) => ShareHelper.Share(_path, this, true);
         }
 
         public override void OnApplyTemplate()
