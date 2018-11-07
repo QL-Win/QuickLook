@@ -18,7 +18,9 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using QuickLook.Common.Helpers;
 
@@ -28,7 +30,16 @@ namespace QuickLook.Plugin.HtmlViewer
     {
         public WebpagePanel()
         {
-            Zoom = (int) (100 * DpiHelper.GetCurrentScaleFactor().Vertical);
+            var factor = VisualTreeHelper.GetDpi(this);
+            Zoom = (int)(factor.DpiScaleX*100);
+        }
+
+        // adjust zoom when DPI changes.
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            var ratio = newDpi.DpiScaleX / oldDpi.DpiScaleX;
+            Zoom = (int)(Zoom * ratio);
+            base.OnDpiChanged(oldDpi, newDpi);
         }
 
         public void LoadFile(string path)
