@@ -31,6 +31,12 @@
                            EntryPoint="Windows.FullTrustApplication">
           <desktop:StartupTask TaskId="QuickLookTask" Enabled="true" DisplayName="QuickLook" />
         </desktop:Extension>
+        <desktop:Extension Category="windows.appExecutionAlias" Executable="Package\QuickLook.exe"
+                           EntryPoint="Windows.FullTrustApplication">
+          <desktop:AppExecutionAlias>
+            <desktop:ExecutionAlias Alias="QuickLook.exe" />
+          </desktop:AppExecutionAlias>
+        </desktop:Extension>
       </Extensions>
       <uap:VisualElements DisplayName="QuickLook" 
                           Description="Bring macOS &#8220;Quick Look&#8221; feature to Windows" 
