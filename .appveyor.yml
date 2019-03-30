@@ -22,7 +22,7 @@ before_build:
 - ps: >-
     $env:GIT_TAG = git describe --always --tags
     
-    nuget restore
+    nuget restore -verbosity detailed
 build:
   verbosity: minimal
 after_build:
