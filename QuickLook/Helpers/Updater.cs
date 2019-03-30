@@ -119,7 +119,11 @@ namespace QuickLook.Helpers
 
         private static dynamic DownloadJson(string url)
         {
-            var web = new WebClientEx(15 * 1000);
+            var web = new WebClientEx(15 * 1000)
+            {
+                Proxy = WebRequest.DefaultWebProxy,
+                Credentials = CredentialCache.DefaultCredentials
+            };
             web.Headers.Add(HttpRequestHeader.UserAgent, "Wget/1.9.1");
 
             var response =
