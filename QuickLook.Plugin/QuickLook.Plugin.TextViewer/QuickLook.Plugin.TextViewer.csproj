@@ -67,7 +67,7 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="UtfUnknown, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90217ce7a23260d4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\UTF.Unknown.1.0.0-beta1\lib\net40\UtfUnknown.dll</HintPath>
+      <HintPath>..\..\packages\UTF.Unknown.1.0.0\lib\net40\UtfUnknown.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
