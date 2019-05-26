@@ -19,9 +19,9 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Microsoft.Win32;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Plugin;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
@@ -73,10 +73,7 @@ namespace QuickLook
             switch (theme)
             {
                 case Themes.None:
-                    var t = Registry.GetValue(
-                        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
-                        "AppsUseLightTheme", 1);
-                    isDark = t != null && (int) t == 0;
+                    isDark = OSThemeHelper.AppsUseDarkTheme();
                     break;
                 case Themes.Dark:
                 case Themes.Light:

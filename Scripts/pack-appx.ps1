@@ -24,11 +24,11 @@ if(-not (Test-Path env:CI))
     Update-Version("..\Build\Appx\AppxManifest.xml")
 
     # generate resources
-    $priExe = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\x86\makepri.exe'
+    $priExe = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\makepri.exe'
     .$priExe new /pr ..\Build\Appx /cf ..\Build\priconfig.xml /of ..\Build\Appx\resources.pri
     
     # packing
-    $packExe = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\x86\makeappx.exe'
+    $packExe = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\makeappx.exe'
     $folder = '..\Build\Appx\'
 
     .$packExe pack /l /o /d ..\Build\Appx /p ..\Build\QuickLook-$version.appx

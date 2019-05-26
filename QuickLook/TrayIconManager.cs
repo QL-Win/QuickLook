@@ -74,9 +74,12 @@ namespace QuickLook
         {
             var scale = DpiHelper.GetCurrentScaleFactor().Vertical;
 
-            if (App.IsWin10)
-                return scale > 1 ? Resources.app_white : Resources.app_white_16;
-            return scale > 1 ? Resources.app : Resources.app_16;
+            if (!App.IsWin10)
+                return scale > 1 ? Resources.app : Resources.app_16;
+
+            return OSThemeHelper.SystemUsesDarkTheme()
+                ? (scale > 1 ? Resources.app_white : Resources.app_white_16)
+                : (scale > 1 ? Resources.app_black : Resources.app_black_16);
         }
 
         public static void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,

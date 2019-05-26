@@ -124,6 +124,15 @@
   <data name="app_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\app_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="app_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\app_black.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="app_black_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\app_black_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="app_black_png" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\app_black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="app_png" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\app.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
