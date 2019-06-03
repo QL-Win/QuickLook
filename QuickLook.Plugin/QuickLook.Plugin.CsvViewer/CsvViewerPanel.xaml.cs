@@ -46,7 +46,9 @@ namespace QuickLook.Plugin.CsvViewer
 
             using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
-                using (var parser = new CsvParser(sr))
+                var conf = new CsvHelper.Configuration.Configuration() {MissingFieldFound = null, BadDataFound = null};
+
+                using (var parser = new CsvParser(sr, conf))
                 {
                     var i = 0;
                     while (true)
