@@ -102,7 +102,7 @@ namespace QuickLook
         {
             base.OnApplyTemplate();
 
-            if (SystemParameters.IsGlassEnabled && App.IsWin10)
+            if (SystemParameters.IsGlassEnabled && App.IsWin10 && !App.IsGPUInBlacklist)
                 WindowHelper.EnableBlur(this);
             else
                 Background = (Brush) FindResource("MainWindowBackgroundNoTransparent");

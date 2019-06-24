@@ -40,6 +40,7 @@ namespace QuickLook
         public static readonly bool Is64Bit = Environment.Is64BitProcess;
         public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
         public static readonly bool IsWin10 = Environment.OSVersion.Version >= new Version(10, 0);
+        public static readonly bool IsGPUInBlacklist = SystemHelper.IsGPUInBlacklist();
 
         private bool _isFirstInstance;
         private Mutex _isRunning;
