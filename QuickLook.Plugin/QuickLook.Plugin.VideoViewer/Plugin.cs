@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -34,7 +34,7 @@ namespace QuickLook.Plugin.VideoViewer
             ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".tp", ".ts", ".vob", ".webm", ".wmv",
             // audio
             ".3gp", ".aa", ".aac", ".aax", ".act", ".aif", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
-            ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
+            ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".m4r", ".mmf", ".mp3", ".mpc", ".msv", ".ogg",
             ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
         };
 
