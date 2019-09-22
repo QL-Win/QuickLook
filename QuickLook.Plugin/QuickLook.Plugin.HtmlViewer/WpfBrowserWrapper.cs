@@ -115,9 +115,10 @@ namespace QuickLook.Plugin.HtmlViewer
         private void InnerBrowserNavigating(object sender, NavigatingCancelEventArgs e)
         {
             if (_loaded)
-                if (_innerBrowser.Source.Scheme != e.Uri.Scheme ||
-                    _innerBrowser.Source.AbsolutePath != e.Uri.AbsolutePath) // allow in-page navigation
-                    e.Cancel = true;
+                if (_innerBrowser.Source != null)
+                    if (_innerBrowser.Source.Scheme != e.Uri.Scheme ||
+                        _innerBrowser.Source.AbsolutePath != e.Uri.AbsolutePath) // allow in-page navigation
+                        e.Cancel = true;
             _loaded = true;
         }
 
@@ -169,7 +170,7 @@ namespace QuickLook.Plugin.HtmlViewer
         // register script errors handler on DOM - document.window
         private void RegisterWindowErrorHanlder_()
         {
-            object parwin = ((dynamic) _innerBrowser.Document).parentWindow;
+            object parwin = ((dynamic)_innerBrowser.Document).parentWindow;
             var cookie = new AxHost.ConnectionPointCookie(parwin, new HtmlWindowEvents2Impl(this),
                 typeof(IIntHTMLWindowEvents2));
             // MemoryLEAK? No: cookie has a Finalize() to Disconnect istelf. We'll rely on that. If disconnected too early, 
@@ -185,14 +186,14 @@ namespace QuickLook.Plugin.HtmlViewer
             // grab a handle to the underlying ActiveX object
             IServiceProvider serviceProvider = null;
             if (_innerBrowser.Document != null)
-                serviceProvider = (IServiceProvider) _innerBrowser.Document;
+                serviceProvider = (IServiceProvider)_innerBrowser.Document;
             if (serviceProvider == null)
                 return;
 
             var serviceGuid = SidSWebBrowserApp;
             var iid = typeof(IWebBrowser2).GUID;
             var browserInst =
-                (IWebBrowser2) serviceProvider.QueryService(ref serviceGuid, ref iid);
+                (IWebBrowser2)serviceProvider.QueryService(ref serviceGuid, ref iid);
 
             try
             {
