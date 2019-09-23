@@ -75,33 +75,35 @@ namespace QuickLook
 
         private void InvokeRoutine(Keys key, bool isKeyDown)
         {
-            var path = NativeMethods.QuickLook.GetCurrentSelection();
-
             Debug.WriteLine($"InvokeRoutine: key={key},down={isKeyDown}");
 
             if (isKeyDown)
+            {
                 switch (key)
                 {
                     case Keys.Enter:
                         PipeServerManager.SendMessage(PipeMessages.RunAndClose);
                         break;
                 }
+            }
             else
+            {
                 switch (key)
                 {
                     case Keys.Up:
                     case Keys.Down:
                     case Keys.Left:
                     case Keys.Right:
-                        PipeServerManager.SendMessage(PipeMessages.Switch, path);
+                        PipeServerManager.SendMessage(PipeMessages.Switch);
                         break;
                     case Keys.Space:
-                        PipeServerManager.SendMessage(PipeMessages.Toggle, path);
+                        PipeServerManager.SendMessage(PipeMessages.Toggle);
                         break;
                     case Keys.Escape:
                         PipeServerManager.SendMessage(PipeMessages.Close);
                         break;
                 }
+            }
         }
 
         private void InstallKeyHook(KeyEventHandler downHandler, KeyEventHandler upHandler)
