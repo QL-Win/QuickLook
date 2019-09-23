@@ -78,16 +78,16 @@ namespace QuickLook.Plugin.VideoViewer
             context.TitlebarOverlap = true;
 
             if (_mediaInfo == null ||
-                !string.IsNullOrEmpty(_mediaInfo.Get(StreamKind.General, 0, "VideoCount"))) // video
+                !string.IsNullOrWhiteSpace(_mediaInfo.Get(StreamKind.General, 0, "VideoCount"))) // video
             {
-                int.TryParse(_mediaInfo?.Get(StreamKind.Audio, 0, "Width"), out var width);
-                int.TryParse(_mediaInfo?.Get(StreamKind.Audio, 0, "Height"), out var height);
+                int.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Width"), out var width);
+                int.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Height"), out var height);
                 double.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
-                
+
                 var windowSize = new Size
                 {
-                    Width = Math.Max(1366, width == 0 ? 1366 : width),
-                    Height = Math.Max(768, height == 0 ? 768 : height)
+                    Width = Math.Max(100, width == 0 ? 1366 : width),
+                    Height = Math.Max(100, height == 0 ? 768 : height)
                 };
 
                 if (rotation % 180 != 0)
