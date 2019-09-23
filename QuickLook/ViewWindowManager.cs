@@ -107,13 +107,13 @@ namespace QuickLook
 
         public void SwitchPreview(string path = null)
         {
+            if (_viewerWindow.Visibility != Visibility.Visible)
+                return;
+
             if (string.IsNullOrEmpty(path))
                 path = NativeMethods.QuickLook.GetCurrentSelection();
 
             if (string.IsNullOrEmpty(path))
-                return;
-
-            if (_viewerWindow.Visibility != Visibility.Visible)
                 return;
 
             InvokePreview(path);
