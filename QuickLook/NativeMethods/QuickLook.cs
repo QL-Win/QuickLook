@@ -107,7 +107,9 @@ namespace QuickLook.NativeMethods
             Invalid,
             Desktop,
             Explorer,
-            Dialog
+            Dialog,
+            Everything,
+            DOpus
         }
     }
 }
