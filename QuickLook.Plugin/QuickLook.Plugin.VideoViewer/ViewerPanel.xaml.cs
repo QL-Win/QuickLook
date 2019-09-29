@@ -48,6 +48,7 @@ namespace QuickLook.Plugin.VideoViewer
         private bool _hasVideo;
         private bool _isPlaying;
         private bool _wasPlaying;
+        private bool _shouldLoop;
 
         public ViewerPanel(ContextObject context)
         {
@@ -70,6 +71,7 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement.MediaFailed += MediaFailed;
 
             buttonPlayPause.Click += TogglePlayPause;
+            buttonLoop.Click += ToggleShouldLoop;
             buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
             buttonMute.Click += (sender, e) => volumeSliderLayer.Visibility = Visibility.Visible;
             volumeSliderLayer.MouseDown += (sender, e) => volumeSliderLayer.Visibility = Visibility.Collapsed;
@@ -106,6 +108,23 @@ namespace QuickLook.Plugin.VideoViewer
                 if (value == _isPlaying) return;
                 _isPlaying = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public bool ShouldLoop
+        {
+            get => _shouldLoop;
+            private set
+            {
+                if (value == _shouldLoop) return;
+                _shouldLoop = value;
+                OnPropertyChanged();
+                if (!IsPlaying)
+                {
+                    IsPlaying = true;
+
+                    mediaElement.Play();
+                }
             }
         }
 
@@ -169,10 +188,19 @@ namespace QuickLook.Plugin.VideoViewer
             if (mediaElement == null)
                 return;
 
-            IsPlaying = false;
-
             mediaElement.MediaPosition = 0;
-            mediaElement.Pause();
+            if (ShouldLoop)
+            {
+                IsPlaying = true;
+
+                mediaElement.Play();
+            }
+            else
+            {
+                IsPlaying = false;
+                
+                mediaElement.Pause();
+            }
         }
 
         private void ShowViedoControlContainer(object sender, MouseEventArgs e)
@@ -264,6 +292,11 @@ namespace QuickLook.Plugin.VideoViewer
                 mediaElement.Pause();
             else
                 mediaElement.Play();
+        }
+
+        private void ToggleShouldLoop(object sender, EventArgs e)
+        {
+            ShouldLoop = !ShouldLoop;
         }
 
         public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
