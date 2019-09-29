@@ -73,8 +73,11 @@ namespace QuickLook
             _viewerWindow.BeginHide();
         }
 
-        public void TogglePreview(string path)
+        public void TogglePreview(string path = null)
         {
+            if (string.IsNullOrEmpty(path))
+                path = NativeMethods.QuickLook.GetCurrentSelection();
+
             if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
                 ClosePreview();
             else
@@ -99,30 +102,28 @@ namespace QuickLook
 
             var newWindow = new ViewerWindow();
 
-            /*if (_viewerWindow.WindowState != WindowState.Maximized)
-            {
-                newWindow.Top = _viewerWindow.Top;
-                newWindow.Left = _viewerWindow.Left;
-                newWindow.Width = _viewerWindow.Width;
-                newWindow.Height = _viewerWindow.Height;
-            }*/
-
             _viewerWindow = newWindow;
         }
 
-        public void SwitchPreview(string path)
+        public void SwitchPreview(string path = null)
         {
-            if (string.IsNullOrEmpty(path))
+            if (_viewerWindow.Visibility != Visibility.Visible)
                 return;
 
-            if (_viewerWindow.Visibility != Visibility.Visible)
+            if (string.IsNullOrEmpty(path))
+                path = NativeMethods.QuickLook.GetCurrentSelection();
+
+            if (string.IsNullOrEmpty(path))
                 return;
 
             InvokePreview(path);
         }
 
-        public void InvokePreview(string path)
+        public void InvokePreview(string path = null)
         {
+            if (string.IsNullOrEmpty(path))
+                path = NativeMethods.QuickLook.GetCurrentSelection();
+
             if (string.IsNullOrEmpty(path))
                 return;
 
