@@ -145,6 +145,19 @@
                         </Style>
                     </Button.Style>
                 </Button>
+                <Button x:Name="buttonLoop" DockPanel.Dock="Left">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
+                            <Setter Property="Content" Value="&#xE72C;" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShouldLoop, ElementName=viewerPanel}"
+                                             Value="True">
+                                    <Setter Property="Content" Value="&#xE777;" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <Button x:Name="buttonMute" DockPanel.Dock="Right">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
