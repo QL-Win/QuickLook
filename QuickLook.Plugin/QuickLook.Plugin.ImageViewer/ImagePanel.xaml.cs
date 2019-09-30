@@ -1,4 +1,4 @@
-// Copyright © 2018 Paddy Xu
+﻿// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -79,6 +79,7 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
             viewPanel.MouseMove += ViewPanel_MouseMove;
+            viewPanel.MouseDoubleClick += ViewPanel_MouseDoubleClick;
 
             viewPanel.ManipulationInertiaStarting += ViewPanel_ManipulationInertiaStarting;
             viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
@@ -339,6 +340,11 @@ namespace QuickLook.Plugin.ImageViewer
             var temp = _dragInitPos.Value; // Point is a type value
             temp.Offset(viewPanel.HorizontalOffset, viewPanel.VerticalOffset);
             _dragInitPos = temp;
+        }
+
+        private void ViewPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e) 
+        {
+            DoZoomToFit();
         }
 
         private void ViewPanel_MouseMove(object sender, MouseEventArgs e)
