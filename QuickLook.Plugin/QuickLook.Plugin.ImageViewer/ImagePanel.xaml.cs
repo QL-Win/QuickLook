@@ -1,4 +1,4 @@
-﻿// Copyright © 2018 Paddy Xu
+// Copyright © 2018 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -365,16 +365,6 @@ namespace QuickLook.Plugin.ImageViewer
         private void ViewPanel_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
-            {
-                // normal scroll
-                viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - e.Delta);
-
-                ImageScrolled?.Invoke(this, e.Delta);
-
-                return;
-            }
 
             // zoom
             var newZoom = ZoomFactor + ZoomFactor * e.Delta / 120 * 0.1;
