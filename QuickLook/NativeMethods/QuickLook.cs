@@ -98,7 +98,8 @@ namespace QuickLook.NativeMethods
             {
                 Debug.WriteLine(e);
             }
-
+            var str = sb.ToString();
+            sb = new StringBuilder(PipeServerManager.ResolveShortcut(str));
             return sb?.ToString() ?? string.Empty;
         }
 
