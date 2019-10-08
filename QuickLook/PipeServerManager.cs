@@ -125,8 +125,8 @@ namespace QuickLook
             var wParam = msg.Substring(0, split);
             var lParam = msg.Substring(split + 1, msg.Length - split - 1);
 
-            if (!string.IsNullOrEmpty(lParam))
-                lParam = ResolveShortcut(lParam);
+            //if (!string.IsNullOrEmpty(lParam))
+                //lParam = ResolveShortcut(lParam);
 
             switch (wParam)
             {
@@ -174,6 +174,8 @@ namespace QuickLook
 
         public static string ResolveShortcut(string filename)
         {
+            if (String.IsNullOrEmpty(filename)) return filename;
+            
             if (Path.GetExtension(filename).ToLower() != ".lnk")
                 return filename;
 
