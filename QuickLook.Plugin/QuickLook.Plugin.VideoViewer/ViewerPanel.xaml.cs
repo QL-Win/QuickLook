@@ -70,6 +70,8 @@ namespace QuickLook.Plugin.VideoViewer
             mediaElement.MediaEnded += MediaEnded;
             mediaElement.MediaFailed += MediaFailed;
 
+            ShouldLoop = SettingHelper.Get("ShouldLoop", false);
+
             buttonPlayPause.Click += TogglePlayPause;
             buttonLoop.Click += ToggleShouldLoop;
             buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
@@ -144,6 +146,7 @@ namespace QuickLook.Plugin.VideoViewer
         {
             // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
             SettingHelper.Set("VolumeDouble", mediaElement.Volume);
+            SettingHelper.Set("ShouldLoop", ShouldLoop);
 
             try
             {

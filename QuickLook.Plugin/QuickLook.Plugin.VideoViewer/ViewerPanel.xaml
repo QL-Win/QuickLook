@@ -132,7 +132,7 @@
                 </glassLayer:GlassLayer.Style>
             </glassLayer:GlassLayer>
             <DockPanel Margin="8,0,8,0">
-                <Button x:Name="buttonPlayPause" DockPanel.Dock="Left">
+                <Button x:Name="buttonPlayPause" ToolTip="Play/Pause" DockPanel.Dock="Left">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
                             <Setter Property="Content" Value="&#xE769;" />
@@ -145,10 +145,10 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button x:Name="buttonLoop" DockPanel.Dock="Left">
+                <Button x:Name="buttonLoop" ToolTip="Loop" DockPanel.Dock="Left">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
-                            <Setter Property="Content" Value="&#xE72C;" />
+                            <Setter Property="Content" Value="&#xE8D8;" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShouldLoop, ElementName=viewerPanel}"
                                              Value="True">
@@ -158,7 +158,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button x:Name="buttonMute" DockPanel.Dock="Right">
+                <Button x:Name="buttonMute" ToolTip="Volume" DockPanel.Dock="Right">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
                             <Setter Property="Content"
@@ -167,6 +167,7 @@
                     </Button.Style>
                 </Button>
                 <Button x:Name="buttonTime" Width="37" Style="{StaticResource ControlButtonStyle}"
+                        ToolTip="Time Elapsed/Remaining"
                         DockPanel.Dock="Right" Tag="Time">
                     <TextBlock VerticalAlignment="Center" FontSize="11"
                                FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
