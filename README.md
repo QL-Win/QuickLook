@@ -56,7 +56,7 @@ Get it from one of the following sources:
  - <kbd>Esc</kbd> Hide the preview window
  - <kbd>Enter</kbd> Open/Execute current file
  - <kbd>Mouse</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> Preview another file
- - <kbd>Ctrl</kbd>+<kbd>Wheel</kbd> Zoom in/out (images & pdf)
+ - <kbd>Mouse Wheel</kbd> Zoom in/out (images & pdf)
  - <kbd>Wheel</kbd> Increase/decrease volume
 
 ## Supported file types, file manager intergation, etc.
