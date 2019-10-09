@@ -58,6 +58,7 @@ namespace QuickLook.Plugin.ImageViewer
 
         private bool _zoomToFit = true;
         private double _zoomToFitFactor;
+        private bool _zoomWithControlKey;
 
         public ImagePanel()
         {
@@ -97,6 +98,16 @@ namespace QuickLook.Plugin.ImageViewer
 
             ShowMeta();
             Theme = ContextObject.Theme;
+        }
+
+        public bool ZoomWithControlKey
+        {
+            get => _zoomWithControlKey;
+            set
+            {
+                _zoomWithControlKey = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool ShowZoomLevelInfo
@@ -372,7 +383,15 @@ namespace QuickLook.Plugin.ImageViewer
         {
             e.Handled = true;
 
-            // zoom
+            // normal scroll when Control is not pressed, useful for PdfViewer
+            if (ZoomWithControlKey && (Keyboard.Modifiers & ModifierKeys.Control) == 0)
+            {
+                viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - e.Delta);
+                ImageScrolled?.Invoke(this, e.Delta);
+                return;
+            }
+
+            // otherwise, perform normal zooming
             var newZoom = ZoomFactor + ZoomFactor * e.Delta / 120 * 0.1;
 
             Zoom(newZoom);
