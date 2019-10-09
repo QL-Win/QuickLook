@@ -342,7 +342,7 @@ namespace QuickLook.Plugin.ImageViewer
             _dragInitPos = temp;
         }
 
-        private void ViewPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e) 
+        private void ViewPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DoZoomToFit();
         }
