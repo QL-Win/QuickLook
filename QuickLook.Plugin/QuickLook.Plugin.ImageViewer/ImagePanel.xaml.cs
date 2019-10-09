@@ -79,6 +79,7 @@ namespace QuickLook.Plugin.ImageViewer
             viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
             viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;
             viewPanel.MouseMove += ViewPanel_MouseMove;
+            viewPanel.MouseDoubleClick += ViewPanel_MouseDoubleClick;
 
             viewPanel.ManipulationInertiaStarting += ViewPanel_ManipulationInertiaStarting;
             viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
@@ -341,6 +342,11 @@ namespace QuickLook.Plugin.ImageViewer
             _dragInitPos = temp;
         }
 
+        private void ViewPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DoZoomToFit();
+        }
+
         private void ViewPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_dragInitPos.HasValue)
@@ -365,16 +371,6 @@ namespace QuickLook.Plugin.ImageViewer
         private void ViewPanel_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
-            {
-                // normal scroll
-                viewPanel.ScrollToVerticalOffset(viewPanel.VerticalOffset - e.Delta);
-
-                ImageScrolled?.Invoke(this, e.Delta);
-
-                return;
-            }
 
             // zoom
             var newZoom = ZoomFactor + ZoomFactor * e.Delta / 120 * 0.1;
