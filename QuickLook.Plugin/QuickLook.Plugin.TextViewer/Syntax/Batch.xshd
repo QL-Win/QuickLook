@@ -10,7 +10,7 @@ hello@exr.be
 https://github.com/ei
 -->
 
-<SyntaxDefinition name="Batch" extensions="*.bat;*.cmd">
+<SyntaxDefinition name="Batch" extensions=".bat;.cmd">
 
     <Environment>
         <Default color="Black" bgcolor="#FFFFFF"/>
