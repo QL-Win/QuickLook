@@ -75,7 +75,7 @@ See the [Translation guide](https://github.com/QL-Win/QuickLook/wiki/Translation
  - Many [open-source projects](https://github.com/QL-Win/QuickLook/wiki/On-the-Shoulders-of-Giants) and their contributors
  - Our UI designers [@OiCkilL](https://twitter.com/OiCkilL) (“Fluent” user interface since v0.3) and [@QubitsDev](https://twitter.com/qubitsdev) (application icon since v0.3)
  - [Our contributers](https://github.com/QL-Win/QuickLook/graphs/contributors) who
-     - teach QuickLook speaks *your* language
+     - teach QuickLook to speak *your* language
      - send pull requests, report bugs or give suggestions
  - ... and you 😊
 
