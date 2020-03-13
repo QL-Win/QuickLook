@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<!-- Shades of Red-Brown: #a31515, #cf4315, #ffb96e, #ffdc95 -->
+<!-- Shades of Bright-Blue: #0077dc #008fe4 #8dbbdc #8de8ff -->
+<SyntaxDefinition name="Ruby" extensions=".rb" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Digits" foreground="Red"/>
+
+  <Color name="Variable" foreground="Red" />
+  <Color name="Punctuation" foreground="#FFa31515" />
+
+  <Color name="Comment" foreground="Green" />
+  <Color name="DocComment" foreground="Green" />
+  <Color name="NestedComments"  foreground="Teal" />
+  <Color name="MultiLineComment" foreground="Green" />
+  <Color name="LineComment" foreground="Green" />
+
+  <Color name="Char" foreground="Magenta" />
+  <Color name="String" foreground="Blue" />
+
+  <Color name="MethodCall" foreground="MidnightBlue" fontWeight="bold" />
+  <Color name="FunctionDefinition" fontWeight="bold" foreground="Blue" />
+
+  <Color name="BuiltInStatements" fontWeight="bold" foreground="MidnightBlue" />
+  <Color name="ClassStatement" foreground="Blue" fontWeight="bold" />
+  <Color name="ExceptionHandlingStatements" fontWeight="bold" foreground="Teal" />
+
+  <Color name="Imports" fontWeight="bold" foreground="Green" />
+  <Color name="IterationStatements" fontWeight="bold" foreground="Blue" />
+  <Color name="JumpStatements" foreground="Navy" />
+  <Color name="OperatorStatements" fontWeight="bold" foreground="DarkCyan" />
+  <Color name="NullStatement" foreground="Red" fontWeight="bold" />
+  <Color name="SelectionStatements" fontWeight="bold" foreground="Blue" />
+  <Color name="BooleanStatements" foreground="DarkViolet" />
+  <Color name="DefinedStatement" foreground="DarkViolet" />
+  <Color name="ClassSelfStatement" foreground="DarkViolet" />
+  <Color name="ClassInheritanceStatement" foreground="DarkViolet" />
+
+  <Color name="ImportStatement" foreground="#FF008fe4"/>
+
+  <Color name="CommentMarkerSetTodo"       foreground="Red"     fontWeight="bold"/>
+  <Color name="CommentMarkerSetHackUndone" foreground="#E0E000" fontWeight="bold"/>
+
+  <RuleSet name="CommentMarkerSet">
+    <Keywords color="CommentMarkerSetTodo">
+      <Word>TODO</Word>
+      <Word>FIXME</Word>
+    </Keywords>
+    <Keywords color="CommentMarkerSetHackUndone">
+      <Word>HACK</Word>
+      <Word>UNDONE</Word>
+    </Keywords>
+  </RuleSet>
+
+  <!-- Main RuleSet -->
+  <RuleSet ignoreCase="false">
+
+    <Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+
+    <Rule color="Punctuation"><!-- removed &amp;-->
+      [?,.:;()\[\]{}+\-/%*&lt;&gt;^=~!]+
+    </Rule>
+
+    <Span color="Char" multiline="false">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <!-- escape with backslash -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+    <Span color="DocComment" ruleSet="CommentMarkerSet" multiline="true">
+      <Begin>"""</Begin>
+      <End>"""</End>
+    </Span>
+    <Span color="MultiLineComment" ruleSet="comments set" multiline="true">
+      <Begin>\=begin</Begin>
+      <End>\=end</End>
+    </Span>
+    <Span color="LineComment" ruleSet="CommentMarkerSet" multiline="false">
+      <Begin>\#</Begin>
+    </Span>
+    <Span color="String" multiline="false">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- escape with backslash -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Keywords color="BuiltInStatements">
+      <Word>abort</Word>
+      <Word>Array</Word>
+      <Word>at_exit</Word>
+      <Word>autoload</Word>
+      <Word>binding</Word>
+      <Word>callcc</Word>
+      <Word>caller</Word>
+      <Word>chomp</Word>
+      <Word>chop</Word>
+      <Word>eval</Word>
+      <Word>exec</Word>
+      <Word>exit</Word>
+      <Word>fail</Word>
+      <Word>Float</Word>
+      <Word>fork</Word>
+      <Word>format</Word>
+      <Word>gets</Word>
+      <Word>global_variables</Word>
+      <Word>gsub</Word>
+      <Word>Integer</Word>
+      <Word>lambda</Word>
+      <Word>proc</Word>
+      <Word>load</Word>
+      <Word>local_variables</Word>
+      <Word>loop</Word>
+      <Word>open</Word>
+      <Word>p</Word>
+      <Word>print</Word>
+      <Word>print</Word>
+      <Word>printf</Word>
+      <Word>putc</Word>
+      <Word>puts</Word>
+      <Word>rand</Word>
+      <Word>readline</Word>
+      <Word>scan</Word>
+      <Word>select</Word>
+      <Word>set_trace_func</Word>
+      <Word>sleep</Word>
+      <Word>split</Word>
+      <Word>sprintf</Word>
+      <Word>srand</Word>
+      <Word>String</Word>
+      <Word>syscall</Word>
+      <Word>system</Word>
+      <Word>sub</Word>
+      <Word>test</Word>
+      <Word>throw</Word>
+      <Word>trace_var</Word>
+      <Word>trap</Word>
+      <Word>untrace_var</Word>
+    </Keywords>
+
+    <Keywords color="ClassStatement">
+      <Word>class</Word>
+      <Word>module</Word>
+      <Word>public</Word>
+      <Word>protected</Word>
+      <Word>private</Word>
+    </Keywords>
+
+    <Keywords color="ExceptionHandlingStatements">
+      <Word>begin</Word>
+      <Word>rescue</Word>
+      <Word>ensure</Word>
+      <Word>raise</Word>
+      <Word>catch</Word>
+    </Keywords>
+
+    <Keywords color="FunctionDefinition">
+      <Word>def</Word>
+      <Word>end</Word>
+      <Word>undef</Word>
+    </Keywords>
+
+    <Keywords color="IterationStatements">
+      <Word>for</Word>
+      <Word>do</Word>
+      <Word>in</Word>
+      <Word>while</Word>
+      <Word>until</Word>
+    </Keywords>
+
+    <Keywords color="JumpStatements">
+      <Word>break</Word>
+      <Word>yield</Word>
+      <Word>redo</Word>
+      <Word>return</Word>
+      <Word>retry</Word>
+      <Word>next</Word>
+    </Keywords>
+
+    <Keywords color="OperatorStatements">
+      <Word>and</Word>
+      <Word>not</Word>
+      <Word>or</Word>
+    </Keywords>
+
+    <Keywords color="NullStatement">
+      <Word>nil</Word>
+    </Keywords>
+
+    <Keywords color="SelectionStatements">
+      <Word>elsif</Word>
+      <Word>else</Word>
+      <Word>if</Word>
+      <Word>then</Word>
+      <Word>case</Word>
+      <Word>unless</Word>
+    </Keywords>
+
+    <Keywords color="BooleanStatements">
+      <Word>true</Word>
+      <Word>false</Word>
+    </Keywords>
+
+    <Keywords color="DefinedStatement">
+      <Word>defined</Word>
+    </Keywords>
+
+    <Keywords color="ClassSelfStatement">
+      <Word>self</Word>
+    </Keywords>
+
+    <Keywords color="ClassInheritanceStatement">
+      <Word>super</Word>
+    </Keywords>
+
+    <Keywords color="Imports">
+      <Word>import</Word>
+      <Word>alias</Word>
+    </Keywords>
+
+    <Keywords color="ImportStatement">
+      <Word>include</Word>
+      <Word>require</Word>
+    </Keywords>
+
+    <Rule color="MethodCall">[\d\w_]+(?=(\s*\())</Rule>
+    <Rule color="Variable">@([\w]+)</Rule>
+    <Rule color="Variable">&amp;([\w]+)</Rule>
+  </RuleSet>
+  <!-- End of Main RuleSet-->
+
+  <RuleSet name="comments set">
+    <Keywords color="CommentMarkerSetTodo">
+      <Word>TODO</Word>
+      <Word>FIXME</Word>
+    </Keywords>
+    <Keywords color="CommentMarkerSetHackUndone">
+      <Word>HACK</Word>
+      <Word>UNDONE</Word>
+    </Keywords>
+    <!-- allows nested /**/ comments, coloring them Green/Teal alternately -->
+    <Span color="NestedComments" multiline="true">
+      <Begin>=begin</Begin>
+      <End>=end</End>
+      <RuleSet>
+        <Keywords color="CommentMarkerSetTodo">
+          <Word>TODO</Word>
+          <Word>FIXME</Word>
+        </Keywords>
+        <Keywords color="CommentMarkerSetHackUndone">
+          <Word>HACK</Word>
+          <Word>UNDONE</Word>
+        </Keywords>
+        <Span color="Comment" ruleSet="comments set" multiline="true">
+          <Begin>=begin</Begin>
+          <End>=end</End>
+        </Span>
+      </RuleSet>
+    </Span>
+  </RuleSet>
+</SyntaxDefinition>
