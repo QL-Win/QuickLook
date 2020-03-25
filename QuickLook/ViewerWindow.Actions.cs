@@ -193,18 +193,16 @@ namespace QuickLook
             buttonShare.Visibility = ShareHelper.IsShareSupported(_path) ? Visibility.Visible : Visibility.Collapsed;
 
             // open icon
-            buttonOpenText.Inlines.Clear();
-
             if (Directory.Exists(_path))
             {
-                AddToInlines("MW_BrowseFolder", Path.GetFileName(_path));
+                buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_BrowseFolder"), Path.GetFileName(_path));
                 return;
             }
 
             var isExe = FileHelper.IsExecutable(_path, out var appFriendlyName);
             if (isExe)
             {
-                AddToInlines("MW_Run", appFriendlyName);
+                buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_Run"), appFriendlyName);
                 return;
             }
 
@@ -212,31 +210,12 @@ namespace QuickLook
             var found = FileHelper.GetAssocApplication(_path, out appFriendlyName);
             if (found)
             {
-                AddToInlines("MW_OpenWith", appFriendlyName);
+                buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_OpenWith"), appFriendlyName);
                 return;
             }
 
             // assoc not found
-            AddToInlines("MW_Open", Path.GetFileName(_path));
-
-            void AddToInlines(string str, string replaceWith)
-            {
-                // limit str length
-                if (replaceWith.Length > 16)
-                    replaceWith = replaceWith.Substring(0, 8) + "…" + replaceWith.Substring(replaceWith.Length - 8);
-
-                str = TranslationHelper.Get(str);
-                var elements = str.Split(new[] {"{0}"}, StringSplitOptions.None).ToList();
-                while (elements.Count < 2)
-                    elements.Add(string.Empty);
-
-                buttonOpenText.Inlines.Add(
-                    new Run(elements[0]) {FontWeight = FontWeights.Normal}); // text beforehand
-                buttonOpenText.Inlines.Add(
-                    new Run(replaceWith) {FontWeight = FontWeights.SemiBold}); // appFriendlyName
-                buttonOpenText.Inlines.Add(
-                    new Run(elements[1]) {FontWeight = FontWeights.Normal}); // text afterward
-            }
+            buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_Open"), Path.GetFileName(_path));
         }
 
         internal void BeginHide()

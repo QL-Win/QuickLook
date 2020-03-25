@@ -102,14 +102,17 @@
                             Content="&#xE72D;" ToolTip="Share" />
                     <Button DockPanel.Dock="Right" x:Name="buttonOpenWith" Style="{StaticResource CaptionButtonStyle}"
                             Content="&#xE7AC;" ToolTip="Open With" />
-                    <Button x:Name="buttonOpen" DockPanel.Dock="Right"
-                            Style="{StaticResource CaptionTextButtonStyle}">
+                    <Button DockPanel.Dock="Right" x:Name="buttonOpen" Style="{StaticResource CaptionButtonStyle}"
+                            Content="&#xE8E5;" ToolTip="Open with XXX" />
+                    <!--<Button x:Name="buttonOpen" DockPanel.Dock="Right"
+                            Style="{StaticResource CaptionTextButtonStyle}"
+                            Visibility="{Binding ActualWidth, ElementName=windowCaptionContainer, Converter={StaticResource WidthToVisibilityCollapsedConverter}}">
                         <Button.Content>
                             <TextBlock x:Name="buttonOpenText" VerticalAlignment="Center">
                                 Open with <Bold>AppName</Bold>
                             </TextBlock>
                         </Button.Content>
-                    </Button>
+                    </Button>-->
                     <Button DockPanel.Dock="Left" x:Name="buttonTop" Tag="Auto" ToolTip="Stay on Top">
                         <Button.Resources>
                             <Grid x:Key="ContentTop">
