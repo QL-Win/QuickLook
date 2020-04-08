@@ -26,7 +26,6 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        // TODO: Handle urls based on protocol
         private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".svg" };
         private static readonly string[] SupportedProtocols = { "http", "https" };
 
