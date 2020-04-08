@@ -26,7 +26,9 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".svg", ".url" };
+        // TODO: Handle urls based on protocol
+        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".svg" };
+        private static readonly string[] SupportedProtocols = { "http", "https" };
 
         private WebpagePanel _panel;
 
@@ -39,7 +41,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Extensions.Any(path.ToLower().EndsWith);
+            return !Directory.Exists(path) && (Extensions.Any(path.ToLower().EndsWith) || (path.ToLower().EndsWith(".url") && SupportedProtocols.Contains(Helper.GetUrlPath(path).Split(':')[0].ToLower())));
         }
 
         public void Prepare(string path, ContextObject context)
