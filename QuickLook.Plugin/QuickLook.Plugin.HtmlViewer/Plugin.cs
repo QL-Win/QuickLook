@@ -26,7 +26,7 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".svg", ".url" };
+        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".url" };
 
         private WebpagePanel _panel;
 
