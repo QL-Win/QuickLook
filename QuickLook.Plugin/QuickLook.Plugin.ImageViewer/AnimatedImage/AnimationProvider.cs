@@ -25,7 +25,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal abstract class AnimationProvider : IDisposable
     {
-        protected AnimationProvider(string path, NConvert meta)
+        protected AnimationProvider(string path, MetaProvider meta)
         {
             Path = path;
             Meta = meta;
@@ -33,13 +33,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public string Path { get; }
 
-        public NConvert Meta { get; }
+        public MetaProvider Meta { get; }
 
         public Int32AnimationUsingKeyFrames Animator { get; protected set; }
 
         public abstract void Dispose();
 
-        public abstract Task<BitmapSource> GetThumbnail(Size size, Size fullSize);
+        public abstract Task<BitmapSource> GetThumbnail(Size renderSize);
 
         public abstract Task<BitmapSource> GetRenderedFrame(int index);
     }

@@ -51,7 +51,7 @@ namespace QuickLook.Plugin.PDFViewer
 
             listThumbnails.SelectionChanged += UpdatePageViewWhenSelectionChanged;
 
-            pagePanel.DelayedReRender += ReRenderCurrentPageDelayed;
+            pagePanel.ZoomChanged += ReRenderCurrentPageDelayed;
             pagePanel.ImageScrolled += NavigatePage;
         }
 
@@ -80,7 +80,7 @@ namespace QuickLook.Plugin.PDFViewer
 
             if (pagePanel != null)
             {
-                pagePanel.DelayedReRender -= ReRenderCurrentPageDelayed;
+                pagePanel.ZoomChanged -= ReRenderCurrentPageDelayed;
                 pagePanel.ImageScrolled -= NavigatePage;
             }
 

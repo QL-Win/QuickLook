@@ -48,7 +48,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         public event EventHandler ImageLoaded;
         public event EventHandler DoZoomToFit;
 
-        private static AnimationProvider LoadFullImageCore(Uri path, NConvert meta)
+        private static AnimationProvider InitAnimationProvider(Uri path, MetaProvider meta)
         {
             var ext = Path.GetExtension(path.LocalPath).ToLower();
             var type = Providers.First(p => p.Key.Contains(ext) || p.Key.Contains("*")).Value;
@@ -69,7 +69,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                 new UIPropertyMetadata(null, AnimationUriChanged));
 
         public static readonly DependencyProperty MetaProperty =
-            DependencyProperty.Register("Meta", typeof(NConvert), typeof(AnimatedImage));
+            DependencyProperty.Register("Meta", typeof(MetaProvider), typeof(AnimatedImage));
 
         public static readonly DependencyProperty ContextObjectProperty =
             DependencyProperty.Register("ContextObject", typeof(ContextObject), typeof(AnimatedImage));
@@ -86,9 +86,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             set => SetValue(AnimationUriProperty, value);
         }
 
-        public NConvert Meta
+        public MetaProvider Meta
         {
-            private get => (NConvert) GetValue(MetaProperty);
+            private get => (MetaProvider) GetValue(MetaProperty);
             set => SetValue(MetaProperty, value);
         }
 
@@ -106,13 +106,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             //var thumbnail = instance.Meta?.GetThumbnail(true);
             //instance.Source = thumbnail;
 
-            instance._animation = LoadFullImageCore((Uri) ev.NewValue, instance.Meta);
+            instance._animation = InitAnimationProvider((Uri) ev.NewValue, instance.Meta);
             ShowThumbnailAndStartAnimation(instance);
         }
 
         private static void ShowThumbnailAndStartAnimation(AnimatedImage instance)
         {
-            var task = instance._animation.GetThumbnail(instance.ContextObject.PreferredSize, instance.Meta.GetSize());
+            var task = instance._animation.GetThumbnail(instance.ContextObject.PreferredSize);
             if (task == null) return;
 
             task.ContinueWith(_ => instance.Dispatcher.Invoke(() =>
@@ -121,8 +121,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     return;
 
                 instance.Source = _.Result;
-                instance.DoZoomToFit?.Invoke(instance, new EventArgs());
-                instance.ImageLoaded?.Invoke(instance, new EventArgs());
+
+                if (_.Result != null)
+                {
+                    instance.DoZoomToFit?.Invoke(instance, new EventArgs());
+                    instance.ImageLoaded?.Invoke(instance, new EventArgs());
+                }
 
                 instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation?.Animator);
             }));
@@ -141,8 +145,18 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             task.ContinueWith(_ => instance.Dispatcher.Invoke(() =>
             {
-                if (!instance._disposing)
-                    instance.Source = _.Result;
+                if (instance._disposing)
+                    return;
+
+                var firstLoad = instance.Source == null;
+
+                instance.Source = _.Result;
+
+                if (firstLoad)
+                {
+                    instance.DoZoomToFit?.Invoke(instance, new EventArgs());
+                    instance.ImageLoaded?.Invoke(instance, new EventArgs());
+                }
             }));
             task.Start();
         }

@@ -76,23 +76,37 @@
             </Border.Resources>
         </Border>
 
-        <Button x:Name="buttonMeta" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
+        <Button x:Name="buttonMeta" Width="24" Height="24" Style="{StaticResource CaptionButtonStyle}"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}"
-                Margin="0,8,8,0" Content="&#xE946;" />
+                Margin="0,8,40,0" Content="&#xE946;" />
 
         <Button x:Name="buttonBackgroundColour" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}"
-                Margin="0,8,40,0" Content="&#xEF1F;" />
+                Margin="0,8,8,0" Content="&#xEF1F;" />
 
-        <TextBlock x:Name="textMeta" IsHitTestVisible="False" Visibility="Collapsed" HorizontalAlignment="Right"
+        <TextBlock x:Name="textMeta" IsHitTestVisible="False" HorizontalAlignment="Right"
                    VerticalAlignment="Top" FontSize="11"
                    Padding="5,5,5,5" Margin="0,40,8,0" Background="{DynamicResource CaptionBackground}"
                    Foreground="{DynamicResource WindowTextForeground}">
             <TextBlock.Inlines>
-                <Run FontWeight="SemiBold">Camera maker</Run><Run>:&#160;</Run><Run>SONY</Run>
+                <Run FontWeight="SemiBold">Camera maker</Run>
+                <Run>:&#160;</Run>
+                <Run>SONY</Run>
             </TextBlock.Inlines>
+            <TextBlock.Style>
+                <Style>
+                    <Style.Setters>
+                        <Setter Property="TextBlock.Visibility" Value="Collapsed" />
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=buttonMeta,Path=IsMouseOver}" Value="True">
+                            <Setter Property="TextBlock.Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
         </TextBlock>
     </Grid>
 </UserControl>
