@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using Size = System.Windows.Size;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
@@ -31,9 +32,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private BitmapSource _frame;
         private bool _isPlaying;
 
-        public GifAnimationProvider(string path, NConvert meta) : base(path, meta)
+        public GifAnimationProvider(string path, MetaProvider meta) : base(path, meta)
         {
             _fileHandle = (Bitmap) Image.FromFile(path);
+
+            _fileHandle.SetResolution(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
+                DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical);
 
             Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
@@ -53,7 +57,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             _frame = null;
         }
 
-        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
+        public override Task<BitmapSource> GetThumbnail(Size renderSize)
         {
             return new Task<BitmapSource>(() =>
             {

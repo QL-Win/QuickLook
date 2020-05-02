@@ -37,7 +37,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         private int _lastEffectivePreviousPreviousFrameIndex;
         private NativeImageProvider _nativeImageProvider;
 
-        public APngAnimationProvider(string path, NConvert meta) : base(path, meta)
+        public APngAnimationProvider(string path, MetaProvider meta) : base(path, meta)
         {
             if (!IsAnimatedPng(path))
             {
@@ -68,12 +68,18 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             }
         }
 
-        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
+        public override Task<BitmapSource> GetThumbnail(Size renderSize)
         {
             if (_nativeImageProvider != null)
-                return _nativeImageProvider.GetThumbnail(size, fullSize);
+                return _nativeImageProvider.GetThumbnail(renderSize);
 
-            return new Task<BitmapSource>(() => _baseFrame.GetBitmapSource());
+            return new Task<BitmapSource>(() =>
+            {
+                var bs = _baseFrame.GetBitmapSource();
+
+                bs.Freeze();
+                return bs;
+            });
         }
 
         public override Task<BitmapSource> GetRenderedFrame(int index)

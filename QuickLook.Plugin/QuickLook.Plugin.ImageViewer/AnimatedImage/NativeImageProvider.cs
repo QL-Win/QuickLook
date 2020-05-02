@@ -27,19 +27,25 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal class NativeImageProvider : AnimationProvider
     {
-        public NativeImageProvider(string path, NConvert meta) : base(path, meta)
+        public NativeImageProvider(string path, MetaProvider meta) : base(path, meta)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
                 KeyTime.FromTimeSpan(TimeSpan.Zero)));
         }
 
-        public override Task<BitmapSource> GetThumbnail(Size size, Size fullSize)
+        public override Task<BitmapSource> GetThumbnail(Size renderSize)
         {
-            var decodeWidth = (int) Math.Round(fullSize.Width *
-                                               Math.Min(size.Width / 2 / fullSize.Width,
-                                                   size.Height / 2 / fullSize.Height));
-            var decodeHeight = (int) Math.Round(fullSize.Height / fullSize.Width * decodeWidth);
+            var fullSize = Meta.GetSize();
+
+            //var decodeWidth = (int) Math.Round(fullSize.Width *
+            //                                   Math.Min(renderSize.Width / 2 / fullSize.Width,
+            //                                       renderSize.Height / 2 / fullSize.Height));
+            //var decodeHeight = (int) Math.Round(fullSize.Height / fullSize.Width * decodeWidth);
+            var decodeWidth =
+                (int) Math.Round(Math.Min(Meta.GetSize().Width, Math.Max(1d, Math.Floor(renderSize.Width))));
+            var decodeHeight =
+                (int) Math.Round(Math.Min(Meta.GetSize().Height, Math.Max(1d, Math.Floor(renderSize.Height))));
             var orientation = Meta.GetOrientation();
             var rotate = ShouldRotate(orientation);
 
@@ -51,18 +57,22 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     img.BeginInit();
                     img.UriSource = new Uri(Path);
                     img.CacheOption = BitmapCacheOption.OnLoad;
+                    // specific renderSize to avoid .net's double to int conversion
                     img.DecodePixelWidth = rotate ? decodeHeight : decodeWidth;
-                    img.DecodePixelHeight = rotate ? decodeWidth : decodeHeight; // specific size to avoid .net's double to int conversion
+                    img.DecodePixelHeight = rotate ? decodeWidth : decodeHeight;
                     img.EndInit();
 
-                    var scaled = rotate ?
-                        new TransformedBitmap(img,
+                    var scaled = rotate
+                        ? new TransformedBitmap(img,
                             new ScaleTransform(fullSize.Height / img.PixelWidth, fullSize.Width / img.PixelHeight))
                         : new TransformedBitmap(img,
                             new ScaleTransform(fullSize.Width / img.PixelWidth, fullSize.Height / img.PixelHeight));
 
                     var rotated = ApplyTransformFromExif(scaled, orientation);
+
+                    Helper.DpiHack(rotated);
                     rotated.Freeze();
+
                     return rotated;
                 }
                 catch (Exception e)
@@ -75,6 +85,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
+            var fullSize = Meta.GetSize();
+            var rotate = ShouldRotate(Meta.GetOrientation());
+
             return new Task<BitmapSource>(() =>
             {
                 try
@@ -83,9 +96,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     img.BeginInit();
                     img.UriSource = new Uri(Path);
                     img.CacheOption = BitmapCacheOption.OnLoad;
+                    img.DecodePixelWidth = (int) (rotate ? fullSize.Height : fullSize.Width);
+                    img.DecodePixelHeight = (int) (rotate ? fullSize.Width : fullSize.Height);
                     img.EndInit();
 
                     var img2 = ApplyTransformFromExif(img, Meta.GetOrientation());
+
+                    Helper.DpiHack(img2);
                     img2.Freeze();
 
                     return img2;
@@ -100,13 +117,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
         private static bool ShouldRotate(Orientation orientation)
         {
-            bool rotate = false;
+            var rotate = false;
             switch (orientation)
             {
                 case Orientation.LeftTop:
                 case Orientation.RightTop:
                 case Orientation.RightBottom:
-                case Orientation.Leftbottom:
+                case Orientation.LeftBottom:
                     rotate = true;
                     break;
             }
@@ -137,7 +154,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
                     return new TransformedBitmap(
                         new TransformedBitmap(image, new RotateTransform(270)),
                         new ScaleTransform(-1, 1, 0, 0));
-                case Orientation.Leftbottom:
+                case Orientation.LeftBottom:
                     return new TransformedBitmap(image, new RotateTransform(270));
             }
 

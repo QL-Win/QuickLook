@@ -1,5 +1,0 @@
-HEIF support based on https://github.com/liuziangexit/HEIF-Utility-Native-DLL
-
-https://github.com/nokiatech/heif
-
-Please check https://github.com/nokiatech/heif/blob/master/LICENSE.TXT
