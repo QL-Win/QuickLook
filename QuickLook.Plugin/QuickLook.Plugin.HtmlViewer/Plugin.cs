@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -26,7 +26,8 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html", ".url" };
+        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html" };
+        private static readonly string[] SupportedProtocols = { "http", "https" };
 
         private WebpagePanel _panel;
 
@@ -39,7 +40,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Extensions.Any(path.ToLower().EndsWith);
+            return !Directory.Exists(path) && (Extensions.Any(path.ToLower().EndsWith) || (path.ToLower().EndsWith(".url") && SupportedProtocols.Contains(Helper.GetUrlPath(path).Split(':')[0].ToLower())));
         }
 
         public void Prepare(string path, ContextObject context)
