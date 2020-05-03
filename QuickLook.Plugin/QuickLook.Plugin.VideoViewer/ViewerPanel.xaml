@@ -189,7 +189,7 @@
                     </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress" Style="{StaticResource PositionSliderStyle}"
-                        SmallChange="1" LargeChange="10"
+                        SmallChange="1" LargeChange="1" Delay="1"
                         Maximum="{Binding ElementName=mediaElement, Path=MediaDuration}"
                         Value="{Binding MediaPosition, ElementName=mediaElement}" />
             </DockPanel>
