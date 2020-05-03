@@ -8,10 +8,10 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <DataGrid x:Name="dataGrid" AlternationCount="2" BorderThickness="0" Background="Transparent"
+        <DataGrid x:Name="dataGrid" AlternationCount="2" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource WindowTextForeground}"
                   RowBackground="Transparent" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" 
                   CanUserReorderColumns="False" ItemsSource="{Binding Path=Rows,ElementName=csvViewer}" 
-                  AlternatingRowBackground="#99D8D8D8" HorizontalGridLinesBrush="#FFBDBDBD" VerticalGridLinesBrush="#FFBDBDBD" />
+                  AlternatingRowBackground="#1900FF70" HorizontalGridLinesBrush="#19000000" VerticalGridLinesBrush="#19000000" />
 
     </Grid>
 </UserControl>
