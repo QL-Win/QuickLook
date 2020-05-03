@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.ImageViewer
         private MetaProvider _meta;
         private Visibility _metaIconVisibility = Visibility.Visible;
         private double _minZoomFactor = 0.1d;
-        private BitmapScalingMode _renderMode = BitmapScalingMode.NearestNeighbor;
+        private BitmapScalingMode _renderMode = BitmapScalingMode.Linear;
         private bool _showZoomLevelInfo = true;
         private BitmapSource _source;
         private double _zoomFactor = 1d;
