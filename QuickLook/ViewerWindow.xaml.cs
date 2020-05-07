@@ -60,6 +60,11 @@ namespace QuickLook
             Topmost = SettingHelper.Get("Topmost", false);
             buttonTop.Tag = Topmost ? "Top" : "Auto";
 
+            SourceInitialized += (sender, e) => this.SetNoactivate();
+
+            // bring the window to top. use together with SetNoactivate()
+            PreviewMouseDown += (sender, e) => this.BringToFront(false);
+
             buttonTop.Click += (sender, e) =>
             {
                 Topmost = !Topmost;
