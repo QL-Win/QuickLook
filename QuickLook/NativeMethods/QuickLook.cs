@@ -17,7 +17,9 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,7 +101,21 @@ namespace QuickLook.NativeMethods
                 Debug.WriteLine(e);
             }
 
-            return sb?.ToString() ?? string.Empty;
+            return ResolveShortcut(sb?.ToString() ?? string.Empty);
+        }
+
+        private static string ResolveShortcut(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return path;
+
+            if (Path.GetExtension(path).ToLower() != ".lnk") return path;
+
+            var link = new ShellLink();
+            ((IPersistFile) link).Load(path, 0);
+            var sb = new StringBuilder(MaxPath);
+            ((IShellLinkW) link).GetPath(sb, sb.Capacity, out _, 0);
+
+            return sb.Length == 0 ? path : sb.ToString();
         }
 
         internal enum FocusedWindowType
