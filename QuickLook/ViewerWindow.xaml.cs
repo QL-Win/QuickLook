@@ -18,6 +18,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
@@ -55,15 +56,14 @@ namespace QuickLook
 
             StateChanged += (sender, e) => _ignoreNextWindowSizeChange = true;
 
+            // bring the window to top when users click in the client area.
+            // the non-client area is handled by the WndProc inside OnSourceInitialized().
+            PreviewMouseDown += (sender, e) => this.BringToFront(false);
+
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
             
             Topmost = SettingHelper.Get("Topmost", false);
             buttonTop.Tag = Topmost ? "Top" : "Auto";
-
-            SourceInitialized += (sender, e) => this.SetNoactivate();
-
-            // bring the window to top. use together with SetNoactivate()
-            PreviewMouseDown += (sender, e) => this.BringToFront(false);
 
             buttonTop.Click += (sender, e) =>
             {
@@ -101,6 +101,27 @@ namespace QuickLook
 
             buttonShare.Click += (sender, e) => ShareHelper.Share(_path, this);
             buttonOpenWith.Click += (sender, e) => ShareHelper.Share(_path, this, true);
+        }
+
+        // bring the window to top when users click in the non-client area.
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            this.SetNoactivate();
+
+            HwndSource.FromHwnd(new WindowInteropHelper(this).Handle)?.AddHook(
+                (IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) =>
+                {
+                    switch (msg)
+                    {
+                        case 0x0112: // WM_SYSCOMMAND
+                            this.BringToFront(false);
+                            break;
+                    }
+
+                    return IntPtr.Zero;
+                });
         }
 
         public override void OnApplyTemplate()
