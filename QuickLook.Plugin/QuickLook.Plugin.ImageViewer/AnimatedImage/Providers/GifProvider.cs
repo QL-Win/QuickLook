@@ -24,15 +24,15 @@ using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using Size = System.Windows.Size;
 
-namespace QuickLook.Plugin.ImageViewer.AnimatedImage
+namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
-    internal class GifAnimationProvider : AnimationProvider
+    internal class GifProvider : AnimationProvider
     {
         private Bitmap _fileHandle;
         private BitmapSource _frame;
         private bool _isPlaying;
 
-        public GifAnimationProvider(string path, MetaProvider meta) : base(path, meta)
+        public GifProvider(string path, MetaProvider meta) : base(path, meta)
         {
             _fileHandle = (Bitmap) Image.FromFile(path);
 

@@ -22,7 +22,7 @@ using System.Linq;
 using System.Windows;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer.AnimatedImage;
+using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 
 namespace QuickLook.Plugin.ImageViewer
 {
@@ -49,13 +49,13 @@ namespace QuickLook.Plugin.ImageViewer
         {
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {".apng", ".png"},
-                    typeof(APngAnimationProvider)));
+                    typeof(APngProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {".gif"},
-                    typeof(GifAnimationProvider)));
+                    typeof(GifProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".tif", ".tiff"},
-                    typeof(NativeImageProvider)));
+                    typeof(NativeProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {"*"},
                     typeof(ImageMagickProvider)));

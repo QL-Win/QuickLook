@@ -23,9 +23,10 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using ImageMagick;
+using ImageMagick.Formats.Dng;
 using QuickLook.Common.Helpers;
 
-namespace QuickLook.Plugin.ImageViewer.AnimatedImage
+namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class ImageMagickProvider : AnimationProvider
     {
@@ -80,9 +81,19 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 
             return new Task<BitmapSource>(() =>
             {
+                var settings = new MagickReadSettings
+                {
+                    Defines = new DngReadDefines
+                    {
+                        OutputColor = DngOutputColor.SRGB,
+                        UseCameraWhitebalance = true,
+                        DisableAutoBrightness = false
+                    }
+                };
+
                 try
                 {
-                    using (var mi = new MagickImage(Path))
+                    using (var mi = new MagickImage(Path, settings))
                     {
                         var profile = mi.GetColorProfile();
                         if (profile?.Description != null && !profile.Description.Contains("sRGB"))
