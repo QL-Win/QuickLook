@@ -18,10 +18,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using QuickLook.Common.Helpers;
@@ -62,47 +60,88 @@ namespace QuickLook
             BeginClose();
         }
 
-        private void ResizeAndCenter(Size size, bool canOldPluginResize, bool canNextPluginResize)
+        private void ResizeAndCentre(Size size)
         {
-            // resize to MinSize first
-            size.Width = Math.Max(size.Width, MinWidth);
-            size.Height = Math.Max(size.Height, MinHeight);
-
             // if the window is now now maximized, do not move it
             if (WindowState == WindowState.Maximized)
                 return;
 
-            var screen = WindowHelper.GetCurrentWindowRect();
-
-            // otherwise, resize it and place it to the old window center.
-            var oldCenterX = Left + Width / 2;
-            var oldCenterY = Top + Height / 2;
-
-            var newLeft = oldCenterX - size.Width / 2;
-            var newTop = oldCenterY - size.Height / 2;
-
-            // ensure the new window is fully visible
-            newLeft = Math.Max(newLeft, screen.Left); // left
-            newTop = Math.Max(newTop, screen.Top); // top
-            newLeft = newLeft + size.Width > screen.Right ? screen.Right - size.Width : newLeft; // right
-            newTop = newTop + size.Height > screen.Bottom ? screen.Bottom - size.Height : newTop; // bottom
+            var newRect = IsLoaded ? ResizeAndCentreExistingWindow(size) : ResizeAndCentreNewWindow(size);
 
             if (IsLoaded)
             {
-                this.MoveWindow(newLeft, newTop, size.Width, size.Height);
+                this.MoveWindow(newRect.Left, newRect.Top, newRect.Width, newRect.Height);
             }
             else
             {
-                // MoveWindow does not work for new windows
-                Width = size.Width;
-                Height = size.Height;
-                Left = newLeft;
-                Top = newTop;
-                if (double.IsNaN(Left) || double.IsNaN(Top)) // first time showing
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-                Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
+                Top = newRect.Top;
+                Left = newRect.Left;
+                Width = newRect.Width;
+                Height = newRect.Height;
             }
+        }
+
+        private Rect ResizeAndCentreExistingWindow(Size size)
+        {
+            // align window just like in macOS ...
+            // 
+            // |10%|    80%    |10%|
+            // |---|-----------|---|---
+            // |TL |     T     |TR |10%
+            // |---|-----------|---|---
+            // |   |           |   |
+            // |L  |     C     | R |80%
+            // |   |           |   |
+            // |---|-----------|---|---
+            // |LB |     B     |RB |10%
+            // |---|-----------|---|---
+
+            const double limitPercentX = 0.1;
+            const double limitPercentY = 0.1;
+
+            var oldRect = new Rect(Left, Top, Width, Height);
+
+            // scale to new size, maintain centre
+            var newRect = Rect.Inflate(oldRect,
+                (Math.Max(MinWidth, size.Width) - oldRect.Width) / 2,
+                (Math.Max(MinHeight, size.Height) - oldRect.Height) / 2);
+
+            var desktopRect = WindowHelper.GetDesktopRectFromWindow(this);
+
+            var leftLimit = desktopRect.Left + desktopRect.Width * limitPercentX;
+            var rightLimit = desktopRect.Right - desktopRect.Width * limitPercentX;
+            var topLimit = desktopRect.Top + desktopRect.Height * limitPercentY;
+            var bottomLimit = desktopRect.Bottom - desktopRect.Height * limitPercentY;
+
+            if (oldRect.Left < leftLimit && oldRect.Right < rightLimit) // L
+                newRect.Location = new Point(Math.Max(oldRect.Left, desktopRect.Left), newRect.Top);
+            else if (oldRect.Left > leftLimit && oldRect.Right > rightLimit) // R
+                newRect.Location = new Point(Math.Min(oldRect.Right, desktopRect.Right) - newRect.Width, newRect.Top);
+            else // C, fix window boundary
+                newRect.Offset(
+                    Math.Max(0, desktopRect.Left - newRect.Left) + Math.Min(0, desktopRect.Right - newRect.Right), 0);
+
+            if (oldRect.Top < topLimit && oldRect.Bottom < bottomLimit) // T
+                newRect.Location = new Point(newRect.Left, Math.Max(oldRect.Top, desktopRect.Top));
+            else if (oldRect.Top > topLimit && oldRect.Bottom > bottomLimit) // B
+                newRect.Location = new Point(newRect.Left,
+                    Math.Min(oldRect.Bottom, desktopRect.Bottom) - newRect.Height);
+            else // C, fix window boundary
+                newRect.Offset(0,
+                    Math.Max(0, desktopRect.Top - newRect.Top) + Math.Min(0, desktopRect.Bottom - newRect.Bottom));
+
+            return newRect;
+        }
+
+        private Rect ResizeAndCentreNewWindow(Size size)
+        {
+            var desktopRect = WindowHelper.GetCurrentDesktopRect();
+
+            var newRect = Rect.Inflate(desktopRect,
+                (Math.Max(MinWidth, size.Width) - desktopRect.Width) / 2,
+                (Math.Max(MinHeight, size.Height) - desktopRect.Height) / 2);
+
+            return newRect;
         }
 
         internal void UnloadPlugin()
@@ -164,7 +203,8 @@ namespace QuickLook
             else
                 _ignoreNextWindowSizeChange = true;
 
-            ResizeAndCenter(newSize, _canOldPluginResize, ContextObject.CanResize);
+            ResizeAndCentre(newSize);
+            Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
 
             if (Visibility != Visibility.Visible)
                 Show();
