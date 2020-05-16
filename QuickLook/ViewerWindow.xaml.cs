@@ -19,14 +19,12 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
-using Brush = System.Windows.Media.Brush;
-using FontFamily = System.Windows.Media.FontFamily;
-using Size = System.Windows.Size;
 
 namespace QuickLook
 {
@@ -58,10 +56,12 @@ namespace QuickLook
 
             // bring the window to top when users click in the client area.
             // the non-client area is handled by the WndProc inside OnSourceInitialized().
-            PreviewMouseDown += (sender, e) => this.BringToFront(false);
+            // This is buggy for Windows 7 and 8: https://github.com/QL-Win/QuickLook/issues/644#issuecomment-628921704
+            if (App.IsWin10)
+                PreviewMouseDown += (sender, e) => this.BringToFront(false);
 
             windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
-            
+
             Topmost = SettingHelper.Get("Topmost", false);
             buttonTop.Tag = Topmost ? "Top" : "Auto";
 
@@ -108,20 +108,25 @@ namespace QuickLook
         {
             base.OnSourceInitialized(e);
 
-            this.SetNoactivate();
+            // The non-focusable trick is buggy for Windows 7 and 8
+            // https://github.com/QL-Win/QuickLook/issues/644#issuecomment-628921704
+            if (App.IsWin10)
+            {
+                this.SetNoactivate();
 
-            HwndSource.FromHwnd(new WindowInteropHelper(this).Handle)?.AddHook(
-                (IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) =>
-                {
-                    switch (msg)
+                HwndSource.FromHwnd(new WindowInteropHelper(this).Handle)?.AddHook(
+                    (IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) =>
                     {
-                        case 0x0112: // WM_SYSCOMMAND
-                            this.BringToFront(false);
-                            break;
-                    }
+                        switch (msg)
+                        {
+                            case 0x0112: // WM_SYSCOMMAND
+                                this.BringToFront(false);
+                                break;
+                        }
 
-                    return IntPtr.Zero;
-                });
+                        return IntPtr.Zero;
+                    });
+            }
         }
 
         public override void OnApplyTemplate()
