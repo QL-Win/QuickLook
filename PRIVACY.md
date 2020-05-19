@@ -6,11 +6,11 @@ When accessing our Website, QuickLook website will learn certain information abo
 
 If you visit our site to read or download information on our pages, we collect and store only the following information about you:
 
-The name of the domain from which you access the Internet
-The date and time you access our site
-The Internet address of the website you used to link directly to our site.
-Third party vendors, including Google and GitHub, use cookies to serve ads based on a user’s prior visits to your website.
-If you identify yourself by sending us an e-mail containing personal information, then the information collected will be solely used to respond to your message.
+* The name of the domain from which you access the Internet
+* The date and time you access our site
+* The Internet address of the website you used to link directly to our site.
+* Third party vendors, including Google and GitHub, use cookies to serve ads based on a user’s prior visits to your website.
+* If you identify yourself by sending us an e-mail containing personal information, then the information collected will be solely used to respond to your message.
 
 The information collected is for statistical purposes. QuickLook website may use software programs to create summary statistics, which are used for such purposes as assessing the number of visitors to the different sections of our site, what information is of most and least interest, determining technical design specifications, and identifying system performance or problem areas.
 
