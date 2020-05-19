@@ -26,4 +26,6 @@ public:
 
 private:
 	static bool IsListaryToolbarVisible();
+	static bool IsSearchBoxFocused();
+	static HWND GetFocusedControl();
 };
