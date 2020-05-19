@@ -20,4 +20,4 @@ QuickLook website will not obtain personally-identifying information about you w
 
 The software application doesn’t collect anything personal information from you.
 
-The software application exchange data only with https://github.com using the GitHub Releases API. If you are viewing a remote content via the software, data exchange will happen between you and the remove content.
+The software application exchange data only with https://github.com using the GitHub Releases API. If you are viewing a remote content via the software, data exchange will happen between you and the remote content.
