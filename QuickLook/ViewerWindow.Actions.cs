@@ -60,7 +60,7 @@ namespace QuickLook
             BeginClose();
         }
 
-        private void ResizeAndCentre(Size size)
+        private void PositionWindow(Size size)
         {
             // if the window is now now maximized, do not move it
             if (WindowState == WindowState.Maximized)
@@ -203,11 +203,13 @@ namespace QuickLook
             else
                 _ignoreNextWindowSizeChange = true;
 
-            ResizeAndCentre(newSize);
-            Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
+            PositionWindow(newSize);
 
             if (Visibility != Visibility.Visible)
+            {
+                Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
                 Show();
+            }
 
             //ShowWindowCaptionContainer(null, null);
             //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
