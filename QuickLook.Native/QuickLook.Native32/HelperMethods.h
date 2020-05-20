@@ -22,10 +22,10 @@ public:
 	static void GetSelectedInternal(CComQIPtr<IWebBrowserApp> pWebBrowserApp, PWCHAR buffer);
 	static void ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer);
 	static bool IsCursorActivated(HWND hwndfg);
+	static bool IsExplorerSearchBoxFocused();
 	static bool HelperMethods::IsUWP();
 
 private:
 	static bool IsListaryToolbarVisible();
-	static bool IsSearchBoxFocused();
 	static HWND GetFocusedControl();
 };

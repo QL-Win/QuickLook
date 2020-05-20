@@ -90,29 +90,15 @@ bool HelperMethods::IsListaryToolbarVisible()
 
 // Windows 10 1909 replaced the search box in the File Explorer by a UWP control.
 // gti.flags is always 0 for UWP applications.
-bool HelperMethods::IsSearchBoxFocused()
+bool HelperMethods::IsExplorerSearchBoxFocused()
 {
-	WCHAR wClassBuffer[MAX_PATH] = { '\0' };
-	if (FAILED(GetClassName(GetForegroundWindow(), wClassBuffer, MAX_PATH)))
-		return false;
-
-	if (wcscmp(wClassBuffer, L"ExploreWClass") != 0 && wcscmp(wClassBuffer, L"CabinetWClass") != 0)
-		return false;
-
 	auto* hwnd = GetFocusedControl();
 
 	WCHAR classBuffer[MAX_PATH] = { '\0' };
 	if (FAILED(GetClassName(hwnd, classBuffer, MAX_PATH)))
 		return false;
 
-	if (wcscmp(classBuffer, L"Windows.UI.Core.CoreWindow") != 0)
-		return false;
-
-	WCHAR textBuffer[MAX_PATH] = { '\0' };
-	if (FAILED(GetWindowText(hwnd, textBuffer, MAX_PATH)))
-		return false;
-
- 	return wcscmp(textBuffer, L"Cortana") == 0;
+	return wcscmp(classBuffer, L"Windows.UI.Core.CoreWindow") == 0;
 }
 
 bool HelperMethods::IsCursorActivated(HWND hwnd)
@@ -122,7 +108,7 @@ bool HelperMethods::IsCursorActivated(HWND hwnd)
 	GUITHREADINFO gti = { sizeof gti };
 	GetGUIThreadInfo(tId, &gti);
 
-	return gti.flags || gti.hwndCaret || IsSearchBoxFocused() || IsListaryToolbarVisible();
+	return gti.flags || gti.hwndCaret || IsListaryToolbarVisible();
 }
 
 bool HelperMethods::IsUWP()

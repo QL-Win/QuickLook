@@ -32,7 +32,7 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 	if (HelperMethods::IsCursorActivated(hwndfg))
 		return INVALID;
 
-	WCHAR classBuffer[MAX_PATH] = {'\0'};
+	WCHAR classBuffer[MAX_PATH] = { '\0' };
 	if (FAILED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
 		return INVALID;
 
@@ -53,13 +53,19 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 	}
 	if (wcscmp(classBuffer, L"ExploreWClass") == 0 || wcscmp(classBuffer, L"CabinetWClass") == 0)
 	{
-		return EXPLORER;
+		if (!HelperMethods::IsExplorerSearchBoxFocused())
+		{
+			return EXPLORER;
+		}
 	}
 	if (wcscmp(classBuffer, L"#32770") == 0)
 	{
 		if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
 		{
-			return DIALOG;
+			if (!HelperMethods::IsExplorerSearchBoxFocused())
+			{
+				return DIALOG;
+			}
 		}
 	}
 
