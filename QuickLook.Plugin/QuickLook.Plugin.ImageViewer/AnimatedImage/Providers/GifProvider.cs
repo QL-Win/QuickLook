@@ -31,9 +31,16 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         private Bitmap _fileHandle;
         private BitmapSource _frame;
         private bool _isPlaying;
+        private NativeProvider _nativeProvider;
 
         public GifProvider(string path, MetaProvider meta) : base(path, meta)
         {
+            if (!ImageAnimator.CanAnimate(Image.FromFile(path)))
+            {
+                _nativeProvider = new NativeProvider(path, meta);
+                return;
+            }
+
             _fileHandle = (Bitmap) Image.FromFile(path);
 
             _fileHandle.SetResolution(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
@@ -47,11 +54,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
         public override void Dispose()
         {
-            if (_fileHandle == null)
-                return;
+            _nativeProvider?.Dispose();
+            _nativeProvider = null;
 
             ImageAnimator.StopAnimate(_fileHandle, OnFrameChanged);
-            _fileHandle.Dispose();
+            _fileHandle?.Dispose();
 
             _fileHandle = null;
             _frame = null;
@@ -59,6 +66,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
         public override Task<BitmapSource> GetThumbnail(Size renderSize)
         {
+            if (_nativeProvider != null)
+                return _nativeProvider.GetThumbnail(renderSize);
+
             return new Task<BitmapSource>(() =>
             {
                 _frame = _fileHandle.ToBitmapSource();
@@ -68,6 +78,9 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
         public override Task<BitmapSource> GetRenderedFrame(int index)
         {
+            if (_nativeProvider != null)
+                return _nativeProvider.GetRenderedFrame(index);
+
             return new Task<BitmapSource>(() =>
             {
                 if (!_isPlaying)
