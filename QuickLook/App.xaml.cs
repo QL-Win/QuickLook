@@ -67,11 +67,26 @@ namespace QuickLook
 
             EnsureFirstInstance();
 
+            string path = null;
+            bool bToInvoke = false;
+
+            if (e.Args.Any())
+            {
+                path = e.Args.First();
+                bToInvoke = path.StartsWith("|");
+                if (bToInvoke) path = path.Substring(1);
+
+                if(path != "" && !Directory.Exists(path) && !File.Exists(path))
+                    path = null;
+            }            
+
             if (!_isFirstInstance)
             {
                 // second instance: preview this file
-                if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
-                    RemoteCallShowPreview(e);
+                if(path == "")
+                    PipeServerManager.SendMessage(PipeMessages.Close);
+                else if (path != null)
+                    PipeServerManager.SendMessage(bToInvoke? PipeMessages.Invoke : PipeMessages.Toggle, path);
                 // second instance: duplicate
                 else
                     MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
@@ -85,8 +100,8 @@ namespace QuickLook
             RunListener(e);
 
             // first instance: run and preview this file
-            if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
-                RemoteCallShowPreview(e);
+            if (!string.IsNullOrEmpty(path))
+                PipeServerManager.SendMessage(PipeMessages.Toggle, path);
         }
 
         private void CheckUpdate()
