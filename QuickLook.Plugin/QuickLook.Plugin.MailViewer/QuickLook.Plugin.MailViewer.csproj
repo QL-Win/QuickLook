@@ -57,11 +57,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MsgReader, Version=3.7.3.0, Culture=neutral, PublicKeyToken=3ba01cf3434959fa, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MsgReader.3.7.3\lib\net45\MsgReader.dll</HintPath>
+    <Reference Include="MsgReader, Version=3.7.24.0, Culture=neutral, PublicKeyToken=3ba01cf3434959fa, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MsgReader.3.7.24\lib\net45\MsgReader.dll</HintPath>
     </Reference>
-    <Reference Include="OpenMcdf, Version=2.2.1.2, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OpenMcdf.2.2.1.3\lib\net40\OpenMcdf.dll</HintPath>
+    <Reference Include="OpenMcdf, Version=2.2.1.4, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OpenMcdf.2.2.1.4\lib\net40\OpenMcdf.dll</HintPath>
+    </Reference>
+    <Reference Include="RtfPipe, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a1f9ff4d1ab35daf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MsgReader.3.7.24\lib\net45\RtfPipe.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

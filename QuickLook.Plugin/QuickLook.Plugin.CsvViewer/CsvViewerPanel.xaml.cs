@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -24,6 +25,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace QuickLook.Plugin.CsvViewer
 {
@@ -46,7 +48,7 @@ namespace QuickLook.Plugin.CsvViewer
 
             using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
-                var conf = new CsvHelper.Configuration.Configuration() {MissingFieldFound = null, BadDataFound = null};
+                var conf = new Configuration {MissingFieldFound = null, BadDataFound = null};
 
                 using (var parser = new CsvParser(sr, conf))
                 {
