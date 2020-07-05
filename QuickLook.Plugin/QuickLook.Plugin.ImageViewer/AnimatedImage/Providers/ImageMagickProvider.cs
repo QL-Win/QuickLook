@@ -111,7 +111,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                         mi.Density = new Density(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
                             DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical);
 
-                        var img = mi.ToBitmapSource(BitmapDensity.Use);
+                        var img = mi.ToBitmapSourceWithDensity();
 
                         img.Freeze();
                         return img;
