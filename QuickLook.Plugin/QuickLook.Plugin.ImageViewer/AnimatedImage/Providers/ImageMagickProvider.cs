@@ -96,7 +96,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                     using (var mi = new MagickImage(Path, settings))
                     {
                         var profile = mi.GetColorProfile();
-                        if (profile?.Description != null && !profile.Description.Contains("sRGB"))
+                        if (mi.ColorSpace == ColorSpace.RGB ||
+                            mi.ColorSpace == ColorSpace.sRGB ||
+                            mi.ColorSpace == ColorSpace.scRGB &&
+                            profile?.Description != null &&
+                            !profile.Description.Contains("sRGB"))
                             mi.SetProfile(ColorProfile.SRGB);
 
                         mi.AutoOrient();
