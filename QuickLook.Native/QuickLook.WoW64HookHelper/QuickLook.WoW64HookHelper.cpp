@@ -81,7 +81,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void GetCurrentSelection()
 {
-	WCHAR dllBuffer[MAX_PATH] = {'\0'};
+	// This function runs inside the target process. Some of them may already support Long Path.
+	// Therefore, we must assume all of them support Long Path to avoid buffer overflow.
+	WCHAR dllBuffer[MAX_PATH_EX] = {'\0'};
 	pGCS(dllBuffer);
 
 	auto hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, false, SHARED_MEM_NAME);
@@ -95,7 +97,7 @@ void GetCurrentSelection()
 		return;
 	}
 
-	wcscpy_s(buffer, MAX_PATH, dllBuffer);
+	wcscpy_s(buffer, MAX_PATH_EX, dllBuffer);
 
 	UnmapViewOfFile(buffer);
 	CloseHandle(hMapFile);

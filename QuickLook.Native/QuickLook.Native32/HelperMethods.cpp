@@ -60,7 +60,10 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 	if (n < 1)
 		return;
 
-	DragQueryFile(HDROP(medium.hGlobal), 0, buffer, MAX_PATH - 1);
+	WCHAR localBuffer[MAX_PATH] = { '\0' };
+	DragQueryFile(HDROP(medium.hGlobal), 0, localBuffer, MAX_PATH);
+	
+	GetLongPathName(localBuffer, buffer, MAX_PATH_EX);
 }
 
 bool HelperMethods::IsListaryToolbarVisible()

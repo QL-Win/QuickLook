@@ -122,7 +122,7 @@ namespace QuickLook.Plugin.InfoPanel
                 SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out var nativeShellItem);
 
             if (retCode != 0)
-                throw Marshal.GetExceptionForHR(retCode);
+                return IntPtr.Zero;
 
             var nativeSize = new NativeSize
             {

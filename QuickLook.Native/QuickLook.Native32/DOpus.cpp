@@ -103,7 +103,7 @@ void DOpus::ParseXmlBuffer(PWCHAR buffer)
 		auto b = new WCHAR[size];
 		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path, -1, b, size);
 
-		wcscpy_s(buffer, MAX_PATH, b);
+		wcscpy_s(buffer, MAX_PATH_EX, b); // DOpus supports Long Path
 
 		delete[] b;
 		return; // we now cares only the first result

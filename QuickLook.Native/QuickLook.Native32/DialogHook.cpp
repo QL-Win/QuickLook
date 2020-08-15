@@ -58,9 +58,9 @@ void DialogHook::GetSelected(PWCHAR buffer)
 	if (!IsWow64Process(GetCurrentProcess(), &isSelfWoW64))
 		return;
 
+	// if QuickLook is 64bit and target is 32bit, obtain result from the helper
 	if (isTargetWoW64 && !isSelfWoW64)
 	{
-		// if self is 64bit and target is 32bit, do this
 		GetSelectedFromWoW64HookHelper(buffer);
 	}
 	else
@@ -72,7 +72,8 @@ void DialogHook::GetSelected(PWCHAR buffer)
 			return;
 
 		SendMessage(hwndfg, WM_HOOK_NOTIFY, 0, 0);
-		wcscpy_s(buffer, MAX_PATH, filePathBuffer);
+		
+		GetLongPathName(filePathBuffer, buffer, MAX_PATH_EX);
 	}
 }
 
@@ -114,7 +115,7 @@ void DialogHook::GetSelectedFromWoW64HookHelper(PWCHAR buffer)
 	SendMessage(hHelperWnd, WM_HOOK_NOTIFY, 0, 0);
 
 	// the sharedBuffer should now ready
-	wcscpy_s(buffer, MAX_PATH, sharedBuffer);
+	GetLongPathName(sharedBuffer, buffer, MAX_PATH_EX);
 
 	UnmapViewOfFile(sharedBuffer);
 	CloseHandle(hMapFile);

@@ -43,7 +43,7 @@ void Everything::GetSelected(PWCHAR buffer)
 
 	auto p = wcsstr(pText, L"\r\n");
 	auto l = p == nullptr ? wcslen(pText) : p - pText;
-	wcsncpy_s(buffer, MAX_PATH, pText, l);
+	wcsncpy_s(buffer, MAX_PATH_EX, pText, l); // Everything supports Long Path
 
 	GlobalUnlock(hData);
 

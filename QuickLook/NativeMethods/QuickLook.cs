@@ -27,7 +27,7 @@ namespace QuickLook.NativeMethods
 {
     internal static class QuickLook
     {
-        private const int MaxPath = 8192;
+        private const int MaxPath = 32767;
 
         [DllImport("QuickLook.Native32.dll", EntryPoint = "Init",
             CallingConvention = CallingConvention.Cdecl)]

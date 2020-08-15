@@ -33,3 +33,5 @@
 #include<Shellapi.h>
 #include<Psapi.h>
 #include<AppModel.h>
+
+#define MAX_PATH_EX 32767

@@ -31,3 +31,4 @@
 
 
 // TODO: reference additional headers your program requires here
+#define MAX_PATH_EX 32767
