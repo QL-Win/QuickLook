@@ -91,7 +91,7 @@ namespace QuickLook
 
         private void CheckUpdate()
         {
-            if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(7).Ticks)
+            if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(30).Ticks)
                 return;
 
             Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
