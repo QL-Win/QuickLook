@@ -242,10 +242,10 @@ namespace QuickLook.Plugin.PDFViewer
             PdfDocumentWrapper = new PdfDocumentWrapper(stream);
             _pdfLoaded = true;
 
-            BeginLoadThumbnails();
-
             if (PdfDocumentWrapper.PdfDocument.PageCount < 2)
                 listThumbnails.Visibility = Visibility.Collapsed;
+
+            BeginLoadThumbnails();
         }
 
         public void LoadPdf(MemoryStream stream)
@@ -254,10 +254,10 @@ namespace QuickLook.Plugin.PDFViewer
             PdfDocumentWrapper = new PdfDocumentWrapper(stream);
             _pdfLoaded = true;
 
-            BeginLoadThumbnails();
-
             if (PdfDocumentWrapper.PdfDocument.PageCount < 2)
                 listThumbnails.Visibility = Visibility.Collapsed;
+
+            BeginLoadThumbnails();
         }
 
         private void BeginLoadThumbnails()
