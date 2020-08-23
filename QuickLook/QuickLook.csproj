@@ -180,8 +180,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BackgroundListener.cs" />
-    <Compile Include="GlobalKeyboardHook.cs" />
+    <Compile Include="KeystrokeDispatcher.cs" />
+    <Compile Include="Helpers\GlobalKeyboardHook.cs" />
     <Compile Include="ViewerWindow.xaml.cs">
       <DependentUpon>ViewerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

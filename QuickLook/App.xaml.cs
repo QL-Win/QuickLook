@@ -16,8 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -80,7 +78,7 @@ namespace QuickLook
                 Shutdown();
                 return;
             }
-            
+
             CheckUpdate();
             RunListener(e);
 
@@ -115,7 +113,7 @@ namespace QuickLook
 
             PluginManager.GetInstance();
             ViewWindowManager.GetInstance();
-            BackgroundListener.GetInstance();
+            KeystrokeDispatcher.GetInstance();
             PipeServerManager.GetInstance();
         }
 
@@ -128,7 +126,7 @@ namespace QuickLook
 
             PipeServerManager.GetInstance().Dispose();
             TrayIconManager.GetInstance().Dispose();
-            BackgroundListener.GetInstance().Dispose();
+            KeystrokeDispatcher.GetInstance().Dispose();
             ViewWindowManager.GetInstance().Dispose();
         }
 

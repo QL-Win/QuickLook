@@ -16,22 +16,35 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using QuickLook.Common.Helpers;
+using QuickLook.Helpers;
 
 namespace QuickLook
 {
-    internal class BackgroundListener : IDisposable
+    internal class KeystrokeDispatcher : IDisposable
     {
-        private static BackgroundListener _instance;
+        private static KeystrokeDispatcher _instance;
+
+        private static HashSet<Keys> _validKeys;
 
         private GlobalKeyboardHook _hook;
         private bool _isKeyDownInDesktopOrShell;
+        private long _lastInvalidKeyPressTick;
 
-        protected BackgroundListener()
+        private const long VALID_KEY_PRESS_DELAY = TimeSpan.TicksPerSecond * 1;
+
+        protected KeystrokeDispatcher()
         {
             InstallKeyHook(KeyDownEventHandler, KeyUpEventHandler);
+
+            _validKeys = new HashSet<Keys>(new[]
+            {
+                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+                Keys.Enter, Keys.Space, Keys.Escape
+            });
         }
 
         public void Dispose()
@@ -55,7 +68,7 @@ namespace QuickLook
             if (e.Modifiers != Keys.None)
                 return;
 
-            // set variable only when KeyDown
+            // check if the window is valid at the time of pressing a key, used for case 1
             if (isKeyDown)
             {
                 _isKeyDownInDesktopOrShell = NativeMethods.QuickLook.GetFocusedWindowType() !=
@@ -64,17 +77,32 @@ namespace QuickLook
                 _isKeyDownInDesktopOrShell |= WindowHelper.IsForegroundWindowBelongToSelf();
             }
 
-            // call InvokeRoutine only when the KeyDown is valid
+            // call InvokeRoutine only when:
+            // (1) user released a key which was pressed in a valid window, or
+            // (2) user pressed a key in a valid window
             if (_isKeyDownInDesktopOrShell)
                 InvokeRoutine(e.KeyCode, isKeyDown);
 
-            // reset variable only when KeyUp
+            // in case 2, reset the variable
             if (!isKeyDown)
                 _isKeyDownInDesktopOrShell = false;
         }
 
         private void InvokeRoutine(Keys key, bool isKeyDown)
         {
+            if (!_validKeys.Contains(key))
+            {
+                Debug.WriteLine($"Invalid keypress: key={key},down={isKeyDown}, time={_lastInvalidKeyPressTick}");
+
+                _lastInvalidKeyPressTick = DateTime.Now.Ticks;
+                return;
+            }
+
+            if (DateTime.Now.Ticks - _lastInvalidKeyPressTick < VALID_KEY_PRESS_DELAY)
+                return;
+
+            _lastInvalidKeyPressTick = 0L;
+
             Debug.WriteLine($"InvokeRoutine: key={key},down={isKeyDown}");
 
             if (isKeyDown)
@@ -110,20 +138,13 @@ namespace QuickLook
         {
             _hook = GlobalKeyboardHook.GetInstance();
 
-            _hook.HookedKeys.Add(Keys.Enter);
-            _hook.HookedKeys.Add(Keys.Space);
-            _hook.HookedKeys.Add(Keys.Escape);
-            _hook.HookedKeys.Add(Keys.Up);
-            _hook.HookedKeys.Add(Keys.Down);
-            _hook.HookedKeys.Add(Keys.Left);
-            _hook.HookedKeys.Add(Keys.Right);
             _hook.KeyDown += downHandler;
             _hook.KeyUp += upHandler;
         }
 
-        internal static BackgroundListener GetInstance()
+        internal static KeystrokeDispatcher GetInstance()
         {
-            return _instance ?? (_instance = new BackgroundListener());
+            return _instance ?? (_instance = new KeystrokeDispatcher());
         }
     }
 }
