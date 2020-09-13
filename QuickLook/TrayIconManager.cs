@@ -48,7 +48,6 @@ namespace QuickLook
                 Text = string.Format(TranslationHelper.Get("Icon_ToolTip"),
                     Application.ProductVersion),
                 Icon = GetTrayIconByDPI(),
-                Visible = true,
                 ContextMenu = new ContextMenu(new[]
                 {
                     new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : "")}") {Enabled = false},
@@ -59,7 +58,8 @@ namespace QuickLook
                     _itemAutorun,
                     new MenuItem(TranslationHelper.Get("Icon_Quit"),
                         (sender, e) => System.Windows.Application.Current.Shutdown())
-                })
+                }),
+                Visible = SettingHelper.Get("ShowTrayIcon", true)
             };
 
             _icon.ContextMenu.Popup += (sender, e) => { _itemAutorun.Checked = AutoStartupHelper.IsAutorun(); };
@@ -67,6 +67,8 @@ namespace QuickLook
 
         public void Dispose()
         {
+            SettingHelper.Set("ShowTrayIcon", _icon.Visible);
+
             _icon.Visible = false;
         }
 
