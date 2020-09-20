@@ -62,6 +62,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
+    <Reference Include="UtfUnknown, Version=2.0.0.0, Culture=neutral, PublicKeyToken=90217ce7a23260d4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\UTF.Unknown.2.3.0\lib\net40\UtfUnknown.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +98,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\md2html.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

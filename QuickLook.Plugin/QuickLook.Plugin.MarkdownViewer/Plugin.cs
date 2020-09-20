@@ -19,10 +19,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
+using UtfUnknown;
 
 namespace QuickLook.Plugin.MarkdownViewer
 {
@@ -66,7 +68,10 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         private string GenerateMarkdownHtml(string path)
         {
-            var md = File.ReadAllText(path);
+            var bytes = File.ReadAllBytes(path);
+            var encoding = CharsetDetector.DetectFromBytes(bytes).Detected?.Encoding ?? Encoding.Default;
+
+            var md = encoding.GetString(bytes);
             md = WebUtility.HtmlEncode(md);
 
             var html = Resources.md2html.Replace("{{content}}", md);
