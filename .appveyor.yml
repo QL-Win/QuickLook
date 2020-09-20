@@ -45,5 +45,4 @@ deploy:
   artifact: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
   draft: true
   on:
-    branch: master
     APPVEYOR_REPO_TAG: true
