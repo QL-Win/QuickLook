@@ -29,15 +29,11 @@ namespace QuickLook.Plugin.ImageViewer
     {
         private static readonly HashSet<string> Formats = new HashSet<string>(new[]
         {
-            // camera raw
-            ".ari", ".arw", ".avif", ".bay", ".crw", ".cr2", ".cap", ".dcs", ".dcr", ".dng", ".drf", ".eip", ".erf",
-            ".fff", ".iiq", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf", ".pef",
-            ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rwl", ".rw2", ".rwz", ".sr2", ".srf", ".srw", ".x3f",
-            // normal
-            ".bmp", ".hdr", ".heic", ".heif", ".ico", ".icon", ".jpg", ".jpeg", ".psd", ".wdp", ".tif", ".tiff",
-            ".tga", ".webp", ".pbm", ".pgm", ".ppm", ".pnm", ".svg", ".emf", ".wmf", ".exr",
-            // animated
-            ".png", ".apng", ".gif"
+            ".apng", ".ari", ".arw", ".avif", ".bay", ".bmp", ".cap", ".cr2", ".crw", ".dcr", ".dcs", ".dng", ".drf",
+            ".eip", ".emf", ".erf", ".exr", ".fff", ".gif", ".hdr", ".heic", ".heif", ".ico", ".icon", ".iiq", ".jfif",
+            ".jpeg", ".jpg", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf", ".pbm",
+            ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rw2", ".rwl",
+            ".rwz", ".sr2", ".srf", ".srw", ".svg", ".tga", ".tif", ".tiff", ".wdp", ".webp", ".wmf", ".x3f"
         });
 
         private ImagePanel _ip;
