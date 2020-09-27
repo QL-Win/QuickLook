@@ -26,4 +26,4 @@ A clear and concise description of what you expected to happen.
  - QuickLook Version: [e.g. 0.3.3 from Windows Store]
 
 **Screenshots and Exception Log**
-If applicable, add screenshots and logs to help explain your problem. The log file is located in `%APPDATA%\pooi.moe\QuickLook\QuickLook.Exception.log` (`.msi` or `.zip` version) or `%LOCALAPPDATA%\Packages\21090PaddyXu.QuickLook_egxr34yet59cg\LocalCache\Roaming\pooi.moe\QuickLook\QuickLook.Exception.log` (Windows Store version).
+If applicable, add screenshots and logs to help explain your problem. The log file is located in [one of serveal locations](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions#user-data-location).
