@@ -41,7 +41,7 @@ namespace QuickLook
         public static readonly bool IsGPUInBlacklist = SystemHelper.IsGPUInBlacklist();
         public static readonly bool IsPortable = SettingHelper.IsPortableVersion();
 
-        private bool _cleanExit;
+        private bool _cleanExit = true;
         private Mutex _isRunning;
 
         protected override void OnStartup(StartupEventArgs e)
