@@ -26,4 +26,4 @@ A clear and concise description of what you expected to happen.
  - QuickLook Version: [e.g. 0.3.3 from Windows Store]
 
 **Screenshots and Exception Log**
-If applicable, add screenshots and logs to help explain your problem. The log file is located in [one of serveal locations](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions#user-data-location).
+If applicable, add screenshots and logs to help explain your problem. The log file is located in [one of several locations](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions#user-data-location).
