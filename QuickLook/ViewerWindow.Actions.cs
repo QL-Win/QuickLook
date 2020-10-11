@@ -66,19 +66,11 @@ namespace QuickLook
             if (WindowState == WindowState.Maximized)
                 return;
 
+            size = new Size(Math.Max(MinWidth, size.Width), Math.Max(MinHeight, size.Height));
+
             var newRect = IsLoaded ? ResizeAndCentreExistingWindow(size) : ResizeAndCentreNewWindow(size);
 
-            if (IsLoaded)
-            {
-                this.MoveWindow(newRect.Left, newRect.Top, newRect.Width, newRect.Height);
-            }
-            else
-            {
-                Top = newRect.Top;
-                Left = newRect.Left;
-                Width = newRect.Width;
-                Height = newRect.Height;
-            }
+            this.MoveWindow(newRect.Left, newRect.Top, newRect.Width, newRect.Height);
         }
 
         private Rect ResizeAndCentreExistingWindow(Size size)
@@ -96,52 +88,60 @@ namespace QuickLook
             // |LB |     B     |RB |10%
             // |---|-----------|---|---
 
-            const double limitPercentX = 0.1;
-            const double limitPercentY = 0.1;
+            var scale = DpiHelper.GetScaleFactorFromWindow(this);
 
-            var oldRect = new Rect(Left, Top, Width, Height);
+            var limitPercentX = 0.1 * scale.Horizontal;
+            var limitPercentY = 0.1 * scale.Vertical;
+
+            // use absolute pixels for calculation
+            var pxSize = new Size(scale.Horizontal * size.Width, scale.Vertical * size.Height);
+            var pxOldRect = this.GetWindowRectInPixel();
 
             // scale to new size, maintain centre
-            var newRect = Rect.Inflate(oldRect,
-                (Math.Max(MinWidth, size.Width) - oldRect.Width) / 2,
-                (Math.Max(MinHeight, size.Height) - oldRect.Height) / 2);
+            var pxNewRect = Rect.Inflate(pxOldRect,
+                (pxSize.Width - pxOldRect.Width) / 2,
+                (pxSize.Height - pxOldRect.Height) / 2);
 
-            var desktopRect = WindowHelper.GetDesktopRectFromWindow(this);
+            var desktopRect = WindowHelper.GetDesktopRectFromWindowInPixel(this);
 
             var leftLimit = desktopRect.Left + desktopRect.Width * limitPercentX;
             var rightLimit = desktopRect.Right - desktopRect.Width * limitPercentX;
             var topLimit = desktopRect.Top + desktopRect.Height * limitPercentY;
             var bottomLimit = desktopRect.Bottom - desktopRect.Height * limitPercentY;
 
-            if (oldRect.Left < leftLimit && oldRect.Right < rightLimit) // L
-                newRect.Location = new Point(Math.Max(oldRect.Left, desktopRect.Left), newRect.Top);
-            else if (oldRect.Left > leftLimit && oldRect.Right > rightLimit) // R
-                newRect.Location = new Point(Math.Min(oldRect.Right, desktopRect.Right) - newRect.Width, newRect.Top);
+            if (pxOldRect.Left < leftLimit && pxOldRect.Right < rightLimit) // L
+                pxNewRect.Location = new Point(Math.Max(pxOldRect.Left, desktopRect.Left), pxNewRect.Top);
+            else if (pxOldRect.Left > leftLimit && pxOldRect.Right > rightLimit) // R
+                pxNewRect.Location = new Point(Math.Min(pxOldRect.Right, desktopRect.Right) - pxNewRect.Width, pxNewRect.Top);
             else // C, fix window boundary
-                newRect.Offset(
-                    Math.Max(0, desktopRect.Left - newRect.Left) + Math.Min(0, desktopRect.Right - newRect.Right), 0);
+                pxNewRect.Offset(
+                    Math.Max(0, desktopRect.Left - pxNewRect.Left) + Math.Min(0, desktopRect.Right - pxNewRect.Right), 0);
 
-            if (oldRect.Top < topLimit && oldRect.Bottom < bottomLimit) // T
-                newRect.Location = new Point(newRect.Left, Math.Max(oldRect.Top, desktopRect.Top));
-            else if (oldRect.Top > topLimit && oldRect.Bottom > bottomLimit) // B
-                newRect.Location = new Point(newRect.Left,
-                    Math.Min(oldRect.Bottom, desktopRect.Bottom) - newRect.Height);
+            if (pxOldRect.Top < topLimit && pxOldRect.Bottom < bottomLimit) // T
+                pxNewRect.Location = new Point(pxNewRect.Left, Math.Max(pxOldRect.Top, desktopRect.Top));
+            else if (pxOldRect.Top > topLimit && pxOldRect.Bottom > bottomLimit) // B
+                pxNewRect.Location = new Point(pxNewRect.Left,
+                    Math.Min(pxOldRect.Bottom, desktopRect.Bottom) - pxNewRect.Height);
             else // C, fix window boundary
-                newRect.Offset(0,
-                    Math.Max(0, desktopRect.Top - newRect.Top) + Math.Min(0, desktopRect.Bottom - newRect.Bottom));
+                pxNewRect.Offset(0,
+                    Math.Max(0, desktopRect.Top - pxNewRect.Top) + Math.Min(0, desktopRect.Bottom - pxNewRect.Bottom));
 
-            return newRect;
+            // return absolute location and relative size
+            return new Rect(pxNewRect.Location, size);
         }
 
         private Rect ResizeAndCentreNewWindow(Size size)
         {
-            var desktopRect = WindowHelper.GetCurrentDesktopRect();
+            var desktopRect = WindowHelper.GetCurrentDesktopRectInPixel();
+            var scale = DpiHelper.GetCurrentScaleFactor();
+            var pxSize = new Size(scale.Horizontal * size.Width, scale.Vertical * size.Height);
 
-            var newRect = Rect.Inflate(desktopRect,
-                (Math.Max(MinWidth, size.Width) - desktopRect.Width) / 2,
-                (Math.Max(MinHeight, size.Height) - desktopRect.Height) / 2);
+            var pxLocation = new Point(
+                desktopRect.X + (desktopRect.Width - pxSize.Width) / 2,
+                desktopRect.Y + (desktopRect.Height - pxSize.Height) / 2);
 
-            return newRect;
+            // return absolute location and relative size
+            return new Rect(pxLocation, size);
         }
 
         internal void UnloadPlugin()
