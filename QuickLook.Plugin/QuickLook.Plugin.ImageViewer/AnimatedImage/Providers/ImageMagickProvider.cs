@@ -40,6 +40,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         public override Task<BitmapSource> GetThumbnail(Size renderSize)
         {
             var fullSize = Meta.GetSize();
+            var orientation = Meta.GetOrientation();
 
             return new Task<BitmapSource>(() =>
             {
@@ -54,17 +55,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                         img.BeginInit();
                         img.StreamSource = buffer;
                         img.CacheOption = BitmapCacheOption.OnLoad;
-                        //// specific renderSize to avoid .net's double to int conversion
-                        //img.DecodePixelWidth = Math.Max(1, (int) Math.Floor(renderSize.Width));
-                        //img.DecodePixelHeight = Math.Max(1, (int) Math.Floor(renderSize.Height));
                         img.EndInit();
 
-                        var scaled = new TransformedBitmap(img,
-                            new ScaleTransform(fullSize.Width / img.PixelWidth, fullSize.Height / img.PixelHeight));
+                        var transformed = RotateAndScaleThumbnail(img, orientation, fullSize);
 
-                        Helper.DpiHack(scaled);
-                        scaled.Freeze();
-                        return scaled;
+                        Helper.DpiHack(transformed);
+                        transformed.Freeze();
+                        return transformed;
                     }
                 }
                 catch (Exception e)
@@ -96,7 +93,8 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                     using (var mi = new MagickImage(Path, settings))
                     {
                         var profile = mi.GetColorProfile();
-                        if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
+                        if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB ||
+                            mi.ColorSpace == ColorSpace.scRGB)
                             if (profile?.Description != null && !profile.Description.Contains("sRGB"))
                                 mi.SetProfile(ColorProfile.SRGB);
 
@@ -124,6 +122,54 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
         public override void Dispose()
         {
+        }
+
+        private static TransformedBitmap RotateAndScaleThumbnail(BitmapImage image, Orientation orientation,
+            Size fullSize)
+        {
+            var swap = false;
+
+            var transforms = new TransformGroup();
+
+            // some RAWs, like from RX100, have thumbnails already rotated.
+            if (fullSize.Height >= fullSize.Width && image.PixelHeight <= image.PixelWidth ||
+                fullSize.Height < fullSize.Width && image.PixelHeight > image.PixelWidth)
+                switch (orientation)
+                {
+                    case Orientation.TopRight:
+                        transforms.Children.Add(new ScaleTransform(-1, 1, 0, 0));
+                        break;
+                    case Orientation.BottomRight:
+                        transforms.Children.Add(new RotateTransform(180));
+                        break;
+                    case Orientation.BottomLeft:
+                        transforms.Children.Add(new ScaleTransform(1, 1, 0, 0));
+                        break;
+                    case Orientation.LeftTop:
+                        transforms.Children.Add(new RotateTransform(90));
+                        transforms.Children.Add(new ScaleTransform(-1, 1, 0, 0));
+                        swap = true;
+                        break;
+                    case Orientation.RightTop:
+                        transforms.Children.Add(new RotateTransform(90));
+                        swap = true;
+                        break;
+                    case Orientation.RightBottom:
+                        transforms.Children.Add(new RotateTransform(270));
+                        transforms.Children.Add(new ScaleTransform(-1, 1, 0, 0));
+                        swap = true;
+                        break;
+                    case Orientation.LeftBottom:
+                        transforms.Children.Add(new RotateTransform(270));
+                        swap = true;
+                        break;
+                }
+
+            transforms.Children.Add(swap
+                ? new ScaleTransform(fullSize.Width / image.PixelHeight, fullSize.Height / image.PixelWidth)
+                : new ScaleTransform(fullSize.Width / image.PixelWidth, fullSize.Height / image.PixelHeight));
+
+            return new TransformedBitmap(image, transforms);
         }
     }
 }
