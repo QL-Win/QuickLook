@@ -30,12 +30,12 @@ namespace QuickLook.Plugin.VideoViewer
         private static readonly HashSet<string> Formats = new HashSet<string>(new[]
         {
             // video
-            ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".asf", ".avi", ".flv", ".mts", ".m2ts", ".m4v", ".mkv",
-            ".mov", ".mp4", ".mp4v", ".mpeg", ".mpg", ".ogv", ".qt", ".tp", ".ts", ".vob", ".webm", ".wmv", ".mxf",
+            ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".avi", ".flv", ".m4v", ".mkv", ".mov", ".mp4", ".mp4v", 
+            ".mpeg", ".mpg", ".mts", ".m2ts", ".mxf", ".ogv", ".qt", ".tp", ".ts", ".vob", ".webm", ".wmv",
             // audio
-            ".3gp", ".aa", ".aac", ".aax", ".act", ".aif", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss",
-            ".dvf", ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".m4r", ".mmf", ".mp3", ".mpc", ".msv",
-            ".ogg", ".oga", ".mogg", ".opus", ".ra", ".rm", ".raw", ".tta", ".vox", ".wav", ".wma", ".wv", ".webm"
+            ".3gp", ".aa", ".aac", ".aax", ".act", ".aif", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
+            ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".m4r", ".mka", ".mmf", ".mp3", ".mpc", ".msv",
+            ".ogg", ".oga", ".mogg", ".opus", ".ra", ".raw", ".rm", ".tta", ".vox", ".wav", ".webm", ".wma", ".wv"
         });
 
         private ContextObject _context;
