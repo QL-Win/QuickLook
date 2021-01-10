@@ -61,9 +61,9 @@ namespace QuickLook.Plugin.PDFViewer
                 var realWidth = (int) Math.Round(size.Width * scale.Horizontal * factor);
                 var realHeight = (int) Math.Round(size.Height * scale.Vertical * factor);
 
-                bitmap = doc.PdfDocument.Render(page, realWidth, realHeight, dpiX, dpiY,
+                bitmap = doc.PdfDocument.Render(page, realWidth, realHeight, dpiX, dpiY, PdfRotation.Rotate0,
                     PdfRenderFlags.LimitImageCacheSize | PdfRenderFlags.LcdText | PdfRenderFlags.Annotations |
-                    PdfRenderFlags.ForPrinting) as Bitmap;
+                    PdfRenderFlags.ForPrinting, true) as Bitmap;
             }
 
             var bs = bitmap?.ToBitmapSource();

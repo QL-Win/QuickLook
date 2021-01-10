@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props" Condition="Exists('..\..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props')" />
-  <Import Project="..\..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props" Condition="Exists('..\..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props')" />
+  <Import Project="..\..\packages\PDFium.x64.v8-xfa.4194.0.0\build\pdfium.x64.v8-xfa.props" Condition="Exists('..\..\packages\PDFium.x64.v8-xfa.4194.0.0\build\pdfium.x64.v8-xfa.props')" />
+  <Import Project="..\..\packages\PDFium.x86.v8-xfa.4194.0.0\build\pdfium.x86.v8-xfa.props" Condition="Exists('..\..\packages\PDFium.x86.v8-xfa.4194.0.0\build\pdfium.x86.v8-xfa.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,8 +65,8 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PdfiumViewer, Version=2.13.0.0, Culture=neutral, PublicKeyToken=91e4789cfb0609e0, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\PdfiumViewer.2.13.0.0\lib\net20\PdfiumViewer.dll</HintPath>
+    <Reference Include="PdfiumViewer, Version=2.14.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PdfiumViewer.Updated.2.14.0\lib\net45\PdfiumViewer.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -114,17 +114,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Resource Include="Resources\loading.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\loading.png" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86_64.v8-xfa.props'))" />
-    <Error Condition="!Exists('..\..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.8.256\build\PdfiumViewer.Native.x86.v8-xfa.props'))" />
+    <Error Condition="!Exists('..\..\packages\PDFium.x86.v8-xfa.4194.0.0\build\pdfium.x86.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PDFium.x86.v8-xfa.4194.0.0\build\pdfium.x86.v8-xfa.props'))" />
+    <Error Condition="!Exists('..\..\packages\PDFium.x64.v8-xfa.4194.0.0\build\pdfium.x64.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PDFium.x64.v8-xfa.4194.0.0\build\pdfium.x64.v8-xfa.props'))" />
   </Target>
 </Project>
