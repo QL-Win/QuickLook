@@ -39,7 +39,13 @@ namespace QuickLook.Plugin.HtmlViewer
             }
             else
             {
-                _webView = new WebView2();
+                _webView = new WebView2
+                {
+                    CreationProperties = new CoreWebView2CreationProperties
+                    {
+                        UserDataFolder = Path.Combine(App.LocalDataPath, @"WebView2_Data\\")
+                    }
+                };
                 _webView.NavigationStarting += NavigationStarting_CancelNavigation;
                 Content = _webView;
             }

@@ -32,6 +32,7 @@ namespace QuickLook
     /// </summary>
     public partial class App : Application
     {
+        public static readonly string LocalDataPath = SettingHelper.LocalDataPath;
         public static readonly string UserPluginPath = Path.Combine(SettingHelper.LocalDataPath, "QuickLook.Plugin\\");
         public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
         public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);

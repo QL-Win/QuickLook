@@ -19,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
-using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.HtmlViewer
@@ -35,8 +34,6 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public void Init()
         {
-            if (Helper.IsWebView2Available())
-                new WebView2().EnsureCoreWebView2Async();
         }
 
         public bool CanHandle(string path)
