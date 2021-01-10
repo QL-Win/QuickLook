@@ -171,6 +171,8 @@ namespace QuickLook
             _viewerWindow = new ViewerWindow();
             _viewerWindow.Closed += (sender, e) =>
             {
+                if (ProcessHelper.IsShuttingDown())
+                    return;
                 if (!(sender is ViewerWindow w) || w.Pinned)
                     return; // Pinned window has already been forgotten
                 StopFocusMonitor();
