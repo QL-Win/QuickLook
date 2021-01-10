@@ -78,7 +78,7 @@ namespace QuickLook
             buttonCloseWindow.Click += (sender, e) =>
             {
                 if (Pinned)
-                    BeginClose();
+                    Close();
                 else
                     ViewWindowManager.GetInstance().ClosePreview();
             };

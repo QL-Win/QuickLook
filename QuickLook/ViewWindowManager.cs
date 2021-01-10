@@ -34,7 +34,7 @@ namespace QuickLook
 
         internal ViewWindowManager()
         {
-            _viewerWindow = new ViewerWindow();
+            InitNewViewerWindow();
         }
 
         public void Dispose()
@@ -100,9 +100,7 @@ namespace QuickLook
 
             _viewerWindow.Pinned = true;
 
-            var newWindow = new ViewerWindow();
-
-            _viewerWindow = newWindow;
+            InitNewViewerWindow();
         }
 
         public void SwitchPreview(string path = null)
@@ -166,6 +164,18 @@ namespace QuickLook
                 BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
             else
                 e.Throw();
+        }
+
+        private void InitNewViewerWindow()
+        {
+            _viewerWindow = new ViewerWindow();
+            _viewerWindow.Closed += (sender, e) =>
+            {
+                if (!(sender is ViewerWindow w) || w.Pinned)
+                    return; // Pinned window has already been forgotten
+                StopFocusMonitor();
+                InitNewViewerWindow();
+            };
         }
 
         internal static ViewWindowManager GetInstance()

@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
@@ -57,7 +58,7 @@ namespace QuickLook
         internal void RunAndClose()
         {
             Run();
-            BeginClose();
+            Close();
         }
 
         private void PositionWindow(Size size)
@@ -276,17 +277,17 @@ namespace QuickLook
             //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
 
             ViewWindowManager.GetInstance().ForgetCurrentWindow();
-            BeginClose();
+            Close();
 
             ProcessHelper.PerformAggressiveGC();
         }
 
-        internal void BeginClose()
+        protected override void OnClosing(CancelEventArgs e)
         {
             UnloadPlugin();
             busyDecorator.Dispose();
 
-            Close();
+            base.OnClosing(e);
 
             ProcessHelper.PerformAggressiveGC();
         }
