@@ -49,12 +49,6 @@ namespace QuickLook
             }
         }
 
-        internal void RunAndHide()
-        {
-            Run();
-            BeginHide();
-        }
-
         internal void RunAndClose()
         {
             Run();
@@ -259,27 +253,6 @@ namespace QuickLook
 
             // assoc not found
             buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_Open"), Path.GetFileName(_path));
-        }
-
-        internal void BeginHide()
-        {
-            // reset custom window size
-            _customWindowSize = Size.Empty;
-            _ignoreNextWindowSizeChange = true;
-
-            UnloadPlugin();
-
-            // if the this window is hidden in Max state, new show() will results in failure:
-            // "Cannot show Window when ShowActivated is false and WindowState is set to Maximized"
-            //WindowState = WindowState.Normal;
-
-            Hide();
-            //Dispatcher.BeginInvoke(new Action(Hide), DispatcherPriority.ApplicationIdle);
-
-            ViewWindowManager.GetInstance().ForgetCurrentWindow();
-            Close();
-
-            ProcessHelper.PerformAggressiveGC();
         }
 
         protected override void OnClosing(CancelEventArgs e)
