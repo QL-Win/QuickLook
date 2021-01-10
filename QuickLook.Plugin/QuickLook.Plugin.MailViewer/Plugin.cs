@@ -53,7 +53,7 @@ namespace QuickLook.Plugin.MailViewer
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
 
-            _panel.Navigate(ExtractMailBody(path));
+            _panel.NavigateToFile(ExtractMailBody(path));
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
         }
 

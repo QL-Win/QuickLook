@@ -1,4 +1,4 @@
-// Copyright © 2017 Paddy Xu
+// Copyright © 2021 Paddy Xu and mooflu
 // 
 // This file is part of QuickLook program.
 // 
@@ -15,19 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly string[] Extensions = { ".mht", ".mhtml", ".htm", ".html" };
-        private static readonly string[] SupportedProtocols = { "http", "https" };
+        private static readonly string[] Extensions = {".mht", ".mhtml", ".htm", ".html"};
+        private static readonly string[] SupportedProtocols = {"http", "https"};
 
         private WebpagePanel _panel;
 
@@ -35,12 +35,16 @@ namespace QuickLook.Plugin.HtmlViewer
 
         public void Init()
         {
-            Helper.SetBrowserFeatureControl();
+            if (Helper.IsWebView2Available())
+                new WebView2().EnsureCoreWebView2Async();
         }
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && (Extensions.Any(path.ToLower().EndsWith) || (path.ToLower().EndsWith(".url") && SupportedProtocols.Contains(Helper.GetUrlPath(path).Split(':')[0].ToLower())));
+            return !Directory.Exists(path) && (Extensions.Any(path.ToLower().EndsWith) ||
+                                               path.ToLower().EndsWith(".url") &&
+                                               SupportedProtocols.Contains(Helper.GetUrlPath(path).Split(':')[0]
+                                                   .ToLower()));
         }
 
         public void Prepare(string path, ContextObject context)
@@ -55,10 +59,8 @@ namespace QuickLook.Plugin.HtmlViewer
             context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
 
             if (path.ToLower().EndsWith(".url"))
-            {
                 path = Helper.GetUrlPath(path);
-            }
-            _panel.LoadFile(path);
+            _panel.NavigateToFile(path);
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
         }
 

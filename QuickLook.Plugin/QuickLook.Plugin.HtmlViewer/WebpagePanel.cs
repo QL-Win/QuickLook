@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+﻿// Copyright © 2021 Paddy Xu and mooflu
 // 
 // This file is part of QuickLook program.
 // 
@@ -15,42 +15,85 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Threading;
+using System.Windows.Controls;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
-    public class WebpagePanel : WpfWebBrowserWrapper
+    public class WebpagePanel : UserControl
     {
+        private Uri _currentUri;
+        private WebView2 _webView;
+
         public WebpagePanel()
         {
-            Zoom = (int)(100 * DpiHelper.GetCurrentScaleFactor().Vertical);
+            if (!Helper.IsWebView2Available())
+            {
+                Content = CreateDownloadButton();
+            }
+            else
+            {
+                _webView = new WebView2();
+                _webView.NavigationStarting += NavigationStarting_CancelNavigation;
+                Content = _webView;
+            }
         }
 
-        // adjust zoom when DPI changes.
-        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        public void NavigateToFile(string path)
         {
-            var ratio = newDpi.DpiScaleX / oldDpi.DpiScaleX;
-            Zoom = (int)(Zoom * ratio);
-            base.OnDpiChanged(oldDpi, newDpi);
+            var uri = Path.IsPathRooted(path) ? Helper.FilePathToFileUrl(path) : new Uri(path);
+
+            NavigateToUri(uri);
         }
 
-        public void LoadFile(string path)
+        public void NavigateToUri(Uri uri)
         {
-            if (Path.IsPathRooted(path))
-                path = Helper.FilePathToFileUrl(path);
+            if (_webView == null)
+                return;
 
-            Dispatcher.Invoke(() => { base.Navigate(path); }, DispatcherPriority.Loaded);
+            _webView.Source = uri;
+            _currentUri = _webView?.Source;
         }
 
-        public void LoadHtml(string html)
+        public void NavigateToHtml(string html)
         {
-            var s = new MemoryStream(Encoding.UTF8.GetBytes(html ?? ""));
+            _webView.EnsureCoreWebView2Async()
+                .ContinueWith(_ => Dispatcher.Invoke(() => _webView?.NavigateToString(html)));
+        }
 
-            Dispatcher.Invoke(() => { base.Navigate(s); }, DispatcherPriority.Loaded);
+        private void NavigationStarting_CancelNavigation(object sender, CoreWebView2NavigationStartingEventArgs e)
+        {
+            if (e.Uri.StartsWith("data:")) // when using NavigateToString
+                return;
+
+            var newUri = new Uri(e.Uri);
+            if (newUri != _currentUri) e.Cancel = true;
+        }
+
+        public void Dispose()
+        {
+            _webView?.Dispose();
+            _webView = null;
+        }
+
+        private object CreateDownloadButton()
+        {
+            var button = new Button
+            {
+                Content = TranslationHelper.Get("WEBVIEW2_NOT_AVAILABLE"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Padding = new Thickness(20, 6, 20, 6)
+            };
+            button.Click += (sender, e) => Process.Start("https://go.microsoft.com/fwlink/p/?LinkId=2124703");
+
+            return button;
         }
     }
 }
