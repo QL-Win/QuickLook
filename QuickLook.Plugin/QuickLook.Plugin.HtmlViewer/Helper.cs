@@ -1,4 +1,4 @@
-// Copyright © 2021 Paddy Xu and mooflu
+// Copyright © 2021 Paddy Xu and Frank Becker
 // 
 // This file is part of QuickLook program.
 // 

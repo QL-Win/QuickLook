@@ -1,4 +1,4 @@
-﻿// Copyright © 2021 Paddy Xu and mooflu
+﻿// Copyright © 2021 Paddy Xu and Frank Becker
 // 
 // This file is part of QuickLook program.
 // 
@@ -64,12 +64,12 @@ namespace QuickLook.Plugin.HtmlViewer
                 return;
 
             _webView.Source = uri;
-            _currentUri = _webView?.Source;
+            _currentUri = _webView.Source;
         }
 
         public void NavigateToHtml(string html)
         {
-            _webView.EnsureCoreWebView2Async()
+            _webView?.EnsureCoreWebView2Async()
                 .ContinueWith(_ => Dispatcher.Invoke(() => _webView?.NavigateToString(html)));
         }
 
