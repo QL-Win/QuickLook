@@ -31,7 +31,7 @@ I am aware that several alternatives are already available on the Internet (e.g.
 
 Get it from one of the following sources:
 
-  * Microsoft Store (Windows 10 users only, no preview in open/save-dialogs available) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://assets.windowsphone.com/13484911-a6ab-4170-8b7e-795c1e8b4165/English_get_L_InvariantCulture_Default.png" height="22px" alt="Store Link" /></a> 
+  * Microsoft Store (Windows 10 users only, no preview in open/save-dialogs available) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://developer.microsoft.com/store/badges/images/English_get_L.png" height="22px" alt="Store Link" /></a> 
   * Installer or portable archive of the stable version from [GitHub Release](https://github.com/QL-Win/QuickLook/releases) 
   * Nightly builds from [AppVeyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts)
 
@@ -70,7 +70,7 @@ See the [Translation guide](https://github.com/QL-Win/QuickLook/wiki/Translation
 ## Thanks to
 
  - Many [open-source projects](https://github.com/QL-Win/QuickLook/wiki/On-the-Shoulders-of-Giants) and their contributors
- - Our UI designers [@OiCkilL](https://twitter.com/OiCkilL) (“Fluent” user interface since v0.3) and [@QubitsDev](https://twitter.com/qubitsdev) (application icon since v0.3)
+ - Our UI designers [@OiCkilL](https://twitter.com/OiCkilL) (“Fluent” user interface since v0.3), [@QubitsDev](https://twitter.com/qubitsdev) (app-icon v0.3-v3.6.9) and [Donno](https://github.com/Donnnno) (app-icon since v3.6.10)
  - [Our contributers](https://github.com/QL-Win/QuickLook/graphs/contributors) who
      - teach QuickLook to speak *your* language
      - send pull requests, report bugs or give suggestions
