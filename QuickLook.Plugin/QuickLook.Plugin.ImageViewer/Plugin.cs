@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using ImageMagick;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
@@ -27,15 +28,6 @@ namespace QuickLook.Plugin.ImageViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly HashSet<string> Formats = new HashSet<string>(new[]
-        {
-            ".apng", ".ari", ".arw", ".avif", ".bay", ".bmp", ".cap", ".cr2", ".cr3", ".crw", ".dcr", ".dcs", ".dng",
-            ".drf", ".eip", ".emf", ".erf", ".exr", ".fff", ".gif", ".hdr", ".heic", ".heif", ".ico", ".icon", ".iiq",
-            ".jfif", ".jpeg", ".jpg", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf",
-            ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rw2",
-            ".rwl", ".rwz", ".sr2", ".srf", ".srw", ".svg", ".tga", ".tif", ".tiff", ".wdp", ".webp", ".wmf", ".x3f"
-        });
-
         private ImagePanel _ip;
         private MetaProvider _meta;
 
@@ -57,9 +49,21 @@ namespace QuickLook.Plugin.ImageViewer
                     typeof(ImageMagickProvider)));
         }
 
+        private bool IsKnownImageFormat(string path)
+        {
+            try
+            {
+                return new MagickImageInfo(path).Format != MagickFormat.Unknown;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Formats.Contains(Path.GetExtension(path.ToLower()));
+            return !Directory.Exists(path) && IsKnownImageFormat(path);
         }
 
         public void Prepare(string path, ContextObject context)
