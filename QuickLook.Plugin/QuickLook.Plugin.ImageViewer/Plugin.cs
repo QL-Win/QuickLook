@@ -31,7 +31,7 @@ namespace QuickLook.Plugin.ImageViewer
         private ImagePanel _ip;
         private MetaProvider _meta;
 
-        public int Priority => 0;
+        public int Priority => -4;
 
         public void Init()
         {

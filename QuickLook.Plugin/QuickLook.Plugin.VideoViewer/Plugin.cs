@@ -27,32 +27,62 @@ namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly HashSet<string> Formats = new HashSet<string>(new[]
-        {
-            // video
-            ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".avi", ".flv", ".m4v", ".mkv", ".mov", ".mp4", ".mp4v", 
-            ".mpeg", ".mpg", ".mts", ".m2ts", ".mxf", ".ogv", ".qt", ".tp", ".ts", ".vob", ".webm", ".wmv",
-            // audio
-            ".3gp", ".aa", ".aac", ".aax", ".act", ".aif", ".aiff", ".amr", ".ape", ".au", ".awb", ".dct", ".dss", ".dvf",
-            ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".m4r", ".mka", ".mmf", ".mp3", ".mpc", ".msv",
-            ".ogg", ".oga", ".mogg", ".opus", ".ra", ".raw", ".rm", ".tta", ".vox", ".wav", ".webm", ".wma", ".wv"
-        });
-
         private ContextObject _context;
         private MediaInfo.MediaInfo _mediaInfo;
 
         private ViewerPanel _vp;
 
-        public int Priority => -10; // make it lower than TextViewer
+        public int Priority => -3;
 
         public void Init()
         {
             QLVRegistry.Register();
         }
 
+        private MediaInfo.MediaInfo MediaInfoObj()
+        {
+            if (_mediaInfo == null)
+            {
+                _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
+            }
+            return _mediaInfo;
+        }
+
+        private void ResetMediaInfoObj()
+        {
+            _mediaInfo?.Dispose();
+            _mediaInfo = null;
+        }
+
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Formats.Contains(Path.GetExtension(path)?.ToLower());
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    var mediaInfo = MediaInfoObj();
+                    mediaInfo.Open(path);
+                    string videoCodec = mediaInfo.Get(StreamKind.Video, 0, "Format");
+                    string audioCodec = mediaInfo.Get(StreamKind.Audio, 0, "Format");
+                    ResetMediaInfoObj();
+                    if (videoCodec == "Unable to load MediaInfo library")
+                    {
+                        return false;
+                    }
+                    if (!string.IsNullOrWhiteSpace(videoCodec) || !string.IsNullOrWhiteSpace(audioCodec))
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    ResetMediaInfoObj();
+                }
+            }
+
+            return false;
         }
 
         public void Prepare(string path, ContextObject context)
@@ -61,52 +91,48 @@ namespace QuickLook.Plugin.VideoViewer
 
             try
             {
-                _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
-                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                    Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
-                _mediaInfo.Option("Cover_Data", "base64");
+                var mediaInfo = MediaInfoObj();
+                mediaInfo.Option("Cover_Data", "base64");
 
-                _mediaInfo.Open(path);
+                mediaInfo.Open(path);
+                string videoCodec = mediaInfo.Get(StreamKind.Video, 0, "Format");
+                if (!string.IsNullOrWhiteSpace(videoCodec))  // video
+                {
+                    int.TryParse(mediaInfo?.Get(StreamKind.Video, 0, "Width"), out var width);
+                    int.TryParse(mediaInfo?.Get(StreamKind.Video, 0, "Height"), out var height);
+                    double.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+
+                    var windowSize = new Size
+                    {
+                        Width = Math.Max(100, width == 0 ? 1366 : width),
+                        Height = Math.Max(100, height == 0 ? 768 : height)
+                    };
+
+                    if (rotation % 180 != 0)
+                        windowSize = new Size(windowSize.Height, windowSize.Width);
+
+                    context.SetPreferredSizeFit(windowSize, 0.8);
+
+                    context.TitlebarAutoHide = true;
+                    context.Theme = Themes.Dark;
+                    context.TitlebarBlurVisibility = true;
+                }
+                else // audio
+                {
+                    context.PreferredSize = new Size(500, 300);
+
+                    context.CanResize = false;
+                    context.TitlebarAutoHide = false;
+                    context.TitlebarBlurVisibility = false;
+                    context.TitlebarColourVisibility = false;
+                }
             }
             catch (Exception)
             {
-                _mediaInfo?.Dispose();
-                _mediaInfo = null;
+                ResetMediaInfoObj();
             }
 
             context.TitlebarOverlap = true;
-
-            if (_mediaInfo == null ||
-                !string.IsNullOrWhiteSpace(_mediaInfo.Get(StreamKind.General, 0, "VideoCount"))) // video
-            {
-                int.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Width"), out var width);
-                int.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Height"), out var height);
-                double.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
-
-                var windowSize = new Size
-                {
-                    Width = Math.Max(100, width == 0 ? 1366 : width),
-                    Height = Math.Max(100, height == 0 ? 768 : height)
-                };
-
-                if (rotation % 180 != 0)
-                    windowSize = new Size(windowSize.Height, windowSize.Width);
-
-                context.SetPreferredSizeFit(windowSize, 0.8);
-
-                context.TitlebarAutoHide = true;
-                context.Theme = Themes.Dark;
-                context.TitlebarBlurVisibility = true;
-            }
-            else // audio
-            {
-                context.PreferredSize = new Size(500, 300);
-
-                context.CanResize = false;
-                context.TitlebarAutoHide = false;
-                context.TitlebarBlurVisibility = false;
-                context.TitlebarColourVisibility = false;
-            }
         }
 
         public void View(string path, ContextObject context)
@@ -125,9 +151,7 @@ namespace QuickLook.Plugin.VideoViewer
             _vp?.Dispose();
             _vp = null;
 
-            _mediaInfo?.Dispose();
-            _mediaInfo = null;
-
+            ResetMediaInfoObj();
             _context = null;
         }
     }
