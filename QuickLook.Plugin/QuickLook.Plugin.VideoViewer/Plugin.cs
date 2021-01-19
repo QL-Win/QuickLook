@@ -27,33 +27,23 @@ namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
-        private ContextObject _context;
-        private MediaInfo.MediaInfo _mediaInfo;
+        private static MediaInfo.MediaInfo _mediaInfo;
 
         private ViewerPanel _vp;
 
         public int Priority => -3;
 
+        static Plugin()
+        {
+            _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
+            _mediaInfo.Option("Cover_Data", "base64");
+        }
+
         public void Init()
         {
             QLVRegistry.Register();
-        }
-
-        private MediaInfo.MediaInfo MediaInfoObj()
-        {
-            if (_mediaInfo == null)
-            {
-                _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
-                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                    Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
-            }
-            return _mediaInfo;
-        }
-
-        private void ResetMediaInfoObj()
-        {
-            _mediaInfo?.Dispose();
-            _mediaInfo = null;
         }
 
         public bool CanHandle(string path)
@@ -62,12 +52,16 @@ namespace QuickLook.Plugin.VideoViewer
             {
                 try
                 {
-                    var mediaInfo = MediaInfoObj();
-                    mediaInfo.Open(path);
-                    string videoCodec = mediaInfo.Get(StreamKind.Video, 0, "Format");
-                    string audioCodec = mediaInfo.Get(StreamKind.Audio, 0, "Format");
-                    ResetMediaInfoObj();
-                    if (videoCodec == "Unable to load MediaInfo library")
+                    _mediaInfo.Open(path);
+                    string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
+                    string audioCodec = _mediaInfo.Get(StreamKind.Audio, 0, "Format");
+                    // Note MediaInfo.Close seems to close the dll and you have to re-create the MediaInfo
+                    //      object like in the static class constructor above. Any call to Get methods etc.
+                    //      will result in a "Unable to load MediaInfo library" error.
+                    // Ref: https://github.com/MediaArea/MediaInfoLib/blob/master/Source/MediaInfoDLL/MediaInfoDLL.cs
+                    // Pretty sure it doesn't leak when opening another file as the c++ code calls Close on Open
+                    // Ref: https://github.com/MediaArea/MediaInfoLib/blob/master/Source/MediaInfo/MediaInfo_Internal.cpp
+                    if (videoCodec == "Unable to load MediaInfo library") // should not happen
                     {
                         return false;
                     }
@@ -76,9 +70,9 @@ namespace QuickLook.Plugin.VideoViewer
                         return true;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    ResetMediaInfoObj();
+                    // return false;
                 }
             }
 
@@ -87,20 +81,15 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            _context = context;
-
             try
             {
-                var mediaInfo = MediaInfoObj();
-                mediaInfo.Option("Cover_Data", "base64");
+                string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
 
-                mediaInfo.Open(path);
-                string videoCodec = mediaInfo.Get(StreamKind.Video, 0, "Format");
-                if (!string.IsNullOrWhiteSpace(videoCodec))  // video
+                if (!string.IsNullOrWhiteSpace(videoCodec)) // video
                 {
-                    int.TryParse(mediaInfo?.Get(StreamKind.Video, 0, "Width"), out var width);
-                    int.TryParse(mediaInfo?.Get(StreamKind.Video, 0, "Height"), out var height);
-                    double.TryParse(_mediaInfo?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+                    int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Width"), out var width);
+                    int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Height"), out var height);
+                    double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
 
                     var windowSize = new Size
                     {
@@ -127,9 +116,8 @@ namespace QuickLook.Plugin.VideoViewer
                     context.TitlebarColourVisibility = false;
                 }
             }
-            catch (Exception)
+            catch
             {
-                ResetMediaInfoObj();
             }
 
             context.TitlebarOverlap = true;
@@ -150,9 +138,6 @@ namespace QuickLook.Plugin.VideoViewer
         {
             _vp?.Dispose();
             _vp = null;
-
-            ResetMediaInfoObj();
-            _context = null;
         }
     }
 }
