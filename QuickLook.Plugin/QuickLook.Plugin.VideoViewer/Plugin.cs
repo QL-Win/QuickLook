@@ -81,43 +81,36 @@ namespace QuickLook.Plugin.VideoViewer
 
         public void Prepare(string path, ContextObject context)
         {
-            try
+            string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
+            if (!string.IsNullOrWhiteSpace(videoCodec)) // video
             {
-                string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
+                int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Width"), out var width);
+                int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Height"), out var height);
+                double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
 
-                if (!string.IsNullOrWhiteSpace(videoCodec)) // video
+                var windowSize = new Size
                 {
-                    int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Width"), out var width);
-                    int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Height"), out var height);
-                    double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+                    Width = Math.Max(100, width == 0 ? 1366 : width),
+                    Height = Math.Max(100, height == 0 ? 768 : height)
+                };
 
-                    var windowSize = new Size
-                    {
-                        Width = Math.Max(100, width == 0 ? 1366 : width),
-                        Height = Math.Max(100, height == 0 ? 768 : height)
-                    };
+                if (rotation % 180 != 0)
+                    windowSize = new Size(windowSize.Height, windowSize.Width);
 
-                    if (rotation % 180 != 0)
-                        windowSize = new Size(windowSize.Height, windowSize.Width);
+                context.SetPreferredSizeFit(windowSize, 0.8);
 
-                    context.SetPreferredSizeFit(windowSize, 0.8);
-
-                    context.TitlebarAutoHide = true;
-                    context.Theme = Themes.Dark;
-                    context.TitlebarBlurVisibility = true;
-                }
-                else // audio
-                {
-                    context.PreferredSize = new Size(500, 300);
-
-                    context.CanResize = false;
-                    context.TitlebarAutoHide = false;
-                    context.TitlebarBlurVisibility = false;
-                    context.TitlebarColourVisibility = false;
-                }
+                context.TitlebarAutoHide = true;
+                context.Theme = Themes.Dark;
+                context.TitlebarBlurVisibility = true;
             }
-            catch
+            else // audio
             {
+                context.PreferredSize = new Size(500, 300);
+
+                context.CanResize = false;
+                context.TitlebarAutoHide = false;
+                context.TitlebarBlurVisibility = false;
+                context.TitlebarColourVisibility = false;
             }
 
             context.TitlebarOverlap = true;
