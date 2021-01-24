@@ -57,7 +57,7 @@ namespace QuickLook.Plugin.PDFViewer
 
             var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
 
-            context.SetPreferredSizeFit(desiredSize, 0.8);
+            context.SetPreferredSizeFit(desiredSize, 0.9);
         }
 
         public void View(string path, ContextObject context)
