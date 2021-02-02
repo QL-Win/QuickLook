@@ -145,7 +145,7 @@ namespace QuickLook.Plugin.VideoViewer
         public void Dispose()
         {
             // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-            SettingHelper.Set("VolumeDouble", mediaElement.Volume);
+            SettingHelper.Set("VolumeDouble", LinearVolume);
             SettingHelper.Set("ShouldLoop", ShouldLoop);
 
             try
@@ -280,13 +280,38 @@ namespace QuickLook.Plugin.VideoViewer
                 : Visibility.Visible;
         }
 
+        // Newer .net has Math.Clamp
+        private T Clamp<T>(T val, T min, T max) where T : IComparable<T>
+        {
+            if (val.CompareTo(min) < 0) return min;
+            else if (val.CompareTo(max) > 0) return max;
+            else return val;
+        }
+
+        // A change in amplitude by a factor of 10 corresponds to a 20 dB change
+        private const double DecibelAmplitudeMult = 20.0;
+        public double LinearVolume
+        {
+            // mediaElement.Volume returns [0,1] where 0 = -100db, 1 = 0db
+            // Decibel is logarithmic. See amplitude table https://en.wikipedia.org/wiki/Decibel
+            get
+            {
+                var dbVol = 100.0 * (mediaElement.Volume - 1.0);
+                var linearVol = Math.Pow(10, dbVol / DecibelAmplitudeMult);
+                return linearVol;
+            }
+            set
+            {
+                var linearVol = Clamp(value, 0.00001, 1.0);
+                var dbVol = DecibelAmplitudeMult * Math.Log10(linearVol);
+                mediaElement.Volume = dbVol / 100.0 + 1.0;
+                OnPropertyChanged();
+            }
+        }
+
         private void ChangeVolume(double delta)
         {
-            var newVol = mediaElement.Volume + delta;
-            newVol = Math.Max(newVol, 0);
-            newVol = Math.Min(newVol, 1);
-
-            mediaElement.Volume = newVol;
+            LinearVolume = LinearVolume + delta; // setter will clamp
         }
 
         private void TogglePlayPause(object sender, EventArgs e)
@@ -313,7 +338,7 @@ namespace QuickLook.Plugin.VideoViewer
 
             mediaElement.Source = new Uri(path);
             // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-            mediaElement.Volume = SettingHelper.Get("VolumeDouble", 1d);
+            LinearVolume = SettingHelper.Get("VolumeDouble", 1d);
 
             mediaElement.Play();
         }
