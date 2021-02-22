@@ -305,9 +305,12 @@ namespace QuickLook.Plugin.VideoViewer
         public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
         {
             UpdateMeta(path, info);
-            
+
             // detect rotation
             double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+            // Correct rotation: on some machine the value "90" becomes "90000" by some reason
+            if (rotation > 360)
+                rotation /= 1e3;
             if (Math.Abs(rotation) > 0.1)
                 mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5, 0.5);
 
