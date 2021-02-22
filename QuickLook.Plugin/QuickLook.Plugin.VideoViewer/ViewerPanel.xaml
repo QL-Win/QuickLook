@@ -162,7 +162,7 @@
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ControlButtonStyle}">
                             <Setter Property="Content"
-                                    Value="{Binding ElementName=mediaElement, Path=Volume, Converter={StaticResource VolumeToIconConverter}}" />
+                                    Value="{Binding ElementName=viewerPanel, Path=LinearVolume, Converter={StaticResource VolumeToIconConverter}}" />
                         </Style>
                     </Button.Style>
                 </Button>
@@ -198,7 +198,7 @@
             <Grid Height="32" Width="130" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                   Background="{DynamicResource CaptionButtonHoverBackground}" Margin="0,0,0,32">
                 <Slider Style="{StaticResource CustomSliderStyle}" Width="110" Maximum="1"
-                        Value="{Binding ElementName=mediaElement, Path=Volume}" />
+                        Value="{Binding ElementName=viewerPanel, Path=LinearVolume}" />
             </Grid>
         </Grid>
     </Grid>
