@@ -89,7 +89,7 @@ namespace QuickLook.Plugin.ImageViewer
                 h = mi.Height;
             }
 
-            return w + h == 0 ? new Size(800, 600) : new Size(w, h);
+            return w + h == 0 ? new Size(200, 150) : new Size(w, h);
         }
 
         public Orientation GetOrientation()
