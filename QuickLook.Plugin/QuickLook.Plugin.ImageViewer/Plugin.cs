@@ -50,7 +50,7 @@ namespace QuickLook.Plugin.ImageViewer
                 new KeyValuePair<string[], Type>(new[] {".gif"},
                     typeof(GifProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
-                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".tif", ".tiff"},
+                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"},
                     typeof(NativeProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {"*"},
