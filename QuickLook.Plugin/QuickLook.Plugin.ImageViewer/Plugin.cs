@@ -86,7 +86,7 @@ namespace QuickLook.Plugin.ImageViewer
                 ? $"{Path.GetFileName(path)}"
                 : $"{size.Width}×{size.Height}: {Path.GetFileName(path)}";
 
-            _ip.ImageUriSource = new Uri(path);
+            _ip.ImageUriSource = Helper.FilePathToFileUrl(path);
         }
 
         public void Cleanup()

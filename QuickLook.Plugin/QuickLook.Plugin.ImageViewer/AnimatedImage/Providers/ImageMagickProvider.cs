@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class ImageMagickProvider : AnimationProvider
     {
-        public ImageMagickProvider(string path, MetaProvider meta) : base(path, meta)
+        public ImageMagickProvider(Uri path, MetaProvider meta) : base(path, meta)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
@@ -90,7 +90,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
                 try
                 {
-                    using (var mi = new MagickImage(Path, settings))
+                    using (var mi = new MagickImage(Path.LocalPath, settings))
                     {
                         var profile = mi.GetColorProfile();
                         if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB ||

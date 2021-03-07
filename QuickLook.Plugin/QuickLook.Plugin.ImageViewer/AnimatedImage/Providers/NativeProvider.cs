@@ -27,7 +27,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class NativeProvider : AnimationProvider
     {
-        public NativeProvider(string path, MetaProvider meta) : base(path, meta)
+        public NativeProvider(Uri path, MetaProvider meta) : base(path, meta)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
@@ -55,7 +55,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                 {
                     var img = new BitmapImage();
                     img.BeginInit();
-                    img.UriSource = new Uri(Path);
+                    img.UriSource = Path;
                     img.CacheOption = BitmapCacheOption.OnLoad;
                     // specific renderSize to avoid .net's double to int conversion
                     img.DecodePixelWidth = rotate ? decodeHeight : decodeWidth;
@@ -94,7 +94,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                 {
                     var img = new BitmapImage();
                     img.BeginInit();
-                    img.UriSource = new Uri(Path);
+                    img.UriSource = Path;
                     img.CacheOption = BitmapCacheOption.OnLoad;
                     img.DecodePixelWidth = (int) (rotate ? fullSize.Height : fullSize.Width);
                     img.DecodePixelHeight = (int) (rotate ? fullSize.Width : fullSize.Height);

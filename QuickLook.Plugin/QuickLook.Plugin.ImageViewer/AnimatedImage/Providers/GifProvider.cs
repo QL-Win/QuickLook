@@ -33,15 +33,15 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         private bool _isPlaying;
         private NativeProvider _nativeProvider;
 
-        public GifProvider(string path, MetaProvider meta) : base(path, meta)
+        public GifProvider(Uri path, MetaProvider meta) : base(path, meta)
         {
-            if (!ImageAnimator.CanAnimate(Image.FromFile(path)))
+            if (!ImageAnimator.CanAnimate(Image.FromFile(path.LocalPath)))
             {
                 _nativeProvider = new NativeProvider(path, meta);
                 return;
             }
 
-            _fileHandle = (Bitmap) Image.FromFile(path);
+            _fileHandle = (Bitmap) Image.FromFile(path.LocalPath);
 
             _fileHandle.SetResolution(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
                 DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical);
