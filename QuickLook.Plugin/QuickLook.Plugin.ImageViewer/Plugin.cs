@@ -73,7 +73,7 @@ namespace QuickLook.Plugin.ImageViewer
             else
                 context.PreferredSize = new Size(800, 600);
 
-            context.Theme = (Themes) SettingHelper.Get("LastTheme", 1);
+            context.Theme = (Themes) SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
         }
 
         public void View(string path, ContextObject context)
