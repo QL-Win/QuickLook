@@ -21,7 +21,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class DcrawProvider : NativeProvider
     {
-        public DcrawProvider(string path, MetaProvider meta) : base(path, meta)
+        public DcrawProvider(Uri path, MetaProvider meta) : base(path, meta)
         {
             throw new NotImplementedException();
         }

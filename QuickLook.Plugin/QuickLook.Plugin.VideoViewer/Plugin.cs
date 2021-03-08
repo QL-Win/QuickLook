@@ -88,6 +88,10 @@ namespace QuickLook.Plugin.VideoViewer
                 int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Height"), out var height);
                 double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
 
+                // Correct rotation: on some machine the value "90" becomes "90000" by some reason
+                if (rotation > 360)
+                    rotation /= 1e3;
+
                 var windowSize = new Size
                 {
                     Width = Math.Max(100, width == 0 ? 1366 : width),

@@ -278,7 +278,7 @@ namespace QuickLook.Plugin.ImageViewer
         {
             Theme = Theme == Themes.Dark ? Themes.Light : Themes.Dark;
 
-            SettingHelper.Set("LastTheme", (int) Theme);
+            SettingHelper.Set("LastTheme", (int) Theme, "QuickLook.Plugin.ImageViewer");
         }
 
         private void ShowMeta()

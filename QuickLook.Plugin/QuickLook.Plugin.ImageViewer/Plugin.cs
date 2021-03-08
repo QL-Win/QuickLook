@@ -42,7 +42,7 @@ namespace QuickLook.Plugin.ImageViewer
                 new KeyValuePair<string[], Type>(new[] {".gif"},
                     typeof(GifProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
-                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".tif", ".tiff"},
+                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"},
                     typeof(NativeProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {"*"},
@@ -77,7 +77,7 @@ namespace QuickLook.Plugin.ImageViewer
             else
                 context.PreferredSize = new Size(800, 600);
 
-            context.Theme = (Themes) SettingHelper.Get("LastTheme", 1);
+            context.Theme = (Themes) SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
         }
 
         public void View(string path, ContextObject context)
@@ -90,7 +90,7 @@ namespace QuickLook.Plugin.ImageViewer
                 ? $"{Path.GetFileName(path)}"
                 : $"{size.Width}×{size.Height}: {Path.GetFileName(path)}";
 
-            _ip.ImageUriSource = new Uri(path);
+            _ip.ImageUriSource = Helper.FilePathToFileUrl(path);
         }
 
         public void Cleanup()

@@ -37,16 +37,16 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         private int _lastEffectivePreviousPreviousFrameIndex;
         private NativeProvider _nativeImageProvider;
 
-        public APngProvider(string path, MetaProvider meta) : base(path, meta)
+        public APngProvider(Uri path, MetaProvider meta) : base(path, meta)
         {
-            if (!IsAnimatedPng(path))
+            if (!IsAnimatedPng(path.LocalPath))
             {
                 _nativeImageProvider = new NativeProvider(path, meta);
                 Animator = _nativeImageProvider.Animator;
                 return;
             }
 
-            var decoder = new APNGBitmap(path);
+            var decoder = new APNGBitmap(path.LocalPath);
 
             _baseFrame = decoder.DefaultImage;
             _frames = new List<FrameInfo>(decoder.Frames.Length);

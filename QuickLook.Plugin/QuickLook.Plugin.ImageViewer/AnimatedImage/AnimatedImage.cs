@@ -53,7 +53,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             var ext = Path.GetExtension(path.LocalPath).ToLower();
             var type = Providers.First(p => p.Key.Contains(ext) || p.Key.Contains("*")).Value;
 
-            var provider = type.CreateInstance<AnimationProvider>(path.LocalPath, meta);
+            var provider = type.CreateInstance<AnimationProvider>(path, meta);
 
             return provider;
         }

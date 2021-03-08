@@ -25,13 +25,13 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal abstract class AnimationProvider : IDisposable
     {
-        protected AnimationProvider(string path, MetaProvider meta)
+        protected AnimationProvider(Uri path, MetaProvider meta)
         {
             Path = path;
             Meta = meta;
         }
 
-        public string Path { get; }
+        public Uri Path { get; }
 
         public MetaProvider Meta { get; }
 

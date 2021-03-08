@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Microsoft.Win32;
+using Microsoft.Web.WebView2.Core;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
@@ -26,14 +26,13 @@ namespace QuickLook.Plugin.HtmlViewer
     {
         public static bool IsWebView2Available()
         {
-            var path = App.Is64Bit
-                ? @"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}\"
-                : @"SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}\";
-
-            using (var key = Registry.LocalMachine.OpenSubKey(path, RegistryKeyPermissionCheck.ReadSubTree))
+            try
             {
-                var pv = key?.GetValue("pv");
-                return !string.IsNullOrEmpty(pv as string);
+                return !string.IsNullOrEmpty(CoreWebView2Environment.GetAvailableBrowserVersionString());
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
