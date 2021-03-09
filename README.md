@@ -59,7 +59,7 @@ Get it from one of the following sources:
  - <kbd>Ctrl</kbd>+<kbd>Mouse Wheel</kbd> Zoom in/out (PDFs)
  - <kbd>Wheel</kbd> Increase/decrease volume
 
-## Supported file types, file manager intergation, etc.
+## Supported file types, file manager integration, etc.
 
 See the [Wiki page](https://github.com/QL-Win/QuickLook/wiki)
 
