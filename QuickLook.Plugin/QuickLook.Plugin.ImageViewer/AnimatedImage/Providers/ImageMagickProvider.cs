@@ -23,7 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using ImageMagick;
-using ImageMagick.Formats.Dng;
+using ImageMagick.Formats;
 using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
