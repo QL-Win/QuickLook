@@ -62,14 +62,14 @@
     <Reference Include="LibAPNG">
       <HintPath>.\LibAPNG.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.23.3.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.7.23.3\lib\net40\Magick.NET-Q8-AnyCPU.dll</HintPath>
+    <Reference Include="Magick.NET-Q8-AnyCPU, Version=7.23.4.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.7.23.4\lib\net40\Magick.NET-Q8-AnyCPU.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET.Core, Version=6.1.3.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET.Core.6.1.3\lib\net40\Magick.NET.Core.dll</HintPath>
+    <Reference Include="Magick.NET.Core, Version=6.2.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Magick.NET.Core.6.2.0\lib\net40\Magick.NET.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Magick.NET.SystemWindowsMedia, Version=3.0.8.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET.SystemWindowsMedia.3.0.8\lib\net40\Magick.NET.SystemWindowsMedia.dll</HintPath>
+    <Reference Include="Magick.NET.SystemWindowsMedia, Version=3.0.9.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Magick.NET.SystemWindowsMedia.3.0.9\lib\net40\Magick.NET.SystemWindowsMedia.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
