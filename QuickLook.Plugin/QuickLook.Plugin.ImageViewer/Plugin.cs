@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using ImageMagick;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
@@ -27,19 +28,16 @@ namespace QuickLook.Plugin.ImageViewer
 {
     public class Plugin : IViewer
     {
-        private static readonly HashSet<string> Formats = new HashSet<string>(new[]
+        private static readonly HashSet<string> WellKnownImageExtensions = new HashSet<string>(new[]
         {
-            ".apng", ".ari", ".arw", ".avif", ".bay", ".bmp", ".cap", ".cr2", ".cr3", ".crw", ".dcr", ".dcs", ".dng",
-            ".drf", ".eip", ".emf", ".erf", ".exr", ".fff", ".gif", ".hdr", ".heic", ".heif", ".ico", ".icon", ".iiq",
-            ".jfif", ".jpeg", ".jpg", ".k25", ".kdc", ".mdc", ".mef", ".mos", ".mrw", ".nef", ".nrw", ".obm", ".orf",
-            ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn", ".r3d", ".raf", ".raw", ".rw2",
-            ".rwl", ".rwz", ".sr2", ".srf", ".srw", ".svg", ".tga", ".tif", ".tiff", ".wdp", ".webp", ".wmf", ".x3f"
+            ".apng", ".bmp", ".gif", ".ico", ".icon", ".jfif", ".jpeg", ".jpg", ".png", ".psd",
+            ".svg", ".tga", ".tif", ".tiff", ".webp", ".wmf",
         });
 
         private ImagePanel _ip;
         private MetaProvider _meta;
 
-        public int Priority => 0;
+        public int Priority => -4;
 
         public void Init()
         {
@@ -57,9 +55,28 @@ namespace QuickLook.Plugin.ImageViewer
                     typeof(ImageMagickProvider)));
         }
 
+        private bool IsWellKnownImageExtension(string path)
+        {
+            return WellKnownImageExtensions.Contains(Path.GetExtension(path.ToLower()));
+        }
+
+        private bool IsImageMagickSupported(string path)
+        {
+            try
+            {
+                return new MagickImageInfo(path).Format != MagickFormat.Unknown;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && Formats.Contains(Path.GetExtension(path.ToLower()));
+            // Only check extension for well known image and animated image types.
+            // For other image formats, let ImageMagick try to detect by file content.
+            return !Directory.Exists(path) && (IsWellKnownImageExtension(path) || IsImageMagickSupported(path));
         }
 
         public void Prepare(string path, ContextObject context)
