@@ -67,7 +67,7 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            if (path.ToLower().EndsWith(".txt") || path.ToLower().EndsWith(".rtf"))
+            if (new[] { ".txt", ".rtf" }.Any(path.ToLower().EndsWith))
                 return true;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
@@ -94,7 +94,7 @@ namespace QuickLook.Plugin.TextViewer
 
         public void View(string path, ContextObject context)
         {
-            if (path.EndsWith(".rtf"))
+            if (path.ToLower().EndsWith(".rtf"))
             {
                 var rtfBox = new RichTextBox();
                 FileStream fs = File.OpenRead(path);
