@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -66,7 +67,7 @@ namespace QuickLook.Plugin.TextViewer
             if (Directory.Exists(path))
                 return false;
 
-            if (path.ToLower().EndsWith(".txt"))
+            if (new[] { ".txt", ".rtf" }.Any(path.ToLower().EndsWith))
                 return true;
 
             // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
@@ -93,9 +94,23 @@ namespace QuickLook.Plugin.TextViewer
 
         public void View(string path, ContextObject context)
         {
-            _tvp = new TextViewerPanel(path, context);
+            if (path.ToLower().EndsWith(".rtf"))
+            {
+                var rtfBox = new RichTextBox();
+                FileStream fs = File.OpenRead(path);
+                rtfBox.Selection.Load(fs, DataFormats.Rtf);
+                rtfBox.IsReadOnly = true;
+                rtfBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                rtfBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
 
-            context.ViewerContent = _tvp;
+                context.ViewerContent = rtfBox;
+                context.IsBusy = false;
+            }
+            else
+            {
+                _tvp = new TextViewerPanel(path, context);
+                context.ViewerContent = _tvp;
+            }
             context.Title = $"{Path.GetFileName(path)}";
         }
 
