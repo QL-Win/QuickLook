@@ -89,7 +89,7 @@ namespace QuickLook.Helpers
                 {
                     var json = DownloadJson("https://api.github.com/repos/xupefei/QuickLook/releases");
 
-                    var notes = "# QuickLook release notes\r\n\r\n";
+                    var notes = "# QuickLook has been updated!\r\n";
 
                     var count = 0;
                     foreach (var item in json)
