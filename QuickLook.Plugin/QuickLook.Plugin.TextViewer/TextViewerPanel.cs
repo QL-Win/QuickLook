@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -54,9 +55,16 @@ namespace QuickLook.Plugin.TextViewer
 
             ContextMenu = new ContextMenu();
             ContextMenu.Items.Add(new MenuItem
-                {Header = TranslationHelper.Get("Editor_Copy"), Command = ApplicationCommands.Copy});
+            {
+                Header = TranslationHelper.Get("Editor_Copy", domain: Assembly.GetExecutingAssembly().GetName().Name),
+                Command = ApplicationCommands.Copy
+            });
             ContextMenu.Items.Add(new MenuItem
-                {Header = TranslationHelper.Get("Editor_SelectAll"), Command = ApplicationCommands.SelectAll});
+            {
+                Header = TranslationHelper.Get("Editor_SelectAll",
+                    domain: Assembly.GetExecutingAssembly().GetName().Name),
+                Command = ApplicationCommands.SelectAll
+            });
 
             ManipulationInertiaStarting += Viewer_ManipulationInertiaStarting;
             ManipulationStarting += Viewer_ManipulationStarting;
