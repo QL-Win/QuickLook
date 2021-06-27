@@ -30,14 +30,32 @@ namespace QuickLook.Plugin.ImageViewer
     {
         private static readonly HashSet<string> WellKnownImageExtensions = new HashSet<string>(new[]
         {
-            ".apng", ".bmp", ".gif", ".ico", ".icon", ".jfif", ".jpeg", ".jpg", ".png", ".psd",
-            ".svg", ".tga", ".tif", ".tiff", ".webp", ".wmf",
+            ".apng", ".ari", ".arw", ".avif",
+            ".bay", ".bmp",
+            ".cap", ".cr2", ".cr3", ".crw",
+            ".dcr", ".dcs", ".dng", ".drf",
+            ".eip", ".emf", ".erf", ".exr",
+            ".fff",
+            ".gif",
+            ".hdr", ".heic", ".heif",
+            ".ico", ".icon", ".iiq",
+            ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl",
+            ".k25", ".kdc",
+            ".mdc", ".mef", ".mos", ".mrw",
+            ".nef", ".nrw",
+            ".obm", ".orf",
+            ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn",
+            ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
+            ".sr2", ".srf", ".srw", ".svg",
+            ".tga", ".tif", ".tiff",
+            ".wdp", ".webp", ".wmf",
+            ".x3f"
         });
 
         private ImagePanel _ip;
         private MetaProvider _meta;
 
-        public int Priority => -4;
+        public int Priority => 0;
 
         public void Init()
         {
@@ -74,9 +92,10 @@ namespace QuickLook.Plugin.ImageViewer
 
         public bool CanHandle(string path)
         {
+            // Disabled due mishandling text file types e.g., "*.config".
             // Only check extension for well known image and animated image types.
             // For other image formats, let ImageMagick try to detect by file content.
-            return !Directory.Exists(path) && (IsWellKnownImageExtension(path) || IsImageMagickSupported(path));
+            return !Directory.Exists(path) && (IsWellKnownImageExtension(path)); // || IsImageMagickSupported(path));
         }
 
         public void Prepare(string path, ContextObject context)
