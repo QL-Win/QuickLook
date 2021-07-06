@@ -72,7 +72,8 @@ namespace QuickLook.Plugin.TextViewer
 
             PreviewMouseWheel += Viewer_MouseWheel;
 
-            FontFamily = new FontFamily(TranslationHelper.Get("Editor_FontFamily"));
+            FontFamily = new FontFamily(TranslationHelper.Get("Editor_FontFamily",
+                domain: Assembly.GetExecutingAssembly().GetName().Name));
 
             TextArea.TextView.ElementGenerators.Add(new TruncateLongLines());
 
