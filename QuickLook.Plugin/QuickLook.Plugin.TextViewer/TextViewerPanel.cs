@@ -144,12 +144,13 @@ namespace QuickLook.Plugin.TextViewer
             Task.Run(() =>
             {
                 const int maxLength = 5 * 1024 * 1024;
+                const int maxHighlightingLength = (int) (0.5 * 1024 * 1024);
                 var buffer = new MemoryStream();
-                bool tooLong;
+                bool fileTooLong;
 
                 using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    tooLong = s.Length > maxLength;
+                    fileTooLong = s.Length > maxLength;
                     while (s.Position < s.Length && buffer.Length < maxLength)
                     {
                         if (_disposed)
@@ -164,7 +165,7 @@ namespace QuickLook.Plugin.TextViewer
                 if (_disposed)
                     return;
 
-                if (tooLong)
+                if (fileTooLong)
                     _context.Title += " (0 ~ 5MB)";
 
                 var bufferCopy = buffer.ToArray();
@@ -182,7 +183,7 @@ namespace QuickLook.Plugin.TextViewer
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Encoding = encoding;
-                    SyntaxHighlighting = tooLong
+                    SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
                         ? null
                         : HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
                     Document = doc;
