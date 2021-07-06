@@ -118,7 +118,7 @@ namespace QuickLook.Plugin.TextViewer
         private class TruncateLongLines : VisualLineElementGenerator
         {
             const int MAX_LENGTH = 10000;
-            const string ELLIPSIS = "……………";
+            const string ELLIPSIS = "⁞⁞[TRUNCATED]⁞⁞";
 
             public override int GetFirstInterestedOffset(int startOffset)
             {
@@ -181,7 +181,9 @@ namespace QuickLook.Plugin.TextViewer
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Encoding = encoding;
-                    SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
+                    SyntaxHighlighting = tooLong
+                        ? null
+                        : HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
                     Document = doc;
 
                     _context.IsBusy = false;
