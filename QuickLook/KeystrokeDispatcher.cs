@@ -31,9 +31,12 @@ namespace QuickLook
         private static HashSet<Keys> _validKeys;
 
         private GlobalKeyboardHook _hook;
-        private bool _isKeyDownInDesktopOrShell;
+        private bool _isPreviewRequest;
+        private bool _spaceIsDown;
+        private long _spaceHoldTick;
         private long _lastInvalidKeyPressTick;
 
+        private const long HOLD_TO_PREVIEW_DURATION = TimeSpan.TicksPerMillisecond * 750;
         private const long VALID_KEY_PRESS_DELAY = TimeSpan.TicksPerSecond * 1;
 
         protected KeystrokeDispatcher()
@@ -65,44 +68,60 @@ namespace QuickLook
 
         private void CallViewWindowManagerInvokeRoutine(KeyEventArgs e, bool isKeyDown)
         {
-            if (e.Modifiers != Keys.None)
-                return;
-
-            // check if the window is valid at the time of pressing a key, used for case 1
-            if (isKeyDown)
+            // skip invalid keys, but record the timestamp
+            if (!_validKeys.Contains(e.KeyCode))
             {
-                _isKeyDownInDesktopOrShell = NativeMethods.QuickLook.GetFocusedWindowType() !=
-                                             NativeMethods.QuickLook.FocusedWindowType.Invalid;
-
-                _isKeyDownInDesktopOrShell |= WindowHelper.IsForegroundWindowBelongToSelf();
-            }
-
-            // call InvokeRoutine only when:
-            // (1) user released a key which was pressed in a valid window, or
-            // (2) user pressed a key in a valid window
-            if (_isKeyDownInDesktopOrShell)
-                InvokeRoutine(e.KeyCode, isKeyDown);
-
-            // in case 2, reset the variable
-            if (!isKeyDown)
-                _isKeyDownInDesktopOrShell = false;
-        }
-
-        private void InvokeRoutine(Keys key, bool isKeyDown)
-        {
-            if (!_validKeys.Contains(key))
-            {
-                Debug.WriteLine($"Invalid keypress: key={key},down={isKeyDown}, time={_lastInvalidKeyPressTick}");
-
+                Debug.WriteLine($"Invalid keypress: key={e.KeyCode},down={isKeyDown}, time={_lastInvalidKeyPressTick}");
                 _lastInvalidKeyPressTick = DateTime.Now.Ticks;
                 return;
             }
 
-            if (DateTime.Now.Ticks - _lastInvalidKeyPressTick < VALID_KEY_PRESS_DELAY)
+            // skip valid keys when modifiers are used
+            if (isKeyDown && e.Modifiers != Keys.None)
                 return;
 
+            // skip if key is valid but too close after pressing an invalid key
+            if (DateTime.Now.Ticks - _lastInvalidKeyPressTick < VALID_KEY_PRESS_DELAY)
+                return;
             _lastInvalidKeyPressTick = 0L;
 
+            // skip if user is holding Space (don't skip other valid keys)
+            if (isKeyDown && e.KeyCode == Keys.Space)
+            {
+                if (_spaceIsDown)
+                    return;
+                _spaceIsDown = true;
+                _spaceHoldTick = DateTime.Now.Ticks;
+            }
+
+            // check if the valid key is a preview request
+            if (isKeyDown)
+            {
+                _isPreviewRequest = NativeMethods.QuickLook.GetFocusedWindowType() !=
+                                    NativeMethods.QuickLook.FocusedWindowType.Invalid;
+                _isPreviewRequest |= WindowHelper.IsForegroundWindowBelongToSelf();
+            } // else (when isKeyDown is false), _isPreviewRequest retain its current state
+
+            // call InvokeRoutine only when user pressed a key in a valid window, or
+            // released a key which was pressed in a valid window, with an exception of Space which
+            // must be hold for 750ms before releasing.
+            if (_isPreviewRequest)
+            {
+                if (isKeyDown || e.KeyCode != Keys.Space ||
+                    DateTime.Now.Ticks - _spaceHoldTick >= HOLD_TO_PREVIEW_DURATION)
+                    InvokeRoutine(e.KeyCode, isKeyDown);
+            }
+
+            // when the key has been released, reset variables
+            if (!isKeyDown)
+            {
+                _isPreviewRequest = false;
+                _spaceIsDown = e.KeyCode != Keys.Space && _spaceIsDown;
+            }
+        }
+
+        private void InvokeRoutine(Keys key, bool isKeyDown)
+        {
             Debug.WriteLine($"InvokeRoutine: key={key},down={isKeyDown}");
 
             if (isKeyDown)
@@ -111,6 +130,9 @@ namespace QuickLook
                 {
                     case Keys.Enter:
                         PipeServerManager.SendMessage(PipeMessages.RunAndClose);
+                        break;
+                    case Keys.Space:
+                        PipeServerManager.SendMessage(PipeMessages.Toggle);
                         break;
                 }
             }
@@ -124,11 +146,11 @@ namespace QuickLook
                     case Keys.Right:
                         PipeServerManager.SendMessage(PipeMessages.Switch);
                         break;
-                    case Keys.Space:
-                        PipeServerManager.SendMessage(PipeMessages.Toggle);
-                        break;
                     case Keys.Escape:
                         PipeServerManager.SendMessage(PipeMessages.Close);
+                        break;
+                    case Keys.Space:
+                        PipeServerManager.SendMessage(PipeMessages.Toggle);
                         break;
                 }
             }
