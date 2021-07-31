@@ -67,8 +67,6 @@ namespace QuickLook
 
         public void Dispose()
         {
-            SettingHelper.Set("ShowTrayIcon", _icon.Visible);
-
             _icon.Visible = false;
         }
 
