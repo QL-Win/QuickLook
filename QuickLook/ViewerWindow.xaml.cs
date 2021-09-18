@@ -105,6 +105,7 @@ namespace QuickLook
             if (SettingHelper.Get("UseTransparency", true)
                 && SystemParameters.IsGlassEnabled
                 && App.IsWin10
+                && !App.IsWin11
                 && !App.IsGPUInBlacklist
             )
                 WindowHelper.EnableBlur(this);
