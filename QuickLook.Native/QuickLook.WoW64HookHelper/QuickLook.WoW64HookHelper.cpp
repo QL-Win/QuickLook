@@ -90,14 +90,14 @@ void GetCurrentSelection()
 	if (hMapFile == nullptr)
 		return;
 
-	auto buffer = static_cast<PWCHAR>(MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, MAX_PATH * sizeof WCHAR));
+	auto buffer = static_cast<PWCHAR>(MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0));
 	if (buffer == nullptr)
 	{
 		CloseHandle(hMapFile);
 		return;
 	}
 
-	wcscpy_s(buffer, MAX_PATH_EX, dllBuffer);
+	wcscpy_s(buffer, wcslen(dllBuffer) + 1, dllBuffer);
 
 	UnmapViewOfFile(buffer);
 	CloseHandle(hMapFile);
