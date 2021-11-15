@@ -48,14 +48,14 @@ namespace QuickLook.Plugin.CsvViewer
 
             using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
-                var conf = new Configuration {MissingFieldFound = null, BadDataFound = null};
+                var conf = new CsvConfiguration(CultureInfo.CurrentUICulture) {MissingFieldFound = null, BadDataFound = null, DetectDelimiter = true};
 
                 using (var parser = new CsvParser(sr, conf))
                 {
                     var i = 0;
-                    while (true)
+                    while (parser.Read())
                     {
-                        var row = parser.Read();
+                        var row = parser.Record;
                         if (row == null)
                             break;
                         row = Concat(new[] {$"{i++ + 1}".PadLeft(6)}, row);
