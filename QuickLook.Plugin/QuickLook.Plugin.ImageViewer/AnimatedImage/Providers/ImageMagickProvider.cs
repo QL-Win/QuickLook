@@ -80,6 +80,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
             {
                 var settings = new MagickReadSettings
                 {
+                    BackgroundColor = MagickColors.None,
                     Defines = new DngReadDefines
                     {
                         OutputColor = DngOutputColor.SRGB,
