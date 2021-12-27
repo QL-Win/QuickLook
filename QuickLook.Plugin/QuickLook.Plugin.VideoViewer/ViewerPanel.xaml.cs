@@ -28,7 +28,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using MediaInfo;
+using MediaInfoLib;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
@@ -59,8 +59,8 @@ namespace QuickLook.Plugin.VideoViewer
 
             _context = context;
 
-            mediaElement.MediaUriPlayer.LAVFilterDirectory =
-                IntPtr.Size == 8 ? "LAVFilters-0.72-x64\\" : "LAVFilters-0.72-x86\\";
+            //mediaElement.MediaUriPlayer.LAVFilterDirectory =
+            //    IntPtr.Size == 8 ? "LAVFilters-0.75.1-x64\\" : "LAVFilters-0.75.1-x86\\";
 
             //ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
@@ -241,7 +241,7 @@ namespace QuickLook.Plugin.VideoViewer
             }
         }
 
-        private void UpdateMeta(string path, MediaInfo.MediaInfo info)
+        private void UpdateMeta(string path, MediaInfoLib.MediaInfo info)
         {
             if (HasVideo)
                 return;
@@ -327,7 +327,7 @@ namespace QuickLook.Plugin.VideoViewer
             ShouldLoop = !ShouldLoop;
         }
 
-        public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
+        public void LoadAndPlay(string path, MediaInfoLib.MediaInfo info)
         {
             UpdateMeta(path, info);
 

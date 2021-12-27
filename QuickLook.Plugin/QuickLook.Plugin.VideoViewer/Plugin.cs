@@ -16,18 +16,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Windows;
-using MediaInfo;
+using MediaInfoLib;
 using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.VideoViewer
 {
     public class Plugin : IViewer
     {
-        private static MediaInfo.MediaInfo _mediaInfo;
+        private static MediaInfoLib.MediaInfo _mediaInfo;
 
         private ViewerPanel _vp;
 
@@ -35,9 +33,8 @@ namespace QuickLook.Plugin.VideoViewer
 
         static Plugin()
         {
-            _mediaInfo = new MediaInfo.MediaInfo(Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
+            //_mediaInfo = new MediaInfo.MediaInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            _mediaInfo = new MediaInfoLib.MediaInfo();
             _mediaInfo.Option("Cover_Data", "base64");
         }
 
