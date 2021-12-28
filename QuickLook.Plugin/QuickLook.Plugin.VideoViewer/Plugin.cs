@@ -33,7 +33,6 @@ namespace QuickLook.Plugin.VideoViewer
 
         static Plugin()
         {
-            //_mediaInfo = new MediaInfo.MediaInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             _mediaInfo = new MediaInfoLib.MediaInfo();
             _mediaInfo.Option("Cover_Data", "base64");
         }

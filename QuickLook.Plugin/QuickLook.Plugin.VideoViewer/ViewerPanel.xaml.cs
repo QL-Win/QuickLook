@@ -59,9 +59,6 @@ namespace QuickLook.Plugin.VideoViewer
 
             _context = context;
 
-            //mediaElement.MediaUriPlayer.LAVFilterDirectory =
-            //    IntPtr.Size == 8 ? "LAVFilters-0.75.1-x64\\" : "LAVFilters-0.75.1-x86\\";
-
             //ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
 
