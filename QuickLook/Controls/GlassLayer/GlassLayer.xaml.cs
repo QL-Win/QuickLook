@@ -32,7 +32,7 @@ namespace QuickLook.Controls.GlassLayer
         {
             InitializeComponent();
 
-            var scale = DpiHelper.GetCurrentScaleFactor();
+            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
             noiseBrush.Viewport = new Rect(new Size(
                 noiseBrush.ImageSource.Width / scale.Horizontal,
                 noiseBrush.ImageSource.Height / scale.Vertical));

@@ -83,7 +83,7 @@ namespace QuickLook
             // |LB |     B     |RB |10%
             // |---|-----------|---|---
 
-            var scale = DpiHelper.GetScaleFactorFromWindow(this);
+            var scale = DisplayDeviceHelper.GetScaleFactorFromWindow(this);
 
             var limitPercentX = 0.1 * scale.Horizontal;
             var limitPercentY = 0.1 * scale.Vertical;
@@ -128,7 +128,7 @@ namespace QuickLook
         private Rect ResizeAndCentreNewWindow(Size size)
         {
             var desktopRect = WindowHelper.GetCurrentDesktopRectInPixel();
-            var scale = DpiHelper.GetCurrentScaleFactor();
+            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
             var pxSize = new Size(scale.Horizontal * size.Width, scale.Vertical * size.Height);
 
             var pxLocation = new Point(

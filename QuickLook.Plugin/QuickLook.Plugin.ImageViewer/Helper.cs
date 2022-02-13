@@ -30,8 +30,8 @@ namespace QuickLook.Plugin.ImageViewer
         {
             // a dirty hack... but is the fastest
 
-            var newDpiX = (double) DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal;
-            var newDpiY = (double) DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical;
+            var newDpiX = (double) DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal;
+            var newDpiY = (double) DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical;
 
             var dpiX = img.GetType().GetField("_dpiX",
                 BindingFlags.NonPublic | BindingFlags.Instance);

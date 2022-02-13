@@ -43,8 +43,8 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
             _fileHandle = (Bitmap) Image.FromFile(path.LocalPath);
 
-            _fileHandle.SetResolution(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
-                DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical);
+            _fileHandle.SetResolution(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
+                DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
 
             Animator = new Int32AnimationUsingKeyFrames {RepeatBehavior = RepeatBehavior.Forever};
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));

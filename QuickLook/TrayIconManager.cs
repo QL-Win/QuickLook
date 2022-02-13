@@ -72,7 +72,7 @@ namespace QuickLook
 
         private Icon GetTrayIconByDPI()
         {
-            var scale = DpiHelper.GetCurrentScaleFactor().Vertical;
+            var scale = DisplayDeviceHelper.GetCurrentScaleFactor().Vertical;
 
             if (!App.IsWin10)
                 return scale > 1 ? Resources.app : Resources.app_16;

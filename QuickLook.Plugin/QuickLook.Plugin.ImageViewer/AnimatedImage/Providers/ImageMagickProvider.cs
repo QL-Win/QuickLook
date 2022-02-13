@@ -104,8 +104,8 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                         if (mi.Width != (int) fullSize.Width || mi.Height != (int) fullSize.Height)
                             mi.Resize((int) fullSize.Width, (int) fullSize.Height);
 
-                        mi.Density = new Density(DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Horizontal,
-                            DpiHelper.DefaultDpi * DpiHelper.GetCurrentScaleFactor().Vertical);
+                        mi.Density = new Density(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
+                            DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
 
                         var img = mi.ToBitmapSourceWithDensity();
 

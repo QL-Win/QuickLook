@@ -49,9 +49,9 @@ namespace QuickLook.Plugin.PDFViewer
 
         public static BitmapSource Render(this PdfDocumentWrapper doc, int page, double factor, bool fixDpi = true)
         {
-            var scale = DpiHelper.GetCurrentScaleFactor();
-            var dpiX = fixDpi ? scale.Horizontal * DpiHelper.DefaultDpi : 96;
-            var dpiY = fixDpi ? scale.Vertical * DpiHelper.DefaultDpi : 96;
+            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
+            var dpiX = fixDpi ? scale.Horizontal * DisplayDeviceHelper.DefaultDpi : 96;
+            var dpiY = fixDpi ? scale.Vertical * DisplayDeviceHelper.DefaultDpi : 96;
 
             Bitmap bitmap;
 

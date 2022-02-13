@@ -50,7 +50,7 @@ namespace QuickLook.Plugin.InfoPanel
         {
             Task.Run(() =>
             {
-                var scale = DpiHelper.GetCurrentScaleFactor();
+                var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
 
                 var icon =
                     WindowsThumbnailProvider.GetThumbnail(path,
