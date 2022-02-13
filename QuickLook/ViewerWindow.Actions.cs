@@ -171,6 +171,11 @@ namespace QuickLook
             _path = path;
             Plugin = matchedPlugin;
 
+            ContextObject.Reset();
+
+            // assign monitor color profile
+            ContextObject.ColorProfileName = DisplayDeviceHelper.GetMonitorColorProfileFromWindow(this);
+
             // get window size before showing it
             try
             {

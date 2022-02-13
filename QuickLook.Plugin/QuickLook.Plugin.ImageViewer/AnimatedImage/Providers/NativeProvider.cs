@@ -22,12 +22,13 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class NativeProvider : AnimationProvider
     {
-        public NativeProvider(Uri path, MetaProvider meta) : base(path, meta)
+        public NativeProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,

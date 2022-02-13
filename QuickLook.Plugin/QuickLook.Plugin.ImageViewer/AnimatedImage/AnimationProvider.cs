@@ -20,20 +20,24 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage
 {
     internal abstract class AnimationProvider : IDisposable
     {
-        protected AnimationProvider(Uri path, MetaProvider meta)
+        protected AnimationProvider(Uri path, MetaProvider meta, ContextObject contextObject)
         {
             Path = path;
             Meta = meta;
+            ContextObject = contextObject;
         }
 
         public Uri Path { get; }
 
         public MetaProvider Meta { get; }
+
+        public ContextObject ContextObject { get; }
 
         public Int32AnimationUsingKeyFrames Animator { get; protected set; }
 

@@ -26,6 +26,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using LibAPNG;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
@@ -37,11 +38,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         private int _lastEffectivePreviousPreviousFrameIndex;
         private NativeProvider _nativeImageProvider;
 
-        public APngProvider(Uri path, MetaProvider meta) : base(path, meta)
+        public APngProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
         {
             if (!IsAnimatedPng(path.LocalPath))
             {
-                _nativeImageProvider = new NativeProvider(path, meta);
+                _nativeImageProvider = new NativeProvider(path, meta, contextObject);
                 Animator = _nativeImageProvider.Animator;
                 return;
             }

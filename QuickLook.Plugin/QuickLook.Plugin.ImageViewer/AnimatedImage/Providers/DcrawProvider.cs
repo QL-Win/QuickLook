@@ -16,12 +16,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class DcrawProvider : NativeProvider
     {
-        public DcrawProvider(Uri path, MetaProvider meta) : base(path, meta)
+        public DcrawProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
         {
             throw new NotImplementedException();
         }

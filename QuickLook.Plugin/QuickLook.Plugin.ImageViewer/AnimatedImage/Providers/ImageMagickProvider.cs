@@ -25,12 +25,13 @@ using System.Windows.Media.Imaging;
 using ImageMagick;
 using ImageMagick.Formats;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 {
     internal class ImageMagickProvider : AnimationProvider
     {
-        public ImageMagickProvider(Uri path, MetaProvider meta) : base(path, meta)
+        public ImageMagickProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
         {
             Animator = new Int32AnimationUsingKeyFrames();
             Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0,
@@ -93,11 +94,15 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                 {
                     using (var mi = new MagickImage(Path.LocalPath, settings))
                     {
-                        var profile = mi.GetColorProfile();
-                        if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB ||
-                            mi.ColorSpace == ColorSpace.scRGB)
-                            if (profile?.Description != null && !profile.Description.Contains("sRGB"))
+                        if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
+                        {
+                            if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
+                            {
                                 mi.SetProfile(ColorProfile.SRGB);
+                                if (ContextObject.ColorProfileName != null)
+                                    mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
+                            }
+                        }
 
                         mi.AutoOrient();
 

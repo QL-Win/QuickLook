@@ -48,12 +48,12 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
         public event EventHandler ImageLoaded;
         public event EventHandler DoZoomToFit;
 
-        private static AnimationProvider InitAnimationProvider(Uri path, MetaProvider meta)
+        private static AnimationProvider InitAnimationProvider(Uri path, MetaProvider meta, ContextObject contextObject)
         {
             var ext = Path.GetExtension(path.LocalPath).ToLower();
             var type = Providers.First(p => p.Key.Contains(ext) || p.Key.Contains("*")).Value;
 
-            var provider = type.CreateInstance<AnimationProvider>(path, meta);
+            var provider = type.CreateInstance<AnimationProvider>(path, meta, contextObject);
 
             return provider;
         }
@@ -106,7 +106,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage
             //var thumbnail = instance.Meta?.GetThumbnail(true);
             //instance.Source = thumbnail;
 
-            instance._animation = InitAnimationProvider((Uri) ev.NewValue, instance.Meta);
+            instance._animation = InitAnimationProvider((Uri) ev.NewValue, instance.Meta, instance.ContextObject);
             ShowThumbnailAndStartAnimation(instance);
         }
 

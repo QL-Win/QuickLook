@@ -59,14 +59,18 @@ namespace QuickLook.Plugin.ImageViewer
 
         public void Init()
         {
+            var useColorProfile = SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer");
+
             AnimatedImage.AnimatedImage.Providers.Add(
-                new KeyValuePair<string[], Type>(new[] {".apng", ".png"},
+                new KeyValuePair<string[], Type>(
+                    useColorProfile ? new[] { ".apng" } : new[] { ".apng", ".png" },
                     typeof(APngProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {".gif"},
                     typeof(GifProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
-                new KeyValuePair<string[], Type>(new[] {".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"},
+                new KeyValuePair<string[], Type>(
+                    useColorProfile ? new string[0] : new[] { ".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff" },
                     typeof(NativeProvider)));
             AnimatedImage.AnimatedImage.Providers.Add(
                 new KeyValuePair<string[], Type>(new[] {"*"},

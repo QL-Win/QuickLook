@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using Size = System.Windows.Size;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
@@ -33,11 +34,11 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
         private bool _isPlaying;
         private NativeProvider _nativeProvider;
 
-        public GifProvider(Uri path, MetaProvider meta) : base(path, meta)
+        public GifProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
         {
             if (!ImageAnimator.CanAnimate(Image.FromFile(path.LocalPath)))
             {
-                _nativeProvider = new NativeProvider(path, meta);
+                _nativeProvider = new NativeProvider(path, meta, contextObject);
                 return;
             }
 
