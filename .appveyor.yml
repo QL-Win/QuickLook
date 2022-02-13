@@ -3,7 +3,7 @@ branches:
   only:
   - master
 skip_branch_with_pr: true
-image: Visual Studio 2019
+image: Visual Studio 2022
 configuration: Release
 platform: Any CPU
 clone_script:
