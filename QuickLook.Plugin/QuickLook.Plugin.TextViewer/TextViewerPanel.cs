@@ -39,12 +39,14 @@ namespace QuickLook.Plugin.TextViewer
     {
         private readonly ContextObject _context;
         private bool _disposed;
+        private HighlightingManager highlightingManager = HighlightingManager.Instance;
 
         public TextViewerPanel(string path, ContextObject context)
         {
             _context = context;
 
-            Background = new SolidColorBrush(Color.FromArgb(0xAA, 255, 255, 255));
+            SetResourceReference(Control.ForegroundProperty, "WindowTextForeground");
+            Background = Brushes.Transparent;
             FontSize = 14;
             ShowLineNumbers = true;
             WordWrap = true;
@@ -80,6 +82,12 @@ namespace QuickLook.Plugin.TextViewer
             SearchPanel.Install(this);
 
             LoadFileAsync(path);
+        }
+
+        public HighlightingManager HighlightingManager
+        {
+            get => highlightingManager;
+            set => highlightingManager = value;
         }
 
         public void Dispose()
@@ -144,7 +152,7 @@ namespace QuickLook.Plugin.TextViewer
             Task.Run(() =>
             {
                 const int maxLength = 5 * 1024 * 1024;
-                const int maxHighlightingLength = (int) (0.5 * 1024 * 1024);
+                const int maxHighlightingLength = (int)(0.5 * 1024 * 1024);
                 var buffer = new MemoryStream();
                 bool fileTooLong;
 
@@ -185,7 +193,7 @@ namespace QuickLook.Plugin.TextViewer
                     Encoding = encoding;
                     SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
                         ? null
-                        : HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path));
+                        : HighlightingManager?.GetDefinitionByExtension(Path.GetExtension(path));
                     Document = doc;
 
                     _context.IsBusy = false;
