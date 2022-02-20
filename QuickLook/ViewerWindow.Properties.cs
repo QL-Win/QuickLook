@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using QuickLook.Common.Annotations;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
 
