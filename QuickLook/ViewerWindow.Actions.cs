@@ -188,6 +188,12 @@ namespace QuickLook
             }
 
             SetOpenWithButtonAndPath();
+            
+            // set translations
+            buttonTop.ToolTip = string.Format(TranslationHelper.Get("MW_StayTop"), Path.GetFileName(_path));
+            buttonPin.ToolTip = string.Format(TranslationHelper.Get("MW_PreventClosing"), Path.GetFileName(_path));
+            buttonOpenWith.ToolTip = string.Format(TranslationHelper.Get("MW_OpenWithMenu"), Path.GetFileName(_path));
+            buttonShare.ToolTip = string.Format(TranslationHelper.Get("MW_Share"), Path.GetFileName(_path));
 
             // revert UI changes
             ContextObject.IsBusy = true;
