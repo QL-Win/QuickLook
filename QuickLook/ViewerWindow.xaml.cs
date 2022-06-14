@@ -102,14 +102,36 @@ namespace QuickLook
         {
             base.OnApplyTemplate();
 
+            WindowHelper.RemoveWindowControls(this);
+
             if (SettingHelper.Get("UseTransparency", true)
                 && SystemParameters.IsGlassEnabled
-                && (App.IsWin10 || App.IsWin11)
-                && !App.IsGPUInBlacklist
-            )
-                WindowHelper.EnableBlur(this);
+                && !App.IsGPUInBlacklist)
+            {
+                if (App.IsWin11)
+                {
+                    if (Environment.OSVersion.Version >= new Version(10, 0, 22523))
+                    {
+                        WindowHelper.EnableBackdropMicaBlur(this, CurrentTheme == Themes.Dark);
+                    }
+                    else
+                    {
+                        WindowHelper.EnableMicaBlur(this, CurrentTheme == Themes.Dark);
+                    }
+                }
+                else if (App.IsWin10)
+                {
+                    WindowHelper.EnableBlur(this);
+                }
+                else
+                {
+                    Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
+                }
+            }
             else
-                Background = (Brush) FindResource("MainWindowBackgroundNoTransparent");
+            {
+                Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
+            }
         }
 
         private void SaveWindowSizeOnSizeChanged(object sender, SizeChangedEventArgs e)
