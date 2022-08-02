@@ -17,7 +17,7 @@ I am aware that several alternatives are already available on the Internet (e.g.
 ## Highlights
 
  - Tons of supported file types (full list [here](https://github.com/QL-Win/QuickLook/wiki/Supported-File-Types))
- - Fluent design (new in version 0.3)
+ - Fluent design
  - Touchscreen friendly
  - HiDPI support
  - Preview from *Open* and *Save File* Dialog
