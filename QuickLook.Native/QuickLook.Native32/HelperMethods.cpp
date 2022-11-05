@@ -18,16 +18,8 @@
 #include "stdafx.h"
 #include "HelperMethods.h"
 
-void HelperMethods::GetSelectedInternal(CComQIPtr<IWebBrowserApp> pwba, PWCHAR buffer)
+void HelperMethods::GetSelectedInternal(CComPtr<IShellBrowser> psb, PWCHAR buffer)
 {
-	CComQIPtr<IServiceProvider> psp;
-	if (FAILED(pwba->QueryInterface(IID_IServiceProvider, reinterpret_cast<void**>(&psp))))
-		return;
-
-	CComPtr<IShellBrowser> psb;
-	if (FAILED(psp->QueryService(SID_STopLevelBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
-		return;
-
 	CComPtr<IShellView> psv;
 	if (FAILED(psb->QueryActiveShellView(&psv)))
 		return;
