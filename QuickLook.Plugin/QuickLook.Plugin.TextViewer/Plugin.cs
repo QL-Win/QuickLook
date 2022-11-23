@@ -128,7 +128,7 @@ namespace QuickLook.Plugin.TextViewer
             if (!Directory.Exists(syntaxPath))
                 return hlm;
 
-            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
+            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd").OrderBy(f => f))
             {
                 Debug.WriteLine(file);
                 var ext = Path.GetFileNameWithoutExtension(file);
@@ -146,7 +146,8 @@ namespace QuickLook.Plugin.TextViewer
         }
         private void AssignHighlightingManager(TextViewerPanel tvp, ContextObject context)
         {
-            var isDark = (context.Theme == Themes.Dark) | OSThemeHelper.AppsUseDarkTheme() | false;
+            var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", false, "QuickLook.Plugin.TextViewer");
+            var isDark = darkThemeAllowed && OSThemeHelper.AppsUseDarkTheme();
             tvp.HighlightingManager = isDark ? _hlmDark : _hlmLight;
         }
     }

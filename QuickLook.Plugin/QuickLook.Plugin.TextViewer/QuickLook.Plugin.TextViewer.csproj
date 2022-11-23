@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Syntax\**">
-      <CopyToOutputDirectory>None</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -45,8 +45,9 @@ namespace QuickLook.Plugin.TextViewer
         {
             _context = context;
 
-            SetResourceReference(Control.ForegroundProperty, "WindowTextForeground");
-            Background = Brushes.Transparent;
+            Background = OSThemeHelper.AppsUseDarkTheme()
+                ? new SolidColorBrush(Color.FromArgb(150, 255, 255, 255))
+                : Brushes.Transparent;
             FontSize = 14;
             ShowLineNumbers = true;
             WordWrap = true;
