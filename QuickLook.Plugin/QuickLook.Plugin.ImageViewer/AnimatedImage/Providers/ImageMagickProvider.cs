@@ -96,7 +96,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
                     {
                         IMagickImage<byte> mi;
                         // Only flatten multi-layer gimp xcf files.
-                        if (Path.LocalPath.EndsWith(".xcf") && layers.Count > 1)
+                        if (Path.LocalPath.ToLower().EndsWith(".xcf") && layers.Count > 1)
                         {
                             // Flatten crops layers to canvas
                             mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
