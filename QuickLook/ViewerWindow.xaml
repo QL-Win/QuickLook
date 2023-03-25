@@ -101,7 +101,7 @@
                     <Button DockPanel.Dock="Right" x:Name="buttonShare" Style="{StaticResource CaptionButtonStyle}"
                             Content="&#xE72D;" ToolTip="Share" />
                     <Button DockPanel.Dock="Right" x:Name="buttonOpenWith" Style="{StaticResource CaptionButtonStyle}"
-                            Content="&#xE7AC;" ToolTip="Open With Menu" />
+                            Content="&#xE7AC;" ToolTip="Open With" />
                     <Button DockPanel.Dock="Right" x:Name="buttonOpen" Style="{StaticResource CaptionButtonStyle}"
                             Content="&#xE8E5;" ToolTip="Open with XXX" />
                     <!--<Button x:Name="buttonOpen" DockPanel.Dock="Right"
