@@ -96,6 +96,12 @@ namespace QuickLook
 
             buttonShare.Click += (sender, e) => ShareHelper.Share(_path, this);
             buttonOpenWith.Click += (sender, e) => ShareHelper.Share(_path, this, true);
+            
+            // Set UI translations
+            buttonTop.ToolTip = TranslationHelper.Get("MW_StayTop");
+            buttonPin.ToolTip = TranslationHelper.Get("MW_PreventClosing");
+            buttonOpenWith.ToolTip = TranslationHelper.Get("MW_OpenWithMenu");
+            buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
         }
 
         public override void OnApplyTemplate()
