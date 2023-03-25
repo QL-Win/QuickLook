@@ -45,8 +45,6 @@ namespace QuickLook.Plugin.TextViewer
         {
             _context = context;
 
-            SetResourceReference(Control.ForegroundProperty, "WindowTextForeground");
-            Background = Brushes.Transparent;
             FontSize = 14;
             ShowLineNumbers = true;
             WordWrap = true;

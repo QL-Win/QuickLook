@@ -104,7 +104,8 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
 		return;
 
-	auto hwndfg = GetForegroundWindow();
+	auto hwndfgw = GetForegroundWindow();
+	auto hwndfgt = FindWindowEx(hwndfgw, nullptr, L"ShellTabWindowClass", nullptr);
 
 	auto count = 0L;
 	psw->get_Count(&count);
@@ -120,18 +121,26 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 		if (S_OK != psw->Item(vi, &pdisp))
 			continue;
 
-		CComQIPtr<IWebBrowserApp> pwba;
-		if (FAILED(pdisp->QueryInterface(IID_IWebBrowserApp, reinterpret_cast<void**>(&pwba))))
+		CComPtr<IServiceProvider> psp;
+		if (FAILED(pdisp->QueryInterface(IID_IServiceProvider, reinterpret_cast<void**>(&psp))))
 			continue;
 
-		HWND hwndwba;
-		if (FAILED(pwba->get_HWND(reinterpret_cast<LONG_PTR*>(&hwndwba))))
+		CComPtr<IShellBrowser> psb;
+		if (FAILED(psp->QueryService(IID_IShellBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
 			continue;
 
-		if (hwndwba != hwndfg || HelperMethods::IsCursorActivated(hwndwba))
+		HWND phwnd;
+		if (FAILED(psb->GetWindow(&phwnd)))
 			continue;
 
-		HelperMethods::GetSelectedInternal(pwba, buffer);
+		if (hwndfgw != phwnd && (hwndfgt != nullptr && hwndfgt != phwnd))
+			continue;
+
+		if (HelperMethods::IsCursorActivated(0))
+			continue;
+
+		HelperMethods::GetSelectedInternal(psb, buffer);
+		return;
 	}
 }
 
@@ -140,7 +149,7 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	CoInitialize(nullptr);
 
 	CComPtr<IShellWindows> psw;
-	CComQIPtr<IWebBrowserApp> pwba;
+	CComPtr<IWebBrowserApp> pwba;
 
 	if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
 		return;
@@ -155,5 +164,13 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 	if (HelperMethods::IsCursorActivated(reinterpret_cast<HWND>(LongToHandle(phwnd))))
 		return;
 
-	HelperMethods::GetSelectedInternal(pwba, buffer);
+	CComPtr<IServiceProvider> psp;
+	if (FAILED(pwba->QueryInterface(IID_IServiceProvider, reinterpret_cast<void**>(&psp))))
+		return;
+
+	CComPtr<IShellBrowser> psb;
+	if (FAILED(psp->QueryService(IID_IShellBrowser, IID_IShellBrowser, reinterpret_cast<LPVOID*>(&psb))))
+		return;
+
+	HelperMethods::GetSelectedInternal(psb, buffer);
 }

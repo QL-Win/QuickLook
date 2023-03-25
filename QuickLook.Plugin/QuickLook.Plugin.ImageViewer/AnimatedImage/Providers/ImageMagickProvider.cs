@@ -92,8 +92,19 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers
 
                 try
                 {
-                    using (var mi = new MagickImage(Path.LocalPath, settings))
+                    using (MagickImageCollection layers = new MagickImageCollection(Path.LocalPath, settings))
                     {
+                        IMagickImage<byte> mi;
+                        // Only flatten multi-layer gimp xcf files.
+                        if (Path.LocalPath.ToLower().EndsWith(".xcf") && layers.Count > 1)
+                        {
+                            // Flatten crops layers to canvas
+                            mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
+                        }
+                        else
+                        {
+                            mi = layers[0];
+                        }
                         if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
                         {
                             if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -128,7 +129,7 @@ namespace QuickLook.Plugin.TextViewer
             if (!Directory.Exists(syntaxPath))
                 return hlm;
 
-            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd"))
+            foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd").OrderBy(f => f))
             {
                 Debug.WriteLine(file);
                 var ext = Path.GetFileNameWithoutExtension(file);
@@ -146,8 +147,21 @@ namespace QuickLook.Plugin.TextViewer
         }
         private void AssignHighlightingManager(TextViewerPanel tvp, ContextObject context)
         {
-            var isDark = (context.Theme == Themes.Dark) | OSThemeHelper.AppsUseDarkTheme() | false;
+            var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", false, "QuickLook.Plugin.TextViewer");
+            var isDark = darkThemeAllowed && OSThemeHelper.AppsUseDarkTheme();
             tvp.HighlightingManager = isDark ? _hlmDark : _hlmLight;
+            if (isDark)
+            {
+                tvp.Background = Brushes.Transparent;
+                tvp.SetResourceReference(Control.ForegroundProperty, "WindowTextForeground");
+            }
+            else
+            {
+                // if os dark mode, but not AllowDarkTheme, make background light
+                tvp.Background = OSThemeHelper.AppsUseDarkTheme()
+                    ? new SolidColorBrush(Color.FromArgb(150, 255, 255, 255))
+                    : Brushes.Transparent;
+            }
         }
     }
 }
