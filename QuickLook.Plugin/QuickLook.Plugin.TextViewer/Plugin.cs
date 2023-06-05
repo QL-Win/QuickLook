@@ -145,6 +145,7 @@ namespace QuickLook.Plugin.TextViewer
 
             return hlm;
         }
+        
         private void AssignHighlightingManager(TextViewerPanel tvp, ContextObject context)
         {
             var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", false, "QuickLook.Plugin.TextViewer");
