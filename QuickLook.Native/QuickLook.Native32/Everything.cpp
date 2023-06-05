@@ -20,6 +20,7 @@
 
 #define EVERYTHING_IPC_SEARCH_CLIENT_WNDCLASSW							L"EVERYTHING"
 #define EVERYTHING_IPC_ID_FILE_COPY_FULL_PATH_AND_NAME					41007
+static HANDLE backupData = nullptr;
 
 void Everything::GetSelected(PWCHAR buffer)
 {
@@ -52,10 +53,44 @@ void Everything::GetSelected(PWCHAR buffer)
 
 void Everything::backupClipboard()
 {
-	// TODO
+	if (!OpenClipboard(nullptr))
+		return;
+
+    auto hData = GetClipboardData(CF_UNICODETEXT);
+	if (hData == nullptr)
+	{
+        CloseClipboard();
+		return;
+    }
+
+    backupData = GlobalAlloc(GMEM_MOVEABLE, sizeof(WCHAR) * (wcslen(static_cast<PWCHAR>(GlobalLock(hData))) + 1));
+    if (backupData != nullptr)
+	{
+        memcpy(GlobalLock(backupData), GlobalLock(hData), sizeof(WCHAR) * GlobalSize(hData));
+        GlobalUnlock(backupData);
+    }
+    GlobalUnlock(hData);
+
+    CloseClipboard();
 }
 
 void Everything::restoreClipboard()
 {
-	// TODO
+	if (backupData == nullptr)
+        return;
+
+    if (!OpenClipboard(nullptr))
+        return;
+
+    EmptyClipboard();
+
+    auto success = SetClipboardData(CF_UNICODETEXT, backupData);
+    CloseClipboard();
+
+    if (!success)
+	{
+        GlobalFree(backupData);
+    }
+
+    backupData = nullptr;
 }
