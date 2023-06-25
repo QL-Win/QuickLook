@@ -99,7 +99,8 @@ namespace QuickLook.Plugin.ImageViewer
             // Disabled due mishandling text file types e.g., "*.config".
             // Only check extension for well known image and animated image types.
             // For other image formats, let ImageMagick try to detect by file content.
-            return !Directory.Exists(path) && (IsWellKnownImageExtension(path)); // || IsImageMagickSupported(path));
+            FileInfo fileInfo = new FileInfo(path);
+            return !Directory.Exists(path) && fileInfo.Length > 0 && (IsWellKnownImageExtension(path)); // || IsImageMagickSupported(path));
         }
 
         public void Prepare(string path, ContextObject context)
