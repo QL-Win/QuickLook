@@ -11,7 +11,7 @@
         <DataGrid x:Name="dataGrid" AlternationCount="2" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource WindowTextForeground}"
                   RowBackground="Transparent" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" 
                   CanUserReorderColumns="False" ItemsSource="{Binding Path=Rows,ElementName=csvViewer}" 
-                  AlternatingRowBackground="#1900FF70" HorizontalGridLinesBrush="#19000000" VerticalGridLinesBrush="#19000000" />
+                  AlternatingRowBackground="#1900BFFF" HorizontalGridLinesBrush="#19000000" VerticalGridLinesBrush="#19000000" />
 
     </Grid>
 </UserControl>
