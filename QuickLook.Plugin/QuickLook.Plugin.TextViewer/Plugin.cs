@@ -52,7 +52,9 @@ namespace QuickLook.Plugin.TextViewer
 
         public bool CanHandle(string path)
         {
-            if (Directory.Exists(path))
+            FileInfo fileInfo = new FileInfo(path);
+
+            if (Directory.Exists(path) || fileInfo.Length == 0)
                 return false;
 
             if (new[] { ".txt", ".rtf" }.Any(path.ToLower().EndsWith))
@@ -145,6 +147,7 @@ namespace QuickLook.Plugin.TextViewer
 
             return hlm;
         }
+        
         private void AssignHighlightingManager(TextViewerPanel tvp, ContextObject context)
         {
             var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", false, "QuickLook.Plugin.TextViewer");

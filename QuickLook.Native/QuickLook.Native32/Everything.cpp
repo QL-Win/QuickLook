@@ -20,6 +20,8 @@
 
 #define EVERYTHING_IPC_SEARCH_CLIENT_WNDCLASSW							L"EVERYTHING"
 #define EVERYTHING_IPC_ID_FILE_COPY_FULL_PATH_AND_NAME					41007
+static HANDLE backupData = nullptr;
+static HANDLE backupMutex = nullptr;
 
 void Everything::GetSelected(PWCHAR buffer)
 {
@@ -52,10 +54,65 @@ void Everything::GetSelected(PWCHAR buffer)
 
 void Everything::backupClipboard()
 {
-	// TODO
+	if (!OpenClipboard(nullptr))
+		return;
+
+	auto hData = GetClipboardData(CF_UNICODETEXT);
+	if (hData == nullptr)
+	{
+		CloseClipboard();
+		return;
+	}
+
+	backupMutex = CreateMutex(nullptr, FALSE, nullptr);
+	if (backupMutex == nullptr)
+	{
+		CloseClipboard();
+		return;
+	}
+
+	WaitForSingleObject(backupMutex, INFINITE);
+	backupData = GlobalAlloc(GMEM_MOVEABLE, sizeof(WCHAR) * (wcslen(static_cast<PWCHAR>(GlobalLock(hData))) + 1));
+	if (backupData != nullptr)
+	{
+		memcpy(GlobalLock(backupData), GlobalLock(hData), sizeof(WCHAR) * GlobalSize(hData));
+		GlobalUnlock(backupData);
+	}
+	GlobalUnlock(hData);
+	ReleaseMutex(backupMutex);
+
+	CloseClipboard();
 }
 
 void Everything::restoreClipboard()
 {
-	// TODO
+	backupMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, L"backupMutex");
+	if (backupMutex == nullptr)
+		return;
+
+	WaitForSingleObject(backupMutex, INFINITE);
+	if (backupData == nullptr)
+	{
+		ReleaseMutex(backupMutex);
+		return;
+	}
+
+	if (!OpenClipboard(nullptr))
+	{
+		ReleaseMutex(backupMutex);
+		return;
+	}
+
+	EmptyClipboard();
+
+	auto success = SetClipboardData(CF_UNICODETEXT, backupData);
+	CloseClipboard();
+
+	if (!success)
+	{
+		GlobalFree(backupData);
+	}
+
+	backupData = nullptr;
+	ReleaseMutex(backupMutex);
 }
