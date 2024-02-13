@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -46,7 +47,7 @@ namespace QuickLook.Plugin.CsvViewer
             const int limit = 10000;
             var binded = false;
 
-            using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default))
             {
                 var conf = new CsvConfiguration(CultureInfo.CurrentUICulture) {MissingFieldFound = null, BadDataFound = null, DetectDelimiter = true};
 
