@@ -30,6 +30,7 @@ public:
 		DIALOG,
 		EVERYTHING,
 		DOPUS,
+        MULTICOMMANDER,
 	};
 
 	static FocusedWindowType GetFocusedWindowType();
