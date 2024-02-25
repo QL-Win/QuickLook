@@ -24,6 +24,7 @@
     <ClCompile Include="..\QuickLook.Native32\DOpus.cpp" />
     <ClCompile Include="..\QuickLook.Native32\Everything.cpp" />
     <ClCompile Include="..\QuickLook.Native32\HelperMethods.cpp" />
+    <ClCompile Include="..\QuickLook.Native32\MultiCommander.cpp" />
     <ClCompile Include="..\QuickLook.Native32\Shell32.cpp" />
     <ClCompile Include="..\QuickLook.Native32\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

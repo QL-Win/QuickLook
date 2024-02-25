@@ -20,6 +20,7 @@
 #include "Shell32.h"
 #include "WoW64HookHelper.h"
 #include "DOpus.h"
+#include "MultiCommander.h"
 
 #define EXPORT extern "C" __declspec(dllexport)
 
@@ -29,6 +30,7 @@ EXPORT void Init()
 	WoW64HookHelper::Launch();
 #endif
 	DOpus::PrepareMessageWindow();
+    MultiCommander::PrepareMessageWindow();
 }
 
 EXPORT Shell32::FocusedWindowType GetFocusedWindowType()
