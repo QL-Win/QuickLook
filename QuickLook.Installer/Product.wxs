@@ -1,16 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="QuickLook" Language="1033"
-           Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="Paddy Xu"
-           UpgradeCode="c83b9c02-87d6-494e-9f5f-cf4c3900a54d">
-    <Package InstallerVersion="500" Compressed="yes" Platform="x86" InstallScope="perUser" />
-
-    <MajorUpgrade Schedule="afterInstallValidate" AllowDowngrades="yes" />
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package Name="QuickLook" Language="1033" Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="Paddy Xu" UpgradeCode="c83b9c02-87d6-494e-9f5f-cf4c3900a54d" Scope="perUser"><MajorUpgrade Schedule="afterInstallValidate" AllowDowngrades="yes" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="low" />
 
-    <Property Id='ALLUSERS' Value='2' />
-    <Property Id='MSIINSTALLPERUSER' Value='1' />
+    <Property Id="ALLUSERS" Value="2" />
+    <Property Id="MSIINSTALLPERUSER" Value="1" />
 
     <WixVariable Id="WixUILicenseRtf" Value="gpl.rtf" />
 
@@ -20,58 +13,33 @@
       <ComponentRef Id="ApplicationShortcutProgramMenu" />
     </Feature>
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramMenuFolder">
-        <Component Id="ApplicationShortcutProgramMenu" Guid="4F3E84DA-0E8B-44E9-B59D-B3AFAE70519E">
-          <Shortcut Id="ApplicationProgramMenuShortcut"
-                    Name="QuickLook"
-                    Description="QuickLook lets you preview any file by pressing the space bar."
-                    Target="[INSTALLFOLDER]QuickLook.exe"
-                    WorkingDirectory="INSTALLFOLDER" />
-          <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
-          <RegistryValue
-            Root="HKCU"
-            Key="Software\QuickLook"
-            Name="installed"
-            Type="integer"
-            Value="1"
-            KeyPath="yes" />
-        </Component>
-      </Directory>
-      <Directory Id="DesktopFolder" Name="Desktop">
-        <Component Id="ApplicationShortcutDesktop" Guid="9ECBF18A-F3C7-495A-9327-02A2E79ABBD7">
-          <Shortcut Id="ApplicationDesktopShortcut"
-                    Name="QuickLook"
-                    Description="QuickLook lets you preview any file by pressing the space bar."
-                    Target="[INSTALLFOLDER]QuickLook.exe"
-                    WorkingDirectory="INSTALLFOLDER" />
-          <RemoveFolder Id="DesktopFolder" On="uninstall" />
-          <RegistryValue
-            Root="HKCU"
-            Key="Software\QuickLook"
-            Name="installed"
-            Type="integer"
-            Value="1"
-            KeyPath="yes" />
-        </Component>
-      </Directory>
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="QuickLook" />
-      </Directory>
-    </Directory>
+    
 
-    <CustomAction Id="LaunchApplication"
-                  FileKey="fil22F7B7F07E63622AD2451459086A3CF2"
-                  ExeCommand="/first"
-                  Execute="immediate"
-                  Impersonate="yes"
-                  Return="asyncNoWait" />
+    <CustomAction Id="LaunchApplication" ExeCommand="/first" Execute="immediate" Impersonate="yes" Return="asyncNoWait" FileRef="fil22F7B7F07E63622AD2451459086A3CF2" />
 
     <UI>
-      <UIRef Id="WixUI_InstallDir" />
+      <ui:WixUI Id="WixUI_InstallDir" />
       <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="LaunchApplication">NOT Installed</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="LaunchApplication" Condition="NOT Installed" />
     </UI>
-  </Product>
+  
+      <StandardDirectory Id="ProgramMenuFolder">
+        <Component Id="ApplicationShortcutProgramMenu" Guid="4F3E84DA-0E8B-44E9-B59D-B3AFAE70519E">
+          <Shortcut Id="ApplicationProgramMenuShortcut" Name="QuickLook" Description="QuickLook lets you preview any file by pressing the space bar." Target="[INSTALLFOLDER]QuickLook.exe" WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="Software\QuickLook" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+      </StandardDirectory>
+      <StandardDirectory Id="DesktopFolder">
+        <Component Id="ApplicationShortcutDesktop" Guid="9ECBF18A-F3C7-495A-9327-02A2E79ABBD7">
+          <Shortcut Id="ApplicationDesktopShortcut" Name="QuickLook" Description="QuickLook lets you preview any file by pressing the space bar." Target="[INSTALLFOLDER]QuickLook.exe" WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="DesktopFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="Software\QuickLook" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+      </StandardDirectory>
+      <StandardDirectory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="QuickLook" />
+      </StandardDirectory>
+    </Package>
 </Wix>
