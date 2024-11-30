@@ -1,5 +1,3 @@
-﻿// Copyright © 2017 Paddy Xu
-// 
 // This file is part of QuickLook program.
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -17,26 +15,23 @@
 
 #pragma once
 
-#include "stdafx.h"
+#define MULTICMD_CPF_GETCURITEMFULL 0x00000010L // Get full path of current item (file or folder) in focus
+#define MULTICMD_CPF_SOURCE         0x00000400L // Go to the new path in the source panel side
 
-class Shell32
+#define MULTICMD_CLASS              L"MultiCommander MainWnd"
+#define MULTICMD_MSGWINDOW_CLASS    L"QuickLook.Native.MultiCmd.MsgWindow"
+
+class MultiCommander
 {
 public:
-	enum FocusedWindowType
-	{
-		INVALID,
-		DESKTOP,
-		EXPLORER,
-		DIALOG,
-		EVERYTHING,
-		DOPUS,
-        MULTICOMMANDER,
-	};
-
-	static FocusedWindowType GetFocusedWindowType();
-	static void GetCurrentSelection(PWCHAR buffer);
-
+	static void GetSelected(PWCHAR buffer);
+    static bool PrepareMessageWindow();
+    MultiCommander() = delete;
 private:
-	static void getSelectedFromDesktop(PWCHAR buffer);
-	static void getSelectedFromExplorer(PWCHAR buffer);
+    static HWND     hMsgWnd;
+	static HANDLE   hGetResultEvent;
+	static PCHAR    pCurrentItemPath;
+
+    static LRESULT CALLBACK msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
+
