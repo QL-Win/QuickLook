@@ -1,57 +1,79 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <!-- only for design -->
+        <!--  only for design  -->
         <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ControlButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+    <Style x:Key="ControlButtonStyle"
+           BasedOn="{StaticResource CaptionButtonStyle}"
+           TargetType="Button">
         <Setter Property="Width" Value="32" />
     </Style>
 
-    <!-- Postion Slider Control -->
+    <!--  Postion Slider Control  -->
     <ControlTemplate x:Key="PositionSliderThumbTemplate" TargetType="{x:Type Thumb}">
-        <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Path x:Name="grip" Data="M 0,0 A 180,180 180 1 1 1,1 Z" Fill="Transparent" Stretch="Fill"
-                  Stroke="{DynamicResource WindowTextForeground}" StrokeThickness="1" UseLayoutRounding="True"
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              UseLayoutRounding="True">
+            <Path x:Name="grip"
+                  Margin="-1,-1"
                   VerticalAlignment="Center"
-                  Margin="-1,-1" />
+                  Data="M 0,0 A 180,180 180 1 1 1,1 Z"
+                  Fill="Transparent"
+                  Stretch="Fill"
+                  Stroke="{DynamicResource WindowTextForeground}"
+                  StrokeThickness="1"
+                  UseLayoutRounding="True" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
-                <Setter Property="Fill" TargetName="grip" Value="{DynamicResource WindowTextForeground}" />
-                <Setter Property="Stroke" TargetName="grip" Value="{DynamicResource WindowTextForeground}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource WindowTextForeground}" />
+                <Setter TargetName="grip" Property="Stroke" Value="{DynamicResource WindowTextForeground}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Visibility" TargetName="grip" Value="Hidden" />
+                <Setter TargetName="grip" Property="Visibility" Value="Hidden" />
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter Property="Fill" TargetName="grip" Value="{DynamicResource WindowTextForeground}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource WindowTextForeground}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="PositionSliderTemplate" TargetType="{x:Type Slider}">
-        <Border x:Name="border" Background="Transparent" SnapsToDevicePixels="True">
+        <Border x:Name="border"
+                Background="Transparent"
+                SnapsToDevicePixels="True">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
                 <DockPanel LastChildFill="True">
-                    <Border ClipToBounds="True" x:Name="PART_SelectionRange" Height="1" Visibility="Visible">
-                        <Rectangle RadiusX="1" RadiusY="1" Margin="10,0,-10,0"
-                                   Fill="{DynamicResource WindowTextForeground}" />
+                    <Border x:Name="PART_SelectionRange"
+                            Height="1"
+                            ClipToBounds="True"
+                            Visibility="Visible">
+                        <Rectangle Margin="10,0,-10,0"
+                                   Fill="{DynamicResource WindowTextForeground}"
+                                   RadiusX="1"
+                                   RadiusY="1" />
                     </Border>
-                    <Border ClipToBounds="True" Height="1" Visibility="Visible">
-                        <Rectangle RadiusX="1" RadiusY="1" Margin="10,0,10,0"
-                                   Fill="{DynamicResource WindowTextForegroundAlternative}" />
+                    <Border Height="1"
+                            ClipToBounds="True"
+                            Visibility="Visible">
+                        <Rectangle Margin="10,0,10,0"
+                                   Fill="{DynamicResource WindowTextForegroundAlternative}"
+                                   RadiusX="1"
+                                   RadiusY="1" />
                     </Border>
                 </DockPanel>
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
-                        <Thumb x:Name="Thumb" Focusable="False" Width="{TemplateBinding MinHeight}"
+                        <Thumb x:Name="Thumb"
+                               Width="{TemplateBinding MinHeight}"
                                Height="{TemplateBinding MinHeight}"
-                               OverridesDefaultStyle="True" Template="{StaticResource PositionSliderThumbTemplate}"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center"
+                               Focusable="False"
+                               OverridesDefaultStyle="True"
+                               Template="{StaticResource PositionSliderThumbTemplate}" />
                     </Track.Thumb>
                 </Track>
             </Grid>
@@ -74,47 +96,70 @@
         <Setter Property="Template" Value="{StaticResource PositionSliderTemplate}" />
     </Style>
 
-    <!-- Custom Slider Control -->
+    <!--  Custom Slider Control  -->
     <ControlTemplate x:Key="CustomSliderThumbTemplate" TargetType="{x:Type Thumb}">
-        <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-            <Rectangle x:Name="grip" Fill="{DynamicResource WindowTextForeground}" Width="5"
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              UseLayoutRounding="True">
+            <Rectangle x:Name="grip"
+                       Width="5"
                        Height="{Binding Path=Height, RelativeSource={RelativeSource TemplatedParent}}"
+                       Fill="{DynamicResource WindowTextForeground}"
+                       RadiusX="3"
+                       RadiusY="3"
+                       Stretch="Fill"
                        StrokeThickness="0"
-                       UseLayoutRounding="True" Stretch="Fill" RadiusX="3" RadiusY="3" />
+                       UseLayoutRounding="True" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
-                <Setter Property="Fill" TargetName="grip" Value="{DynamicResource WindowTextForeground}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource WindowTextForeground}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Fill" TargetName="grip" Value="{DynamicResource MainWindowBackground}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource MainWindowBackground}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="False">
-                <Setter Property="Fill" TargetName="grip" Value="{DynamicResource WindowTextForeground}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource WindowTextForeground}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="CustomSliderTemplate" TargetType="{x:Type Slider}">
-        <Border x:Name="border" Background="Transparent" SnapsToDevicePixels="True">
+        <Border x:Name="border"
+                Background="Transparent"
+                SnapsToDevicePixels="True">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
                 <DockPanel LastChildFill="True">
-                    <Border ClipToBounds="True" x:Name="PART_SelectionRange" Height="1" Visibility="Visible">
-                        <Rectangle RadiusX="1" RadiusY="1" Margin="4,0,-2,0"
-                                   Fill="{DynamicResource WindowTextForeground}" />
+                    <Border x:Name="PART_SelectionRange"
+                            Height="1"
+                            ClipToBounds="True"
+                            Visibility="Visible">
+                        <Rectangle Margin="4,0,-2,0"
+                                   Fill="{DynamicResource WindowTextForeground}"
+                                   RadiusX="1"
+                                   RadiusY="1" />
                     </Border>
-                    <Border ClipToBounds="True" Height="1" Visibility="Visible">
-                        <Rectangle x:Name="PART_NegativeSelection" RadiusX="1" RadiusY="1" Margin="-2,0,4,0"
-                                   Fill="{DynamicResource WindowTextForegroundAlternative}" />
+                    <Border Height="1"
+                            ClipToBounds="True"
+                            Visibility="Visible">
+                        <Rectangle x:Name="PART_NegativeSelection"
+                                   Margin="-2,0,4,0"
+                                   Fill="{DynamicResource WindowTextForegroundAlternative}"
+                                   RadiusX="1"
+                                   RadiusY="1" />
                     </Border>
                 </DockPanel>
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
-                        <Thumb x:Name="Thumb" Focusable="False" Width="5" Height="{TemplateBinding MinHeight}"
-                               OverridesDefaultStyle="True" Template="{StaticResource CustomSliderThumbTemplate}"
-                               VerticalAlignment="Center" />
+                        <Thumb x:Name="Thumb"
+                               Width="5"
+                               Height="{TemplateBinding MinHeight}"
+                               VerticalAlignment="Center"
+                               Focusable="False"
+                               OverridesDefaultStyle="True"
+                               Template="{StaticResource CustomSliderThumbTemplate}" />
                     </Track.Thumb>
                 </Track>
             </Grid>

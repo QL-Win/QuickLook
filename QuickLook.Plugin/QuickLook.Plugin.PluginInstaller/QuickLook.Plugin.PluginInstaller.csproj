@@ -1,101 +1,66 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD58F3FC-7601-47BA-AAA1-D8A9D54A33DA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuickLook.Plugin.PluginInstaller</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.PluginInstaller</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.PluginInstaller\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.PluginInstaller\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\GitVersion.cs">
-      <Link>Properties\GitVersion.cs</Link>
-    </Compile>
-    <Compile Include="PluginInfoPanel.xaml.cs">
-      <DependentUpon>PluginInfoPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
-      <Name>QuickLook.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
-      <Project>{8b4a9ce5-67b5-4a94-81cb-3771f688fdeb}</Project>
-      <Name>QuickLook</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="PluginInfoPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net462</TargetFramework>
+        <RootNamespace>QuickLook.Plugin.PluginInstaller</RootNamespace>
+        <AssemblyName>QuickLook.Plugin.PluginInstaller</AssemblyName>
+        <FileAlignment>512</FileAlignment>
+        <SignAssembly>false</SignAssembly>
+        <UseWPF>true</UseWPF>
+        <LangVersion>latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CameraRawViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.PluginInstaller\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.PluginInstaller\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="WindowsBase" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
+        <ProjectReference Include="..\..\QuickLook\QuickLook.csproj" />
+    </ItemGroup>
+
 </Project>

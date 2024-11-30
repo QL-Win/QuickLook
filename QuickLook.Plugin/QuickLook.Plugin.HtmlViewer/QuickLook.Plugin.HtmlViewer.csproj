@@ -1,134 +1,72 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}</ProjectGuid>
-    <OutputType>library</OutputType>
-    <RootNamespace>QuickLook.Plugin.HtmlViewer</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.HtmlViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1020.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.1020.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1020.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="WebpagePanel.cs" />
-    <Compile Include="..\..\GitVersion.cs">
-      <Link>Properties\GitVersion.cs</Link>
-    </Compile>
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Helper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
-      <Name>QuickLook.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
-      <Project>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</Project>
-      <Name>QuickLook</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="SHDocVw">
-      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>1</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Translations.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\build\Microsoft.Web.WebView2.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Web.WebView2.1.0.1020.30\build\Microsoft.Web.WebView2.targets'))" />
-  </Target>
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>library</OutputType>
+		<TargetFramework>net462</TargetFramework>
+		<RootNamespace>QuickLook.Plugin.HtmlViewer</RootNamespace>
+		<AssemblyName>QuickLook.Plugin.HtmlViewer</AssemblyName>
+		<FileAlignment>512</FileAlignment>
+		<SignAssembly>false</SignAssembly>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugType>full</DebugType>
+		<PlatformTarget>x86</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<PlatformTarget>x86</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugType>full</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="WebpagePanel.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Remove="WebpagePanel.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
+	</ItemGroup>
+
 </Project>

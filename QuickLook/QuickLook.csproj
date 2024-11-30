@@ -1,279 +1,122 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>QuickLook</RootNamespace>
-    <AssemblyName>QuickLook</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Build\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\Build\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\Build\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\Build\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SystemRoot)\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="windows">
-      <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.20348.0\Facade\windows.winmd</HintPath>
-    </Reference>
-    <Reference Include="Windows.Foundation.FoundationContract">
-      <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.20348.0\Windows.Foundation.FoundationContract\4.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
-    </Reference>
-    <Reference Include="Windows.Foundation.UniversalApiContract">
-      <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.20348.0\Windows.Foundation.UniversalApiContract\12.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="..\GitVersion.cs">
-      <Link>Properties\GitVersion.cs</Link>
-    </Compile>
-    <Compile Include="Controls\BusyDecorator\ISpinable.cs" />
-    <Compile Include="Controls\BusyDecorator\SpinIcon.cs" />
-    <Compile Include="Controls\GlassLayer\ElementCoordinateConverter.cs" />
-    <Compile Include="Controls\GlassLayer\GaussianBlurEffect.cs" />
-    <Compile Include="Controls\GlassLayer\GlassLayer.xaml.cs">
-      <DependentUpon>GlassLayer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\BooleanToKeyTimeConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityHiddenConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityCollapsedConverter.cs" />
-    <Compile Include="Converters\WindowStateNormalToThicknessConverter.cs" />
-    <Compile Include="Converters\WindowStateMaximizedToThicknessConverter.cs" />
-    <Compile Include="Converters\ScaledValueConverter.cs" />
-    <Compile Include="Controls\BusyDecorator\ControlExtensions.cs" />
-    <Compile Include="FocusMonitor.cs" />
-    <Compile Include="Helpers\AutoStartupHelper.cs" />
-    <Compile Include="Controls\BusyDecorator\BackgroundVisualHost.cs" />
-    <Compile Include="Controls\BusyDecorator\BusyDecorator.cs" />
-    <Compile Include="Controls\BusyDecorator\VisualTargetPresentationSource.cs" />
-    <Compile Include="Helpers\ShareHelper.cs" />
-    <Compile Include="Helpers\SystemHelper.cs" />
-    <Compile Include="NativeMethods\ShellLink.cs" />
-    <Compile Include="NativeMethods\WMI.cs" />
-    <Compile Include="PipeServerManager.cs" />
-    <Compile Include="PluginManager.cs" />
-    <Compile Include="Plugin\InfoPanel\FileHelper.cs" />
-    <Compile Include="Plugin\InfoPanel\InfoPanel.xaml.cs">
-      <DependentUpon>InfoPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin\InfoPanel\Plugin.cs" />
-    <Compile Include="Plugin\InfoPanel\WindowsThumbnailProvider.cs" />
-    <Compile Include="TrayIconManager.cs" />
-    <Compile Include="Helpers\Updater.cs" />
-    <Compile Include="ViewerWindow.Actions.cs" />
-    <Compile Include="ViewerWindow.Properties.cs" />
-    <Compile Include="ViewWindowManager.cs" />
-    <Compile Include="Controls\WebClientEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Page Include="Controls\GlassLayer\GlassLayer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Plugin\InfoPanel\InfoPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ViewerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="KeystrokeDispatcher.cs" />
-    <Compile Include="Helpers\GlobalKeyboardHook.cs" />
-    <Compile Include="ViewerWindow.xaml.cs">
-      <DependentUpon>ViewerWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Controls\BusyDecorator\BusyDecorator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Resource Include="Resources\app_black.ico" />
-    <Resource Include="Resources\app_black.png" />
-    <Resource Include="Resources\app_black_16.ico" />
-    <Resource Include="Resources\app.png" />
-    <Resource Include="Resources\app_white.png" />
-    <None Include="packages.config" />
-    <None Include="Resources\app_white_16.ico" />
-    <None Include="Resources\app_16.ico" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <Compile Include="NativeMethods\QuickLook.cs" />
-    <None Include="..\README.md">
-      <Link>README.md</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="app.manifest" />
-    <Resource Include="Controls\GlassLayer\GaussianBlur.ps">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Content Include="Fonts\segmdl2.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\app.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\app_white.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE-GPL.txt">
-      <Link>LICENSE-GPL.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Translations.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
-    <None Include="Controls\GlassLayer\GaussianBlur.fx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
-      <Name>QuickLook.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExtensionMethods\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net462</TargetFramework>
+		<AssemblyName>QuickLook</AssemblyName>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ApplicationIcon>Resources\app.ico</ApplicationIcon>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<LangVersion>latest</LangVersion>
+		<Platforms>AnyCPU;x64</Platforms>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<ApplicationManifest>App.manifest</ApplicationManifest>
+		<AssemblyVersion>3.7.3</AssemblyVersion>
+		<FileVersion>3.7.3</FileVersion>
+		<Version>$(VersionPrefix)3.7.3</Version>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+		<OutputPath>..\Build\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Prefer32Bit>true</Prefer32Bit>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\Build\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<Prefer32Bit>true</Prefer32Bit>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+		<OutputPath>..\Build\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<OutputPath>..\Build\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<OutputPath>..\Build\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<OutputPath>..\Build\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<Prefer32Bit>false</Prefer32Bit>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Management" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="windows">
+			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0\Facade\windows.winmd</HintPath>
+		</Reference>
+		<Reference Include="Windows.Foundation.FoundationContract">
+			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.FoundationContract\4.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+		</Reference>
+		<Reference Include="Windows.Foundation.UniversalApiContract">
+			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.UniversalApiContract\19.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Costura.Fody" Version="5.7.0" Condition=" '$(Configuration)' == 'Release'">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="NotifyIconEx" Version="1.1.1" />
+		<PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Controls\GlassLayer\100-50-5-monochrome.png" />
+		<None Remove="Controls\GlassLayer\GaussianBlur.ps" />
+		<None Remove="Resources\app.ico" />
+		<None Remove="Fonts\*.ttf" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
+		<Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
+		<Resource Include="Resources\app.ico" />
+		<Resource Include="Fonts\*.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Resources\app.ico" />
+		<None Update="Translations.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj" />
+	</ItemGroup>
+
 </Project>

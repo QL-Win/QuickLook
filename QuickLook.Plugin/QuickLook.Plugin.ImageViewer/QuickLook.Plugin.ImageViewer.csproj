@@ -1,142 +1,80 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE5A5111-9607-4721-A7BE-422754002ED8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuickLook.Plugin.ImageViewer</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.ImageViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="LibAPNG">
-      <HintPath>.\LibAPNG.dll</HintPath>
-    </Reference>
-    <Reference Include="Magick.NET-Q8-AnyCPU, Version=12.2.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET-Q8-AnyCPU.12.2.1\lib\netstandard20\Magick.NET-Q8-AnyCPU.dll</HintPath>
-    </Reference>
-    <Reference Include="Magick.NET.Core, Version=12.2.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET.Core.12.2.1\lib\netstandard20\Magick.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Magick.NET.SystemWindowsMedia, Version=6.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Magick.NET.SystemWindowsMedia.6.1.2\lib\net462\Magick.NET.SystemWindowsMedia.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\GitVersion.cs">
-      <Link>Properties\GitVersion.cs</Link>
-    </Compile>
-    <Compile Include="AnimatedImage\AnimatedImage.cs" />
-    <Compile Include="AnimatedImage\Providers\APngProvider.cs" />
-    <Compile Include="AnimatedImage\Providers\DcrawProvider.cs" />
-    <Compile Include="AnimatedImage\Providers\GifProvider.cs" />
-    <Compile Include="AnimatedImage\AnimationProvider.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="AnimatedImage\Providers\ImageMagickProvider.cs" />
-    <Compile Include="AnimatedImage\Providers\NativeProvider.cs" />
-    <Compile Include="ImagePanel.xaml.cs">
-      <DependentUpon>ImagePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MetaProvider.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
-      <Name>QuickLook.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="ImagePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\background-b.png" />
-    <Resource Include="Resources\background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="exiv2-ql-32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="exiv2-ql-64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\packages\Magick.NET-Q8-AnyCPU.12.2.1\build\netstandard20\Magick.NET-Q8-AnyCPU.targets" Condition="Exists('..\..\packages\Magick.NET-Q8-AnyCPU.12.2.1\build\netstandard20\Magick.NET-Q8-AnyCPU.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Magick.NET-Q8-AnyCPU.12.2.1\build\netstandard20\Magick.NET-Q8-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Magick.NET-Q8-AnyCPU.12.2.1\build\netstandard20\Magick.NET-Q8-AnyCPU.targets'))" />
-  </Target>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net462</TargetFramework>
+		<RootNamespace>QuickLook.Plugin.ImageViewer</RootNamespace>
+		<AssemblyName>QuickLook.Plugin.ImageViewer</AssemblyName>
+		<FileAlignment>512</FileAlignment>
+		<SignAssembly>false</SignAssembly>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugType>full</DebugType>
+		<PlatformTarget>x86</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<PlatformTarget>x86</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugType>full</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.9.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="LibAPNG">
+			<HintPath>.\LibAPNG.dll</HintPath>
+		</Reference>
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\background-b.png" />
+		<Resource Include="Resources\background.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="exiv2-ql-32.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="exiv2-ql-64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
+	</ItemGroup>
+
 </Project>
