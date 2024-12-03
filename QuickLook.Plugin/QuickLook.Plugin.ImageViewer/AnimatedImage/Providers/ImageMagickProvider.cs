@@ -86,7 +86,7 @@ internal class ImageMagickProvider : AnimationProvider
                 Defines = new DngReadDefines
                 {
                     OutputColor = DngOutputColor.SRGB,
-                    UseCameraWhitebalance = true,
+                    UseCameraWhiteBalance = true,
                     DisableAutoBrightness = false
                 }
             };
@@ -119,7 +119,7 @@ internal class ImageMagickProvider : AnimationProvider
                     mi.AutoOrient();
 
                     if (mi.Width != (int)fullSize.Width || mi.Height != (int)fullSize.Height)
-                        mi.Resize((int)fullSize.Width, (int)fullSize.Height);
+                        mi.Resize((uint)fullSize.Width, (uint)fullSize.Height);
 
                     mi.Density = new Density(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
                         DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
@@ -232,12 +232,12 @@ file static class Extension
             }
 
             var step = format.BitsPerPixel / 8;
-            var stride = image.Width * step;
+            var stride = (int)image.Width * step;
 
             using var pixels = image.GetPixelsUnsafe();
             var bytes = pixels.ToByteArray(mapping);
             var dpi = GetDefaultDensity(image, useDensity ? DensityUnit.PixelsPerInch : DensityUnit.Undefined);
-            return BitmapSource.Create(image.Width, image.Height, dpi.X, dpi.Y, format, null, bytes, stride);
+            return BitmapSource.Create((int)image.Width, (int)image.Height, dpi.X, dpi.Y, format, null, bytes, stride);
         }
         finally
         {
