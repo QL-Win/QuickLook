@@ -1,0 +1,77 @@
+# run a build for the latest version and upload the artifacts to a "latest" pre-release
+
+name: MSBuild
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: ./QuickLook.sln
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        fetch-depth: 0
+        ref: master
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:BuildInParallel=true /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+
+    # upload msi and zip artifacts so the publish job below can download and then update latest release via Linux
+    - uses: actions/upload-artifact@v3
+      with:
+        name: quicklook-build-files
+        path: Build/QuickLook-*.*
+
+  publish:
+    # don't run in parallel - wait for build to complete first
+    needs: build
+    
+    # one of the steps uses container action which is Linux only
+    runs-on: ubuntu-latest
+    
+    permissions: write-all
+    
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: quicklook-build-files
+    
+    - name: Update latest release
+      # see https://github.com/pyTooling/Actions/tree/main/releaser
+      uses: pyTooling/Actions/releaser@main
+      with:
+        tag: latest
+        rm: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: QuickLook-*.*
+
+
