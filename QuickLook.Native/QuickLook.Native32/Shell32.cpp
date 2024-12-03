@@ -22,6 +22,7 @@
 #include "DialogHook.h"
 #include "Everything.h"
 #include "DOpus.h"
+#include "MultiCommander.h"
 
 using namespace std;
 
@@ -36,6 +37,10 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
 	if (FAILED(GetClassName(hwndfg, classBuffer, MAX_PATH)))
 		return INVALID;
 
+    if (wcscmp(classBuffer, MULTICMD_CLASS) == 0)
+    {
+        return MULTICOMMANDER;
+    }
 	if (wcscmp(classBuffer, L"dopus.lister") == 0)
 	{
 		return DOPUS;
@@ -91,6 +96,9 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 	case DOPUS:
 		DOpus::GetSelected(buffer);
 		break;
+    case MULTICOMMANDER:
+        MultiCommander::GetSelected(buffer);
+        break;
 	default:
 		break;
 	}

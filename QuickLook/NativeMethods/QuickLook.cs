@@ -127,7 +127,8 @@ namespace QuickLook.NativeMethods
             Explorer,
             Dialog,
             Everything,
-            DOpus
+            DOpus,
+            MultiCommander
         }
     }
 }

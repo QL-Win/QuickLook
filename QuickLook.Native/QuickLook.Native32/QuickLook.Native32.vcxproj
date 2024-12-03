@@ -86,6 +86,7 @@
     <ClInclude Include="DOpus.h" />
     <ClInclude Include="Everything.h" />
     <ClInclude Include="HelperMethods.h" />
+    <ClInclude Include="MultiCommander.h" />
     <ClInclude Include="rapidxml.hpp" />
     <ClInclude Include="WoW64HookHelper.h" />
     <ClInclude Include="Shell32.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Everything.cpp" />
     <ClCompile Include="HelperMethods.cpp" />
     <ClCompile Include="DllExport.cpp" />
+    <ClCompile Include="MultiCommander.cpp" />
     <ClCompile Include="Shell32.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
