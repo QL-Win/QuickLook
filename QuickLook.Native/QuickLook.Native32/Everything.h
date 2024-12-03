@@ -15,11 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#define EVERYTHING_IPC_HIDDEN_WIN_CLASS			L"EVERYTHING_RESULT_LIST_FOCUS"
+#define EVERYTHING_IPC_WINDOW_CLASS				L"EVERYTHING"
+#define EVERYTHING_IPC_COPY_TO_CLIPBOARD		41007
+
 #pragma once
 class Everything
 {
 public:
 	static void GetSelected(PWCHAR buffer);
+	static bool MatchClass(PWCHAR classBuffer);
 
 private:
 	static void backupClipboard();
