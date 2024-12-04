@@ -9,7 +9,11 @@
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<ProjectGuid>{BD58F3FC-7601-47BA-AAA1-D8A9D54A33DA}</ProjectGuid>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -62,5 +66,11 @@
         <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
         <ProjectReference Include="..\..\QuickLook\QuickLook.csproj" />
     </ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\GitVersion.cs">
+			<Link>Properties\GitVersion.cs</Link>
+		</Compile>
+	</ItemGroup>
 
 </Project>

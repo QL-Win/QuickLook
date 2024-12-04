@@ -7,11 +7,14 @@
         <AssemblyName>QuickLook.Plugin.MarkdownViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
         <SignAssembly>false</SignAssembly>
-        <ProjectGuid>{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}</ProjectGuid>
-        <UseWPF>true</UseWPF>
-        <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<ProjectGuid>{AB1270AF-7EB4-4B4F-9E09-6404F1A28EA0}</ProjectGuid>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -76,5 +79,11 @@
     <ItemGroup>
         <Resource Include="Resources\**" />
     </ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\GitVersion.cs">
+			<Link>Properties\GitVersion.cs</Link>
+		</Compile>
+	</ItemGroup>
 
 </Project>

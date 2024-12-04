@@ -4,6 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net462</TargetFramework>
 		<AssemblyName>QuickLook</AssemblyName>
+		<FileAlignment>512</FileAlignment>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ApplicationIcon>Resources\app.ico</ApplicationIcon>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -11,11 +12,14 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<LangVersion>latest</LangVersion>
 		<Platforms>AnyCPU;x64</Platforms>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 		<ApplicationManifest>App.manifest</ApplicationManifest>
-		<AssemblyVersion>3.7.3</AssemblyVersion>
-		<FileVersion>3.7.3</FileVersion>
-		<Version>$(VersionPrefix)3.7.3</Version>
+		<ProjectGuid>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</ProjectGuid>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -117,6 +121,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\GitVersion.cs">
+			<Link>Properties\GitVersion.cs</Link>
+		</Compile>
 	</ItemGroup>
 
 </Project>

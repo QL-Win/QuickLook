@@ -4,12 +4,18 @@
         <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.VideoViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.VideoViewer</AssemblyName>
-	<UseWPF>true</UseWPF>
-	<UseWindowsForms>true</UseWindowsForms>
-	<LangVersion>latest</LangVersion>
-	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    </PropertyGroup>
+		<FileAlignment>512</FileAlignment>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+        <LangVersion>latest</LangVersion>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<ProjectGuid>{1B746D92-49A5-4A37-9D75-DCC490393290}</ProjectGuid>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+	</PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DebugSymbols>true</DebugSymbols>
@@ -133,5 +139,11 @@
         </None>
         <None Include="Resources\QLV.reg" />
     </ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\GitVersion.cs">
+			<Link>Properties\GitVersion.cs</Link>
+		</Compile>
+	</ItemGroup>
 
 </Project>
