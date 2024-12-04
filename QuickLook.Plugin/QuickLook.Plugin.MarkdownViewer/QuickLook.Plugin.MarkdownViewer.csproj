@@ -70,11 +70,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Resource Include="Resources\**" />
+        <EmbeddedResource Include="Resources\**\*">
+            <LogicalName>QuickLook.Plugin.MarkdownViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
 </Project>

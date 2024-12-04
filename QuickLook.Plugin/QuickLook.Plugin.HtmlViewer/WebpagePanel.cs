@@ -1,4 +1,4 @@
-﻿// Copyright © 2021 Paddy Xu and Frank Becker
+// Copyright © 2021 Paddy Xu and Frank Becker
 //
 // This file is part of QuickLook program.
 //
@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -29,8 +30,8 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class WebpagePanel : UserControl
     {
-        private Uri _currentUri;
-        private WebView2 _webView;
+        public Uri _currentUri;
+        public WebView2 _webView;
 
         public WebpagePanel()
         {
@@ -44,10 +45,12 @@ namespace QuickLook.Plugin.HtmlViewer
                 {
                     CreationProperties = new CoreWebView2CreationProperties
                     {
-                        UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\\")
-                    }
+                        UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\\"),
+                    },
+                    DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White, // Prevent white flash in dark mode
                 };
                 _webView.NavigationStarting += NavigationStarting_CancelNavigation;
+                _webView.NavigationCompleted += WebView_NavigationCompleted;
                 Content = _webView;
             }
         }
@@ -81,6 +84,11 @@ namespace QuickLook.Plugin.HtmlViewer
 
             var newUri = new Uri(e.Uri);
             if (newUri != _currentUri) e.Cancel = true;
+        }
+
+        private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            _webView.DefaultBackgroundColor = Color.White; // Reset to white after page load to match expected default behavior
         }
 
         public void Dispose()
