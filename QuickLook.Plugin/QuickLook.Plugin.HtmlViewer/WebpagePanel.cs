@@ -20,6 +20,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Web.WebView2.Core;
@@ -30,8 +32,8 @@ namespace QuickLook.Plugin.HtmlViewer
 {
     public class WebpagePanel : UserControl
     {
-        public Uri _currentUri;
-        public WebView2 _webView;
+        private Uri _currentUri;
+        private WebView2 _webView;
 
         public WebpagePanel()
         {
@@ -83,8 +85,130 @@ namespace QuickLook.Plugin.HtmlViewer
                 return;
 
             var newUri = new Uri(e.Uri);
-            if (newUri != _currentUri) e.Cancel = true;
+            if (newUri == _currentUri) return;
+            e.Cancel = true;
+
+            // Open in default browser
+            try
+            {
+                if (!Uri.TryCreate(e.Uri, UriKind.Absolute, out var uri))
+                {
+                    Debug.WriteLine($"Invalid URI format: {e.Uri}");
+                    return;
+                }
+
+                // Safe schemes can open directly
+                if (uri.Scheme == Uri.UriSchemeHttp ||
+                    uri.Scheme == Uri.UriSchemeHttps ||
+                    uri.Scheme == Uri.UriSchemeMailto)
+                {
+                    try
+                    {
+                        Process.Start(uri.AbsoluteUri);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Failed to open URL: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    return;
+                }
+
+                // Ask user for unsafe schemes. Use dispatcher to avoid blocking thread.
+                string associatedApp = GetAssociatedAppForScheme(uri.Scheme);
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    var result = MessageBox.Show(
+                        !string.IsNullOrEmpty(associatedApp) ?
+                        $"The following link will open in {associatedApp}:\n{e.Uri}" : $"The following link will open:\n{e.Uri}",
+                        !string.IsNullOrEmpty(associatedApp) ?
+                        $"Open {associatedApp}?" : "Open custom URI?",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            Process.Start(e.Uri);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Failed to open URL: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to open URL: {ex.Message}");
+            }
         }
+
+        #region Get Associated App For Scheme
+        [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
+        private static extern uint AssocQueryString(
+            AssocF flags,
+            AssocStr str,
+            string pszAssoc,
+            string pszExtra,
+            [Out] StringBuilder pszOut,
+            ref uint pcchOut);
+
+        [Flags]
+        private enum AssocF
+        {
+            None = 0,
+            VerifyExists = 0x1
+        }
+
+        private enum AssocStr
+        {
+            Command = 1,
+            Executable = 2,
+            FriendlyAppName = 4
+        }
+
+        private string GetAssociatedAppForScheme(string scheme)
+        {
+            try
+            {
+                // Try to get friendly app name first
+                uint pcchOut = 0;
+                AssocQueryString(AssocF.None, AssocStr.FriendlyAppName, scheme, null, null, ref pcchOut);
+
+                if (pcchOut > 0)
+                {
+                    StringBuilder pszOut = new StringBuilder((int)pcchOut);
+                    AssocQueryString(AssocF.None, AssocStr.FriendlyAppName, scheme, null, pszOut, ref pcchOut);
+
+                    var appName = pszOut.ToString().Trim();
+                    if (!string.IsNullOrEmpty(appName))
+                        return appName;
+                }
+
+                // Fall back to executable name if friendly name is not available
+                pcchOut = 0;
+                AssocQueryString(AssocF.None, AssocStr.Executable, scheme, null, null, ref pcchOut);
+
+                if (pcchOut > 0)
+                {
+                    StringBuilder pszOut = new StringBuilder((int)pcchOut);
+                    AssocQueryString(AssocF.None, AssocStr.Executable, scheme, null, pszOut, ref pcchOut);
+
+                    var exeName = pszOut.ToString().Trim();
+                    if (!string.IsNullOrEmpty(exeName))
+                        return Path.GetFileName(exeName);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to get associated app: {ex.Message}");
+                return null;
+            }
+        }
+        #endregion
 
         private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
