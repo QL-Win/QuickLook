@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -16,12 +16,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
 using UtfUnknown;
@@ -30,17 +32,27 @@ namespace QuickLook.Plugin.MarkdownViewer
 {
     public class Plugin : IViewer
     {
-        private WebpagePanel _panel;
+        private WebpagePanel? _panel;
+        private string? _currentHtmlPath;
+
+        private static readonly string _resourcePath = Path.Combine(SettingHelper.LocalDataPath, "QuickLook.Plugin.MarkdownViewer");
+        private static readonly string _resourcePrefix = "QuickLook.Plugin.MarkdownViewer.Resources.";
+        private static readonly ResourceManager _resourceManager = new ResourceManager(_resourcePath, _resourcePrefix);
 
         public int Priority => 0;
 
         public void Init()
         {
+            // Initialize resources and handle versioning
+            _resourceManager.InitializeResources();
+
+            // Clean up any temporary HTML files if QuickLook was forcibly terminated
+            CleanupTempFiles();
         }
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && new[] {".md", ".rmd", ".markdown"}.Any(path.ToLower().EndsWith);
+            return !Directory.Exists(path) && new[] { ".md", ".rmd", ".markdown" }.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)
@@ -54,29 +66,85 @@ namespace QuickLook.Plugin.MarkdownViewer
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
 
-            _panel.NavigateToHtml(GenerateMarkdownHtml(path));
+            var htmlPath = GenerateMarkdownHtml(path);
+            _panel.NavigateToFile(htmlPath);
             _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
+        }
+
+        private string GenerateMarkdownHtml(string path)
+        {
+            var templatePath = Path.Combine(_resourcePath, "md2html.html");
+
+            if (!File.Exists(templatePath))
+                throw new FileNotFoundException($"Required template file md2html.html not found in extracted resources at {templatePath}");
+
+            var bytes = File.ReadAllBytes(path);
+            var encoding = CharsetDetector.DetectFromBytes(bytes).Detected?.Encoding ?? Encoding.Default;
+            var content = encoding.GetString(bytes);
+
+            var template = File.ReadAllText(templatePath);
+            var html = template.Replace("{{content}}", content);
+
+            // Generate unique filename and ensure it doesn't exist
+            string outputPath;
+            do
+            {
+                var uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
+                var outputFileName = $"temp_{uniqueId}.html";
+                outputPath = Path.Combine(_resourcePath, outputFileName);
+            } while (File.Exists(outputPath));
+
+            // Clean up previous file if it exists
+            CleanupTempHtmlFile();
+
+            File.WriteAllText(outputPath, html);
+            _currentHtmlPath = outputPath;
+
+            return outputPath;
+        }
+
+        #region Cleanup
+        private void CleanupTempHtmlFile()
+        {
+            if (!string.IsNullOrEmpty(_currentHtmlPath) && File.Exists(_currentHtmlPath))
+            {
+                try
+                {
+                    File.Delete(_currentHtmlPath);
+                }
+                catch (IOException) { } // Ignore deletion errors
+            }
+        }
+
+        private void CleanupTempFiles()
+        {
+            try
+            {
+                var tempFiles = Directory.GetFiles(_resourcePath, "temp_*.html");
+                foreach (var file in tempFiles)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (IOException) { } // Ignore deletion errors
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to clean up temporary HTML files: {ex.Message}");
+            }
         }
 
         public void Cleanup()
         {
             GC.SuppressFinalize(this);
 
+            CleanupTempHtmlFile();
+
             _panel?.Dispose();
             _panel = null;
         }
-
-        private string GenerateMarkdownHtml(string path)
-        {
-            var bytes = File.ReadAllBytes(path);
-            var encoding = CharsetDetector.DetectFromBytes(bytes).Detected?.Encoding ?? Encoding.Default;
-
-            var md = encoding.GetString(bytes);
-            md = WebUtility.HtmlEncode(md);
-
-            var html = Resources.md2html.Replace("{{content}}", md);
-
-            return html;
-        }
+        #endregion
     }
 }

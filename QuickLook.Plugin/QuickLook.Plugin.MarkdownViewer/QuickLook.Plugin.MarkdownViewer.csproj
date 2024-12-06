@@ -73,12 +73,28 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\**" />
+        <EmbeddedResource Include="Resources\**\*">
+            <LogicalName>QuickLook.Plugin.MarkdownViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
-    <ItemGroup>
-        <Resource Include="Resources\**" />
-    </ItemGroup>
+    <Target Name="GenerateEmbeddedResourcesHash" BeforeTargets="CoreCompile">
+        <PropertyGroup>
+            <HashFileDir>$(IntermediateOutputPath)Generated</HashFileDir>
+            <HashFilePath>$(HashFileDir)\EmbeddedResourcesHash.cs</HashFilePath>
+        </PropertyGroup>
+
+        <!-- Create the output directory -->
+        <MakeDir Directories="$(HashFileDir)" />
+
+        <!-- Run a script to calculate hash and generate code file -->
+        <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)GenerateEmbeddedResourcesHash.ps1&quot; -ResourcesDir &quot;$(MSBuildThisFileDirectory)Resources&quot; -OutputFile &quot;$(HashFilePath)&quot;" />
+
+        <!-- Include the generated file in compilation -->
+        <ItemGroup>
+            <Compile Include="$(HashFilePath)" />
+        </ItemGroup>
+    </Target>
 
 	<ItemGroup>
 		<Compile Include="..\..\GitVersion.cs">
