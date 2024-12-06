@@ -38,11 +38,11 @@ artifacts:
   name: QuickLook-%GIT_TAG%
 - path: QuickLook-%GIT_TAG%.msi
   name: QuickLook-%GIT_TAG%
-deploy:
-- provider: GitHub
-  auth_token:
-    secure: 5CSvkfKBq9kUho529L1tkH5ywQQFJY/A8Y6lNoHGJFi7mnSqQAaoiVPbUVU4a/KC
-  artifact: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
-  draft: true
-  on:
-    APPVEYOR_REPO_TAG: true
+# deploy:
+# - provider: GitHub
+#   auth_token:
+#     secure: 5CSvkfKBq9kUho529L1tkH5ywQQFJY/A8Y6lNoHGJFi7mnSqQAaoiVPbUVU4a/KC
+#   artifact: QuickLook-$(APPVEYOR_REPO_TAG_NAME)
+#   draft: true
+#   on:
+#     APPVEYOR_REPO_TAG: true
