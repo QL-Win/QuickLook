@@ -16,8 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QuickLook.Common.Helpers;
@@ -78,11 +80,12 @@ namespace QuickLook
                 [
                     new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : "")}") {Enabled = false},
                     new MenuItem("-"),
-                    new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (sender, e) => Updater.CheckForUpdates()),
+                    new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (_, _) => Updater.CheckForUpdates()),
                     new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
                         (sender, e) => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
-                    new MenuItem(TranslationHelper.Get("Icon_OpenDataFolder"), (sender, e) => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
+                    new MenuItem(TranslationHelper.Get("Icon_OpenDataFolder"), (_, _) => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
                     _itemAutorun,
+                    new MenuItem(TranslationHelper.Get("Icon_Restart"), (_, _) => Restart(forced: true)),
                     new MenuItem(TranslationHelper.Get("Icon_Quit"),
                         (sender, e) => System.Windows.Application.Current.Shutdown())
                 ]),
@@ -95,6 +98,34 @@ namespace QuickLook
         public void Dispose()
         {
             _icon.Visible = false;
+        }
+
+        public void Restart(string fileName = null, string dir = null, string args = null, int? exitCode = null, bool forced = false)
+        {
+            _ = args; // Currently there is no cli supported by QL
+
+            try
+            {
+                using Process process = new()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = fileName ?? Path.Combine(dir ?? AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.FriendlyName),
+                        WorkingDirectory = dir ?? Environment.CurrentDirectory,
+                        UseShellExecute = true,
+                    },
+                };
+                process.Start();
+            }
+            catch (Win32Exception)
+            {
+                return;
+            }
+            if (forced)
+            {
+                Process.GetCurrentProcess().Kill();
+            }
+            Environment.Exit(exitCode ?? 'r' + 'e' + 's' + 't' + 'a' + 'r' + 't');
         }
 
         private Icon GetTrayIconByDPI()
