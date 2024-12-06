@@ -52,7 +52,7 @@ namespace QuickLook.Plugin.MarkdownViewer
 
         public bool CanHandle(string path)
         {
-            return !Directory.Exists(path) && new[] { ".md", ".rmd", ".markdown" }.Any(path.ToLower().EndsWith);
+            return !Directory.Exists(path) && new[] { ".md", ".mdown", ".rmd", ".markdown" }.Any(path.ToLower().EndsWith);
         }
 
         public void Prepare(string path, ContextObject context)
