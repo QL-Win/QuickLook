@@ -29,7 +29,7 @@ namespace QuickLook.Controls.GlassLayer
             var glass = value as GlassLayer;
 
             if (glass?.BlurredElement == null)
-                return null;
+                return Rect.Empty;
 
             var target = glass.BlurredElement;
 
