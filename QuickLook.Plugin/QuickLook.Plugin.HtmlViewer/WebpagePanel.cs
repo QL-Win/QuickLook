@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
+using QuickLook.Common.Helpers;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,15 +27,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.Wpf;
-using QuickLook.Common.Helpers;
 
 namespace QuickLook.Plugin.HtmlViewer
 {
     public class WebpagePanel : UserControl
     {
         private Uri _currentUri;
+        private string _primaryPath;
+        private string _fallbackPath;
         private WebView2 _webView;
 
         public WebpagePanel()
@@ -53,12 +55,24 @@ namespace QuickLook.Plugin.HtmlViewer
                 };
                 _webView.NavigationStarting += NavigationStarting_CancelNavigation;
                 _webView.NavigationCompleted += WebView_NavigationCompleted;
+                _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
                 Content = _webView;
             }
         }
 
-        public void NavigateToFile(string path)
+        public void NavigateToFile(string path, string fallbackPath = null)
         {
+            try
+            {
+                _primaryPath = Path.GetDirectoryName(path);
+                _fallbackPath = fallbackPath;
+            }
+            catch (Exception e)
+            {
+                // Omit logging for less important logs
+                Debug.WriteLine(e);
+            }
+
             var uri = Path.IsPathRooted(path) ? Helper.FilePathToFileUrl(path) : new Uri(path);
 
             NavigateToUri(uri);
@@ -145,6 +159,7 @@ namespace QuickLook.Plugin.HtmlViewer
         }
 
         #region Get Associated App For Scheme
+
         [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
         private static extern uint AssocQueryString(
             AssocF flags,
@@ -208,11 +223,65 @@ namespace QuickLook.Plugin.HtmlViewer
                 return null;
             }
         }
-        #endregion
+
+        #endregion Get Associated App For Scheme
 
         private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             _webView.DefaultBackgroundColor = Color.White; // Reset to white after page load to match expected default behavior
+        }
+
+        private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            if (e.IsSuccess)
+            {
+                _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+
+                _webView.CoreWebView2.WebResourceRequested += (sender, args) =>
+                {
+                    if (string.IsNullOrWhiteSpace(_fallbackPath) || !Directory.Exists(_fallbackPath))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        var requestedUri = new Uri(args.Request.Uri);
+
+                        // Check if the request is for a local file
+                        if (requestedUri.Scheme == "file" && !File.Exists(requestedUri.LocalPath))
+                        {
+                            // Try loading from fallback directory
+                            var fileName = Path.GetFileName(requestedUri.LocalPath);
+                            var fileDirectoryName = Path.GetDirectoryName(requestedUri.LocalPath);
+
+                            // Convert the primary path to fallback path
+                            if (fileDirectoryName.StartsWith(_primaryPath))
+                            {
+                                var fallbackFilePath = Path.Combine(
+                                    _fallbackPath.Trim('/', '\\'), // Make it combinable
+                                    fileDirectoryName.Substring(_primaryPath.Length).Trim('/', '\\'), // Make it combinable
+                                    fileName
+                                );
+
+                                if (File.Exists(fallbackFilePath))
+                                {
+                                    // Serve the file from the fallback directory
+                                    var fileStream = File.OpenRead(fallbackFilePath);
+                                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                                        fileStream, 200, "OK", "Content-Type: application/octet-stream");
+                                    args.Response = response;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // We don’t need to feel burdened by any exceptions
+                        Debug.WriteLine(e);
+                    }
+                };
+            }
         }
 
         public void Dispose()
