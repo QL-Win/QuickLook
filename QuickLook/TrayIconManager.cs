@@ -1,17 +1,17 @@
 // Copyright © 2017 Paddy Xu
-// 
+//
 // This file is part of QuickLook program.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -28,6 +28,14 @@ namespace QuickLook
 {
     internal class TrayIconManager : IDisposable
     {
+        /// <summary>
+        /// Windows 10 1903, aka 18362, broke the API.
+        /// ---
+        /// Before 18362, the #135 is AllowDarkModeForApp(BOOL)
+        /// After 18362, the #135 SetPreferredAppMode(PreferredMode)
+        /// ---
+        /// Since the support of AllowDarkModeForApp is unclear, it will not be considered
+        /// </summary>
         [DllImport("uxtheme.dll", EntryPoint = "#135", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern int SetPreferredAppMode(int preferredAppMode);
 
@@ -54,8 +62,11 @@ namespace QuickLook
             // Enable dark mode for context menus if using dark theme
             if (OSThemeHelper.AppsUseDarkTheme())
             {
-                SetPreferredAppMode(2); // ForceDark
-                FlushMenuThemes();
+                if (Environment.OSVersion.Version.Build >= 18362) // Windows 10 1903
+                {
+                    SetPreferredAppMode(2); // ForceDark
+                    FlushMenuThemes();
+                }
             }
 
             _icon = new NotifyIcon
@@ -63,8 +74,8 @@ namespace QuickLook
                 Text = string.Format(TranslationHelper.Get("Icon_ToolTip"),
                     Application.ProductVersion),
                 Icon = GetTrayIconByDPI(),
-                ContextMenu = new ContextMenu(new[]
-                {
+                ContextMenu = new ContextMenu(
+                [
                     new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : "")}") {Enabled = false},
                     new MenuItem("-"),
                     new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (sender, e) => Updater.CheckForUpdates()),
@@ -74,7 +85,7 @@ namespace QuickLook
                     _itemAutorun,
                     new MenuItem(TranslationHelper.Get("Icon_Quit"),
                         (sender, e) => System.Windows.Application.Current.Shutdown())
-                }),
+                ]),
                 Visible = SettingHelper.Get("ShowTrayIcon", true)
             };
 
@@ -112,7 +123,6 @@ namespace QuickLook
                 clickEvent?.Invoke();
                 icon.BalloonTipClicked -= OnIconOnBalloonTipClicked;
             }
-
 
             void OnIconOnBalloonTipClosed(object sender, EventArgs e)
             {

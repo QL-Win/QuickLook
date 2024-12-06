@@ -94,7 +94,6 @@
 			<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="NotifyIconEx" Version="1.1.1" />
 		<PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
 	</ItemGroup>
