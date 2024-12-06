@@ -9,11 +9,11 @@
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		<ProjectGuid>{A82AC69C-EDF5-4F0D-8CBD-8E5E3C06E64D}</ProjectGuid>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <ProjectGuid>{A82AC69C-EDF5-4F0D-8CBD-8E5E3C06E64D}</ProjectGuid>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -73,18 +73,26 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
-        <ProjectReference Include="..\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj" />
+        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
+            <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+            <Name>QuickLook.Common</Name>
+            <Private>False</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\QuickLook.Plugin.ImageViewer\QuickLook.Plugin.ImageViewer.csproj">
+            <Project>{fe5a5111-9607-4721-a7be-422754002ed8}</Project>
+            <Name>QuickLook.Plugin.ImageViewer</Name>
+            <Private>False</Private>
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
         <Resource Include="Resources\loading.png" />
     </ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="..\..\GitVersion.cs">
-			<Link>Properties\GitVersion.cs</Link>
-		</Compile>
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\GitVersion.cs">
+            <Link>Properties\GitVersion.cs</Link>
+        </Compile>
+    </ItemGroup>
 
 </Project>

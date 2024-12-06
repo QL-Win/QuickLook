@@ -1,133 +1,133 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net462</TargetFramework>
-		<AssemblyName>QuickLook</AssemblyName>
-		<FileAlignment>512</FileAlignment>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<ApplicationIcon>Resources\app.ico</ApplicationIcon>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<UseWPF>true</UseWPF>
-		<UseWindowsForms>true</UseWindowsForms>
-		<LangVersion>latest</LangVersion>
-		<Platforms>AnyCPU;x64</Platforms>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-		<ApplicationManifest>App.manifest</ApplicationManifest>
-		<ProjectGuid>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</ProjectGuid>
-		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		<WarningLevel>4</WarningLevel>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net462</TargetFramework>
+        <AssemblyName>QuickLook</AssemblyName>
+        <FileAlignment>512</FileAlignment>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+        <LangVersion>latest</LangVersion>
+        <Platforms>AnyCPU;x64</Platforms>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <ApplicationManifest>App.manifest</ApplicationManifest>
+        <ProjectGuid>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</ProjectGuid>
+        <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-		<OutputPath>..\Build\Debug\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Prefer32Bit>true</Prefer32Bit>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+        <OutputPath>..\Build\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Prefer32Bit>true</Prefer32Bit>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<OutputPath>..\Build\Release\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<Prefer32Bit>true</Prefer32Bit>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+        <OutputPath>..\Build\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <Prefer32Bit>true</Prefer32Bit>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-		<OutputPath>..\Build\Debug\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Prefer32Bit>false</Prefer32Bit>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+        <OutputPath>..\Build\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<OutputPath>..\Build\Debug\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Prefer32Bit>false</Prefer32Bit>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <OutputPath>..\Build\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-		<OutputPath>..\Build\Release\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<Prefer32Bit>false</Prefer32Bit>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+        <OutputPath>..\Build\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<OutputPath>..\Build\Release\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<Prefer32Bit>false</Prefer32Bit>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+        <OutputPath>..\Build\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<Reference Include="System.Management" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="windows">
-			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0\Facade\windows.winmd</HintPath>
-		</Reference>
-		<Reference Include="Windows.Foundation.FoundationContract">
-			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.FoundationContract\4.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
-		</Reference>
-		<Reference Include="Windows.Foundation.UniversalApiContract">
-			<HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.UniversalApiContract\19.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
-		</Reference>
-	</ItemGroup>
+    <ItemGroup>
+        <Reference Include="System.Management" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="windows">
+            <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0\Facade\windows.winmd</HintPath>
+        </Reference>
+        <Reference Include="Windows.Foundation.FoundationContract">
+            <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.FoundationContract\4.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+        </Reference>
+        <Reference Include="Windows.Foundation.UniversalApiContract">
+            <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.UniversalApiContract\19.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
+        </Reference>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Costura.Fody" Version="5.7.0" Condition=" '$(Configuration)' == 'Release'">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
-		<PackageReference Include="WPF-UI.Violeta" Version="3.0.5.26" />
-		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+        <PackageReference Include="WPF-UI.Violeta" Version="3.0.5.26" />
+        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Controls\GlassLayer\100-50-5-monochrome.png" />
-		<None Remove="Controls\GlassLayer\GaussianBlur.ps" />
-		<None Remove="Resources\app.ico" />
-		<None Remove="Fonts\*.ttf" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
-		<Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
-		<Resource Include="Resources\app.ico" />
-		<Resource Include="Fonts\*.ttf" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="Controls\GlassLayer\100-50-5-monochrome.png" />
+        <None Remove="Controls\GlassLayer\GaussianBlur.ps" />
+        <None Remove="Resources\app.ico" />
+        <None Remove="Fonts\*.ttf" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
+        <Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
+        <Resource Include="Resources\app.ico" />
+        <Resource Include="Fonts\*.ttf" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="Resources\app.ico" />
-		<None Update="Translations.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="Resources\app.ico" />
+        <None Update="Translations.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj">
+            <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+            <Name>QuickLook.Common</Name>
+            <Private>False</Private>
+        </ProjectReference>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="..\GitVersion.cs">
-			<Link>Properties\GitVersion.cs</Link>
-		</Compile>
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\GitVersion.cs">
+            <Link>Properties\GitVersion.cs</Link>
+        </Compile>
+    </ItemGroup>
 
 </Project>

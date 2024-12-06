@@ -9,11 +9,11 @@
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-		<ProjectGuid>{AE041682-E3A1-44F6-8BB4-916A98D89FBE}</ProjectGuid>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <ProjectGuid>{AE041682-E3A1-44F6-8BB4-916A98D89FBE}</ProjectGuid>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -65,7 +65,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj" />
+        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
+            <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+            <Name>QuickLook.Common</Name>
+            <Private>False</Private>
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -77,10 +81,10 @@
         </None>
     </ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="..\..\GitVersion.cs">
-			<Link>Properties\GitVersion.cs</Link>
-		</Compile>
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\GitVersion.cs">
+            <Link>Properties\GitVersion.cs</Link>
+        </Compile>
+    </ItemGroup>
 
 </Project>
