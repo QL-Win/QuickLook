@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
@@ -27,6 +28,12 @@ namespace QuickLook
 {
     internal class TrayIconManager : IDisposable
     {
+        [DllImport("uxtheme.dll", EntryPoint = "#135", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern int SetPreferredAppMode(int preferredAppMode);
+
+        [DllImport("uxtheme.dll", EntryPoint = "#136", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern void FlushMenuThemes();
+
         private static TrayIconManager _instance;
 
         private readonly NotifyIcon _icon;
@@ -39,10 +46,18 @@ namespace QuickLook
                         AutoStartupHelper.RemoveAutorunShortcut();
                     else
                         AutoStartupHelper.CreateAutorunShortcut();
-                }) {Enabled = !App.IsUWP};
+                })
+            { Enabled = !App.IsUWP };
 
         private TrayIconManager()
         {
+            // Enable dark mode for context menus if using dark theme
+            if (OSThemeHelper.AppsUseDarkTheme())
+            {
+                SetPreferredAppMode(2); // ForceDark
+                FlushMenuThemes();
+            }
+
             _icon = new NotifyIcon
             {
                 Text = string.Format(TranslationHelper.Get("Icon_ToolTip"),
@@ -55,6 +70,7 @@ namespace QuickLook
                     new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (sender, e) => Updater.CheckForUpdates()),
                     new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
                         (sender, e) => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
+                    new MenuItem(TranslationHelper.Get("Icon_OpenDataFolder"), (sender, e) => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
                     _itemAutorun,
                     new MenuItem(TranslationHelper.Get("Icon_Quit"),
                         (sender, e) => System.Windows.Application.Current.Shutdown())
