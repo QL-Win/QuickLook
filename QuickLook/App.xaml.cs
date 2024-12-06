@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Paddy Xu
+// Copyright © 2017 Paddy Xu
 // 
 // This file is part of QuickLook program.
 // 
@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
+using Wpf.Ui.Violeta.Appearance;
 
 namespace QuickLook
 {
@@ -50,8 +51,15 @@ namespace QuickLook
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                ProcessHelper.WriteLog(((Exception) args.ExceptionObject).ToString());
+                ProcessHelper.WriteLog(((Exception)args.ExceptionObject).ToString());
             };
+
+            bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
+            // Initialize MessageBox patching
+            if (modernMessageBox) MessageBoxPatcher.Initialize();
+
+            // Set initial theme based on system settings
+            ThemeManager.Apply(ThemeManager.GetSystemTheme());
 
             base.OnStartup(e);
         }
