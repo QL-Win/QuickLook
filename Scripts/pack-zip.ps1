@@ -1,4 +1,4 @@
-$version = git describe --always --tags
+$version = git describe --always --tags --exclude latest
 
 Start-Sleep -s 1
 

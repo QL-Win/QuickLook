@@ -1,4 +1,4 @@
-$version = git describe --always --tags "--abbrev=0"
+$version = git describe --always --tags "--abbrev=0" --exclude latest
 
 if($version.Split('.').Length.Equals(3))
 {
