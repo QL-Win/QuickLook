@@ -10,5 +10,6 @@
     <ClCompile Include="..\QuickLook.Native32\WoW64HookHelper.cpp" />
     <ClCompile Include="..\QuickLook.Native32\Everything.cpp" />
     <ClCompile Include="..\QuickLook.Native32\DOpus.cpp" />
+    <ClCompile Include="..\QuickLook.Native32\MultiCommander.cpp" />
   </ItemGroup>
 </Project>
