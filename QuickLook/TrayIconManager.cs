@@ -15,33 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
+using QuickLook.Helpers;
+using QuickLook.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using QuickLook.Common.Helpers;
-using QuickLook.Helpers;
-using QuickLook.Properties;
 
 namespace QuickLook
 {
     internal class TrayIconManager : IDisposable
     {
-        /// <summary>
-        /// Windows 10 1903, aka 18362, broke the API.
-        ///  - Before 18362, the #135 is AllowDarkModeForApp(BOOL)
-        ///  - After 18362, the #135 is SetPreferredAppMode(PreferredMode)
-        /// Since the support of AllowDarkModeForApp is unclear, it will not be considered to use
-        /// </summary>
-        [DllImport("uxtheme.dll", EntryPoint = "#135", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern int SetPreferredAppMode(int preferredAppMode);
-
-        [DllImport("uxtheme.dll", EntryPoint = "#136", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern void FlushMenuThemes();
-
         private static TrayIconManager _instance;
 
         private readonly NotifyIcon _icon;
@@ -59,16 +46,6 @@ namespace QuickLook
 
         private TrayIconManager()
         {
-            // Enable dark mode for context menus if using dark theme
-            if (OSThemeHelper.AppsUseDarkTheme())
-            {
-                if (Environment.OSVersion.Version.Build >= 18362) // Windows 10 1903
-                {
-                    SetPreferredAppMode(2); // ForceDark
-                    FlushMenuThemes();
-                }
-            }
-
             _icon = new NotifyIcon
             {
                 Text = string.Format(TranslationHelper.Get("Icon_ToolTip"),
