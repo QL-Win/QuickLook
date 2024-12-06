@@ -69,7 +69,7 @@ bool Everything::MatchClass(PWCHAR classBuffer)
 {
 	WCHAR sMatchC[256] = { '\0' };
 	WCHAR sMatchS[256] = EVERYTHING_IPC_WINDOW_CLASS;
-	int iLen = wcslen(sMatchS);
+	size_t iLen = wcslen(sMatchS);
 	wcsncpy_s(sMatchC, classBuffer, iLen);
 	return (0 == wcscmp(sMatchC, sMatchS));
 }
