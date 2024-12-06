@@ -68,6 +68,10 @@ See the [Wiki page](https://github.com/QL-Win/QuickLook/wiki)
 
 See the [Translation guide](https://github.com/QL-Win/QuickLook/wiki/Translations)
 
+## Developer
+
+- **Formatter**: [CodeMaid.config](CodeMaid.config), [Settings.XamlStyler](Settings.XamlStyler)
+
 ## Thanks to
 
  - Many [open-source projects](https://github.com/QL-Win/QuickLook/wiki/On-the-Shoulders-of-Giants) and their contributors
