@@ -20,7 +20,7 @@ cache:
 - '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
 - ps: >-
-    $env:GIT_TAG = git describe --always --tags
+    $env:GIT_TAG = git describe --always --tags --exclude latest
     
     nuget restore -verbosity detailed
 build:
