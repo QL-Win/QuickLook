@@ -129,8 +129,9 @@ namespace QuickLook.Plugin.HtmlViewer
 
                 // Ask user for unsafe schemes. Use dispatcher to avoid blocking thread.
                 string associatedApp = GetAssociatedAppForScheme(uri.Scheme);
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    // TODO: translation
                     var result = MessageBox.Show(
                         !string.IsNullOrEmpty(associatedApp) ?
                         $"The following link will open in {associatedApp}:\n{e.Uri}" : $"The following link will open:\n{e.Uri}",
@@ -193,7 +194,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
                 if (pcchOut > 0)
                 {
-                    StringBuilder pszOut = new StringBuilder((int)pcchOut);
+                    var pszOut = new StringBuilder((int)pcchOut);
                     AssocQueryString(AssocF.None, AssocStr.FriendlyAppName, scheme, null, pszOut, ref pcchOut);
 
                     var appName = pszOut.ToString().Trim();
@@ -207,7 +208,7 @@ namespace QuickLook.Plugin.HtmlViewer
 
                 if (pcchOut > 0)
                 {
-                    StringBuilder pszOut = new StringBuilder((int)pcchOut);
+                    var pszOut = new StringBuilder((int)pcchOut);
                     AssocQueryString(AssocF.None, AssocStr.Executable, scheme, null, pszOut, ref pcchOut);
 
                     var exeName = pszOut.ToString().Trim();
@@ -277,7 +278,7 @@ namespace QuickLook.Plugin.HtmlViewer
                     }
                     catch (Exception e)
                     {
-                        // We don’t need to feel burdened by any exceptions
+                        // We don't need to feel burdened by any exceptions
                         Debug.WriteLine(e);
                     }
                 };

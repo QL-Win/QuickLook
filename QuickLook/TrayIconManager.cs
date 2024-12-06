@@ -32,11 +32,9 @@ namespace QuickLook
     {
         /// <summary>
         /// Windows 10 1903, aka 18362, broke the API.
-        /// ---
-        /// Before 18362, the #135 is AllowDarkModeForApp(BOOL)
-        /// After 18362, the #135 SetPreferredAppMode(PreferredMode)
-        /// ---
-        /// Since the support of AllowDarkModeForApp is unclear, it will not be considered
+        ///  - Before 18362, the #135 is AllowDarkModeForApp(BOOL)
+        ///  - After 18362, the #135 is SetPreferredAppMode(PreferredMode)
+        /// Since the support of AllowDarkModeForApp is unclear, it will not be considered to use
         /// </summary>
         [DllImport("uxtheme.dll", EntryPoint = "#135", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern int SetPreferredAppMode(int preferredAppMode);
