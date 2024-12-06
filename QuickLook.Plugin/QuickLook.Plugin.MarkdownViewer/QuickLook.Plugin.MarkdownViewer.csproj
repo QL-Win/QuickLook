@@ -61,9 +61,6 @@
 
     <ItemGroup>
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Reference Include="WindowsBase" />
     </ItemGroup>
 

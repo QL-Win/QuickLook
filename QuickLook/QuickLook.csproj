@@ -89,11 +89,25 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
-        <PackageReference Include="WPF-UI.Violeta" Version="3.0.5.26" />
-        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+        <PackageReference Include="Costura.Fody" Version="6.0.0" Condition=" '$(Configuration)' == 'Release'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="WPF-UI.Violeta" Version="3.0.5.26">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Lib.Harmony" Version="2.2.2">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

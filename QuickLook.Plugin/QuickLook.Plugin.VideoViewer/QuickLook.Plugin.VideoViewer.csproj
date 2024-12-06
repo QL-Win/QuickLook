@@ -41,9 +41,6 @@
         <!--<PackageReference Include="WPFMediaKit" Version="2.2.0" />-->
         <!--<PackageReference Include="MediaInfoDLL" Version="24.4.0" />-->
         <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
