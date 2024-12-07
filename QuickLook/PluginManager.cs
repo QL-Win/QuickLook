@@ -99,7 +99,8 @@ namespace QuickLook
                                      select t).ToList()
                                     .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
                                 }
-                                catch (FileLoadException ex) when (ex.Message.Contains("0x80131515") && SettingHelper.IsPortableVersion())
+                                // 0x80131515: ERROR_ASSEMBLY_FILE_BLOCKED - Windows blocked the assembly due to security policy
+                                catch (FileLoadException ex) when (ex.HResult == unchecked((int)0x80131515) && SettingHelper.IsPortableVersion())
                                 {
                                     MessageBox.Show(
                                         "Windows has blocked the plugins.\n\n" +
