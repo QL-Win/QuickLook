@@ -1,17 +1,17 @@
 ﻿// Copyright © 2017 Paddy Xu
-// 
+//
 // This file is part of QuickLook program.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -44,7 +44,7 @@ namespace QuickLook.Plugin.VideoViewer
     {
         private readonly ContextObject _context;
         private BitmapSource _coverArt;
-        
+
         private bool _hasVideo;
         private bool _isPlaying;
         private bool _wasPlaying;
@@ -60,7 +60,7 @@ namespace QuickLook.Plugin.VideoViewer
             _context = context;
 
             mediaElement.MediaUriPlayer.LAVFilterDirectory =
-                IntPtr.Size == 8 ? "LAVFilters-0.72-x64\\" : "LAVFilters-0.72-x86\\";
+                IntPtr.Size == 8 ? "LAVFilters-x64\\" : "LAVFilters-x86\\";
 
             //ShowViedoControlContainer(null, null);
             viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
@@ -74,7 +74,7 @@ namespace QuickLook.Plugin.VideoViewer
 
             buttonPlayPause.Click += TogglePlayPause;
             buttonLoop.Click += ToggleShouldLoop;
-            buttonTime.Click += (sender, e) => buttonTime.Tag = (string) buttonTime.Tag == "Time" ? "Length" : "Time";
+            buttonTime.Click += (sender, e) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
             buttonMute.Click += (sender, e) => volumeSliderLayer.Visibility = Visibility.Visible;
             volumeSliderLayer.MouseDown += (sender, e) => volumeSliderLayer.Visibility = Visibility.Collapsed;
 
@@ -88,7 +88,7 @@ namespace QuickLook.Plugin.VideoViewer
                 if (_wasPlaying) mediaElement.Play();
             };
 
-            PreviewMouseWheel += (sender, e) => ChangeVolume((double) e.Delta / 120 * 0.04);
+            PreviewMouseWheel += (sender, e) => ChangeVolume((double)e.Delta / 120 * 0.04);
         }
 
         public bool HasVideo
@@ -178,10 +178,10 @@ namespace QuickLook.Plugin.VideoViewer
 
         private void MediaFailed(object sender, MediaFailedEventArgs e)
         {
-            ((MediaUriElement) sender).Dispatcher.BeginInvoke(new Action(() =>
+            ((MediaUriElement)sender).Dispatcher.BeginInvoke(new Action(() =>
             {
                 _context.ViewerContent =
-                    new Label {Content = e.Exception, VerticalAlignment = VerticalAlignment.Center};
+                    new Label { Content = e.Exception, VerticalAlignment = VerticalAlignment.Center };
                 _context.IsBusy = false;
             }));
         }
@@ -201,14 +201,14 @@ namespace QuickLook.Plugin.VideoViewer
             else
             {
                 IsPlaying = false;
-                
+
                 mediaElement.Pause();
             }
         }
 
         private void ShowViedoControlContainer(object sender, MouseEventArgs e)
         {
-            var show = (Storyboard) videoControlContainer.FindResource("ShowControlStoryboard");
+            var show = (Storyboard)videoControlContainer.FindResource("ShowControlStoryboard");
             if (videoControlContainer.Opacity == 0 || videoControlContainer.Opacity == 1)
                 show.Begin();
         }
@@ -221,7 +221,7 @@ namespace QuickLook.Plugin.VideoViewer
             if (videoControlContainer.IsMouseOver)
                 return;
 
-            var hide = (Storyboard) videoControlContainer.FindResource("HideControlStoryboard");
+            var hide = (Storyboard)videoControlContainer.FindResource("HideControlStoryboard");
 
             hide.Begin();
         }
@@ -233,6 +233,7 @@ namespace QuickLook.Plugin.VideoViewer
                 case PlayerState.Playing:
                     IsPlaying = true;
                     break;
+
                 case PlayerState.Paused:
                 case PlayerState.Stopped:
                 case PlayerState.Closed:
@@ -290,6 +291,7 @@ namespace QuickLook.Plugin.VideoViewer
 
         // A change in amplitude by a factor of 10 corresponds to a 20 dB change
         private const double DecibelAmplitudeMult = 20.0;
+
         public double LinearVolume
         {
             // mediaElement.Volume returns [0,1] where 0 = -100db, 1 = 0db

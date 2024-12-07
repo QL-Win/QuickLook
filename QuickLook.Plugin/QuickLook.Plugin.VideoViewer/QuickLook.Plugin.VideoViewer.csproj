@@ -75,10 +75,10 @@
         <Content Include="EVRPresenter64.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="LAVFilters-0.72-x64\**">
+        <Content Include="LAVFilters-x64\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="LAVFilters-0.72-x86\**">
+        <Content Include="LAVFilters-x86\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="MediaInfo-x64\MediaInfo.dll">
@@ -91,58 +91,6 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Resource Include="Resources\empty.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="LAVFilters-0.72-x64\COPYING">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVAudio.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVAudio.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVFilters.Dependencies.manifest">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVSplitter.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVSplitter.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVVideo.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x64\LAVVideo.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\COPYING">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVAudio.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVAudio.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVFilters.Dependencies.manifest">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVSplitter.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVSplitter.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVVideo.ax">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="LAVFilters-0.72-x86\LAVVideo.ax.bak">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="Resources\QLV.reg" />
     </ItemGroup>
 
     <ItemGroup>
