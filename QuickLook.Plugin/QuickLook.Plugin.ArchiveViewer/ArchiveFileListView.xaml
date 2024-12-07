@@ -1,23 +1,23 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.ArchiveViewer.ArchiveFileListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.ArchiveViewer"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Grid.IsSharedSizeScope="True"
-          x:Name="treeGrid">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <Grid x:Name="treeGrid" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-            <!-- Header row -->
+            <!--  Header row  -->
             <RowDefinition Height="Auto" />
-            <!-- Row for data -->
+            <!--  Row for data  -->
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
 
-            <!-- Converts the level in the tree to the width of the spacer column -->
+            <!--  Converts the level in the tree to the width of the spacer column  -->
             <local:LevelToIndentConverter x:Key="LevelToIndentConverter" />
             <local:BooleanToAsteriskConverter x:Key="BooleanToAsteriskConverter" />
             <local:SizePrettyPrintConverter x:Key="SizePrettyPrintConverter" />
@@ -25,9 +25,8 @@
             <local:FileExtToIconConverter x:Key="FileExtToIconConverter" />
             <local:LevelToBooleanConverter x:Key="LevelToBooleanConverter" />
 
-            <!-- Template for directory information at all levels -->
-            <HierarchicalDataTemplate ItemsSource="{Binding Children.Keys}"
-                                      DataType="{x:Type local:ArchiveFileEntry}">
+            <!--  Template for directory information at all levels  -->
+            <HierarchicalDataTemplate DataType="{x:Type local:ArchiveFileEntry}" ItemsSource="{Binding Children.Keys}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2" />
@@ -35,8 +34,10 @@
                         <RowDefinition Height="2" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1" ShowGridLines="False">
-                        <!-- All column widths are shared except for column 1 which is sized
-                         to compensate for different indentation at each level -->
+                        <!--
+                            All column widths are shared except for column 1 which is sized
+                            to compensate for different indentation at each level
+                        -->
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MinWidth="300" SharedSizeGroup="rowHeaderColumn" />
                             <ColumnDefinition />
@@ -53,15 +54,13 @@
                                 </Image.Source>
                             </Image>
                             <TextBlock Text="{Binding Name}" />
-                            <TextBlock
-                                Text="{Binding Encrypted, Converter={StaticResource BooleanToAsteriskConverter}}" />
+                            <TextBlock Text="{Binding Encrypted, Converter={StaticResource BooleanToAsteriskConverter}}" />
                         </StackPanel>
                         <Rectangle Grid.Column="1">
                             <Rectangle.Width>
                                 <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
                                     <Binding Path="Level" />
-                                    <Binding ElementName="treeViewItemToMeasure"
-                                             Path="ActualWidth" />
+                                    <Binding ElementName="treeViewItemToMeasure" Path="ActualWidth" />
                                 </MultiBinding>
                             </Rectangle.Width>
                         </Rectangle>
@@ -86,9 +85,11 @@
             </HierarchicalDataTemplate>
         </Grid.Resources>
 
-        <!-- Tree view with one item for the header row -->
+        <!--  Tree view with one item for the header row  -->
 
-        <TreeView BorderThickness="0" Focusable="False" Background="Transparent"
+        <TreeView Background="Transparent"
+                  BorderThickness="0"
+                  Focusable="False"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <TreeViewItem Focusable="False" Visibility="Collapsed">
                 <TreeViewItem.Header>
@@ -99,44 +100,34 @@
                             <ColumnDefinition SharedSizeGroup="column1" />
                             <ColumnDefinition SharedSizeGroup="column2" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   Text=" " />
+                        <TextBlock Grid.Column="0" Text=" " />
                         <TreeViewItem Grid.Column="1">
                             <TreeViewItem.Header>
-                                <TreeViewItem x:Name="treeViewItemToMeasure"
-                                              Padding="0" />
+                                <TreeViewItem x:Name="treeViewItemToMeasure" Padding="0" />
                             </TreeViewItem.Header>
 
-                            <!-- Set the width of Column 1 to the same width as the top level 
-                                 in the data -->
+                            <!--
+                                Set the width of Column 1 to the same width as the top level
+                                in the data
+                            -->
                             <TreeViewItem.Width>
                                 <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
                                     <Binding Path="Level" />
-                                    <Binding ElementName="treeViewItemToMeasure"
-                                             Path="ActualWidth" />
+                                    <Binding ElementName="treeViewItemToMeasure" Path="ActualWidth" />
                                 </MultiBinding>
                             </TreeViewItem.Width>
                         </TreeViewItem>
-                        <TextBlock Grid.Column="2"
-                                   Text="Original Size" />
-                        <TextBlock Grid.Column="3"
-                                   Text="Modified Date" />
+                        <TextBlock Grid.Column="2" Text="Original Size" />
+                        <TextBlock Grid.Column="3" Text="Modified Date" />
                     </Grid>
                 </TreeViewItem.Header>
             </TreeViewItem>
         </TreeView>
 
-        <!-- Tree view that will display hierarchical data rows -->
+        <!--  Tree view that will display hierarchical data rows  -->
 
-        <TreeView Grid.Row="1"
-                  x:Name="treeView"
-                  BorderThickness="0" Background="Transparent" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:ArchiveFileListView}}"
-                  ItemsSource="{Binding}">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TreeView}}" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
+        <TreeView x:Name="treeView"
+                  Grid.Row="1"
+                  ItemsSource="{Binding}" />
     </Grid>
 </UserControl>
