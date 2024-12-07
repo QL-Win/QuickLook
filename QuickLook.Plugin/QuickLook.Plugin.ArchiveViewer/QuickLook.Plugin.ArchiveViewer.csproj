@@ -52,7 +52,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpCompress" Version="0.33.0" />
+        <PackageReference Include="SharpCompress" Version="0.38.0" />
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
     </ItemGroup>
 
