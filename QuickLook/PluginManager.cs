@@ -85,64 +85,56 @@ namespace QuickLook
 
             var failedPlugins = new List<(string Plugin, Exception Error)>();
 
-            try
-            {
-                Directory.GetFiles(folder, "QuickLook.Plugin.*.dll",
-                        SearchOption.AllDirectories)
-                    .ToList()
-                    .ForEach(
-                        lib =>
+            Directory.GetFiles(folder, "QuickLook.Plugin.*.dll",
+                    SearchOption.AllDirectories)
+                .ToList()
+                .ForEach(
+                    lib =>
+                            {
+                                try
                                 {
-                                    try
-                                    {
-                                        (from t in Assembly.LoadFrom(lib).GetExportedTypes()
-                                         where !t.IsInterface && !t.IsAbstract
-                                         where typeof(IViewer).IsAssignableFrom(t)
-                                         select t).ToList()
-                                        .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
-                                    }
-                                    catch (FileLoadException ex) when (ex.Message.Contains("0x80131515") && SettingHelper.IsPortableVersion())
-                                    {
-                                        MessageBox.Show(
-                                            "Windows has blocked the plugins.\n\n" +
-                                            "To fix this, please follow these steps:\n" +
-                                            "1. Right-click the downloaded QuickLook zip file and select 'Properties'\n" +
-                                            "2. At the bottom of the Properties window, check 'Unblock'\n" +
-                                            "3. Click 'Apply' and 'OK'\n" +
-                                            "4. Extract the zip file again\n\n" +
-                                            "QuickLook will now close. Please launch it from the unblocked folder.",
-                                            "Security Block Detected",
-                                            MessageBoxButton.OK,
-                                            MessageBoxImage.Error);
-                                        throw;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        // Log the error
-                                        ProcessHelper.WriteLog($"Failed to load plugin {Path.GetFileName(lib)}: {ex}");
-                                        failedPlugins.Add((Path.GetFileName(lib), ex));
-                                    }
-                                });
+                                    (from t in Assembly.LoadFrom(lib).GetExportedTypes()
+                                     where !t.IsInterface && !t.IsAbstract
+                                     where typeof(IViewer).IsAssignableFrom(t)
+                                     select t).ToList()
+                                    .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
+                                }
+                                catch (FileLoadException ex) when (ex.Message.Contains("0x80131515") && SettingHelper.IsPortableVersion())
+                                {
+                                    MessageBox.Show(
+                                        "Windows has blocked the plugins.\n\n" +
+                                        "To fix this, please follow these steps:\n" +
+                                        "1. Right-click the downloaded QuickLook zip file and select 'Properties'\n" +
+                                        "2. At the bottom of the Properties window, check 'Unblock'\n" +
+                                        "3. Click 'Apply' and 'OK'\n" +
+                                        "4. Extract the zip file again\n\n" +
+                                        "QuickLook will now close. Please launch it from the unblocked folder.",
+                                        "Security Block Detected",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Error);
+                                    throw;
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Log the error
+                                    ProcessHelper.WriteLog($"Failed to load plugin {Path.GetFileName(lib)}: {ex}");
+                                    failedPlugins.Add((Path.GetFileName(lib), ex));
+                                }
+                            });
 
-                LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
+            LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
 
-                // If any plugins failed to load, show a message box with the details
-                if (failedPlugins.Any())
-                {
-                    var message = "The following plugins failed to load:\n\n" +
-                        string.Join("\n", failedPlugins.Select(f => $"• {f.Plugin}"));
-
-                    MessageBox.Show(
-                        message,
-                        "Some Plugins Failed to Load",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-                }
-            }
-            catch (Exception ex)
+            // If any plugins failed to load, show a message box with the details
+            if (failedPlugins.Any())
             {
-                ProcessHelper.WriteLog(ex.ToString());
-                throw;
+                var message = "The following plugins failed to load:\n\n" +
+                    string.Join("\n", failedPlugins.Select(f => $"• {f.Plugin}"));
+
+                MessageBox.Show(
+                    message,
+                    "Some Plugins Failed to Load",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
         }
 
