@@ -60,6 +60,9 @@ jobs:
     
     permissions: write-all
     
+    # only run this job on push events, not pull_request
+    if: github.event_name == 'push'
+    
     steps:
     - uses: actions/download-artifact@v3
       with:
