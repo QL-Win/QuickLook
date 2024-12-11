@@ -1,41 +1,49 @@
 ﻿<UserControl x:Class="QuickLook.Controls.GlassLayer.GlassLayer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Controls.GlassLayer"
-             mc:Ignorable="d"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="glassLayer"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <local:ElementCoordinateConverter x:Key="ElementCoordinateConverter" />
     </UserControl.Resources>
     <Grid>
         <Rectangle Panel.ZIndex="100" Visibility="{Binding ElementName=glassLayer, Path=NoiseVisibility}">
             <Rectangle.Fill>
-                <ImageBrush x:Name="noiseBrush" ImageSource="100-50-5-monochrome.png" AlignmentY="Top"
-                            ViewportUnits="Absolute"
+                <ImageBrush x:Name="noiseBrush"
+                            AlignmentY="Top"
+                            ImageSource="100-50-5-monochrome.png"
                             Opacity="0.5"
-                            Viewport="0,0,100,100" TileMode="FlipY" Stretch="UniformToFill" />
+                            Stretch="UniformToFill"
+                            TileMode="FlipY"
+                            Viewport="0,0,100,100"
+                            ViewportUnits="Absolute" />
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle Panel.ZIndex="50" Fill="{Binding ElementName=glassLayer, Path=OverlayColor}" Opacity="0.7"
-                   Visibility="{Binding ElementName=glassLayer,Path=ColorOverlayVisibility}" />
-        <Grid Panel.ZIndex="0" Visibility="{Binding ElementName=glassLayer,Path=GlassVisibility}">
+        <Rectangle Panel.ZIndex="50"
+                   Fill="{Binding ElementName=glassLayer, Path=OverlayColor}"
+                   Opacity="0.7"
+                   Visibility="{Binding ElementName=glassLayer, Path=ColorOverlayVisibility}" />
+        <Grid Panel.ZIndex="0" Visibility="{Binding ElementName=glassLayer, Path=GlassVisibility}">
             <Grid.Effect>
-                <local:GaussianBlurEffect Direction="0,1"
-                                          Shader="pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps" />
+                <local:GaussianBlurEffect Direction="0,1" Shader="pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps" />
             </Grid.Effect>
             <Grid>
                 <Grid.Effect>
-                    <local:GaussianBlurEffect Direction="1,0"
-                                              Shader="pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps" />
+                    <local:GaussianBlurEffect Direction="1,0" Shader="pack://application:,,,/QuickLook;component/Controls/GlassLayer/GaussianBlur.ps" />
                 </Grid.Effect>
                 <Grid.Background>
-                    <VisualBrush x:Name="brush" Visual="{Binding ElementName=glassLayer, Path=BlurredElement}"
+                    <VisualBrush x:Name="brush"
+                                 AlignmentX="Left"
+                                 AlignmentY="Top"
+                                 Stretch="None"
                                  Viewbox="{Binding ElementName=glassLayer, Converter={StaticResource ElementCoordinateConverter}}"
                                  ViewboxUnits="Absolute"
-                                 AlignmentX="Left" AlignmentY="Top" Stretch="None" />
+                                 Visual="{Binding ElementName=glassLayer, Path=BlurredElement}" />
                 </Grid.Background>
                 <StackPanel />
             </Grid>

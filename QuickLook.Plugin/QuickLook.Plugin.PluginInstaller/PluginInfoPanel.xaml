@@ -1,10 +1,12 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.PluginInstaller.PluginInfoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Width="460"
+             Height="200"
              FontSize="14"
-             mc:Ignorable="d" Width="460" Height="200">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,23 +31,41 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
-            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
-                       TextWrapping="Wrap"
-                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
+            <TextBlock x:Name="filename"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       MaxHeight="60"
+                       Padding="3"
+                       FontSize="19"
+                       FontWeight="SemiBold"
+                       LineHeight="25"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap">
                 QuickLook.Plugin.PluginInstaller
             </TextBlock>
-            <TextBlock x:Name="version" Grid.Row="3" Grid.Column="1" Padding="3"
+            <TextBlock x:Name="version"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Version 0
             </TextBlock>
-            <TextBlock x:Name="description" Grid.Row="5" Grid.Column="1" Padding="3"
+            <TextBlock x:Name="description"
+                       Grid.Row="5"
+                       Grid.Column="1"
+                       Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 I am a potato.
             </TextBlock>
-            <Button x:Name="btnInstall" Content="Click here to install this plugin." Grid.Column="1" Grid.Row="6" 
-                    
-                    FontWeight="SemiBold" Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                    Style="{StaticResource CaptionTextButtonStyle}" HorizontalAlignment="Right" Margin="0,0,20,0" />
+            <Button x:Name="btnInstall"
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Margin="0,0,20,0"
+                    HorizontalAlignment="Right"
+                    Content="Click here to install this plugin."
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                    Style="{StaticResource CaptionTextButtonStyle}" />
         </Grid>
     </Grid>
 </UserControl>

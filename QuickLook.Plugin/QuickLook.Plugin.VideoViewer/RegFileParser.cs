@@ -298,12 +298,12 @@ public class RegValueObject
     /// </summary>
     public RegValueObject()
     {
-        root = "";
-        parentkey = "";
-        parentkeywithoutroot = "";
-        entry = "";
-        value = "";
-        type = "";
+        root = string.Empty;
+        parentkey = string.Empty;
+        parentkeywithoutroot = string.Empty;
+        entry = string.Empty;
+        value = string.Empty;
+        type = string.Empty;
     }
 
     /// <summary>
@@ -317,7 +317,7 @@ public class RegValueObject
         root = GetHive(ref parentkeywithoutroot);
         entry = regValueName;
         value = regValueData;
-        type = "";
+        type = string.Empty;
         var tmpStringValue = value;
         type = GetRegEntryType(ref tmpStringValue, encoding);
         value = tmpStringValue;

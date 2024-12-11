@@ -1,48 +1,52 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.ImageViewer.ImagePanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.ImageViewer"
-             xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:plugin="clr-namespace:QuickLook.Common.Plugin;assembly=QuickLook.Common"
-             mc:Ignorable="d"
              x:Name="imagePanel"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- only for design -->
+                <!--  only for design  -->
                 <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
                 <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.Dark.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Rectangle Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}"
-                   RenderOptions.BitmapScalingMode="NearestNeighbor">
+        <Rectangle RenderOptions.BitmapScalingMode="NearestNeighbor" Visibility="{Binding BackgroundVisibility, ElementName=imagePanel}">
             <Rectangle.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}"
-                                     Value="{x:Static plugin:Themes.Dark}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=Theme}" Value="{x:Static plugin:Themes.Dark}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
-                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32"
-                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    <ImageBrush AlignmentY="Top"
                                                 ImageSource="Resources/background-b.png"
-                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
+                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                Stretch="UniformToFill"
+                                                TileMode="Tile"
+                                                Viewport="0,0,32,32"
+                                                ViewportUnits="Absolute" />
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel,Path=Theme}"
-                                     Value="{x:Static plugin:Themes.Light}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=Theme}" Value="{x:Static plugin:Themes.Light}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
-                                    <ImageBrush AlignmentY="Top" Viewport="0,0,32,32"
-                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    <ImageBrush AlignmentY="Top"
                                                 ImageSource="Resources/background.png"
-                                                ViewportUnits="Absolute" Stretch="UniformToFill" TileMode="Tile" />
+                                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                Stretch="UniformToFill"
+                                                TileMode="Tile"
+                                                Viewport="0,0,32,32"
+                                                ViewportUnits="Absolute" />
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
@@ -50,46 +54,72 @@
                 </Style>
             </Rectangle.Style>
         </Rectangle>
-        <ScrollViewer x:Name="viewPanel" BorderThickness="0" HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollBarVisibility="Auto" Focusable="False" IsManipulationEnabled="True">
-            <animatedImage:AnimatedImage x:Name="viewPanelImage" Stretch="None"
-                                         Meta="{Binding Meta, ElementName=imagePanel}"
+        <ScrollViewer x:Name="viewPanel"
+                      BorderThickness="0"
+                      Focusable="False"
+                      HorizontalScrollBarVisibility="Auto"
+                      IsManipulationEnabled="True"
+                      VerticalScrollBarVisibility="Auto">
+            <animatedImage:AnimatedImage x:Name="viewPanelImage"
+                                         AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}"
                                          ContextObject="{Binding ContextObject, ElementName=imagePanel}"
+                                         Meta="{Binding Meta, ElementName=imagePanel}"
                                          RenderOptions.BitmapScalingMode="{Binding RenderMode, ElementName=imagePanel}"
-                                         AnimationUri="{Binding ImageUriSource, ElementName=imagePanel}" />
+                                         Stretch="None" />
         </ScrollViewer>
-        <Border x:Name="zoomLevelInfo" CornerRadius="5" IsHitTestVisible="False" Opacity="0" Background="Gray"
-                Padding="15,4,15,4" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Foreground="White" FontSize="18"
+        <Border x:Name="zoomLevelInfo"
+                Padding="15,4,15,4"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Gray"
+                CornerRadius="5"
+                IsHitTestVisible="False"
+                Opacity="0">
+            <TextBlock FontSize="18"
+                       Foreground="White"
                        Text="{Binding ElementName=imagePanel, Path=ZoomFactor, StringFormat={}{0:P0}}" />
             <Border.Resources>
                 <Storyboard x:Key="StoryboardShowZoomLevelInfo">
-                    <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference zoomLevelInfo}}"
-                                                   Storyboard.TargetProperty="Opacity">
+                    <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference zoomLevelInfo}}" Storyboard.TargetProperty="Opacity">
                         <DoubleAnimationUsingKeyFrames.KeyFrames>
-                            <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.1" />
-                            <LinearDoubleKeyFrame Value="0.9" KeyTime="0:0:0.6" />
-                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.8" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.6" Value="0.9" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="0" />
                         </DoubleAnimationUsingKeyFrames.KeyFrames>
                     </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
             </Border.Resources>
         </Border>
 
-        <Button x:Name="buttonMeta" Width="24" Height="24" Style="{StaticResource CaptionButtonStyle}"
-                HorizontalAlignment="Right" VerticalAlignment="Top"
-                Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}"
-                Margin="0,8,40,0" Content="&#xE946;" />
+        <Button x:Name="buttonMeta"
+                Width="24"
+                Height="24"
+                Margin="0,8,40,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="&#xE946;"
+                Style="{StaticResource CaptionButtonStyle}"
+                Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}" />
 
-        <Button x:Name="buttonBackgroundColour" Style="{StaticResource CaptionButtonStyle}" Width="24" Height="24"
-                HorizontalAlignment="Right" VerticalAlignment="Top"
-                Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}"
-                Margin="0,8,8,0" Content="&#xEF1F;" />
+        <Button x:Name="buttonBackgroundColour"
+                Width="24"
+                Height="24"
+                Margin="0,8,8,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="&#xEF1F;"
+                Style="{StaticResource CaptionButtonStyle}"
+                Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}" />
 
-        <TextBlock x:Name="textMeta" IsHitTestVisible="False" HorizontalAlignment="Right"
-                   VerticalAlignment="Top" FontSize="11"
-                   Padding="5,5,5,5" Margin="0,40,8,0" Background="{DynamicResource CaptionBackground}"
-                   Foreground="{DynamicResource WindowTextForeground}">
+        <TextBlock x:Name="textMeta"
+                   Margin="0,40,8,0"
+                   Padding="5,5,5,5"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"
+                   Background="{DynamicResource CaptionBackground}"
+                   FontSize="11"
+                   Foreground="{DynamicResource WindowTextForeground}"
+                   IsHitTestVisible="False">
             <TextBlock.Inlines>
                 <Run FontWeight="SemiBold">Camera maker</Run>
                 <Run>:&#160;</Run>
@@ -101,7 +131,7 @@
                         <Setter Property="TextBlock.Visibility" Value="Collapsed" />
                     </Style.Setters>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=buttonMeta,Path=IsMouseOver}" Value="True">
+                        <DataTrigger Binding="{Binding ElementName=buttonMeta, Path=IsMouseOver}" Value="True">
                             <Setter Property="TextBlock.Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>

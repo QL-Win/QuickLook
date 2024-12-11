@@ -1,15 +1,15 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.PDFViewer.PdfViewerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:QuickLook.Plugin.PDFViewer"
              xmlns:imageViewer="clr-namespace:QuickLook.Plugin.ImageViewer;assembly=QuickLook.Plugin.ImageViewer"
-             mc:Ignorable="d"
+             xmlns:local="clr-namespace:QuickLook.Plugin.PDFViewer"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="thisPdfViewer"
-             UseLayoutRounding="True"
              d:DesignHeight="476.974"
-             d:DesignWidth="720.29">
+             d:DesignWidth="720.29"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <local:AsyncPageToThumbnailConverter x:Key="AsyncPageToThumbnailConverter" />
@@ -24,16 +24,19 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="listThumbnails" Grid.Column="0" Width="150"
-                 SelectedIndex="0"
-                 Focusable="False"
+        <ListBox x:Name="listThumbnails"
+                 Grid.Column="0"
+                 Width="150"
                  HorizontalContentAlignment="Center"
-                 VirtualizingStackPanel.IsVirtualizing="True"
-                 VirtualizingStackPanel.VirtualizationMode="Recycling"
-                 Background="Transparent" BorderThickness="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 Focusable="False"
+                 ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}"
                  ItemsSource="{Binding ElementName=thisPdfViewer, Path=PageThumbnails}"
-                 ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource ListBoxItemStyleNoFocusedBorder}}">
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectedIndex="0"
+                 VirtualizingStackPanel.IsVirtualizing="True"
+                 VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="150"
@@ -49,11 +52,15 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="10" />
                         </Grid.RowDefinitions>
-                        <Border x:Name="bbd" Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="Gray">
+                        <Border x:Name="bbd"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                BorderBrush="Gray"
+                                BorderThickness="1">
                             <Image Source="{Binding Path=Result}">
                                 <Image.DataContext>
                                     <MultiBinding Converter="{StaticResource AsyncPageToThumbnailConverter}">
-                                        <Binding Path="PdfDocumentWrapper" ElementName="thisPdfViewer" />
+                                        <Binding ElementName="thisPdfViewer" Path="PdfDocumentWrapper" />
                                         <Binding />
                                     </MultiBinding>
                                 </Image.DataContext>
@@ -64,9 +71,7 @@
                         -->
                     </Grid>
                     <DataTemplate.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
-                            Value="True">
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                             <Setter TargetName="bbd" Property="BorderBrush" Value="#DD0027FF" />
                         </DataTrigger>
                     </DataTemplate.Triggers>
@@ -74,8 +79,12 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Column="1" Background="#33FFFFFF">
-            <imageViewer:ImagePanel x:Name="pagePanel" RenderMode="NearestNeighbor" ShowZoomLevelInfo="False"
-                                    ZoomWithControlKey="True" BackgroundVisibility="Collapsed" MetaIconVisibility="Collapsed" />
+            <imageViewer:ImagePanel x:Name="pagePanel"
+                                    BackgroundVisibility="Collapsed"
+                                    MetaIconVisibility="Collapsed"
+                                    RenderMode="NearestNeighbor"
+                                    ShowZoomLevelInfo="False"
+                                    ZoomWithControlKey="True" />
         </Grid>
     </Grid>
 </UserControl>

@@ -1,47 +1,46 @@
 ﻿// Copyright © 2017 Paddy Xu
-// 
+//
 // This file is part of QuickLook program.
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Text;
 using SharpCompress.Common;
 using SharpCompress.Readers;
+using System;
+using System.Text;
 using UtfUnknown;
 
-namespace QuickLook.Plugin.ArchiveViewer
+namespace QuickLook.Plugin.ArchiveViewer;
+
+internal class ChardetReaderOptions : ReaderOptions
 {
-    internal class ChardetReaderOptions : ReaderOptions
+    public ChardetReaderOptions()
     {
-        public ChardetReaderOptions()
+        ArchiveEncoding = new ArchiveEncoding
         {
-            ArchiveEncoding = new ArchiveEncoding
-            {
-                CustomDecoder = Chardet
-            };
-        }
+            CustomDecoder = Chardet
+        };
+    }
 
-        public string Chardet(byte[] bytes, int index, int count)
-        {
-            var buffer = new byte[count];
+    public string Chardet(byte[] bytes, int index, int count)
+    {
+        var buffer = new byte[count];
 
-            Array.Copy(bytes, index, buffer, 0, count);
+        Array.Copy(bytes, index, buffer, 0, count);
 
-            var encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
+        var encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
 
-            return encoding.GetString(buffer);
-        }
+        return encoding.GetString(buffer);
     }
 }

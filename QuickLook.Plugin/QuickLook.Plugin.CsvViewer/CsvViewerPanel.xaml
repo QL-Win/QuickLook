@@ -1,17 +1,27 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.CsvViewer.CsvViewerPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.CsvViewer"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="csvViewer"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
     <Grid>
-        <DataGrid x:Name="dataGrid" AlternationCount="2" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource WindowTextForeground}"
-                  RowBackground="Transparent" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" 
-                  CanUserReorderColumns="False" ItemsSource="{Binding Path=Rows,ElementName=csvViewer}" 
-                  AlternatingRowBackground="#1900BFFF" HorizontalGridLinesBrush="#19000000" VerticalGridLinesBrush="#19000000" />
-
+        <DataGrid x:Name="dataGrid"
+                  AlternatingRowBackground="#1900BFFF"
+                  AlternationCount="2"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  CanUserReorderColumns="False"
+                  Foreground="{DynamicResource WindowTextForeground}"
+                  HeadersVisibility="None"
+                  HorizontalGridLinesBrush="#19000000"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding Path=Rows, ElementName=csvViewer}"
+                  RowBackground="Transparent"
+                  VerticalGridLinesBrush="#19000000" />
     </Grid>
 </UserControl>

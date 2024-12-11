@@ -1,11 +1,14 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.InfoPanel.InfoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.InfoPanel"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Width="453"
+             Height="172"
              FontSize="14"
-             mc:Ignorable="d" Width="453" Height="172" UseLayoutRounding="True">
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,8 +25,14 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="65*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" Grid.Row="1" Grid.Column="0" Height="128" Width="128" Stretch="Fill" Opacity="0"
-               Margin="0,-20,0,0">
+        <Image x:Name="image"
+               Grid.Row="1"
+               Grid.Column="0"
+               Width="128"
+               Height="128"
+               Margin="0,-20,0,0"
+               Opacity="0"
+               Stretch="Fill">
             <Image.Style>
                 <Style TargetType="{x:Type Image}">
                     <Style.Triggers>
@@ -31,8 +40,11 @@
                             <DataTrigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1"
-                                                         BeginTime="0:0:0" Duration="0:0:0.05" />
+                                        <DoubleAnimation BeginTime="0:0:0"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0"
+                                                         To="1"
+                                                         Duration="0:0:0.05" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.ExitActions>
@@ -41,7 +53,7 @@
                 </Style>
             </Image.Style>
         </Image>
-        <Grid Grid.Column="1" Grid.Row="1">
+        <Grid Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
@@ -55,16 +67,29 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock x:Name="filename" Grid.Row="1" Grid.Column="1" FontSize="19" Padding="3"
-                       TextWrapping="Wrap"
-                       LineHeight="25" MaxHeight="60" TextTrimming="CharacterEllipsis" FontWeight="SemiBold">
+            <TextBlock x:Name="filename"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       MaxHeight="60"
+                       Padding="3"
+                       FontSize="19"
+                       FontWeight="SemiBold"
+                       LineHeight="25"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap">
                 FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename.ext
             </TextBlock>
-            <TextBlock x:Name="modDate" Grid.Row="3" Grid.Column="1" Padding="3"
+            <TextBlock x:Name="modDate"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Last modified at 01/01/2017 00:00:00
             </TextBlock>
-            <TextBlock x:Name="totalSize" Grid.Row="4" Grid.Column="1" Padding="3"
+            <TextBlock x:Name="totalSize"
+                       Grid.Row="4"
+                       Grid.Column="1"
+                       Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">
                 Calculating size...
             </TextBlock>

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using ImageMagick;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,172 +23,170 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Xml;
-using ImageMagick;
 
-namespace QuickLook.Plugin.ImageViewer
+namespace QuickLook.Plugin.ImageViewer;
+
+public class MetaProvider
 {
-    public class MetaProvider
+    private readonly SortedDictionary<string, (string, string)> _cache =
+        new SortedDictionary<string, (string, string)>(); // [key, [label, value]]
+
+    private readonly string _path;
+
+    public MetaProvider(string path)
     {
-        private readonly SortedDictionary<string, (string, string)> _cache =
-            new SortedDictionary<string, (string, string)>(); // [key, [label, value]]
+        _path = path;
 
-        private readonly string _path;
+        GetExif();
+    }
 
-        public MetaProvider(string path)
-        {
-            _path = path;
-
-            GetExif();
-        }
-
-        public SortedDictionary<string, (string, string)> GetExif()
-        {
-            if (_cache.Count != 0)
-                return _cache;
-
-            var exif = NativeMethods.GetExif(_path);
-            if (string.IsNullOrEmpty(exif))
-                return _cache;
-
-            var xml = new XmlDocument();
-            xml.LoadXml(exif);
-            var iter = xml.SelectNodes("/Exif/child::node()")?.GetEnumerator();
-            while (iter != null && iter.MoveNext())
-            {
-                if (!(iter.Current is XmlNode node))
-                    continue;
-
-                var key = node.Name;
-                var label = node.Attributes?["Label"]?.InnerText;
-                var value = node.InnerText;
-
-                _cache.Add(key, (label, value));
-            }
-
+    public SortedDictionary<string, (string, string)> GetExif()
+    {
+        if (_cache.Count != 0)
             return _cache;
-        }
 
-        public byte[] GetThumbnail()
+        var exif = NativeMethods.GetExif(_path);
+        if (string.IsNullOrEmpty(exif))
+            return _cache;
+
+        var xml = new XmlDocument();
+        xml.LoadXml(exif);
+        var iter = xml.SelectNodes("/Exif/child::node()")?.GetEnumerator();
+        while (iter != null && iter.MoveNext())
         {
-            return NativeMethods.GetThumbnail(_path) ?? new byte[0];
+            if (iter.Current is not XmlNode node)
+                continue;
+
+            var key = node.Name;
+            var label = node.Attributes?["Label"]?.InnerText;
+            var value = node.InnerText;
+
+            _cache.Add(key, (label, value));
         }
 
-        public Size GetSize()
-        {
-            _cache.TryGetValue("_.Size.Width", out var w_);
-            _cache.TryGetValue("_.Size.Height", out var h_);
-
-            if (int.TryParse(w_.Item2, out var w) && int.TryParse(h_.Item2, out var h))
-                return new Size(w, h);
-
-            // fallback
-
-            using (var mi = new MagickImage())
-            {
-                mi.Ping(_path);
-                w = (int)mi.Width;
-                h = (int)mi.Height;
-            }
-
-            return w + h == 0 ? new Size(800, 600) : new Size(w, h);
-        }
-
-        public Orientation GetOrientation()
-        {
-            return (Orientation)NativeMethods.GetOrientation(_path);
-        }
+        return _cache;
     }
 
-    internal static class NativeMethods
+    public byte[] GetThumbnail()
     {
-        private static readonly bool Is64 = Environment.Is64BitProcess;
+        return NativeMethods.GetThumbnail(_path) ?? [];
+    }
 
-        public static string GetExif(string file)
+    public Size GetSize()
+    {
+        _cache.TryGetValue("_.Size.Width", out var w_);
+        _cache.TryGetValue("_.Size.Height", out var h_);
+
+        if (int.TryParse(w_.Item2, out var w) && int.TryParse(h_.Item2, out var h))
+            return new Size(w, h);
+
+        // fallback
+
+        using (var mi = new MagickImage())
         {
-            try
-            {
-                var len = Is64 ? GetExif_64(file, null) : GetExif_32(file, null);
-                if (len <= 0)
-                    return string.Empty;
+            mi.Ping(_path);
+            w = (int)mi.Width;
+            h = (int)mi.Height;
+        }
 
-                var sb = new StringBuilder(len + 1);
-                var _ = Is64 ? GetExif_64(file, sb) : GetExif_32(file, sb);
+        return w + h == 0 ? new Size(800, 600) : new Size(w, h);
+    }
 
-                return sb.ToString();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
+    public Orientation GetOrientation()
+    {
+        return (Orientation)NativeMethods.GetOrientation(_path);
+    }
+}
+
+internal static class NativeMethods
+{
+    private static readonly bool Is64 = Environment.Is64BitProcess;
+
+    public static string GetExif(string file)
+    {
+        try
+        {
+            var len = Is64 ? GetExif_64(file, null) : GetExif_32(file, null);
+            if (len <= 0)
                 return string.Empty;
-            }
-        }
 
-        public static byte[] GetThumbnail(string file)
+            var sb = new StringBuilder(len + 1);
+            var _ = Is64 ? GetExif_64(file, sb) : GetExif_32(file, sb);
+
+            return sb.ToString();
+        }
+        catch (Exception e)
         {
-            try
-            {
-                var len = Is64 ? GetThumbnail_64(file, null) : GetThumbnail_32(file, null);
-                if (len <= 0)
-                    return null;
-
-                var buffer = new byte[len];
-                var _ = Is64 ? GetThumbnail_64(file, buffer) : GetThumbnail_32(file, buffer);
-
-                return buffer;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return null;
-            }
+            Debug.WriteLine(e);
+            return string.Empty;
         }
-
-        public static int GetOrientation(string file)
-        {
-            try
-            {
-                return Is64 ? GetOrientation_64(file) : GetOrientation_32(file);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return 0;
-            }
-        }
-
-        [DllImport("exiv2-ql-32.dll", EntryPoint = "GetExif", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetExif_32([MarshalAs(UnmanagedType.LPWStr)] string file,
-            [MarshalAs(UnmanagedType.LPStr)] StringBuilder sb);
-
-        [DllImport("exiv2-ql-32.dll", EntryPoint = "GetThumbnail", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetThumbnail_32([MarshalAs(UnmanagedType.LPWStr)] string file,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-
-        [DllImport("exiv2-ql-32.dll", EntryPoint = "GetOrientation", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetOrientation_32([MarshalAs(UnmanagedType.LPWStr)] string file);
-
-        [DllImport("exiv2-ql-64.dll", EntryPoint = "GetExif", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetExif_64([MarshalAs(UnmanagedType.LPWStr)] string file,
-            [MarshalAs(UnmanagedType.LPStr)] StringBuilder sb);
-
-        [DllImport("exiv2-ql-64.dll", EntryPoint = "GetThumbnail", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetThumbnail_64([MarshalAs(UnmanagedType.LPWStr)] string file,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-
-        [DllImport("exiv2-ql-64.dll", EntryPoint = "GetOrientation", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetOrientation_64([MarshalAs(UnmanagedType.LPWStr)] string file);
     }
 
-    public enum Orientation
+    public static byte[] GetThumbnail(string file)
     {
-        Undefined = 0,
-        TopLeft = 1,
-        TopRight = 2,
-        BottomRight = 3,
-        BottomLeft = 4,
-        LeftTop = 5,
-        RightTop = 6,
-        RightBottom = 7,
-        LeftBottom = 8
+        try
+        {
+            var len = Is64 ? GetThumbnail_64(file, null) : GetThumbnail_32(file, null);
+            if (len <= 0)
+                return null;
+
+            var buffer = new byte[len];
+            var _ = Is64 ? GetThumbnail_64(file, buffer) : GetThumbnail_32(file, buffer);
+
+            return buffer;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            return null;
+        }
     }
+
+    public static int GetOrientation(string file)
+    {
+        try
+        {
+            return Is64 ? GetOrientation_64(file) : GetOrientation_32(file);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            return 0;
+        }
+    }
+
+    [DllImport("exiv2-ql-32.dll", EntryPoint = "GetExif", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetExif_32([MarshalAs(UnmanagedType.LPWStr)] string file,
+        [MarshalAs(UnmanagedType.LPStr)] StringBuilder sb);
+
+    [DllImport("exiv2-ql-32.dll", EntryPoint = "GetThumbnail", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetThumbnail_32([MarshalAs(UnmanagedType.LPWStr)] string file,
+        [MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
+
+    [DllImport("exiv2-ql-32.dll", EntryPoint = "GetOrientation", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetOrientation_32([MarshalAs(UnmanagedType.LPWStr)] string file);
+
+    [DllImport("exiv2-ql-64.dll", EntryPoint = "GetExif", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetExif_64([MarshalAs(UnmanagedType.LPWStr)] string file,
+        [MarshalAs(UnmanagedType.LPStr)] StringBuilder sb);
+
+    [DllImport("exiv2-ql-64.dll", EntryPoint = "GetThumbnail", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetThumbnail_64([MarshalAs(UnmanagedType.LPWStr)] string file,
+        [MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
+
+    [DllImport("exiv2-ql-64.dll", EntryPoint = "GetOrientation", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int GetOrientation_64([MarshalAs(UnmanagedType.LPWStr)] string file);
+}
+
+public enum Orientation
+{
+    Undefined = 0,
+    TopLeft = 1,
+    TopRight = 2,
+    BottomRight = 3,
+    BottomLeft = 4,
+    LeftTop = 5,
+    RightTop = 6,
+    RightBottom = 7,
+    LeftBottom = 8
 }

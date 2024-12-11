@@ -1,16 +1,17 @@
 ﻿<UserControl x:Class="QuickLook.Plugin.ArchiveViewer.ArchiveInfoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.ArchiveViewer"
-             mc:Ignorable="d"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="infoPanel"
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- only for design -->
+                <!--  only for design  -->
                 <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:Percent100ToVisibilityVisibleConverter x:Key="Percent100ToVisibilityVisibleConverter" />
@@ -18,30 +19,55 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid ZIndex="9999"
-              Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}">
+        <Grid Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}" ZIndex="9999">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label x:Name="lblLoading" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource WindowTextForeground}">Loading archive ...</Label>
-                <ProgressBar Height="13" Width="150"
+                <Label x:Name="lblLoading"
+                       HorizontalAlignment="Center"
+                       FontSize="14"
+                       Foreground="{DynamicResource WindowTextForeground}">
+                    Loading archive ...
+                </Label>
+                <ProgressBar Width="150"
+                             Height="13"
                              Value="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay}" />
             </StackPanel>
         </Grid>
-        <Grid
-            Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityVisibleConverter}}">
+        <Grid Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityVisibleConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <local:ArchiveFileListView Grid.Row="0" x:Name="fileListView" Focusable="False" Foreground="{DynamicResource WindowTextForeground}" />
+            <local:ArchiveFileListView x:Name="fileListView"
+                                       Grid.Row="0"
+                                       Focusable="False"
+                                       Foreground="{DynamicResource WindowTextForeground}" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
                     <ColumnDefinition Width="30*" />
                     <ColumnDefinition Width="30*" />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="archiveCount" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">0 folders and 0 files, solid, password-protected</Label>
-                <Label x:Name="archiveSizeC" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Compressed size 0 bytes</Label>
-                <Label x:Name="archiveSizeU" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Uncompressed size 0 bytes</Label>
+                <Label x:Name="archiveCount"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
+                    0 folders and 0 files, solid, password-protected
+                </Label>
+                <Label x:Name="archiveSizeC"
+                       Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
+                    Compressed size 0 bytes
+                </Label>
+                <Label x:Name="archiveSizeU"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">
+                    Uncompressed size 0 bytes
+                </Label>
             </Grid>
         </Grid>
     </Grid>
