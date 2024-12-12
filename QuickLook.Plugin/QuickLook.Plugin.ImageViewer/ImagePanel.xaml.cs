@@ -49,6 +49,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     private bool _isZoomFactorFirstSet = true;
     private DateTime _lastZoomTime = DateTime.MinValue;
     private double _maxZoomFactor = 3d;
+    private Visibility _copyIconVisibility = Visibility.Visible;
     private MetaProvider _meta;
     private Visibility _metaIconVisibility = Visibility.Visible;
     private double _minZoomFactor = 0.1d;
@@ -66,6 +67,8 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         InitializeComponent();
 
         Resources.MergedDictionaries.Clear();
+
+        buttonCopy.Click += OnCopyOnClick;
 
         buttonMeta.Click += (sender, e) =>
             textMeta.Visibility = textMeta.Visibility == Visibility.Collapsed
@@ -158,6 +161,16 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         set
         {
             _metaIconVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility CopyIconVisibility
+    {
+        get => _copyIconVisibility;
+        set
+        {
+            _copyIconVisibility = value;
             OnPropertyChanged();
         }
     }
@@ -273,6 +286,28 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnCopyOnClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            if (_source is not null)
+            {
+                Clipboard.SetImage(_source);
+                return;
+            }
+
+            if (viewPanelImage.Source is BitmapSource bitmapSource)
+            {
+                Clipboard.SetImage(bitmapSource);
+                return;
+            }
+        }
+        catch
+        {
+            ///
+        }
+    }
 
     private void OnBackgroundColourOnClick(object sender, RoutedEventArgs e)
     {
@@ -499,7 +534,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
 
             Debug.WriteLine($"FireZoomChangedEvent fired: {Thread.CurrentThread.ManagedThreadId}");
 
-            Dispatcher.BeginInvoke(new Action(() => ZoomChanged?.Invoke(this, new EventArgs())),
+            Dispatcher.BeginInvoke(new Action(() => ZoomChanged?.Invoke(this, EventArgs.Empty)),
                 DispatcherPriority.Background);
         });
     }

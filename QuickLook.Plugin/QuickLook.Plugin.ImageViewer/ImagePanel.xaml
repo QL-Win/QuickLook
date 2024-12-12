@@ -91,25 +91,34 @@
             </Border.Resources>
         </Border>
 
-        <Button x:Name="buttonMeta"
-                Width="24"
-                Height="24"
-                Margin="0,8,40,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Content="&#xE946;"
-                Style="{StaticResource CaptionButtonStyle}"
-                Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}" />
+        <StackPanel Margin="0,8,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <Button x:Name="buttonCopy"
+                    Width="24"
+                    Height="24"
+                    Margin="0,0,8,0"
+                    Content="&#xE8C8;"
+                    Style="{StaticResource CaptionButtonStyle}"
+                    Visibility="{Binding ElementName=imagePanel, Path=CopyIconVisibility}" />
 
-        <Button x:Name="buttonBackgroundColour"
-                Width="24"
-                Height="24"
-                Margin="0,8,8,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Content="&#xEF1F;"
-                Style="{StaticResource CaptionButtonStyle}"
-                Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}" />
+            <Button x:Name="buttonMeta"
+                    Width="24"
+                    Height="24"
+                    Margin="0,0,8,0"
+                    Content="&#xE946;"
+                    Style="{StaticResource CaptionButtonStyle}"
+                    Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}" />
+
+            <Button x:Name="buttonBackgroundColour"
+                    Width="24"
+                    Height="24"
+                    Margin="0,0,8,0"
+                    Content="&#xEF1F;"
+                    Style="{StaticResource CaptionButtonStyle}"
+                    Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}" />
+        </StackPanel>
 
         <TextBlock x:Name="textMeta"
                    Margin="0,40,8,0"
