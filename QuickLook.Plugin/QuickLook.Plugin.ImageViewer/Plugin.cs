@@ -45,12 +45,12 @@ public class Plugin : IViewer
         ".nef", ".nrw",
         ".obm", ".orf",
         ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn",
+        ".qoi",
         ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
         ".sr2", ".srf", ".srw", ".svg",
         ".tga", ".tif", ".tiff",
         ".wdp", ".webp", ".wmf",
         ".x3f", ".xcf",
-        ".qoi"
     ]);
 
     private ImagePanel _ip;

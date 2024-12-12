@@ -29,7 +29,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage;
 public class AnimatedImage : Image, IDisposable
 {
     // List<Pair<formats, type>>
-    public static List<KeyValuePair<string[], Type>> Providers = new List<KeyValuePair<string[], Type>>();
+    public static List<KeyValuePair<string[], Type>> Providers = [];
 
     private AnimationProvider _animation;
     private bool _disposing;
@@ -101,7 +101,7 @@ public class AnimatedImage : Image, IDisposable
 
     private static void AnimationUriChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
     {
-        if (!(obj is AnimatedImage instance))
+        if (obj is not AnimatedImage instance)
             return;
 
         //var thumbnail = instance.Meta?.GetThumbnail(true);
@@ -125,8 +125,8 @@ public class AnimatedImage : Image, IDisposable
 
             if (_.Result != null)
             {
-                instance.DoZoomToFit?.Invoke(instance, new EventArgs());
-                instance.ImageLoaded?.Invoke(instance, new EventArgs());
+                instance.DoZoomToFit?.Invoke(instance, EventArgs.Empty);
+                instance.ImageLoaded?.Invoke(instance, EventArgs.Empty);
             }
 
             instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation?.Animator);
@@ -136,7 +136,7 @@ public class AnimatedImage : Image, IDisposable
 
     private static void AnimationFrameIndexChanged(DependencyObject obj, DependencyPropertyChangedEventArgs ev)
     {
-        if (!(obj is AnimatedImage instance))
+        if (obj is not AnimatedImage instance)
             return;
 
         if (instance._disposing)
@@ -155,8 +155,8 @@ public class AnimatedImage : Image, IDisposable
 
             if (firstLoad)
             {
-                instance.DoZoomToFit?.Invoke(instance, new EventArgs());
-                instance.ImageLoaded?.Invoke(instance, new EventArgs());
+                instance.DoZoomToFit?.Invoke(instance, EventArgs.Empty);
+                instance.ImageLoaded?.Invoke(instance, EventArgs.Empty);
             }
         }));
         task.Start();

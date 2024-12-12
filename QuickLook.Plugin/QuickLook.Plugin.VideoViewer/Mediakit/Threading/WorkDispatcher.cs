@@ -60,9 +60,7 @@ public class WorkDispatcher
 
     private void InvokeShutdownStarted()
     {
-        var e = new EventArgs();
-        EventHandler started = ShutdownStarted;
-        if (started != null) started(this, e);
+        ShutdownStarted?.Invoke(this, EventArgs.Empty);
     }
 
     ~WorkDispatcher()
@@ -73,8 +71,7 @@ public class WorkDispatcher
     private ShutdownFinishedEventArgs InvokeShutdownFinished()
     {
         var e = new ShutdownFinishedEventArgs();
-        var finished = ShutdownFinished;
-        if (finished != null) finished(this, e);
+        ShutdownFinished?.Invoke(this, e);
 
         return e;
     }
@@ -84,7 +81,7 @@ public class WorkDispatcher
     /// </summary>
     public Thread DispatcherThread
     {
-        get { return m_dispatcherThread; }
+        get => m_dispatcherThread;
         private set
         {
             m_dispatcherThread = value;
@@ -96,8 +93,8 @@ public class WorkDispatcher
     /// </summary>
     public bool ShuttingDown
     {
-        get { return m_shuttingDown; }
-        private set { m_shuttingDown = value; }
+        get => m_shuttingDown;
+        private set => m_shuttingDown = value;
     }
 
     /// <summary>
@@ -105,8 +102,8 @@ public class WorkDispatcher
     /// </summary>
     public bool Shutdown
     {
-        get { return m_shutdown; }
-        private set { m_shutdown = value; }
+        get => m_shutdown;
+        private set => m_shutdown = value;
     }
 
     public bool ShuttingOrShutDown
@@ -186,8 +183,7 @@ public class WorkDispatcher
         m_threadId = GetCurrentThreadId();
 
         // Call PeekMessage to create the message queue before the event is set
-        Msg msg;
-        PeekMessage(out msg, IntPtr.Zero, 0, 0, 0);
+        PeekMessage(out Msg msg, IntPtr.Zero, 0, 0, 0);
         resetEvent.Set();
 
         /* Begins the pump */

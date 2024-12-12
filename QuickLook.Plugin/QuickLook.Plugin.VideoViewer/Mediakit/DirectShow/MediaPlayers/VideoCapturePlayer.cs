@@ -608,7 +608,7 @@ public class VideoCapturePlayer : MediaPlayerBase, ISampleGrabberCB
             Marshal.FinalReleaseComObject(m_graph);
             m_graph = null;
 
-            InvokeMediaClosed(new EventArgs());
+            InvokeMediaClosed(EventArgs.Empty);
         }
     }
 }

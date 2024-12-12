@@ -67,7 +67,7 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
             listThumbnails.SelectedIndex = value;
             listThumbnails.ScrollIntoView(listThumbnails.SelectedItem);
 
-            CurrentPageChanged?.Invoke(this, new EventArgs());
+            CurrentPageChanged?.Invoke(this, EventArgs.Empty);
             OnPropertyChanged();
         }
     }
@@ -202,7 +202,7 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         if (CurrentPage == -1)
             return;
 
-        CurrentPageChanged?.Invoke(this, new EventArgs());
+        CurrentPageChanged?.Invoke(this, EventArgs.Empty);
 
         ReRenderCurrentPage();
 

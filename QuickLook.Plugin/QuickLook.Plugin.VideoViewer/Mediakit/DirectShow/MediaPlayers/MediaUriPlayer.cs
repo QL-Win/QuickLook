@@ -737,7 +737,7 @@ public class MediaUriPlayer : MediaSeekingPlayer
 
             /* Only run the media closed if we have an
              * initialized filter graph */
-            InvokeMediaClosed(new EventArgs());
+            InvokeMediaClosed(EventArgs.Empty);
         }
         else
         {

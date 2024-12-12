@@ -18,7 +18,7 @@ public class OverDvdButtonEventArgs : EventArgs
     }
 
     /// <summary>
-    /// Flag that defines if the cursor is over a Dvd butotn
+    /// Flag that defines if the cursor is over a Dvd button
     /// </summary>
     public bool IsOverDvdButton { get; private set; }
 }
@@ -242,7 +242,7 @@ public class DvdPlayer : MediaSeekingPlayer
     /// </summary>
     public string DvdDirectory
     {
-        get { return m_dvdDirectory; }
+        get => m_dvdDirectory;
         set
         {
             m_dvdDirectory = value;
@@ -255,35 +255,28 @@ public class DvdPlayer : MediaSeekingPlayer
     private void InvokeDvdError(DvdError error)
     {
         var e = new DvdErrorArgs { Error = error };
-        var dvdErrorHandler = OnDvdError;
-        if (dvdErrorHandler != null) dvdErrorHandler(this, e);
+        OnDvdError?.Invoke(this, e);
     }
 
     private void InvokeOnDvdTime(DvdTimeEventArgs e)
     {
-        var onDvdTimeHandler = OnDvdTime;
-        if (onDvdTimeHandler != null) onDvdTimeHandler(this, e);
+        OnDvdTime?.Invoke(this, e);
     }
 
     private void InvokeOnOverDvdButton(bool isOverDvdButton)
     {
         var e = new OverDvdButtonEventArgs(isOverDvdButton);
-        var onOverDvdButtonHandler = OnOverDvdButton;
-        if (onOverDvdButtonHandler != null) onOverDvdButtonHandler(this, e);
+        OnOverDvdButton?.Invoke(this, e);
     }
 
     private void InvokeOnDvdInserted()
     {
-        var e = new EventArgs();
-        var onDvdInsertedHandler = OnDvdInserted;
-        if (onDvdInsertedHandler != null) onDvdInsertedHandler(this, e);
+        OnDvdInserted?.Invoke(this, EventArgs.Empty);
     }
 
     private void InvokeOnDvdEjected()
     {
-        var e = new EventArgs();
-        var onDvdEjectedHandler = OnDvdEjected;
-        if (onDvdEjectedHandler != null) onDvdEjectedHandler(this, e);
+        OnDvdEjected?.Invoke(this, EventArgs.Empty);
     }
 
     #endregion Event Invokers
@@ -296,10 +289,9 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
         m_dvdControl.ShowMenu(DvdMenuId.Root,
                               DvdCmdFlags.Block | DvdCmdFlags.Flush,
-                              out cmd);
+                              out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -317,13 +309,10 @@ public class DvdPlayer : MediaSeekingPlayer
             if (m_dvdInfo == null)
                 return 0;
 
-            int volumeCount, currentVolume, titleCount;
-            DvdDiscSide side;
-
-            m_dvdInfo.GetDVDVolumeInfo(out volumeCount,
-                                       out currentVolume,
-                                       out side,
-                                       out titleCount);
+            m_dvdInfo.GetDVDVolumeInfo(out _,
+                                       out _,
+                                       out _,
+                                       out int titleCount);
 
             return titleCount;
         }
@@ -339,10 +328,9 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
         m_dvdControl.ShowMenu(DvdMenuId.Title,
                               DvdCmdFlags.Block | DvdCmdFlags.Flush,
-                              out cmd);
+                              out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -358,8 +346,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.ReturnFromSubmenu(DvdCmdFlags.None, out cmd);
+        m_dvdControl.ReturnFromSubmenu(DvdCmdFlags.None, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -376,8 +363,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.SelectAngle(angle, DvdCmdFlags.None, out cmd);
+        m_dvdControl.SelectAngle(angle, DvdCmdFlags.None, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -393,8 +379,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.Resume(DvdCmdFlags.None, out cmd);
+        m_dvdControl.Resume(DvdCmdFlags.None, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -511,8 +496,7 @@ public class DvdPlayer : MediaSeekingPlayer
     {
         VerifyAccess();
 
-        IDvdCmd cmd;
-        m_dvdControl.PlayTitle(titleIndex, DvdCmdFlags.Flush, out cmd);
+        m_dvdControl.PlayTitle(titleIndex, DvdCmdFlags.Flush, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -528,8 +512,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.PlayNextChapter(DvdCmdFlags.Flush, out cmd);
+        m_dvdControl.PlayNextChapter(DvdCmdFlags.Flush, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -546,8 +529,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.PlayForwards(speed, DvdCmdFlags.None, out cmd);
+        m_dvdControl.PlayForwards(speed, DvdCmdFlags.None, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -564,8 +546,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.PlayBackwards(speed, DvdCmdFlags.None, out cmd);
+        m_dvdControl.PlayBackwards(speed, DvdCmdFlags.None, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -581,8 +562,7 @@ public class DvdPlayer : MediaSeekingPlayer
         if (m_dvdControl == null)
             return;
 
-        IDvdCmd cmd;
-        m_dvdControl.PlayPrevChapter(DvdCmdFlags.Flush, out cmd);
+        m_dvdControl.PlayPrevChapter(DvdCmdFlags.Flush, out IDvdCmd cmd);
 
         if (cmd != null)
             Marshal.ReleaseComObject(cmd);
@@ -616,12 +596,9 @@ public class DvdPlayer : MediaSeekingPlayer
             /* Do some VMR9 specific stuff */
             if (rendererType == VideoRendererType.VideoMixingRenderer9)
             {
-                var mixer = m_renderer as IVMRMixerControl9;
-
-                if (mixer != null)
+                if (m_renderer is IVMRMixerControl9 mixer)
                 {
-                    VMR9MixerPrefs dwPrefs;
-                    mixer.GetMixingPrefs(out dwPrefs);
+                    mixer.GetMixingPrefs(out VMR9MixerPrefs dwPrefs);
                     dwPrefs &= ~VMR9MixerPrefs.RenderTargetMask;
                     dwPrefs |= VMR9MixerPrefs.RenderTargetYUV;
 
@@ -866,10 +843,7 @@ public class DvdPlayer : MediaSeekingPlayer
     /// </summary>
     public override long MediaPosition
     {
-        get
-        {
-            return (long)m_currentDvdTime.TotalMilliseconds * MEDIA_TIME_TO_MILLISECONDS;
-        }
+        get => (long)m_currentDvdTime.TotalMilliseconds * MEDIA_TIME_TO_MILLISECONDS;
         set
         {
             var timeCode = new DvdHMSFTimeCode();
@@ -897,8 +871,7 @@ public class DvdPlayer : MediaSeekingPlayer
     private void SetTitleDuration()
     {
         var totalTime = new DvdHMSFTimeCode();
-        DvdTimeCodeFlags flags;
-        int hr = m_dvdInfo.GetTotalTitleTime(totalTime, out flags);
+        int hr = m_dvdInfo.GetTotalTitleTime(totalTime, out DvdTimeCodeFlags flags);
 
         if (hr != 0)
             return;
