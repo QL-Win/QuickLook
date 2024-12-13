@@ -16,9 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using PdfiumViewer;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Windows;
@@ -98,8 +100,22 @@ public class Plugin : IViewer
                     {
                         var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path, password);
                         context.SetPreferredSizeFit(desiredSize, 0.9); // Actually it is no longer effective here
-
                         context.ViewerContent = _pdfControl;
+
+                        // Call the viewer window private method using reflection
+                        // QuickLook.ViewerWindow.ResizeAndCentreExistingWindow
+                        if (Window.GetWindow(_pdfControl) is Window window)
+                        {
+                            var ResizeAndCentreExistingWindow = window.GetType().GetMethod("ResizeAndCentreExistingWindow",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+
+                            if (ResizeAndCentreExistingWindow != null)
+                            {
+                                var newRect = (Rect)ResizeAndCentreExistingWindow.Invoke(window, [context.PreferredSize]);
+
+                                window.MoveWindow(newRect.Left, newRect.Top, newRect.Width, newRect.Height);
+                            }
+                        }
 
                         context.IsBusy = true;
                         _pdfControl.LoadPdf(path, password);
