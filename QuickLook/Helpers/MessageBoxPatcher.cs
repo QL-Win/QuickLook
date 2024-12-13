@@ -1,9 +1,26 @@
+﻿// Copyright © 2024 KamilDev
+//
+// This file is part of QuickLook program.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using HarmonyLib;
 using System;
 using System.Diagnostics;
 using System.Windows;
-using HarmonyLib;
-using WindowsMessageBox = System.Windows.MessageBox;
 using VioletaMessageBox = Wpf.Ui.Violeta.Controls.MessageBox;
+using WindowsMessageBox = System.Windows.MessageBox;
 
 namespace QuickLook.Helpers;
 
@@ -13,24 +30,6 @@ namespace QuickLook.Helpers;
 public static class MessageBoxPatcher
 {
     private static readonly Harmony Harmony = new("com.quicklook.messagebox.patch");
-    private static readonly Type OriginalType = typeof(WindowsMessageBox);
-
-    /// <summary>
-    /// Defines all MessageBox.Show method overloads to be patched:
-    /// 1. Show(string messageBoxText)
-    /// 2. Show(string messageBoxText, string caption)
-    /// 3. Show(string messageBoxText, string caption, MessageBoxButton button)
-    /// 4. Show(string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon)
-    /// 5. Show(Window owner, string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon)
-    /// </summary>
-    private static readonly (string Name, Type[] Parameters)[] ShowMethods =
-    {
-        ("Show", [typeof(string)]),
-        ("Show", [typeof(string), typeof(string)]),
-        ("Show", [typeof(string), typeof(string), typeof(MessageBoxButton)]),
-        ("Show", [typeof(string), typeof(string), typeof(MessageBoxButton), typeof(MessageBoxImage)]),
-        ("Show", [typeof(Window), typeof(string), typeof(string), typeof(MessageBoxButton), typeof(MessageBoxImage)])
-    };
 
     /// <summary>
     /// Initializes the MessageBox patch by applying Harmony patches to the MessageBox.Show method overloads.
@@ -39,10 +38,29 @@ public static class MessageBoxPatcher
     {
         try
         {
+            Type originalType = typeof(WindowsMessageBox);
+
+            /// <summary>
+            /// Defines all MessageBox.Show method overloads to be patched:
+            /// 1. Show(string messageBoxText)
+            /// 2. Show(string messageBoxText, string caption)
+            /// 3. Show(string messageBoxText, string caption, MessageBoxButton button)
+            /// 4. Show(string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon)
+            /// 5. Show(Window owner, string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon)
+            /// </summary>
+            (string Name, Type[] Parameters)[] showMethods =
+            [
+                (nameof(WindowsMessageBox.Show), [typeof(string)]),
+                (nameof(WindowsMessageBox.Show), [typeof(string), typeof(string)]),
+                (nameof(WindowsMessageBox.Show), [typeof(string), typeof(string), typeof(MessageBoxButton)]),
+                (nameof(WindowsMessageBox.Show), [typeof(string), typeof(string), typeof(MessageBoxButton), typeof(MessageBoxImage)]),
+                (nameof(WindowsMessageBox.Show), [typeof(Window), typeof(string), typeof(string), typeof(MessageBoxButton), typeof(MessageBoxImage)])
+            ];
+
             // Iterate over each MessageBox.Show method overload and apply the patch
-            foreach (var (name, parameters) in ShowMethods)
+            foreach (var (name, parameters) in showMethods)
             {
-                var method = OriginalType.GetMethod(name, parameters);
+                var method = originalType.GetMethod(name, parameters);
                 if (method != null)
                 {
                     Harmony.Patch(method, new HarmonyMethod(typeof(MessageBoxPatches), nameof(MessageBoxPatches.Prefix)));
@@ -60,7 +78,7 @@ public static class MessageBoxPatcher
 /// <summary>
 /// Provides a patch for the MessageBox.Show method overloads.
 /// </summary>
-public static class MessageBoxPatches
+file static class MessageBoxPatches
 {
     /// <summary>
     /// Prefix patch for the MessageBox.Show method overloads.
