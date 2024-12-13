@@ -23,12 +23,12 @@ namespace QuickLook.Plugin.PDFViewer;
 
 public class PdfDocumentWrapper : IDisposable
 {
-    public PdfDocumentWrapper(Stream stream)
+    public PdfDocumentWrapper(Stream stream, string password = null)
     {
         PdfStream = new MemoryStream((int)stream.Length);
         stream.CopyTo(PdfStream);
 
-        PdfDocument = PdfDocument.Load(PdfStream);
+        PdfDocument = PdfDocument.Load(PdfStream, password);
     }
 
     public PdfDocument PdfDocument { get; private set; }

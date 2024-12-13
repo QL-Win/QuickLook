@@ -213,13 +213,13 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         }
     }
 
-    public static Size GetDesiredControlSizeByFirstPage(string path)
+    public static Size GetDesiredControlSizeByFirstPage(string path, string password = null)
     {
         Size size;
 
         using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
-            using (var tempHandle = PdfDocument.Load(s))
+            using (var tempHandle = PdfDocument.Load(s, password))
             {
                 size = new Size(0, 0);
                 tempHandle.PageSizes.Take(5).ForEach(p =>
@@ -236,10 +236,10 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         return new Size(size.Width * 3, size.Height * 3);
     }
 
-    public void LoadPdf(string path)
+    public void LoadPdf(string path, string password = null)
     {
         var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        PdfDocumentWrapper = new PdfDocumentWrapper(stream);
+        PdfDocumentWrapper = new PdfDocumentWrapper(stream, password);
         _pdfLoaded = true;
 
         if (PdfDocumentWrapper.PdfDocument.PageCount < 2)

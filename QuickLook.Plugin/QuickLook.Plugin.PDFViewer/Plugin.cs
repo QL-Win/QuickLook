@@ -15,11 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using PdfiumViewer;
 using QuickLook.Common.Plugin;
 using System;
 using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Text;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer;
@@ -29,6 +31,7 @@ public class Plugin : IViewer
     private ContextObject _context;
     private string _path;
     private PdfViewerControl _pdfControl;
+    private PasswordControl _passwordControl;
 
     public int Priority => 0;
 
@@ -55,9 +58,16 @@ public class Plugin : IViewer
         _context = context;
         _path = path;
 
-        var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
-
-        context.SetPreferredSizeFit(desiredSize, 0.9);
+        try
+        {
+            var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
+            context.SetPreferredSizeFit(desiredSize, 0.9);
+        }
+        catch (PdfException ex) when (ex.Message == "Password required or incorrect password")
+        {
+            // Fallback to a size to request the password
+            context.PreferredSize = new Size { Width = 800, Height = 600 };
+        }
     }
 
     public void View(string path, ContextObject context)
@@ -67,7 +77,7 @@ public class Plugin : IViewer
 
         Exception exception = null;
 
-        _pdfControl.Dispatcher.BeginInvoke(new Action(() =>
+        _ = _pdfControl.Dispatcher.BeginInvoke(() =>
         {
             try
             {
@@ -78,11 +88,46 @@ public class Plugin : IViewer
                 _pdfControl.CurrentPageChanged += UpdateWindowCaption;
                 context.IsBusy = false;
             }
-            catch (Exception e)
+            catch (PdfException ex) when (ex.Message == "Password required or incorrect password")
             {
-                exception = e;
+                // Fallback to request a password
+                _passwordControl = new PasswordControl();
+                _passwordControl.PasswordRequested += (string password) =>
+                {
+                    try
+                    {
+                        var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path, password);
+                        context.SetPreferredSizeFit(desiredSize, 0.9); // Actually it is no longer effective here
+
+                        context.ViewerContent = _pdfControl;
+
+                        context.IsBusy = true;
+                        _pdfControl.LoadPdf(path, password);
+
+                        context.Title = $"1 / {_pdfControl.TotalPages}: {Path.GetFileName(path)}";
+
+                        _pdfControl.CurrentPageChanged += UpdateWindowCaption;
+                        context.IsBusy = false;
+                    }
+                    catch (PdfException ex) when (ex.Message == "Password required or incorrect password")
+                    {
+                        // This password is not accepted
+                        return false;
+                    }
+
+                    // This password is accepted
+                    return true;
+                };
+
+                context.ViewerContent = _passwordControl;
+                context.Title = $"[PASSWORD PROTECTED] {Path.GetFileName(path)}";
+                context.IsBusy = false;
             }
-        }), DispatcherPriority.Loaded).Wait();
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+        }, DispatcherPriority.Loaded).Wait();
 
         if (exception != null)
             ExceptionDispatchInfo.Capture(exception).Throw();

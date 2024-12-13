@@ -87,6 +87,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="Translations.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">
             <Link>Properties\GitVersion.cs</Link>
         </Compile>
