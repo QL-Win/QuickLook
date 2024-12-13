@@ -22,10 +22,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using UtfUnknown;
 
 namespace QuickLook.Plugin.CsvViewer;
 
@@ -39,14 +41,17 @@ public partial class CsvViewerPanel : UserControl
         InitializeComponent();
     }
 
-    public List<string[]> Rows { get; private set; } = new List<string[]>();
+    public List<string[]> Rows { get; private set; } = [];
 
     public void LoadFile(string path)
     {
         const int limit = 10000;
         var binded = false;
 
-        using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+        var encoding = CharsetDetector.DetectFromFile(path).Detected?.Encoding ??
+                       Encoding.Default;
+
+        using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), encoding))
         {
             var conf = new CsvConfiguration(CultureInfo.CurrentUICulture) { MissingFieldFound = null, BadDataFound = null, DetectDelimiter = true };
 
@@ -58,7 +63,7 @@ public partial class CsvViewerPanel : UserControl
                     var row = parser.Record;
                     if (row == null)
                         break;
-                    row = Concat(new[] { $"{i++ + 1}".PadLeft(6) }, row);
+                    row = Concat([$"{i++ + 1}".PadLeft(6)], row);
 
                     if (!binded)
                     {

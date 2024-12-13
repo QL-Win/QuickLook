@@ -52,7 +52,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CsvHelper" Version="27.1.1" />
+        <PackageReference Include="CsvHelper" Version="33.0.1" />
+		<PackageReference Include="UTF.Unknown" Version="2.5.1" />
     </ItemGroup>
 
     <ItemGroup>
