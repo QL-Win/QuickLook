@@ -57,17 +57,32 @@ internal class TrayIconManager : IDisposable
                 new MenuItem("-"),
                 new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (_, _) => Updater.CheckForUpdates()),
                 new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
-                    (sender, e) => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
+                    (_, _) => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
                 new MenuItem(TranslationHelper.Get("Icon_OpenDataFolder"), (_, _) => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
                 _itemAutorun,
                 new MenuItem(TranslationHelper.Get("Icon_Restart"), (_, _) => Restart(forced: true)),
                 new MenuItem(TranslationHelper.Get("Icon_Quit"),
-                    (sender, e) => System.Windows.Application.Current.Shutdown())
+                    (_, _) => System.Windows.Application.Current.Shutdown())
             ]),
             Visible = SettingHelper.Get("ShowTrayIcon", true)
         };
 
         _icon.ContextMenu.Popup += (sender, e) => { _itemAutorun.Checked = AutoStartupHelper.IsAutorun(); };
+
+        // Readjust the display position of ContextMenu
+        if (SettingHelper.Get("ModernTrayIcon", true, "QuickLook"))
+        {
+            _icon.MouseDown += (_, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    // Call ShowContextMenu here will be later than the native call,
+                    // so here can readjust the ContextMenu position.
+                    // You can check the source code to determine the behavior.
+                    _icon.ShowContextMenu();
+                }
+            };
+        }
     }
 
     public void Dispose()

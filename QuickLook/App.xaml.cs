@@ -57,9 +57,12 @@ public partial class App : Application
             ProcessHelper.WriteLog(((Exception)args.ExceptionObject).ToString());
         };
 
-        bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
         // Initialize MessageBox patching
+        bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
         if (modernMessageBox) MessageBoxPatcher.Initialize();
+        // Initialize TrayIcon patching
+        bool modernTrayIcon = SettingHelper.Get("ModernTrayIcon", true, "QuickLook");
+        if (modernTrayIcon) TrayIconPatcher.Initialize();
 
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
