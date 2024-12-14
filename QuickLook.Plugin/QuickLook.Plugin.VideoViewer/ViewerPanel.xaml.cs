@@ -276,9 +276,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             {
                 var coverBytes = Convert.FromBase64String
                 (
-                    coverData.Length % 4 == 0 // MediaInfo may will return multiple covers
-                        ? coverData
-                        : coverData.Split(" / ")[0] // Get the first cover only
+                    coverData.Contains(' ') // MediaInfo may will return multiple covers
+                        ? coverData.Split(" / ")[0] // Get the first cover only
+                        : coverData
                 );
                 using var ms = new MemoryStream(coverBytes);
 
