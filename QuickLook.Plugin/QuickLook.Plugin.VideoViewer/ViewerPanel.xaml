@@ -116,6 +116,14 @@
                            Foreground="{DynamicResource WindowTextForeground}"
                            Text="{Binding ElementName=mediaElement, Path=MediaDuration, Converter={StaticResource TimeTickToShortStringConverter}}"
                            TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="metaLyric"
+                           Grid.Row="6"
+                           Margin="0,0,8,0"
+                           Padding="3"
+                           FontSize="14"
+                           Foreground="{DynamicResource WindowTextForeground}"
+                           TextWrapping="Wrap"
+                           Visibility="Collapsed" />
             </Grid>
         </Grid>
 

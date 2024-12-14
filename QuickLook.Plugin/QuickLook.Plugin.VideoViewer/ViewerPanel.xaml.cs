@@ -19,11 +19,15 @@ using MediaInfo;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.VideoViewer.Extensions;
+using QuickLook.Plugin.VideoViewer.LyricTrack;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +35,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using UtfUnknown;
 using WPFMediaKit.DirectShow.Controls;
 using WPFMediaKit.DirectShow.MediaPlayers;
 
@@ -43,6 +49,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 {
     private readonly ContextObject _context;
     private BitmapSource _coverArt;
+    private DispatcherTimer _lyricTimer;
+    private LrcLine[] _lyricLines;
 
     private bool _hasVideo;
     private bool _isPlaying;
@@ -161,6 +169,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         {
             Debug.WriteLine(e);
         }
+
+        _lyricTimer?.Stop();
+        _lyricTimer = null;
+        _lyricLines = null;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -285,6 +297,37 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         metaAlbum.Visibility = string.IsNullOrEmpty(metaAlbum.Text)
             ? Visibility.Collapsed
             : Visibility.Visible;
+
+        var lyricPath = Path.ChangeExtension(path, ".lrc");
+
+        if (File.Exists(lyricPath))
+        {
+            var buffer = File.ReadAllBytes(lyricPath);
+            var encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
+
+            _lyricLines = LrcHelper.ParseText(encoding.GetString(buffer)).ToArray();
+            _lyricTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+            _lyricTimer.Tick += (sender, e) =>
+            {
+                if (_lyricLines != null && _lyricLines.Length != 0)
+                {
+                    var lyric = LrcHelper.GetNearestLrc(_lyricLines, new TimeSpan(mediaElement.MediaPosition));
+                    metaLyric.Text = lyric?.LrcText?.Trim();
+                }
+                else
+                {
+                    metaLyric.Text = null;
+                    metaLyric.Visibility = Visibility.Collapsed;
+                }
+            };
+            _lyricTimer.Start();
+
+            metaLyric.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            metaLyric.Visibility = Visibility.Collapsed;
+        }
     }
 
     // Newer .net has Math.Clamp
