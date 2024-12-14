@@ -108,6 +108,9 @@
         <PackageReference Include="Lib.Harmony" Version="2.2.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

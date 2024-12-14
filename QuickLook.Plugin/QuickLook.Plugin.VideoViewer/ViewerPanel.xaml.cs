@@ -259,12 +259,19 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             metaArtists.Text = artist;
             metaAlbum.Text = album;
 
-            var cs = info.Get(StreamKind.General, 0, "Cover_Data");
-            if (!string.IsNullOrEmpty(cs))
-                using (var ms = new MemoryStream(Convert.FromBase64String(cs)))
-                {
-                    CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-                }
+            var coverData = info.Get(StreamKind.General, 0, "Cover_Data");
+            if (!string.IsNullOrEmpty(coverData))
+            {
+                var coverBytes = Convert.FromBase64String
+                (
+                    coverData.Length % 4 == 0 // MediaInfo may will return multiple covers
+                        ? coverData
+                        : coverData.Split(" / ")[0] // Get the first cover only
+                );
+                using var ms = new MemoryStream(coverBytes);
+
+                CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            }
         }
         catch (Exception)
         {
