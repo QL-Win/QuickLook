@@ -38,7 +38,7 @@ public class Plugin : IViewer
         ".fff",
         ".gif",
         ".hdr", ".heic", ".heif",
-        ".ico", ".icon", ".iiq",
+        ".ico", ".icon", ".icns", ".iiq",
         ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl",
         ".k25", ".kdc",
         ".mdc", ".mef", ".mos", ".mrw",
@@ -73,6 +73,9 @@ public class Plugin : IViewer
             new KeyValuePair<string[], Type>(
                 useColorProfile ? [] : [".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"],
                 typeof(NativeProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".icns"],
+                typeof(IcnsProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));

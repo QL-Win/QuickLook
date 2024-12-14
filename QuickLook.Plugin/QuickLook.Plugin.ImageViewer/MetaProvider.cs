@@ -82,11 +82,20 @@ public class MetaProvider
 
         // fallback
 
-        using (var mi = new MagickImage())
+        try
         {
-            mi.Ping(_path);
-            w = (int)mi.Width;
-            h = (int)mi.Height;
+            using (var mi = new MagickImage())
+            {
+                mi.Ping(_path);
+                w = (int)mi.Width;
+                h = (int)mi.Height;
+            }
+        }
+        catch
+        {
+            // There are always formats that MagickImage does not support
+            // TODO: Use MediaInfo to detect it?
+            return Size.Empty;
         }
 
         return w + h == 0 ? new Size(800, 600) : new Size(w, h);
