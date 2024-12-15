@@ -138,7 +138,10 @@
                                            VerticalAlignment="Bottom"
                                            TextBlock.FontFamily="{StaticResource SegoeFluent}">
                                     <TextBlock.RenderTransform>
-                                        <ScaleTransform CenterX="13" CenterY="13" ScaleX="0.3" ScaleY="0.3" />
+                                        <TransformGroup>
+                                            <ScaleTransform CenterX="13" CenterY="13" ScaleX="0.25" ScaleY="0.25" />
+                                            <TranslateTransform X="0" Y="1" />
+                                        </TransformGroup>
                                     </TextBlock.RenderTransform>
                                     &#xF83F;
                                 </TextBlock>
