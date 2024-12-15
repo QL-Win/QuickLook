@@ -293,3 +293,4 @@ __pycache__/
 !/Build/AppxManifest.*
 !/Build/assetslayout.resfiles
 !/Build/priconfig.xml
+!/Build/micasetup.json

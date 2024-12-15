@@ -2,7 +2,7 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="QuickLook" Language="1033"
-           Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="Paddy Xu"
+           Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="QL-Win"
            UpgradeCode="c83b9c02-87d6-494e-9f5f-cf4c3900a54d">
     <Package InstallerVersion="500" Compressed="yes" Platform="x86" InstallScope="perUser" />
 
