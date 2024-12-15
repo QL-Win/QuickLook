@@ -18,13 +18,12 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Helpers;
+using QuickLook.Plugin.HtmlViewer.NativeMethods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -128,7 +127,7 @@ public class WebpagePanel : UserControl
             }
 
             // Ask user for unsafe schemes. Use dispatcher to avoid blocking thread.
-            string associatedApp = GetAssociatedAppForScheme(uri.Scheme);
+            string associatedApp = ShlwApi.GetAssociatedAppForScheme(uri.Scheme);
             _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 // TODO: translation
@@ -158,74 +157,6 @@ public class WebpagePanel : UserControl
             Debug.WriteLine($"Failed to open URL: {ex.Message}");
         }
     }
-
-    #region Get Associated App For Scheme
-
-    [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
-    private static extern uint AssocQueryString(
-        AssocF flags,
-        AssocStr str,
-        string pszAssoc,
-        string pszExtra,
-        [Out] StringBuilder pszOut,
-        ref uint pcchOut);
-
-    [Flags]
-    private enum AssocF
-    {
-        None = 0,
-        VerifyExists = 0x1
-    }
-
-    private enum AssocStr
-    {
-        Command = 1,
-        Executable = 2,
-        FriendlyAppName = 4
-    }
-
-    private string GetAssociatedAppForScheme(string scheme)
-    {
-        try
-        {
-            // Try to get friendly app name first
-            uint pcchOut = 0;
-            AssocQueryString(AssocF.None, AssocStr.FriendlyAppName, scheme, null, null, ref pcchOut);
-
-            if (pcchOut > 0)
-            {
-                var pszOut = new StringBuilder((int)pcchOut);
-                AssocQueryString(AssocF.None, AssocStr.FriendlyAppName, scheme, null, pszOut, ref pcchOut);
-
-                var appName = pszOut.ToString().Trim();
-                if (!string.IsNullOrEmpty(appName))
-                    return appName;
-            }
-
-            // Fall back to executable name if friendly name is not available
-            pcchOut = 0;
-            AssocQueryString(AssocF.None, AssocStr.Executable, scheme, null, null, ref pcchOut);
-
-            if (pcchOut > 0)
-            {
-                var pszOut = new StringBuilder((int)pcchOut);
-                AssocQueryString(AssocF.None, AssocStr.Executable, scheme, null, pszOut, ref pcchOut);
-
-                var exeName = pszOut.ToString().Trim();
-                if (!string.IsNullOrEmpty(exeName))
-                    return Path.GetFileName(exeName);
-            }
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Failed to get associated app: {ex.Message}");
-            return null;
-        }
-    }
-
-    #endregion Get Associated App For Scheme
 
     private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
     {
