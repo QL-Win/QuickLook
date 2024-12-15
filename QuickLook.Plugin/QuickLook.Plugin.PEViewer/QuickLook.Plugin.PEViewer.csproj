@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net462</TargetFramework>
+        <RootNamespace>QuickLook.Plugin.PEViewer</RootNamespace>
+        <AssemblyName>QuickLook.Plugin.PEViewer</AssemblyName>
+        <FileAlignment>512</FileAlignment>
+        <SignAssembly>false</SignAssembly>
+        <UseWPF>true</UseWPF>
+        <LangVersion>latest</LangVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+        <ProjectGuid>{EB7D1F10-6E04-4F7E-96A0-4E18359FBD30}</ProjectGuid>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.PEViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.PEViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.PEViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.PEViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
+            <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
+            <Name>QuickLook.Common</Name>
+            <Private>False</Private>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\GitVersion.cs">
+            <Link>Properties\GitVersion.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Memory" Version="4.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Translations.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>
