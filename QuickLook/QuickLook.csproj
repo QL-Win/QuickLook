@@ -99,13 +99,13 @@
         <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122">
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="WPF-UI.Violeta" Version="3.0.5.27">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Lib.Harmony" Version="2.2.2">
+        <PackageReference Include="Lib.Harmony" Version="2.3.3">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0">
