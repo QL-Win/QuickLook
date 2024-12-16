@@ -75,7 +75,7 @@ public class Plugin : IViewer
 
         var msg = new Reader();
 
-        var files = msg.ExtractToFolder(path, _tmpDir, true);
+        var files = msg.ExtractToFolder(path, _tmpDir, ReaderHyperLinks.Both);
 
         if (files.Length > 0 && !string.IsNullOrEmpty(files[0]))
             return files[0];

@@ -55,8 +55,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MsgReader" Version="3.7.24" />
-        <PackageReference Include="OpenMcdf" Version="2.2.1.4" />
+        <PackageReference Include="MsgReader" Version="5.7.0" />
+        <PackageReference Include="OpenMcdf" Version="2.4.1" />
         <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     </ItemGroup>
 
