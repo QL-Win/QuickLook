@@ -33,7 +33,7 @@ public class Plugin : IViewer
         ".apng", ".ari", ".arw", ".avif",
         ".bay", ".bmp",
         ".cap", ".cr2", ".cr3", ".crw",
-        ".dcr", ".dcs", ".dng", ".drf",
+        ".dcr", ".dcs", ".dds", ".dng", ".drf",
         ".eip", ".emf", ".erf", ".exr",
         ".fff",
         ".gif",
