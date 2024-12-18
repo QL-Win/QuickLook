@@ -45,6 +45,7 @@
             <HintPath>Mediakit\Assemblies\DirectShowLib-2005.dll</HintPath>
         </Reference>
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="Melanchall.DryWetMidi" Version="7.2.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,6 +19,7 @@ using MediaInfo;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.VideoViewer.AudioTrack;
 using QuickLook.Plugin.VideoViewer.Extensions;
 using QuickLook.Plugin.VideoViewer.LyricTrack;
 using System;
@@ -51,6 +52,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private BitmapSource _coverArt;
     private DispatcherTimer _lyricTimer;
     private LrcLine[] _lyricLines;
+    private MidiPlayer _midiPlayer;
 
     private bool _hasVideo;
     private bool _isPlaying;
@@ -173,6 +175,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         _lyricTimer?.Stop();
         _lyricTimer = null;
         _lyricLines = null;
+        _midiPlayer?.Dispose();
+        _midiPlayer = null;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -380,6 +384,21 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
     {
+        if (!HasVideo)
+        {
+            if (info != null)
+            {
+                string audioCodec = info.Get(StreamKind.Audio, 0, "Format");
+
+                if (audioCodec == "MIDI")
+                {
+                    _midiPlayer = new MidiPlayer(this, _context);
+                    _midiPlayer.LoadAndPlay(path, info);
+                    return;
+                }
+            }
+        }
+
         UpdateMeta(path, info);
 
         // detect rotation
