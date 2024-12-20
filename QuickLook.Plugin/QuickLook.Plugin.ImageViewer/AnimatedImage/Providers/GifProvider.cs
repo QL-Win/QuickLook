@@ -19,6 +19,7 @@ using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -43,9 +44,9 @@ internal class GifProvider : AnimationProvider
     private NativeProvider _nativeProvider;
 
     private int[] _frameDelays; // in millisecond
-    private int _frameCount = 0;
+    private readonly int _frameCount = 0;
     private int _frameIndex = 0;
-    private int _maxLoopCount = 0; // 0 - infinite loop
+    private readonly int _maxLoopCount = 0; // 0 - infinite loop
     private int _loopIndex = 0;
 
     private TimeSpan _minTickTimeInMillisecond = TimeSpan.FromMilliseconds(20);
@@ -95,20 +96,18 @@ internal class GifProvider : AnimationProvider
 
         try
         {
-            if (_bitmap != null)
+            lock (_bitmap ?? new object()) // Lock to prevent null reference exception
             {
-                lock (_bitmap)
-                {
-                    _stream?.Dispose();
-                    _bitmap?.Dispose();
+                _bitmap?.Dispose();
+                _bitmap = null;
 
-                    _bitmap = null;
-                    _stream = null;
-                }
+                _stream?.Dispose();
+                _stream = null;
             }
         }
-        catch
+        catch (Exception e)
         {
+            Debug.WriteLine(e);
         }
 
         _frame = null;

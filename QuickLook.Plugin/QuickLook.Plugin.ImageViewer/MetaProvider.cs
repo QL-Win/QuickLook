@@ -28,8 +28,7 @@ namespace QuickLook.Plugin.ImageViewer;
 
 public class MetaProvider
 {
-    private readonly SortedDictionary<string, (string, string)> _cache =
-        new SortedDictionary<string, (string, string)>(); // [key, [label, value]]
+    private readonly SortedDictionary<string, (string, string)> _cache = []; // [key, [label, value]]
 
     private readonly string _path;
 
