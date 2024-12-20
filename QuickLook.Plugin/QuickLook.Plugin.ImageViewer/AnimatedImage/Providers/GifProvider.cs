@@ -22,6 +22,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -32,6 +34,7 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 internal class GifProvider : AnimationProvider
 {
     private readonly int FRAME_DELAY_TAG = 0x5100;
+    private readonly int LOOP_COUNT_TAG = 20737;
 
     private Stream _stream;
     private Bitmap _bitmap;
@@ -39,8 +42,13 @@ internal class GifProvider : AnimationProvider
     private bool _isPlaying;
     private NativeProvider _nativeProvider;
 
+    private int[] _frameDelays; // in millisecond
     private int _frameCount = 0;
     private int _frameIndex = 0;
+    private int _maxLoopCount = 0; // 0 - infinite loop
+    private int _loopIndex = 0;
+
+    private TimeSpan _minTickTimeInMillisecond = TimeSpan.FromMilliseconds(20);
 
     public GifProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
     {
@@ -59,27 +67,52 @@ internal class GifProvider : AnimationProvider
         Animator = new Int32AnimationUsingKeyFrames { RepeatBehavior = RepeatBehavior.Forever };
 
         _frameCount = _bitmap.GetFrameCount(FrameDimension.Time);
+        _maxLoopCount = BitConverter.ToInt16(_bitmap.GetPropertyItem(LOOP_COUNT_TAG).Value, 0);
+
         var frameDelayData = _bitmap.GetPropertyItem(FRAME_DELAY_TAG)?.Value;
+        _frameDelays = new int[_frameCount];
 
         for (int i = 0; i < _frameCount; i++)
         {
-            var frameDelays = BitConverter.ToInt32(frameDelayData, i * 4) * 10; // in millisecond
-            Animator.KeyFrames.Add(new LinearInt32KeyFrame(i, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(frameDelays))));
+            _frameDelays[i] = BitConverter.ToInt32(frameDelayData, i * 4) * 10;
+
+            // The current architecture only requires 3 frames,
+            // and subsequent frames are triggered by a background thread
+            // Animator.KeyFrames.Add(new LinearInt32KeyFrame(i, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(_frameDelays[i]))));
         }
+
+        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
+        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10))));
+        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(20))));
     }
 
     public override void Dispose()
     {
+        _isPlaying = false;
+
         _nativeProvider?.Dispose();
         _nativeProvider = null;
 
-        ImageAnimator.StopAnimate(_bitmap, OnFrameChanged);
-        _stream?.Dispose();
-        _bitmap?.Dispose();
+        try
+        {
+            if (_bitmap != null)
+            {
+                lock (_bitmap)
+                {
+                    _stream?.Dispose();
+                    _bitmap?.Dispose();
 
-        _bitmap = null;
-        _stream = null;
+                    _bitmap = null;
+                    _stream = null;
+                }
+            }
+        }
+        catch
+        {
+        }
+
         _frame = null;
+        _frameDelays = null;
     }
 
     public override Task<BitmapSource> GetThumbnail(Size renderSize)
@@ -104,24 +137,103 @@ internal class GifProvider : AnimationProvider
             if (!_isPlaying)
             {
                 _isPlaying = true;
-                ImageAnimator.Animate(_bitmap, OnFrameChanged);
+
+                BeginAnimateBackground();
             }
 
             return _frame;
         });
     }
 
-    private void OnFrameChanged(object sender, EventArgs e)
+    private void BeginAnimateBackground()
     {
-        _frameIndex++;
-        if (_frameIndex >= _frameCount) _frameIndex = 0;
+        var _thHeartBeat = new Thread(HandleThreadHeartBeatTicked)
+        {
+            IsBackground = true,
+            Name = "heartbeat - ImageAnimator"
+        };
+        _thHeartBeat.Start();
+    }
 
-        _bitmap.SetActiveTimeFrame(_frameIndex);
-        _frame = _bitmap.ToBitmapSource();
+    /// <summary>
+    /// Given a delay amount, return either the minimum tick or delay, whichever is greater.
+    /// </summary>
+    /// <returns> the time to sleep during a tick in milliseconds </returns>
+    private TimeSpan GetSleepAmountInMilliseconds(TimeSpan delay)
+    {
+        if (delay > _minTickTimeInMillisecond)
+        {
+            return delay;
+        }
+
+        return _minTickTimeInMillisecond;
+    }
+
+    private TimeSpan GetFrameDelay(int frameIndex)
+    {
+        return TimeSpan.FromMilliseconds(_frameDelays[frameIndex]);
+    }
+
+    /// <summary>
+    /// Process image frame tick.
+    /// </summary>
+    private void HandleThreadHeartBeatTicked()
+    {
+        var initSleepTime = GetSleepAmountInMilliseconds(GetFrameDelay(_frameIndex));
+        Thread.Sleep(initSleepTime);
+
+        while (_isPlaying)
+        {
+            try
+            {
+                UpdateFrame(_frameIndex);
+
+                var sleepTime = GetSleepAmountInMilliseconds(GetFrameDelay(_frameIndex));
+                Thread.Sleep(sleepTime);
+            }
+            catch (ArgumentException)
+            {
+                // ignore errors that occur due to the image being disposed
+            }
+            catch (OutOfMemoryException)
+            {
+                // also ignore errors that occur due to running out of memory
+            }
+            catch (ExternalException)
+            {
+                // ignore
+            }
+            catch (InvalidOperationException)
+            {
+                // ignore
+            }
+
+            _frameIndex++;
+            if (_frameIndex >= _frameCount)
+            {
+                _frameIndex = 0;
+                _loopIndex++;
+
+                if (_maxLoopCount > 0 && _loopIndex >= _maxLoopCount)
+                {
+                    _isPlaying = false;
+                    return;
+                }
+            }
+        }
+    }
+
+    private void UpdateFrame(int frameIndex)
+    {
+        lock (_bitmap)
+        {
+            _bitmap.SetActiveTimeFrame(frameIndex);
+            _frame = _bitmap.ToBitmapSource();
+        }
     }
 }
 
-file static class GifBitmapExtension
+file static class BitmapExtensions
 {
     /// <summary>
     /// Sets the active frame of the bitmap using <see cref="FrameDimension.Time"/>.
