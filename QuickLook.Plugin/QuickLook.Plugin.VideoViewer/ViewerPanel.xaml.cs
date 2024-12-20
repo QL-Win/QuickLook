@@ -257,7 +257,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
-    private void UpdateMeta(string path, MediaInfo.MediaInfo info)
+    private void UpdateMeta(string path, MediaInfoLib info)
     {
         if (HasVideo)
             return;
@@ -382,20 +382,18 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         ShouldLoop = !ShouldLoop;
     }
 
-    public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
+    public void LoadAndPlay(string path, MediaInfoLib info)
     {
+        // Detect whether it is other playback formats
         if (!HasVideo)
         {
-            if (info != null)
-            {
-                string audioCodec = info.Get(StreamKind.Audio, 0, "Format");
+            string audioCodec = info?.Get(StreamKind.Audio, 0, "Format");
 
-                if (audioCodec == "MIDI")
-                {
-                    _midiPlayer = new MidiPlayer(this, _context);
-                    _midiPlayer.LoadAndPlay(path, info);
-                    return;
-                }
+            if (audioCodec?.Equals("MIDI", StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                _midiPlayer = new MidiPlayer(this, _context);
+                _midiPlayer.LoadAndPlay(path, info);
+                return; // MIDI player will handle the playback at all
             }
         }
 

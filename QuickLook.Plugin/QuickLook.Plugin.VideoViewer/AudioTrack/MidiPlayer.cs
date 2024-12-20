@@ -1,19 +1,41 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿// Copyright © 2024 QL-Win Contributors
+//
+// This file is part of QuickLook program.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
+using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace QuickLook.Plugin.VideoViewer.AudioTrack;
 
-internal class MidiPlayer : IDisposable
+internal class MidiPlayer : IDisposable, INotifyPropertyChanged
 {
     private ViewerPanel _vp;
     private ContextObject _context;
@@ -21,7 +43,22 @@ internal class MidiPlayer : IDisposable
     private OutputDevice _outputDevice;
     private Playback _playback;
     private TimeSpan _duration;
-    private MethodInfo _setShouldLoop; // _vp.set_ShouldLoop()
+    private MethodInfo _setShouldLoop; // Reflection to invoke `_vp.set_ShouldLoop()`
+
+    private long _currentTicks = 0L;
+
+    public long CurrentTicks
+    {
+        get => _currentTicks;
+        private set
+        {
+            if (value == _currentTicks) return;
+            _currentTicks = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public MidiPlayer(ViewerPanel panle, ContextObject context)
     {
@@ -33,12 +70,14 @@ internal class MidiPlayer : IDisposable
     {
         _vp = null;
         _context = null;
-        _outputDevice?.Dispose();
         _playback?.Stop();
         _playback?.Dispose();
+        _playback = null;
+        _outputDevice?.Dispose();
+        _outputDevice = null;
     }
 
-    public void LoadAndPlay(string path, MediaInfo.MediaInfo info)
+    public void LoadAndPlay(string path, MediaInfoLib info)
     {
         _midiFile = MidiFile.Read(path);
         _vp.metaTitle.Text = Path.GetFileName(path);
@@ -57,8 +96,16 @@ internal class MidiPlayer : IDisposable
             {
                 timeText.Text = "00:00";
                 _vp.metaLength.Text = durationString;
-                _vp.sliderProgress.Maximum = _duration.Ticks; // Unbinding
+                _vp.sliderProgress.IsSelectionRangeEnabled = false;
+                _vp.sliderProgress.SelectionEnd = 0L; // Unbinding
                 _vp.sliderProgress.Value = 0L; // Unbinding
+                _vp.sliderProgress.Maximum = _duration.Ticks; // Unbinding
+                _vp.sliderProgress.SetBinding(Slider.ValueProperty, new Binding(nameof(CurrentTicks)) // Rebinding
+                {
+                    Source = this,
+                    Mode = BindingMode.TwoWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                });
             }
         }
 
@@ -67,12 +114,12 @@ internal class MidiPlayer : IDisposable
             if (_playback.IsRunning)
             {
                 _playback.Stop();
-                _vp.buttonPlayPause.Content = "\xE768";
+                _vp.buttonPlayPause.Content = FontSymbols.Play;
             }
             else
             {
                 _playback.Start();
-                _vp.buttonPlayPause.Content = "\xE769";
+                _vp.buttonPlayPause.Content = FontSymbols.Pause;
             }
         };
 
@@ -88,22 +135,9 @@ internal class MidiPlayer : IDisposable
             _playback.Loop = _vp.ShouldLoop;
         };
 
-        //_vp.sliderProgress.ValueChanged += (_, _) =>
-        //{
-        //    if (!_isValueHandling)
-        //    {
-        //        _playback?.Stop();
-
-        //        double seekPercent = _vp.sliderProgress.Value / _duration.Ticks;
-        //        long moveTime = (long)(_duration.Ticks * seekPercent);
-        //        TimeSpan timeSpan = TimeSpan.FromTicks(moveTime);
-        //        _playback?.MoveToTime(new MetricTimeSpan(timeSpan));
-
-        //        _playback.Start();
-        //    }
-        //};
-
-        _vp.sliderProgress.PreviewMouseDown += (_, e) =>
+        // Event Slider.PreviewMouseDown will be prevented from being handled by the slider itself
+        // So we should add a handler by ourself
+        _vp.sliderProgress.AddHandler(UIElement.PreviewMouseDownEvent, new MouseButtonEventHandler((_, e) =>
         {
             _playback?.Stop();
 
@@ -112,15 +146,13 @@ internal class MidiPlayer : IDisposable
             double seekPercent = newValue / _duration.Ticks;
             long moveTime = (long)(_duration.Ticks * seekPercent);
             TimeSpan timeSpan = TimeSpan.FromTicks(moveTime);
-            _playback?.MoveToTime(new MetricTimeSpan(timeSpan));
 
-            _playback.Start();
-        };
-        _vp.sliderProgress.IsSelectionRangeEnabled = false;
-        _vp.sliderProgress.PreviewMouseUp += (_, _) =>
-        {
-            //_playback.Start();
-        };
+            _playback?.MoveToTime(new MetricTimeSpan(timeSpan));
+            CurrentTicks = timeSpan.Ticks;
+
+            _playback?.Start();
+            _vp.buttonPlayPause.Content = FontSymbols.Pause;
+        }), true);
 
         // Disable unsupported functionality
         {
@@ -140,7 +172,7 @@ internal class MidiPlayer : IDisposable
                         var current = TimeSpan.FromMilliseconds(metricTimeSpan.TotalMilliseconds);
                         var currentString = new TimeTickToShortStringConverter().Convert(current.Ticks, typeof(string), null, CultureInfo.InvariantCulture).ToString();
 
-                        _vp.sliderProgress.Value = current.Ticks;
+                        CurrentTicks = current.Ticks;
 
                         if (_vp?.buttonTime?.Content is TextBlock timeText)
                         {
@@ -155,7 +187,7 @@ internal class MidiPlayer : IDisposable
                         var current = TimeSpan.FromMilliseconds(metricTimeSpan.TotalMilliseconds);
                         var subtractString = new TimeTickToShortStringConverter().Convert(_duration.Ticks - current.Ticks, typeof(string), null, CultureInfo.InvariantCulture).ToString();
 
-                        _vp.sliderProgress.Value = current.Ticks;
+                        CurrentTicks = current.Ticks;
 
                         if (_vp?.buttonTime?.Content is TextBlock timeText)
                         {
@@ -172,12 +204,31 @@ internal class MidiPlayer : IDisposable
                 _playback.MoveToStart();
                 _vp.Dispatcher.Invoke(() =>
                 {
-                    _vp.buttonPlayPause.Content = "\xE768";
+                    _vp.buttonPlayPause.Content = FontSymbols.Play;
                 });
             }
         };
+
+        // Playback supported by DryWetMidi will block the current thread
+        // So we should run it in a new thread
         _ = Task.Run(() => _playback?.Play());
-        _vp.buttonPlayPause.Content = "\xE769";
+        _vp.buttonPlayPause.Content = FontSymbols.Pause;
         _context.IsBusy = false;
+    }
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    /// <summary>
+    /// Segoe Fluent Icons
+    /// https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-fluent-icons-font
+    /// </summary>
+    private sealed class FontSymbols
+    {
+        public const string Play = "\xe768";
+        public const string Pause = "\xe769";
     }
 }
