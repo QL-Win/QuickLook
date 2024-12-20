@@ -1,4 +1,4 @@
-﻿// Copyright © 2018 Paddy Xu
+﻿// Copyright © 2024 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -20,6 +20,8 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -29,10 +31,16 @@ namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 
 internal class GifProvider : AnimationProvider
 {
-    private Bitmap _fileHandle;
+    private readonly int FRAME_DELAY_TAG = 0x5100;
+
+    private Stream _stream;
+    private Bitmap _bitmap;
     private BitmapSource _frame;
     private bool _isPlaying;
     private NativeProvider _nativeProvider;
+
+    private int _frameCount = 0;
+    private int _frameIndex = 0;
 
     public GifProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
     {
@@ -42,15 +50,22 @@ internal class GifProvider : AnimationProvider
             return;
         }
 
-        _fileHandle = (Bitmap)Image.FromFile(path.LocalPath);
+        _stream = new FileStream(path.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        _bitmap = new Bitmap(_stream);
 
-        _fileHandle.SetResolution(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
+        _bitmap.SetResolution(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
             DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
 
         Animator = new Int32AnimationUsingKeyFrames { RepeatBehavior = RepeatBehavior.Forever };
-        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0))));
-        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10))));
-        Animator.KeyFrames.Add(new DiscreteInt32KeyFrame(2, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(20))));
+
+        _frameCount = _bitmap.GetFrameCount(FrameDimension.Time);
+        var frameDelayData = _bitmap.GetPropertyItem(FRAME_DELAY_TAG)?.Value;
+
+        for (int i = 0; i < _frameCount; i++)
+        {
+            var frameDelays = BitConverter.ToInt32(frameDelayData, i * 4) * 10; // in millisecond
+            Animator.KeyFrames.Add(new LinearInt32KeyFrame(i, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(frameDelays))));
+        }
     }
 
     public override void Dispose()
@@ -58,10 +73,12 @@ internal class GifProvider : AnimationProvider
         _nativeProvider?.Dispose();
         _nativeProvider = null;
 
-        ImageAnimator.StopAnimate(_fileHandle, OnFrameChanged);
-        _fileHandle?.Dispose();
+        ImageAnimator.StopAnimate(_bitmap, OnFrameChanged);
+        _stream?.Dispose();
+        _bitmap?.Dispose();
 
-        _fileHandle = null;
+        _bitmap = null;
+        _stream = null;
         _frame = null;
     }
 
@@ -72,7 +89,7 @@ internal class GifProvider : AnimationProvider
 
         return new Task<BitmapSource>(() =>
         {
-            _frame = _fileHandle.ToBitmapSource();
+            _frame = _bitmap.ToBitmapSource();
             return _frame;
         });
     }
@@ -87,7 +104,7 @@ internal class GifProvider : AnimationProvider
             if (!_isPlaying)
             {
                 _isPlaying = true;
-                ImageAnimator.Animate(_fileHandle, OnFrameChanged);
+                ImageAnimator.Animate(_bitmap, OnFrameChanged);
             }
 
             return _frame;
@@ -96,7 +113,29 @@ internal class GifProvider : AnimationProvider
 
     private void OnFrameChanged(object sender, EventArgs e)
     {
-        ImageAnimator.UpdateFrames();
-        _frame = _fileHandle.ToBitmapSource();
+        _frameIndex++;
+        if (_frameIndex >= _frameCount) _frameIndex = 0;
+
+        _bitmap.SetActiveTimeFrame(_frameIndex);
+        _frame = _bitmap.ToBitmapSource();
+    }
+}
+
+file static class GifBitmapExtension
+{
+    /// <summary>
+    /// Sets the active frame of the bitmap using <see cref="FrameDimension.Time"/>.
+    /// </summary>
+    public static void SetActiveTimeFrame(this Bitmap bmp, int frameIndex)
+    {
+        if (bmp == null || frameIndex < 0) return;
+
+        var frameCount = bmp.GetFrameCount(FrameDimension.Time);
+
+        // Check if frame index is greater than upper limit
+        if (frameIndex >= frameCount) return;
+
+        // Set active frame index
+        bmp.SelectActiveFrame(FrameDimension.Time, frameIndex);
     }
 }
