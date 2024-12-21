@@ -1,4 +1,4 @@
-﻿// Copyright © 2019 Paddy Xu
+﻿// Copyright © 2024 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -15,32 +15,40 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
+using System.Runtime.InteropServices;
 
 namespace QuickLook.NativeMethods;
 
-internal class WMI
+internal static class WMI
 {
     public static List<string> GetGPUNames()
     {
         try
         {
-            using (var searcher = new ManagementObjectSearcher(@"root\CIMV2", @"SELECT * FROM Win32_VideoController"))
-            {
-                var names = new List<string>();
+            using var searcher = new ManagementObjectSearcher(@"root\CIMV2", @"SELECT * FROM Win32_VideoController");
+            List<string> names = [];
 
-                foreach (var obj in searcher.Get())
-                    names.Add(obj["Name"] as string);
+            foreach (var obj in searcher.Get())
+                names.Add(obj["Name"] as string);
 
-                return names;
-            }
+            return names;
         }
         catch (ManagementException e)
         {
-            Debug.WriteLine(e.Message);
-            return new List<string>();
+            Debug.WriteLine($"ManagementException caught: {e.Message}");
         }
+        catch (COMException e)
+        {
+            Debug.WriteLine($"COMException caught: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"General exception caught: {e.Message}");
+        }
+        return [];
     }
 }
