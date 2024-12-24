@@ -47,7 +47,7 @@ public class Plugin : IViewer
         ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psd", ".ptx", ".pxn",
         ".qoi",
         ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
-        ".sr2", ".srf", ".srw", ".svg",
+        ".sr2", ".srf", ".srw", ".svg", ".svgz",
         ".tga", ".tif", ".tiff",
         ".wdp", ".webp", ".wmf",
         ".x3f", ".xcf",
