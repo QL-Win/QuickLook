@@ -19,7 +19,6 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using QuickLook.Common.Annotations;
-using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.ComponentModel;
@@ -43,7 +42,6 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
     private OutputDevice _outputDevice;
     private Playback _playback;
     private TimeSpan _duration;
-    private MethodInfo _setShouldLoop; // Reflection to invoke `_vp.set_ShouldLoop()`
 
     private long _currentTicks = 0L;
 
@@ -64,6 +62,7 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
     {
         _vp = panle;
         _context = context;
+        _outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
     }
 
     public void Dispose()
@@ -84,7 +83,6 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
         _vp.metaArtists.Text = _midiFile.OriginalFormat.ToString();
         _vp.metaAlbum.Text = _midiFile.TimeDivision.ToString();
 
-        _outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
         _playback = _midiFile.GetPlayback(_outputDevice);
 
         if (_playback.GetDuration(TimeSpanType.Metric) is MetricTimeSpan metricTimeSpan)
@@ -123,15 +121,8 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
             }
         };
 
-        if (_vp.GetType().GetProperty("ShouldLoop", BindingFlags.Instance | BindingFlags.Public) is PropertyInfo propertyShouldLoop)
-        {
-            _setShouldLoop = propertyShouldLoop.GetSetMethod(nonPublic: true);
-            _setShouldLoop.Invoke(_vp, [SettingHelper.Get("ShouldLoop", false, "QuickLook.Plugin.VideoViewer")]);
-        }
-
         _vp.buttonLoop.Click += (_, _) =>
         {
-            _setShouldLoop.Invoke(_vp, [!_vp.ShouldLoop]);
             _playback.Loop = _vp.ShouldLoop;
         };
 
