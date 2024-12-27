@@ -69,11 +69,12 @@
             <Name>QuickLook.Common</Name>
             <Private>False</Private>
         </ProjectReference>
-        <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
+        <!--  Keep QuickLook reference here for App testing  -->
+        <!--<ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
             <Project>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</Project>
             <Name>QuickLook</Name>
             <Private>False</Private>
-        </ProjectReference>
+        </ProjectReference>-->
     </ItemGroup>
 
     <ItemGroup>

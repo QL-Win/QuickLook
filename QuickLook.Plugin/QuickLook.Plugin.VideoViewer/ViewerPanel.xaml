@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mediakit="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=QuickLook.WPFMediaKit"
@@ -158,7 +157,9 @@
                     </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
             </Grid.Resources>
-            <glassLayer:GlassLayer ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=HasVideo, Converter={StaticResource BooleanToVisibilityConverter}}"
+            <!--  Keep glassLayer:GlassLayer here for the dependency testing  -->
+            <!--  xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"  -->
+            <!--<glassLayer:GlassLayer ColorOverlayVisibility="{Binding ElementName=viewerPanel, Path=HasVideo, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    GlassVisibility="{Binding ElementName=viewerPanel, Path=HasVideo, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    OverlayColor="{DynamicResource CaptionBackground}">
                 <glassLayer:GlassLayer.Style>
@@ -171,7 +172,7 @@
                         </Style.Triggers>
                     </Style>
                 </glassLayer:GlassLayer.Style>
-            </glassLayer:GlassLayer>
+            </glassLayer:GlassLayer>-->
             <DockPanel Margin="8,0,8,0">
                 <Button x:Name="buttonPlayPause"
                         DockPanel.Dock="Left"

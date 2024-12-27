@@ -62,6 +62,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     public ViewerPanel(ContextObject context)
     {
         InitializeComponent();
+        LoadAndInsertGlassLayer();
 
         // apply global theme
         Resources.MergedDictionaries[0].MergedDictionaries.Clear();
@@ -99,6 +100,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         PreviewMouseWheel += (sender, e) => ChangeVolume((double)e.Delta / 120 * 0.04);
     }
+
+    private partial void LoadAndInsertGlassLayer();
 
     public bool HasVideo
     {
