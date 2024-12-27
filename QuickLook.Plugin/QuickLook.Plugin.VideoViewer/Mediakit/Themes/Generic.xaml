@@ -1,7 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WPFMediaKit">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WPFMediaKit;component/Themes/MediaDetectorGeneric.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>

@@ -5,7 +5,7 @@
              xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer;assembly=QuickLook"
              xmlns:local="clr-namespace:QuickLook.Plugin.VideoViewer"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:mediakit="clr-namespace:WPFMediaKit.DirectShow.Controls"
+             xmlns:mediakit="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=QuickLook.WPFMediaKit"
              x:Name="viewerPanel"
              d:DesignHeight="300"
              d:DesignWidth="500"

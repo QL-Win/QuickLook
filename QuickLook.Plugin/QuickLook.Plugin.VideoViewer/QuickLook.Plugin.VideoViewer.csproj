@@ -36,22 +36,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!--<PackageReference Include="WPFMediaKit" Version="2.2.0" />-->
-        <!--<PackageReference Include="MediaInfoDLL" Version="24.4.0" />-->
+        <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.0" />
         <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3" />
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>Mediakit\Assemblies\DirectShowLib-2005.dll</HintPath>
         </Reference>
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
         <PackageReference Include="Melanchall.DryWetMidi" Version="7.2.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="Mediakit\Effects\DeeperColor.fx" />
-    </ItemGroup>
-    
     <ItemGroup>
         <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
             <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
@@ -66,15 +60,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="DirectShowLib-2005.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="EVRPresenter32.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="EVRPresenter64.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
         <Content Include="LAVFilters-x64\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -92,6 +77,10 @@
         </Content>
         <Resource Include="Resources\empty.png" />
     </ItemGroup>
+
+    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <Delete Files="$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib" Condition="Exists('$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib')" />
+    </Target>
 
     <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">
