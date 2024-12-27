@@ -33,7 +33,7 @@ Get it from one of the following sources:
 
   * Microsoft Store (Windows 10 users only, no preview in open/save-dialogs available) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://developer.microsoft.com/store/badges/images/English_get_L.png" height="22px" alt="Store Link" /></a> 
   * Installer or portable archive of the stable version from [GitHub Release](https://github.com/QL-Win/QuickLook/releases)
-  * Using [Scoop](https://scoop.sh/): `scoop install quicklook`
+  * Using [Scoop](https://scoop.sh/): `scoop bucket add extras && scoop install extras/quicklook`
   * Nightly builds from [AppVeyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts) and [GitHub Action](https://github.com/QL-Win/QuickLook/releases/)
 
 [What are the differences between `.msi`, `.zip`, Nightly and Store versions?](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions)
