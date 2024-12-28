@@ -81,6 +81,12 @@
         </ProjectReference>
     </ItemGroup>
 
+    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <!-- Not support to ARM64 -->
+        <Delete Files="$(OutputPath)\arm64\pdfium.dll" Condition="Exists('$(OutputPath)\arm64\pdfium.dll')" />
+        <RemoveDir Directories="$(OutputPath)\arm64" Condition="Exists('$(OutputPath)\arm64')" />
+    </Target>
+    
     <ItemGroup>
         <Resource Include="Resources\loading.png" />
     </ItemGroup>
