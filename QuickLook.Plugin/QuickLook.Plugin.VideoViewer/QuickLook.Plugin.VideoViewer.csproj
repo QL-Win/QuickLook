@@ -25,7 +25,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
@@ -37,7 +37,12 @@
 
     <ItemGroup>
         <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.0" />
-        <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3" />
+        <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3">
+            <Aliases>MediaInfoWrapper</Aliases>
+        </PackageReference>
+        <PackageReference Include="MediaInfoDLL" Version="24.12.0">
+            <Aliases>MediaInfoDLL</Aliases>
+        </PackageReference>
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
@@ -67,12 +72,21 @@
         <Content Include="LAVFilters-x86\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="MediaInfo-x64\MediaInfo.dll">
+        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\24.12.0\lib\netstandard2.0\x64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <DestinationFolder>$(OutDir)MediaInfo-x64\</DestinationFolder>
+            <Link>MediaInfo-x64\MediaInfo.dll</Link>
         </Content>
-        <Content Include="MediaInfo-x86\MediaInfo.dll">
+        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\24.12.0\lib\netstandard2.0\x86\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <DestinationFolder>$(OutDir)MediaInfo-x86\</DestinationFolder>
+            <Link>MediaInfo-x86\MediaInfo.dll</Link>
         </Content>
+        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\24.12.0\lib\netstandard2.0\arm64\MediaInfo.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <DestinationFolder>$(OutDir)MediaInfo-ARM64\</DestinationFolder>
+            <Link>MediaInfo-ARM64\MediaInfo.dll</Link>
+        </Content>-->
         <Content Include="LibVlc\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -81,6 +95,10 @@
 
     <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <Delete Files="$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib" Condition="Exists('$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib')" />
+		<!-- Keep MediaInfoDLL.dll for MediaInfoViewer to read the translations -->
+		<Delete Files="$(OutputPath)\MediaInfoDLL.dll" Condition="Exists('$(OutputPath)\MediaInfoDLL.dll')" />
+		<!-- MediaInfoDLL will copy the MediaInfo.dll file according to the architecture, we do not use this usage so delete it manually -->
+		<Delete Files="$(OutputPath)\MediaInfo.dll" Condition="Exists('$(OutputPath)\MediaInfo.dll')" />
     </Target>
 
     <ItemGroup>

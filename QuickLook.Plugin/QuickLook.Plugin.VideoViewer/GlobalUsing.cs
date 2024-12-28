@@ -15,4 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-global using MediaInfoLib = MediaInfo.MediaInfo;
+extern alias MediaInfoWrapper;
+
+global using MediaInfoLib = MediaInfoWrapper::MediaInfo.MediaInfo;
