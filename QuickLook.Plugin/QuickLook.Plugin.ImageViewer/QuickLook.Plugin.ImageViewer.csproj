@@ -8,6 +8,7 @@
         <FileAlignment>512</FileAlignment>
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
         <LangVersion>latest</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

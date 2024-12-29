@@ -106,7 +106,7 @@ public class MetaProvider
     }
 }
 
-internal static class NativeMethods
+file static class NativeMethods
 {
     private static readonly bool Is64 = Environment.Is64BitProcess;
 
