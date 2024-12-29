@@ -36,6 +36,12 @@ public class WebpagePanel : UserControl
     private string _fallbackPath;
     private WebView2 _webView;
 
+    public string FallbackPath
+    {
+        get => _fallbackPath;
+        set => _fallbackPath = value;
+    }
+
     public WebpagePanel()
     {
         if (!Helper.IsWebView2Available())
@@ -59,12 +65,11 @@ public class WebpagePanel : UserControl
         }
     }
 
-    public void NavigateToFile(string path, string fallbackPath = null)
+    public void NavigateToFile(string path)
     {
         try
         {
             _primaryPath = Path.GetDirectoryName(path);
-            _fallbackPath = fallbackPath;
         }
         catch (Exception e)
         {

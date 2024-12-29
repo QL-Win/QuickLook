@@ -66,7 +66,8 @@ public class Plugin : IViewer
         context.Title = Path.GetFileName(path);
 
         var htmlPath = GenerateMarkdownHtml(path);
-        _panel.NavigateToFile(htmlPath, Path.GetDirectoryName(path));
+        _panel.FallbackPath = Path.GetDirectoryName(path);
+        _panel.NavigateToFile(htmlPath);
         _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
     }
 
