@@ -80,6 +80,11 @@
 
     <ItemGroup>
         <PackageReference Include="FreeTypeSharp" Version="3.0.0" />
+		<!--<Reference Include="Typography.OpenFont">
+			<HintPath>.\Typography.OpenFont.dll</HintPath>
+		</Reference>-->
+		<!--<PackageReference Include="SharpZipLib" Version="1.4.2" />-->
+		<PackageReference Include="BrotliSharpLib" Version="0.3.3" />
     </ItemGroup>
 
     <ItemGroup>

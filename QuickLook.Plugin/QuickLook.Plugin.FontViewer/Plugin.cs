@@ -18,6 +18,7 @@
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
+using SampleWinForms;
 using System;
 using System.IO;
 using System.IO.Packaging;
@@ -26,6 +27,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Resources;
+using Typography.OpenFont.WebFont;
 
 namespace QuickLook.Plugin.FontViewer;
 
@@ -44,7 +46,8 @@ public class Plugin : IViewer
     public bool CanHandle(string path)
     {
         // The `*.eot` and `*.svg` font types are not supported
-        return !Directory.Exists(path) && new string[] { ".ttf", ".otf", ".woff", ".woff2" }.Any(path.ToLower().EndsWith);
+        // TODO: Check `*.otc` type
+        return !Directory.Exists(path) && new string[] { ".ttf", ".otf", ".woff", ".woff2", ".ttc" }.Any(path.ToLower().EndsWith);
     }
 
     public void Prepare(string path, ContextObject context)
@@ -109,6 +112,7 @@ public class Plugin : IViewer
         //      url('xxx.ttf') format('truetype'),
         //      url('xxx.svg#xxx') format('svg');
         var fileName = Path.GetFileName(path);
+        var fileNameWithoutExt = Path.GetFileNameWithoutExtension(path);
         var fileExt = Path.GetExtension(fileName);
         static string GenerateRandomString(int length)
         {
@@ -124,9 +128,8 @@ public class Plugin : IViewer
             return new string(result);
         }
 
-        string cssUrl = $"src: url('{fileName}'), url('{fileName.Substring(0, fileExt.Length)}?#{GenerateRandomString(5)}{fileExt}')"
-            + Path.GetExtension(path)
-            switch
+        string cssUrl = $"src: url('{fileName}'), url('{fileNameWithoutExt}?#{GenerateRandomString(5)}{fileExt}')"
+            + fileExt switch
             {
                 ".eot" => " format('embedded-opentype');",
                 ".woff" => " format('woff');",
@@ -135,6 +138,47 @@ public class Plugin : IViewer
                 ".otf" => " format('opentype');",
                 _ => ";",
             };
+
+        if (string.IsNullOrEmpty(fontFamilyName))
+        {
+            string GetWoff2FontFamilyName()
+            {
+                OurOpenFontSystemSetup.SetupWoffDecompressFunctions();
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                using var input = new BinaryReader(fs);
+                var woffReader = new Woff2Reader
+                {
+                    DecompressHandler = Woff2DefaultBrotliDecompressFunc.DecompressHandler
+                };
+                input.BaseStream.Position = 0;
+                var info = woffReader.ReadPreview(input);
+
+                return info?.Name;
+            }
+            //string GetWoffFontFamilyName()
+            //{
+            //    OurOpenFontSystemSetup.SetupWoffDecompressFunctions();
+            //    using var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            //    using var input = new BinaryReader(fs);
+            //    var woffReader = new WoffReader
+            //    {
+            //        DecompressHandler = WoffDefaultZlibDecompressFunc.DecompressHandler
+            //    };
+            //    input.BaseStream.Position = 0;
+            //    var info = woffReader.ReadPreview(input);
+
+            //    return info?.Name;
+            //}
+
+            if (fileExt.ToLower().Equals(".woff2"))
+            {
+                fontFamilyName = GetWoff2FontFamilyName();
+            }
+            //else if (fileExt.ToLower().Equals(".woff"))
+            //{
+            //    fontFamilyName = GetWoffFontFamilyName();
+            //}
+        }
 
         html = html.Replace("--font-family;", $"font-family: '{fontFamilyName}';")
                    .Replace("--font-url;", cssUrl)
