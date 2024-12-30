@@ -1,4 +1,4 @@
-﻿// Copyright © 2018 Paddy Xu
+﻿// Copyright © 2024 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -76,6 +76,9 @@ public class Plugin : IViewer
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".icns"],
                 typeof(IcnsProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".webp"],
+                typeof(WebPProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));
