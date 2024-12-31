@@ -72,8 +72,7 @@ public partial class ViewerWindow : Window
         {
             if (Pinned)
             {
-                TranslationHelper.Get("Icon_Quit");
-                Toast.Information("Cancellation of Prevent Closing is not supported");
+                Toast.Information(TranslationHelper.Get("InfoPanel_CantPreventClosing"));
                 return;
             }
 
