@@ -212,7 +212,8 @@
                     </Button.Style>
                 </Button>
                 <Button x:Name="buttonTime"
-                        Width="37"
+                        Width="NaN"
+                        MinWidth="37"
                         DockPanel.Dock="Right"
                         Style="{StaticResource ControlButtonStyle}"
                         Tag="Time"
