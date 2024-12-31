@@ -23,6 +23,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Wpf.Ui.Violeta.Controls;
 using Brush = System.Windows.Media.Brush;
 using FontFamily = System.Windows.Media.FontFamily;
 using Size = System.Windows.Size;
@@ -41,7 +42,7 @@ public partial class ViewerWindow : Window
     internal ViewerWindow()
     {
         // this object should be initialized before loading UI components, because many of which are binding to it.
-        ContextObject = new ContextObject();
+        ContextObject = new ContextObject() { Source = this };
 
         ContextObject.PropertyChanged += ContextObject_PropertyChanged;
 
@@ -53,29 +54,33 @@ public partial class ViewerWindow : Window
 
         SizeChanged += SaveWindowSizeOnSizeChanged;
 
-        StateChanged += (sender, e) => _ignoreNextWindowSizeChange = true;
+        StateChanged += (_, _) => _ignoreNextWindowSizeChange = true;
 
         windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
 
-        buttonTop.Click += (sender, e) =>
+        buttonTop.Click += (_, _) =>
         {
             Topmost = !Topmost;
             SettingHelper.Set("Topmost", Topmost);
             buttonTop.Tag = Topmost ? "Top" : "Auto";
         };
 
-        buttonPin.Click += (sender, e) =>
+        buttonPin.Click += (_, _) =>
         {
             if (Pinned)
+            {
+                TranslationHelper.Get("Icon_Quit");
+                Toast.Information("Cancellation of Prevent Closing is not supported");
                 return;
+            }
 
             ViewWindowManager.GetInstance().ForgetCurrentWindow();
         };
 
-        buttonCloseWindow.Click += (sender, e) =>
+        buttonCloseWindow.Click += (_, _) =>
         {
             if (Pinned)
                 Close();
@@ -83,7 +88,7 @@ public partial class ViewerWindow : Window
                 ViewWindowManager.GetInstance().ClosePreview();
         };
 
-        buttonOpen.Click += (sender, e) =>
+        buttonOpen.Click += (_, _) =>
         {
             if (Pinned)
                 RunAndClose();
@@ -91,11 +96,11 @@ public partial class ViewerWindow : Window
                 ViewWindowManager.GetInstance().RunAndClosePreview();
         };
 
-        buttonWindowStatus.Click += (sender, e) =>
+        buttonWindowStatus.Click += (_, _) =>
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-        buttonShare.Click += (sender, e) => ShareHelper.Share(_path, this);
-        buttonOpenWith.Click += (sender, e) => ShareHelper.Share(_path, this, true);
+        buttonShare.Click += (_, _) => ShareHelper.Share(_path, this);
+        buttonOpenWith.Click += (_, _) => ShareHelper.Share(_path, this, true);
 
         // Set UI translations
         buttonTop.ToolTip = TranslationHelper.Get("MW_StayTop");
