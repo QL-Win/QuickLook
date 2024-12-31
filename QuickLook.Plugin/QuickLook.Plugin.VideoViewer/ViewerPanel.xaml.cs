@@ -397,8 +397,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             if (audioCodec?.Equals("MIDI", StringComparison.OrdinalIgnoreCase) ?? false)
             {
                 _midiPlayer = new MidiPlayer(this, _context);
-                _midiPlayer.LoadAndPlay(path, info);
-                return; // MIDI player will handle the playback at all
+                _midiPlayer.LoadAndPlay(path);
+                return; // Midi player will handle the playback at all
             }
         }
 

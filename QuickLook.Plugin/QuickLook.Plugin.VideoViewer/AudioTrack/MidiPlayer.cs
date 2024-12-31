@@ -1,4 +1,4 @@
-﻿// Copyright © 2024 QL-Win Contributors
+﻿// Copyright © 2017–2025 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -24,9 +24,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -56,8 +54,6 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
     public MidiPlayer(ViewerPanel panle, ContextObject context)
     {
         _vp = panle;
@@ -76,7 +72,7 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
         _outputDevice = null;
     }
 
-    public void LoadAndPlay(string path, MediaInfoLib info)
+    public void LoadAndPlay(string path)
     {
         _midiFile = MidiFile.Read(path);
         _vp.metaTitle.Text = Path.GetFileName(path);
@@ -200,12 +196,12 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
             }
         };
 
-        // Playback supported by DryWetMidi will block the current thread
-        // So we should run it in a new thread
-        _ = Task.Run(() => _playback?.Play());
+        _playback.Start();
         _vp.buttonPlayPause.Content = FontSymbols.Pause;
         _context.IsBusy = false;
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     [NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
