@@ -1,4 +1,4 @@
-// Copyright © 2017 Paddy Xu
+// Copyright © 2017-2025 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using UnblockZoneIdentifier;
 
 namespace QuickLook;
 
@@ -162,13 +163,15 @@ internal class PluginManager
 
         // Show manual unblock instructions if automatic unblock failed or was already attempted
         MessageBox.Show(
-            "Windows has blocked the plugins.\n\n" +
-            "To fix this, please follow these steps:\n" +
-            "1. Right-click the downloaded QuickLook zip file and select 'Properties'\n" +
-            "2. At the bottom of the Properties window, check 'Unblock'\n" +
-            "3. Click 'Apply' and 'OK'\n" +
-            "4. Extract the zip file again\n\n" +
-            "QuickLook will now close. Please launch it from the unblocked folder.",
+            """
+            Windows has blocked the plugins.
+            To fix this, please follow these steps:
+            1. Right-click the downloaded QuickLook zip file and select 'Properties'
+            2. At the bottom of the Properties window, check 'Unblock'
+            3. Click 'Apply' and 'OK'
+            4. Extract the zip file again
+            QuickLook will now close. Please launch it from the unblocked folder.
+            """,
             "Security Block Detected",
             MessageBoxButton.OK,
             MessageBoxImage.Error);
@@ -191,38 +194,23 @@ internal class PluginManager
         try
         {
             var rootDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (rootDir != null)
+
+            if (!string.IsNullOrEmpty(rootDir) && Directory.Exists(rootDir))
             {
-                // Create and start PowerShell process
-                var startInfo = new ProcessStartInfo
+                foreach (var filePath in Directory.GetFiles(rootDir, "*.*", SearchOption.AllDirectories))
                 {
-                    FileName = "powershell.exe",
-                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"Get-ChildItem '{rootDir}' -Recurse | Unblock-File\"",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
-
-                using (var process = Process.Start(startInfo))
-                {
-                    if (process != null)
+                    if (ZoneIdentifierManager.IsZoneBlocked(filePath))
                     {
-                        process.WaitForExit();
-                        var output = process.StandardOutput.ReadToEnd();
-                        var error = process.StandardError.ReadToEnd();
-
-                        if (!string.IsNullOrEmpty(error))
-                            ProcessHelper.WriteLog($"PowerShell unblock output error: {error}");
-                        if (!string.IsNullOrEmpty(output))
-                            ProcessHelper.WriteLog($"PowerShell unblock output: {output}");
+                        _ = ZoneIdentifierManager.UnblockZone(filePath);
                     }
                 }
             }
 
             MessageBox.Show(
-                "QuickLook has detected that Windows blocked the plugins, and has attempted to unblock them.\n\n" +
-                "The application will now restart to check if the unblocking was successful.",
+                """
+                QuickLook has detected that Windows blocked the plugins, and has attempted to unblock them.
+                The application will now restart to check if the unblocking was successful.
+                """,
                 "Security Unblock Attempt",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -231,9 +219,9 @@ internal class PluginManager
             TrayIconManager.GetInstance().Restart(forced: true);
             return true;
         }
-        catch (Exception unblockEx)
+        catch (Exception e)
         {
-            ProcessHelper.WriteLog($"Failed to perform automatic unblock: {unblockEx}");
+            ProcessHelper.WriteLog($"Failed to perform automatic unblock: {e}");
             return false;
         }
     }

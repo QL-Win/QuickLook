@@ -111,6 +111,9 @@
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="UnblockZoneIdentifier " Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
