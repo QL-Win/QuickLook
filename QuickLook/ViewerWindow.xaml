@@ -15,7 +15,6 @@
         d:DesignWidth="624"
         Background="{DynamicResource MainWindowBackground}"
         BorderBrush="{DynamicResource CaptionBackground}"
-        Focusable="False"
         Foreground="{DynamicResource WindowTextForeground}"
         ResizeMode="CanResize"
         ShowActivated="False"
