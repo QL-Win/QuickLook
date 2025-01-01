@@ -30,11 +30,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
-using Size = System.Windows.Size;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 

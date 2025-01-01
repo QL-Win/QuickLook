@@ -85,6 +85,9 @@ public class Plugin : IViewer
             new KeyValuePair<string[], Type>([".cur", ".ani"],
                 typeof(CursorProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".svg"],
+                typeof(SvgProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));
     }
