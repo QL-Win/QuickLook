@@ -196,6 +196,18 @@ internal class ImageMagickProvider : AnimationProvider
 
         return new TransformedBitmap(image, transforms);
     }
+
+    protected bool IsImageMagickSupported(string path)
+    {
+        try
+        {
+            return new MagickImageInfo(path).Format != MagickFormat.Unknown;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
 
 file static class Extension

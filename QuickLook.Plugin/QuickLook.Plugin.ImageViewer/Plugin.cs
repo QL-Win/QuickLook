@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using ImageMagick;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
@@ -30,9 +32,9 @@ public class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownImageExtensions = new(
     [
-        ".apng", ".ari", ".arw", ".avif",
+        ".apng", ".ari", ".arw", ".avif", ".ani",
         ".bay", ".bmp",
-        ".cap", ".cr2", ".cr3", ".crw",
+        ".cap", ".cr2", ".cr3", ".crw", ".cur",
         ".dcr", ".dcs", ".dds", ".dng", ".drf",
         ".eip", ".emf", ".erf", ".exr",
         ".fff",
@@ -80,6 +82,9 @@ public class Plugin : IViewer
             new KeyValuePair<string[], Type>([".webp"],
                 typeof(WebPProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".cur", ".ani"],
+                typeof(CursorProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));
     }
@@ -89,24 +94,11 @@ public class Plugin : IViewer
         return WellKnownImageExtensions.Contains(Path.GetExtension(path.ToLower()));
     }
 
-    private bool IsImageMagickSupported(string path)
-    {
-        try
-        {
-            return new MagickImageInfo(path).Format != MagickFormat.Unknown;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public bool CanHandle(string path)
     {
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        // For other image formats, let ImageMagick try to detect by file content.
-        return !Directory.Exists(path) && (IsWellKnownImageExtension(path)); // || IsImageMagickSupported(path));
+        return !Directory.Exists(path) && (IsWellKnownImageExtension(path));
     }
 
     public void Prepare(string path, ContextObject context)
@@ -134,6 +126,12 @@ public class Plugin : IViewer
             : $"{size.Width}×{size.Height}: {Path.GetFileName(path)}";
 
         _ip.ImageUriSource = Helper.FilePathToFileUrl(path);
+
+        // Load the custom cursor into the preview panel
+        if (new string[] { ".cur", ".ani" }.Any(path.ToLower().EndsWith))
+        {
+            _ip.Cursor = CursorProvider.GetCursor(path) ?? Cursors.Arrow;
+        }
     }
 
     public void Cleanup()
