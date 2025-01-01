@@ -61,7 +61,7 @@
         <PackageReference Include="Svg.Skia" Version="2.0.0.4">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.2.0">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.3.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
