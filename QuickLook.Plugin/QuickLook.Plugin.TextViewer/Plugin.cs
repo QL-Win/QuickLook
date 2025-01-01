@@ -95,7 +95,7 @@ public class Plugin : IViewer
         else
         {
             _tvp = new TextViewerPanel(path, context);
-            AssignHighlightingManager(_tvp, context);
+            AssignHighlightingManager(path, _tvp, context);
 
             context.ViewerContent = _tvp;
         }
@@ -146,10 +146,12 @@ public class Plugin : IViewer
         return hlm;
     }
 
-    private void AssignHighlightingManager(TextViewerPanel tvp, ContextObject context)
+    private void AssignHighlightingManager(string path, TextViewerPanel tvp, ContextObject context)
     {
-        var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", false, "QuickLook.Plugin.TextViewer");
+        var def = _hlmDark.GetDefinitionByExtension(Path.GetExtension(path));
+        var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", def != null, "QuickLook.Plugin.TextViewer");
         var isDark = darkThemeAllowed && OSThemeHelper.AppsUseDarkTheme();
+
         tvp.HighlightingManager = isDark ? _hlmDark : _hlmLight;
         if (isDark)
         {
@@ -160,7 +162,7 @@ public class Plugin : IViewer
         {
             // if os dark mode, but not AllowDarkTheme, make background light
             tvp.Background = OSThemeHelper.AppsUseDarkTheme()
-                ? new SolidColorBrush(Color.FromArgb(150, 255, 255, 255))
+                ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
                 : Brushes.Transparent;
         }
     }
