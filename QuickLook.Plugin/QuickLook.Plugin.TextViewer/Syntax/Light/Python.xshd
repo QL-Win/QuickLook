@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-Python syntax highlighting
-Written by Ezra Altahan
-Created 12/4/2015 | Updated 16/10/2016
-Version 1.3
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Python" extensions=".py;.pyw">
 
     <Environment> 

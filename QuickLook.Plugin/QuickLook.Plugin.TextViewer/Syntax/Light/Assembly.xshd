@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-Assembly syntax highlighting
-Written by Ezra Altahan
-Created 03/01/2011 | Updated 23/10/2016
-Version 1.6
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Assembly" extensions=".asm">
 
     <Environment> 

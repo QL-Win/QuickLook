@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Batch" extensions=".bat;.cmd">
+
+	<Environment>
+		<Default color="White" bgcolor="#000000"/>
+		<Selection color="#000080" bgcolor="#C3C3FF"/>
+		<LineNumbers color="#A9A9A9" bgcolor="#000000"/>
+		<CaretMarker color="#A9A9A9"/>
+		<VRuler color="#808080"/>
+
+		<FoldLine color="#D3D3D3" bgcolor="#000000"/>
+		<FoldMarker color="#D3D3D3" bgcolor="#000000"/>
+		<SelectedFoldLine color="#D3D3D3" bgcolor="#000000"/>
+
+		<EOLMarkers color="#A9A9A9"/>
+		<SpaceMarkers color="#A9A9A9"/>
+		<TabMarkers color="#A9A9A9"/>
+		<InvalidLines color="#A9A9A9"/>
+	</Environment>
+
+	<Properties>
+		<Property name="LineComment" value="REM "/>
+	</Properties>
+
+	<Digits name="Digits" color="White" bold="false" italic="false"/>
+
+	<RuleSets>
+		<RuleSet ignorecase="true">
+
+			<Delimiters>@+*\/=|'&lt;&gt;?;</Delimiters>
+
+			<Span name="LineComment1" stopateol="true" color="#00FF00" bold="false" italic="false">
+				<Begin singleword="true">REM </Begin>
+			</Span>
+
+			<Span name="LineComment2" stopateol="true" color="#00FF00" bold="false" italic="false">
+				<Begin startofline="true">::</Begin>
+			</Span>
+
+			<Span name="Label" stopateol="true" color="#FF0000" bgcolor="#FFFF80" bold="false" italic="false">
+				<Begin startofline="true">:</Begin>
+			</Span>
+
+			<Span name="Output" stopateol="true" color="White" bold="false" italic="false">
+				<Begin color="Blue">echo</Begin>
+			</Span>
+
+			<KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+				<Key word="aux"/>
+				<Key word="baud"/>
+				<Key word="break"/>
+				<Key word="call"/>
+				<Key word="cd"/>
+				<Key word="chcp"/>
+				<Key word="chdir"/>
+				<Key word="choice"/>
+				<Key word="cls"/>
+				<Key word="cmdextversion"/>
+				<Key word="cols"/>
+				<Key word="com"/>
+				<Key word="con"/>
+				<Key word="copy"/>
+				<Key word="cp"/>
+				<Key word="cut"/>
+				<Key word="data"/>
+				<Key word="defined"/>
+				<Key word="del"/>
+				<Key word="delay"/>
+				<Key word="dir"/>
+				<Key word="do"/>
+				<Key word="dtr"/>
+				<Key word="echo"/>
+				<Key word="else"/>
+				<Key word="end"/>
+				<Key word="equ"/>
+				<Key word="erase"/>
+				<Key word="errorlevel"/>
+				<Key word="exist"/>
+				<Key word="exists"/>
+				<Key word="exit"/>
+				<Key word="for"/>
+				<Key word="geq"/>
+				<Key word="goto"/>
+				<Key word="gtr"/>
+				<Key word="hs"/>
+				<Key word="idsr"/>
+				<Key word="if"/>
+				<Key word="in"/>
+				<Key word="leq"/>
+				<Key word="lfnfor"/>
+				<Key word="lines"/>
+				<Key word="loadfix"/>
+				<Key word="loadhigh"/>
+				<Key word="lock"/>
+				<Key word="low"/>
+				<Key word="lpt"/>
+				<Key word="lpt1"/>
+				<Key word="lss"/>
+				<Key word="max"/>
+				<Key word="md"/>
+				<Key word="min"/>
+				<Key word="mkdir"/>
+				<Key word="move"/>
+				<Key word="neq"/>
+				<Key word="normal"/>
+				<Key word="not"/>
+				<Key word="nul"/>
+				<Key word="octs"/>
+				<Key word="odsr"/>
+				<Key word="off"/>
+				<Key word="on"/>
+				<Key word="parity"/>
+				<Key word="path"/>
+				<Key word="pause"/>
+				<Key word="pause"/>
+				<Key word="prn"/>
+				<Key word="prompt"/>
+				<Key word="rate"/>
+				<Key word="rd"/>
+				<Key word="realtime"/>
+				<Key word="ren"/>
+				<Key word="rename"/>
+				<Key word="rmd"/>
+				<Key word="rmdir"/>
+				<Key word="rts"/>
+				<Key word="select"/>
+				<Key word="separate"/>
+				<Key word="set"/>
+				<Key word="sgn"/>
+				<Key word="shared"/>
+				<Key word="shift"/>
+				<Key word="status"/>
+				<Key word="stop"/>
+				<Key word="tg"/>
+				<Key word="then"/>
+				<Key word="time"/>
+				<Key word="to"/>
+				<Key word="truename"/>
+				<Key word="type"/>
+				<Key word="unlock"/>
+				<Key word="ver"/>
+				<Key word="verify"/>
+				<Key word="verify"/>
+				<Key word="vol"/>
+				<Key word="wait"/>
+				<Key word="xon"/>
+			</KeyWords>
+
+			<KeyWords name="Keywords2" color="#008080" bold="false" italic="false">
+				<Key word="append"/>
+				<Key word="assoc"/>
+				<Key word="at"/>
+				<Key word="attrib"/>
+				<Key word="begin"/>
+				<Key word="cacls"/>
+				<Key word="chkdsk"/>
+				<Key word="chkntfs"/>
+				<Key word="cmd"/>
+				<Key word="color"/>
+				<Key word="comp"/>
+				<Key word="compact"/>
+				<Key word="convert"/>
+				<Key word="ctty"/>
+				<Key word="date"/>
+				<Key word="delims"/>
+				<Key word="diskcomp"/>
+				<Key word="diskcopy"/>
+				<Key word="doskey"/>
+				<Key word="enableextensions"/>
+				<Key word="endlocal"/>
+				<Key word="eol"/>
+				<Key word="fc"/>
+				<Key word="find"/>
+				<Key word="findstr"/>
+				<Key word="format"/>
+				<Key word="ftype"/>
+				<Key word="graftabl"/>
+				<Key word="help"/>
+				<Key word="keyb"/>
+				<Key word="label"/>
+				<Key word="mklink"/>
+				<Key word="mode"/>
+				<Key word="more"/>
+				<Key word="other"/>
+				<Key word="ping"/>
+				<Key word="popd"/>
+				<Key word="print"/>
+				<Key word="pushd"/>
+				<Key word="recover"/>
+				<Key word="replace"/>
+				<Key word="restore"/>
+				<Key word="setlocal"/>
+				<Key word="skip"/>
+				<Key word="sort"/>
+				<Key word="start"/>
+				<Key word="subst"/>
+				<Key word="title"/>
+				<Key word="tokens"/>
+				<Key word="tree"/>
+				<Key word="ttrib"/>
+				<Key word="xcopy"/>
+			</KeyWords>
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>

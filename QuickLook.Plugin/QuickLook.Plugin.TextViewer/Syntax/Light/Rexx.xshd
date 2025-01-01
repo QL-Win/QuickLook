@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding ="utf-8"?>
 
-<!-- 
-Rexx syntax highlighting
-Written by Ezra Altahan
-Created 29/11/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Rexx" extensions=".rex">
     
     <Environment> 

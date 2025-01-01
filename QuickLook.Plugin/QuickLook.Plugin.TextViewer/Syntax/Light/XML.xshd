@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-XML syntax highlighting
-Written by Ezra Altahan
-Created 03/01/2009 | Updated 16/10/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="XML" extensions=".xml;.xsl;.xslt;.xsd;.syn;.lang;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.resx;.user;.ilproj;.booproj;.build;.xfrm;.targets;.xaml;.xpt;.xft;.map;.wsdl;.disco">
     
     <Environment> 

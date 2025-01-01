@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-Objective-C syntax highlighting
-Written by Ezra Altahan
-Created 20/01/2014 | Updated 20/11/2016
-Version 1.2
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Objective-C" extensions=".m">
 
     <Environment> 

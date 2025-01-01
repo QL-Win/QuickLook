@@ -1,15 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-PHP syntax highlighting
-Written by Ezra Altahan
-Created 08/08/2014 | Updated 16/10/2016
-Version 1.2
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="PHP" extensions=".php;.php3;.php4;.php5;.hh">
 
     <Environment> 

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding ="utf-8"?>
 
-<!-- 
-Prolog syntax highlighting
-Written by Ezra Altahan
-Created 28/11/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Prolog" extensions=".pl;.pro">
     
     <Environment> 

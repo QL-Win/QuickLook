@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-TCL syntax highlighting
-Written by Ezra Altahan
-Created 19/10/2016
-Version 1.0
-
-HazelDev@outlook.com
-https://github.com/ei
--->
-
 <SyntaxDefinition name="TCL" extensions=".tcl">
 
     <Environment> 

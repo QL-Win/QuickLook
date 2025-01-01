@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-XC syntax highlighting
-Written by Ezra Altahan
-Created 09/05/2014 | Updated 16/10/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="XC" extensions=".xc">
 
     <Environment> 

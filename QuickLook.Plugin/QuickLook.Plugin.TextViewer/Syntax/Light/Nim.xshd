@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-Nim syntax highlighting
-Original syntax keywords provided by Konstantin Zaitsev for VSCode
-Modified by Ezra Altahan
-Created 27/06/2016 | Updated 16/10/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Nim" extensions=".nim">
 
     <Environment> 

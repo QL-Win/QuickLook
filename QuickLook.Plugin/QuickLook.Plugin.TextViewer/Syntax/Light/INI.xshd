@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-INI/INF syntax highlighting
-Written by Ezra Altahan
-Created 18/07/2009 | Updated 16/10/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="INI" extensions=".ini;.inf;.wer;.dof">
 
     <Environment> 

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-Lisp syntax highlighting
-Written by Ezra Altahan
-Created 29/09/2013 | Updated 19/10/2016
-Version 1.1
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="Lisp" extensions=".lisp;.lsp">
     
     <Environment> 

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-PowerShell syntax highlighting
-Written by Ezra Altahan
-Created 30/05/2016 | Updated 16/10/2016
-Version 1.0
-
-hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="PowerShell" extensions=".ps1;.psm1">
 
     <Environment> 

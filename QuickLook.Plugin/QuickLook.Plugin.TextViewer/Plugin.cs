@@ -20,6 +20,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -46,8 +47,8 @@ public class Plugin : IViewer
         // pre-load
         var _ = new TextEditor();
 
-        _hlmLight = getHighlightingManager(Themes.Light, "Light");
-        _hlmDark = getHighlightingManager(Themes.Dark, "Dark");
+        _hlmLight = GetHighlightingManager(Themes.Light, "Light");
+        _hlmDark = GetHighlightingManager(Themes.Dark, "Dark");
     }
 
     public bool CanHandle(string path)
@@ -117,7 +118,7 @@ public class Plugin : IViewer
         return true;
     }
 
-    private HighlightingManager getHighlightingManager(Themes theme, string dirName)
+    private HighlightingManager GetHighlightingManager(Themes theme, string dirName)
     {
         var hlm = new HighlightingManager();
 
@@ -131,15 +132,22 @@ public class Plugin : IViewer
 
         foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd").OrderBy(f => f))
         {
-            Debug.WriteLine(file);
-            var ext = Path.GetFileNameWithoutExtension(file);
-            using (Stream s = File.OpenRead(Path.GetFullPath(file)))
-            using (var reader = new XmlTextReader(s))
+            try
             {
-                var xshd = HighlightingLoader.LoadXshd(reader);
-                var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
-                if (xshd.Extensions.Count > 0)
-                    hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
+                Debug.WriteLine(file);
+                var ext = Path.GetFileNameWithoutExtension(file);
+                using (Stream s = File.OpenRead(Path.GetFullPath(file)))
+                using (var reader = new XmlTextReader(s))
+                {
+                    var xshd = HighlightingLoader.LoadXshd(reader);
+                    var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                    if (xshd.Extensions.Count > 0)
+                        hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
+                }
+            }
+            catch (Exception e)
+            {
+                ProcessHelper.WriteLog(e.ToString());
             }
         }
 

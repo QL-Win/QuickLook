@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
-AutoHotkey syntax highlighting
-Written by Ezra Altahan
-Created 19/01/2015 | Updated 7/11/2016
-Version 1.2
-
-Hello@exr.be
-https://github.com/ei
--->
-
 <SyntaxDefinition name="AutoHotkey" extensions=".ahk">
 
     <Environment> 
