@@ -87,6 +87,16 @@
         </Content>
     </ItemGroup>
 
+    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <!-- Not support to ARM64 -->
+        <Delete Files="$(OutputPath)\arm64\libHarfBuzzSharp.dll" Condition="Exists('$(OutputPath)\arm64\libHarfBuzzSharp.dll')" />
+        <Delete Files="$(OutputPath)\arm64\libSkiaSharp.dll" Condition="Exists('$(OutputPath)\arm64\libSkiaSharp.dll')" />
+        <RemoveDir Directories="$(OutputPath)\arm64" Condition="Exists('$(OutputPath)\arm64')" />
+        <Delete Files="$(OutputPath)\libHarfBuzzSharp.dylib" Condition="Exists('$(OutputPath)\libHarfBuzzSharp.dylib')" />
+        <Delete Files="$(OutputPath)\libSkiaSharp.dylib" Condition="Exists('$(OutputPath)\libSkiaSharp.dylib')" />
+        <Delete Files="$(OutputPath)\Magick.Native-Q8-arm64.dll" Condition="Exists('$(OutputPath)\Magick.Native-Q8-arm64.dll')" />
+    </Target>
+
     <ItemGroup>
         <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
             <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
