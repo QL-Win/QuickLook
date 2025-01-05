@@ -42,11 +42,11 @@ internal class PluginManager
 
     internal IViewer DefaultPlugin { get; } = new Plugin.InfoPanel.Plugin();
 
-    internal List<IViewer> LoadedPlugins { get; private set; } = new List<IViewer>();
+    internal List<IViewer> LoadedPlugins { get; private set; } = [];
 
     internal static PluginManager GetInstance()
     {
-        return _instance ?? (_instance = new PluginManager());
+        return _instance ??= new PluginManager();
     }
 
     internal IViewer FindMatch(string path)
@@ -86,34 +86,32 @@ internal class PluginManager
 
         var failedPlugins = new List<(string Plugin, Exception Error)>();
 
-        Directory.GetFiles(folder, "QuickLook.Plugin.*.dll",
-                SearchOption.AllDirectories)
+        Directory.GetFiles(folder, "QuickLook.Plugin.*.dll", SearchOption.AllDirectories)
             .ToList()
-            .ForEach(
-                lib =>
-                        {
-                            try
-                            {
-                                (from t in Assembly.LoadFrom(lib).GetExportedTypes()
-                                 where !t.IsInterface && !t.IsAbstract
-                                 where typeof(IViewer).IsAssignableFrom(t)
-                                 select t).ToList()
-                                .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
-                            }
-                            // 0x80131515: ERROR_ASSEMBLY_FILE_BLOCKED - Windows blocked the assembly due to security policy
-                            catch (FileLoadException ex) when (ex.HResult == unchecked((int)0x80131515) && SettingHelper.IsPortableVersion())
-                            {
-                                if (!HandleSecurityBlockedException()) throw;
-                            }
-                            catch (Exception ex)
-                            {
-                                // Log the error
-                                ProcessHelper.WriteLog($"Failed to load plugin {Path.GetFileName(lib)}: {ex}");
-                                failedPlugins.Add((Path.GetFileName(lib), ex));
-                            }
-                        });
+            .ForEach(lib =>
+            {
+                try
+                {
+                    (from t in Assembly.LoadFrom(lib).GetExportedTypes()
+                     where !t.IsInterface && !t.IsAbstract
+                     where typeof(IViewer).IsAssignableFrom(t)
+                     select t).ToList()
+                    .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
+                }
+                // 0x80131515: ERROR_ASSEMBLY_FILE_BLOCKED - Windows blocked the assembly due to security policy
+                catch (FileLoadException ex) when (ex.HResult == unchecked((int)0x80131515) && SettingHelper.IsPortableVersion())
+                {
+                    if (!HandleSecurityBlockedException()) throw;
+                }
+                catch (Exception ex)
+                {
+                    // Log the error
+                    ProcessHelper.WriteLog($"Failed to load plugin {Path.GetFileName(lib)}: {ex}");
+                    failedPlugins.Add((Path.GetFileName(lib), ex));
+                }
+            });
 
-        LoadedPlugins = LoadedPlugins.OrderByDescending(i => i.Priority).ToList();
+        LoadedPlugins = [.. LoadedPlugins.OrderByDescending(i => i.Priority)];
 
         // If any plugins failed to load, show a message box with the details
         if (failedPlugins.Any())
