@@ -52,6 +52,8 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // Test https://github.com/QL-Win/QuickLook/issues/1498
+
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
             ProcessHelper.WriteLog(((Exception)args.ExceptionObject).ToString());
