@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Shell Script" extensions=".sh">
+
+	<RuleSets>
+		<RuleSet ignorecase="false">
+
+			<Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+				<Begin>#</Begin>
+			</Span>
+
+			<Span name="String" color="#808080" stopateol="true" bold="false" italic="false" escapecharacter="\">
+				<Begin>"</Begin>
+				<End>"</End>
+			</Span>
+
+			<Span name="Char" color="#808080" stopateol="true" bold="false" italic="false" escapecharacter="\">
+				<Begin>'</Begin>
+				<End>'</End>
+			</Span>
+
+			<KeyWords name="Syntax" color="Blue" bold="false">
+				<Key word="if"/>
+				<Key word="then"/>
+				<Key word="fi"/>
+			</KeyWords>
+
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>
