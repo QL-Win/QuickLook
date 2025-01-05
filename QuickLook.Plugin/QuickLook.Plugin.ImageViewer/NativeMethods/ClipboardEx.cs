@@ -21,9 +21,7 @@ internal static class ClipboardEx
         var thread = new Thread((img) =>
         {
             if (img == null)
-            {
                 return;
-            }
 
             var image = (BitmapSource)img;
 
@@ -36,7 +34,7 @@ internal static class ClipboardEx
             try
             {
                 using var pngMemStream = new MemoryStream();
-                using var bitmpa = image.ToBitmap();
+                using var bitmpa = image.Dispatcher?.Invoke(() => image.ToBitmap()) ?? image.ToBitmap();
                 var data = new DataObject();
 
                 bitmpa.Save(pngMemStream, ImageFormat.Png);
@@ -44,7 +42,8 @@ internal static class ClipboardEx
 
                 Clipboard.SetDataObject(data, true);
             }
-            catch { }
+            catch { } // Clipboard competition leading to failure is common
+                      // There is currently no UI notification of success or failure
         });
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start(img);
