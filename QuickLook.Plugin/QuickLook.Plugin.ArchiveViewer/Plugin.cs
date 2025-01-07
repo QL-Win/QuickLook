@@ -26,7 +26,19 @@ namespace QuickLook.Plugin.ArchiveViewer;
 public class Plugin : IViewer
 {
     private static readonly string[] Extensions =
-        [".rar", ".zip", ".tar", ".tgz", ".gz", ".bz2", ".lz", ".xz", ".7z", ".jar", ".crx", ".nupkg", ".cb7", ".cbr", ".cbt", ".cbz"];
+    [
+        ".7z",
+        ".bz2",
+        ".cb7", ".cbr", ".cbt", ".cbz", ".crx",
+        ".gz",
+        ".jar",
+        ".lz",
+        ".nupkg",
+        ".rar",
+        ".tar", ".tgz",
+        ".xz",
+        ".zip",
+    ];
 
     private ArchiveInfoPanel _panel;
 
