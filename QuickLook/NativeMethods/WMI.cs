@@ -33,7 +33,8 @@ internal static class WMI
             List<string> names = [];
 
             foreach (var obj in searcher.Get())
-                names.Add(obj["Name"] as string);
+                if (obj["Name"] is string name)
+                    names.Add(name);
 
             return names;
         }
@@ -49,6 +50,7 @@ internal static class WMI
         {
             Debug.WriteLine($"General exception caught: {e.Message}");
         }
+
         return [];
     }
 }
