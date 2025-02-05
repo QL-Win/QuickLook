@@ -46,7 +46,7 @@ jobs:
       run: msbuild /m /p:BuildInParallel=true /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     # upload msi and zip artifacts so the publish job below can download and then update latest release via Linux
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: quicklook-build-files
         path: Build/QuickLook-*.*
@@ -64,7 +64,7 @@ jobs:
     if: github.event_name == 'push'
     
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: quicklook-build-files
     
