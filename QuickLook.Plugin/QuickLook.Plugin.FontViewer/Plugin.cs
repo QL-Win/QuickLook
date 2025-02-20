@@ -37,7 +37,7 @@ public class Plugin : IViewer
 
     private WebpagePanel _panel;
 
-    public int Priority => int.MaxValue;
+    public int Priority => 0;
 
     public void Init()
     {
