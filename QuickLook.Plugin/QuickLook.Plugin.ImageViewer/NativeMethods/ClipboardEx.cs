@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -14,9 +16,7 @@ internal static class ClipboardEx
     public static void SetClipboardImage(this BitmapSource img)
     {
         if (img == null)
-        {
             return;
-        }
 
         var thread = new Thread((img) =>
         {
@@ -33,18 +33,33 @@ internal static class ClipboardEx
 
             try
             {
+                // BitmapFrameDecode or BitmapFrame may need to be converted to
+                // a standard format of BitmapSource to ensure compatibility
+                // and only the frozen image is supported
+                if (image is BitmapFrame && image.IsFrozen)
+                {
+                    image = new WriteableBitmap(image);
+                }
+
                 using var pngMemStream = new MemoryStream();
-                using var bitmpa = image.Dispatcher?.Invoke(() => image.ToBitmap()) ?? image.ToBitmap();
+                using var bitmap = image.Dispatcher?.Invoke(() => image.ToBitmap()) ?? image.ToBitmap();
                 var data = new DataObject();
 
-                bitmpa.Save(pngMemStream, ImageFormat.Png);
+                bitmap.Save(pngMemStream, ImageFormat.Png);
                 data.SetData("PNG", pngMemStream, false);
 
                 Clipboard.SetDataObject(data, true);
             }
-            catch { } // Clipboard competition leading to failure is common
-                      // There is currently no UI notification of success or failure
-        });
+            catch (Exception e)
+            {
+                // Clipboard competition leading to failure is common
+                // There is currently no UI notification of success or failure
+                Debug.WriteLine(e);
+            }
+        })
+        {
+            Name = nameof(ClipboardEx),
+        };
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start(img);
     }
