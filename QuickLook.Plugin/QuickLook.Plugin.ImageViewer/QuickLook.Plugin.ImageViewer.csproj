@@ -58,10 +58,10 @@
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Svg.Skia" Version="2.0.0.4">
+        <PackageReference Include="Svg.Skia" Version="3.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.4.0">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
