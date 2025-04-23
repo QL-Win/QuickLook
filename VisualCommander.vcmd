@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SerializableSnippets xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <commands>
+    <Snippet>
+      <id>1</id>
+      <name>Copy Avalonia URL</name>
+      <code>using EnvDTE;
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+ 
+public class C : VisualCommanderExt.ICommand
+{
+	public void Run(EnvDTE80.DTE2 DTE, Microsoft.VisualStudio.Shell.Package package) 
+	{
+	     var toolWindow = DTE.ToolWindows;
+            var solutionExplorer = toolWindow.SolutionExplorer;
+ 
+            var selectedItems = (solutionExplorer.SelectedItems as IEnumerable).OfType&lt;UIHierarchyItem&gt;().Select(i=&gt;i.Object).OfType&lt;ProjectItem&gt;();
+            var selectedItem = selectedItems.FirstOrDefault();
+ 
+            if (selectedItem == null) return;
+ 
+            var project = selectedItem.ContainingProject;
+            var projectPath = project.FullName;
+            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+            var projectDirPath = Path.GetDirectoryName(projectPath);
+ 
+            var filePath = selectedItem.FileNames[0];
+            var partPath = filePath.Substring(projectDirPath.Length);
+ 
+            var url = GetAvaloniaURL(projectName, partPath);
+ 
+            //Console.WriteLine(url);
+            Clipboard.SetText(url);
+	}
+ 
+ 	string GetAvaloniaURL(string assemblyName, string relPath)
+ 	{
+    	     var relPathFixed = relPath.Replace('\\', '/');
+    	     return "avares://" + assemblyName + relPathFixed ;
+ 	}
+}
+ </code>
+      <referencedAssemblies />
+      <type>Command</type>
+      <lang>CS</lang>
+      <langVersion>v4.0</langVersion>
+      <enabled>true</enabled>
+      <includeDebugInformation>false</includeDebugInformation>
+    </Snippet>
+    <Snippet>
+      <id>2</id>
+      <name>Copy WPF URL</name>
+      <code>using EnvDTE;
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+ 
+public class C : VisualCommanderExt.ICommand
+{
+	public void Run(EnvDTE80.DTE2 DTE, Microsoft.VisualStudio.Shell.Package package) 
+	{
+	     var toolWindow = DTE.ToolWindows;
+ 
+            var solutionExplorer = toolWindow.SolutionExplorer;
+ 
+            var selectedItems = (solutionExplorer.SelectedItems as IEnumerable).OfType&lt;UIHierarchyItem&gt;().Select(i=&gt;i.Object).OfType&lt;ProjectItem&gt;();
+            var selectedItem = selectedItems.FirstOrDefault();
+ 
+            if (selectedItem == null) return;
+ 
+            var project = selectedItem.ContainingProject;
+            var projectPath = project.FullName;
+            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+            var projectDirPath = Path.GetDirectoryName(projectPath);
+ 
+            var filePath = selectedItem.FileNames[0];
+            var partPath = filePath.Substring(projectDirPath.Length);
+ 
+            var url = GetWPFURL(projectName, partPath);
+ 
+            //Console.WriteLine(url);
+            Clipboard.SetText(url);
+	}
+ 
+        string GetWPFURL(string assemblyName, string relPath)
+        {
+            var relPathFixed = relPath.Replace('\\', '/');
+            return "pack://application:,,,/"+assemblyName+";component"+relPathFixed; 
+        }
+ 
+}
+ </code>
+      <referencedAssemblies />
+      <type>Command</type>
+      <lang>CS</lang>
+      <langVersion>v4.0</langVersion>
+      <enabled>true</enabled>
+      <includeDebugInformation>false</includeDebugInformation>
+    </Snippet>
+  </commands>
+  <extensions />
+  <commonCode />
+</SerializableSnippets>
