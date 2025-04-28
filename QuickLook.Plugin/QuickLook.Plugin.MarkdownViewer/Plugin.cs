@@ -34,6 +34,23 @@ public class Plugin : IViewer
     private WebpagePanel? _panel;
     private string? _currentHtmlPath;
 
+    /// <summary>
+    /// Markdown and Markdown-like extensions
+    /// It is not guaranteed to support all formats perfectly
+    /// </summary>
+    private static readonly string[] _extensions =
+    [
+        ".md", ".markdown", // The most common Markdown extensions
+        ".mdx", // MDX (Markdown + JSX), used in React ecosystems
+        ".mmd", // MultiMarkdown (MMD), an extended version of Markdown
+        ".mkd", ".mdwn", ".mdown", // Early Markdown variants, used by different parsers like Pandoc, Gitit, and Hakyll
+        ".mdc", // A Markdown variant used by Cursor AI [Repeated format from ImageViewer]
+        ".qmd", // Quarto Markdown, developed by RStudio for scientific computing and reproducible reports
+        ".rmd", ".rmarkdown", // R Markdown, mainly used in RStudio
+        ".apib", // API Blueprint, a Markdown-based format
+        ".mdtxt", ".mdtext", // Less common
+    ];
+
     private static readonly string _resourcePath = Path.Combine(SettingHelper.LocalDataPath, "QuickLook.Plugin.MarkdownViewer");
     private static readonly string _resourcePrefix = "QuickLook.Plugin.MarkdownViewer.Resources.";
     private static readonly ResourceManager _resourceManager = new(_resourcePath, _resourcePrefix);
@@ -51,7 +68,7 @@ public class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && new[] { ".md", ".mdown", ".rmd", ".markdown" }.Any(path.ToLower().EndsWith);
+        return !Directory.Exists(path) && _extensions.Any(path.ToLower().EndsWith);
     }
 
     public void Prepare(string path, ContextObject context)

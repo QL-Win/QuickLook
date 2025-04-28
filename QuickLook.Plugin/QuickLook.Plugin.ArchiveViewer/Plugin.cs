@@ -25,7 +25,7 @@ namespace QuickLook.Plugin.ArchiveViewer;
 
 public class Plugin : IViewer
 {
-    private static readonly string[] Extensions =
+    private static readonly string[] _extensions =
     [
         ".7z",
         ".bz2",
@@ -50,7 +50,7 @@ public class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && Extensions.Any(path.ToLower().EndsWith);
+        return !Directory.Exists(path) && _extensions.Any(path.ToLower().EndsWith);
     }
 
     public void Prepare(string path, ContextObject context)
