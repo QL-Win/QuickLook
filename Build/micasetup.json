@@ -28,6 +28,8 @@
   "AutoRunLaunchCommand": "/autostart",
   "IsUseFolderPickerPreferClassic": false,
   "IsUseInstallPathPreferX86": false,
+  "IsUseInstallPathPreferAppDataLocalPrograms": true,
+  "IsUseInstallPathPreferAppDataRoaming": false,
   "IsUseRegistryPreferX86": null,
   "IsAllowFullFolderSecurity": true,
   "IsAllowFirewall": true,

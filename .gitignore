@@ -294,3 +294,4 @@ __pycache__/
 !/Build/assetslayout.resfiles
 !/Build/priconfig.xml
 !/Build/micasetup.json
+!/Build/micasetup.cmd
