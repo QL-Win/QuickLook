@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
+#include "strsafe.h"
+
 #include "HelperMethods.h"
 
 void HelperMethods::GetSelectedInternal(CComPtr<IShellBrowser> psb, PWCHAR buffer)
@@ -33,8 +35,11 @@ void HelperMethods::GetSelectedInternal(CComPtr<IShellBrowser> psb, PWCHAR buffe
 
 void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 {
-    FORMATETC formatetc;
-    STGMEDIUM medium = {sizeof medium};
+    if (!dao || !buffer)
+        return;
+
+    FORMATETC formatetc = {};
+    STGMEDIUM medium = {};
 
     formatetc.cfFormat = CF_HDROP;
     formatetc.ptd = nullptr;
@@ -44,18 +49,62 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 
     medium.tymed = TYMED_HGLOBAL;
 
-    if (FAILED(dao->GetData(&formatetc, &medium)))
-        return;
+    // Try CF_HDROP first
+    if (SUCCEEDED(dao->GetData(&formatetc, &medium)))
+    {
+        HDROP hDrop = HDROP(medium.hGlobal);
+        int count = DragQueryFile(hDrop, 0xFFFFFFFF, nullptr, 0);
+        if (count >= 1)
+        {
+            WCHAR localBuffer[MAX_PATH] = { '\0' };
+            if (DragQueryFileW(hDrop, 0, localBuffer, MAX_PATH) > 0)
+            {
+                GetLongPathName(localBuffer, buffer, MAX_PATH_EX);
+                ReleaseStgMedium(&medium);
+                return;
+            }
+            ReleaseStgMedium(&medium);
+        }
+    }
 
-    int n = DragQueryFile(HDROP(medium.hGlobal), 0xFFFFFFFF, nullptr, 0);
+    // If CF_HDROP fails, try CFSTR_SHELLIDLIST
+    // Support Desktop Icon (This PC, Recycle Bin and so on)
+    // https://github.com/QL-Win/QuickLook/issues/1610
+    static const CLIPFORMAT cfShellIDList = (CLIPFORMAT)RegisterClipboardFormatW(CFSTR_SHELLIDLIST);
+    formatetc.cfFormat = cfShellIDList;
 
-    if (n < 1)
-        return;
+    if (SUCCEEDED(dao->GetData(&formatetc, &medium))) 
+    {
+        CIDA* pida = (CIDA*)GlobalLock(medium.hGlobal);
+        if (!pida)
+        {
+            ReleaseStgMedium(&medium);
+            return;
+        }
 
-    WCHAR localBuffer[MAX_PATH] = { '\0' };
-    DragQueryFile(HDROP(medium.hGlobal), 0, localBuffer, MAX_PATH);
-    
-    GetLongPathName(localBuffer, buffer, MAX_PATH_EX);
+        ITEMIDLIST* pidlFolder = (ITEMIDLIST*)((BYTE*)pida + pida->aoffset[0]);
+        ITEMIDLIST* pidlItem = (ITEMIDLIST*)((BYTE*)pida + pida->aoffset[1]);
+        PIDLIST_ABSOLUTE pidlFull = ILCombine(pidlFolder, pidlItem);
+        GlobalUnlock(medium.hGlobal);
+        ReleaseStgMedium(&medium);
+
+        if (!pidlFull)
+            return;
+
+        // Convert to IShellItem to get canonical parsing path
+        CComPtr<IShellItem> shellItem;
+        if (SUCCEEDED(SHCreateItemFromIDList(pidlFull, IID_PPV_ARGS(&shellItem))))
+        {
+            PWSTR pszPath = nullptr;
+            if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &pszPath)))
+            {
+                StringCchCopyW(buffer, MAX_PATH, pszPath); // returns e.g., ::{645FF040-5081-101B-9F08-00AA002F954E}
+                CoTaskMemFree(pszPath);
+            }
+        }
+
+        ILFree(pidlFull);
+    }
 }
 
 bool HelperMethods::IsListaryToolbarVisible()

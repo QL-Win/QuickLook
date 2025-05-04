@@ -19,9 +19,9 @@
 class DOpus
 {
 public:
-	static void PrepareMessageWindow();
-	static void GetSelected(PWCHAR buffer);
+    static void PrepareMessageWindow();
+    static void GetSelected(PWCHAR buffer);
 private:
-	static void ParseXmlBuffer(PWCHAR buffer);
-	static LRESULT CALLBACK msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static void ParseXmlBuffer(PWCHAR buffer);
+    static LRESULT CALLBACK msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

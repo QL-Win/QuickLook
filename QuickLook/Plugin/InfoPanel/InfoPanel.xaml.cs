@@ -83,10 +83,7 @@ public partial class InfoPanel : UserControl
             }
             else if (Path.GetPathRoot(path) == path) // is this a drive?
             {
-                long totalSpace;
-                long totalFreeSpace;
-
-                FileHelper.GetDriveSpace(path, out totalSpace, out totalFreeSpace);
+                FileHelper.GetDriveSpace(path, out var totalSpace, out var totalFreeSpace);
 
                 Dispatcher.Invoke(() =>
                 {
