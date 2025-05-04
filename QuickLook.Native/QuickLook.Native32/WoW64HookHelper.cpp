@@ -27,54 +27,54 @@ HANDLE hJob = nullptr;
 
 bool WoW64HookHelper::CheckStatus()
 {
-	DWORD running = -1;
-	GetExitCodeProcess(hHelper, &running);
-	return running == STILL_ACTIVE;
+    DWORD running = -1;
+    GetExitCodeProcess(hHelper, &running);
+    return running == STILL_ACTIVE;
 }
 
 bool WoW64HookHelper::Launch()
 {
 #ifndef WIN64
-	return true;
+    return true;
 #endif
 
-	if (HelperMethods::IsUWP())
-		return true;
+    if (HelperMethods::IsUWP())
+        return true;
 
-	if (CheckStatus())
-		return true;
+    if (CheckStatus())
+        return true;
 
-	createJob();
+    createJob();
 
-	WCHAR fullPath[MAX_PATH] = {'\0'};
-	GetModuleFileName(nullptr, fullPath, MAX_PATH - 1);
-	auto p = wcsrchr(fullPath, L'\\');
-	memcpy(p, HELPER_FILE, wcslen(HELPER_FILE) * sizeof WCHAR);
+    WCHAR fullPath[MAX_PATH] = {'\0'};
+    GetModuleFileName(nullptr, fullPath, MAX_PATH - 1);
+    auto p = wcsrchr(fullPath, L'\\');
+    memcpy(p, HELPER_FILE, wcslen(HELPER_FILE) * sizeof WCHAR);
 
-	STARTUPINFO si = {sizeof si};
-	PROCESS_INFORMATION pi = {nullptr};
-	si.cb = sizeof si;
+    STARTUPINFO si = {sizeof si};
+    PROCESS_INFORMATION pi = {nullptr};
+    si.cb = sizeof si;
 
-	CreateProcess(fullPath, RUN_ARG, nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi);
-	hHelper = pi.hProcess;
+    CreateProcess(fullPath, RUN_ARG, nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi);
+    hHelper = pi.hProcess;
 
-	AssignProcessToJobObject(hJob, hHelper);
+    AssignProcessToJobObject(hJob, hHelper);
 
-	return CheckStatus();
+    return CheckStatus();
 }
 
 void WoW64HookHelper::createJob()
 {
-	if (hJob != nullptr)
-		return;
+    if (hJob != nullptr)
+        return;
 
-	hJob = CreateJobObject(nullptr, nullptr);
+    hJob = CreateJobObject(nullptr, nullptr);
 
-	JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation = {sizeof BasicLimitInformation};
-	BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
-	JOBOBJECT_EXTENDED_LIMIT_INFORMATION lpJobObjectInfo = {sizeof lpJobObjectInfo};
-	lpJobObjectInfo.BasicLimitInformation = BasicLimitInformation;
+    JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation = {sizeof BasicLimitInformation};
+    BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+    JOBOBJECT_EXTENDED_LIMIT_INFORMATION lpJobObjectInfo = {sizeof lpJobObjectInfo};
+    lpJobObjectInfo.BasicLimitInformation = BasicLimitInformation;
 
-	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &lpJobObjectInfo,
-	                        sizeof JOBOBJECT_EXTENDED_LIMIT_INFORMATION);
+    SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &lpJobObjectInfo,
+                            sizeof JOBOBJECT_EXTENDED_LIMIT_INFORMATION);
 }

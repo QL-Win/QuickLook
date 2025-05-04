@@ -62,6 +62,6 @@ internal class FocusMonitor
 
     internal static FocusMonitor GetInstance()
     {
-        return _instance ?? (_instance = new FocusMonitor());
+        return _instance ??= new FocusMonitor();
     }
 }

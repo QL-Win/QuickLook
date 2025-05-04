@@ -83,7 +83,7 @@ internal static class QuickLook
 
     internal static string GetCurrentSelection()
     {
-        StringBuilder sb = new StringBuilder(MaxPath);
+        StringBuilder sb = new(MaxPath);
         // communicate with COM in a separate STA thread
         var thread = new Thread(() =>
         {
@@ -107,7 +107,7 @@ internal static class QuickLook
             // We got a quoted string which breaks ResolveShortcut
             sb = sb.Replace("\"", string.Empty, 0, 1).Replace("\"", string.Empty, sb.Length - 1, 1);
         }
-        return ResolveShortcut(sb?.ToString() ?? String.Empty);
+        return ResolveShortcut(sb?.ToString() ?? string.Empty);
     }
 
     private static string ResolveShortcut(string path)

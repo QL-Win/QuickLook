@@ -43,11 +43,11 @@ internal class KeystrokeDispatcher : IDisposable
     {
         InstallKeyHook(KeyDownEventHandler, KeyUpEventHandler);
 
-        _validKeys = new HashSet<Keys>(
+        _validKeys =
         [
             Keys.Up, Keys.Down, Keys.Left, Keys.Right,
             Keys.Enter, Keys.Space, Keys.Escape
-        ]);
+        ];
     }
 
     public void Dispose()
