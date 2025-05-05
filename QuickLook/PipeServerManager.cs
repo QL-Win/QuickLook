@@ -170,6 +170,6 @@ internal class PipeServerManager : IDisposable
 
     public static PipeServerManager GetInstance()
     {
-        return _instance ?? (_instance = new PipeServerManager());
+        return _instance ??= new PipeServerManager();
     }
 }

@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="QuickLook.Plugin.CLSIDViewer.CLSIDInfoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuickLook.Plugin.CLSIDViewer"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Height="192"
+             FontSize="14"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+    <Grid>
+        <TextBlock x:Name="UnsupportedTextBlock"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="Collapsed" />
+        <!--  EMPTY  -->
+    </Grid>
+</UserControl>

@@ -129,7 +129,8 @@ internal class ViewWindowManager : IDisposable
             return;
 
         if (!Directory.Exists(path) && !File.Exists(path))
-            return;
+            if (!path.StartsWith("::")) // CLSID
+                return;
 
         _invokedPath = path;
 
@@ -197,7 +198,7 @@ internal class ViewWindowManager : IDisposable
         {
             if (ProcessHelper.IsShuttingDown())
                 return;
-            if (!(sender is ViewerWindow w) || w.Pinned)
+            if (sender is not ViewerWindow w || w.Pinned)
                 return; // Pinned window has already been forgotten
             StopFocusMonitor();
             InitNewViewerWindow();
@@ -206,6 +207,6 @@ internal class ViewWindowManager : IDisposable
 
     internal static ViewWindowManager GetInstance()
     {
-        return _instance ?? (_instance = new ViewWindowManager());
+        return _instance ??= new ViewWindowManager();
     }
 }

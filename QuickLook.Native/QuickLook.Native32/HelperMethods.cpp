@@ -68,7 +68,7 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
     }
 
     // If CF_HDROP fails, try CFSTR_SHELLIDLIST
-    // Support Desktop Icon (This PC, Recycle Bin and so on)
+    // Support Desktop Icons (This PC, Recycle Bin and so on)
     // https://github.com/QL-Win/QuickLook/issues/1610
     static const CLIPFORMAT cfShellIDList = (CLIPFORMAT)RegisterClipboardFormatW(CFSTR_SHELLIDLIST);
     formatetc.cfFormat = cfShellIDList;
