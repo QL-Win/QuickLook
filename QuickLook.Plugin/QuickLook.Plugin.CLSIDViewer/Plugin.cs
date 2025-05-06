@@ -47,7 +47,12 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = new Size { Width = 520, Height = 192 };
+        context.PreferredSize = path switch
+        {
+            CLSIDRegister.RecycleBin => new Size { Width = 520, Height = 192 },
+            CLSIDRegister.ThisPC => new Size { Width = 900, Height = 800 },
+            _ => new Size { Width = 520, Height = 192 },
+        };
     }
 
     public void View(string path, ContextObject context)
@@ -59,7 +64,7 @@ public class Plugin : IViewer
         _ip.Tag = context;
 
         context.ViewerContent = _ip;
-        context.Title = $"{CLSIDRegister.GetName(path)}";
+        context.Title = $"{CLSIDRegister.GetName(path) ?? path}";
         context.IsBusy = false;
     }
 

@@ -15,39 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Windows;
 using System.Windows.Controls;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
-public partial class CLSIDInfoPanel : UserControl
+public partial class ThisPCPanel : UserControl
 {
-    public CLSIDInfoPanel()
+    public ThisPCPanel()
     {
-        DataContext = this;
         InitializeComponent();
-    }
-
-    public void DisplayInfo(string path)
-    {
-        switch (path.ToUpper())
-        {
-            case CLSIDRegister.RecycleBin:
-                Content = new RecycleBinPanel();
-                break;
-
-            case CLSIDRegister.ThisPC:
-                Content = new ThisPCPanel();
-                break;
-
-            default:
-                Content = new TextBlock()
-                {
-                    Text = $"Unsupported for {path}",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                };
-                break;
-        }
     }
 }

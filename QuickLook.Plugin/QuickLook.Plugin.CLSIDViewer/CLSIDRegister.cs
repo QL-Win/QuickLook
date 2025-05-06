@@ -23,6 +23,9 @@ namespace QuickLook.Plugin.CLSIDViewer;
 
 internal static class CLSIDRegister
 {
+    public const string RecycleBin = "::{645FF040-5081-101B-9F08-00AA002F954E}";
+    public const string ThisPC = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
+
     public static string GetName(string clsid)
     {
         try
@@ -31,10 +34,10 @@ internal static class CLSIDRegister
             string displayName = Registry.GetValue($@"HKEY_CLASSES_ROOT\CLSID\{clsid.Replace(":", string.Empty)}", string.Empty, null)?.ToString();
             return displayName;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Debug.WriteLine("Error reading registry: " + ex.Message);
+            Debug.WriteLine("Error reading registry: " + e.Message);
         }
-        return string.Empty;
+        return null;
     }
 }
