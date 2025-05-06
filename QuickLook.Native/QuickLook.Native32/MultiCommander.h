@@ -1,3 +1,5 @@
+﻿// Copyright © 2017-2025 QL-Win Contributors
+// 
 // This file is part of QuickLook program.
 // 
 // This program is free software: you can redistribute it and/or modify
