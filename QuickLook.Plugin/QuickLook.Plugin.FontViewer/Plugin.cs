@@ -18,7 +18,7 @@
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
-using SampleWinForms;
+using QuickLook.Typography.OpenFont;
 using System;
 using System.IO;
 using System.IO.Packaging;
@@ -27,7 +27,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Resources;
-using Typography.OpenFont.WebFont;
 
 namespace QuickLook.Plugin.FontViewer;
 
@@ -112,23 +111,9 @@ public class Plugin : IViewer
         //      url('xxx.ttf') format('truetype'),
         //      url('xxx.svg#xxx') format('svg');
         var fileName = Path.GetFileName(path);
-        var fileNameWithoutExt = Path.GetFileNameWithoutExtension(path);
         var fileExt = Path.GetExtension(fileName);
-        static string GenerateRandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            Random random = new();
-            char[] result = new char[length];
 
-            for (int i = 0; i < length; i++)
-            {
-                result[i] = chars[random.Next(chars.Length)];
-            }
-
-            return new string(result);
-        }
-
-        string cssUrl = $"src: url('{fileName}'), url('{fileNameWithoutExt}?#{GenerateRandomString(5)}{fileExt}')"
+        string cssUrl = $"src: url('{fileName}')"
             + fileExt switch
             {
                 ".eot" => " format('embedded-opentype');",
@@ -141,43 +126,10 @@ public class Plugin : IViewer
 
         if (string.IsNullOrEmpty(fontFamilyName))
         {
-            string GetWoff2FontFamilyName()
-            {
-                OurOpenFontSystemSetup.SetupWoffDecompressFunctions();
-                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                using var input = new BinaryReader(fs);
-                var woffReader = new Woff2Reader
-                {
-                    DecompressHandler = Woff2DefaultBrotliDecompressFunc.DecompressHandler
-                };
-                input.BaseStream.Position = 0;
-                var info = woffReader.ReadPreview(input);
-
-                return info?.Name;
-            }
-            //string GetWoffFontFamilyName()
-            //{
-            //    OurOpenFontSystemSetup.SetupWoffDecompressFunctions();
-            //    using var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            //    using var input = new BinaryReader(fs);
-            //    var woffReader = new WoffReader
-            //    {
-            //        DecompressHandler = WoffDefaultZlibDecompressFunc.DecompressHandler
-            //    };
-            //    input.BaseStream.Position = 0;
-            //    var info = woffReader.ReadPreview(input);
-
-            //    return info?.Name;
-            //}
-
             if (fileExt.ToLower().Equals(".woff2"))
             {
-                fontFamilyName = GetWoff2FontFamilyName();
+                fontFamilyName = Woff2.GetFontInfo(path)?.Name;
             }
-            //else if (fileExt.ToLower().Equals(".woff"))
-            //{
-            //    fontFamilyName = GetWoffFontFamilyName();
-            //}
         }
 
         html = html.Replace("--font-family;", $"font-family: '{fontFamilyName}';")
