@@ -49,7 +49,7 @@ public class Plugin : IViewer
     {
         context.PreferredSize = path switch
         {
-            CLSIDRegister.RecycleBin => new Size { Width = 520, Height = 192 },
+            CLSIDRegister.RecycleBin => new Size { Width = 400, Height = 150 },
             CLSIDRegister.ThisPC => new Size { Width = 900, Height = 800 },
             _ => new Size { Width = 520, Height = 192 },
         };
@@ -59,13 +59,11 @@ public class Plugin : IViewer
     {
         _path = path;
         _ip = new CLSIDInfoPanel();
-
-        _ip.DisplayInfo(_path);
-        _ip.Tag = context;
+        _ip.DisplayInfo(path, context);
 
         context.ViewerContent = _ip;
         context.Title = $"{CLSIDRegister.GetName(path) ?? path}";
-        context.IsBusy = false;
+        context.IsBusy = true;
     }
 
     public void Cleanup()

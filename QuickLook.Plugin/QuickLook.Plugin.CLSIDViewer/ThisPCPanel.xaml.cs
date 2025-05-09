@@ -15,14 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Plugin;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
 public partial class ThisPCPanel : UserControl
 {
-    public ThisPCPanel()
+    private ContextObject _context;
+
+    public ThisPCPanel(ContextObject context)
     {
+        _context = context;
+
+        DataContext = this;
         InitializeComponent();
+        Loaded += OnLoaded;
+    }
+
+    protected virtual void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        _context.IsBusy = false;
     }
 }

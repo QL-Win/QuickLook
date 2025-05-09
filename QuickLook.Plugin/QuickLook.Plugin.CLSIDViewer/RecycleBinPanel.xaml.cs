@@ -15,46 +15,148 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Win32;
+using QuickLook.Common.Commands;
+using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
-public partial class RecycleBinPanel : UserControl
+public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
 {
-    public RecycleBinPanel()
+    private ContextObject _context;
+    private RecycleBinHelper.RecycleBinInfo _info;
+    private ICommand _emptyRecycleBinCommand;
+
+    // ICommand must be used so that the button can be automatically disabled
+    public ICommand EmptyRecycleBinCommand =>
+        _emptyRecycleBinCommand ??= new AsyncRelayCommand(OnEmptyRecycleBinAsync);
+
+    public RecycleBinPanel(ContextObject context)
     {
+        _context = context;
+
+        DataContext = this;
         InitializeComponent();
-        Loaded += OnRecycleBinPanelLoaded;
+
+        emptyButton.Content = TranslationHelper.Get("RecycleBinButton",
+            domain: Assembly.GetExecutingAssembly().GetName().Name);
+
+        Loaded += OnLoaded;
     }
 
-    private void OnRecycleBinPanelLoaded(object sender, RoutedEventArgs e)
+    protected virtual void OnLoaded(object sender, RoutedEventArgs e)
     {
-        UpdateState();
-    }
-
-    private void OnEmptyRecycleBinClick(object sender, RoutedEventArgs e)
-    {
-        // TODO: Use async to avoid blocking the UI thread
-        if (RecycleBinHelper.EmptyRecycleBin())
+        _ = Task.Run(() =>
         {
             UpdateState();
+            _context.IsBusy = false;
+        });
+    }
+
+    private async Task OnEmptyRecycleBinAsync()
+    {
+        var result = MessageBox.Show(
+            string.Format(TranslationHelper.Get("ConfirmDeleteText", domain: Assembly.GetExecutingAssembly().GetName().Name), _info.TotalCount),
+            TranslationHelper.Get("RecycleBinButton", domain: Assembly.GetExecutingAssembly().GetName().Name),
+            MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            await Task.Run(() =>
+            {
+                if (RecycleBinHelper.EmptyRecycleBin())
+                {
+                    UpdateState();
+                }
+            });
         }
     }
 
     private void UpdateState()
     {
-        bool hasTrash = RecycleBinHelper.HasTrash();
+        _info = RecycleBinHelper.GetRecycleBinInfo();
 
-        EmptyRecycleBinButton.Visibility = hasTrash ? Visibility.Visible : Visibility.Collapsed;
-        EmptyRecycleBinText.Visibility = hasTrash ? Visibility.Collapsed : Visibility.Visible;
+        Dispatcher.BeginInvoke(() =>
+        {
+            image.Source = _info.HasTrash ? _info.FullIcon : _info.EmptyIcon;
+
+            if (_info.HasTrash)
+            {
+                totalSizeAndCount.Text = string.Format(
+                    TranslationHelper.Get("RecycleBinSizeText",
+                        domain: Assembly.GetExecutingAssembly().GetName().Name),
+                    _info.TotalSizeString,
+                    _info.TotalCount
+                );
+            }
+            else
+            {
+                totalSizeAndCount.Text = TranslationHelper.Get("RecycleBinEmptyText",
+                    domain: Assembly.GetExecutingAssembly().GetName().Name);
+            }
+            emptyButton.Visibility = _info.HasTrash ? Visibility.Visible : Visibility.Collapsed;
+        });
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 
-file static class RecycleBinHelper
+internal static class RecycleBinHelper
 {
+    public static ImageSource _emptyIcon = null;
+    public static ImageSource _fullIcon = null;
+
+    public sealed class RecycleBinInfo
+    {
+        /// <summary>
+        /// In bytes
+        /// </summary>
+        public ulong TotalSize { get; set; } = 0L;
+
+        public string TotalSizeString => FormatBytes(TotalSize);
+
+        public ulong TotalCount { get; set; } = 0L;
+
+        public bool HasTrash => TotalCount > 0;
+
+        public ImageSource EmptyIcon { get; set; } = _emptyIcon;
+
+        public ImageSource FullIcon { get; set; } = _fullIcon;
+
+        private static string FormatBytes(ulong bytes)
+        {
+            string[] sizes = ["B", "KB", "MB", "GB", "TB"];
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024d && order < sizes.Length - 1)
+            {
+                order++;
+                len /= 1024d;
+            }
+            return $"{len:0.##} {sizes[order]}";
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct SHQUERYRBINFO
     {
@@ -69,15 +171,21 @@ file static class RecycleBinHelper
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SHEmptyRecycleBin(nint hwnd, string pszRootPath, RecycleFlags dwFlags);
 
+    [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+    private static extern int ExtractIconEx(string lpszFile, int nIconIndex, nint[] phiconLarge, nint[] phiconSmall, int nIcons);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool DestroyIcon(nint hIcon);
+
     [Flags]
-    private enum RecycleFlags : uint
+    public enum RecycleFlags : uint
     {
         SHERB_NOCONFIRMATION = 0x00000001,
         SHERB_NOPROGRESSUI = 0x00000002,
         SHERB_NOSOUND = 0x00000004,
     }
 
-    public static bool HasTrash()
+    public static RecycleBinInfo GetRecycleBinInfo()
     {
         var info = new SHQUERYRBINFO()
         {
@@ -85,21 +193,98 @@ file static class RecycleBinHelper
         };
 
         int result = SHQueryRecycleBin(null, ref info);
-        
-        if (result == 0) // S_OK
+        string[] icons = GetIcons();
+        ImageSource[] bitmapSources = [_emptyIcon, _fullIcon];
+
+        if (bitmapSources[0] is null || bitmapSources[1] is null)
         {
-            return info.i64NumItems > 0;
+            bitmapSources[0] = ExtractIconBitmap(icons[0]);
+            bitmapSources[1] = ExtractIconBitmap(icons[1]);
         }
 
-        // Fallback
-        return false;
+        if (result == 0 && icons.Length >= 2) // S_OK (0)
+        {
+            var output = new RecycleBinInfo()
+            {
+                TotalSize = info.i64Size,
+                TotalCount = info.i64NumItems,
+                EmptyIcon = bitmapSources[0],
+                FullIcon = bitmapSources[1],
+            };
+
+            return output;
+        }
+        return default;
     }
 
-    public static bool EmptyRecycleBin()
+    public static bool EmptyRecycleBin(RecycleFlags flags = RecycleFlags.SHERB_NOSOUND | RecycleFlags.SHERB_NOCONFIRMATION | RecycleFlags.SHERB_NOPROGRESSUI)
     {
-        int result = SHEmptyRecycleBin(IntPtr.Zero, null,
-            RecycleFlags.SHERB_NOCONFIRMATION | RecycleFlags.SHERB_NOPROGRESSUI | RecycleFlags.SHERB_NOSOUND);
+        int result = SHEmptyRecycleBin(IntPtr.Zero, null, flags);
 
-        return result == 0;
+        return result == 0; // S_OK (0)
+    }
+
+    private static string[] GetIcons()
+    {
+        const string keyPath = @"CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon";
+        using RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyPath);
+
+        if (key != null)
+        {
+            if (key.GetValue("Empty") is string emptyIcon
+             && key.GetValue("Full") is string fullIcon)
+            {
+                return [emptyIcon, fullIcon];
+            }
+        }
+
+        return null;
+    }
+
+    private static ImageSource ExtractIconBitmap(string resourcePath)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(resourcePath)) return null;
+
+            string expanded = Environment.ExpandEnvironmentVariables(resourcePath);
+            string[] parts = expanded.Split(',');
+
+            if (parts.Length != 2 || !int.TryParse(parts[1], out int iconIndex)) return null;
+
+            string dllPath = parts[0];
+
+            nint[] icons = new nint[1];
+            int count = ExtractIconEx(dllPath, iconIndex, icons, null, 1);
+
+            if (count > 0 && icons[0] != IntPtr.Zero)
+            {
+                try
+                {
+                    using Icon icon = Icon.FromHandle(icons[0]);
+                    return ((Icon)icon.Clone()).ToImageSource();
+                }
+                finally
+                {
+                    DestroyIcon(icons[0]);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.ToString());
+        }
+        return null;
+    }
+
+    private static ImageSource ToImageSource(this Icon icon)
+    {
+        var imageSource = Imaging.CreateBitmapSourceFromHIcon(
+            icon.Handle,
+            Int32Rect.Empty,
+            BitmapSizeOptions.FromEmptyOptions());
+
+        imageSource.Freeze();
+        return imageSource;
     }
 }
