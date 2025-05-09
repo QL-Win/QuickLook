@@ -66,6 +66,18 @@ public partial class ViewerWindow : INotifyPropertyChanged
                 SwitchTheme(ContextObject.Theme);
                 break;
 
+            case nameof(ContextObject.Title):
+                if (!string.IsNullOrWhiteSpace(ContextObject.Title))
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        ShowInTaskbar = true;
+                        Title = $"QuickLook - {ContextObject.Title}";
+                        ShowInTaskbar = false;
+                    }));
+                }
+                break;
+
             default:
                 break;
         }

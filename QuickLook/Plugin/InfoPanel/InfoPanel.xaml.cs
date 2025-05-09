@@ -73,7 +73,7 @@ public partial class InfoPanel : UserControl
 
         Stop = false;
 
-        Task.Run(() =>
+        _ = Task.Run(() =>
         {
             if (File.Exists(path))
             {
