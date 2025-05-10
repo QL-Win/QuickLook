@@ -121,7 +121,7 @@ internal class PipeServerManager : IDisposable
 
         var pipeMessage = split[0];
         var path = split[1];
-        var option = split.Length >= 3 ? split[2] : string.Empty;
+        var option = split.Length >= 3 ? split[2] : null;
 
         switch (pipeMessage)
         {

@@ -79,7 +79,7 @@ internal class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             path = NativeMethods.QuickLook.GetCurrentSelection();
 
-        if (options != null)
+        if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
         else
             if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
