@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -73,12 +74,15 @@ internal class ViewWindowManager : IDisposable
         _viewerWindow.Close();
     }
 
-    public void TogglePreview(string path = null)
+    public void TogglePreview(string path = null, string options = null)
     {
         if (string.IsNullOrEmpty(path))
             path = NativeMethods.QuickLook.GetCurrentSelection();
 
-        if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
+        if (options != null)
+            InvokePreviewWithOption(path, options);
+        else
+            if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
             ClosePreview();
         else
             InvokePreview(path);
@@ -115,6 +119,26 @@ internal class ViewWindowManager : IDisposable
             return;
 
         InvokePreview(path);
+    }
+
+    public void InvokePreviewWithOption(string path = null, string options = null)
+    {
+        InvokePreview(path);
+
+        if (string.IsNullOrWhiteSpace(options)) return;
+
+        var cli = new CommandLineParser(options.Split(','));
+
+        if (cli.Has("top"))
+        {
+            _viewerWindow.Topmost = true;
+            _viewerWindow.buttonTop.Tag = "Top";
+        }
+        if (cli.Has("pin"))
+        {
+            _viewerWindow.Pinned = true;
+            ForgetCurrentWindow();
+        }
     }
 
     public void InvokePreview(string path = null)

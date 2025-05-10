@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Pipes;
 using System.Security.Principal;
@@ -50,27 +51,25 @@ internal class PipeServerManager : IDisposable
     {
         _server = new NamedPipeServerStream(PipeName, PipeDirection.In);
 
-        new Task(() =>
+        _ = Task.Factory.StartNew(() =>
         {
-            using (var reader = new StreamReader(_server))
+            using var reader = new StreamReader(_server);
+            Debug.WriteLine("PipeManager: Ready");
+
+            while (true)
             {
-                Debug.WriteLine("PipeManager: Ready");
+                _server.WaitForConnection();
+                var msg = reader.ReadLine();
 
-                while (true)
-                {
-                    _server.WaitForConnection();
-                    var msg = reader.ReadLine();
+                Debug.WriteLine($"PipeManager: {msg}");
 
-                    Debug.WriteLine($"PipeManager: {msg}");
+                // dispatch message
+                if (MessageReceived(msg))
+                    return;
 
-                    // dispatch message
-                    if (MessageReceived(msg))
-                        return;
-
-                    _server.Disconnect();
-                }
+                _server.Disconnect();
             }
-        }).Start();
+        }, TaskCreationOptions.LongRunning);
     }
 
     public void Dispose()
@@ -83,10 +82,11 @@ internal class PipeServerManager : IDisposable
         _server = null;
     }
 
-    public static void SendMessage(string pipeMessage, string path = null)
+    [SuppressMessage("Style", "IDE0063:Use simple 'using' statement")]
+    public static void SendMessage(string pipeMessage, string path = null, string[] options = null)
     {
-        if (path == null)
-            path = "";
+        path ??= string.Empty;
+        options ??= [];
 
         try
         {
@@ -96,7 +96,7 @@ internal class PipeServerManager : IDisposable
 
                 using (var writer = new StreamWriter(client))
                 {
-                    writer.WriteLine($"{pipeMessage}|{path}");
+                    writer.WriteLine($"{pipeMessage}|{path}|{string.Join(",", options)}");
                     writer.Flush();
                 }
             }
@@ -109,8 +109,8 @@ internal class PipeServerManager : IDisposable
 
     private bool MessageReceived(string msg)
     {
-        var split = msg.IndexOf('|');
-        if (split == -1)
+        var split = msg.Split('|');
+        if (split.Length <= 1)
             return false;
 
         if (_lastOperation != null && _lastOperation.Status == DispatcherOperationStatus.Pending)
@@ -119,10 +119,11 @@ internal class PipeServerManager : IDisposable
             Debug.WriteLine("Dispatcher task canceled");
         }
 
-        var wParam = msg.Substring(0, split);
-        var lParam = msg.Substring(split + 1, msg.Length - split - 1);
+        var pipeMessage = split[0];
+        var path = split[1];
+        var option = split.Length >= 3 ? split[2] : string.Empty;
 
-        switch (wParam)
+        switch (pipeMessage)
         {
             case PipeMessages.RunAndClose:
                 Application.Current.Dispatcher.BeginInvoke(
@@ -132,19 +133,19 @@ internal class PipeServerManager : IDisposable
 
             case PipeMessages.Invoke:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().InvokePreview(lParam)),
+                    new Action(() => ViewWindowManager.GetInstance().InvokePreview(path)),
                     DispatcherPriority.ApplicationIdle);
                 return false;
 
             case PipeMessages.Switch:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().SwitchPreview(lParam)),
+                    new Action(() => ViewWindowManager.GetInstance().SwitchPreview(path)),
                     DispatcherPriority.ApplicationIdle);
                 return false;
 
             case PipeMessages.Toggle:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
-                    new Action(() => ViewWindowManager.GetInstance().TogglePreview(lParam)),
+                    new Action(() => ViewWindowManager.GetInstance().TogglePreview(path, option)),
                     DispatcherPriority.ApplicationIdle);
                 return false;
 

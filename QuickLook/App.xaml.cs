@@ -168,7 +168,7 @@ public partial class App : Application
         // second instance: preview this file
         if (args.Any() && (Directory.Exists(args.First()) || File.Exists(args.First())))
         {
-            PipeServerManager.SendMessage(PipeMessages.Toggle, args.First());
+            PipeServerManager.SendMessage(PipeMessages.Toggle, args.First(), [.. args.Skip(1)]);
         }
         // second instance: duplicate
         else
