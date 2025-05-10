@@ -31,6 +31,7 @@ namespace QuickLook.Plugin.MarkdownViewer;
 
 public class Plugin : IViewer
 {
+    private bool _isInitialized = false;
     private WebpagePanel? _panel;
     private string? _currentHtmlPath;
 
@@ -59,6 +60,12 @@ public class Plugin : IViewer
 
     public void Init()
     {
+        // Delayed initialization can speed up startup
+        _isInitialized = false;
+    }
+
+    public void InitializeResources()
+    {
         // Initialize resources and handle versioning
         _resourceManager.InitializeResources();
 
@@ -78,6 +85,12 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
+        if (!_isInitialized)
+        {
+            _isInitialized = true;
+            InitializeResources();
+        }
+
         _panel = new WebpagePanel();
         context.ViewerContent = _panel;
         context.Title = Path.GetFileName(path);
