@@ -71,14 +71,9 @@ public partial class ViewerWindow : INotifyPropertyChanged
                 {
                     Dispatcher?.Invoke(() =>
                     {
-                        // We can not update the Title anytime
+                        // We can not update the Title when ShowInTaskbar is false
                         // https://github.com/QL-Win/QuickLook/issues/1628
-                        if (ContextObject.IsBusy)
-                        {
-                            ShowInTaskbar = true;
-                            Title = $"QuickLook - {ContextObject.Title}";
-                            ShowInTaskbar = false;
-                        }
+                        Title = $"QuickLook - {ContextObject.Title}";
                     });
                 }
                 break;
