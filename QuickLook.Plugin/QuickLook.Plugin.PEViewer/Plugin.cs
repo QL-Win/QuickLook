@@ -63,7 +63,6 @@ public class Plugin : IViewer
         _ip.Tag = context;
 
         context.ViewerContent = _ip;
-        context.Title = $"{Path.GetFileName(path)}";
         context.IsBusy = false;
     }
 
