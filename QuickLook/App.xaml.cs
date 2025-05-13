@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Violeta.Appearance;
+using Wpf.Ui.Violeta.Win32;
 
 namespace QuickLook;
 
@@ -70,6 +71,7 @@ public partial class App : Application
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
 
+        DpiAware.SetProcessDpiAwareness();
         base.OnStartup(e);
     }
 
