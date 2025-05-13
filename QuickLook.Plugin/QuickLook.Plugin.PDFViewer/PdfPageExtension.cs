@@ -27,7 +27,7 @@ namespace QuickLook.Plugin.PDFViewer;
 internal static class PdfPageExtension
 {
     private static int _renderCount;
-    private static readonly object LockObj = new object();
+    private static readonly object LockObj = new();
 
     public static BitmapSource RenderThumbnail(this PdfDocumentWrapper doc, int page)
     {

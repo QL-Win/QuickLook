@@ -55,7 +55,7 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         pagePanel.ImageScrolled += NavigatePage;
     }
 
-    public ObservableCollection<int> PageThumbnails { get; set; } = new ObservableCollection<int>();
+    public ObservableCollection<int> PageThumbnails { get; set; } = [];
 
     public int TotalPages => PdfDocumentWrapper.PdfDocument.PageCount;
 
