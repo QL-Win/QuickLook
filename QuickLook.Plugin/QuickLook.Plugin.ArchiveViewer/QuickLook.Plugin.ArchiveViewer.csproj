@@ -52,7 +52,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpCompress" Version="0.39.0" />
+		<!--Rollback SharpCompress to 0.38.0 before clear dependencies-->
+        <PackageReference Include="SharpCompress" Version="0.38.0" />
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
     </ItemGroup>
 
