@@ -1,0 +1,13 @@
+[req]
+default_bits       = 2048
+prompt             = no
+default_md         = sha256
+distinguished_name = dn
+x509_extensions    = v3_req
+
+[dn]
+CN = CE36AF3D-FF94-43EB-9908-7EC8FD1D29FB
+
+[v3_req]
+keyUsage = critical, digitalSignature
+extendedKeyUsage = codeSigning

@@ -3,10 +3,15 @@
          xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" 
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" 
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+  <!-- Invalid package identity name: QL-Win.QuickLook (expected: 21090PaddyXu.QuickLook) -->
+  <!-- Invalid package family name: QL-Win.QuickLook_wgqddy12gm212 (expected: 21090PaddyXu.QuickLook_egxr34yet59cg) -->
+  <!-- Invalid package publisher name: CN=F4F538EC-55CB-41B8-9531-25CC140D0339 (expected: CN=CE36AF3D-FF94-43EB-9908-7EC8FD1D29FB) -->
   <Identity Name="21090PaddyXu.QuickLook" Version="0.0.0.0" Publisher="CN=CE36AF3D-FF94-43EB-9908-7EC8FD1D29FB" />
   <Properties>
     <DisplayName>QuickLook</DisplayName>
-    <PublisherDisplayName>Paddy Xu</PublisherDisplayName>
+    <!-- We can not set the name to QL-Win, see the following error message -->
+    <!-- Package acceptance validation error: The PublisherDisplayName element in the app manifest of QuickLook-4.0.1.0.appx is QL-Win, which doesn't match your publisher display name: emako. -->
+    <PublisherDisplayName>emako</PublisherDisplayName>
     <Description>Bring macOS &#8220;Quick Look&#8221; feature to Windows</Description>
     <Logo>Assets\storelogo.png</Logo>
   </Properties>
@@ -19,7 +24,7 @@
     <Resource uap:Scale="400" />
   </Resources>
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.15063.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.26100.0" />
   </Dependencies>
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />

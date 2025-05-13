@@ -290,8 +290,11 @@ __pycache__/
 /QuickLook.Installer/C_QuickLookComponents.wxs
 /Build/*
 !/Build/Assets
-!/Build/AppxManifest.*
+!/Build/AppxManifest.xml
 !/Build/assetslayout.resfiles
 !/Build/priconfig.xml
 !/Build/micasetup.json
-!/Build/micasetup.cmd
+!/Build/openssl-sign.cnf
+!/Build/sideload.crt
+!/Build/sideload.key
+!/Build/sideload.pfx
