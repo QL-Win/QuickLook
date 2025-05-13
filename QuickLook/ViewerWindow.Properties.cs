@@ -69,7 +69,7 @@ public partial class ViewerWindow : INotifyPropertyChanged
             case nameof(ContextObject.Title):
                 if (!string.IsNullOrWhiteSpace(ContextObject.Title))
                 {
-                    Dispatcher.BeginInvoke(() =>
+                    Dispatcher?.Invoke(() =>
                     {
                         // We can not update the Title anytime
                         // https://github.com/QL-Win/QuickLook/issues/1628
