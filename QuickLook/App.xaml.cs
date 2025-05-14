@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.NativeMethods;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,13 +29,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Violeta.Appearance;
-using Wpf.Ui.Violeta.Win32;
 
 namespace QuickLook;
 
-/// <summary>
-///     Interaction logic for App.xaml
-/// </summary>
 public partial class App : Application
 {
     public static readonly string LocalDataPath = SettingHelper.LocalDataPath;
@@ -50,6 +47,19 @@ public partial class App : Application
 
     private bool _cleanExit = true;
     private Mutex _isRunning;
+
+    static App()
+    {
+        // Explicitly set to PerMonitor to avoid being overridden by the system
+        if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
+        {
+            Debug.WriteLine(
+                result == 0 ?
+                "DPI Awareness applied successfully" :
+                $"DPI Awareness manual setup failed. Error Code: {result}"
+            );
+        }
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -71,7 +81,6 @@ public partial class App : Application
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
 
-        DpiAware.SetProcessDpiAwareness();
         base.OnStartup(e);
     }
 
