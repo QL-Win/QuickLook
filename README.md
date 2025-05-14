@@ -31,7 +31,7 @@ I am aware that several alternatives are already available on the Internet (e.g.
 
 Get it from one of the following sources:
 
-  * Microsoft Store (Windows 10+ users only and does NOT work on Windows 10 S) <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://developer.microsoft.com/store/badges/images/English_get_L.png" height="22px" alt="Store Link" /></a> 
+  * Microsoft Store (Windows 10 and later only). Not supported on Windows 10 S. Not support file preview in Open-File or Save-File dialogs. <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://developer.microsoft.com/store/badges/images/English_get_L.png" height="22px" alt="Store Link" /></a> 
   * Installer or portable archive of the stable version from [GitHub Release](https://github.com/QL-Win/QuickLook/releases)
   * Using [Scoop](https://scoop.sh/): `scoop bucket add extras && scoop install extras/quicklook`
   * Nightly builds from [AppVeyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts) and [GitHub Action](https://github.com/QL-Win/QuickLook/releases/)
