@@ -63,9 +63,62 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        // Exception handling events which are not caught in the Task thread
+        TaskScheduler.UnobservedTaskException += (_, e) =>
         {
-            ProcessHelper.WriteLog(((Exception)args.ExceptionObject).ToString());
+            try
+            {
+                ProcessHelper.WriteLog(e.Exception.ToString());
+                Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+            }
+            catch (Exception ex)
+            {
+                ProcessHelper.WriteLog(ex.ToString());
+            }
+            finally
+            {
+                e.SetObserved();
+            }
+        };
+
+        // Exception handling events which are not caught in UI thread
+        DispatcherUnhandledException += (_, e) =>
+        {
+            try
+            {
+                ProcessHelper.WriteLog(e.Exception.ToString());
+                Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+            }
+            catch (Exception ex)
+            {
+                ProcessHelper.WriteLog(ex.ToString());
+            }
+            finally
+            {
+                e.Handled = true;
+            }
+        };
+
+        // Exception handling events which are not caught in Non-UI thread
+        // Such as a child thread created by ourself
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            try
+            {
+                if (e.ExceptionObject is Exception ex)
+                {
+                    ProcessHelper.WriteLog(ex.ToString());
+                    Wpf.Ui.Violeta.Controls.ExceptionReport.Show(ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ProcessHelper.WriteLog(ex.ToString());
+            }
+            finally
+            {
+                // Ignore
+            }
         };
 
         // Initialize MessageBox patching
