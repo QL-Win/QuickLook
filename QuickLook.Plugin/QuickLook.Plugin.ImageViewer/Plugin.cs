@@ -45,7 +45,7 @@ public class Plugin : IViewer
         ".mdc", ".mef", ".mos", ".mrw",
         ".nef", ".nrw",
         ".obm", ".orf",
-        ".pbm", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
+        ".pbm", ".pcx", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
         ".qoi",
         ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
         ".sr2", ".srf", ".srw", ".svg", ".svgz",
