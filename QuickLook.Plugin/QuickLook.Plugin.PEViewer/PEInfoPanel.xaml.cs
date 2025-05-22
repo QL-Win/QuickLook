@@ -83,13 +83,33 @@ public partial class PEInfoPanel : UserControl
 
                 try
                 {
-                    using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                    using var binaryReader = new BinaryReader(stream);
-                    var byteArray = binaryReader.ReadBytes(1024); // Fast reading
-                    var peImage = PEImage.FromBinary(byteArray);
-                    var machine = peImage.CoffHeader.Machine;
+                    int maxAttempts = 3;
+                    int bufferSize = 1024;
 
-                    arch = machine.ToImageMachineName();
+                    for (int attempt = 0; attempt < maxAttempts; attempt++)
+                    {
+                        try
+                        {
+                            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                            using var binaryReader = new BinaryReader(stream);
+                            var byteArray = binaryReader.ReadBytes(bufferSize);
+                            var peImage = PEImage.FromBinary(byteArray);
+                            var machine = peImage.CoffHeader.Machine;
+
+                            arch = machine.ToImageMachineName();
+                            break; // Successfully parsed, jumped out of the loop
+                        }
+                        catch (Exception e) when (e.Message == "Section headers incomplete.")
+                        {
+                            // Extended buffer size
+                            bufferSize *= 2;
+                        }
+                        catch
+                        {
+                            // Non-Section headers errors will not be retryed
+                            break;
+                        }
+                    }
                 }
                 catch
                 {
