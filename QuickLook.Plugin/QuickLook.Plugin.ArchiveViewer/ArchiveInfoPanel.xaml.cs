@@ -18,9 +18,9 @@
 using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
-using SharpCompress.Archives;
-using SharpCompress.Common;
-using SharpCompress.Readers;
+using PureSharpCompress.Archives;
+using PureSharpCompress.Common;
+using PureSharpCompress.Readers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
