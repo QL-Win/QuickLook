@@ -41,18 +41,18 @@ public class RegFileObject
 
     public RegFileObject()
     {
-        regvalues = new Dictionary<string, Dictionary<string, RegValueObject>>();
+        regvalues = [];
     }
 
     public RegFileObject(string RegFileName)
     {
-        regvalues = new Dictionary<string, Dictionary<string, RegValueObject>>();
+        regvalues = [];
         Read(RegFileName);
     }
 
     public RegFileObject(byte[] RegFileContents)
     {
-        regvalues = new Dictionary<string, Dictionary<string, RegValueObject>>();
+        regvalues = [];
         Read(RegFileContents);
     }
 
@@ -165,7 +165,7 @@ public class RegFileObject
                 if (sKey.EndsWith("=")) sKey = sKey.Substring(0, sKey.Length - 1);
                 sKey = StripeBraces(sKey);
                 if (sKey == "@")
-                    sKey = "";
+                    sKey = string.Empty;
                 else
                     sKey = StripeLeadingChars(sKey, "\"");
 
@@ -226,7 +226,7 @@ public class RegFileObject
                 while (sKey.EndsWith("\r\n")) sKey = sKey.Substring(0, sKey.Length - 2);
 
                 if (sKey == "@")
-                    sKey = "";
+                    sKey = string.Empty;
                 else
                     sKey = StripeLeadingChars(sKey, "\"");
 
@@ -443,7 +443,7 @@ public class RegValueObject
             return "HKEY_CURRENT_USER";
         }
 
-        return "";
+        return string.Empty;
     }
 
     /// <summary>
@@ -512,44 +512,21 @@ public class RegValueObject
 
     private string SetRegEntryType(string sRegDataType)
     {
-        switch (sRegDataType)
+        return sRegDataType switch
         {
-            case "REG_QWORD":
-                return "hex(b):";
-
-            case "REG_RESOURCE_REQUIREMENTS_LIST":
-                return "hex(a):";
-
-            case "REG_FULL_RESOURCE_DESCRIPTOR":
-                return "hex(9):";
-
-            case "REG_RESOURCE_LIST":
-                return "hex(8):";
-
-            case "REG_MULTI_SZ":
-                return "hex(7):";
-
-            case "REG_LINK":
-                return "hex(6):";
-
-            case "REG_DWORD":
-                return "dword:";
-
-            case "REG_EXPAND_SZ":
-                return "hex(2):";
-
-            case "REG_NONE":
-                return "hex(0):";
-
-            case "REG_BINARY":
-                return "hex:";
-
-            case "REG_SZ":
-                return "";
-
-            default:
-                return "";
-        }
+            "REG_QWORD" => "hex(b):",
+            "REG_RESOURCE_REQUIREMENTS_LIST" => "hex(a):",
+            "REG_FULL_RESOURCE_DESCRIPTOR" => "hex(9):",
+            "REG_RESOURCE_LIST" => "hex(8):",
+            "REG_MULTI_SZ" => "hex(7):",
+            "REG_LINK" => "hex(6):",
+            "REG_DWORD" => "dword:",
+            "REG_EXPAND_SZ" => "hex(2):",
+            "REG_NONE" => "hex(0):",
+            "REG_BINARY" => "hex:",
+            "REG_SZ" => string.Empty,
+            _ => string.Empty,
+        };
 
         /*
         hex: REG_BINARY

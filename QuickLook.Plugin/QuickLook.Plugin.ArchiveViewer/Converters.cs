@@ -96,7 +96,7 @@ public class BooleanToAsteriskConverter : DependencyObject, IValueConverter
     {
         var b = (bool)value;
 
-        return b ? "*" : "";
+        return b ? "*" : string.Empty;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -112,7 +112,7 @@ public class SizePrettyPrintConverter : DependencyObject, IMultiValueConverter
         var size = (ulong)values[0];
         var isFolder = (bool)values[1];
 
-        return isFolder ? "" : ((long)size).ToPrettySize(2);
+        return isFolder ? string.Empty : ((long)size).ToPrettySize(2);
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -128,7 +128,7 @@ public class DatePrintConverter : DependencyObject, IMultiValueConverter
         var date = (DateTime)values[0];
         var isFolder = (bool)values[1];
 
-        return isFolder ? "" : date.ToString(CultureInfo.CurrentCulture);
+        return isFolder ? string.Empty : date.ToString(CultureInfo.CurrentCulture);
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

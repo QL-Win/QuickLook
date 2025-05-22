@@ -53,7 +53,7 @@ internal class Updater
                 {
                     if (!silent)
                         Application.Current.Dispatcher.Invoke(
-                            () => TrayIconManager.ShowNotification("",
+                            () => TrayIconManager.ShowNotification(string.Empty,
                                 TranslationHelper.Get("Update_NoUpdate")));
                     return;
                 }
@@ -63,7 +63,7 @@ internal class Updater
                 Application.Current.Dispatcher.Invoke(
                     () =>
                     {
-                        TrayIconManager.ShowNotification("",
+                        TrayIconManager.ShowNotification(string.Empty,
                             string.Format(TranslationHelper.Get("Update_Found"), nVersion),
                             timeout: 20000,
                             clickEvent:
@@ -74,7 +74,7 @@ internal class Updater
             {
                 Debug.WriteLine(e.Message);
                 Application.Current.Dispatcher.Invoke(
-                    () => TrayIconManager.ShowNotification("",
+                    () => TrayIconManager.ShowNotification(string.Empty,
                         string.Format(TranslationHelper.Get("Update_Error"), e.Message)));
             }
         });
@@ -110,7 +110,7 @@ internal class Updater
             {
                 Debug.WriteLine(e.Message);
                 Application.Current.Dispatcher.Invoke(
-                    () => TrayIconManager.ShowNotification("",
+                    () => TrayIconManager.ShowNotification(string.Empty,
                         string.Format(TranslationHelper.Get("Update_Error"), e.Message)));
             }
         });

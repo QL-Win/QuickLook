@@ -92,7 +92,7 @@ public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
         if (IsFolder)
             return $"{Name}";
 
-        var en = Encrypted ? "*" : "";
+        var en = Encrypted ? "*" : string.Empty;
         return $"{Name}{en},{IsFolder},{Size},{ModifiedDate}";
     }
 }

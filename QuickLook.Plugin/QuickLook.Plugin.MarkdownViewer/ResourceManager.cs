@@ -137,16 +137,10 @@ internal class ResourceManager
         }
     }
 
-    private class VersionInfo
+    private class VersionInfo(string embeddedHash, string extractedHash)
     {
-        public string EmbeddedHash { get; set; }
-        public string ExtractedHash { get; set; }
-
-        public VersionInfo(string embeddedHash, string extractedHash)
-        {
-            EmbeddedHash = embeddedHash;
-            ExtractedHash = extractedHash;
-        }
+        public string EmbeddedHash { get; set; } = embeddedHash;
+        public string ExtractedHash { get; set; } = extractedHash;
     }
 
     private static string CalculateDirectoryHash(string directory)
@@ -169,8 +163,8 @@ internal class ResourceManager
                 combinedBytes.AddRange(contentBytes);
             }
 
-            var hash = sha256.ComputeHash(combinedBytes.ToArray());
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            var hash = sha256.ComputeHash([.. combinedBytes]);
+            return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
         }
     }
 
@@ -190,32 +184,28 @@ internal class ResourceManager
     private string CalculateEmbeddedResourcesHash()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        using (var sha256 = SHA256.Create())
+        using var sha256 = SHA256.Create();
+        var combinedBytes = new List<byte>();
+        var resourceNames = assembly.GetManifestResourceNames()
+            .Where(name => name.StartsWith(_resourcePrefix) &&
+                   !name.EndsWith(".version"))
+            .OrderBy(name => name)
+            .ToList();
+
+        foreach (var resourceName in resourceNames)
         {
-            var combinedBytes = new List<byte>();
-            var resourceNames = assembly.GetManifestResourceNames()
-                .Where(name => name.StartsWith(_resourcePrefix) &&
-                       !name.EndsWith(".version"))
-                .OrderBy(name => name)
-                .ToList();
+            var nameBytes = Encoding.UTF8.GetBytes(resourceName.ToLowerInvariant());
+            combinedBytes.AddRange(nameBytes);
 
-            foreach (var resourceName in resourceNames)
-            {
-                var nameBytes = Encoding.UTF8.GetBytes(resourceName.ToLowerInvariant());
-                combinedBytes.AddRange(nameBytes);
-
-                using (var stream = assembly.GetManifestResourceStream(resourceName))
-                {
-                    if (stream == null) continue;
-                    var buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    combinedBytes.AddRange(buffer);
-                }
-            }
-
-            var hash = sha256.ComputeHash(combinedBytes.ToArray());
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null) continue;
+            var buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            combinedBytes.AddRange(buffer);
         }
+
+        var hash = sha256.ComputeHash([.. combinedBytes]);
+        return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
     }
 
     private void GenerateVersionFile()

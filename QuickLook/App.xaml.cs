@@ -197,7 +197,7 @@ public partial class App : Application
     {
         TrayIconManager.GetInstance();
         if (!e.Args.Contains("/autorun") && !IsUWP)
-            TrayIconManager.ShowNotification("", TranslationHelper.Get("APP_START"));
+            TrayIconManager.ShowNotification(string.Empty, TranslationHelper.Get("APP_START"));
         if (e.Args.Contains("/first"))
             AutoStartupHelper.CreateAutorunShortcut();
 

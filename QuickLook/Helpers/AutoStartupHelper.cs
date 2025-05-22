@@ -49,7 +49,7 @@ internal static class AutoStartupHelper
         catch (Exception e)
         {
             ProcessHelper.WriteLog(e.ToString());
-            TrayIconManager.ShowNotification("", "Failed to add QuickLook to Startup folder.");
+            TrayIconManager.ShowNotification(string.Empty, "Failed to add QuickLook to Startup folder.");
         }
     }
 
@@ -65,7 +65,7 @@ internal static class AutoStartupHelper
         catch (Exception e)
         {
             ProcessHelper.WriteLog(e.ToString());
-            TrayIconManager.ShowNotification("", "Failed to delete QuickLook startup shortcut.");
+            TrayIconManager.ShowNotification(string.Empty, "Failed to delete QuickLook startup shortcut.");
         }
     }
 

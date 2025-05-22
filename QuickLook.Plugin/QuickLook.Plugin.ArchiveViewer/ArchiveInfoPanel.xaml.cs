@@ -37,7 +37,7 @@ namespace QuickLook.Plugin.ArchiveViewer;
 /// </summary>
 public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
-    private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = new Dictionary<string, ArchiveFileEntry>();
+    private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = [];
     private bool _disposed;
     private double _loadPercent;
     private ulong _totalZippedSize;
@@ -82,7 +82,7 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
             _totalZippedSize = (ulong)new FileInfo(path).Length;
 
             var root = new ArchiveFileEntry(Path.GetFileName(path), true);
-            _fileEntries.Add("", root);
+            _fileEntries.Add(string.Empty, root);
 
             try
             {
@@ -123,7 +123,7 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
                 if (_disposed)
                     return;
 
-                fileListView.SetDataContext(_fileEntries[""].Children.Keys);
+                fileListView.SetDataContext(_fileEntries[string.Empty].Children.Keys);
                 archiveCount.Content =
                     $"{_type} archive{t}";
                 archiveSizeC.Content =
@@ -137,38 +137,37 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
 
     private void LoadItemsFromArchive(string path)
     {
-        using (var stream = File.OpenRead(path))
+        using var stream = File.OpenRead(path);
+
+        // ReaderFactory is slow... so limit its usage
+        string[] useReader = [".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"];
+
+        if (useReader.Any(path.ToLower().EndsWith))
         {
-            // ReaderFactory is slow... so limit its usage
-            string[] useReader = { ".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz" };
+            var reader = ReaderFactory.Open(stream, new ChardetReaderOptions());
 
-            if (useReader.Any(path.ToLower().EndsWith))
+            _type = reader.ArchiveType.ToString();
+
+            while (reader.MoveToNextEntry())
             {
-                var reader = ReaderFactory.Open(stream, new ChardetReaderOptions());
-
-                _type = reader.ArchiveType.ToString();
-
-                while (reader.MoveToNextEntry())
-                {
-                    if (_disposed)
-                        return;
-                    LoadPercent = 100d * stream.Position / stream.Length;
-                    ProcessByLevel(reader.Entry);
-                }
+                if (_disposed)
+                    return;
+                LoadPercent = 100d * stream.Position / stream.Length;
+                ProcessByLevel(reader.Entry);
             }
-            else
+        }
+        else
+        {
+            var archive = ArchiveFactory.Open(stream, new ChardetReaderOptions());
+
+            _type = archive.Type.ToString();
+
+            foreach (var entry in archive.Entries)
             {
-                var archive = ArchiveFactory.Open(stream, new ChardetReaderOptions());
-
-                _type = archive.Type.ToString();
-
-                foreach (var entry in archive.Entries)
-                {
-                    if (_disposed)
-                        return;
-                    LoadPercent = 100d * stream.Position / stream.Length;
-                    ProcessByLevel(entry);
-                }
+                if (_disposed)
+                    return;
+                LoadPercent = 100d * stream.Position / stream.Length;
+                ProcessByLevel(entry);
             }
         }
     }
@@ -212,17 +211,17 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
     {
         var d = Path.GetDirectoryName(path);
 
-        return d ?? "";
+        return d ?? string.Empty;
     }
 
     private string[] GetPathFragments(string path)
     {
         if (string.IsNullOrEmpty(path))
-            return new string[0];
+            return [];
 
         var frags = path.Split('\\', '/').Where(f => !string.IsNullOrEmpty(f)).ToArray();
 
-        return frags.Select((s, i) => frags.Take(i + 1).Aggregate((a, b) => a + "\\" + b)).ToArray();
+        return [.. frags.Select((s, i) => frags.Take(i + 1).Aggregate((a, b) => a + "\\" + b))];
     }
 
     [NotifyPropertyChangedInvocator]
