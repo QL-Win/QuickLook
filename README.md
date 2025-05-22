@@ -68,6 +68,10 @@ See the [Wiki page](https://github.com/QL-Win/QuickLook/wiki)
 
 See the [Translation guide](https://github.com/QL-Win/QuickLook/wiki/Translations)
 
+## Community
+
+QQ Group: [371388501](https://qm.qq.com/q/KIczirznua)
+
 ## Developer
 
 - **Formatter**: [CodeMaid.config](CodeMaid.config), [Settings.XamlStyler](Settings.XamlStyler)
