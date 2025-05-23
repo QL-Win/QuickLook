@@ -2,6 +2,8 @@
 
 # QuickLook
 
+<a href="https://trendshift.io/repositories/3258" target="_blank"><img src="https://trendshift.io/api/badge/repositories/3258" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+
 [![license](https://img.shields.io/github/license/QL-Win/QuickLook.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![AppVeyor](https://img.shields.io/appveyor/ci/xupefei/QuickLook.svg)](https://ci.appveyor.com/project/xupefei/QuickLook)
 [![Github All Releases](https://img.shields.io/github/downloads/QL-Win/QuickLook/total.svg)](https://github.com/QL-Win/QuickLook/releases)
