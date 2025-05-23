@@ -19,6 +19,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.VideoViewer;
 
@@ -48,7 +49,7 @@ public sealed class TimeTickToShortStringConverter : DependencyObject, IValueCon
 
 public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
 {
-    private static readonly string[] Volumes = { "\xE74F", "\xE993", "\xE994", "\xE995" };
+    private static readonly string[] Volumes = ["\xE74F", "\xE993", "\xE994", "\xE995"];
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -62,6 +63,22 @@ public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
         v = Math.Min(v, 1);
 
         return Volumes[1 + (int)(v / 0.34)];
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public sealed class CoverArtConverter : IValueConverter
+{
+    private static readonly BitmapImage emptyImage =
+        new(new Uri("pack://application:,,,/QuickLook.Plugin.VideoViewer;component/Resources/empty.png", UriKind.Absolute));
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value ?? emptyImage;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -14,6 +14,7 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:TimeTickToShortStringConverter x:Key="TimeTickToShortStringConverter" />
             <local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
+            <local:CoverArtConverter x:Key="CoverArtConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -54,23 +55,14 @@
                        Opacity="0.6" />
             <Image x:Name="imageCoverArt"
                    Grid.Column="0"
-                   Margin="20,40,20,40">
+                   Margin="20,40,20,40"
+                   Source="{Binding CoverArt, ElementName=viewerPanel, Converter={StaticResource CoverArtConverter}}">
                 <Image.Effect>
                     <DropShadowEffect BlurRadius="6"
                                       Direction="0"
                                       ShadowDepth="0"
                                       Color="#FF898989" />
                 </Image.Effect>
-                <Image.Style>
-                    <Style TargetType="Image">
-                        <Setter Property="Source" Value="{Binding CoverArt, ElementName=viewerPanel}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding CoverArt, ElementName=viewerPanel, FallbackValue=0, TargetNullValue=0}" Value="0">
-                                <Setter Property="Source" Value="Resources/empty.png" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
             </Image>
             <Grid Grid.Column="1">
                 <Grid.Effect>
