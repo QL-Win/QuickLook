@@ -50,6 +50,8 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
     medium.tymed = TYMED_HGLOBAL;
 
     // Try CF_HDROP first
+    // If the file path is too long, the call might fail but CFSTR_SHELLIDLIST will do it
+    // https://github.com/QL-Win/QuickLook/issues/1643
     if (SUCCEEDED(dao->GetData(&formatetc, &medium)))
     {
         HDROP hDrop = HDROP(medium.hGlobal);
@@ -73,7 +75,7 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
     static const CLIPFORMAT cfShellIDList = (CLIPFORMAT)RegisterClipboardFormatW(CFSTR_SHELLIDLIST);
     formatetc.cfFormat = cfShellIDList;
 
-    if (SUCCEEDED(dao->GetData(&formatetc, &medium))) 
+    if (SUCCEEDED(dao->GetData(&formatetc, &medium)))
     {
         CIDA* pida = (CIDA*)GlobalLock(medium.hGlobal);
         if (!pida)
@@ -98,7 +100,7 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
             PWSTR pszPath = nullptr;
             if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &pszPath)))
             {
-                StringCchCopyW(buffer, MAX_PATH, pszPath); // returns e.g., ::{645FF040-5081-101B-9F08-00AA002F954E}
+                StringCchCopyW(buffer, MAX_PATH_EX, pszPath); // returns e.g., ::{645FF040-5081-101B-9F08-00AA002F954E}
                 CoTaskMemFree(pszPath);
             }
         }
