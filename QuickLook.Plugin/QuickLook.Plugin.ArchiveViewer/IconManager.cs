@@ -196,7 +196,7 @@ public static class IconManager
         public const uint FileAttributeDirectory = 0x00000010;
 
         [DllImport("Shell32.dll")]
-        public static extern IntPtr SHGetFileInfo(
+        public static extern nint SHGetFileInfo(
             string pszPath,
             uint dwFileAttributes,
             ref Shfileinfo psfi,
@@ -208,7 +208,7 @@ public static class IconManager
         public struct Shfileinfo
         {
             private const int Namesize = 80;
-            public readonly IntPtr hIcon;
+            public readonly nint hIcon;
             private readonly int iIcon;
             private readonly uint dwAttributes;
 
@@ -232,6 +232,6 @@ public static class IconManager
         /// <param name="hIcon">Pointer to icon handle.</param>
         /// <returns>N/A</returns>
         [DllImport("User32.dll")]
-        public static extern int DestroyIcon(IntPtr hIcon);
+        public static extern int DestroyIcon(nint hIcon);
     }
 }

@@ -31,9 +31,6 @@ using Size = System.Windows.Size;
 
 namespace QuickLook;
 
-/// <summary>
-///     Interaction logic for ViewerWindow.xaml
-/// </summary>
 public partial class ViewerWindow : Window
 {
     private Size _customWindowSize = Size.Empty;

@@ -32,9 +32,6 @@ using System.Windows.Controls;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-/// <summary>
-///     Interaction logic for ArchiveInfoPanel.xaml
-/// </summary>
 public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
     private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = [];

@@ -44,13 +44,13 @@ internal static class WindowsThumbnailProvider
     private static extern int SHCreateItemFromParsingName(
         [MarshalAs(UnmanagedType.LPWStr)] string path,
         // The following parameter is not used - binding context.
-        IntPtr pbc,
+        nint pbc,
         ref Guid riid,
         [MarshalAs(UnmanagedType.Interface)] out IShellItem shellItem);
 
     [DllImport("gdi32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool DeleteObject(IntPtr hObject);
+    private static extern bool DeleteObject(nint hObject);
 
     public static Bitmap GetThumbnail(string fileName, int width, int height, ThumbnailOptions options)
     {
@@ -71,7 +71,7 @@ internal static class WindowsThumbnailProvider
         }
     }
 
-    internal static Bitmap GetBitmapFromHBitmap(IntPtr nativeHBitmap)
+    internal static Bitmap GetBitmapFromHBitmap(nint nativeHBitmap)
     {
         var bmp = Image.FromHbitmap(nativeHBitmap);
 
@@ -115,7 +115,7 @@ internal static class WindowsThumbnailProvider
         return srcBitmap;
     }
 
-    private static IntPtr GetHBitmap(string fileName, int width, int height, ThumbnailOptions options)
+    private static nint GetHBitmap(string fileName, int width, int height, ThumbnailOptions options)
     {
         var shellItem2Guid = new Guid(IShellItem2Guid);
         var retCode =
@@ -142,18 +142,18 @@ internal static class WindowsThumbnailProvider
     [Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe")]
     internal interface IShellItem
     {
-        void BindToHandler(IntPtr pbc,
-            [MarshalAs(UnmanagedType.LPStruct)] Guid bhid,
-            [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
-            out IntPtr ppv);
+        public void BindToHandler(nint pbc,
+           [MarshalAs(UnmanagedType.LPStruct)] Guid bhid,
+           [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
+           out nint ppv);
 
-        void GetParent(out IShellItem ppsi);
+        public void GetParent(out IShellItem ppsi);
 
-        void GetDisplayName(SIGDN sigdnName, out IntPtr ppszName);
+        public void GetDisplayName(SIGDN sigdnName, out nint ppszName);
 
-        void GetAttributes(uint sfgaoMask, out uint psfgaoAttribs);
+        public void GetAttributes(uint sfgaoMask, out uint psfgaoAttribs);
 
-        void Compare(IShellItem psi, uint hint, out int piOrder);
+        public void Compare(IShellItem psi, uint hint, out int piOrder);
     }
 
     internal enum SIGDN : uint
@@ -165,7 +165,7 @@ internal static class WindowsThumbnailProvider
         PARENTRELATIVEEDITING = 0x80031001,
         DESKTOPABSOLUTEEDITING = 0x8004c000,
         FILESYSPATH = 0x80058000,
-        URL = 0x80068000
+        URL = 0x80068000,
     }
 
     internal enum HResult
@@ -182,7 +182,7 @@ internal static class WindowsThumbnailProvider
         Win32ErrorCanceled = 1223,
         Canceled = unchecked((int)0x800704C7),
         ResourceInUse = unchecked((int)0x800700AA),
-        AccessDenied = unchecked((int)0x80030005)
+        AccessDenied = unchecked((int)0x80030005),
     }
 
     [ComImport]
@@ -191,10 +191,10 @@ internal static class WindowsThumbnailProvider
     internal interface IShellItemImageFactory
     {
         [PreserveSig]
-        HResult GetImage(
+        public HResult GetImage(
             [In][MarshalAs(UnmanagedType.Struct)] NativeSize size,
             [In] ThumbnailOptions flags,
-            [Out] out IntPtr phbm);
+            [Out] out nint phbm);
     }
 
     [StructLayout(LayoutKind.Sequential)]

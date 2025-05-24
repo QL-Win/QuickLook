@@ -29,9 +29,6 @@ using System.Windows.Controls;
 
 namespace QuickLook.Plugin.PDFViewer;
 
-/// <summary>
-///     Interaction logic for PdfViewer.xaml
-/// </summary>
 public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDisposable
 {
     private int _changePageDeltaSum;

@@ -29,25 +29,14 @@ namespace QuickLook.Plugin.PEViewer;
 
 public partial class PEInfoPanel : UserControl
 {
-    private bool _stop;
-
     public PEInfoPanel()
     {
         InitializeComponent();
-
-        // apply global theme
-        Resources.MergedDictionaries[0].Clear();
 
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         fileVersionTitle.Text = TranslationHelper.Get("FILE_VERSION", translationFile);
         productVersionTitle.Text = TranslationHelper.Get("PRODUCT_VERSION", translationFile);
-    }
-
-    public bool Stop
-    {
-        set => _stop = value;
-        get => _stop;
     }
 
     public void DisplayInfo(string path)
@@ -70,8 +59,6 @@ public partial class PEInfoPanel : UserControl
 
         var name = Path.GetFileName(path);
         filename.Text = string.IsNullOrEmpty(name) ? path : name;
-
-        Stop = false;
 
         _ = Task.Run(() =>
         {

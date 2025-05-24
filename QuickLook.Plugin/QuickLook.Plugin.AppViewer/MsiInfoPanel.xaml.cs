@@ -35,9 +35,6 @@ public partial class MsiInfoPanel : UserControl, IAppInfoPanel
     {
         InitializeComponent();
 
-        // apply global theme
-        Resources.MergedDictionaries[0].Clear();
-
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
         productNameTitle.Text = TranslationHelper.Get("PRODUCT_NAME", translationFile);
         productVersionTitle.Text = TranslationHelper.Get("PRODUCT_VERSION", translationFile);

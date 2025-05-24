@@ -37,9 +37,6 @@ public partial class PluginInfoPanel : UserControl
     {
         InitializeComponent();
 
-        // apply global theme
-        Resources.MergedDictionaries[0].Clear();
-
         _path = path;
         _context = context;
         ReadInfo();

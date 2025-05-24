@@ -20,9 +20,6 @@ using System.Windows.Controls;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-/// <summary>
-///     Interaction logic for ArchiveFileListView.xaml
-/// </summary>
 public partial class ArchiveFileListView : UserControl, IDisposable
 {
     public ArchiveFileListView()

@@ -38,9 +38,6 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-/// <summary>
-///     Interaction logic for ImagePanel.xaml
-/// </summary>
 public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposable
 {
     private Visibility _backgroundVisibility = Visibility.Visible;

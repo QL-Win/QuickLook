@@ -31,9 +31,6 @@ using UtfUnknown;
 
 namespace QuickLook.Plugin.CsvViewer;
 
-/// <summary>
-///     Interaction logic for CsvViewerPanel.xaml
-/// </summary>
 public partial class CsvViewerPanel : UserControl
 {
     public CsvViewerPanel()

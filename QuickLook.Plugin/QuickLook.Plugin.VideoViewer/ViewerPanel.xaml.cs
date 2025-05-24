@@ -45,9 +45,6 @@ using WPFMediaKit.DirectShow.MediaPlayers;
 
 namespace QuickLook.Plugin.VideoViewer;
 
-/// <summary>
-///     Interaction logic for UserControl1.xaml
-/// </summary>
 public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
     private readonly ContextObject _context;

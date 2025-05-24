@@ -23,9 +23,6 @@ using QuickLook.Common.Helpers;
 
 namespace QuickLook.Controls.GlassLayer;
 
-/// <summary>
-///     Interaction logic for GlassLayer.xaml
-/// </summary>
 public partial class GlassLayer : UserControl
 {
     public GlassLayer()

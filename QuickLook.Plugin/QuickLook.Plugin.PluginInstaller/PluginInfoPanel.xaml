@@ -7,13 +7,6 @@
              Height="200"
              FontSize="14"
              mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/QuickLook.Common;component/Styles/MainWindowStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
