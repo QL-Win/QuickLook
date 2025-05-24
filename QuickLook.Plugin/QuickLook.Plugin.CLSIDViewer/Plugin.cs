@@ -25,7 +25,6 @@ namespace QuickLook.Plugin.CLSIDViewer;
 public class Plugin : IViewer
 {
     private CLSIDInfoPanel _ip;
-    private string _path;
 
     public int Priority => -1;
 
@@ -57,13 +56,12 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        _path = path;
         _ip = new CLSIDInfoPanel();
         _ip.DisplayInfo(path, context);
 
         context.ViewerContent = _ip;
         context.Title = $"{CLSIDRegister.GetName(path) ?? path}";
-        context.IsBusy = true;
+        context.IsBusy = false;
     }
 
     public void Cleanup()
