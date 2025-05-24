@@ -17,21 +17,21 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
-using QuickLook.Plugin.PEViewer.PEImageParser;
+using QuickLook.Plugin.AppViewer.MsiImageParser;
 using System;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace QuickLook.Plugin.PEViewer;
+namespace QuickLook.Plugin.AppViewer;
 
-public partial class PEInfoPanel : UserControl
+public partial class MsiInfoPanel : UserControl, IAppInfoPanel
 {
     private bool _stop;
 
-    public PEInfoPanel()
+    public MsiInfoPanel()
     {
         InitializeComponent();
 
@@ -39,9 +39,11 @@ public partial class PEInfoPanel : UserControl
         Resources.MergedDictionaries[0].Clear();
 
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
-        totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
-        fileVersionTitle.Text = TranslationHelper.Get("FILE_VERSION", translationFile);
+        productNameTitle.Text = TranslationHelper.Get("PRODUCT_NAME", translationFile);
         productVersionTitle.Text = TranslationHelper.Get("PRODUCT_VERSION", translationFile);
+        manufacturerTitle.Text = TranslationHelper.Get("MANUFACTURER", translationFile);
+        totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
+        modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
     }
 
     public bool Stop
@@ -77,52 +79,17 @@ public partial class PEInfoPanel : UserControl
         {
             if (File.Exists(path))
             {
-                var info = FileVersionInfo.GetVersionInfo(path);
                 var size = new FileInfo(path).Length;
-                var arch = default(string);
-
-                try
-                {
-                    int maxAttempts = 3;
-                    int bufferSize = 1024;
-
-                    for (int attempt = 0; attempt < maxAttempts; attempt++)
-                    {
-                        try
-                        {
-                            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                            using var binaryReader = new BinaryReader(stream);
-                            var byteArray = binaryReader.ReadBytes(bufferSize);
-                            var peImage = PEImage.FromBinary(byteArray);
-                            var machine = peImage.CoffHeader.Machine;
-
-                            arch = machine.ToImageMachineName();
-                            break; // Successfully parsed, jumped out of the loop
-                        }
-                        catch (Exception e) when (e.Message == "Section headers incomplete.")
-                        {
-                            // Extended buffer size
-                            bufferSize *= 2;
-                        }
-                        catch
-                        {
-                            // Non-Section headers errors will not be retryed
-                            break;
-                        }
-                    }
-                }
-                catch
-                {
-                    // Usually because DOS Header not found
-                }
+                MsiInfo msiInfo = MsiParser.Parse(path);
+                var last = File.GetLastWriteTime(path);
 
                 Dispatcher.Invoke(() =>
                 {
-                    architectureContainer.Visibility = string.IsNullOrEmpty(arch) ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
-                    architecture.Text = arch;
-                    fileVersion.Text = info.FileVersion;
-                    productVersion.Text = info.ProductVersion;
+                    productName.Text = msiInfo.ProductName;
+                    productVersion.Text = msiInfo.ProductVersion;
+                    manufacturer.Text = msiInfo.Manufacturer;
                     totalSize.Text = size.ToPrettySize(2);
+                    modDate.Text = last.ToString(CultureInfo.CurrentCulture);
                 });
             }
         });
