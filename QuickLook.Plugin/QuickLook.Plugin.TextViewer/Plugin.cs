@@ -47,8 +47,9 @@ public class Plugin : IViewer
         // pre-load
         var _ = new TextEditor();
 
-        _hlmLight = GetHighlightingManager(Themes.Light, "Light");
-        _hlmDark = GetHighlightingManager(Themes.Dark, "Dark");
+        InitHighlightingManager();
+        AddHighlightingManager(_hlmLight, "Light");
+        AddHighlightingManager(_hlmDark, "Dark");
 
         // Implementation of the Search Panel Styled with Fluent Theme
         {
@@ -74,18 +75,16 @@ public class Plugin : IViewer
             return true;
 
         // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
-        //if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-        //    return true;
+        // if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
+        //     return true;
 
         // otherwise, read the first 16KB, check if we can get something.
-        using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-        {
-            const int bufferLength = 16 * 1024;
-            var buffer = new byte[bufferLength];
-            var size = s.Read(buffer, 0, bufferLength);
+        using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        const int bufferLength = 16 * 1024;
+        var buffer = new byte[bufferLength];
+        var size = s.Read(buffer, 0, bufferLength);
 
-            return IsText(buffer, size);
-        }
+        return IsText(buffer, size);
     }
 
     public void Prepare(string path, ContextObject context)
@@ -132,17 +131,15 @@ public class Plugin : IViewer
         return true;
     }
 
-    private HighlightingManager GetHighlightingManager(Themes theme, string dirName)
+    private void AddHighlightingManager(HighlightingManager hlm, string dirName)
     {
-        var hlm = new HighlightingManager();
-
         var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         if (string.IsNullOrEmpty(assemblyPath))
-            return hlm;
+            return;
 
         var syntaxPath = Path.Combine(assemblyPath, "Syntax", dirName);
         if (!Directory.Exists(syntaxPath))
-            return hlm;
+            return;
 
         foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd").OrderBy(f => f))
         {
@@ -150,22 +147,52 @@ public class Plugin : IViewer
             {
                 Debug.WriteLine(file);
                 var ext = Path.GetFileNameWithoutExtension(file);
-                using (Stream s = File.OpenRead(Path.GetFullPath(file)))
-                using (var reader = new XmlTextReader(s))
-                {
-                    var xshd = HighlightingLoader.LoadXshd(reader);
-                    var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
-                    if (xshd.Extensions.Count > 0)
-                        hlm.RegisterHighlighting(ext, xshd.Extensions.ToArray(), highlightingDefinition);
-                }
+                using Stream s = File.OpenRead(Path.GetFullPath(file));
+                using var reader = new XmlTextReader(s);
+                var xshd = HighlightingLoader.LoadXshd(reader);
+                var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                if (xshd.Extensions.Count > 0)
+                    hlm.RegisterHighlighting(ext, [.. xshd.Extensions], highlightingDefinition);
             }
             catch (Exception e)
             {
                 ProcessHelper.WriteLog(e.ToString());
             }
         }
+    }
 
-        return hlm;
+    private void InitHighlightingManager()
+    {
+        _hlmLight = new HighlightingManager();
+        _hlmDark = new HighlightingManager();
+
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string[] resourceNames = assembly.GetManifestResourceNames();
+
+        foreach (var resourceName in resourceNames.Where(name => name.Contains(".Syntax.")))
+        {
+            using Stream s = assembly.GetManifestResourceStream(resourceName);
+
+            if (s == null)
+                continue;
+
+            try
+            {
+                Debug.WriteLine(resourceName);
+
+                var hlm = resourceName.Contains(".Syntax.Dark.") ? _hlmDark : _hlmLight;
+                var ext = Path.GetFileNameWithoutExtension(resourceName);
+                using var reader = new XmlTextReader(s);
+                var xshd = HighlightingLoader.LoadXshd(reader);
+                var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
+                if (xshd.Extensions.Count > 0)
+                    hlm.RegisterHighlighting(ext, [.. xshd.Extensions], highlightingDefinition);
+            }
+            catch (Exception e)
+            {
+                ProcessHelper.WriteLog(e.ToString());
+            }
+        }
     }
 
     private void AssignHighlightingManager(string path, TextViewerPanel tvp, ContextObject context)

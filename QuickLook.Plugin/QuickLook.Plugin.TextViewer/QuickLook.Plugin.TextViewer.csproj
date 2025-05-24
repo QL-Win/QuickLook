@@ -73,9 +73,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Syntax\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        <EmbeddedResource Include="Syntax\**" />
         <None Include="Translations.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
