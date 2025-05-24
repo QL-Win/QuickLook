@@ -36,7 +36,7 @@ internal class ShareHelper
 
     internal static bool IsShareSupported(string path)
     {
-        return !Directory.Exists(path) && App.IsWin10 && Environment.OSVersion.Version >= new Version("10.0.16299.0");
+        return !Directory.Exists(path) && Environment.OSVersion.Version >= new Version(10, 0, 16299);
     }
 
     internal static void Share(string path, Window parent, bool forceOpenWith = false)
