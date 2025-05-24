@@ -34,8 +34,8 @@ namespace QuickLook.Plugin.VideoViewer.AudioTrack;
 
 internal class MidiPlayer : IDisposable, INotifyPropertyChanged
 {
-    private ViewerPanel _vp;
     private ContextObject _context;
+    private ViewerPanel _vp;
     private MidiFile _midiFile;
     private OutputDevice _outputDevice;
     private Playback _playback;

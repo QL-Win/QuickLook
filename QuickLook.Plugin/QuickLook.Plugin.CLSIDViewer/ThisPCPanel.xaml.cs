@@ -23,7 +23,7 @@ namespace QuickLook.Plugin.CLSIDViewer;
 
 public partial class ThisPCPanel : UserControl
 {
-    private ContextObject _context;
+    private readonly ContextObject _context;
 
     public ThisPCPanel(ContextObject context)
     {

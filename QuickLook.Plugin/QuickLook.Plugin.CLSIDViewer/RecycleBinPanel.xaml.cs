@@ -38,7 +38,7 @@ namespace QuickLook.Plugin.CLSIDViewer;
 
 public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
 {
-    private ContextObject _context;
+    private readonly ContextObject _context;
     private RecycleBinHelper.RecycleBinInfo _info;
     private ICommand _emptyRecycleBinCommand;
 

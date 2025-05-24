@@ -99,7 +99,7 @@ public class TextViewerPanel : TextEditor, IDisposable
         e.TranslationBehavior = new InertiaTranslationBehavior
         {
             InitialVelocity = e.InitialVelocities.LinearVelocity,
-            DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0)
+            DesiredDeceleration = 10d * 96d / (1000d * 1000d)
         };
     }
 
@@ -148,10 +148,10 @@ public class TextViewerPanel : TextEditor, IDisposable
 
     private void LoadFileAsync(string path)
     {
-        Task.Run(() =>
+        _ = Task.Run(() =>
         {
             const int maxLength = 5 * 1024 * 1024;
-            const int maxHighlightingLength = (int)(0.5 * 1024 * 1024);
+            const int maxHighlightingLength = (int)(0.5d * 1024 * 1024);
             var buffer = new MemoryStream();
             bool fileTooLong;
 
@@ -187,7 +187,7 @@ public class TextViewerPanel : TextEditor, IDisposable
             if (_disposed)
                 return;
 
-            Dispatcher.BeginInvoke(new Action(() =>
+            Dispatcher.BeginInvoke(() =>
             {
                 Encoding = encoding;
                 SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
@@ -196,7 +196,7 @@ public class TextViewerPanel : TextEditor, IDisposable
                 Document = doc;
 
                 _context.IsBusy = false;
-            }), DispatcherPriority.Render);
+            }, DispatcherPriority.Render);
         });
     }
 }
