@@ -31,7 +31,6 @@ public class Plugin : IViewer
         ".dll", ".ax", ".drv", ".vxd",
         ".mui", ".mun",
         ".tlb",
-        ".msi",
         ".efi", ".mz",
     ];
 
