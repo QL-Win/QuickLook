@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="HLSL" extensions=".hlsl">
+
+	<Environment>
+		<Default color="Black" bgcolor="#FFFFFF"/>
+		<Selection color="Black" bgcolor="#C3C3FF"/>
+		<LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+		<CaretMarker color="#F0F0F1"/>
+		<VRuler color="#E0E0E5"/>
+		<FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+		<FoldMarker color="Black" bgcolor="#FFFFFF"/>
+		<SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+		<EOLMarkers color="#CACAD2"/>
+		<SpaceMarkers color="#B6B6C0"/>
+		<TabMarkers color="#B6B6C0"/>
+		<InvalidLines color="#B6B6C0"/>
+	</Environment>
+
+	<Properties>
+		<Property name="LineComment" value="//"/>
+		<Property name="BlockCommentBegin" value="/*"/>
+		<Property name="BlockCommentEnd" value="*/"/>
+	</Properties>
+
+	<Digits name="Number" color="Purple"/>
+
+	<RuleSets>
+		<RuleSet ignorecase="false">
+			<Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,	?</Delimiters>
+
+			<!-- Comments -->
+			<Span name="LineComment" stopateol="true" color="Green">
+				<Begin>//</Begin>
+			</Span>
+			<Span name="BlockComment" stopateol="false" color="Green">
+				<Begin>/*</Begin>
+				<End>*/</End>
+			</Span>
+
+			<!-- Strings -->
+			<Span name="String" stopateol="false" color="Maroon">
+				<Begin>"</Begin>
+				<End>"</End>
+			</Span>
+
+			<!-- Keywords -->
+			<KeyWords name="Keywords" color="Blue" bold="true">
+				<Key word="if"/>
+				<Key word="else"/>
+				<Key word="for"/>
+				<Key word="while"/>
+				<Key word="do"/>
+				<Key word="break"/>
+				<Key word="continue"/>
+				<Key word="return"/>
+				<Key word="discard"/>
+				<Key word="struct"/>
+				<Key word="cbuffer"/>
+				<Key word="register"/>
+				<Key word="sampler"/>
+				<Key word="Texture2D"/>
+				<Key word="Texture3D"/>
+				<Key word="TextureCube"/>
+				<Key word="SamplerState"/>
+				<Key word="RWTexture2D"/>
+			</KeyWords>
+
+			<!-- Types -->
+			<KeyWords name="Types" color="Teal">
+				<Key word="float"/>
+				<Key word="float2"/>
+				<Key word="float3"/>
+				<Key word="float4"/>
+				<Key word="float4x4"/>
+				<Key word="int"/>
+				<Key word="int2"/>
+				<Key word="int3"/>
+				<Key word="int4"/>
+				<Key word="bool"/>
+				<Key word="bool2"/>
+				<Key word="bool3"/>
+				<Key word="bool4"/>
+				<Key word="uint"/>
+				<Key word="half"/>
+				<Key word="min16float"/>
+			</KeyWords>
+
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>

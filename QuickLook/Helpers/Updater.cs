@@ -82,7 +82,7 @@ internal class Updater
 
     private static void CollectAndShowReleaseNotes()
     {
-        Task.Run(() =>
+        _ = Task.Run(() =>
         {
             try
             {

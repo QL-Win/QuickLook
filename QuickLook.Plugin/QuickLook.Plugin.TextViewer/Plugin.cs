@@ -181,7 +181,7 @@ public class Plugin : IViewer
                 Debug.WriteLine(resourceName);
 
                 var hlm = resourceName.Contains(".Syntax.Dark.") ? _hlmDark : _hlmLight;
-                var ext = Path.GetFileNameWithoutExtension(resourceName);
+                var ext = Path.GetFileNameWithoutExtension(resourceName.ToResourceDummyName());
                 using var reader = new XmlTextReader(s);
                 var xshd = HighlightingLoader.LoadXshd(reader);
                 var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
@@ -214,5 +214,37 @@ public class Plugin : IViewer
                 ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
                 : Brushes.Transparent;
         }
+    }
+}
+
+file static class ResourceNameHelper
+{
+    /// <summary>
+    /// Converts a resource name (using '.' as separators) into a dummy file path
+    /// by replacing inner dots with backslashes, while preserving the file extension.
+    ///
+    /// Example:
+    /// Input:  "Resources.Images.icon.png"
+    /// Output: "Resources\Images\icon.png"
+    ///
+    /// Input:  "Assets.Sounds.music.background.mp3"
+    /// Output: "Assets\Sounds\music\background.mp3"
+    /// </summary>
+    /// <param name="resourceName">The embedded resource name (excluding the default namespace).</param>
+    /// <returns>A string representing the resource as a dummy file path.</returns>
+    public static string ToResourceDummyName(this string resourceName)
+    {
+        if (string.IsNullOrWhiteSpace(resourceName))
+            return resourceName;
+
+        int lastDotIndex = resourceName.LastIndexOf('.');
+        if (lastDotIndex <= 0) // Either no dot or dot is at the beginning
+            return resourceName;
+
+        // Replace dots before the extension with backslashes
+        string pathWithoutExtension = resourceName.Substring(0, lastDotIndex).Replace('.', '\\');
+        string extension = resourceName.Substring(lastDotIndex);
+
+        return pathWithoutExtension + extension;
     }
 }
