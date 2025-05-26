@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.NativeMethods;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -59,6 +60,48 @@ public partial class App : Application
                 $"DPI Awareness manual setup failed. Error Code: {result}"
             );
         }
+
+        // Occurs when the resolution of an assembly fails
+        AppDomain.CurrentDomain.AssemblyResolve += (_, e) =>
+        {
+            // Ignore the resource fails
+            // e.g. "QuickLook.resources, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+            if (e.Name.Contains(".resources,"))
+            {
+                return null;
+            }
+
+            try
+            {
+                // Manually resolve the assembly fails
+                // https://github.com/QL-Win/QuickLook/issues/1618
+                // e.g. "System.Memory, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+                if (e.Name.Split(',').FirstOrDefault() is string assemblyName)
+                {
+                    foreach (var libPath in FetchFiles(AppDomain.CurrentDomain.BaseDirectory, assemblyName + ".dll"))
+                    {
+                        return Assembly.LoadFrom(libPath);
+                    }
+                }
+            }
+            catch
+            {
+                // There is no way to resolve it
+            }
+
+            return null;
+
+            static IEnumerable<string> FetchFiles(string rootPath, string targetFileName)
+            {
+                foreach (var file in Directory.GetFiles(rootPath, "*" + Path.GetExtension(targetFileName), SearchOption.AllDirectories))
+                {
+                    if (string.Equals(Path.GetFileName(file), targetFileName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        yield return file;
+                    }
+                }
+            }
+        };
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -69,7 +112,10 @@ public partial class App : Application
             try
             {
                 ProcessHelper.WriteLog(e.Exception.ToString());
-                Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+                Current?.Dispatcher?.BeginInvoke(() =>
+                {
+                    Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+                });
             }
             catch (Exception ex)
             {
@@ -87,7 +133,10 @@ public partial class App : Application
             try
             {
                 ProcessHelper.WriteLog(e.Exception.ToString());
-                Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+                Current?.Dispatcher?.BeginInvoke(() =>
+                {
+                    Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
+                });
             }
             catch (Exception ex)
             {
@@ -108,7 +157,10 @@ public partial class App : Application
                 if (e.ExceptionObject is Exception ex)
                 {
                     ProcessHelper.WriteLog(ex.ToString());
-                    Wpf.Ui.Violeta.Controls.ExceptionReport.Show(ex);
+                    Current?.Dispatcher?.BeginInvoke(() =>
+                    {
+                        Wpf.Ui.Violeta.Controls.ExceptionReport.Show(ex);
+                    });
                 }
             }
             catch (Exception ex)
