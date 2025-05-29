@@ -132,9 +132,14 @@ public class Plugin : IViewer
             }
         }
 
+        // https://en.wikipedia.org/wiki/Pangram
+        string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+        string pangram = TranslationHelper.Get("SAMPLE_TEXT", translationFile);
+
         html = html.Replace("--font-family;", $"font-family: '{fontFamilyName}';")
                    .Replace("--font-url;", cssUrl)
-                   .Replace("{{h1}}", fontFamilyName ?? fileName);
+                   .Replace("{{h1}}", fontFamilyName ?? fileName)
+                   .Replace("{{pangram}}", pangram ?? "The quick brown fox jumps over the lazy dog. 0123456789");
 
         return html;
     }
