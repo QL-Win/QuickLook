@@ -59,7 +59,7 @@
                     Content="Click here to install this plugin."
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                    Style="{StaticResource CaptionTextButtonStyle}" />
+                    Style="{DynamicResource CaptionTextButtonStyle}" />
         </Grid>
     </Grid>
 </UserControl>
