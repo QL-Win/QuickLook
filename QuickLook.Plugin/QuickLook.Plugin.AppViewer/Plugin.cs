@@ -48,7 +48,7 @@ public class Plugin : IViewer
         //".har", // HarmonyOS Archive
 
         // Others
-        //".wgt", ".wgtu", // UniApp Widget
+        ".wgt", ".wgtu", // UniApp Widget
     ];
 
     private IAppInfoPanel _ip;
@@ -70,7 +70,8 @@ public class Plugin : IViewer
         context.PreferredSize = Path.GetExtension(path).ToLower() switch
         {
             ".msi" => new Size { Width = 520, Height = 230 },
-            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 320 },
+            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
+            ".wgt" or ".wgtu" => new Size { Width = 600, Height = 328 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
     }
@@ -82,6 +83,7 @@ public class Plugin : IViewer
         {
             ".msi" => new MsiInfoPanel(),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(),
+            ".wgt" or ".wgtu" => new WgtInfoPanel(),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
 

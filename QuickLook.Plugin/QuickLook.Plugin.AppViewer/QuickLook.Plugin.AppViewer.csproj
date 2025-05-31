@@ -60,6 +60,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Remove="Resources\*.png" />
+        <Resource Include="Resources\*.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">
             <Link>Properties\GitVersion.cs</Link>
         </Compile>
@@ -67,14 +72,21 @@
 
     <ItemGroup>
         <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.IO.Compression" />
         <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
         <None Update="Translations.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\" />
+      <Folder Include="WgtPackageParser\" />
     </ItemGroup>
 
 </Project>
