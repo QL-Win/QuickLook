@@ -17,7 +17,7 @@
 
 using WixToolset.Dtf.WindowsInstaller;
 
-namespace QuickLook.Plugin.AppViewer.MsiImageParser;
+namespace QuickLook.Plugin.AppViewer.MsiPackageParser;
 
 public static class MsiParser
 {

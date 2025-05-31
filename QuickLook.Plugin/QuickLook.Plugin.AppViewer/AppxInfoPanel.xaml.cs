@@ -17,48 +17,34 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
-using QuickLook.Plugin.AppViewer.MsiPackageParser;
-using System;
+using QuickLook.Plugin.AppViewer.AppxPackageParser;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.AppViewer;
 
-public partial class MsiInfoPanel : UserControl, IAppInfoPanel
+public partial class AppxInfoPanel : UserControl, IAppInfoPanel
 {
-    public MsiInfoPanel()
+    public AppxInfoPanel()
     {
+        DataContext = this;
         InitializeComponent();
 
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
         productNameTitle.Text = TranslationHelper.Get("PRODUCT_NAME", translationFile);
         productVersionTitle.Text = TranslationHelper.Get("PRODUCT_VERSION", translationFile);
-        manufacturerTitle.Text = TranslationHelper.Get("MANUFACTURER", translationFile);
+        publisherTitle.Text = TranslationHelper.Get("PUBLISHER", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
+        capabilitiesGroupBox.Header = TranslationHelper.Get("CAPABILITIES", translationFile);
     }
 
     public void DisplayInfo(string path)
     {
-        _ = Task.Run(() =>
-        {
-            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
-
-            var icon =
-                WindowsThumbnailProvider.GetThumbnail(path,
-                    (int)(128 * scale.Horizontal),
-                    (int)(128 * scale.Vertical),
-                    ThumbnailOptions.ScaleUp);
-
-            var source = icon?.ToBitmapSource();
-            icon?.Dispose();
-
-            Dispatcher.BeginInvoke(new Action(() => image.Source = source));
-        });
-
         var name = Path.GetFileName(path);
         filename.Text = string.IsNullOrEmpty(name) ? path : name;
 
@@ -67,18 +53,35 @@ public partial class MsiInfoPanel : UserControl, IAppInfoPanel
             if (File.Exists(path))
             {
                 var size = new FileInfo(path).Length;
-                MsiInfo msiInfo = MsiParser.Parse(path);
+                AppxInfo appxInfo = AppxParser.Parse(path);
                 var last = File.GetLastWriteTime(path);
 
                 Dispatcher.Invoke(() =>
                 {
-                    productName.Text = msiInfo.ProductName;
-                    productVersion.Text = msiInfo.ProductVersion;
-                    manufacturer.Text = msiInfo.Manufacturer;
+                    productName.Text = appxInfo.ProductName;
+                    productVersion.Text = appxInfo.ProductVersion;
+                    publisher.Text = appxInfo.Publisher;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
+                    capabilities.ItemsSource = appxInfo.Capabilities;
+
+                    using var icon = appxInfo.Logo;
+                    image.Source = icon?.ToBitmapSource() ?? GetWindowsThumbnail(path);
                 });
             }
         });
+
+        static BitmapSource GetWindowsThumbnail(string path)
+        {
+            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
+            using var icon =
+                WindowsThumbnailProvider.GetThumbnail(path,
+                    (int)(128 * scale.Horizontal),
+                    (int)(128 * scale.Vertical),
+                    ThumbnailOptions.ScaleUp);
+            var source = icon?.ToBitmapSource();
+
+            return source;
+        }
     }
 }

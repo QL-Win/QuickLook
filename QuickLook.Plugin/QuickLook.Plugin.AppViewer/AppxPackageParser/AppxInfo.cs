@@ -15,11 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace QuickLook.Plugin.AppViewer;
+using System.Drawing;
 
-public interface IAppInfoPanel
+namespace QuickLook.Plugin.AppViewer.AppxPackageParser;
+
+public class AppxInfo
 {
-    public void DisplayInfo(string path);
+    public string ProductName { get; set; }
 
-    public object Tag { get; set; }
+    public string ProductVersion { get; set; }
+
+    public string Publisher { get; set; }
+
+    public Bitmap Logo { get; set; }
+
+    public string[] Capabilities { get; set; }
 }

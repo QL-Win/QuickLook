@@ -33,9 +33,9 @@ public class Plugin : IViewer
         //".aab", // Android App Bundle
 
         // Windows
-        //".appx", ".appxbundle", // Windows APPX installer
+        ".appx", ".appxbundle", // Windows APPX installer
         ".msi", // Windows MSI installer
-        //".msix", ".msixbundle", // Windows MSIX installer
+        ".msix", ".msixbundle", // Windows MSIX installer
 
         // macOS
         //".dmg", // macOS DMG
@@ -67,9 +67,10 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = Path.GetExtension(path) switch
+        context.PreferredSize = Path.GetExtension(path).ToLower() switch
         {
             ".msi" => new Size { Width = 520, Height = 230 },
+            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 320 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
     }
@@ -77,9 +78,10 @@ public class Plugin : IViewer
     public void View(string path, ContextObject context)
     {
         _path = path;
-        _ip = Path.GetExtension(path) switch
+        _ip = Path.GetExtension(path).ToLower() switch
         {
             ".msi" => new MsiInfoPanel(),
+            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
 

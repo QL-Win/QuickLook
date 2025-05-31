@@ -66,8 +66,9 @@
     </ItemGroup>
 
     <ItemGroup>
-		<Reference Include="Microsoft.CSharp" />
-		<PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
+        <Reference Include="Microsoft.CSharp" />
+        <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
+        <PackageReference Include="SharpZipLib" Version="1.4.2" />
     </ItemGroup>
 
     <ItemGroup>
