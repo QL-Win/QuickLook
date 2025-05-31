@@ -18,20 +18,21 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.AppViewer.WgtPackageParser;
+using QuickLook.Plugin.AppViewer.ApkPackageParser;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.AppViewer;
 
-public partial class WgtInfoPanel : UserControl, IAppInfoPanel
+public partial class ApkInfoPanel : UserControl, IAppInfoPanel
 {
     private ContextObject _context;
 
-    public WgtInfoPanel(ContextObject context)
+    public ApkInfoPanel(ContextObject context)
     {
         _context = context;
 
@@ -42,6 +43,9 @@ public partial class WgtInfoPanel : UserControl, IAppInfoPanel
         applicationNameTitle.Text = TranslationHelper.Get("APP_NAME", translationFile);
         versionNameTitle.Text = TranslationHelper.Get("APP_VERSION_NAME", translationFile);
         versionCodeTitle.Text = TranslationHelper.Get("APP_VERSION_CODE", translationFile);
+        packageNameTitle.Text = TranslationHelper.Get("PACKAGE_NAME", translationFile);
+        minSdkVersionTitle.Text = TranslationHelper.Get("APP_MIN_SDK_VERSION", translationFile);
+        targetSdkVersionTitle.Text = TranslationHelper.Get("APP_TARGET_SDK_VERSION", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
         permissionsGroupBox.Header = TranslationHelper.Get("PERMISSIONS", translationFile);
@@ -57,17 +61,29 @@ public partial class WgtInfoPanel : UserControl, IAppInfoPanel
             if (File.Exists(path))
             {
                 var size = new FileInfo(path).Length;
-                WgtInfo wgtInfo = WgtParser.Parse(path);
+                ApkInfo apkInfo = ApkParser.Parse(path);
                 var last = File.GetLastWriteTime(path);
 
                 Dispatcher.Invoke(() =>
                 {
-                    applicationName.Text = wgtInfo.AppNameLocale ?? wgtInfo.AppName;
-                    versionName.Text = wgtInfo.AppVersionName;
-                    versionCode.Text = wgtInfo.AppVersionCode;
+                    applicationName.Text = apkInfo.Label;
+                    versionName.Text = apkInfo.VersionName;
+                    versionCode.Text = apkInfo.VersionCode;
+                    packageName.Text = apkInfo.PackageName;
+                    minSdkVersion.Text = apkInfo.MinSdkVersion;
+                    targetSdkVersion.Text = apkInfo.TargetSdkVersion;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
-                    permissions.ItemsSource = wgtInfo.Permissions;
+                    permissions.ItemsSource = apkInfo.Permissions;
+
+                    using var stream = new MemoryStream(apkInfo.Logo);
+                    var icon = new BitmapImage();
+                    icon.BeginInit();
+                    icon.CacheOption = BitmapCacheOption.OnLoad;
+                    icon.StreamSource = stream;
+                    icon.EndInit();
+                    icon.Freeze();
+                    image.Source = icon;
 
                     _context.IsBusy = false;
                 });

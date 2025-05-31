@@ -17,6 +17,7 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.AppxPackageParser;
 using System.Globalization;
 using System.IO;
@@ -29,8 +30,12 @@ namespace QuickLook.Plugin.AppViewer;
 
 public partial class AppxInfoPanel : UserControl, IAppInfoPanel
 {
-    public AppxInfoPanel()
+    private ContextObject _context;
+
+    public AppxInfoPanel(ContextObject context)
     {
+        _context = context;
+
         DataContext = this;
         InitializeComponent();
 
@@ -67,6 +72,8 @@ public partial class AppxInfoPanel : UserControl, IAppInfoPanel
 
                     using var icon = appxInfo.Logo;
                     image.Source = icon?.ToBitmapSource() ?? GetWindowsThumbnail(path);
+
+                    _context.IsBusy = false;
                 });
             }
         });

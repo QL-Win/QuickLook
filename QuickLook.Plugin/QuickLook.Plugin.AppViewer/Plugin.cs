@@ -28,7 +28,7 @@ public class Plugin : IViewer
     private static readonly string[] _extensions =
     [
         // Android
-        //".apk", ".apk.1", // Android Package
+        ".apk", ".apk.1", // Android Package
         //".aar", // Android Archive
         //".aab", // Android App Bundle
 
@@ -67,8 +67,9 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = Path.GetExtension(path).ToLower() switch
+        context.PreferredSize = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
+            ".apk" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 520, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 328 },
@@ -79,11 +80,12 @@ public class Plugin : IViewer
     public void View(string path, ContextObject context)
     {
         _path = path;
-        _ip = Path.GetExtension(path).ToLower() switch
+        _ip = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
-            ".msi" => new MsiInfoPanel(),
-            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(),
-            ".wgt" or ".wgtu" => new WgtInfoPanel(),
+            ".apk" => new ApkInfoPanel(context),
+            ".msi" => new MsiInfoPanel(context),
+            ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
+            ".wgt" or ".wgtu" => new WgtInfoPanel(context),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
 
@@ -91,7 +93,6 @@ public class Plugin : IViewer
         _ip.Tag = context;
 
         context.ViewerContent = _ip;
-        context.IsBusy = false;
     }
 
     public void Cleanup()
@@ -99,5 +100,14 @@ public class Plugin : IViewer
         GC.SuppressFinalize(this);
 
         _ip = null;
+    }
+
+    public static string ConfirmPath(string path)
+    {
+        if (Path.GetExtension(path) == ".1")
+        {
+            return path.Substring(0, path.Length - 2);
+        }
+        return path;
     }
 }

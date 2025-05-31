@@ -56,7 +56,7 @@ internal static class WgtParser
 
                 if (version != null)
                 {
-                    if (version.ContainsKey("name")) wgtInfo.AppVersion = version["name"].ToString();
+                    if (version.ContainsKey("name")) wgtInfo.AppVersionName = version["name"].ToString();
                     if (version.ContainsKey("code")) wgtInfo.AppVersionCode = version["code"].ToString();
                 }
             }

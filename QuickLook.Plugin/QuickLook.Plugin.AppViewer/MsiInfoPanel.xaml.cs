@@ -17,6 +17,7 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.MsiPackageParser;
 using System;
 using System.Globalization;
@@ -29,8 +30,12 @@ namespace QuickLook.Plugin.AppViewer;
 
 public partial class MsiInfoPanel : UserControl, IAppInfoPanel
 {
-    public MsiInfoPanel()
+    private ContextObject _context;
+
+    public MsiInfoPanel(ContextObject context)
     {
+        _context = context;
+
         InitializeComponent();
 
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
@@ -77,6 +82,8 @@ public partial class MsiInfoPanel : UserControl, IAppInfoPanel
                     manufacturer.Text = msiInfo.Manufacturer;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
+
+                    _context.IsBusy = false;
                 });
             }
         });

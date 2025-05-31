@@ -15,12 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Newtonsoft.Json.Linq;
-using QuickLook.Plugin.AppViewer.AppxPackageParser;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Resources;
-using System.Text.RegularExpressions;
 
 namespace QuickLook.Plugin.AppViewer.WgtPackageParser;
 
@@ -84,12 +80,12 @@ public sealed class WgtInfo
     public string CompilerVersion { get; set; }
 
     /// <summary>
-    /// Json path: version.name
+    /// Json path: versionName.name
     /// </summary>
-    public string AppVersion { get; set; }
+    public string AppVersionName { get; set; }
 
     /// <summary>
-    /// Json path: version.code
+    /// Json path: versionName.code
     /// </summary>
     public string AppVersionCode { get; set; }
 
