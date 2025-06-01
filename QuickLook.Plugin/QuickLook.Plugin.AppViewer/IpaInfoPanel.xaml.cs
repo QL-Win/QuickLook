@@ -18,7 +18,6 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.AppViewer.ApkPackageParser;
 using QuickLook.Plugin.AppViewer.IpaPackageParser;
 using System;
 using System.Globalization;
@@ -79,7 +78,7 @@ public partial class IpaInfoPanel : UserControl, IAppInfoPanel
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
                     permissions.ItemsSource = ipaInfo.Permissions;
 
-                    if (!ipaInfo.HasIcon)
+                    if (ipaInfo.HasIcon)
                     {
                         using var stream = new MemoryStream(ipaInfo.Logo);
                         var icon = new BitmapImage();

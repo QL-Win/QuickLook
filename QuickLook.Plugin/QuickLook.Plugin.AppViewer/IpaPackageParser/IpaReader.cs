@@ -158,7 +158,7 @@ public class IpaReader
                     }
                 }
             }
-            if (!string.IsNullOrWhiteSpace(IconName))
+            if (string.IsNullOrWhiteSpace(IconName))
             {
                 if (InfoPlistDict.TryGetValue("CFBundleIconFiles", out object iconFilesNode) && iconFilesNode is IList<object> iconFiles)
                 {

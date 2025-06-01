@@ -77,7 +77,7 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
                     permissions.ItemsSource = apkInfo.Permissions;
 
-                    if (!apkInfo.HasIcon)
+                    if (apkInfo.HasIcon)
                     {
                         using var stream = new MemoryStream(apkInfo.Logo);
                         var icon = new BitmapImage();

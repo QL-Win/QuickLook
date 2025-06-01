@@ -65,6 +65,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="ApkPackageParser\ApkManifest.cs" />
+      <Compile Remove="ApkPackageParser\ApkReader.cs" />
+      <Compile Remove="ApkPackageParser\ApkResourceFinder.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">
             <Link>Properties\GitVersion.cs</Link>
         </Compile>
@@ -76,6 +82,7 @@
         <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="ApkReader" Version="2.0.1.1" />
     </ItemGroup>
 
     <ItemGroup>

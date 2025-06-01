@@ -25,36 +25,33 @@ public static class ApkParser
 {
     public static ApkInfo Parse(string path)
     {
-        byte[] manifestData = null;
-        byte[] resourcesData = null;
-
         using var zip = new ZipFile(path);
 
-        // AndroidManifest.xml
+        var apkReader = new ApkReader.ApkReader();
+        ApkReader.ApkInfo baseInfo = apkReader.Read(path);
+        ApkInfo info = new()
         {
-            ZipEntry entry = zip.GetEntry("AndroidManifest.xml");
-            using var s = new BinaryReader(zip.GetInputStream(entry));
-            manifestData = s.ReadBytes((int)entry.Size);
-        }
+            VersionName = baseInfo.VersionName,
+            VersionCode = baseInfo.VersionCode,
+            TargetSdkVersion = baseInfo.TargetSdkVersion,
+            Permissions = baseInfo.Permissions,
+            PackageName = baseInfo.PackageName,
+            MinSdkVersion = baseInfo.MinSdkVersion,
+            Icon = baseInfo.Icon,
+            Icons = baseInfo.Icons,
+            Label = baseInfo.Label,
+            Labels = baseInfo.Labels,
+            Locales = baseInfo.Locales,
+            Densities = baseInfo.Densities,
+            LaunchableActivity = baseInfo.LaunchableActivity,
+        };
 
-        // resources.arsc
+        if (baseInfo.HasIcon)
         {
-            ZipEntry entry = zip.GetEntry("resources.arsc");
-            using var s = new BinaryReader(zip.GetInputStream(entry));
-            resourcesData = s.ReadBytes((int)entry.Size);
-        }
-
-        ApkReader apkReader = new();
-        ApkInfo info = apkReader.ExtractInfo(manifestData, resourcesData);
-
-        // Logo
-        if (info.HasIcon)
-        {
-            ZipEntry entry = zip.GetEntry(info.IconFileName.LastOrDefault());
+            ZipEntry entry = zip.GetEntry(baseInfo.Icons.Values.LastOrDefault());
             using var s = new BinaryReader(zip.GetInputStream(entry));
             info.Logo = s.ReadBytes((int)entry.Size);
         }
-
         return info;
     }
 }
