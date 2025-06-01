@@ -41,7 +41,7 @@ public class Plugin : IViewer
         //".dmg", // macOS DMG
 
         // iOS
-        //".ipa", // iOS IPA
+        ".ipa", // iOS IPA
 
         // HarmonyOS
         //".hap", // HarmonyOS Package
@@ -70,6 +70,7 @@ public class Plugin : IViewer
         context.PreferredSize = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
             ".apk" => new Size { Width = 560, Height = 500 },
+            ".ipa" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 520, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 328 },
@@ -83,6 +84,7 @@ public class Plugin : IViewer
         _ip = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
             ".apk" => new ApkInfoPanel(context),
+            ".ipa" => new IpaInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),

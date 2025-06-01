@@ -84,9 +84,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Resources\" />
-      <Folder Include="WgtPackageParser\" />
-    </ItemGroup>
-
 </Project>
