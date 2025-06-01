@@ -19,6 +19,7 @@ using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.ApkPackageParser;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -76,14 +77,21 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
                     permissions.ItemsSource = apkInfo.Permissions;
 
-                    using var stream = new MemoryStream(apkInfo.Logo);
-                    var icon = new BitmapImage();
-                    icon.BeginInit();
-                    icon.CacheOption = BitmapCacheOption.OnLoad;
-                    icon.StreamSource = stream;
-                    icon.EndInit();
-                    icon.Freeze();
-                    image.Source = icon;
+                    if (!apkInfo.HasIcon)
+                    {
+                        using var stream = new MemoryStream(apkInfo.Logo);
+                        var icon = new BitmapImage();
+                        icon.BeginInit();
+                        icon.CacheOption = BitmapCacheOption.OnLoad;
+                        icon.StreamSource = stream;
+                        icon.EndInit();
+                        icon.Freeze();
+                        image.Source = icon;
+                    }
+                    else
+                    {
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/android.png"));
+                    }
 
                     _context.IsBusy = false;
                 });

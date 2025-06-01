@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.ApkPackageParser;
 using QuickLook.Plugin.AppViewer.IpaPackageParser;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -78,7 +79,7 @@ public partial class IpaInfoPanel : UserControl, IAppInfoPanel
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
                     permissions.ItemsSource = ipaInfo.Permissions;
 
-                    if (ipaInfo.Logo != null)
+                    if (!ipaInfo.HasIcon)
                     {
                         using var stream = new MemoryStream(ipaInfo.Logo);
                         var icon = new BitmapImage();
@@ -88,6 +89,10 @@ public partial class IpaInfoPanel : UserControl, IAppInfoPanel
                         icon.EndInit();
                         icon.Freeze();
                         image.Source = icon;
+                    }
+                    else
+                    {
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/ios.png"));
                     }
 
                     _context.IsBusy = false;

@@ -24,7 +24,10 @@
                Margin="8"
                VerticalAlignment="Top"
                Opacity="0"
-               Stretch="Fill">
+               RenderOptions.BitmapScalingMode="HighQuality"
+               SnapsToDevicePixels="True"
+               Stretch="Fill"
+               UseLayoutRounding="True">
             <Image.Style>
                 <Style TargetType="{x:Type Image}">
                     <Style.Triggers>

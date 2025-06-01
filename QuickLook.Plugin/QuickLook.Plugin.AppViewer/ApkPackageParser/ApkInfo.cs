@@ -19,9 +19,6 @@ using System.Collections.Generic;
 
 namespace QuickLook.Plugin.AppViewer.ApkPackageParser;
 
-/// <summary>
-/// https://github.com/hylander0/Iteedee.ApkReader
-/// </summary>
 public class ApkInfo
 {
     public string Label { get; set; }
