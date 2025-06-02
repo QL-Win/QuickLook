@@ -53,16 +53,17 @@ public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value == null)
-            return Volumes[0];
+        if (value is double v)
+        {
+            // Clump to range [0, 1]
+            v = Math.Max(0d, Math.Min(v, 1d));
 
-        var v = (double)value;
-        if (Math.Abs(v) < 0.01)
-            return Volumes[0];
+            if (v < 0.01d) return Volumes[0];
 
-        v = Math.Min(v, 1);
+            return Volumes[1 + (int)(v / 0.34d)];
+        }
 
-        return Volumes[1 + (int)(v / 0.34)];
+        return Volumes[0];
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
