@@ -42,25 +42,25 @@ internal static class WgtParser
 
             if (dict == null) return null;
 
-            var wgtInfo = new WgtInfo();
+            var info = new WgtInfo();
 
             if (dict.ContainsKey("@platforms"))
             {
-                wgtInfo.Platforms = ((JArray)dict["@platforms"]).Values().Select(v => v.ToString()).ToArray();
+                info.Platforms = ((JArray)dict["@platforms"]).Values().Select(v => v.ToString()).ToArray();
             }
-            if (dict.ContainsKey("id")) wgtInfo.AppId = dict["id"].ToString();
-            if (dict.ContainsKey("name")) wgtInfo.AppName = dict["name"].ToString();
+            if (dict.ContainsKey("id")) info.AppId = dict["id"].ToString();
+            if (dict.ContainsKey("name")) info.AppName = dict["name"].ToString();
             if (dict.ContainsKey("version"))
             {
                 var version = (JObject)dict["version"];
 
                 if (version != null)
                 {
-                    if (version.ContainsKey("name")) wgtInfo.AppVersionName = version["name"].ToString();
-                    if (version.ContainsKey("code")) wgtInfo.AppVersionCode = version["code"].ToString();
+                    if (version.ContainsKey("name")) info.AppVersionName = version["name"].ToString();
+                    if (version.ContainsKey("code")) info.AppVersionCode = version["code"].ToString();
                 }
             }
-            if (dict.ContainsKey("description")) wgtInfo.AppDescription = dict["description"].ToString();
+            if (dict.ContainsKey("description")) info.AppDescription = dict["description"].ToString();
             if (dict.ContainsKey("permissions"))
             {
                 var permissions = (JObject)dict["permissions"];
@@ -72,7 +72,7 @@ internal static class WgtParser
                     {
                         permissionNames.Add(permission.Key);
                     }
-                    wgtInfo.Permissions = [.. permissionNames];
+                    info.Permissions = [.. permissionNames];
                 }
             }
             if (dict.ContainsKey("plus"))
@@ -92,7 +92,7 @@ internal static class WgtParser
                             {
                                 if (kv.Key == "name")
                                 {
-                                    wgtInfo.AppNameLocales.Add(locale.Key, kv.Value.ToString());
+                                    info.AppNameLocales.Add(locale.Key, kv.Value.ToString());
                                 }
                             }
                         }
@@ -103,8 +103,8 @@ internal static class WgtParser
                         var uni_app = plus["uni-app"];
                         var dictionary = uni_app.ToObject<Dictionary<string, object>>();
 
-                        if (dictionary.ContainsKey("vueVersion")) wgtInfo.VueVersion = dictionary["vueVersion"].ToString();
-                        if (dictionary.ContainsKey("compilerVersion")) wgtInfo.CompilerVersion = dictionary["compilerVersion"].ToString();
+                        if (dictionary.ContainsKey("vueVersion")) info.VueVersion = dictionary["vueVersion"].ToString();
+                        if (dictionary.ContainsKey("compilerVersion")) info.CompilerVersion = dictionary["compilerVersion"].ToString();
                     }
                 }
             }
@@ -116,13 +116,13 @@ internal static class WgtParser
                 {
                     foreach (var descriptionLocale in descriptionLocales)
                     {
-                        wgtInfo.AppDescriptionLocales.Add(descriptionLocale.Key, descriptionLocale.Value.ToString());
+                        info.AppDescriptionLocales.Add(descriptionLocale.Key, descriptionLocale.Value.ToString());
                     }
                 }
             }
-            if (dict.ContainsKey("fallbackLocale")) wgtInfo.FallbackLocale = dict["fallbackLocale"].ToString();
+            if (dict.ContainsKey("fallbackLocale")) info.FallbackLocale = dict["fallbackLocale"].ToString();
 
-            return wgtInfo;
+            return info;
         }
 
         return null;

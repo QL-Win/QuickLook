@@ -44,7 +44,7 @@ public class Plugin : IViewer
         ".ipa", // iOS IPA
 
         // HarmonyOS
-        //".hap", // HarmonyOS Package
+        ".hap", ".hap.1", // HarmonyOS Package
         //".har", // HarmonyOS Archive
 
         // Others
@@ -71,6 +71,7 @@ public class Plugin : IViewer
         {
             ".apk" => new Size { Width = 560, Height = 500 },
             ".ipa" => new Size { Width = 560, Height = 500 },
+            ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 520, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 328 },
@@ -85,6 +86,7 @@ public class Plugin : IViewer
         {
             ".apk" => new ApkInfoPanel(context),
             ".ipa" => new IpaInfoPanel(context),
+            ".hap" => new HapInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),

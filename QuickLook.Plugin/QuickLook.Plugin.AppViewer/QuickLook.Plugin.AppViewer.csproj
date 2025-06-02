@@ -65,12 +65,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="ApkPackageParser\ApkManifest.cs" />
-      <Compile Remove="ApkPackageParser\ApkReader.cs" />
-      <Compile Remove="ApkPackageParser\ApkResourceFinder.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">
             <Link>Properties\GitVersion.cs</Link>
         </Compile>
