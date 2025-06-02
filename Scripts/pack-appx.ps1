@@ -19,6 +19,7 @@ if(-not (Test-Path env:CI))
     Copy-Item -Recurse ..\Build\Package ..\Build\Appx\Package
     Copy-Item -Recurse ..\Build\Assets ..\Build\Appx\Assets
     Copy-item ..\Build\AppxManifest.xml ..\Build\Appx\AppxManifest.xml
+    Remove-Item -Recurse ..\Build\Appx\Package\QuickLook.WoW64HookHelper.exe -ErrorAction SilentlyContinue
 
     # set version to git version
     Update-Version("..\Build\Appx\AppxManifest.xml")
