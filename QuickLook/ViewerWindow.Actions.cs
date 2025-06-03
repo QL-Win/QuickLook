@@ -38,7 +38,7 @@ public partial class ViewerWindow
 
         try
         {
-            Process.Start(new ProcessStartInfo(_path)
+            using var _ = Process.Start(new ProcessStartInfo(_path)
             {
                 WorkingDirectory = Path.GetDirectoryName(_path)
             });
@@ -205,10 +205,19 @@ public partial class ViewerWindow
 
         PositionWindow(newSize);
 
-        if (Visibility != Visibility.Visible)
+        if (!IsVisible)
         {
             Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
-            Show();
+
+            try
+            {
+                Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                ProcessHelper.WriteLog(ex.ToString());
+            }
         }
 
         //ShowWindowCaptionContainer(null, null);
@@ -216,17 +225,17 @@ public partial class ViewerWindow
 
         // load plugin, do not block UI
         Dispatcher.BeginInvoke(new Action(() =>
+        {
+            try
             {
-                try
-                {
-                    Plugin.View(path, ContextObject);
-                }
-                catch (Exception e)
-                {
-                    exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
-                }
-            }),
-            DispatcherPriority.Input);
+                Plugin.View(path, ContextObject);
+            }
+            catch (Exception e)
+            {
+                exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
+            }
+        }),
+        DispatcherPriority.Input);
     }
 
     private void SetOpenWithButtonAndPath()

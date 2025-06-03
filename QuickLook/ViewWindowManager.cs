@@ -45,7 +45,7 @@ internal class ViewWindowManager : IDisposable
 
     public void RunAndClosePreview()
     {
-        if (_viewerWindow.Visibility != Visibility.Visible)
+        if (!_viewerWindow.IsVisible)
             return;
 
         // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
@@ -67,7 +67,7 @@ internal class ViewWindowManager : IDisposable
 
     public void ClosePreview()
     {
-        if (_viewerWindow.Visibility != Visibility.Visible)
+        if (!_viewerWindow.IsVisible)
             return;
 
         StopFocusMonitor();
@@ -82,7 +82,7 @@ internal class ViewWindowManager : IDisposable
         if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
         else
-            if (_viewerWindow.Visibility == Visibility.Visible && (string.IsNullOrEmpty(path) || path == _invokedPath))
+            if (_viewerWindow.IsVisible && (string.IsNullOrEmpty(path) || path == _invokedPath))
             ClosePreview();
         else
             InvokePreview(path);
@@ -109,7 +109,7 @@ internal class ViewWindowManager : IDisposable
 
     public void SwitchPreview(string path = null)
     {
-        if (_viewerWindow.Visibility != Visibility.Visible)
+        if (!_viewerWindow.IsVisible)
             return;
 
         if (string.IsNullOrEmpty(path))
@@ -149,7 +149,7 @@ internal class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             return;
 
-        if (_viewerWindow.Visibility == Visibility.Visible && path == _invokedPath)
+        if (_viewerWindow.IsVisible && path == _invokedPath)
             return;
 
         if (!Directory.Exists(path) && !File.Exists(path))
