@@ -45,6 +45,7 @@ public partial class IpaInfoPanel : UserControl, IAppInfoPanel
         versionNameTitle.Text = TranslationHelper.Get("APP_VERSION_NAME", translationFile);
         versionCodeTitle.Text = TranslationHelper.Get("APP_VERSION_CODE", translationFile);
         packageNameTitle.Text = TranslationHelper.Get("PACKAGE_NAME", translationFile);
+        deviceFamilyTitle.Text = TranslationHelper.Get("DEVICE_FAMILY", translationFile);
         minimumOSVersionTitle.Text = TranslationHelper.Get("APP_MIN_OS_VERSION", translationFile);
         platformVersionTitle.Text = TranslationHelper.Get("APP_TARGET_OS_VERSION", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);

@@ -7,6 +7,13 @@
              FontSize="14"
              UseLayoutRounding="True"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="GroupBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15" />
@@ -145,8 +152,11 @@
                       Grid.Row="8"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
-                      Margin="0,0,16,16"
-                      BorderThickness="0.4"
+                      Margin="3,3,16,16"
+                      Padding="3"
+                      Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                      BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                      Foreground="{DynamicResource WindowTextForegroundAlternative}"
                       Header="Capabilities">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ScrollViewer.Resources>

@@ -69,12 +69,12 @@ public class Plugin : IViewer
     {
         context.PreferredSize = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
-            ".apk" => new Size { Width = 560, Height = 500 },
-            ".ipa" => new Size { Width = 560, Height = 500 },
+            ".apk" => new Size { Width = 560, Height = 505 },
+            ".ipa" => new Size { Width = 560, Height = 510 },
             ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 520, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
-            ".wgt" or ".wgtu" => new Size { Width = 600, Height = 328 },
+            ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
     }
