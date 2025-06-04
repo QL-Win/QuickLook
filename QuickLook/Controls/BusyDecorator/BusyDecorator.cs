@@ -27,9 +27,9 @@ namespace QuickLook.Controls.BusyDecorator;
 [StyleTypedProperty(Property = "BusyStyle", StyleTargetType = typeof(Control))]
 public class BusyDecorator : Decorator, IDisposable
 {
-    private readonly BackgroundVisualHost _busyHost = new BackgroundVisualHost();
+    private readonly BackgroundVisualHost _busyHost = new();
 
-    private readonly ResourceDictionary _styles = new ResourceDictionary
+    private readonly ResourceDictionary _styles = new()
     {
         Source = new Uri("pack://application:,,,/QuickLook;component/Controls/BusyDecorator/BusyDecorator.xaml")
     };
@@ -45,12 +45,19 @@ public class BusyDecorator : Decorator, IDisposable
     {
         Resources.MergedDictionaries.Add(_styles);
 
-        AddLogicalChild(_busyHost);
-        AddVisualChild(_busyHost);
-
         SetBinding(_busyHost, IsBusyIndicatorShowingProperty, BackgroundVisualHost.IsContentShowingProperty);
         SetBinding(_busyHost, BusyHorizontalAlignmentProperty, HorizontalAlignmentProperty);
         SetBinding(_busyHost, BusyVerticalAlignmentProperty, VerticalAlignmentProperty);
+
+        void SetBinding(DependencyObject obj, DependencyProperty source, DependencyProperty target)
+        {
+            var b = new Binding
+            {
+                Source = this,
+                Path = new PropertyPath(source)
+            };
+            BindingOperations.SetBinding(obj, target, b);
+        }
     }
 
     protected override int VisualChildrenCount => Child != null ? 2 : 1;
@@ -70,6 +77,11 @@ public class BusyDecorator : Decorator, IDisposable
     {
         GC.SuppressFinalize(this);
 
+        if (_busyHost != null)
+        {
+            RemoveLogicalChild(_busyHost);
+            RemoveVisualChild(_busyHost);
+        }
         _busyHost.ThreadedHelper?.Exit();
     }
 
@@ -88,16 +100,6 @@ public class BusyDecorator : Decorator, IDisposable
             return _busyHost;
 
         throw new IndexOutOfRangeException("index");
-    }
-
-    private void SetBinding(DependencyObject obj, DependencyProperty source, DependencyProperty target)
-    {
-        var b = new Binding
-        {
-            Source = this,
-            Path = new PropertyPath(source)
-        };
-        BindingOperations.SetBinding(obj, target, b);
     }
 
     protected override Size MeasureOverride(Size constraint)
@@ -140,7 +142,8 @@ public class BusyDecorator : Decorator, IDisposable
         typeof(bool),
         typeof(BusyDecorator),
         new FrameworkPropertyMetadata(false,
-            FrameworkPropertyMetadataOptions.AffectsMeasure));
+            FrameworkPropertyMetadataOptions.AffectsMeasure,
+            OnIsBusyIndicatorShowingChanged));
 
     /// <summary>
     ///     Gets or sets if the BusyIndicator is being shown.
@@ -149,6 +152,25 @@ public class BusyDecorator : Decorator, IDisposable
     {
         get => (bool)GetValue(IsBusyIndicatorShowingProperty);
         set => SetValue(IsBusyIndicatorShowingProperty, value);
+    }
+
+    public static void OnIsBusyIndicatorShowingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is BusyDecorator self && self._busyHost != null)
+        {
+            if ((bool)e.NewValue)
+            {
+                self.RemoveLogicalChild(self._busyHost);
+                self.RemoveVisualChild(self._busyHost);
+                self.AddLogicalChild(self._busyHost);
+                self.AddVisualChild(self._busyHost);
+            }
+            else
+            {
+                self.RemoveLogicalChild(self._busyHost);
+                self.RemoveVisualChild(self._busyHost);
+            }
+        }
     }
 
     #endregion IsBusyIndicatorShowing Property

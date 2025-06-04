@@ -50,8 +50,7 @@ public class VisualTargetPresentationSource : PresentationSource
             RootChanged(oldRoot, value);
 
             // Kickoff layout...
-            var rootElement = value as UIElement;
-            if (rootElement != null)
+            if (value is UIElement rootElement)
             {
                 rootElement.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 rootElement.Arrange(new Rect(rootElement.DesiredSize));
