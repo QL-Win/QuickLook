@@ -49,7 +49,7 @@ public class Plugin : IViewer
         //".har", // HarmonyOS Archive
 
         // Ubuntu
-        //".deb", // Debian Package
+        ".deb", // Debian Package
 
         // Others
         ".wgt", ".wgtu", // UniApp Widget

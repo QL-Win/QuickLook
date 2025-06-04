@@ -92,7 +92,7 @@
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Version" />
+                       Text="Version Name" />
             <TextBlock x:Name="versionName"
                        Grid.Row="4"
                        Grid.Column="2"

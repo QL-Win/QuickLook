@@ -21,7 +21,51 @@ public static class DebParser
 {
     public static DebInfo Parse(string path)
     {
-        ArEntry[] ar = ArReader.Read(path);
-        return new();
+        DebReader reader = new(path);
+        DebInfo info = new();
+
+        {
+            if (reader.ControlDict.TryGetValue("Package", out string value))
+            {
+                info.Package = value;
+            }
+        }
+
+        {
+            if (reader.ControlDict.TryGetValue("Maintainer", out string value))
+            {
+                info.Maintainer = value;
+            }
+        }
+
+        {
+            if (reader.ControlDict.TryGetValue("Uploaders", out string value))
+            {
+                info.Uploaders = value;
+            }
+        }
+
+        {
+            if (reader.ControlDict.TryGetValue("Version", out string value))
+            {
+                info.Version = value;
+            }
+        }
+
+        {
+            if (reader.ControlDict.TryGetValue("Architecture", out string value))
+            {
+                info.Architecture = value;
+            }
+        }
+
+        {
+            if (reader.ControlDict.TryGetValue("Description", out string value))
+            {
+                info.Description = value;
+            }
+        }
+
+        return info;
     }
 }

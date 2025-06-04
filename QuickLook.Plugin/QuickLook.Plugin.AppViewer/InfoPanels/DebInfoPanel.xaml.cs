@@ -40,12 +40,12 @@ public partial class DebInfoPanel : UserControl, IAppInfoPanel
         InitializeComponent();
 
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
-        applicationNameTitle.Text = TranslationHelper.Get("APP_NAME", translationFile);
+        packageNameTitle.Text = TranslationHelper.Get("PACKAGE_NAME", translationFile);
         versionNameTitle.Text = TranslationHelper.Get("APP_VERSION_NAME", translationFile);
-        versionCodeTitle.Text = TranslationHelper.Get("APP_VERSION_CODE", translationFile);
+        maintainerTitle.Text = TranslationHelper.Get("MAINTAINER", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
-        permissionsGroupBox.Header = TranslationHelper.Get("PERMISSIONS", translationFile);
+        descriptionGroupBox.Header = TranslationHelper.Get("DESCRIPTION", translationFile);
     }
 
     public void DisplayInfo(string path)
@@ -58,17 +58,17 @@ public partial class DebInfoPanel : UserControl, IAppInfoPanel
             if (File.Exists(path))
             {
                 var size = new FileInfo(path).Length;
-                DebInfo wgtInfo = DebParser.Parse(path);
+                DebInfo debInfo = DebParser.Parse(path);
                 var last = File.GetLastWriteTime(path);
 
                 Dispatcher.Invoke(() =>
                 {
-                    //applicationName.Text = wgtInfo.AppNameLocale ?? wgtInfo.AppName;
-                    //versionName.Text = wgtInfo.AppVersionName;
-                    //versionCode.Text = wgtInfo.AppVersionCode;
-                    //totalSize.Text = size.ToPrettySize(2);
-                    //modDate.Text = last.ToString(CultureInfo.CurrentCulture);
-                    //permissions.ItemsSource = wgtInfo.Permissions;
+                    packageName.Text = debInfo.Package;
+                    versionName.Text = debInfo.Version;
+                    maintainer.Text = debInfo.Maintainer;
+                    totalSize.Text = size.ToPrettySize(2);
+                    modDate.Text = last.ToString(CultureInfo.CurrentCulture);
+                    description.Text = debInfo.Description;
 
                     _context.IsBusy = false;
                 });

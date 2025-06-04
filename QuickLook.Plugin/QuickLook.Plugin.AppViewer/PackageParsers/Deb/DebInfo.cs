@@ -17,6 +17,20 @@
 
 namespace QuickLook.Plugin.AppViewer.PackageParsers.Deb;
 
+/// <summary>
+/// https://www.debian.org/doc/debian-policy/ch-controlfields.html
+/// </summary>
 public class DebInfo
 {
+    public string Package { get; set; }
+
+    public string Maintainer { get; set; }
+
+    public string Uploaders { get; set; }
+
+    public string Version { get; set; }
+
+    public string Architecture { get; set; }
+
+    public string Description { get; set; }
 }

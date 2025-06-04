@@ -70,14 +70,14 @@
                     </TextBlock.Inlines>
                 </TextBlock>
             </Grid>
-            <!--  Application Name  -->
-            <TextBlock x:Name="applicationNameTitle"
+            <!--  Package Name  -->
+            <TextBlock x:Name="packageNameTitle"
                        Grid.Row="3"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Application Name" />
-            <TextBlock x:Name="applicationName"
+                       Text="Package Name" />
+            <TextBlock x:Name="packageName"
                        Grid.Row="3"
                        Grid.Column="2"
                        Margin="8,0,0,0"
@@ -92,7 +92,7 @@
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Version" />
+                       Text="Version Name" />
             <TextBlock x:Name="versionName"
                        Grid.Row="4"
                        Grid.Column="2"
@@ -102,14 +102,14 @@
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
-            <!--  Version Code  -->
-            <TextBlock x:Name="versionCodeTitle"
+            <!--  Maintainer  -->
+            <TextBlock x:Name="maintainerTitle"
                        Grid.Row="5"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Version Code" />
-            <TextBlock x:Name="versionCode"
+                       Text="Maintainer" />
+            <TextBlock x:Name="maintainer"
                        Grid.Row="5"
                        Grid.Column="2"
                        Margin="8,0,0,0"
@@ -147,8 +147,8 @@
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis" />
-            <!--  Permissions  -->
-            <GroupBox x:Name="permissionsGroupBox"
+            <!--  Description  -->
+            <GroupBox x:Name="descriptionGroupBox"
                       Grid.Row="8"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
@@ -157,7 +157,7 @@
                       Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                       BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                      Header="Capabilities">
+                      Header="Description">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ScrollViewer.Resources>
                         <Style TargetType="{x:Type TextBox}">
@@ -167,15 +167,12 @@
                             <Setter Property="BorderBrush" Value="Transparent" />
                         </Style>
                     </ScrollViewer.Resources>
-                    <ItemsControl x:Name="permissions">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBox Margin="8,3,16,3"
-                                         IsReadOnly="True"
-                                         Text="{Binding ., Mode=OneTime}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <TextBox x:Name="description"
+                             Margin="8,3,16,3"
+                             AcceptsReturn="True"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" />
                 </ScrollViewer>
             </GroupBox>
         </Grid>
