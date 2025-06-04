@@ -208,16 +208,7 @@ public partial class ViewerWindow
         if (!IsVisible)
         {
             Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
-
-            try
-            {
-                Show();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                ProcessHelper.WriteLog(ex.ToString());
-            }
+            Show();
         }
 
         //ShowWindowCaptionContainer(null, null);
