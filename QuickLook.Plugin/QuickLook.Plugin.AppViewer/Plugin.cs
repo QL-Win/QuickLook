@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.AppViewer.InfoPanels;
 using System;
 using System.IO;
 using System.Linq;
@@ -47,6 +48,9 @@ public class Plugin : IViewer
         ".hap", ".hap.1", // HarmonyOS Package
         //".har", // HarmonyOS Archive
 
+        // Ubuntu
+        //".deb", // Debian Package
+
         // Others
         ".wgt", ".wgtu", // UniApp Widget
     ];
@@ -74,6 +78,7 @@ public class Plugin : IViewer
             ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 520, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
+            ".deb" => new Size { Width = 600, Height = 345 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
@@ -89,6 +94,7 @@ public class Plugin : IViewer
             ".hap" => new HapInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
+            ".deb" => new DebInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
