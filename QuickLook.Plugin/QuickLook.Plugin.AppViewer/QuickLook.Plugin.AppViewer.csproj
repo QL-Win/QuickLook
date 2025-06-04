@@ -72,7 +72,6 @@
 
     <ItemGroup>
         <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.IO.Compression" />
         <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
