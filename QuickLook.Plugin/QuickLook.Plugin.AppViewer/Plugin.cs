@@ -76,12 +76,17 @@ public class Plugin : IViewer
             ".apk" => new Size { Width = 560, Height = 505 },
             ".ipa" => new Size { Width = 560, Height = 510 },
             ".hap" => new Size { Width = 560, Height = 500 },
-            ".msi" => new Size { Width = 520, Height = 230 },
+            ".msi" => new Size { Width = 560, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".deb" => new Size { Width = 600, Height = 345 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
+        context.Title = string.Empty;
+        context.TitlebarOverlap = false;
+        context.TitlebarBlurVisibility = false;
+        context.TitlebarColourVisibility = false;
+        context.FullWindowDragging = true;
     }
 
     public void View(string path, ContextObject context)

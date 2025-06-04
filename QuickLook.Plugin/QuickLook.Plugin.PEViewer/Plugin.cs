@@ -51,6 +51,11 @@ public class Plugin : IViewer
     public void Prepare(string path, ContextObject context)
     {
         context.PreferredSize = new Size { Width = 520, Height = 192 };
+        context.Title = string.Empty;
+        context.TitlebarOverlap = false;
+        context.TitlebarBlurVisibility = false;
+        context.TitlebarColourVisibility = false;
+        context.FullWindowDragging = true;
     }
 
     public void View(string path, ContextObject context)

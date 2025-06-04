@@ -30,7 +30,7 @@
                Height="120"
                Margin="8"
                VerticalAlignment="Top"
-               Source="/QuickLook.Plugin.AppViewer;component/Resources/uni-app.png"
+               Source="/QuickLook.Plugin.AppViewer;component/Resources/uni.png"
                Stretch="Fill" />
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
