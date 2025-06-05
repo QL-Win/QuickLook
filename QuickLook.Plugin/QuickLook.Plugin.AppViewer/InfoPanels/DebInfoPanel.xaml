@@ -48,6 +48,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="* " />
             </Grid.RowDefinitions>
             <Grid Grid.Row="1"
@@ -102,15 +103,31 @@
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
+            <!--  Architecture  -->
+            <TextBlock x:Name="architectureTitle"
+                       Grid.Row="5"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Architecture" />
+            <TextBlock x:Name="architecture"
+                       Grid.Row="5"
+                       Grid.Column="2"
+                       Margin="8,0,0,0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Searching..."
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap" />
             <!--  Maintainer  -->
             <TextBlock x:Name="maintainerTitle"
-                       Grid.Row="5"
+                       Grid.Row="6"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Maintainer" />
             <TextBlock x:Name="maintainer"
-                       Grid.Row="5"
+                       Grid.Row="6"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -120,13 +137,13 @@
                        TextWrapping="Wrap" />
             <!--  Total Size  -->
             <TextBlock x:Name="totalSizeTitle"
-                       Grid.Row="6"
+                       Grid.Row="7"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Total Size" />
             <TextBlock x:Name="totalSize"
-                       Grid.Row="6"
+                       Grid.Row="7"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -134,13 +151,13 @@
                        Text="Calculating size..." />
             <!--  Last Modified  -->
             <TextBlock x:Name="modDateTitle"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Last Modified" />
             <TextBlock x:Name="modDate"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -149,7 +166,7 @@
                        TextTrimming="CharacterEllipsis" />
             <!--  Description  -->
             <GroupBox x:Name="descriptionGroupBox"
-                      Grid.Row="8"
+                      Grid.Row="9"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="3,3,16,16"

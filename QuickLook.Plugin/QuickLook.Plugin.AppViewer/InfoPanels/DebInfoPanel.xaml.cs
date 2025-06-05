@@ -19,7 +19,6 @@ using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.PackageParsers.Deb;
-using QuickLook.Plugin.AppViewer.PackageParsers.Wgt;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -42,6 +41,7 @@ public partial class DebInfoPanel : UserControl, IAppInfoPanel
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
         packageNameTitle.Text = TranslationHelper.Get("PACKAGE_NAME", translationFile);
         versionNameTitle.Text = TranslationHelper.Get("APP_VERSION_NAME", translationFile);
+        architectureTitle.Text = TranslationHelper.Get("ARCHITECTURE", translationFile);
         maintainerTitle.Text = TranslationHelper.Get("MAINTAINER", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
@@ -65,6 +65,7 @@ public partial class DebInfoPanel : UserControl, IAppInfoPanel
                 {
                     packageName.Text = debInfo.Package;
                     versionName.Text = debInfo.Version;
+                    architecture.Text = debInfo.Architecture;
                     maintainer.Text = debInfo.Maintainer;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
