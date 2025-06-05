@@ -127,11 +127,7 @@ public class DebReader
         {
             case ZipCompressionMethod.Deflate:
                 {
-                    return new DeflateStream(stream, CompressionMode.Decompress);
-                }
-            case ZipCompressionMethod.Deflate64:
-                {
-                    return new Deflate64Stream(stream, CompressionMode.Decompress);
+                    return new GZipStream(stream, CompressionMode.Decompress);
                 }
             case ZipCompressionMethod.BZip2:
                 {
