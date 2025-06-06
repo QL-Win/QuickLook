@@ -1,0 +1,7 @@
+.vs/*
+[Bb]in/
+[Oo]bj/
+AppPackages/*
+BundleArtifacts/*
+*.user
+*.cache

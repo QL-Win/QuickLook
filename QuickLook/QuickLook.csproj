@@ -140,7 +140,7 @@
         <ProjectReference Include="..\QuickLook.Common\QuickLook.Common.csproj">
             <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
             <Name>QuickLook.Common</Name>
-            <Private>False</Private>
+            <Private>True</Private>
         </ProjectReference>
     </ItemGroup>
 
