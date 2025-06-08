@@ -160,6 +160,12 @@ public partial class ViewerWindow
             Debug.WriteLine(e);
         }
 
+        if (_autoReloadWatcher != null)
+        {
+            _autoReloadWatcher.Dispose();
+            _autoReloadWatcher = null;
+        }
+
         Plugin = null;
 
         _path = string.Empty;
@@ -209,6 +215,17 @@ public partial class ViewerWindow
         {
             Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
             Show();
+        }
+
+        if (_autoReload && File.Exists(path))
+        {
+            _autoReloadWatcher?.Dispose();
+            _autoReloadWatcher = new FileSystemWatcher(Path.GetDirectoryName(path)!, Path.GetFileName(path)!)
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+            };
+            _autoReloadWatcher.Changed += (_, _) => Dispatcher.Invoke(() => ViewWindowManager.GetInstance().ReloadPreview());
+            _autoReloadWatcher.EnableRaisingEvents = true;
         }
 
         //ShowWindowCaptionContainer(null, null);
