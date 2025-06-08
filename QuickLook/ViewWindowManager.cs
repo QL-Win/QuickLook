@@ -189,6 +189,16 @@ internal class ViewWindowManager : IDisposable
         }
     }
 
+    public void ReloadPreview()
+    {
+        if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
+            return;
+
+        var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
+
+        BeginShowNewWindow(_invokedPath, matchedPlugin);
+    }
+
     private void BeginShowNewWindow(string path, IViewer matchedPlugin)
     {
         _viewerWindow.UnloadPlugin();
