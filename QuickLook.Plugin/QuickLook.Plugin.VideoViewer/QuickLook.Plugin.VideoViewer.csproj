@@ -37,7 +37,7 @@
 
     <ItemGroup>
         <PackageReference Include="QuickLook.LAVFilters" Version="0.79.2.1" />
-        <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.0" />
+        <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.1" />
         <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3">
             <Aliases>MediaInfoWrapper</Aliases>
         </PackageReference>
