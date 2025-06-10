@@ -117,6 +117,11 @@
                             DockPanel.Dock="Right"
                             Style="{StaticResource CaptionButtonStyle}"
                             ToolTip="Open with XXX" />
+                    <Button x:Name="buttonReload"
+                            Content="&#xE72C;"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource CaptionButtonStyle}"
+                            ToolTip="Reload" />
                     <!--<Button x:Name="buttonOpen" DockPanel.Dock="Right"
                             Style="{StaticResource CaptionTextButtonStyle}"
                             Visibility="{Binding ActualWidth, ElementName=windowCaptionContainer, Converter={StaticResource WidthToVisibilityCollapsedConverter}}">

@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.IO;
 using Wpf.Ui.Violeta.Controls;
 using Brush = System.Windows.Media.Brush;
 using FontFamily = System.Windows.Media.FontFamily;
@@ -36,6 +37,8 @@ public partial class ViewerWindow : Window
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
     private string _path = string.Empty;
+    private FileSystemWatcher? _autoReloadWatcher;
+    private readonly bool _autoReload;
 
     internal ViewerWindow()
     {
@@ -45,6 +48,8 @@ public partial class ViewerWindow : Window
         ContextObject.PropertyChanged += ContextObject_PropertyChanged;
 
         InitializeComponent();
+
+        _autoReload = SettingHelper.Get("AutoReload", false);
 
         Icon = (App.IsWin10 ? Properties.Resources.app_white_png : Properties.Resources.app_png).ToBitmapSource();
 
@@ -93,6 +98,11 @@ public partial class ViewerWindow : Window
                 ViewWindowManager.GetInstance().RunAndClosePreview();
         };
 
+        buttonReload.Click += (_, _) =>
+        {
+            ViewWindowManager.GetInstance().ReloadPreview();
+        };
+
         buttonWindowStatus.Click += (_, _) =>
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
@@ -104,6 +114,7 @@ public partial class ViewerWindow : Window
         buttonPin.ToolTip = TranslationHelper.Get("MW_PreventClosing");
         buttonOpenWith.ToolTip = TranslationHelper.Get("MW_OpenWithMenu");
         buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
+        buttonReload.ToolTip = TranslationHelper.Get("MW_Reload", failsafe: "Reload");
     }
 
     public new void Close()
@@ -148,6 +159,19 @@ public partial class ViewerWindow : Window
         else
         {
             Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
+        }
+
+        var customColor = SettingHelper.Get("WindowBackgroundColor", string.Empty, "QuickLook");
+        if (!string.IsNullOrEmpty(customColor))
+        {
+            try
+            {
+                Background = (Brush)new System.Windows.Media.BrushConverter().ConvertFromString(customColor);
+            }
+            catch
+            {
+                // ignore invalid color
+            }
         }
     }
 
