@@ -58,6 +58,7 @@ internal class NativeProvider : AnimationProvider
                 img.BeginInit();
                 img.UriSource = Path;
                 img.CacheOption = BitmapCacheOption.OnLoad;
+                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 // specific renderSize to avoid .net's double to int conversion
                 img.DecodePixelWidth = rotate ? decodeHeight : decodeWidth;
                 img.DecodePixelHeight = rotate ? decodeWidth : decodeHeight;
@@ -97,6 +98,7 @@ internal class NativeProvider : AnimationProvider
                 img.BeginInit();
                 img.UriSource = Path;
                 img.CacheOption = BitmapCacheOption.OnLoad;
+                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 img.DecodePixelWidth = (int)(rotate ? fullSize.Height : fullSize.Width);
                 img.DecodePixelHeight = (int)(rotate ? fullSize.Width : fullSize.Height);
                 img.EndInit();

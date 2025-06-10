@@ -37,7 +37,7 @@ public partial class ViewerWindow : Window
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
     private string _path = string.Empty;
-    private FileSystemWatcher? _autoReloadWatcher;
+    private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
 
     internal ViewerWindow()
@@ -108,6 +108,8 @@ public partial class ViewerWindow : Window
 
         buttonShare.Click += (_, _) => ShareHelper.Share(_path, this);
         buttonOpenWith.Click += (_, _) => ShareHelper.Share(_path, this, true);
+
+        buttonReload.Visibility = SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
 
         // Set UI translations
         buttonTop.ToolTip = TranslationHelper.Get("MW_StayTop");

@@ -162,6 +162,7 @@ public partial class ViewerWindow
 
         if (_autoReloadWatcher != null)
         {
+            _autoReloadWatcher.EnableRaisingEvents = false;
             _autoReloadWatcher.Dispose();
             _autoReloadWatcher = null;
         }
@@ -220,16 +221,15 @@ public partial class ViewerWindow
         if (_autoReload && File.Exists(path))
         {
             _autoReloadWatcher?.Dispose();
-            _autoReloadWatcher = new FileSystemWatcher(Path.GetDirectoryName(path)!, Path.GetFileName(path)!)
+            _autoReloadWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path))
             {
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size,
             };
-            _autoReloadWatcher.Changed += (_, _) => Dispatcher.Invoke(() => ViewWindowManager.GetInstance().ReloadPreview());
+            _autoReloadWatcher.Changed += (_, _) =>
+                // Executed asynchronously to avoid deadlock
+                Dispatcher.BeginInvoke(() => ViewWindowManager.GetInstance().ReloadPreview());
             _autoReloadWatcher.EnableRaisingEvents = true;
         }
-
-        //ShowWindowCaptionContainer(null, null);
-        //WindowHelper.SetActivate(new WindowInteropHelper(this), ContextObject.CanFocus);
 
         // load plugin, do not block UI
         Dispatcher.BeginInvoke(new Action(() =>
