@@ -38,7 +38,7 @@ public class PreviewHandlerHost : Control
     private IPreviewHandler _mCurrentPreviewHandler;
 
     /// <summary>
-    /// Initialialises a new instance of the PreviewHandlerHost class.
+    /// Initialize a new instance of the PreviewHandlerHost class.
     /// </summary>
     public PreviewHandlerHost()
     {
@@ -82,7 +82,7 @@ public class PreviewHandlerHost : Control
         if (ext != null)
         {
             // open the key that indicates the GUID of the preview handler type
-            var test = ext.OpenSubKey("shellex\\{8895b1c6-b41f-4c1c-a562-0d564250836f}");
+            var test = ext.OpenSubKey(@"shellex\{8895b1c6-b41f-4c1c-a562-0d564250836f}");
             if (test != null) return new Guid(Convert.ToString(test.GetValue(null)));
 
             // sometimes preview handlers are declared on key for the class
@@ -90,7 +90,7 @@ public class PreviewHandlerHost : Control
             if (className != null)
             {
                 test = Registry.ClassesRoot.OpenSubKey(
-                    className + "\\shellex\\{8895b1c6-b41f-4c1c-a562-0d564250836f}");
+                    className + @"\shellex\{8895b1c6-b41f-4c1c-a562-0d564250836f}");
                 if (test != null) return new Guid(Convert.ToString(test.GetValue(null)));
             }
         }

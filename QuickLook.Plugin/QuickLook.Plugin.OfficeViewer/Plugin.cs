@@ -49,8 +49,15 @@ public class Plugin : IViewer
         if (Directory.Exists(path))
             return false;
 
-        if (Extensions.Any(path.ToLower().EndsWith))
-            return PreviewHandlerHost.GetPreviewHandlerGUID(path) != Guid.Empty;
+        if (!Extensions.Any(path.ToLower().EndsWith))
+            return false;
+
+        var previewHandler = PreviewHandlerHost.GetPreviewHandlerGUID(path);
+        if (previewHandler == Guid.Empty)
+            return false;
+
+        if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName($"{{{previewHandler}}}")))
+            return true;
 
         return false;
     }
