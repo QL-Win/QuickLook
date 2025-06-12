@@ -28,6 +28,8 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Violeta.Appearance;
 
@@ -51,6 +53,12 @@ public partial class App : Application
 
     static App()
     {
+        var processRenderMode = SettingHelper.Get("ProcessRenderMode", failsafe: (int)RenderMode.Default, "QuickLook");
+        if (processRenderMode == (int)RenderMode.SoftwareOnly)
+        {
+            RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+        }
+
         // Explicitly set to PerMonitor to avoid being overridden by the system
         if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
         {
@@ -130,6 +138,28 @@ public partial class App : Application
         // Exception handling events which are not caught in UI thread
         DispatcherUnhandledException += (_, e) =>
         {
+            // https://learn.microsoft.com/en-us/troubleshoot/developer/dotnet/framework/general/wpf-render-thread-failures
+            if (e.Exception.Message.StartsWith("UCEERR_RENDERTHREADFAILURE")
+             && e.Exception.Message.Contains("0x88980406"))
+            {
+                ProcessHelper.WriteLog(e.Exception.ToString());
+
+                var result = System.Windows.Forms.MessageBox.Show(
+                    $"{e.Exception.Message} most often due to a lack of graphics resources or hardware/driver limitations in allocating a sufficiently large texture.\nAre you want to fall back to use software render only?",
+                    "Fatal",
+                    System.Windows.Forms.MessageBoxButtons.YesNo,
+                    System.Windows.Forms.MessageBoxIcon.Error
+                );
+
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    SettingHelper.Set("ProcessRenderMode", (int)RenderMode.SoftwareOnly, "QuickLook");
+                }
+
+                TrayIconManager.GetInstance().Restart(forced: true);
+                return;
+            }
+
             try
             {
                 ProcessHelper.WriteLog(e.Exception.ToString());
