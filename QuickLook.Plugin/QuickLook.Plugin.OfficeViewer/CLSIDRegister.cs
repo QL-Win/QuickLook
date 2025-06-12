@@ -23,8 +23,10 @@ namespace QuickLook.Plugin.OfficeViewer;
 
 internal static class CLSIDRegister
 {
-    public const string Office = "{84F66100-FF7C-4fb4-B0C0-02CD7FB668FE}";
-    public const string Visio = "{279D6C9A-652E-4833-BEFC-312CA8887857}";
+    public const string MicrosoftWord = "{84F66100-FF7C-4fb4-B0C0-02CD7FB668FE}";
+    public const string MicrosoftExcel = "{00020827-0000-0000-C000-000000000046}";
+    public const string MicrosoftPowerPoint = "{65235197-874B-4A07-BDC5-E65EA825B718}";
+    public const string MicrosoftVisio = "{21E17C2F-AD3A-4b89-841F-09CFE02D16B7}";
 
     public static string GetName(string clsid)
     {

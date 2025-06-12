@@ -31,8 +31,8 @@ public class Plugin : IViewer
     [
         ".doc", ".docx", ".docm",
         ".xls", ".xlsx", ".xlsm", ".xlsb",
-        ".vsd", ".vsdx",
         ".ppt", ".pptx",
+        ".vsd", ".vsdx",
         ".odt", ".ods", ".odp"
     ];
 
@@ -52,12 +52,41 @@ public class Plugin : IViewer
         if (!Extensions.Any(path.ToLower().EndsWith))
             return false;
 
-        var previewHandler = PreviewHandlerHost.GetPreviewHandlerGUID(path);
+        var previewHandler = ShellExRegister.GetPreviewHandlerGUID(Path.GetExtension(path));
         if (previewHandler == Guid.Empty)
             return false;
 
-        if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName($"{{{previewHandler}}}")))
+        if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(previewHandler.ToString("B"))))
+        {
             return true;
+        }
+        else
+        {
+            // To restore the preview handler CLSID to MS Office
+            // if running with administrative privileges
+            if (ShellExRegister.IsRunAsAdmin())
+            {
+                var fileExtension = Path.GetExtension(path);
+                var fallbackHandler = fileExtension switch
+                {
+                    ".doc" or ".docx" or ".docm" or ".odt" => CLSIDRegister.MicrosoftWord,
+                    ".xls" or ".xlsx" or ".xlsm" or ".xlsb" or ".ods" => CLSIDRegister.MicrosoftExcel,
+                    ".ppt" or ".pptx" or ".odp" => CLSIDRegister.MicrosoftPowerPoint,
+                    ".vsd" or ".vsdx" => CLSIDRegister.MicrosoftVisio,
+                    _ => null,
+                };
+
+                if (fallbackHandler == null)
+                    return false;
+
+                if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(fallbackHandler)))
+                {
+                    // Admin requested
+                    ShellExRegister.SetPreviewHandlerGUID(fileExtension, new Guid(fallbackHandler));
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
