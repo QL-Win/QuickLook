@@ -29,11 +29,10 @@ public class Plugin : IViewer
 {
     private static readonly string[] Extensions =
     [
-        ".doc", ".docx", ".docm",
-        ".xls", ".xlsx", ".xlsm", ".xlsb",
-        ".ppt", ".pptx",
+        ".doc", ".docx", ".docm", ".odt",
+        ".xls", ".xlsx", ".xlsm", ".xlsb", ".ods",
+        ".ppt", ".pptx", ".odp",
         ".vsd", ".vsdx",
-        ".odt", ".ods", ".odp"
     ];
 
     private PreviewPanel _panel;
