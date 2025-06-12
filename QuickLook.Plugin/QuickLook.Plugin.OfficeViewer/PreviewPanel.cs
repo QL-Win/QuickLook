@@ -44,9 +44,6 @@ public class PreviewPanel : WindowsFormsHost, IDisposable
         _control = new PreviewHandlerHost();
         Child = _control;
         _control.Open(file);
-
-        //SetForegroundWindow(new WindowInteropHelper(context.ViewerWindow).Handle);
-        //SetActiveWindow(presenter.Handle);
     }
 
     [DllImport("user32.dll")]

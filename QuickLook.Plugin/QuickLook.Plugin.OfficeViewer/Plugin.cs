@@ -134,11 +134,22 @@ public class Plugin : IViewer
             }
         }
 
-        _panel = new PreviewPanel();
-        context.ViewerContent = _panel;
-        context.Title = Path.GetFileName(path);
-
-        _panel.PreviewFile(path, context);
+        try
+        {
+            _panel = new PreviewPanel();
+            context.ViewerContent = _panel;
+            context.Title = Path.GetFileName(path);
+            _panel.PreviewFile(path, context);
+        }
+        catch (Exception e)
+        {
+            context.ViewerContent = new Label()
+            {
+                Content = e.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
+        }
 
         context.IsBusy = false;
     }

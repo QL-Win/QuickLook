@@ -102,9 +102,7 @@ public class PreviewHandlerHost : Control
         CurrentPreviewHandler = guid;
         var o = Activator.CreateInstance(Type.GetTypeFromCLSID(CurrentPreviewHandler, true));
 
-        var fileInit = o as IInitializeWithFile;
-
-        if (fileInit == null)
+        if (o is not IInitializeWithFile fileInit)
             return false;
 
         fileInit.Initialize(path, 0);
