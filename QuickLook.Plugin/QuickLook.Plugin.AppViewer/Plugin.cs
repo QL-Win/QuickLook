@@ -39,7 +39,7 @@ public class Plugin : IViewer
         ".msix", ".msixbundle", // Windows MSIX installer
 
         // macOS
-        //".dmg", // macOS DMG
+        ".dmg", // macOS DMG
 
         // iOS
         ".ipa", // iOS IPA
@@ -79,6 +79,7 @@ public class Plugin : IViewer
             ".msi" => new Size { Width = 560, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".deb" => new Size { Width = 600, Height = 345 },
+            ".dmg" => new Size { Width = 560, Height = 510 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
@@ -100,6 +101,7 @@ public class Plugin : IViewer
             ".msi" => new MsiInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
             ".deb" => new DebInfoPanel(context),
+            ".dmg" => new DmgInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),
             _ => throw new NotSupportedException("Extension is not supported."),
         };

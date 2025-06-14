@@ -156,6 +156,10 @@ public class IpaReader
                     {
                         IconName = iconFiles.LastOrDefault() as string;
                     }
+                    else if (primaryIcons.TryGetValue("CFBundleIconFile", out object iconFileNode) && iconFileNode is object iconFile)
+                    {
+                        IconName = iconFile as string;
+                    }
                 }
             }
             if (string.IsNullOrWhiteSpace(IconName))
@@ -163,6 +167,13 @@ public class IpaReader
                 if (InfoPlistDict.TryGetValue("CFBundleIconFiles", out object iconFilesNode) && iconFilesNode is IList<object> iconFiles)
                 {
                     IconName = iconFiles.LastOrDefault() as string;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(IconName))
+            {
+                if (InfoPlistDict.TryGetValue("CFBundleIconFile", out object iconFilesNode) && iconFilesNode is object iconFile)
+                {
+                    IconName = iconFile as string;
                 }
             }
             if (!string.IsNullOrWhiteSpace(IconName))
