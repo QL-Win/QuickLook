@@ -18,11 +18,15 @@
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using static System.Net.WebRequestMethods;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 
@@ -77,6 +81,25 @@ internal class NativeProvider : AnimationProvider
 
                 return rotated;
             }
+            // System.IO.IOException: Cannot read from the stream.
+            // Inner Exception: COMException(0x88982F72): Failed to read from the stream.
+            catch (IOException ioe) when (ioe.InnerException is COMException come)
+            {
+                // https://github.com/QL-Win/QuickLook/issues/1671
+                // This error is caused by unsupported ColorContexts in Windows
+                // Although can avoid color problems through `CreateOptions = BitmapCreateOptions.IgnoreColorProfile`
+                // But it may cause color casts, so fallback to ImageMagick
+                if (come.Message.Contains("0x88982F72"))
+                {
+                    var fallbackProvidor = new ImageMagickProvider(Path, Meta, ContextObject);
+                    var task = fallbackProvidor.GetThumbnail(renderSize);
+
+                    task.Start();
+                    return task.Result;
+                }
+                ProcessHelper.WriteLog(ioe.ToString());
+                return null;
+            }
             catch (Exception e)
             {
                 ProcessHelper.WriteLog(e.ToString());
@@ -109,6 +132,25 @@ internal class NativeProvider : AnimationProvider
                 img2.Freeze();
 
                 return img2;
+            }
+            // System.IO.IOException: Cannot read from the stream.
+            // Inner Exception: COMException(0x88982F72): Failed to read from the stream.
+            catch (IOException ioe) when (ioe.InnerException is COMException come)
+            {
+                // https://github.com/QL-Win/QuickLook/issues/1671
+                // This error is caused by unsupported ColorContexts in Windows
+                // Although can avoid color problems through `CreateOptions = BitmapCreateOptions.IgnoreColorProfile`
+                // But it may cause color casts, so fallback to ImageMagick
+                if (come.Message.Contains("0x88982F72"))
+                {
+                    var fallbackProvidor = new ImageMagickProvider(Path, Meta, ContextObject);
+                    var task = fallbackProvidor.GetRenderedFrame(index);
+
+                    task.Start();
+                    return task.Result;
+                }
+                ProcessHelper.WriteLog(ioe.ToString());
+                return null;
             }
             catch (Exception e)
             {
