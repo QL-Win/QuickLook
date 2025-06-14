@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.IO;
@@ -54,6 +55,10 @@ public class Plugin : IViewer
         var previewHandler = ShellExRegister.GetPreviewHandlerGUID(Path.GetExtension(path));
         if (previewHandler == Guid.Empty)
             return false;
+
+        var checkPreviewHandler = SettingHelper.Get("CheckPreviewHandler", true, "QuickLook.Plugin.OfficeViewer");
+        if (!checkPreviewHandler)
+            return true;
 
         if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(previewHandler.ToString("B"))))
         {
