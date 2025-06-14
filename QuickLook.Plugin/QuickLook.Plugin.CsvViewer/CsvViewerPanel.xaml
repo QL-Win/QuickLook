@@ -8,12 +8,19 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <DataGrid x:Name="dataGrid"
-                  AlternatingRowBackground="#1900BFFF"
+        <DataGrid Name="dataGrid"
+                  AlternatingRowBackground="#1900FF70"
                   AlternationCount="2"
                   AutoGenerateColumns="False"
-                  Background="Transparent"
+                  Background="#00FFFFFF"
                   BorderThickness="0"
                   CanUserReorderColumns="False"
                   Foreground="{DynamicResource WindowTextForeground}"
@@ -21,7 +28,7 @@
                   HorizontalGridLinesBrush="#19000000"
                   IsReadOnly="True"
                   ItemsSource="{Binding Path=Rows, ElementName=csvViewer}"
-                  RowBackground="Transparent"
+                  RowBackground="#00FFFFFF"
                   VerticalGridLinesBrush="#19000000" />
     </Grid>
 </UserControl>
