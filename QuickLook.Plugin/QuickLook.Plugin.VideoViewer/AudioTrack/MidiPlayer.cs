@@ -54,9 +54,9 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
         }
     }
 
-    public MidiPlayer(ViewerPanel panle, ContextObject context)
+    public MidiPlayer(ViewerPanel panel, ContextObject context)
     {
-        _vp = panle;
+        _vp = panel;
         _context = context;
         _outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
     }
