@@ -50,6 +50,7 @@ public class Plugin : IViewer
 
         // Ubuntu
         ".deb", // Debian Package
+        ".appimage", // AppImage Format
 
         // Others
         ".wgt", ".wgtu", // UniApp Widget
@@ -80,6 +81,7 @@ public class Plugin : IViewer
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".deb" => new Size { Width = 600, Height = 345 },
             ".dmg" => new Size { Width = 560, Height = 510 },
+            ".appimage" => new Size { Width = 600, Height = 300 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
@@ -102,6 +104,7 @@ public class Plugin : IViewer
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
             ".deb" => new DebInfoPanel(context),
             ".dmg" => new DmgInfoPanel(context),
+            ".appimage" => new AppImageInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
