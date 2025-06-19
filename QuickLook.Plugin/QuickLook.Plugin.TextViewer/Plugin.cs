@@ -16,29 +16,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.TextViewer.Themes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Xml;
 
 namespace QuickLook.Plugin.TextViewer;
 
 public class Plugin : IViewer
 {
     private TextViewerPanel _tvp;
-
-    private static HighlightingManager _hlmLight;
-    private static HighlightingManager _hlmDark;
 
     public int Priority => -5;
 
@@ -47,9 +38,7 @@ public class Plugin : IViewer
         // pre-load
         var _ = new TextEditor();
 
-        InitHighlightingManager();
-        AddHighlightingManager(_hlmLight, "Light");
-        AddHighlightingManager(_hlmDark, "Dark");
+        HighlightingThemeManager.Initialize();
 
         // Implementation of the Search Panel Styled with Fluent Theme
         {
@@ -71,7 +60,7 @@ public class Plugin : IViewer
         if (Directory.Exists(path))
             return false;
 
-        if (new[] { ".txt", ".rtf" }.Any(path.ToLower().EndsWith))
+        if (new[] { ".txt", ".rtf" }.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
             return true;
 
         // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
@@ -94,7 +83,7 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        if (path.ToLower().EndsWith(".rtf"))
+        if (path.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
         {
             var rtfBox = new RichTextBox();
             FileStream fs = File.OpenRead(path);
@@ -108,9 +97,8 @@ public class Plugin : IViewer
         }
         else
         {
-            _tvp = new TextViewerPanel(path, context);
-            AssignHighlightingManager(path, _tvp, context);
-
+            _tvp = new TextViewerPanel();
+            _tvp.LoadFileAsync(path, context);
             context.ViewerContent = _tvp;
         }
         context.Title = $"{Path.GetFileName(path)}";
@@ -129,124 +117,5 @@ public class Plugin : IViewer
                 return false;
 
         return true;
-    }
-
-    private void AddHighlightingManager(HighlightingManager hlm, string dirName)
-    {
-        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        if (string.IsNullOrEmpty(assemblyPath))
-            return;
-
-        var syntaxPath = Path.Combine(assemblyPath, "Syntax", dirName);
-        if (!Directory.Exists(syntaxPath))
-            return;
-
-        foreach (var file in Directory.EnumerateFiles(syntaxPath, "*.xshd").OrderBy(f => f))
-        {
-            try
-            {
-                Debug.WriteLine(file);
-                var ext = Path.GetFileNameWithoutExtension(file);
-                using Stream s = File.OpenRead(Path.GetFullPath(file));
-                using var reader = new XmlTextReader(s);
-                var xshd = HighlightingLoader.LoadXshd(reader);
-                var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
-                if (xshd.Extensions.Count > 0)
-                    hlm.RegisterHighlighting(ext, [.. xshd.Extensions], highlightingDefinition);
-            }
-            catch (Exception e)
-            {
-                ProcessHelper.WriteLog(e.ToString());
-            }
-        }
-    }
-
-    private void InitHighlightingManager()
-    {
-        _hlmLight = new HighlightingManager();
-        _hlmDark = new HighlightingManager();
-
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        string[] resourceNames = assembly.GetManifestResourceNames();
-
-        foreach (var resourceName in resourceNames.Where(name => name.Contains(".Syntax.")))
-        {
-            using Stream s = assembly.GetManifestResourceStream(resourceName);
-
-            if (s == null)
-                continue;
-
-            Debug.WriteLine(resourceName);
-
-            try
-            {
-                var hlm = resourceName.Contains(".Syntax.Dark.") ? _hlmDark : _hlmLight;
-                var name = EmbeddedResource.GetFileNameWithoutExtension(resourceName);
-                using var reader = new XmlTextReader(s);
-                var xshd = HighlightingLoader.LoadXshd(reader);
-                var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
-                if (xshd.Extensions.Count > 0)
-                    hlm.RegisterHighlighting(name, [.. xshd.Extensions], highlightingDefinition);
-            }
-            catch (Exception e)
-            {
-                ProcessHelper.WriteLog(e.ToString());
-            }
-        }
-    }
-
-    private void AssignHighlightingManager(string path, TextViewerPanel tvp, ContextObject context)
-    {
-        var def = _hlmDark.GetDefinitionByExtension(Path.GetExtension(path));
-        var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", def != null, "QuickLook.Plugin.TextViewer");
-        var isDark = darkThemeAllowed && OSThemeHelper.AppsUseDarkTheme();
-
-        tvp.HighlightingManager = isDark ? _hlmDark : _hlmLight;
-        if (isDark)
-        {
-            tvp.Background = Brushes.Transparent;
-            tvp.SetResourceReference(Control.ForegroundProperty, "WindowTextForeground");
-        }
-        else
-        {
-            // if os dark mode, but not AllowDarkTheme, make background light
-            tvp.Background = OSThemeHelper.AppsUseDarkTheme()
-                ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
-                : Brushes.Transparent;
-        }
-    }
-}
-
-file static class EmbeddedResource
-{
-    public static string GetFileNameWithoutExtension(string resourceName)
-    {
-        // Requires the embedded resource file name
-        // must have a file extension and have only one '.' character
-        int start = int.MinValue, end = int.MinValue;
-
-        for (int i = resourceName.Length - 1; i >= 0; i--)
-        {
-            if (resourceName[i] == '.')
-            {
-                if (end == int.MinValue)
-                {
-                    end = i;
-                    continue;
-                }
-
-                if (start == int.MinValue)
-                {
-                    start = i + 1; // Exinclude '.' character
-                    break;
-                }
-            }
-        }
-
-        if ((start != int.MinValue) && (end != int.MinValue))
-        {
-            return resourceName.Substring(start, end - start);
-        }
-        return resourceName;
     }
 }
