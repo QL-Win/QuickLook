@@ -51,7 +51,7 @@ public class Plugin : IViewer
         // Ubuntu
         ".deb", // Debian Package
         ".appimage", // AppImage Format
-        // ".rpm", // Red Hat Package Manager
+         ".rpm", // Red Hat Package Manager
 
         // Others
         ".wgt", ".wgtu", // UniApp Widget
@@ -83,7 +83,7 @@ public class Plugin : IViewer
             ".deb" => new Size { Width = 600, Height = 345 },
             ".dmg" => new Size { Width = 560, Height = 510 },
             ".appimage" => new Size { Width = 600, Height = 300 },
-            ".rpm" => new Size { Width = 600, Height = 300 },
+            ".rpm" => new Size { Width = 600, Height = 260 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };

@@ -23,38 +23,42 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="image"
-               Grid.Row="1"
-               Grid.Column="0"
-               Width="120"
-               Height="120"
-               Margin="8"
-               VerticalAlignment="Top"
-               Opacity="0"
-               RenderOptions.BitmapScalingMode="HighQuality"
-               SnapsToDevicePixels="True"
-               Stretch="Fill"
-               UseLayoutRounding="True">
-            <Image.Style>
-                <Style TargetType="{x:Type Image}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Source, ElementName=image}" Value="{x:Null}">
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation BeginTime="0:0:0"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         From="0"
-                                                         To="1"
-                                                         Duration="0:0:0.05" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Image.Style>
-        </Image>
+        <Border x:Name="imageBk"
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="124"
+                Height="124"
+                VerticalAlignment="Top"
+                CornerRadius="8">
+            <Image x:Name="image"
+                   Width="120"
+                   Height="120"
+                   Opacity="0"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   SnapsToDevicePixels="True"
+                   Stretch="Fill"
+                   UseLayoutRounding="True">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Source, ElementName=image}" Value="{x:Null}">
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Border>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5" />
@@ -66,6 +70,7 @@
                 <RowDefinition Height="10" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -143,47 +148,67 @@
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
+            <!--  Vendor  -->
+            <TextBlock x:Name="vendorTitle"
+                       Grid.Row="6"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Vendor" />
+            <TextBlock x:Name="vendor"
+                       Grid.Row="6"
+                       Grid.Column="2"
+                       Margin="8,0,0,0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Searching..."
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap" />
             <!--  Type  -->
             <TextBlock x:Name="typeTitle"
-                       Grid.Row="6"
+                       Grid.Row="7"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Type" />
+                       Text="Type"
+                       Visibility="Collapsed" />
             <TextBlock x:Name="type"
-                       Grid.Row="6"
+                       Grid.Row="7"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
+                       TextWrapping="Wrap"
+                       Visibility="Collapsed" />
             <!--  Terminal  -->
             <TextBlock x:Name="terminalTitle"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Terminal" />
+                       Text="Terminal"
+                       Visibility="Collapsed" />
             <TextBlock x:Name="terminal"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
+                       TextWrapping="Wrap"
+                       Visibility="Collapsed" />
             <!--  Total Size  -->
             <TextBlock x:Name="totalSizeTitle"
-                       Grid.Row="8"
+                       Grid.Row="9"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Total Size" />
             <TextBlock x:Name="totalSize"
-                       Grid.Row="8"
+                       Grid.Row="9"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -191,13 +216,13 @@
                        Text="Calculating size..." />
             <!--  Last Modified  -->
             <TextBlock x:Name="modDateTitle"
-                       Grid.Row="9"
+                       Grid.Row="10"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Last Modified" />
             <TextBlock x:Name="modDate"
-                       Grid.Row="9"
+                       Grid.Row="10"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -206,7 +231,7 @@
                        TextTrimming="CharacterEllipsis" />
             <!--  Environment  -->
             <GroupBox x:Name="environmentGroupBox"
-                      Grid.Row="10"
+                      Grid.Row="11"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="3,3,16,16"

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using QuickLook.Plugin.AppViewer.PackageParsers.AppImage;
+using RpmReaderNet;
 
 namespace QuickLook.Plugin.AppViewer.PackageParsers.Rpm;
 
@@ -23,19 +23,24 @@ public class RpmParser
 {
     public static RpmInfo Parse(string path)
     {
-        var reader = new RpmReader(path);
+        using var reader = new RpmReader(path);
+
+#if DEBUG
+        try { _ = reader.ToString(); } catch { }
+#endif
 
         return new RpmInfo()
         {
             Arch = reader.Arch,
             Version = reader.Version,
             Name = reader.Name,
-            Exec = reader.Exec,
-            Icon = reader.Icon,
-            Logo = reader.Logo,
-            Type = reader.Type,
-            Terminal = reader.Terminal,
-            Env = reader.Env,
+            Vendor = reader.Vendor,
+            //Exec = reader.Exec,
+            //Icon = reader.Icon,
+            //Logo = reader.Logo,
+            //Type = reader.Type,
+            //Terminal = reader.Terminal,
+            //Env = reader.Env,
         };
     }
 }

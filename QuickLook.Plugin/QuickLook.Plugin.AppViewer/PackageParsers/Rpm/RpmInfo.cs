@@ -27,6 +27,8 @@ public class RpmInfo
 
     public string Name { get; set; }
 
+    public string Vendor { get; set; }
+
     public string Exec { get; set; }
 
     public string Icon { get; set; }

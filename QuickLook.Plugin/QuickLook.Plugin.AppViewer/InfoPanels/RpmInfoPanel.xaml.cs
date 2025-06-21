@@ -18,7 +18,6 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.AppViewer.PackageParsers.AppImage;
 using QuickLook.Plugin.AppViewer.PackageParsers.Rpm;
 using System;
 using System.Globalization;
@@ -26,6 +25,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.AppViewer.InfoPanels;
@@ -45,6 +45,7 @@ public partial class RpmInfoPanel : UserControl, IAppInfoPanel
         applicationNameTitle.Text = TranslationHelper.Get("APP_NAME", translationFile);
         versionTitle.Text = TranslationHelper.Get("APP_VERSION", translationFile);
         architectureTitle.Text = TranslationHelper.Get("ARCHITECTURE", translationFile);
+        vendorTitle.Text = TranslationHelper.Get("VENDOR", translationFile);
         typeTitle.Text = TranslationHelper.Get("TYPE", translationFile);
         terminalTitle.Text = TranslationHelper.Get("TERMINAL", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
@@ -69,19 +70,21 @@ public partial class RpmInfoPanel : UserControl, IAppInfoPanel
                 {
                     applicationName.Text = rpmInfo.Name;
                     version.Text = rpmInfo.Version;
-                    architectureName.Text = rpmInfo.Arch;
-                    type.Text = rpmInfo.Type;
-                    terminal.Text = rpmInfo.Terminal;
+                    architectureName.Text = rpmInfo.Arch; // Not impl
+                    vendor.Text = rpmInfo.Vendor;
+                    type.Text = rpmInfo.Type; // Not impl
+                    terminal.Text = rpmInfo.Terminal; // Not impl
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
-                    permissions.ItemsSource = rpmInfo.Env;
+                    permissions.ItemsSource = rpmInfo.Env; // Not impl
 
-                    if (rpmInfo.HasIcon)
+                    if (rpmInfo.HasIcon) // Not impl
                     {
                         image.Source = rpmInfo.Logo.ToBitmapSource();
                     }
                     else
                     {
+                        imageBk.Background = new SolidColorBrush(OSThemeHelper.AppsUseDarkTheme() ? Colors.LightGray : Colors.White);
                         image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/rpm.png"));
                     }
 
