@@ -34,7 +34,7 @@ internal class TrayIconManager : IDisposable
     private readonly NotifyIcon _icon;
 
     private readonly MenuItem _itemAutorun =
-        new MenuItem(TranslationHelper.Get("Icon_RunAtStartup"),
+        new(TranslationHelper.Get("Icon_RunAtStartup"),
             (sender, e) =>
             {
                 if (AutoStartupHelper.IsAutorun())
@@ -43,6 +43,8 @@ internal class TrayIconManager : IDisposable
                     AutoStartupHelper.CreateAutorunShortcut();
             })
         { Enabled = !App.IsUWP };
+
+    private string _attr = App.IsUWP ? $" (UWP{(App.IsSandBox ? string.Empty : "-SandBox")})" : string.Empty;
 
     private TrayIconManager()
     {
@@ -53,7 +55,7 @@ internal class TrayIconManager : IDisposable
             Icon = GetTrayIconByDPI(),
             ContextMenu = new ContextMenu(
             [
-                new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : string.Empty)}") {Enabled = false},
+                new MenuItem($"v{Application.ProductVersion}{_attr}") {Enabled = false},
                 new MenuItem("-"),
                 new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (_, _) => Updater.CheckForUpdates()),
                 new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
