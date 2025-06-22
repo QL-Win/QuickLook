@@ -21,13 +21,12 @@ using QuickLook.Common.Helpers;
 using QuickLook.Plugin.TextViewer.Detectors;
 using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
-using DarkHighlightingDefinition = QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Dark;
-using LightHighlightingDefinition = QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Light;
 
 namespace QuickLook.Plugin.TextViewer.Themes;
 
@@ -171,12 +170,36 @@ public class HighlightingThemeManager
 
     private static void InitCustomHighlighting()
     {
-        AddCustomHighlighting(Light, new LightHighlightingDefinition.PropertiesHighlightingDefinition());
+        foreach (var definitionClass in LoadAllDefinitions())
+        {
+            var hlm = definitionClass.Theme == nameof(Dark) ? Dark : Light;
 
-        AddCustomHighlighting(Dark, new DarkHighlightingDefinition.PropertiesHighlightingDefinition());
+            AddCustomHighlighting(hlm, definitionClass.Instance);
+        }
+
+        static IEnumerable<CustomHighlightingDefinitionClass> LoadAllDefinitions()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var types = assembly.GetTypes()
+                .Where(t => t.IsClass
+                        && !t.IsAbstract
+                        && typeof(ICustomHighlightingDefinition).IsAssignableFrom(t)
+                        && t.GetConstructor(Type.EmptyTypes) != null);
+
+            foreach (var type in types)
+            {
+                if (type.GetCustomAttribute<CustomHighlightingDefinitionAttribute>() is CustomHighlightingDefinitionAttribute { } attr)
+                {
+                    if (Activator.CreateInstance(type) is ICustomHighlightingDefinition instance)
+                    {
+                        yield return new CustomHighlightingDefinitionClass(instance, attr.Theme);
+                    }
+                }
+            }
+        }
     }
 
-    private static void AddCustomHighlighting(HighlightingManager hlm, CustomHighlightingDefinition definition)
+    private static void AddCustomHighlighting(HighlightingManager hlm, ICustomHighlightingDefinition definition)
     {
         try
         {
