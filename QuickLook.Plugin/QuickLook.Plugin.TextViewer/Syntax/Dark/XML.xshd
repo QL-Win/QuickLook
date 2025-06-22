@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="XML" extensions=".xml;.xsl;.xslt;.xsd;.syn;.lang;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.resx;.user;.ilproj;.booproj;.build;.xfrm;.targets;.axaml;.xaml;.xpt;.xft;.map;.wsdl;.disco;.ascx;.atom;.bpmn;.cpt;.csl;.props;">
+    
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+		<Selection color="#FFFFFF" bgcolor="#264F78"/>
+		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+		<CaretMarker color="#AEAFAD"/>
+		<VRuler color="#333333"/>
+
+		<FoldLine color="#555555" bgcolor="#1E1E1E"/>
+		<FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
+		<SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
+
+		<EOLMarkers color="#3E3E42"/>
+		<SpaceMarkers color="#404040"/>
+		<TabMarkers color="#404040"/>
+		<InvalidLines color="#3E3E42"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="BlockCommentBegin" value="&lt;!--"/>
+        <Property name="BlockCommentEnd" value="--&gt;"/>
+    </Properties>
+
+	<Digits name="Digits" bold="false" italic="false" color="#B5CEA8"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters></Delimiters>
+
+            <Span name="Comment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>&lt;!--</Begin>
+                <End>--&gt;</End>
+            </Span>
+            
+            <Span name="CDataSection" stopateol="false" color="#569CD6" bold="false" italic="false">
+                <Begin>&lt;![CDATA[</Begin>
+                <End>]]&gt;</End>
+            </Span>
+            
+            <Span name="DocTypeSection" stopateol="false" color="#569CD6" bold="false" italic="false">
+                <Begin>&lt;!DOCTYPE</Begin>
+                <End>&gt;</End>
+            </Span>
+            
+            <Span name="XmlDecl" stopateol="false" color="#569CD6" bold="false" italic="false">
+                <Begin>&lt;?</Begin>
+                <End>?&gt;</End>
+            </Span>
+            
+            <Span name="XmlTag" rule="XmlTagSet" stopateol="false" color="#569CD6" bold="false" italic="false">
+                <Begin>&lt;</Begin>
+                <End>&gt;</End>
+            </Span>
+            
+            <Span name="EntityReference" stopateol="true" color="#D7BA7D" bold="false" italic="false">
+                <Begin>&amp;</Begin>
+                <End>;</End>
+            </Span>
+        </RuleSet>
+
+        <RuleSet name="XmlTagSet" ignorecase="false">
+            <Delimiters>/=</Delimiters>
+            
+            <Span name="String" stopateol="true" bold="false" italic="false" color="#CE9178">
+                <Begin>&quot;</Begin>
+                <End>&quot;</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false">
+                <Begin>&apos;</Begin>
+                <End>&apos;</End>
+            </Span>
+            
+            <MarkPrevious color="#92CAF0" bold="false">=</MarkPrevious>
+            
+            <KeyWords name="Slash" color="#569CD6" bold="false" italic="false">
+                <Key word="/"/>
+            </KeyWords>
+            
+            <KeyWords name="Assignment" color="#569CD6" bold="false" italic="false">
+                <Key word="="/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
