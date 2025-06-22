@@ -23,6 +23,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.TextViewer.Detectors;
 using QuickLook.Plugin.TextViewer.Themes;
+using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions;
 using System;
 using System.IO;
 using System.Reflection;
@@ -182,6 +183,14 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     ? null
                     : highlighting.SyntaxHighlighting;
                 Document = doc;
+
+                if (SyntaxHighlighting is ICustomHighlightingDefinition custom)
+                {
+                    foreach (var lineTransformer in custom.LineTransformers)
+                    {
+                        TextArea.TextView.LineTransformers.Add(lineTransformer);
+                    }
+                }
 
                 if (highlighting.IsDark)
                 {

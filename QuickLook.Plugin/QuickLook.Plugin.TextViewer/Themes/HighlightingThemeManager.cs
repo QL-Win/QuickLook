@@ -19,12 +19,15 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using QuickLook.Common.Helpers;
 using QuickLook.Plugin.TextViewer.Detectors;
+using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using DarkHighlightingDefinition = QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Dark;
+using LightHighlightingDefinition = QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Light;
 
 namespace QuickLook.Plugin.TextViewer.Themes;
 
@@ -37,8 +40,7 @@ public class HighlightingThemeManager
     public static void Initialize()
     {
         InitHighlightingManager();
-        AddHighlightingManager(Light, nameof(Light));
-        AddHighlightingManager(Dark, nameof(Dark));
+        InitCustomHighlighting();
     }
 
     public static HighlightingTheme GetHighlightingByExtensionOrDetector(string extension, string text = null)
@@ -132,6 +134,9 @@ public class HighlightingThemeManager
                 ProcessHelper.WriteLog(e.ToString());
             }
         }
+
+        AddHighlightingManager(Light, nameof(Light));
+        AddHighlightingManager(Dark, nameof(Dark));
     }
 
     private static void AddHighlightingManager(HighlightingManager hlm, string dirName)
@@ -161,6 +166,25 @@ public class HighlightingThemeManager
             {
                 ProcessHelper.WriteLog(e.ToString());
             }
+        }
+    }
+
+    private static void InitCustomHighlighting()
+    {
+        AddCustomHighlighting(Light, new LightHighlightingDefinition.PropertiesHighlightingDefinition());
+
+        AddCustomHighlighting(Dark, new DarkHighlightingDefinition.PropertiesHighlightingDefinition());
+    }
+
+    private static void AddCustomHighlighting(HighlightingManager hlm, CustomHighlightingDefinition definition)
+    {
+        try
+        {
+            hlm.RegisterHighlighting(definition.Name, definition.Extension.Split(';'), definition);
+        }
+        catch (Exception e)
+        {
+            ProcessHelper.WriteLog(e.ToString());
         }
     }
 }
