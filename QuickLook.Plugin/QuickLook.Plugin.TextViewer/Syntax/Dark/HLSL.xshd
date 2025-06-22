@@ -3,18 +3,18 @@
 <SyntaxDefinition name="HLSL" extensions=".hlsl">
 
 	<Environment>
-		<Default color="Black" bgcolor="#FFFFFF"/>
-		<Selection color="Black" bgcolor="#C3C3FF"/>
-		<LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-		<CaretMarker color="#F0F0F1"/>
-		<VRuler color="#E0E0E5"/>
-		<FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-		<FoldMarker color="Black" bgcolor="#FFFFFF"/>
-		<SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
-		<EOLMarkers color="#CACAD2"/>
-		<SpaceMarkers color="#B6B6C0"/>
-		<TabMarkers color="#B6B6C0"/>
-		<InvalidLines color="#B6B6C0"/>
+		<Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+		<Selection color="#FFFFFF" bgcolor="#264F78"/>
+		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+		<CaretMarker color="#AEAFAD"/>
+		<VRuler color="#333333"/>
+		<FoldLine color="#555555" bgcolor="#1E1E1E"/>
+		<FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
+		<SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
+		<EOLMarkers color="#3E3E42"/>
+		<SpaceMarkers color="#404040"/>
+		<TabMarkers color="#404040"/>
+		<InvalidLines color="#3E3E42"/>
 	</Environment>
 
 	<Properties>
@@ -23,29 +23,29 @@
 		<Property name="BlockCommentEnd" value="*/"/>
 	</Properties>
 
-	<Digits name="Number" color="Purple"/>
+	<Digits name="Number" color="#B5CEA8"/>
 
 	<RuleSets>
 		<RuleSet ignorecase="false">
 			<Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,	?</Delimiters>
 
 			<!-- Comments -->
-			<Span name="LineComment" stopateol="true" color="Green">
+			<Span name="LineComment" stopateol="true" color="#6A9955">
 				<Begin>//</Begin>
 			</Span>
-			<Span name="BlockComment" stopateol="false" color="Green">
+			<Span name="BlockComment" stopateol="false" color="#6A9955">
 				<Begin>/*</Begin>
 				<End>*/</End>
 			</Span>
 
 			<!-- Strings -->
-			<Span name="String" stopateol="false" color="Maroon">
+			<Span name="String" stopateol="false" color="#CE9178">
 				<Begin>"</Begin>
 				<End>"</End>
 			</Span>
 
 			<!-- Keywords -->
-			<KeyWords name="Keywords" color="Blue" bold="true">
+			<KeyWords name="Keywords" color="#569CD6" bold="true">
 				<Key word="if"/>
 				<Key word="else"/>
 				<Key word="for"/>
@@ -68,7 +68,7 @@
 			</KeyWords>
 
 			<!-- Types -->
-			<KeyWords name="Types" color="Teal">
+			<KeyWords name="Types" color="#4EC9B0">
 				<Key word="float"/>
 				<Key word="float2"/>
 				<Key word="float3"/>
