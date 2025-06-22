@@ -1,0 +1,91 @@
+<!--
+  There is no such thing like a log file format but there are usually keywords,
+  such as, ERROR, FATAL, DEBUG, or timestamps in squared brackets that could be
+  viewed with a better experience than no highlighting at all.
+  
+  This highlighting pattern is intended to improve the viewing experience for text
+  based (non-xml based) log files.
+-->
+<SyntaxDefinition name="LOG" extensions=".log"
+     xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <Color name="Digits"       foreground="Blue" fontStyle="italic" fontWeight="normal" />
+  <Color name="Comment"      foreground="Green"/>
+  <Color name="Punctuation"  foreground="Red"/>
+  <Color name="String"       foreground="Olive"/>
+  <Color name="String2"      foreground="Red"/>
+
+  <Color name="Section"      foreground="Blue"/>
+
+  <Color name="AmericanDate" foreground="Green"/>
+  <Color name="TimeStamp"    foreground="Green"/>
+
+  <Color name="ImportantKeywords" foreground="Red" fontWeight="bold"/>
+  <Color name="InfoKeywords" foreground="Green" fontWeight="normal"/>
+  
+  <RuleSet ignoreCase="true">
+
+    <Keywords color="InfoKeywords">
+      <Word>Info</Word>
+      <Word>Information</Word>
+      <Word>Trace</Word>
+      <Word>Debug</Word>
+    </Keywords>
+
+    <Keywords color="ImportantKeywords">
+      <Word>Error</Word>
+      <Word>Warn</Word>
+      <Word>Warning</Word>
+      <Word>Exception</Word>
+      <Word>Fatal</Word>
+    </Keywords>
+
+    <Span color="String" multiline="false" >
+      <Begin>'</Begin>
+      <End>'</End>
+    </Span>
+
+    <Span color="String2" multiline="false"  >
+      <Begin>"</Begin>
+      <End>"</End>
+    </Span>
+
+    <!-- span for escape sequences -->
+    <Span  color="Comment" multiline="false">
+	  <Begin>;</Begin>
+    </Span>
+      <Span  color="Comment" multiline="false">
+      <Begin>\#</Begin>
+    </Span>
+
+     <Span  color="Section" multiline="false">
+      <Begin>\[</Begin>
+      <End>\]</End>
+     </Span>
+
+    <Rule color="Punctuation">
+      [?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+
+    </Rule>
+
+    <Rule color="Digits">
+      [?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+[0-9]+[ ?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+\n
+    </Rule>
+
+    <!-- American Date: 2013-01-28 -->
+    <Rule color="AmericanDate">
+      [0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]
+    </Rule>
+    
+    <!-- Time Stamp with milli seconds: 13:05:35.425 -->
+    <Rule color="TimeStamp">
+      [0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]\.[0-9][0-9][0-9]
+    </Rule>
+
+    <!-- Time Stamp WITHOUT milli seconds: 13:05:35 -->
+    <Rule color="TimeStamp">
+      [0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]
+    </Rule>
+
+  </RuleSet>
+
+</SyntaxDefinition>
