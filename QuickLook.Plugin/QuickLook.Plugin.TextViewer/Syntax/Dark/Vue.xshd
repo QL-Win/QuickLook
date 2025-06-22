@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SyntaxDefinition name="Vue" extensions=".vue" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+<SyntaxDefinition name="Vue" extensions=".vue;.nvue" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 	<Color name="Comment" foreground="#6A9955" />
 	<Color name="Tag" foreground="#569CD6" exampleText="div" />
 	<Color name="Attribute" foreground="#9CDCFE" exampleText="v-if" />
