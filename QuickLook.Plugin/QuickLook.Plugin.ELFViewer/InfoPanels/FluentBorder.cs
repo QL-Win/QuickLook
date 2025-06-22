@@ -19,7 +19,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace QuickLook.Plugin.PEViewer;
+namespace QuickLook.Plugin.ELFViewer.InfoPanels;
 
 public class FluentBorder : Decorator
 {
