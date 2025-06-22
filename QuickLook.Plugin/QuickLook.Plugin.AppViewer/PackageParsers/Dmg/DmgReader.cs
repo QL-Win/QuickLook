@@ -17,6 +17,7 @@
 
 using DiscUtils;
 using DiscUtils.HfsPlus;
+using QuickLook.Common.Helpers;
 using QuickLook.Plugin.AppViewer.PackageParsers.Ipa;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ public class DmgReader : IDisposable
 
     public Dictionary<string, DmgArchive> Archives { get; } = [];
 
-    public Dictionary<string, object> InfoPlistDict { get; set; }
+    public Dictionary<string, object> InfoPlistDict { get; set; } = [];
 
     public string DisplayName { get; set; }
 
@@ -90,38 +91,45 @@ public class DmgReader : IDisposable
             return;
         }
 
-        // Find the first (and supposedly, only, HFS partition)
-        foreach (var volume in VolumeManager.GetPhysicalVolumes(disk))
+        try
         {
-            foreach (var fileSystem in FileSystemManager.DetectFileSystems(volume))
+            // Find the first (and supposedly, only, HFS partition)
+            foreach (var volume in VolumeManager.GetPhysicalVolumes(disk))
             {
-                // Apple HFS+
-                if (fileSystem.Name == "HFS+")
+                foreach (var fileSystem in FileSystemManager.DetectFileSystems(volume))
                 {
-                    using var hfs = (HfsPlusFileSystem)fileSystem.Open(volume);
+                    // Apple HFS+
+                    if (fileSystem.Name == "HFS+")
+                    {
+                        using var hfs = (HfsPlusFileSystem)fileSystem.Open(volume);
 
-                    VolumeLabel = hfs.VolumeLabel;
-                    ListFiles(hfs, string.Empty);
+                        VolumeLabel = hfs.VolumeLabel;
+                        ListFiles(hfs, string.Empty);
+                    }
+                }
+            }
+
+            byte[] infoPlistData = null;
+
+            foreach (var archive in Archives.Values)
+            {
+                Match m = Regex.Match(archive.Entry, @".*\.app\\Contents\\Info\.plist$");
+
+                if (m.Success)
+                {
+                    ContentsEntry = Path.GetDirectoryName(archive.Entry);
+                    infoPlistData = archive.GetBytes();
+                    if (Plist.ReadPlist(infoPlistData) is Dictionary<string, object> dict)
+                    {
+                        InfoPlistDict = dict;
+                    }
+                    break;
                 }
             }
         }
-
-        byte[] infoPlistData = null;
-
-        foreach (var archive in Archives.Values)
+        catch (Exception e)
         {
-            Match m = Regex.Match(archive.Entry, @".*\.app\\Contents\\Info\.plist$");
-
-            if (m.Success)
-            {
-                ContentsEntry = Path.GetDirectoryName(archive.Entry);
-                infoPlistData = archive.GetBytes();
-                if (Plist.ReadPlist(infoPlistData) is Dictionary<string, object> dict)
-                {
-                    InfoPlistDict = dict;
-                }
-                break;
-            }
+            ProcessHelper.WriteLog(e.ToString());
         }
 
         {
