@@ -22,7 +22,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -46,13 +45,16 @@ public class Plugin : IViewer
         if (Directory.Exists(path))
             return false;
 
-        if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".pdf")
+        if (File.Exists(path) && Path.GetExtension(path).EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             return true;
 
-        using (var br = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)))
-        {
-            return Encoding.ASCII.GetString(br.ReadBytes(4)) == "%PDF";
-        }
+        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        byte[] buffer = new byte[4];
+        if (fs.Read(buffer, 0, 4) < 4) return false;
+        return buffer[0] == (byte)'%' &&
+               buffer[1] == (byte)'P' &&
+               buffer[2] == (byte)'D' &&
+               buffer[3] == (byte)'F';
     }
 
     public void Prepare(string path, ContextObject context)

@@ -26,8 +26,7 @@ namespace QuickLook.Plugin.PDFViewer;
 internal class AsyncPageToThumbnailConverter : IMultiValueConverter
 {
     private static readonly BitmapImage Loading =
-        new BitmapImage(
-            new Uri("pack://application:,,,/QuickLook.Plugin.PdfViewer;component/Resources/loading.png"));
+        new(new Uri("pack://application:,,,/QuickLook.Plugin.PdfViewer;component/Resources/loading.png"));
 
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
