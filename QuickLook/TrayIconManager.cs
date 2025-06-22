@@ -44,7 +44,7 @@ internal class TrayIconManager : IDisposable
             })
         { Enabled = !App.IsUWP };
 
-    private string _attr = App.IsUWP ? $" (UWP{(App.IsSandBox ? string.Empty : "-SandBox")})" : string.Empty;
+    private readonly string _attr = App.IsUWP ? $" (UWP{(App.IsSandBox ? string.Empty : "-SandBox")})" : string.Empty;
 
     private TrayIconManager()
     {
