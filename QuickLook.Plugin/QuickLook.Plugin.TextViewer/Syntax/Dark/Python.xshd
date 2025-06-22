@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="Python" extensions=".py;.pyw" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+	<Color name="Comment"       foreground="#FF57A64A" />
+	<Color name="String"        foreground="#FFD69D85" />
+	<Color name="MethodCall"    foreground="#FFdcdcaa" />
+	<Color name="NumberLiteral" foreground="#FFb5cea8" />
+	<Color name="Keywords"      foreground="#FF00A0FF" />
+
+	<Color name="CommentMarkerSetTodo"        foreground="#FFFF0000" fontWeight="bold"/>
+	<Color name="CommentMarkerSetHackUndone"  foreground="#FF8B008B" fontWeight="bold"/>
+
+	<Property name="DocCommentMarker" value="///" />
+
+	<RuleSet name="CommentMarkerSet">
+		<Keywords fontWeight="bold" foreground="Red">
+			<Word>TODO</Word>
+			<Word>FIXME</Word>
+		</Keywords>
+		<Keywords fontWeight="bold" foreground="#E0E000">
+			<Word>HACK</Word>
+			<Word>UNDONE</Word>
+		</Keywords>
+	</RuleSet>
+
+	<RuleSet>
+		<Span color="Comment" ruleSet="CommentMarkerSet">
+			<Begin>\#</Begin>
+		</Span>
+
+		<Span color="String" multiline="true">
+			<Begin>'''</Begin>
+			<End>'''</End>
+		</Span>
+		<Span color="String" multiline="true">
+			<Begin>"""</Begin>
+			<End>"""</End>
+		</Span>
+
+		<Span color="String">
+			<Begin>"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<Span begin="\\" end="."/>
+			</RuleSet>
+		</Span>
+		<Span color="String">
+			<Begin>'</Begin>
+			<End>'</End>
+			<RuleSet>
+				<Span begin="\\" end="."/>
+			</RuleSet>
+		</Span>
+
+		<Keywords color="Keywords">
+			<Word>and</Word>
+			<Word>as</Word>
+			<Word>assert</Word>
+			<Word>break</Word>
+			<Word>class</Word>
+			<Word>continue</Word>
+			<Word>def</Word>
+			<Word>del</Word>
+			<Word>elif</Word>
+			<Word>else</Word>
+			<Word>except</Word>
+			<Word>exec</Word>
+			<Word>False</Word>
+			<Word>finally</Word>
+			<Word>for</Word>
+			<Word>from</Word>
+			<Word>global</Word>
+			<Word>if</Word>
+			<Word>import</Word>
+			<Word>in</Word>
+			<Word>is</Word>
+			<Word>lambda</Word>
+			<Word>None</Word>
+			<Word>nonlocal</Word>
+			<Word>not</Word>
+			<Word>or</Word>
+			<Word>pass</Word>
+			<Word>print</Word>
+			<Word>raise</Word>
+			<Word>return</Word>
+			<Word>True</Word>
+			<Word>try</Word>
+			<Word>while</Word>
+			<Word>with</Word>
+			<Word>yield</Word>
+			<Word>async</Word>
+			<Word>await</Word>
+		</Keywords>
+
+		<Rule color="MethodCall">
+			\b
+			[\d\w_]+  # an identifier
+			(?=\s*\() # followed by (
+		</Rule>
+		<Rule color="NumberLiteral">
+			\b0[xX][0-9a-fA-F]+  # hex number
+			(	\b\d+(\.[0-9]+)?   #number with optional floating point
+			|	\.[0-9]+           #or just starting with floating point
+			)
+			([eE][+-]?[0-9]+)? # optional exponent
+		</Rule>
+	</RuleSet>
+</SyntaxDefinition>
