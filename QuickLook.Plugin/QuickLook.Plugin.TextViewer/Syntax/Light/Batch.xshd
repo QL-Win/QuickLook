@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Batch" extensions=".bat;.cmd">
+<SyntaxDefinition name="Batch" extensions=".bat;.cmd;.dos">
 
     <Environment>
         <Default color="Black" bgcolor="#FFFFFF"/>
