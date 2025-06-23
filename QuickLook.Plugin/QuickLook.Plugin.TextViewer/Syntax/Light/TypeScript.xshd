@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="TypeScript" extensions=".ts;.tsx">
+<SyntaxDefinition name="TypeScript" extensions=".ts;.tsx;.uts;">
 
-    <Environment> 
+    <Environment>
         <Default color="Black" bgcolor="#FFFFFF"/>
         <Selection color="Black" bgcolor="#C3C3FF"/>
         <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
@@ -24,12 +24,12 @@
         <Property name="BlockCommentBegin" value="/*"/>
         <Property name="BlockCommentEnd" value="*/"/>
     </Properties>
-        
+    
     <Digits name="Digits" color="Teal"/>
 
     <RuleSets>
         <RuleSet ignorecase="false">
-                        
+            
             <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
             
             <Span name="LineComment1" stopateol="true" color="Green" bold="false" italic="false">
