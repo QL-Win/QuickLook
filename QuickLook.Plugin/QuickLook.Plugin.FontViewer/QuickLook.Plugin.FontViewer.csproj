@@ -53,14 +53,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="Translations.config">
-            <SubType>Designer</SubType>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <Resource Include="Resources\**\*" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.0\runtimes\win-x64\native\freetype.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)win-x64\</DestinationFolder>
@@ -81,6 +73,9 @@
     <ItemGroup>
         <PackageReference Include="FreeTypeSharp" Version="3.0.0" />
         <PackageReference Include="QuickLook.Typography.OpenFont" Version="1.0.1" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3240.44">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -94,6 +89,19 @@
             <Name>QuickLook.HtmlViewer</Name>
             <Private>False</Private>
         </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Translations.config">
+            <SubType>Designer</SubType>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\**\*">
+            <LogicalName>QuickLook.Plugin.FontViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

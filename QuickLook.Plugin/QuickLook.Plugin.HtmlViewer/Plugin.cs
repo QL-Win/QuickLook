@@ -15,11 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Plugin;
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
-using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.HtmlViewer;
 
@@ -63,6 +64,8 @@ public class Plugin : IViewer
 
     public void Cleanup()
     {
+        GC.SuppressFinalize(this);
+
         _panel?.Dispose();
         _panel = null;
     }
