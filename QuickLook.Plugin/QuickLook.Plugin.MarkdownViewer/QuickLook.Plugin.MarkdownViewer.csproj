@@ -9,7 +9,6 @@
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -77,29 +76,17 @@
         </ProjectReference>
     </ItemGroup>
 
-    <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3240.44">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
         <EmbeddedResource Include="Resources\**\*">
             <LogicalName>QuickLook.Plugin.MarkdownViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
-
-    <Target Name="GenerateEmbeddedResourcesHash" BeforeTargets="CoreCompile">
-        <PropertyGroup>
-            <HashFileDir>$(IntermediateOutputPath)Generated</HashFileDir>
-            <HashFilePath>$(HashFileDir)\EmbeddedResourcesHash.cs</HashFilePath>
-        </PropertyGroup>
-
-        <!-- Create the output directory -->
-        <MakeDir Directories="$(HashFileDir)" />
-
-        <!-- Run a script to calculate hash and generate code file -->
-        <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)GenerateEmbeddedResourcesHash.ps1&quot; -ResourcesDir &quot;$(MSBuildThisFileDirectory)Resources&quot; -OutputFile &quot;$(HashFilePath)&quot;" />
-
-        <!-- Include the generated file in compilation -->
-        <ItemGroup>
-            <Compile Include="$(HashFilePath)" />
-        </ItemGroup>
-    </Target>
 
     <ItemGroup>
         <Compile Include="..\..\GitVersion.cs">

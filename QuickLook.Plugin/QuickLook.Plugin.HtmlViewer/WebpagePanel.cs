@@ -31,10 +31,10 @@ namespace QuickLook.Plugin.HtmlViewer;
 
 public class WebpagePanel : UserControl
 {
-    private Uri _currentUri;
-    private string _primaryPath;
-    private string _fallbackPath;
-    private WebView2 _webView;
+    protected Uri _currentUri;
+    protected string _primaryPath;
+    protected string _fallbackPath;
+    protected WebView2 _webView;
 
     public string FallbackPath
     {
@@ -54,11 +54,11 @@ public class WebpagePanel : UserControl
             {
                 CreationProperties = new CoreWebView2CreationProperties
                 {
-                    UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\\"),
+                    UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
                 },
                 DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White, // Prevent white flash in dark mode
             };
-            _webView.NavigationStarting += NavigationStarting_CancelNavigation;
+            _webView.NavigationStarting += Webview_NavigationStarting;
             _webView.NavigationCompleted += WebView_NavigationCompleted;
             _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
             Content = _webView;
@@ -97,7 +97,7 @@ public class WebpagePanel : UserControl
             .ContinueWith(_ => Dispatcher.Invoke(() => _webView?.NavigateToString(html)));
     }
 
-    private void NavigationStarting_CancelNavigation(object sender, CoreWebView2NavigationStartingEventArgs e)
+    protected virtual void Webview_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
     {
         if (e.Uri.StartsWith("data:")) // when using NavigateToString
             return;
@@ -163,12 +163,12 @@ public class WebpagePanel : UserControl
         }
     }
 
-    private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+    protected virtual void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
     {
         _webView.DefaultBackgroundColor = Color.White; // Reset to white after page load to match expected default behavior
     }
 
-    private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+    protected virtual void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
     {
         if (e.IsSuccess)
         {
