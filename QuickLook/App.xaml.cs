@@ -145,19 +145,26 @@ public partial class App : Application
             {
                 ProcessHelper.WriteLog(e.Exception.ToString());
 
-                var result = System.Windows.Forms.MessageBox.Show(
-                    $"{e.Exception.Message} most often due to a lack of graphics resources or hardware/driver limitations in allocating a sufficiently large texture.\nAre you want to fall back to use software render only?",
+                // Under this exception, WPF rendering has crashed
+                // and the user must be notified using native MessageBox
+                var result = User32.MessageBoxW(
+                    new WindowInteropHelper(Current.MainWindow).Handle,
+                    $"""
+                    {e.Exception.Message} was most often due to a lack of graphics resources or hardware/driver constraints when attempting to allocate large textures.
+
+                    Although not usually recommended, would you prefer to use software rendering exclusively?
+                    """,
                     "Fatal",
-                    System.Windows.Forms.MessageBoxButtons.YesNo,
-                    System.Windows.Forms.MessageBoxIcon.Error
+                    User32.MessageBoxType.YesNo | User32.MessageBoxType.IconError | User32.MessageBoxType.DefButton2
                 );
 
-                if (result == System.Windows.Forms.DialogResult.Yes)
+                if (result == User32.MessageBoxResult.IDYES)
                 {
                     SettingHelper.Set("ProcessRenderMode", (int)RenderMode.SoftwareOnly, "QuickLook");
                 }
 
                 TrayIconManager.GetInstance().Restart(forced: true);
+                e.Handled = true;
                 return;
             }
 
