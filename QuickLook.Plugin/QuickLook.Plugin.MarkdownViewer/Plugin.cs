@@ -25,7 +25,7 @@ namespace QuickLook.Plugin.MarkdownViewer;
 
 public class Plugin : IViewer
 {
-    private MarkdownPanel? _panel;
+    private MarkdownPanel _panel;
 
     /// <summary>
     /// Markdown and Markdown-like extensions
