@@ -38,10 +38,10 @@ public static class ApkParser
             {
                 VersionName = baseInfo.VersionName,
                 VersionCode = baseInfo.VersionCode,
-                TargetSdkVersion = baseInfo.TargetSdkVersion,
+                TargetSdkVersion = ApiLevel.Create(baseInfo.TargetSdkVersion).ToString(),
                 Permissions = baseInfo.Permissions,
                 PackageName = baseInfo.PackageName,
-                MinSdkVersion = baseInfo.MinSdkVersion,
+                MinSdkVersion = ApiLevel.Create(baseInfo.MinSdkVersion).ToString(),
                 Icon = baseInfo.Icon,
                 Icons = baseInfo.Icons,
                 Label = baseInfo.Label,
