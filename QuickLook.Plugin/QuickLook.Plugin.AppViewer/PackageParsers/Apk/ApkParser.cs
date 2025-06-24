@@ -16,6 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using ICSharpCode.SharpZipLib.Zip;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -25,33 +28,62 @@ public static class ApkParser
 {
     public static ApkInfo Parse(string path)
     {
-        using var zip = new ZipFile(path);
-
-        var apkReader = new ApkReader.ApkReader();
-        ApkReader.ApkInfo baseInfo = apkReader.Read(path);
-        ApkInfo info = new()
+        try
         {
-            VersionName = baseInfo.VersionName,
-            VersionCode = baseInfo.VersionCode,
-            TargetSdkVersion = baseInfo.TargetSdkVersion,
-            Permissions = baseInfo.Permissions,
-            PackageName = baseInfo.PackageName,
-            MinSdkVersion = baseInfo.MinSdkVersion,
-            Icon = baseInfo.Icon,
-            Icons = baseInfo.Icons,
-            Label = baseInfo.Label,
-            Labels = baseInfo.Labels,
-            Locales = baseInfo.Locales,
-            Densities = baseInfo.Densities,
-            LaunchableActivity = baseInfo.LaunchableActivity,
-        };
+            using var zip = new ZipFile(path);
 
-        if (baseInfo.HasIcon)
-        {
-            ZipEntry entry = zip.GetEntry(baseInfo.Icons.Values.LastOrDefault());
-            using var s = new BinaryReader(zip.GetInputStream(entry));
-            info.Logo = s.ReadBytes((int)entry.Size);
+            var apkReader = new ApkReader.ApkReader();
+            ApkReader.ApkInfo baseInfo = apkReader.Read(path);
+            ApkInfo info = new()
+            {
+                VersionName = baseInfo.VersionName,
+                VersionCode = baseInfo.VersionCode,
+                TargetSdkVersion = baseInfo.TargetSdkVersion,
+                Permissions = baseInfo.Permissions,
+                PackageName = baseInfo.PackageName,
+                MinSdkVersion = baseInfo.MinSdkVersion,
+                Icon = baseInfo.Icon,
+                Icons = baseInfo.Icons,
+                Label = baseInfo.Label,
+                Labels = baseInfo.Labels,
+                Locales = baseInfo.Locales,
+                Densities = baseInfo.Densities,
+                LaunchableActivity = baseInfo.LaunchableActivity,
+            };
+
+            if (baseInfo.HasIcon)
+            {
+                ZipEntry entry = zip.GetEntry(baseInfo.Icons.Values.LastOrDefault());
+                using var s = new BinaryReader(zip.GetInputStream(entry));
+                info.Logo = s.ReadBytes((int)entry.Size);
+            }
+
+            var abiSet = new HashSet<string>();
+
+            foreach (ZipEntry entry in zip)
+            {
+                if (entry.IsFile && entry.Name.StartsWith("lib/"))
+                {
+                    var relativePath = entry.Name.Substring("lib/".Length);
+                    int slashIndex = relativePath.IndexOf('/');
+
+                    if (slashIndex > 0)
+                    {
+                        string abi = relativePath.Substring(0, slashIndex);
+                        abiSet.Add(abi);
+                    }
+                }
+            }
+
+            info.ABIs = [.. abiSet];
+
+            return info;
         }
-        return info;
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+        }
+
+        return new ApkInfo();
     }
 }

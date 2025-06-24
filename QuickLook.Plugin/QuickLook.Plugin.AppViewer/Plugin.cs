@@ -75,7 +75,7 @@ public class Plugin : IViewer
     {
         context.PreferredSize = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
-            ".apk" => new Size { Width = 560, Height = 505 },
+            ".apk" => new Size { Width = 560, Height = 510 },
             ".ipa" => new Size { Width = 560, Height = 510 },
             ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 560, Height = 230 },

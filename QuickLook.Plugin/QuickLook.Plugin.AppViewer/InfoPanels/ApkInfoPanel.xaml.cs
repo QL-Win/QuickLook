@@ -45,6 +45,7 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
         versionNameTitle.Text = TranslationHelper.Get("APP_VERSION_NAME", translationFile);
         versionCodeTitle.Text = TranslationHelper.Get("APP_VERSION_CODE", translationFile);
         packageNameTitle.Text = TranslationHelper.Get("PACKAGE_NAME", translationFile);
+        abisTitle.Text = TranslationHelper.Get("ABI", translationFile);
         minSdkVersionTitle.Text = TranslationHelper.Get("APP_MIN_SDK_VERSION", translationFile);
         targetSdkVersionTitle.Text = TranslationHelper.Get("APP_TARGET_SDK_VERSION", translationFile);
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
@@ -70,6 +71,7 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
                     applicationName.Text = apkInfo.Label;
                     versionName.Text = apkInfo.VersionName;
                     versionCode.Text = apkInfo.VersionCode;
+                    abis.Text = string.Join(", ", apkInfo.ABIs ?? []);
                     packageName.Text = apkInfo.PackageName;
                     minSdkVersion.Text = apkInfo.MinSdkVersion;
                     targetSdkVersion.Text = apkInfo.TargetSdkVersion;

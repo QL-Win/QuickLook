@@ -61,4 +61,6 @@ public class ApkInfo
     public List<string> Densities { get; set; } = [];
 
     public string LaunchableActivity { get; set; }
+
+    public string[] ABIs { get; set; } = [];
 }

@@ -74,6 +74,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="* " />
             </Grid.RowDefinitions>
             <Grid Grid.Row="1"
@@ -160,15 +161,31 @@
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
+            <!--  ABIs  -->
+            <TextBlock x:Name="abisTitle"
+                       Grid.Row="7"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="ABIs" />
+            <TextBlock x:Name="abis"
+                       Grid.Row="7"
+                       Grid.Column="2"
+                       Margin="8,0,0,0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Searching..."
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap" />
             <!--  MinSdkVersion  -->
             <TextBlock x:Name="minSdkVersionTitle"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="MinSdkVersion" />
             <TextBlock x:Name="minSdkVersion"
-                       Grid.Row="7"
+                       Grid.Row="8"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -178,13 +195,13 @@
                        TextWrapping="Wrap" />
             <!--  TargetSdkVersion  -->
             <TextBlock x:Name="targetSdkVersionTitle"
-                       Grid.Row="8"
+                       Grid.Row="9"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="TargetSdkVersion" />
             <TextBlock x:Name="targetSdkVersion"
-                       Grid.Row="8"
+                       Grid.Row="9"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -194,13 +211,13 @@
                        TextWrapping="Wrap" />
             <!--  Total Size  -->
             <TextBlock x:Name="totalSizeTitle"
-                       Grid.Row="9"
+                       Grid.Row="10"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Total Size" />
             <TextBlock x:Name="totalSize"
-                       Grid.Row="9"
+                       Grid.Row="10"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -208,13 +225,13 @@
                        Text="Calculating size..." />
             <!--  Last Modified  -->
             <TextBlock x:Name="modDateTitle"
-                       Grid.Row="10"
+                       Grid.Row="11"
                        Grid.Column="1"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Last Modified" />
             <TextBlock x:Name="modDate"
-                       Grid.Row="10"
+                       Grid.Row="11"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
@@ -223,7 +240,7 @@
                        TextTrimming="CharacterEllipsis" />
             <!--  Permissions  -->
             <GroupBox x:Name="permissionsGroupBox"
-                      Grid.Row="11"
+                      Grid.Row="12"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="3,3,16,16"
