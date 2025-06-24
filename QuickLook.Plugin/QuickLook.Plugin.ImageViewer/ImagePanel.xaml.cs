@@ -349,7 +349,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         e.TranslationBehavior = new InertiaTranslationBehavior
         {
             InitialVelocity = e.InitialVelocities.LinearVelocity,
-            DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0)
+            DesiredDeceleration = 10d * 96d / (1000d * 1000d)
         };
     }
 

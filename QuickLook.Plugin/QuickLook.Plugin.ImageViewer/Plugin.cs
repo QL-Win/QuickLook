@@ -40,9 +40,9 @@ public class Plugin : IViewer
         ".gif",
         ".hdr", ".heic", ".heif",
         ".ico", ".icon", ".icns", ".iiq",
-        ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl",
+        ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl", ".j2k", ".jpf", ".jpx", ".jpm",
         ".k25", ".kdc",
-        ".mdc", ".mef", ".mos", ".mrw",
+        ".mdc", ".mef", ".mos", ".mrw", ".mj2", ".miff",
         ".nef", ".nrw",
         ".obm", ".orf",
         ".pbm", ".pcx", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
@@ -51,7 +51,7 @@ public class Plugin : IViewer
         ".sr2", ".srf", ".srw", ".svg", ".svgz",
         ".tga", ".tif", ".tiff",
         ".wdp", ".webp", ".wmf",
-        ".x3f", ".xcf",
+        ".x3f", ".xcf", ".xbm", ".xpm",
     ]);
 
     private ImagePanel _ip;
@@ -100,7 +100,7 @@ public class Plugin : IViewer
     {
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && (IsWellKnownImageExtension(path));
+        return !Directory.Exists(path) && IsWellKnownImageExtension(path);
     }
 
     public void Prepare(string path, ContextObject context)
@@ -110,7 +110,7 @@ public class Plugin : IViewer
         var size = _meta.GetSize();
 
         if (!size.IsEmpty)
-            context.SetPreferredSizeFit(size, 0.8);
+            context.SetPreferredSizeFit(size, 0.8d);
         else
             context.PreferredSize = new Size(800, 600);
 
