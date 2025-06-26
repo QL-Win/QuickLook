@@ -38,7 +38,7 @@ public class Plugin : IViewer
     {
         _mediaInfo = new MediaInfoLib(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            Environment.Is64BitProcess ? "MediaInfo-x64\\" : "MediaInfo-x86\\"));
+            Environment.Is64BitProcess ? @"MediaInfo-x64\" : @"MediaInfo-x86\"));
         _mediaInfo.Option("Cover_Data", "base64");
     }
 
