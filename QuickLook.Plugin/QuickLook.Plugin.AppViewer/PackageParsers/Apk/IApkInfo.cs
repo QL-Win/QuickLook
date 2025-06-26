@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace QuickLook.Plugin.AppViewer.PackageParsers.Apk;
 
-public class ApkInfo : IApkInfo
+public interface IApkInfo
 {
     public string VersionName { get; set; }
 
@@ -27,7 +27,7 @@ public class ApkInfo : IApkInfo
 
     public string TargetSdkVersion { get; set; }
 
-    public List<string> Permissions { get; set; } = [];
+    public List<string> Permissions { get; set; }
 
     public string PackageName { get; set; }
 
@@ -35,32 +35,21 @@ public class ApkInfo : IApkInfo
 
     public string Icon { get; set; }
 
-    public Dictionary<string, string> Icons { get; set; } = [];
+    public Dictionary<string, string> Icons { get; set; }
 
     public byte[] Logo { get; set; }
 
     public string Label { get; set; }
 
-    public Dictionary<string, string> Labels { get; set; } = [];
+    public Dictionary<string, string> Labels { get; set; }
 
-    public bool HasIcon
-    {
-        get
-        {
-            if (Icons.Count <= 0)
-            {
-                return !string.IsNullOrEmpty(Icon);
-            }
+    public bool HasIcon { get; }
 
-            return true;
-        }
-    }
+    public List<string> Locales { get; set; }
 
-    public List<string> Locales { get; set; } = [];
-
-    public List<string> Densities { get; set; } = [];
+    public List<string> Densities { get; set; }
 
     public string LaunchableActivity { get; set; }
 
-    public string[] ABIs { get; set; } = [];
+    public string[] ABIs { get; set; }
 }

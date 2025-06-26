@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.PackageParsers.Apk;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -63,32 +64,45 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
             if (File.Exists(path))
             {
                 var size = new FileInfo(path).Length;
-                ApkInfo apkInfo = ApkParser.Parse(path);
+                IApkInfo info = Path.GetExtension(path).ToLower() switch
+                {
+                    ".apk" => ApkParser.Parse(path),
+                    ".aab" => AabParser.Parse(path),
+                    _ => throw new NotSupportedException("Extension is not supported."),
+                };
                 var last = File.GetLastWriteTime(path);
 
                 Dispatcher.Invoke(() =>
                 {
-                    applicationName.Text = apkInfo.Label;
-                    versionName.Text = apkInfo.VersionName;
-                    versionCode.Text = apkInfo.VersionCode;
-                    abis.Text = string.Join(", ", apkInfo.ABIs ?? []);
-                    packageName.Text = apkInfo.PackageName;
-                    minSdkVersion.Text = apkInfo.MinSdkVersion;
-                    targetSdkVersion.Text = apkInfo.TargetSdkVersion;
+                    applicationName.Text = info.Label;
+                    versionName.Text = info.VersionName;
+                    versionCode.Text = info.VersionCode;
+                    abis.Text = string.Join(", ", info.ABIs ?? []);
+                    packageName.Text = info.PackageName;
+                    minSdkVersion.Text = info.MinSdkVersion;
+                    targetSdkVersion.Text = info.TargetSdkVersion;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
-                    permissions.ItemsSource = apkInfo.Permissions;
+                    permissions.ItemsSource = info.Permissions;
 
-                    if (apkInfo.HasIcon)
+                    if (info.HasIcon)
                     {
-                        using var stream = new MemoryStream(apkInfo.Logo);
-                        var icon = new BitmapImage();
-                        icon.BeginInit();
-                        icon.CacheOption = BitmapCacheOption.OnLoad;
-                        icon.StreamSource = stream;
-                        icon.EndInit();
-                        icon.Freeze();
-                        image.Source = icon;
+                        try
+                        {
+                            using var stream = new MemoryStream(info.Logo);
+                            var icon = new BitmapImage();
+                            icon.BeginInit();
+                            icon.CacheOption = BitmapCacheOption.OnLoad;
+                            icon.StreamSource = stream;
+                            icon.EndInit();
+                            icon.Freeze();
+                            image.Source = icon;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e);
+                            image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/android.png"));
+                        }
                     }
                     else
                     {

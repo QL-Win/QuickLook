@@ -30,8 +30,8 @@ public class Plugin : IViewer
     [
         // Android
         ".apk", ".apk.1", // Android Package
+        ".aab", // Android App Bundle
         //".aar", // Android Archive
-        //".aab", // Android App Bundle
 
         // Windows
         ".appx", ".appxbundle", // Windows APPX installer
@@ -51,7 +51,7 @@ public class Plugin : IViewer
         // Ubuntu
         ".deb", // Debian Package
         ".appimage", // AppImage Format
-         ".rpm", // Red Hat Package Manager
+        ".rpm", // Red Hat Package Manager
 
         // Others
         ".wgt", ".wgtu", // UniApp Widget
@@ -75,7 +75,7 @@ public class Plugin : IViewer
     {
         context.PreferredSize = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
-            ".apk" => new Size { Width = 600, Height = 510 },
+            ".apk" or ".aab" => new Size { Width = 600, Height = 510 },
             ".ipa" => new Size { Width = 560, Height = 510 },
             ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 560, Height = 230 },
@@ -99,7 +99,7 @@ public class Plugin : IViewer
         _path = path;
         _ip = Path.GetExtension(ConfirmPath(path)).ToLower() switch
         {
-            ".apk" => new ApkInfoPanel(context),
+            ".apk" or ".aab" => new ApkInfoPanel(context),
             ".ipa" => new IpaInfoPanel(context),
             ".hap" => new HapInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
