@@ -25,6 +25,7 @@ using QuickLook.Plugin.TextViewer.Detectors;
 using QuickLook.Plugin.TextViewer.Themes;
 using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -203,6 +204,13 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     Background = OSThemeHelper.AppsUseDarkTheme()
                         ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
                         : Brushes.Transparent;
+                }
+
+                if (extension.Equals(".txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    FlowDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft
+                        ? System.Windows.FlowDirection.RightToLeft
+                        : System.Windows.FlowDirection.LeftToRight;
                 }
 
                 context.IsBusy = false;
