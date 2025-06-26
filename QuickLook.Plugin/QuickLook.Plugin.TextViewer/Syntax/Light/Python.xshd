@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Python" extensions=".py;.pyw">
+<SyntaxDefinition name="Python" extensions=".py;.pyw;.vpy">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
