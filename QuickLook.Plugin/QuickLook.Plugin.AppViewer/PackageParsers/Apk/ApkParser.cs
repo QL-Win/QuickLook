@@ -53,7 +53,9 @@ public static class ApkParser
 
             if (baseInfo.HasIcon)
             {
-                ZipEntry entry = zip.GetEntry(baseInfo.Icons.Values.LastOrDefault());
+                ZipEntry entry = zip.GetEntry(baseInfo.Icons.Values
+                    .Where(icon => icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                    .LastOrDefault());
                 using var s = new BinaryReader(zip.GetInputStream(entry));
                 info.Logo = s.ReadBytes((int)entry.Size);
             }
