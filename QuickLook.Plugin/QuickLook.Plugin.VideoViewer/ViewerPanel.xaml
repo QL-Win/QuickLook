@@ -20,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid MouseLeftButtonDown="Panel_MouseLeftButtonDown">
         <mediakit:MediaUriElement x:Name="mediaElement" />
         <Grid x:Name="coverArtPersenter"
               Background="{StaticResource MainWindowBackground}"

@@ -181,6 +181,14 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         _midiPlayer = null;
     }
 
+    private void Panel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed)
+        {
+            Window.GetWindow(this)?.DragMove();
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void MediaOpened(object o, RoutedEventArgs args)
