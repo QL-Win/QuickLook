@@ -17,7 +17,6 @@
 
 using ICSharpCode.SharpZipLib.Zip;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -48,6 +47,7 @@ public static class ApkParser
                 Labels = baseInfo.Labels,
                 Locales = baseInfo.Locales,
                 Densities = baseInfo.Densities,
+                ABIs = [.. baseInfo.Abis],
                 LaunchableActivity = baseInfo.LaunchableActivity,
             };
 
@@ -59,25 +59,6 @@ public static class ApkParser
                 using var s = new BinaryReader(zip.GetInputStream(entry));
                 info.Logo = s.ReadBytes((int)entry.Size);
             }
-
-            var abiSet = new HashSet<string>();
-
-            foreach (ZipEntry entry in zip)
-            {
-                if (entry.IsFile && entry.Name.StartsWith("lib/"))
-                {
-                    var relativePath = entry.Name.Substring("lib/".Length);
-                    int slashIndex = relativePath.IndexOf('/');
-
-                    if (slashIndex > 0)
-                    {
-                        string abi = relativePath.Substring(0, slashIndex);
-                        abiSet.Add(abi);
-                    }
-                }
-            }
-
-            info.ABIs = [.. abiSet];
 
             return info;
         }
