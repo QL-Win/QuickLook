@@ -66,6 +66,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         ManipulationInertiaStarting += Viewer_ManipulationInertiaStarting;
         ManipulationStarting += Viewer_ManipulationStarting;
         ManipulationDelta += Viewer_ManipulationDelta;
+        KeyDown += Viewer_KeyDown;
 
         PreviewMouseWheel += Viewer_MouseWheel;
 
@@ -109,6 +110,20 @@ public partial class TextViewerPanel : TextEditor, IDisposable
     private void Viewer_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
     {
         e.Mode = ManipulationModes.Translate;
+    }
+
+    private void Viewer_KeyDown(object sender, KeyEventArgs e)
+    {
+        // Support keyboard shortcuts for RTL and LTR text direction
+        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+        {
+            // RTL: Ctrl + RShift
+            // LTR: Ctrl + LShift
+            if (Keyboard.IsKeyDown(Key.RightShift))
+                FlowDirection = System.Windows.FlowDirection.RightToLeft;
+            else if (Keyboard.IsKeyDown(Key.LeftShift))
+                FlowDirection = System.Windows.FlowDirection.LeftToRight;
+        }
     }
 
     private class TruncateLongLines : VisualLineElementGenerator
@@ -206,6 +221,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                         : Brushes.Transparent;
                 }
 
+                // Support automatic RTL for text files
                 if (extension.Equals(".txt", StringComparison.OrdinalIgnoreCase))
                 {
                     if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
