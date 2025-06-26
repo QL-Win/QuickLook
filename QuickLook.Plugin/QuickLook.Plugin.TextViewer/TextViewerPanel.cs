@@ -124,6 +124,13 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             else if (Keyboard.IsKeyDown(Key.LeftShift))
                 FlowDirection = System.Windows.FlowDirection.LeftToRight;
         }
+        else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+        {
+            if (Keyboard.IsKeyDown(Key.Z))
+            {
+                WordWrap = !WordWrap;
+            }
+        }
     }
 
     private class TruncateLongLines : VisualLineElementGenerator
