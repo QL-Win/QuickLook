@@ -208,9 +208,15 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
                 if (extension.Equals(".txt", StringComparison.OrdinalIgnoreCase))
                 {
-                    FlowDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft
-                        ? System.Windows.FlowDirection.RightToLeft
-                        : System.Windows.FlowDirection.LeftToRight;
+                    if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
+                    {
+                        string isSupportRTL = TranslationHelper.Get("IsSupportRTL",
+                            failsafe: bool.TrueString,
+                            domain: Assembly.GetExecutingAssembly().GetName().Name);
+
+                        if (bool.TrueString.Equals(isSupportRTL, StringComparison.OrdinalIgnoreCase))
+                            FlowDirection = System.Windows.FlowDirection.RightToLeft;
+                    }
                 }
 
                 context.IsBusy = false;
