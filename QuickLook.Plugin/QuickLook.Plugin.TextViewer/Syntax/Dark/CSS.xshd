@@ -3,20 +3,20 @@
 <SyntaxDefinition name="CSS" extensions=".css;.scss;.less;.sass">
   
     <Environment> 
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
         
-        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
-        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#23272E"/>
         
-        <EOLMarkers color="#CACAD2"/>
-        <SpaceMarkers color="#B6B6C0"/>
-        <TabMarkers color="#B6B6C0"/>
-        <InvalidLines color="#B6B6C0"/>
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#F44747"/>
     </Environment>
   
     <Properties>
@@ -24,50 +24,50 @@
         <Property name="BlockCommentEnd" value="*/"/>
     </Properties>
     
-    <Digits name="Digits" color="Black"/>
+    <Digits name="Digits" color="#B5CEA8"/>
   
     <RuleSets>
         <RuleSet ignorecase="false">
    
             <Delimiters>:#@.()</Delimiters>
           
-            <Span name="CSSClass" rule="CSSClass" stopateol="false" color="Black" bold="false" italic="false">
+            <Span name="CSSClass" rule="CSSClass" stopateol="false" color="#D4D4D4" bold="false" italic="false">
                 <Begin>{</Begin>
                 <End>}</End>
             </Span>
           
-            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
                 <Begin>/*</Begin>
                 <End>*/</End>
             </Span>
             
-            <Span name="String" color="Brown" stopateol="true" bold="false" italic="false">
+            <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
             
-            <MarkFollowing markmarker="true" color="DarkViolet" bold="false" italic="false">@</MarkFollowing>
-            <MarkFollowing markmarker="true" color="#BB179A" bold="false" italic="false">#</MarkFollowing>
+            <MarkFollowing markmarker="true" color="#4EC9B0" bold="false" italic="false">@</MarkFollowing>
+            <MarkFollowing markmarker="true" color="#D7BA7D" bold="false" italic="false">#</MarkFollowing>
         </RuleSet>
    
     <RuleSet name="ValueRules" ignorecase="false">
 
-        <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+        <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
             <Begin>/*</Begin>
             <End>*/</End>
         </Span>
 
-        <Span name="String" color="Brown" stopateol="true" bold="false" italic="false">
+        <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
             <Begin>"</Begin>
             <End>"</End>
         </Span>
 
-        <Span name="Char" stopateol="true" color="Brown" bold="false" italic="false">
+        <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false">
             <Begin>'</Begin>
             <End>'</End>
         </Span>
 
-        <KeyWords name="Flags" color="Brown" bold="true" italic="false">
+        <KeyWords name="Flags" color="#D7BA7D" bold="true" italic="false">
             <Key word="!important" />
         </KeyWords>
     </RuleSet>
@@ -75,23 +75,23 @@
     <RuleSet name="CSSClass" ignorecase="true">
         <Delimiters>#</Delimiters>
     
-        <Span name="Value" rule="ValueRules" stopateol="false" color="#0451A5" bold="false" italic="false">
-            <Begin color="Black">:</Begin>
-            <End color="Black">;</End>
+        <Span name="Value" rule="ValueRules" stopateol="false" color="#569CD6" bold="false" italic="false">
+            <Begin color="#D4D4D4">:</Begin>
+            <End color="#D4D4D4">;</End>
         </Span>
 
-        <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+        <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
             <Begin>/*</Begin>
             <End>*/</End>
         </Span>
         
-        <MarkFollowing color="#BB179A" bold="false" italic="false">#</MarkFollowing>
+        <MarkFollowing color="#D7BA7D" bold="false" italic="false">#</MarkFollowing>
         
-        <KeyWords name="Punctuation" color="#BB179A" bold="false">
+        <KeyWords name="Punctuation" color="#D7BA7D" bold="false">
            <Key word="#"/>
         </KeyWords>
         
-        <KeyWords name="Keywords1" color="#D50000" bold="false" italic="false">
+        <KeyWords name="Keywords1" color="#C586C0" bold="false" italic="false">
             <Key word="-khtml-background-clip"/>
             <Key word="-khtml-background-origin"/>
             <Key word="-khtml-background-size"/>
