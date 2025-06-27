@@ -67,14 +67,19 @@ public class PropertiesHighlightingDefinition : LightHighlightingDefinition
         protected override void ColorizeLine(DocumentLine line)
         {
             var text = CurrentContext.Document.GetText(line);
-            int idx = text.IndexOf('=');
-            if (idx > 0)
+
+            if (!text.TrimStart().StartsWith("#"))
             {
-                ChangeLinePart(
-                    line.Offset,
-                    line.Offset + idx,
-                    el => el.TextRunProperties.SetForegroundBrush(Colors.Blue.ToBrush())
-                );
+                int idx = text.IndexOf('=');
+
+                if (idx > 0)
+                {
+                    ChangeLinePart(
+                        line.Offset,
+                        line.Offset + idx,
+                        el => el.TextRunProperties.SetForegroundBrush(Colors.Blue.ToBrush())
+                    );
+                }
             }
         }
     }
