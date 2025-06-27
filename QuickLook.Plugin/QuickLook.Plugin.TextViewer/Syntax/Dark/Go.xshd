@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Go" extensions=".go">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
+        
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#23272E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#23272E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#F44747"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}@,.:`=;+-*%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+                            
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <KeyWords name="Keywords1" color="#569CD6" bold="false">
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="chan"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="default"/>
+                <Key word="defer"/>
+                <Key word="delete"/>
+                <Key word="else"/>
+                <Key word="fallthrough"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="func"/>
+                <Key word="go"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="interface"/>
+                <Key word="iota"/>
+                <Key word="map"/>
+                <Key word="nil"/>
+                <Key word="package"/>
+                <Key word="range"/>
+                <Key word="return"/>
+                <Key word="select"/>
+                <Key word="struct"/>
+                <Key word="switch"/>
+                <Key word="true"/>
+                <Key word="type"/>
+                <Key word="var"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#D7BA7D" bold="false">
+                <Key word="append"/>
+                <Key word="cap"/>
+                <Key word="close"/>
+                <Key word="closed"/>
+                <Key word="copy"/>
+                <Key word="imag"/>
+                <Key word="len"/>
+                <Key word="main"/>
+                <Key word="make"/>
+                <Key word="new"/>
+                <Key word="panic"/>
+                <Key word="print"/>
+                <Key word="println"/>
+                <Key word="real"/>
+                <Key word="recover"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords3" color="#4EC9B0" bold="false">
+                <Key word="bool"/>
+                <Key word="byte"/>
+                <Key word="complex"/>
+                <Key word="complex128"/>
+                <Key word="complex64"/>
+                <Key word="error"/>
+                <Key word="float"/>
+                <Key word="float32"/>
+                <Key word="float64"/>
+                <Key word="int"/>
+                <Key word="int16"/>
+                <Key word="int32"/>
+                <Key word="int64"/>
+                <Key word="int8"/>
+                <Key word="rune"/>
+                <Key word="string"/>
+                <Key word="uint"/>
+                <Key word="uint16"/>
+                <Key word="uint32"/>
+                <Key word="uint64"/>
+                <Key word="uint8"/>
+                <Key word="uintptr"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
