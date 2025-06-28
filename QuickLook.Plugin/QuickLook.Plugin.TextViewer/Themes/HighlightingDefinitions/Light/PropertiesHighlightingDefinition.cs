@@ -68,7 +68,7 @@ public class PropertiesHighlightingDefinition : LightHighlightingDefinition
         {
             var text = CurrentContext.Document.GetText(line);
 
-            if (text.TrimStart().StartsWith("#"))
+            if (string.IsNullOrWhiteSpace(text) || text.TrimStart().StartsWith("#"))
                 return;
 
             int idx = text.IndexOf('=');
