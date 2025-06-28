@@ -117,12 +117,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Controls\GlassLayer\100-50-5-monochrome.png" />
-        <None Remove="Controls\GlassLayer\GaussianBlur.ps" />
-        <None Remove="Resources\app.ico" />
-        <None Remove="Fonts\*.ttf" />
-    </ItemGroup>
-    <ItemGroup>
         <Resource Include="Controls\GlassLayer\100-50-5-monochrome.png" />
         <Resource Include="Controls\GlassLayer\GaussianBlur.ps" />
         <Resource Include="Resources\app.ico" />

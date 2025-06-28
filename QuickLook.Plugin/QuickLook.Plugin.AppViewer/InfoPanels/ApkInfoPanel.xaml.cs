@@ -64,7 +64,7 @@ public partial class ApkInfoPanel : UserControl, IAppInfoPanel
             if (File.Exists(path))
             {
                 var size = new FileInfo(path).Length;
-                IApkInfo info = Path.GetExtension(path).ToLower() switch
+                IApkInfo info = Path.GetExtension(Plugin.ConfirmPath(path)).ToLower() switch
                 {
                     ".apk" => ApkParser.Parse(path),
                     ".aab" => AabParser.Parse(path),
