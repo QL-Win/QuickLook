@@ -67,19 +67,15 @@ public class PropertiesHighlightingDefinition : DarkHighlightingDefinition
         {
             var text = CurrentContext.Document.GetText(line);
 
-            if (!text.TrimStart().StartsWith("#"))
-            {
-                int idx = text.IndexOf('=');
+            if (text.TrimStart().StartsWith("#"))
+                return;
 
-                if (idx > 0)
-                {
-                    ChangeLinePart(
-                        line.Offset,
-                        line.Offset + idx,
-                    el => el.TextRunProperties.SetForegroundBrush("#3F9CD6".ToBrush())
-                    );
-                }
-            }
+            int idx = text.IndexOf('=');
+
+            if (idx <= 0)
+                return;
+
+            ChangeLinePart(line.Offset, line.Offset + idx, el => el.TextRunProperties.SetForegroundBrush("#3F9CD6".ToBrush()));
         }
     }
 }
