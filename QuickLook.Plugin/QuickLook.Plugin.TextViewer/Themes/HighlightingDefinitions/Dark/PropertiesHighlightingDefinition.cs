@@ -50,13 +50,13 @@ public class PropertiesHighlightingDefinition : DarkHighlightingDefinition
                 Name = "Comment",
                 Foreground = new SimpleHighlightingBrush("#6A9949".ToColor()),
             },
-            _ => null
+            _ => null,
         };
     }
 
     public override IEnumerable<HighlightingColor> NamedHighlightingColors =>
     [
-        GetNamedColor("Comment")
+        GetNamedColor("Comment"),
     ];
 
     public override DocumentColorizingTransformer[] LineTransformers { get; } = [new KeyHighlighter()];
@@ -75,7 +75,10 @@ public class PropertiesHighlightingDefinition : DarkHighlightingDefinition
             if (idx <= 0)
                 return;
 
-            ChangeLinePart(line.Offset, line.Offset + idx, el => el.TextRunProperties.SetForegroundBrush("#3F9CD6".ToBrush()));
+            ChangeLinePart(line.Offset, line.Offset + idx, el =>
+            {
+                el.TextRunProperties.SetForegroundBrush("#3F9CD6".ToBrush());
+            });
         }
     }
 }
