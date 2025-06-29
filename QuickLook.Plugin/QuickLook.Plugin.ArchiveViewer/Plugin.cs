@@ -36,6 +36,7 @@ public class Plugin : IViewer
         ".nupkg",
         ".rar",
         ".tar", ".tgz",
+        ".vsix",
         ".xz",
         ".zip",
     ];
