@@ -152,12 +152,11 @@ public class Plugin : IViewer
 
                 var sizeSvg = _metaSvg.GetSize();
 
-                context.ViewerContent = _ip;
+                context.ViewerContent = _ipSvg;
                 context.Title = sizeSvg.IsEmpty
                     ? $"{Path.GetFileName(path)}"
                     : $"{sizeSvg.Width}×{sizeSvg.Height}: {Path.GetFileName(path)}";
 
-                context.ViewerContent = _ipSvg;
                 context.IsBusy = false;
                 return;
             }
@@ -174,7 +173,7 @@ public class Plugin : IViewer
         _ip.ImageUriSource = Helper.FilePathToFileUrl(path);
 
         // Load the custom cursor into the preview panel
-        if (new string[] { ".cur", ".ani" }.Any(path.ToLower().EndsWith))
+        if (new[] { ".cur", ".ani" }.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
         {
             _ip.Cursor = CursorProvider.GetCursor(path) ?? Cursors.Arrow;
         }
