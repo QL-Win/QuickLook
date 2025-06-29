@@ -14,7 +14,7 @@
     document.addEventListener("wheel", (e) => {
         e.preventDefault();
 
-        const scaleFactor = 1.1;
+        const scaleFactor = 1.2;
 
         if (e.deltaY < 0) {
             scale *= scaleFactor;

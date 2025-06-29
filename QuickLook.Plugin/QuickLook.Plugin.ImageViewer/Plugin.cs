@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using QuickLook.Common.Helpers;
-using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 
 namespace QuickLook.Plugin.ImageViewer;
 
@@ -56,6 +56,9 @@ public class Plugin : IViewer
 
     private ImagePanel _ip;
     private MetaProvider _meta;
+
+    private SvgImagePanel _ipSvg;
+    private SvgMetaProvider _metaSvg;
 
     public int Priority => 0;
 
@@ -109,6 +112,23 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
+        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+        {
+            if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
+            {
+                _metaSvg = new SvgMetaProvider(path);
+                var sizeSvg = _metaSvg.GetSize();
+
+                if (!sizeSvg.IsEmpty)
+                    context.SetPreferredSizeFit(sizeSvg, 0.8d);
+                else
+                    context.PreferredSize = new Size(800, 600);
+
+                context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
+                return;
+            }
+        }
+
         _meta = new MetaProvider(path);
 
         var size = _meta.GetSize();
@@ -123,6 +143,26 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
+        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+        {
+            if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
+            {
+                _ipSvg = new SvgImagePanel();
+                _ipSvg.PreviewSvg(path);
+
+                var sizeSvg = _metaSvg.GetSize();
+
+                context.ViewerContent = _ip;
+                context.Title = sizeSvg.IsEmpty
+                    ? $"{Path.GetFileName(path)}"
+                    : $"{sizeSvg.Width}×{sizeSvg.Height}: {Path.GetFileName(path)}";
+
+                context.ViewerContent = _ipSvg;
+                context.IsBusy = false;
+                return;
+            }
+        }
+
         _ip = new ImagePanel(context, _meta);
         var size = _meta.GetSize();
 
@@ -142,7 +182,12 @@ public class Plugin : IViewer
 
     public void Cleanup()
     {
+        GC.SuppressFinalize(this);
+
         _ip?.Dispose();
         _ip = null;
+
+        _ipSvg?.Dispose();
+        _ipSvg = null;
     }
 }
