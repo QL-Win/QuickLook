@@ -19,14 +19,12 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using static System.Net.WebRequestMethods;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 

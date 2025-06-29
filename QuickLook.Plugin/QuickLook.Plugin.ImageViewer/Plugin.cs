@@ -40,7 +40,7 @@ public class Plugin : IViewer
         ".gif",
         ".hdr", ".heic", ".heif",
         ".ico", ".icon", ".icns", ".iiq",
-        ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl", ".j2k", ".jpf", ".jpx", ".jpm",
+        ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl", ".j2k", ".jpf", ".jpx", ".jpm", ".jxr",
         ".k25", ".kdc",
         ".mdc", ".mef", ".mos", ".mrw", ".mj2", ".miff",
         ".nef", ".nrw",
@@ -74,6 +74,10 @@ public class Plugin : IViewer
             new KeyValuePair<string[], Type>(
                 useColorProfile ? [] : [".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"],
                 typeof(NativeProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>(
+                useColorProfile ? [] : [".jxr"],
+                typeof(WmpProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".icns"],
                 typeof(IcnsProvider)));
