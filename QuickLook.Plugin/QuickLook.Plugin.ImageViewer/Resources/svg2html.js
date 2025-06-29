@@ -25,5 +25,11 @@
         updateTransform();
     }, { passive: false });
 
+    // Add double-click event to reset zoom
+    wrapper.addEventListener("dblclick", () => {
+        scale = 1;
+        updateTransform();
+    });
+
     updateTransform();
 })();
