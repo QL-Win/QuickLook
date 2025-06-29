@@ -45,24 +45,27 @@ public class WebpagePanel : UserControl
     public WebpagePanel()
     {
         if (!Helper.IsWebView2Available())
-        {
             Content = CreateDownloadButton();
-        }
         else
+            InitializeComponent();
+    }
+
+    protected virtual void InitializeComponent()
+    {
+        _webView = new WebView2
         {
-            _webView = new WebView2
+            CreationProperties = new CoreWebView2CreationProperties
             {
-                CreationProperties = new CoreWebView2CreationProperties
-                {
-                    UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
-                },
-                DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White, // Prevent white flash in dark mode
-            };
-            _webView.NavigationStarting += Webview_NavigationStarting;
-            _webView.NavigationCompleted += WebView_NavigationCompleted;
-            _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
-            Content = _webView;
-        }
+                UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
+            },
+
+            // Prevent white flash in dark mode
+            DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White,
+        };
+        _webView.NavigationStarting += Webview_NavigationStarting;
+        _webView.NavigationCompleted += WebView_NavigationCompleted;
+        _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+        Content = _webView;
     }
 
     public void NavigateToFile(string path)

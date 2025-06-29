@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ using System.Threading.Tasks;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-public class WebImagePanel : WebpagePanel
+public class SvgImagePanel : WebpagePanel
 {
     protected const string _resourcePrefix = "QuickLook.Plugin.ImageViewer.Resources.";
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
@@ -52,9 +53,16 @@ public class WebImagePanel : WebpagePanel
         }
     }
 
-    static WebImagePanel()
+    static SvgImagePanel()
     {
         InitializeResources();
+    }
+
+    protected override void InitializeComponent()
+    {
+        _webView = new WebView2();
+        _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+        Content = _webView;
     }
 
     protected static void InitializeResources()
