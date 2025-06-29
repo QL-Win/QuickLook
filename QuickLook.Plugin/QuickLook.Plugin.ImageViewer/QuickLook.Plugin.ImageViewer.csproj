@@ -64,6 +64,9 @@
         <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3296.44">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -76,6 +79,12 @@
     <ItemGroup>
         <Resource Include="Resources\background-b.png" />
         <Resource Include="Resources\background.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\svg2html.*">
+            <LogicalName>QuickLook.Plugin.ImageViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -101,6 +110,11 @@
         <ProjectReference Include="..\..\QuickLook.Common\QuickLook.Common.csproj">
             <Project>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</Project>
             <Name>QuickLook.Common</Name>
+            <Private>False</Private>
+        </ProjectReference>
+        <ProjectReference Include="..\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.csproj">
+            <Project>{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}</Project>
+            <Name>QuickLook.Plugin.HtmlViewer</Name>
             <Private>False</Private>
         </ProjectReference>
     </ItemGroup>
