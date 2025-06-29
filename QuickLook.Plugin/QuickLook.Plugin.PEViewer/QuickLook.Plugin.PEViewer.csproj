@@ -66,10 +66,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Memory" Version="4.6.0" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Update="Translations.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

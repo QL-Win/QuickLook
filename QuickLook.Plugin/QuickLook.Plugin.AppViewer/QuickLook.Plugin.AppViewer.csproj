@@ -72,7 +72,7 @@
 
     <ItemGroup>
         <Reference Include="Microsoft.CSharp" />
-        <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.0" />
+        <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.1" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="PureSharpCompress" Version="0.40.0" />
