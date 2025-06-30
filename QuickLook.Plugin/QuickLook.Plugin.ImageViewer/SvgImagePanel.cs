@@ -44,12 +44,12 @@ public class SvgImagePanel : WebpagePanel
         set
         {
             _objectForScripting = value;
-
-            Dispatcher.Invoke(async () =>
-            {
-                await _webView.EnsureCoreWebView2Async();
-                _webView.CoreWebView2.AddHostObjectToScript("external", value);
-            });
+            _webView?.EnsureCoreWebView2Async()
+                .ContinueWith(_ =>
+                    _webView?.Dispatcher.Invoke(() =>
+                        _webView?.CoreWebView2.AddHostObjectToScript("external", value)
+                    )
+                );
         }
     }
 

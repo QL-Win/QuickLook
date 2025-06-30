@@ -80,15 +80,12 @@ public class MetaProvider
             return new Size(w, h);
 
         // fallback
-
         try
         {
-            using (var mi = new MagickImage())
-            {
-                mi.Ping(_path);
-                w = (int)mi.Width;
-                h = (int)mi.Height;
-            }
+            using var mi = new MagickImage();
+            mi.Ping(_path);
+            w = (int)mi.Width;
+            h = (int)mi.Height;
         }
         catch
         {
