@@ -478,9 +478,6 @@ public class SubStationAlphaHighlightingDefinition : LightHighlightingDefinition
             if (double.TryParse(input, out _))
                 return ValueType.Numeric;
 
-            if (bool.TryParse(input, out _))
-                return ValueType.Boolean;
-
             return ValueType.String;
         }
 
@@ -489,7 +486,6 @@ public class SubStationAlphaHighlightingDefinition : LightHighlightingDefinition
             return type switch
             {
                 ValueType.Numeric => "#098658",
-                ValueType.Boolean => "#0000FF",
                 ValueType.String or _ => "#A31515",
             };
         }
@@ -520,8 +516,6 @@ public class SubStationAlphaHighlightingDefinition : LightHighlightingDefinition
                 return [];
 
             var result = new List<InlineText>();
-            // 定义正则表达式：匹配非分隔符的连续字符段
-            // 分隔符包括：空格 \ { } ( ) , （注意 \\ 需要双转义）
             var matches = Regex.Matches(input, @"[^{}\(\)\\,\s]+");
             foreach (Match match in matches)
             {
@@ -558,7 +552,6 @@ public class SubStationAlphaHighlightingDefinition : LightHighlightingDefinition
         {
             String,
             Numeric,
-            Boolean,
         }
 
         public sealed class SessionStore : Dictionary<string, Session>
