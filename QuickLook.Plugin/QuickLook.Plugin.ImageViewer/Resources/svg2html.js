@@ -203,7 +203,6 @@ class SvgViewer {
                 this.isDragging = true;
                 this.lastMouseX = e.clientX;
                 this.lastMouseY = e.clientY;
-                document.body.style.cursor = 'grab';
                 this.disableTransition(); // Disable animation while panning
             }
         });
@@ -238,7 +237,6 @@ class SvgViewer {
         window.addEventListener('mouseup', () => {
             if (this.isDragging) {
                 this.isDragging = false;
-                document.body.style.cursor = '';
             }
         });
     }
