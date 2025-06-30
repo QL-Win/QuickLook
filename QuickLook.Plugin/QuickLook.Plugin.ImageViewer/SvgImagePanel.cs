@@ -17,6 +17,7 @@
 
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
+using QuickLook.Common.Helpers;
 using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,13 @@ public class SvgImagePanel : WebpagePanel
 
     protected override void InitializeComponent()
     {
-        _webView = new WebView2();
+        _webView = new WebView2()
+        {
+            CreationProperties = new CoreWebView2CreationProperties
+            {
+                UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
+            },
+        };
         _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
         Content = _webView;
     }
