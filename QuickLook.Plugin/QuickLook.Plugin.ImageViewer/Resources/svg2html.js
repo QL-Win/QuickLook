@@ -1,12 +1,23 @@
-﻿// SvgViewer: Provides SVG preview with the following features:
-// - Fit SVG to window with no upscaling
-// - Mouse wheel zoom in/out (with smooth animation)
-// - Double-click to fit SVG to window
-// - Mouse drag to pan (only when SVG is larger than the container)
-// - Pan is limited to visible overflow area
-// - Handles SVGs with or without width/height/viewBox attributes
-// - Resets pan on zoom or fit
-// - No animation during pan, smooth animation during zoom/fit
+﻿/**
+ * SvgViewer: Provides SVG preview with the following features.
+ *
+ * Requirements:
+ * - Requires the following HTML structure:
+ *   <div id="svgContainer">
+ *     <div id="svgWrapper"></div>
+ *   </div>
+ * - SVG content is obtained via chrome.webview.hostObjects.external.GetSvgContent()
+ *
+ * Features:
+ * - Fit SVG to window with no upscaling
+ * - Mouse wheel zoom in/out (with smooth animation)
+ * - Double-click to fit SVG to window
+ * - Mouse drag to pan (only when SVG is larger than the container)
+ * - Pan is limited to visible overflow area
+ * - Handles SVGs with or without width/height/viewBox attributes
+ * - Resets pan on zoom or fit
+ * - No animation during pan, smooth animation during zoom/fit
+ */
 class SvgViewer {
     constructor() {
         // Initial scale and scale limits
@@ -33,7 +44,10 @@ class SvgViewer {
         this.lastMouseY = 0;
     }
 
-    // Ensure SVG has proper size attributes and extract viewBox dimensions
+    /**
+     * Ensure SVG has proper size attributes and extract viewBox dimensions.
+     * @param {SVGElement} svgElement The SVG element to fix.
+     */
     fixSvgSize(svgElement) {
         let widthAttr = svgElement.getAttribute('width');
         let heightAttr = svgElement.getAttribute('height');
@@ -71,7 +85,10 @@ class SvgViewer {
         this.viewBoxHeight = viewBoxHeight;
     }
 
-    // Calculate the base scale to fit SVG into the container
+    /**
+     * Calculate the base scale to fit SVG into the container.
+     * @returns {number} The base scale factor.
+     */
     computeBaseScale() {
         if (!this.viewBoxWidth || !this.viewBoxHeight) return 1;
 
@@ -82,7 +99,9 @@ class SvgViewer {
         return Math.min(scaleX, scaleY, 1); // Never upscale by default
     }
 
-    // Update SVG transform for scale and pan
+    /**
+     * Update SVG transform for scale and pan.
+     */
     updateTransform() {
         // Calculate actual SVG display size
         const container = document.getElementById('svgContainer');
@@ -103,19 +122,25 @@ class SvgViewer {
         this.svgElement.style.transformOrigin = 'center center';
     }
 
-    // Enable transform transition (for zoom)
+    /**
+     * Enable transform transition (for zoom).
+     */
     enableTransition() {
         this.svgElement.style.transition = 'transform 0.1s ease-out';
         this.transitionEnabled = true;
     }
 
-    // Disable transform transition (for pan)
+    /**
+     * Disable transform transition (for pan).
+     */
     disableTransition() {
         this.svgElement.style.transition = '';
         this.transitionEnabled = false;
     }
 
-    // Fit SVG to window and reset pan
+    /**
+     * Fit SVG to window and reset pan.
+     */
     fitToWindow() {
         this.baseScale = this.computeBaseScale();
         this.scale = this.baseScale;
@@ -124,7 +149,9 @@ class SvgViewer {
         this.updateTransform();
     }
 
-    // Bind mouse and wheel events for zoom and pan
+    /**
+     * Bind mouse and wheel events for zoom and pan.
+     */
     bindEvents() {
         // Zoom with mouse wheel
         this.wrapper.addEventListener("wheel", (e) => {
@@ -167,6 +194,7 @@ class SvgViewer {
                 this.disableTransition(); // Disable animation while panning
             }
         });
+
         // Pan on mouse move
         window.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
@@ -192,6 +220,7 @@ class SvgViewer {
                 this.updateTransform();
             }
         });
+
         // End pan on mouse up
         window.addEventListener('mouseup', () => {
             if (this.isDragging) {
@@ -201,7 +230,10 @@ class SvgViewer {
         });
     }
 
-    // Initialize SVG viewer
+    /**
+     * Initialize SVG viewer.
+     * @async
+     */
     async init() {
         const rawSvg = await chrome.webview.hostObjects.external.GetSvgContent();
         const parser = new DOMParser();
