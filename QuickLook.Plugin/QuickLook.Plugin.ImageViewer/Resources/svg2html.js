@@ -23,7 +23,7 @@ class SvgViewer {
         // Initial scale and scale limits
         this.scale = 1;
         this.minScale = 0.1;
-        this.maxScale = 10;
+        this.maxScale = 100; // Increased zoom upper limit by 10x
         this.scaleStep = 1.2;
         this.baseScale = 1;
 
