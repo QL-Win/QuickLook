@@ -62,6 +62,7 @@
                                     <MultiBinding Converter="{StaticResource AsyncPageToThumbnailConverter}">
                                         <Binding ElementName="thisPdfViewer" Path="PdfDocumentWrapper" />
                                         <Binding />
+                                        <Binding ElementName="thisPdfViewer" />
                                     </MultiBinding>
                                 </Image.DataContext>
                             </Image>
