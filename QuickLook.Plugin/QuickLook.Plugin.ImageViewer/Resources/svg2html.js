@@ -1,111 +1,110 @@
-﻿(async function () {
-    function encodeSvgToBase64(svg) {
-        const utf8Bytes = new TextEncoder().encode(svg);
-        let binary = '';
-        for (const byte of utf8Bytes) {
-            binary += String.fromCharCode(byte);
+﻿class SvgViewer {
+    constructor() {
+        this.scale = 1;
+        this.minScale = 0.1;
+        this.maxScale = 10;
+        this.scaleStep = 1.2;
+        this.baseScale = 1;
+        this.viewBoxWidth = null;
+        this.viewBoxHeight = null;
+        this.svgElement = null;
+        this.wrapper = document.getElementById('svgWrapper');
+        this.transitionEnabled = false;
+    }
+
+    fixSvgSize(svgElement) {
+        let widthAttr = svgElement.getAttribute('width');
+        let heightAttr = svgElement.getAttribute('height');
+        let viewBox = svgElement.getAttribute('viewBox');
+        let viewBoxWidth = null, viewBoxHeight = null;
+
+        if (!viewBox && widthAttr && heightAttr && widthAttr.trim() !== '' && heightAttr.trim() !== '') {
+            svgElement.setAttribute('viewBox', `0 0 ${widthAttr} ${heightAttr}`);
+            viewBox = svgElement.getAttribute('viewBox');
         }
-        return btoa(binary);
-    }
 
-    function fixSvgSize(svg) {
-        const viewBoxMatch = svg.match(/viewBox\s*=\s*["']?([\d\s\.]+)["']/i);
-        if (!viewBoxMatch) return svg;
-
-        const parts = viewBoxMatch[1].trim().split(/\s+/);
-        if (parts.length !== 4) return svg;
-
-        const width = parseFloat(parts[2]);
-        const height = parseFloat(parts[3]);
-
-        if (/width\s*=/.test(svg) || /height\s*=/.test(svg)) {
-            return svg;
+        if (viewBox) {
+            const vb = viewBox.split(/\s+/);
+            if (vb.length === 4) {
+                viewBoxWidth = parseFloat(vb[2]);
+                viewBoxHeight = parseFloat(vb[3]);
+            }
         }
 
-        return svg.replace(
-            /<svg([^>]*)>/i,
-            `<svg width="${width}" height="${height}"$1>`
-        );
+        // If width or height is missing or empty, try to set from viewBox
+        if (!widthAttr || widthAttr.trim() === '' || !heightAttr || heightAttr.trim() === '') {
+            if (viewBoxWidth && viewBoxHeight) {
+                svgElement.setAttribute('width', viewBoxWidth.toString());
+                svgElement.setAttribute('height', viewBoxHeight.toString());
+            } else {
+                // fallback: if viewBox is missing or zero, use 100vw
+                svgElement.style.width = '100vw';
+                svgElement.style.height = '100vw';
+            }
+        }
+        this.viewBoxWidth = viewBoxWidth;
+        this.viewBoxHeight = viewBoxHeight;
     }
 
-    const wrapper = document.getElementById("svgWrapper");
-    const svgString = await chrome.webview.hostObjects.external.GetSvgContent();
-    const base64 = encodeSvgToBase64(fixSvgSize(svgString));
-    const img = new Image();
-    img.src = `data:image/svg+xml;base64,${base64}`;
-    img.draggable = false;
-
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
-    let imgNaturalWidth = 0;
-    let imgNaturalHeight = 0;
-    let canDragX = false;
-    let canDragY = false;
-
-    function clamp(val, min, max) {
-        return Math.max(min, Math.min(max, val));
+    computeBaseScale() {
+        if (!this.viewBoxWidth || !this.viewBoxHeight) return 1;
+        const wrapperRect = document.getElementById('svgContainer').getBoundingClientRect();
+        const scaleX = wrapperRect.width / this.viewBoxWidth;
+        const scaleY = wrapperRect.height / this.viewBoxHeight;
+        return Math.min(scaleX, scaleY, 1); // never upscale by default
     }
 
-    function updateTransform() {
-        // Calculate draggable range
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const w = imgNaturalWidth * scale;
-        const h = imgNaturalHeight * scale;
-        canDragX = w > wrapperRect.width;
-        canDragY = h > wrapperRect.height;
-        const maxOffsetX = canDragX ? (w - wrapperRect.width) / 2 : 0;
-        const maxOffsetY = canDragY ? (h - wrapperRect.height) / 2 : 0;
-        offsetX = canDragX ? clamp(offsetX, -maxOffsetX, maxOffsetX) : 0;
-        offsetY = canDragY ? clamp(offsetY, -maxOffsetY, maxOffsetY) : 0;
-        img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    updateTransform() {
+        this.svgElement.style.transform = `scale(${this.scale})`;
+        this.svgElement.style.transformOrigin = 'center center';
     }
 
-    img.onload = function () {
-        imgNaturalWidth = img.naturalWidth;
-        imgNaturalHeight = img.naturalHeight;
-        updateTransform();
-    };
+    enableTransition() {
+        if (!this.transitionEnabled) {
+            this.svgElement.style.transition = 'transform 0.1s ease-out';
+            this.transitionEnabled = true;
+        }
+    }
 
-    document.addEventListener("wheel", (e) => {
-        e.preventDefault();
-        const scaleFactor = 1.2;
-        const prevScale = scale;
-        scale *= (e.deltaY < 0 ? scaleFactor : 1 / scaleFactor);
-        // Zoom based on window center, do not adjust offsetX/offsetY
-        updateTransform();
-    }, { passive: false });
+    fitToWindow() {
+        this.baseScale = this.computeBaseScale();
+        this.scale = this.baseScale;
+        this.updateTransform();
+    }
 
-    // Drag events
-    img.addEventListener("mousedown", (e) => {
-        if (!(canDragX || canDragY)) return;
-        isDragging = true;
-        startX = e.clientX - offsetX;
-        startY = e.clientY - offsetY;
-    });
-    document.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        if (canDragX) offsetX = e.clientX - startX; else offsetX = 0;
-        if (canDragY) offsetY = e.clientY - startY; else offsetY = 0;
-        updateTransform();
-    });
-    document.addEventListener("mouseup", () => {
-        isDragging = false;
-    });
-    document.addEventListener("mouseleave", () => {
-        isDragging = false;
-    });
+    bindEvents() {
+        this.wrapper.addEventListener("wheel", (e) => {
+            this.enableTransition();
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                this.scale = Math.min(this.maxScale, this.scale * this.scaleStep);
+            } else {
+                this.scale = Math.max(this.minScale, this.scale / this.scaleStep);
+            }
+            this.updateTransform();
+        }, { passive: false });
+        this.wrapper.addEventListener('dblclick', () => {
+            this.enableTransition();
+            this.fitToWindow();
+        });
+    }
 
-    // Double-click to reset zoom and position
-    wrapper.addEventListener("dblclick", () => {
-        scale = 1;
-        offsetX = 0;
-        offsetY = 0;
-        updateTransform();
-    });
+    async init() {
+        const rawSvg = await chrome.webview.hostObjects.external.GetSvgContent();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawSvg, 'image/svg+xml');
+        this.svgElement = doc.documentElement;
 
-    wrapper.appendChild(img);
-})();
+        // Fix SVG size and get viewBox dimensions
+        this.fixSvgSize(this.svgElement);
+
+        this.wrapper.innerHTML = '';
+        this.wrapper.appendChild(this.svgElement);
+
+        this.fitToWindow();
+        this.bindEvents();
+        this.updateTransform();
+    }
+}
+
+new SvgViewer().init();
