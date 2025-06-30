@@ -90,9 +90,11 @@ public class Plugin : IViewer
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".cur", ".ani"],
                 typeof(CursorProvider)));
+#if USESVGSKIA
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".svg"],
                 typeof(SvgProvider)));
+#endif
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));

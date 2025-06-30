@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#if USESVGSKIA
+
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using SkiaSharp;
@@ -59,3 +61,5 @@ internal class SvgProvider : ImageMagickProvider
         });
     }
 }
+
+#endif
