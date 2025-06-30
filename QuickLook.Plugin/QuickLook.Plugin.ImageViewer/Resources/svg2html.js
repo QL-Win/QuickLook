@@ -153,6 +153,19 @@ class SvgViewer {
      * Bind mouse and wheel events for zoom and pan.
      */
     bindEvents() {
+        // Prevent file drag-and-drop on the window to disable dropping files into the viewer
+        window.addEventListener('dragover', function (e) {
+            e.preventDefault();
+        });
+        window.addEventListener('drop', function (e) {
+            e.preventDefault();
+        });
+
+        // Prevent the context menu (right-click menu) from appearing anywhere in the viewer
+        window.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
         // Zoom with mouse wheel
         this.wrapper.addEventListener("wheel", (e) => {
             this.enableTransition();
