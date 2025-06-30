@@ -48,23 +48,21 @@ internal class ImageMagickProvider : AnimationProvider
         {
             try
             {
-                using (var buffer = new MemoryStream(Meta.GetThumbnail()))
-                {
-                    if (buffer.Length == 0)
-                        return null;
+                using var buffer = new MemoryStream(Meta.GetThumbnail());
+                if (buffer.Length == 0)
+                    return null;
 
-                    var img = new BitmapImage();
-                    img.BeginInit();
-                    img.StreamSource = buffer;
-                    img.CacheOption = BitmapCacheOption.OnLoad;
-                    img.EndInit();
+                var img = new BitmapImage();
+                img.BeginInit();
+                img.StreamSource = buffer;
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.EndInit();
 
-                    var transformed = RotateAndScaleThumbnail(img, orientation, fullSize);
+                var transformed = RotateAndScaleThumbnail(img, orientation, fullSize);
 
-                    Helper.DpiHack(transformed);
-                    transformed.Freeze();
-                    return transformed;
-                }
+                Helper.DpiHack(transformed);
+                transformed.Freeze();
+                return transformed;
             }
             catch (Exception e)
             {
@@ -95,42 +93,40 @@ internal class ImageMagickProvider : AnimationProvider
 
         try
         {
-            using (MagickImageCollection layers = new MagickImageCollection(Path.LocalPath, settings))
+            using var layers = new MagickImageCollection(Path.LocalPath, settings);
+            IMagickImage<byte> mi;
+            // Only flatten multi-layer gimp xcf files.
+            if (Path.LocalPath.ToLower().EndsWith(".xcf") && layers.Count > 1)
             {
-                IMagickImage<byte> mi;
-                // Only flatten multi-layer gimp xcf files.
-                if (Path.LocalPath.ToLower().EndsWith(".xcf") && layers.Count > 1)
-                {
-                    // Flatten crops layers to canvas
-                    mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
-                }
-                else
-                {
-                    mi = layers[0];
-                }
-                if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
-                {
-                    if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
-                    {
-                        mi.SetProfile(ColorProfile.SRGB);
-                        if (ContextObject.ColorProfileName != null)
-                            mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
-                    }
-                }
-
-                mi.AutoOrient();
-
-                if (mi.Width != (int)fullSize.Width || mi.Height != (int)fullSize.Height)
-                    mi.Resize((uint)fullSize.Width, (uint)fullSize.Height);
-
-                mi.Density = new Density(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
-                    DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
-
-                var img = mi.ToBitmapSourceWithDensity();
-
-                img.Freeze();
-                return img;
+                // Flatten crops layers to canvas
+                mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
             }
+            else
+            {
+                mi = layers[0];
+            }
+            if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
+            {
+                if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
+                {
+                    mi.SetProfile(ColorProfile.SRGB);
+                    if (ContextObject.ColorProfileName != null)
+                        mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
+                }
+            }
+
+            mi.AutoOrient();
+
+            if (mi.Width != (int)fullSize.Width || mi.Height != (int)fullSize.Height)
+                mi.Resize((uint)fullSize.Width, (uint)fullSize.Height);
+
+            mi.Density = new Density(DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Horizontal,
+                DisplayDeviceHelper.DefaultDpi * DisplayDeviceHelper.GetCurrentScaleFactor().Vertical);
+
+            var img = mi.ToBitmapSourceWithDensity();
+
+            img.Freeze();
+            return img;
         }
         catch (Exception e)
         {
@@ -143,8 +139,7 @@ internal class ImageMagickProvider : AnimationProvider
     {
     }
 
-    protected static TransformedBitmap RotateAndScaleThumbnail(BitmapImage image, Orientation orientation,
-        Size fullSize)
+    protected static TransformedBitmap RotateAndScaleThumbnail(BitmapImage image, Orientation orientation, Size fullSize)
     {
         var swap = false;
 
