@@ -20,7 +20,9 @@ using PureSharpCompress.Common;
 using PureSharpCompress.Readers;
 using QuickLook.Common.Plugin;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Resources;
@@ -71,6 +73,34 @@ internal static class Handler
             {
                 _ = e;
                 context.PreferredSize = new Size { Width = 1200, Height = 900 };
+            }
+        }
+        else if (path.EndsWith(".kra", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                using Stream imageData = ViewImage(path);
+                BitmapImage bitmap = imageData.ReadAsBitmapImage();
+                context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
+            }
+            catch (Exception e)
+            {
+                _ = e;
+                context.PreferredSize = new Size { Width = 800, Height = 600 };
+            }
+        }
+        else if (path.EndsWith(".cdr", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                using Stream imageData = ViewImage(path);
+                BitmapImage bitmap = imageData.ReadAsBitmapImage();
+                context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
+            }
+            catch (Exception e)
+            {
+                _ = e;
+                context.PreferredSize = new Size { Width = 800, Height = 600 };
             }
         }
     }
@@ -134,6 +164,40 @@ internal static class Handler
             while (reader.MoveToNextEntry())
             {
                 if (reader.Entry.Key!.Equals("Thumbnails/thumbnail.png", StringComparison.OrdinalIgnoreCase))
+                {
+                    MemoryStream ms = new();
+                    using EntryStream stream = reader.OpenEntryStream();
+                    stream.CopyTo(ms);
+                    return ms;
+                }
+            }
+        }
+        else if (path.EndsWith(".kra", StringComparison.OrdinalIgnoreCase))
+        {
+            using ZipArchive archive = ZipArchive.Open(path, new());
+            using IReader reader = archive.ExtractAllEntries();
+
+            while (reader.MoveToNextEntry())
+            {
+                Debug.WriteLine(reader.Entry.Key);
+
+                if (reader.Entry.Key!.Contains("mergedimage"))
+                {
+                    MemoryStream ms = new();
+                    using EntryStream stream = reader.OpenEntryStream();
+                    stream.CopyTo(ms);
+                    return ms;
+                }
+            }
+        }
+        else if (path.EndsWith(".cdr", StringComparison.OrdinalIgnoreCase))
+        {
+            using ZipArchive archive = ZipArchive.Open(path, new());
+            using IReader reader = archive.ExtractAllEntries();
+
+            while (reader.MoveToNextEntry())
+            {
+                if (reader.Entry.Key!.Equals("previews/thumbnail.png", StringComparison.OrdinalIgnoreCase))
                 {
                     MemoryStream ms = new();
                     using EntryStream stream = reader.OpenEntryStream();

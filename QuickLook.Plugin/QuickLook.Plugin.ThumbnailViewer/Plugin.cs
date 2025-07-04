@@ -30,7 +30,9 @@ public class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownImageExtensions = new(
     [
+        ".cdr", // CorelDraw
         ".fig", // Figma
+        ".kra", // Krita
         ".xd", // AdobeXD
         ".xmind", // XMind
     ]);
@@ -65,6 +67,9 @@ public class Plugin : IViewer
         _ = Task.Run(() =>
         {
             using Stream imageData = Handler.ViewImage(path);
+
+            if (imageData is null) return;
+
             BitmapImage bitmap = imageData.ReadAsBitmapImage();
 
             if (_ip is null) return;
