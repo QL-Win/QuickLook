@@ -114,8 +114,7 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
-         || path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
+        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
         {
             if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
             {
@@ -130,6 +129,14 @@ public class Plugin : IViewer
                 context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
                 return;
             }
+        }
+        else if (path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
+        {
+            _metaSvg = new SvgMetaProvider(path);
+
+            context.PreferredSize = new Size(800, 600);
+            context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
+            return;
         }
 
         _meta = new MetaProvider(path);
