@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="NSIS" extensions=".nsi;.nsh">
+    
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#2F2F2F"/>
+        <VRuler color="#404040"/>
+        
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#1E1E1E"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+        <Property name="LineComment" value=";"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8" bold="false" italic="false"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[]:;"'&lt;&gt; , .?</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+            
+            <Span name="BlockComment1" rule="NSISDoc" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="#D4D4D4" bold="false" italic="true">Function</MarkFollowing>
+            <MarkFollowing color="#D4D4D4" bold="false" italic="true">Section</MarkFollowing>
+            <MarkFollowing color="#D4D4D4" bold="false" italic="true">Var</MarkFollowing>
+                                
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
+                <Key word="Function"/>
+                <Key word="FunctionEnd"/>
+                <Key word="Section"/>
+                <Key word="SectionEnd"/>
+                <Key word="SubSection"/>
+                <Key word="SubSectionEnd"/>
+                <Key word="Page"/>
+                <Key word="UninstPage"/>
+                <Key word="Var"/>
+                <Key word="InstallDir"/>
+                <Key word="Name"/>
+                <Key word="OutFile"/>
+                <Key word="Caption"/>
+                <Key word="Icon"/>
+                <Key word="UninstallIcon"/>
+                <Key word="SetCompressor"/>
+                <Key word="SetCompress"/>
+                <Key word="RequestExecutionLevel"/>
+                <Key word="ShowInstDetails"/>
+                <Key word="ShowUninstDetails"/>
+                <Key word="AutoCloseWindow"/>
+                <Key word="WindowIcon"/>
+                <Key word="XPStyle"/>
+                <Key word="ManifestDPIAware"/>
+                <Key word="ManifestSupportedOS"/>
+                <Key word="VIAddVersionKey"/>
+                <Key word="VIProductVersion"/>
+                <Key word="VIFileVersion"/>
+                <Key word="BrandingText"/>
+                <Key word="InstallDirRegKey"/>
+                <Key word="UninstallExeName"/>
+                <Key word="AllowRootDirInstall"/>
+                <Key word="AllowSkipFiles"/>
+                <Key word="ComponentText"/>
+                <Key word="DirText"/>
+                <Key word="InstallButtonText"/>
+                <Key word="LicenseText"/>
+                <Key word="MiscButtonText"/>
+                <Key word="SpaceTexts"/>
+                <Key word="FileErrorText"/>
+                <Key word="CompletedText"/>
+                <Key word="UninstallText"/>
+                <Key word="UninstallButtonText"/>
+                <Key word="UninstallSubCaption"/>
+                <Key word="LicenseForceSelection"/>
+                <Key word="LicenseData"/>
+                <Key word="LicenseBkColor"/>
+                <Key word="CheckBitmap"/>
+                <Key word="InstallColors"/>
+                <Key word="InstallProgressFlags"/>
+                <Key word="LoadLanguageFile"/>
+                <Key word="LangString"/>
+                <Key word="if"/>
+                <Key word="else"/>
+                <Key word="endif"/>
+                <Key word="ifdef"/>
+                <Key word="ifndef"/>
+                <Key word="define"/>
+                <Key word="undef"/>
+                <Key word="include"/>
+                <Key word="insertmacro"/>
+                <Key word="macro"/>
+                <Key word="macroend"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="on"/>
+                <Key word="off"/>
+                <Key word="force"/>
+                <Key word="try"/>
+                <Key word="lzma"/>
+                <Key word="zlib"/>
+                <Key word="bzip2"/>
+                <Key word="none"/>
+                <Key word="auto"/>
+                <Key word="all"/>
+                <Key word="both"/>
+                <Key word="colored"/>
+                <Key word="listonly"/>
+                <Key word="textonly"/>
+                <Key word="ifdiff"/>
+                <Key word="lastused"/>
+                <Key word="leave"/>
+                <Key word="nevershow"/>
+                <Key word="show"/>
+                <Key word="hide"/>
+                <Key word="silent"/>
+                <Key word="silentlog"/>
+                <Key word="normal"/>
+                <Key word="highest"/>
+                <Key word="admin"/>
+                <Key word="user"/>
+                <Key word="power"/>
+                <Key word="guest"/>
+                <Key word="current"/>
+                <Key word="all"/>
+                <Key word="readonly"/>
+                <Key word="checkbox"/>
+                <Key word="radiobuttons"/>
+                <Key word="top"/>
+                <Key word="left"/>
+                <Key word="bottom"/>
+                <Key word="right"/>
+                <Key word="smooth"/>
+                <Key word="manual"/>
+                <Key word="SW_HIDE"/>
+                <Key word="SW_SHOWNORMAL"/>
+                <Key word="SW_SHOWMINIMIZED"/>
+                <Key word="SW_SHOWMAXIMIZED"/>
+                <Key word="SW_SHOWNOACTIVATE"/>
+                <Key word="SW_SHOW"/>
+                <Key word="SW_MINIMIZE"/>
+                <Key word="SW_SHOWMINNOACTIVE"/>
+                <Key word="SW_SHOWNA"/>
+                <Key word="SW_RESTORE"/>
+                <Key word="SW_SHOWDEFAULT"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false" italic="false">
+                <Key word="File"/>
+                <Key word="Delete"/>
+                <Key word="Rename"/>
+                <Key word="RMDir"/>
+                <Key word="CreateDirectory"/>
+                <Key word="CreateShortCut"/>
+                <Key word="CopyFiles"/>
+                <Key word="SetOutPath"/>
+                <Key word="SetFileAttributes"/>
+                <Key word="GetDLLVersion"/>
+                <Key word="GetFileTime"/>
+                <Key word="GetFileVersion"/>
+                <Key word="GetFullPathName"/>
+                <Key word="GetTempFileName"/>
+                <Key word="SearchPath"/>
+                <Key word="SetFileTime"/>
+                <Key word="LogText"/>
+                <Key word="LogSet"/>
+                <Key word="Exec"/>
+                <Key word="ExecWait"/>
+                <Key word="ExecShell"/>
+                <Key word="ExecShellWait"/>
+                <Key word="RegDLL"/>
+                <Key word="UnRegDLL"/>
+                <Key word="CallInstDLL"/>
+                <Key word="RegSvr32"/>
+                <Key word="WriteRegStr"/>
+                <Key word="WriteRegExpandStr"/>
+                <Key word="WriteRegDWORD"/>
+                <Key word="WriteRegBin"/>
+                <Key word="WriteINIStr"/>
+                <Key word="ReadRegStr"/>
+                <Key word="ReadRegDWORD"/>
+                <Key word="ReadINIStr"/>
+                <Key word="ReadEnvStr"/>
+                <Key word="ExpandEnvStrings"/>
+                <Key word="DeleteRegValue"/>
+                <Key word="DeleteRegKey"/>
+                <Key word="EnumRegKey"/>
+                <Key word="EnumRegValue"/>
+                <Key word="DeleteINISec"/>
+                <Key word="DeleteINIStr"/>
+                <Key word="FlushINI"/>
+                <Key word="SetDetailsPrint"/>
+                <Key word="SetDetailsView"/>
+                <Key word="SetAutoClose"/>
+                <Key word="SetDatablockOptimize"/>
+                <Key word="SetDateSave"/>
+                <Key word="SetOverwrite"/>
+                <Key word="SetPluginUnload"/>
+                <Key word="SetCompress"/>
+                <Key word="SetCompressor"/>
+                <Key word="SetCompressorDictSize"/>
+                <Key word="AllowSkipFiles"/>
+                <Key word="SetBrandingImage"/>
+                <Key word="SetSilent"/>
+                <Key word="SetErrorLevel"/>
+                <Key word="GetErrorLevel"/>
+                <Key word="SetRebootFlag"/>
+                <Key word="GetInstDirError"/>
+                <Key word="InitPluginsDir"/>
+                <Key word="Nop"/>
+                <Key word="SetShellVarContext"/>
+                <Key word="Quit"/>
+                <Key word="Abort"/>
+                <Key word="DetailPrint"/>
+                <Key word="Sleep"/>
+                <Key word="BringToFront"/>
+                <Key word="HideWindow"/>
+                <Key word="ShowWindow"/>
+                <Key word="EnableWindow"/>
+                <Key word="IsWindow"/>
+                <Key word="GetDlgItem"/>
+                <Key word="SetCtlColors"/>
+                <Key word="SetBrandingImage"/>
+                <Key word="LoadAndSetImage"/>
+                <Key word="SetStaticBkColor"/>
+                <Key word="FindWindow"/>
+                <Key word="SendMessage"/>
+                <Key word="GetWindowText"/>
+                <Key word="GetWindowRect"/>
+                <Key word="MoveWindow"/>
+                <Key word="GetDlgItemText"/>
+                <Key word="SetDlgItemText"/>
+                <Key word="MessageBox"/>
+                <Key word="Return"/>
+                <Key word="Call"/>
+                <Key word="CallInstDLL"/>
+                <Key word="GetCurrentAddress"/>
+                <Key word="Goto"/>
+                <Key word="StrCmp"/>
+                <Key word="StrCpy"/>
+                <Key word="StrLen"/>
+                <Key word="IntOp"/>
+                <Key word="IntCmp"/>
+                <Key word="IntCmpU"/>
+                <Key word="IntFmt"/>
+                <Key word="FileOpen"/>
+                <Key word="FileClose"/>
+                <Key word="FileRead"/>
+                <Key word="FileWrite"/>
+                <Key word="FileReadByte"/>
+                <Key word="FileWriteByte"/>
+                <Key word="FileSeek"/>
+                <Key word="FindFirst"/>
+                <Key word="FindNext"/>
+                <Key word="FindClose"/>
+                <Key word="Push"/>
+                <Key word="Pop"/>
+                <Key word="Exch"/>
+                <Key word="ClearErrors"/>
+                <Key word="SetErrors"/>
+                <Key word="GetErrorLevel"/>
+                <Key word="IfErrors"/>
+                <Key word="IfFileExists"/>
+                <Key word="IfRebootFlag"/>
+                <Key word="IfSilent"/>
+                <Key word="IfAbort"/>
+                <Key word="GetFunctionAddress"/>
+                <Key word="GetLabelAddress"/>
+                <Key word="GetCurrentAddress"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="NSISDoc" ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="#808080" bold="false" italic="false">
+                <Key word="@author"/>
+                <Key word="@version"/>
+                <Key word="@description"/>
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="@see"/>
+                <Key word="@since"/>
+                <Key word="@deprecated"/>
+                <Key word="@todo"/>
+                <Key word="@note"/>
+                <Key word="@warning"/>
+                <Key word="@example"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
