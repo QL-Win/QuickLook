@@ -23,7 +23,7 @@ class SvgaViewer {
      */
     async play() {
         const path = await chrome.webview.hostObjects.external.GetPath();
-        const parser = new SVGA.Parser();
+        const parser = new SVGA.Parser(); // Only SVGA 2.x supported
 
         // Because the path is a local file, we need to convert it to a URL format
         parser.load('https://' + path).then(svga => {
