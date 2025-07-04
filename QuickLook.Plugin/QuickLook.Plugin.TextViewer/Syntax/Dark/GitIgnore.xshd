@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="GitIgnore" extensions=".gitignore">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#2A2A2A"/>
+        
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value=";"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;|\/"',;=:-</Delimiters>
+        
+            <Span name="LineComment1" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+			<Span name="Negation" stopateol="true" color="#D7BA7D" bold="true" italic="false">
+				<Begin startofline="true">!</Begin>
+			</Span>
+
+			<Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\"> 
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Variable" stopateol="true" color="#569CD6" bold="true" italic="false">
+                <Begin startofline="true">[</Begin>
+                <End>]</End>
+            </Span>
+            
+            <MarkPrevious color="#C586C0" bold="false" italic="false">=</MarkPrevious>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
