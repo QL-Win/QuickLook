@@ -111,8 +111,12 @@
         <PackageReference Include="UnblockZoneIdentifier" Version="1.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <!--<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />-->
-        <!--<PackageReference Include="System.Memory" Version="4.6.3" />-->
+        <PackageReference Include="System.Memory" Version="4.6.3">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <!--<PackageReference Include="System.Buffers" Version="4.6.1" />-->
     </ItemGroup>
 

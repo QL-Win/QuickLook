@@ -64,6 +64,12 @@
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3296.44">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="System.Memory" Version="4.6.3">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup Condition=" '$(DefineConstants)' != '' and $(DefineConstants.Contains('USESVGSKIA')) ">

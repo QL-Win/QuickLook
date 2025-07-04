@@ -20,13 +20,50 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-internal class Helper
+internal static class Helper
 {
-    public static void DpiHack(BitmapSource img)
+    public static BitmapSource InvertColors(this BitmapSource source)
+    {
+        WriteableBitmap writableBitmap = new(source);
+        writableBitmap.Lock();
+
+        nint pBackBuffer = writableBitmap.BackBuffer;
+        int stride = writableBitmap.BackBufferStride;
+        int width = writableBitmap.PixelWidth;
+        int height = writableBitmap.PixelHeight;
+        int bytesPerPixel = (writableBitmap.Format.BitsPerPixel + 7) / 8;
+
+        unsafe
+        {
+            byte* pPixels = (byte*)pBackBuffer;
+
+            for (int y = 0; y < height; y++)
+            {
+                Span<byte> row = new(pPixels + y * stride, width * bytesPerPixel);
+
+                for (int x = 0; x < width; x++)
+                {
+                    int index = x * bytesPerPixel;
+
+                    row[index] = (byte)(255 - row[index]);
+                    row[index + 1] = (byte)(255 - row[index + 1]);
+                    row[index + 2] = (byte)(255 - row[index + 2]);
+                }
+            }
+        }
+
+        writableBitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
+        writableBitmap.Unlock();
+
+        return writableBitmap;
+    }
+
+    public static void DpiHack(this BitmapSource img)
     {
         // a dirty hack... but is the fastest
 

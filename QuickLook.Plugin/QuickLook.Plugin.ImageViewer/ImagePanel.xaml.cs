@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Win32;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
@@ -23,6 +24,7 @@ using QuickLook.Plugin.ImageViewer.NativeMethods;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -47,9 +49,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     private bool _isZoomFactorFirstSet = true;
     private DateTime _lastZoomTime = DateTime.MinValue;
     private double _maxZoomFactor = 3d;
-    private Visibility _copyIconVisibility = Visibility.Visible;
     private MetaProvider _meta;
-    private Visibility _metaIconVisibility = Visibility.Visible;
     private double _minZoomFactor = 0.1d;
     private BitmapScalingMode _renderMode = BitmapScalingMode.Linear;
     private bool _showZoomLevelInfo = true;
@@ -60,6 +60,11 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     private double _zoomToFitFactor;
     private bool _zoomWithControlKey;
 
+    private Visibility _copyIconVisibility = Visibility.Visible;
+    private Visibility _saveAsVisibility = Visibility.Collapsed;
+    private Visibility _reverseColorVisibility = Visibility.Collapsed;
+    private Visibility _metaIconVisibility = Visibility.Visible;
+
     public ImagePanel()
     {
         InitializeComponent();
@@ -67,6 +72,10 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         Resources.MergedDictionaries.Clear();
 
         buttonCopy.Click += OnCopyOnClick;
+
+        buttonSaveAs.Click += OnSaveAsOnClick;
+
+        buttonReverseColor.Click += OnReverseColorOnClick;
 
         buttonMeta.Click += (sender, e) =>
             textMeta.Visibility = textMeta.Visibility == Visibility.Collapsed
@@ -153,22 +162,42 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         }
     }
 
-    public Visibility MetaIconVisibility
-    {
-        get => _metaIconVisibility;
-        set
-        {
-            _metaIconVisibility = value;
-            OnPropertyChanged();
-        }
-    }
-
     public Visibility CopyIconVisibility
     {
         get => _copyIconVisibility;
         set
         {
             _copyIconVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility SaveAsVisibility
+    {
+        get => _saveAsVisibility;
+        set
+        {
+            _saveAsVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility ReverseColorVisibility
+    {
+        get => _reverseColorVisibility;
+        set
+        {
+            _reverseColorVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility MetaIconVisibility
+    {
+        get => _metaIconVisibility;
+        set
+        {
+            _metaIconVisibility = value;
             OnPropertyChanged();
         }
     }
@@ -305,6 +334,51 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         {
             ///
         }
+    }
+
+    private void OnSaveAsOnClick(object sender, RoutedEventArgs e)
+    {
+        if (_source == null)
+        {
+            return;
+        }
+
+        var dialog = new SaveFileDialog()
+        {
+            Filter = "PNG Image|*.png",
+            DefaultExt = ".png",
+            FileName = Path.GetFileNameWithoutExtension(ContextObject.Title)
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                if (File.Exists(dialog.FileName))
+                {
+                    File.Delete(dialog.FileName);
+                }
+
+                PngBitmapEncoder encoder = new();
+                encoder.Frames.Add(BitmapFrame.Create(_source));
+                using FileStream stream = new(dialog.FileName, FileMode.Create, FileAccess.Write);
+                encoder.Save(stream);
+            }
+            catch
+            {
+                ///
+            }
+        }
+    }
+
+    private void OnReverseColorOnClick(object sender, RoutedEventArgs e)
+    {
+        if (_source == null)
+        {
+            return;
+        }
+
+        Source = _source.InvertColors();
     }
 
     private void OnBackgroundColourOnClick(object sender, RoutedEventArgs e)
