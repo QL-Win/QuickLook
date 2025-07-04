@@ -80,7 +80,7 @@
         </ProjectReference>
     </ItemGroup>
 
-    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <Delete Files="$(OutputPath)\QuickLook.Plugin.HtmlViewer.dll" Condition="Exists('$(OutputPath)\QuickLook.Plugin.HtmlViewer.dll')" />
         <Delete Files="$(OutputPath)\QuickLook.Plugin.HtmlViewer.pdb" Condition="Exists('$(OutputPath)\QuickLook.Plugin.HtmlViewer.pdb')" />
         <Delete Files="$(OutputPath)\lib*.dll" />
