@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Registry" extensions=".reg">
+
+    <Environment> 
+        <Default color="White" bgcolor="#1E1E1E"/>
+        <Selection color="White" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#424242"/>
+        
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="White" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="White" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#505050"/>
+        <SpaceMarkers color="#505050"/>
+        <TabMarkers color="#505050"/>
+        <InvalidLines color="#505050"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value=";"/>
+    </Properties>
+    
+    <Digits name="Digits" color="White"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;|\/()[]"',;@=:-</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>;</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Variable" stopateol="true" color="#9CDCFE" bold="true" italic="false">
+                <Begin startofline="true">[</Begin>
+                <End>]</End>
+            </Span>
+            
+            <KeyWords name="Punctuation" color="#D16969" bold="false">
+                <Key word="@"/>
+                <Key word="="/>
+                <Key word=":"/>
+                <Key word="-"/>
+                <Key word=";"/>
+                <Key word=","/>
+                <Key word="["/>
+                <Key word="]"/>             
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
