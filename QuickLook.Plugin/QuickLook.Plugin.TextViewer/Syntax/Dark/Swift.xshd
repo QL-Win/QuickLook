@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Swift" extensions=".swift">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#2F2F2F"/>
+        <VRuler color="#404040"/>
+        
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#505050"/>
+        <TabMarkers color="#505050"/>
+        <InvalidLines color="#505050"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}@,:`=;+-*/%~ &amp;|^&gt;&lt;?</Delimiters>
+            
+            <Span name="LineComment" rule="SwiftDoc" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+                            
+            <Span name="BlockComment" rule="SwiftDoc" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <MarkFollowing markmarker="true" color="#DCDCAA" bold="false">@</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="#569CD6" bold="false">
+                <Key word="Any"/>
+                <Key word="Self"/>
+                <Key word="as"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="continue"/>
+                <Key word="convenience"/>
+                <Key word="default"/>
+                <Key word="defer"/>
+                <Key word="deinit"/>
+                <Key word="do"/>
+                <Key word="dynamic"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="extension"/>
+                <Key word="fallthrough"/>
+                <Key word="false"/>
+                <Key word="fileprivate"/>
+                <Key word="final"/>
+                <Key word="for"/>
+                <Key word="func"/>
+                <Key word="get"/>
+                <Key word="guard"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="infix"/>
+                <Key word="init"/>
+                <Key word="inout"/>
+                <Key word="internal"/>
+                <Key word="is"/>
+                <Key word="lazy"/>
+                <Key word="let"/>
+                <Key word="nil"/>
+                <Key word="open"/>
+                <Key word="operator"/>
+                <Key word="optional"/>
+                <Key word="override"/>
+                <Key word="postfix"/>
+                <Key word="prefix"/>
+                <Key word="private"/>
+                <Key word="protocol"/>
+                <Key word="public"/>
+                <Key word="repeat"/>
+                <Key word="required"/>
+                <Key word="rethrows"/>
+                <Key word="return"/>
+                <Key word="self"/>
+                <Key word="set"/>
+                <Key word="static"/>
+                <Key word="struct"/>
+                <Key word="subscript"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typealias"/>
+                <Key word="unowned"/>
+                <Key word="var"/>
+                <Key word="weak"/>
+                <Key word="where"/>
+                <Key word="while"/>
+            </KeyWords>
+                                    
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false">
+                <Key word="Array"/>
+                <Key word="Bool"/>
+                <Key word="Character"/>
+                <Key word="Dictionary"/>
+                <Key word="Double"/>
+                <Key word="Float"/>
+                <Key word="Float80"/>
+                <Key word="Index"/>
+                <Key word="Int"/>
+                <Key word="Int16"/>
+                <Key word="Int32"/>
+                <Key word="Int64"/>
+                <Key word="Int8"/>
+                <Key word="Integer"/>
+                <Key word="Iterator"/>
+                <Key word="Optional"/>
+                <Key word="String"/>
+                <Key word="UInt"/>
+                <Key word="UInt16"/>
+                <Key word="UInt32"/>
+                <Key word="UInt64"/>
+                <Key word="UInt8"/>
+                <Key word="UTF16"/>
+                <Key word="UTF32"/>
+                <Key word="UTF8"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="#FF6B6B" bold="false">
+                <Key word="#available"/>
+                <Key word="#colorLiteral"/>
+                <Key word="#column"/>
+                <Key word="#else"/>
+                <Key word="#elseif"/>
+                <Key word="#endif"/>
+                <Key word="#file"/>
+                <Key word="#fileLiteral"/>
+                <Key word="#function"/>
+                <Key word="#if"/>
+                <Key word="#imageLiteral"/>
+                <Key word="#line"/>
+                <Key word="#selector"/>
+                <Key word="#sourceLocation"/>
+            </KeyWords>                     
+        </RuleSet>
+        
+        <RuleSet name="SwiftDoc" ignorecase="true">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="#FFA500" bold="true" italic="false">
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="FIXME:"/>
+                <Key word="MARK:"/>
+                <Key word="TODO:"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
