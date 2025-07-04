@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="SubRip Subtitle" extensions=".srt">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+    </Environment>
+
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>:,-&gt; &lt;&gt;</Delimiters>
+            
+            <!-- Arrow symbol -->
+            <KeyWords name="Arrow" color="#D7BA7D" bold="true">
+                <Key word="-->" />
+            </KeyWords>
+            
+            <!-- HTML formatting tags -->
+            <KeyWords name="HtmlTag" color="#4EC9B0" bold="false">
+                <Key word="&lt;i&gt;" />
+                <Key word="&lt;/i&gt;" />
+                <Key word="&lt;b&gt;" />
+                <Key word="&lt;/b&gt;" />
+                <Key word="&lt;u&gt;" />
+                <Key word="&lt;/u&gt;" />
+                <Key word="&lt;font" />
+                <Key word="&lt;/font&gt;" />
+            </KeyWords>
+            
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
