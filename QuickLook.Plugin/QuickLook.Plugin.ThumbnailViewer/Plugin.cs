@@ -30,9 +30,9 @@ public class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownImageExtensions = new(
     [
+        ".fig", // Figma
         ".xd", // AdobeXD
-        //".xmind", // XMind
-        //".fig", // Figma
+        ".xmind", // XMind
     ]);
 
     private ImagePanel _ip;
@@ -50,17 +50,7 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        try
-        {
-            using Stream imageData = ProductExtractor.ViewImage(path);
-            BitmapImage bitmap = imageData.ReadAsBitmapImage();
-            context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
-        }
-        catch (Exception e)
-        {
-            _ = e;
-            context.PreferredSize = new Size { Width = 1200, Height = 900 };
-        }
+        Handler.Prepare(path, context);
     }
 
     public void View(string path, ContextObject context)
@@ -74,7 +64,7 @@ public class Plugin : IViewer
 
         _ = Task.Run(() =>
         {
-            using Stream imageData = ProductExtractor.ViewImage(path);
+            using Stream imageData = Handler.ViewImage(path);
             BitmapImage bitmap = imageData.ReadAsBitmapImage();
 
             if (_ip is null) return;

@@ -52,6 +52,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Resource Include="Resources\*.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="PureSharpCompress" Version="0.40.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
