@@ -23,38 +23,42 @@ public class SvgMetaProvider(string path)
         {
             return _size;
         }
-        try
+
+        if (_path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
         {
-            var svgContent = File.ReadAllText(_path);
-            var svg = XElement.Parse(svgContent);
-            XNamespace ns = svg.Name.Namespace;
-
-            string widthAttr = svg.Attribute("width")?.Value;
-            string heightAttr = svg.Attribute("height")?.Value;
-
-            float? width = TryParseSvgLength(widthAttr);
-            float? height = TryParseSvgLength(heightAttr);
-
-            if (width.HasValue && height.HasValue)
+            try
             {
-                _size = new Size { Width = width.Value, Height = height.Value };
-            }
+                var svgContent = File.ReadAllText(_path);
+                var svg = XElement.Parse(svgContent);
+                XNamespace ns = svg.Name.Namespace;
 
-            string viewBoxAttr = svg.Attribute("viewBox")?.Value;
-            if (!string.IsNullOrEmpty(viewBoxAttr))
-            {
-                var parts = viewBoxAttr.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length == 4 &&
-                    float.TryParse(parts[2], out float vbWidth) &&
-                    float.TryParse(parts[3], out float vbHeight))
+                string widthAttr = svg.Attribute("width")?.Value;
+                string heightAttr = svg.Attribute("height")?.Value;
+
+                float? width = TryParseSvgLength(widthAttr);
+                float? height = TryParseSvgLength(heightAttr);
+
+                if (width.HasValue && height.HasValue)
                 {
-                    _size = new Size { Width = vbWidth, Height = vbHeight };
+                    _size = new Size { Width = width.Value, Height = height.Value };
+                }
+
+                string viewBoxAttr = svg.Attribute("viewBox")?.Value;
+                if (!string.IsNullOrEmpty(viewBoxAttr))
+                {
+                    var parts = viewBoxAttr.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length == 4 &&
+                        float.TryParse(parts[2], out float vbWidth) &&
+                        float.TryParse(parts[3], out float vbHeight))
+                    {
+                        _size = new Size { Width = vbWidth, Height = vbHeight };
+                    }
                 }
             }
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine(e);
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         return _size;

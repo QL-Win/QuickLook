@@ -99,7 +99,7 @@ public class SvgImagePanel : WebpagePanel
 
         ObjectForScripting ??= new ScriptHandler(path);
 
-        _homePage = _resources["/svg2html.html"];
+        _homePage = _resources[path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase) ? "/svga2html.html" : "/svg2html.html"];
         NavigateToUri(new Uri("file://quicklook/"));
     }
 
@@ -141,6 +141,21 @@ public class SvgImagePanel : WebpagePanel
                                 var fileStream = File.OpenRead(localPath);
                                 var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                                     fileStream, 200, "OK", MimeTypes.GetContentType());
+                                args.Response = response;
+                            }
+                        }
+                    }
+                    else if (requestedUri.Scheme == "https")
+                    {
+                        var localPath = $"{requestedUri.Authority}:{requestedUri.AbsolutePath}".Replace('/', '\\');
+
+                        if (localPath.StartsWith(_fallbackPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (File.Exists(localPath))
+                            {
+                                var fileStream = File.OpenRead(localPath);
+                                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                                    fileStream, 200, "OK", MimeTypes.GetContentType() + "\r\nAccess-Control-Allow-Origin: *");
                                 args.Response = response;
                             }
                         }
@@ -196,6 +211,16 @@ public class SvgImagePanel : WebpagePanel
 public sealed class ScriptHandler(string path)
 {
     public string Path { get; } = path;
+
+    public async Task<string> GetPath()
+    {
+        return await Task.FromResult(new Uri(Path).AbsolutePath);
+    }
+
+    public async Task<string> GetUri()
+    {
+        return await Task.FromResult(new Uri(Path).AbsoluteUri);
+    }
 
     public async Task<string> GetSvgContent()
     {

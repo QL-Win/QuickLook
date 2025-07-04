@@ -48,7 +48,7 @@ public class Plugin : IViewer
         ".pbm", ".pcx", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
         ".qoi",
         ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
-        ".sr2", ".srf", ".srw", ".svg", ".svgz",
+        ".sr2", ".srf", ".srw", ".svg", ".svga", ".svgz",
         ".tga", ".tif", ".tiff",
         ".wdp", ".webp", ".wmf",
         ".x3f", ".xcf", ".xbm", ".xpm",
@@ -114,7 +114,8 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
+         || path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
         {
             if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
             {
@@ -145,7 +146,8 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
+         || path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
         {
             if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
             {
