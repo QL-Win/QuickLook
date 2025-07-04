@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="QML" extensions=".qml">
+
+	<Environment>
+		<Default color="Black" bgcolor="#FFFFFF"/>
+		<Selection color="#FFFFFF" bgcolor="#316AC5"/>
+		<LineNumbers color="#2B91AF" bgcolor="#FFFFFF"/>
+		<CaretMarker color="#2B91AF"/>
+		<VRuler color="#C0C0C0"/>
+
+		<FoldLine color="#808080" bgcolor="#FFFFFF"/>
+		<FoldMarker color="#808080" bgcolor="#FFFFFF"/>
+		<SelectedFoldLine color="#808080" bgcolor="#FFFFFF"/>
+
+		<EOLMarkers color="#C0C0C0"/>
+		<SpaceMarkers color="#C0C0C0"/>
+		<TabMarkers color="#C0C0C0"/>
+		<InvalidLines color="#C0C0C0"/>
+	</Environment>
+
+	<Properties>
+		<Property name="LineComment" value="// "/>
+	</Properties>
+
+	<Digits name="Digits" color="Black" bold="false" italic="false"/>
+
+	<RuleSets>
+		<RuleSet ignorecase="false">
+
+			<Delimiters>()[]{},.;:+-*/=&lt;&gt;!&amp;|</Delimiters>
+
+			<!-- Single line comment -->
+			<Span name="LineComment" stopateol="true" color="#008000" bold="false" italic="false">
+				<Begin>//</Begin>
+			</Span>
+
+			<!-- Multi-line comment -->
+			<Span name="BlockComment" color="#008000" bold="false" italic="false">
+				<Begin>/*</Begin>
+				<End>*/</End>
+			</Span>
+
+			<!-- String literals -->
+			<Span name="String" stopateol="true" color="#A31515" bold="false" italic="false">
+				<Begin>"</Begin>
+				<End>"</End>
+			</Span>
+
+			<!-- String literals with single quotes -->
+			<Span name="String2" stopateol="true" color="#A31515" bold="false" italic="false">
+				<Begin>'</Begin>
+				<End>'</End>
+			</Span>
+
+			<!-- JavaScript code blocks -->
+			<Span name="JavaScript" color="#8B4513" bold="false" italic="false">
+				<Begin>{</Begin>
+				<End>}</End>
+			</Span>
+
+			<KeyWords name="Keywords1" color="#2B91AF" bold="false" italic="false">
+				<!-- QML Types -->
+				<Key word="Rectangle"/>
+				<Key word="Item"/>
+				<Key word="Text"/>
+				<Key word="Image"/>
+				<Key word="MouseArea"/>
+				<Key word="Column"/>
+				<Key word="Row"/>
+				<Key word="Grid"/>
+				<Key word="ListView"/>
+				<Key word="GridView"/>
+				<Key word="PathView"/>
+				<Key word="Repeater"/>
+				<Key word="Loader"/>
+				<Key word="Component"/>
+				<Key word="QtObject"/>
+				<Key word="Timer"/>
+				<Key word="Animation"/>
+				<Key word="PropertyAnimation"/>
+				<Key word="NumberAnimation"/>
+				<Key word="ColorAnimation"/>
+				<Key word="RotationAnimation"/>
+				<Key word="PauseAnimation"/>
+				<Key word="SequentialAnimation"/>
+				<Key word="ParallelAnimation"/>
+				<Key word="ScriptAction"/>
+				<Key word="PropertyAction"/>
+				<Key word="Transition"/>
+				<Key word="State"/>
+				<Key word="StateGroup"/>
+				<Key word="StateChangeScript"/>
+				<Key word="AnchorAnimation"/>
+				<Key word="SmoothedAnimation"/>
+				<Key word="SpringAnimation"/>
+				<Key word="Behavior"/>
+				<Key word="Binding"/>
+				<Key word="Connections"/>
+				<Key word="Window"/>
+				<Key word="ApplicationWindow"/>
+				<Key word="Button"/>
+				<Key word="CheckBox"/>
+				<Key word="RadioButton"/>
+				<Key word="TextField"/>
+				<Key word="TextArea"/>
+				<Key word="ComboBox"/>
+				<Key word="Slider"/>
+				<Key word="ProgressBar"/>
+				<Key word="ScrollView"/>
+				<Key word="TabView"/>
+				<Key word="SplitView"/>
+				<Key word="StackView"/>
+				<Key word="SwipeView"/>
+				<Key word="Page"/>
+				<Key word="Pane"/>
+				<Key word="GroupBox"/>
+				<Key word="Frame"/>
+				<Key word="Label"/>
+				<Key word="ToolBar"/>
+				<Key word="StatusBar"/>
+				<Key word="MenuBar"/>
+				<Key word="Menu"/>
+				<Key word="MenuItem"/>
+				<Key word="Action"/>
+				<Key word="Shortcut"/>
+				<Key word="Dialog"/>
+				<Key word="Popup"/>
+				<Key word="Drawer"/>
+				<Key word="ToolTip"/>
+			</KeyWords>
+
+			<KeyWords name="Keywords2" color="#0000FF" bold="false" italic="false">
+				<!-- QML Properties -->
+				<Key word="width"/>
+				<Key word="height"/>
+				<Key word="x"/>
+				<Key word="y"/>
+				<Key word="z"/>
+				<Key word="anchors"/>
+				<Key word="color"/>
+				<Key word="opacity"/>
+				<Key word="visible"/>
+				<Key word="enabled"/>
+				<Key word="focus"/>
+				<Key word="text"/>
+				<Key word="font"/>
+				<Key word="source"/>
+				<Key word="fillMode"/>
+				<Key word="smooth"/>
+				<Key word="antialiasing"/>
+				<Key word="clip"/>
+				<Key word="scale"/>
+				<Key word="rotation"/>
+				<Key word="transformOrigin"/>
+				<Key word="transform"/>
+				<Key word="parent"/>
+				<Key word="children"/>
+				<Key word="data"/>
+				<Key word="states"/>
+				<Key word="state"/>
+				<Key word="transitions"/>
+				<Key word="id"/>
+				<Key word="property"/>
+				<Key word="signal"/>
+				<Key word="function"/>
+				<Key word="import"/>
+				<Key word="as"/>
+				<Key word="default"/>
+				<Key word="readonly"/>
+				<Key word="alias"/>
+				<Key word="on"/>
+				<Key word="when"/>
+				<Key word="from"/>
+				<Key word="to"/>
+				<Key word="target"/>
+				<Key word="targets"/>
+				<Key word="properties"/>
+				<Key word="duration"/>
+				<Key word="easing"/>
+				<Key word="loops"/>
+				<Key word="running"/>
+				<Key word="paused"/>
+				<Key word="alwaysRunToEnd"/>
+				<Key word="reversible"/>
+				<Key word="type"/>
+				<Key word="curve"/>
+				<Key word="amplitude"/>
+				<Key word="overshoot"/>
+				<Key word="period"/>
+				<Key word="bezierCurve"/>
+				<Key word="left"/>
+				<Key word="right"/>
+				<Key word="top"/>
+				<Key word="bottom"/>
+				<Key word="horizontalCenter"/>
+				<Key word="verticalCenter"/>
+				<Key word="centerIn"/>
+				<Key word="fill"/>
+				<Key word="margins"/>
+				<Key word="leftMargin"/>
+				<Key word="rightMargin"/>
+				<Key word="topMargin"/>
+				<Key word="bottomMargin"/>
+				<Key word="baseline"/>
+				<Key word="spacing"/>
+				<Key word="padding"/>
+				<Key word="leftPadding"/>
+				<Key word="rightPadding"/>
+				<Key word="topPadding"/>
+				<Key word="bottomPadding"/>
+			</KeyWords>
+
+			<KeyWords name="Keywords3" color="#800080" bold="false" italic="false">
+				<!-- JavaScript Keywords -->
+				<Key word="var"/>
+				<Key word="let"/>
+				<Key word="const"/>
+				<Key word="if"/>
+				<Key word="else"/>
+				<Key word="for"/>
+				<Key word="while"/>
+				<Key word="do"/>
+				<Key word="switch"/>
+				<Key word="case"/>
+				<Key word="break"/>
+				<Key word="continue"/>
+				<Key word="return"/>
+				<Key word="function"/>
+				<Key word="true"/>
+				<Key word="false"/>
+				<Key word="null"/>
+				<Key word="undefined"/>
+				<Key word="this"/>
+				<Key word="new"/>
+				<Key word="delete"/>
+				<Key word="typeof"/>
+				<Key word="instanceof"/>
+				<Key word="in"/>
+				<Key word="try"/>
+				<Key word="catch"/>
+				<Key word="finally"/>
+				<Key word="throw"/>
+				<Key word="with"/>
+				<Key word="debugger"/>
+				<Key word="console"/>
+				<Key word="Qt"/>
+				<Key word="parent"/>
+			</KeyWords>
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>
