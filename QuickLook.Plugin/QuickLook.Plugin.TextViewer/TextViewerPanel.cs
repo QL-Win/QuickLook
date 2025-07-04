@@ -40,6 +40,11 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 {
     private bool _disposed;
 
+    static TextViewerPanel()
+    {
+        HighlightingThemeManager.Initialize();
+    }
+
     public TextViewerPanel()
     {
         FontSize = 14;

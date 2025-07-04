@@ -15,9 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using ICSharpCode.AvalonEdit;
 using QuickLook.Common.Plugin;
-using QuickLook.Plugin.TextViewer.Themes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,11 +33,6 @@ public class Plugin : IViewer
 
     public void Init()
     {
-        // pre-load
-        var _ = new TextEditor();
-
-        HighlightingThemeManager.Initialize();
-
         // Implementation of the Search Panel Styled with Fluent Theme
         {
             var groupDictionary = new ResourceDictionary();
