@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,7 @@ public class Plugin : IViewer
         //".fig", // Figma
     ]);
 
-    private ThumbnailImagePanel _ip;
+    private ImagePanel _ip;
 
     public int Priority => 0;
 
@@ -64,9 +65,11 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        _ip = new ThumbnailImagePanel
+        _ip = new ImagePanel
         {
             ContextObject = context,
+            SaveAsVisibility = Visibility.Visible,
+            ReverseColorVisibility = Visibility.Visible,
         };
 
         _ = Task.Run(() =>
