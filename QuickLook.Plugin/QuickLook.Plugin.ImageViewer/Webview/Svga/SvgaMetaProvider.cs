@@ -37,7 +37,18 @@ internal class SvgaMetaProvider(string path) : IWebMetaProvider
             return _size;
         }
 
-        // TODO
+        try
+        {
+            var svga = new SvgaPlayer();
+            var fileStream = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            svga.LoadSvgaFileData(fileStream);
+            return new Size(svga.StageWidth, svga.StageHeight);
+        }
+        catch
+        {
+            // That's fine, just return the default size.
+        }
 
         return new Size(800, 600);
     }
