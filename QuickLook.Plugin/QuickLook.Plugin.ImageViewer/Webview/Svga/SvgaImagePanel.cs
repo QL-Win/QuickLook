@@ -15,14 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Google.Protobuf.Compiler;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Svga;
 
@@ -56,7 +53,7 @@ public sealed class ScriptHandler(string path, IWebMetaProvider metaWeb)
     public async Task<string> GetSize()
     {
         var size = MetaWeb.GetSize();
-        string jsonString = JsonSerializer.Serialize(new { width = size.Width, height = size.Height });
-        return await Task.FromResult(jsonString);
+
+        return await Task.FromResult($"{{\"width\":{size.Width},\"height\":{size.Height}}}");
     }
 }
