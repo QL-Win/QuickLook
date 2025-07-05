@@ -92,7 +92,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Web\*">
+        <EmbeddedResource Include="Resources\Web\**\*">
             <LogicalName>QuickLook.Plugin.ImageViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
