@@ -462,6 +462,13 @@
           updateActiveHeading(currentHeading);
         }
       });
+
+      // Support MathJax inline math
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+      };
     </script>
 
     <script id="MathJax-script" async src="mathjax/tex-mml-svg.js"></script>
