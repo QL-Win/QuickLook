@@ -74,6 +74,7 @@
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="System.Text.Json" Version="9.0.6" />
     </ItemGroup>
 
     <ItemGroup Condition=" '$(DefineConstants)' != '' and $(DefineConstants.Contains('USESVGSKIA')) ">

@@ -19,7 +19,7 @@ using System;
 
 namespace QuickLook.Plugin.ImageViewer.Webview;
 
-internal interface IWebImagePanel : IDisposable
+public interface IWebImagePanel : IDisposable
 {
     public void Preview(string path);
 }

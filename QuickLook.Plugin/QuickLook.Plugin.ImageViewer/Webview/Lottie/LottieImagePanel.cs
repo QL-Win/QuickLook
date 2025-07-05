@@ -20,7 +20,9 @@ using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Lottie;
 
@@ -74,5 +76,17 @@ public class LottieImagePanel : SvgImagePanel
         }
 
         base.WebView_WebResourceRequested(sender, args);
+    }
+}
+
+[ClassInterface(ClassInterfaceType.AutoDual)]
+[ComVisible(true)]
+public sealed class ScriptHandler(string path)
+{
+    public string Path { get; } = path;
+
+    public async Task<string> GetPath()
+    {
+        return await Task.FromResult(new Uri(Path).AbsolutePath);
     }
 }

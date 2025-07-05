@@ -19,7 +19,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.ImageViewer.Webview;
 
-internal interface IWebMetaProvider
+public interface IWebMetaProvider
 {
     public Size GetSize();
 }
