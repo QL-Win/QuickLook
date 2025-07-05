@@ -242,10 +242,10 @@ class SvgViewer {
     }
 
     /**
-     * Initialize SVG viewer.
+     * Render SVG file.
      * @async
      */
-    async init() {
+    async render() {
         const rawSvg = await chrome.webview.hostObjects.external.GetSvgContent();
         const parser = new DOMParser();
         const doc = parser.parseFromString(rawSvg, 'image/svg+xml');
@@ -263,5 +263,5 @@ class SvgViewer {
     }
 }
 
-// Create and initialize the SVG viewer
-new SvgViewer().init();
+// Create the SVG viewer and render
+new SvgViewer().render();
