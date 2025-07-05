@@ -1,18 +1,17 @@
 ﻿/**
- * SvgaViewer: Provides SVGA animation preview with the following features.
+ * LottieViewer: Provides Lottie animation preview with the following features.
  * 
  * Requirements:
  * - Requires the following HTML structure:
- *   <canvas id="canvas">
- *   </canvas>
- * - SVGA file path is obtained via chrome.webview.hostObjects.external.GetPath()
+ *   <div id="bm"></div>
+ * - Lottie file path is obtained via chrome.webview.hostObjects.external.GetPath()
  * 
  * Features:
- * - Loads and plays SVGA animation files
- * - Uses SVGA.js library for parsing and playback
+ * - Loads and plays Lottie animation files
+ * - Uses lottie-web library for parsing and playback
  * - Automatically starts playback after loading
- * - Handles asynchronous loading and mounting of SVGA files 
-*/
+ * - Handles asynchronous loading and mounting of Lottie files
+ */
 class LottieViewer {
     constructor() {
     }
@@ -23,6 +22,8 @@ class LottieViewer {
      */
     async play() {
         const path = await chrome.webview.hostObjects.external.GetPath();
+
+        // Because the path is a local file, we need to convert it to a URL format
         lottie.loadAnimation({
             container: document.getElementById('bm'),
             renderer: 'svg',
