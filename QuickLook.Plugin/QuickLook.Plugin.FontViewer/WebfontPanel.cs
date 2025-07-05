@@ -124,55 +124,47 @@ public class WebfontPanel : WebpagePanel
         return html;
     }
 
-    protected override void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+    protected override void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
     {
-        if (e.IsSuccess)
+        Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
+
+        try
         {
-            _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+            var requestedUri = new Uri(args.Request.Uri);
 
-            _webView.CoreWebView2.WebResourceRequested += (sender, args) =>
+            if (requestedUri.Scheme == "file")
             {
-                Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
-
-                try
+                if (requestedUri.AbsolutePath == "/")
                 {
-                    var requestedUri = new Uri(args.Request.Uri);
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
+                    args.Response = response;
+                }
+                else if (ContainsKey(requestedUri.AbsolutePath))
+                {
+                    var stream = ReadStream(requestedUri.AbsolutePath);
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.AbsolutePath)));
+                    args.Response = response;
+                }
+                else
+                {
+                    var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
 
-                    if (requestedUri.Scheme == "file")
+                    if (File.Exists(localPath))
                     {
-                        if (requestedUri.AbsolutePath == "/")
-                        {
-                            var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
-                            args.Response = response;
-                        }
-                        else if (ContainsKey(requestedUri.AbsolutePath))
-                        {
-                            var stream = ReadStream(requestedUri.AbsolutePath);
-                            var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.AbsolutePath)));
-                            args.Response = response;
-                        }
-                        else
-                        {
-                            var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
-
-                            if (File.Exists(localPath))
-                            {
-                                var fileStream = File.OpenRead(localPath);
-                                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                    fileStream, 200, "OK", MimeTypes.GetContentType());
-                                args.Response = response;
-                            }
-                        }
+                        var fileStream = File.OpenRead(localPath);
+                        var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            fileStream, 200, "OK", MimeTypes.GetContentType());
+                        args.Response = response;
                     }
                 }
-                catch (Exception e)
-                {
-                    // We don't need to feel burdened by any exceptions
-                    Debug.WriteLine(e);
-                }
-            };
+            }
+        }
+        catch (Exception e)
+        {
+            // We don't need to feel burdened by any exceptions
+            Debug.WriteLine(e);
         }
     }
 

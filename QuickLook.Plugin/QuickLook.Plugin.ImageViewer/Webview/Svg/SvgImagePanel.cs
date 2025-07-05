@@ -29,9 +29,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickLook.Plugin.ImageViewer;
+namespace QuickLook.Plugin.ImageViewer.Webview.Svg;
 
-public class SvgImagePanel : WebpagePanel
+public class SvgImagePanel : WebpagePanel, IWebImagePanel
 {
     protected const string _resourcePrefix = "QuickLook.Plugin.ImageViewer.Resources.";
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
@@ -93,80 +93,77 @@ public class SvgImagePanel : WebpagePanel
         }
     }
 
-    public void PreviewSvg(string path)
+    public virtual void Preview(string path)
     {
         FallbackPath = Path.GetDirectoryName(path);
 
         ObjectForScripting ??= new ScriptHandler(path);
 
-        _homePage = _resources[path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase) ? "/svga2html.html" : "/svg2html.html"];
+        _homePage = _resources["/svg2html.html"];
         NavigateToUri(new Uri("file://quicklook/"));
     }
 
-    protected override void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+    protected override void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
     {
-        if (e.IsSuccess)
+        Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
+
+        try
         {
-            _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+            var requestedUri = new Uri(args.Request.Uri);
 
-            _webView.CoreWebView2.WebResourceRequested += (sender, args) =>
+            if (requestedUri.Scheme == "file")
             {
-                Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
-
-                try
+                if (requestedUri.AbsolutePath == "/")
                 {
-                    var requestedUri = new Uri(args.Request.Uri);
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentTypeHeader(".html"));
+                    args.Response = response;
+                }
+                else if (ContainsKey(requestedUri.AbsolutePath))
+                {
+                    var stream = ReadStream(requestedUri.AbsolutePath);
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        stream, 200, "OK", MimeTypes.GetContentTypeHeader(Path.GetExtension(requestedUri.AbsolutePath)));
+                    args.Response = response;
+                }
+                else
+                {
+                    var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
 
-                    if (requestedUri.Scheme == "file")
+                    if (File.Exists(localPath))
                     {
-                        if (requestedUri.AbsolutePath == "/")
-                        {
-                            var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
-                            args.Response = response;
-                        }
-                        else if (ContainsKey(requestedUri.AbsolutePath))
-                        {
-                            var stream = ReadStream(requestedUri.AbsolutePath);
-                            var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.AbsolutePath)));
-                            args.Response = response;
-                        }
-                        else
-                        {
-                            var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
-
-                            if (File.Exists(localPath))
-                            {
-                                var fileStream = File.OpenRead(localPath);
-                                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                    fileStream, 200, "OK", MimeTypes.GetContentType());
-                                args.Response = response;
-                            }
-                        }
-                    }
-                    else if (requestedUri.Scheme == "https")
-                    {
-                        var localPath = $"{requestedUri.Authority}:{requestedUri.AbsolutePath}".Replace('/', '\\');
-
-                        if (localPath.StartsWith(_fallbackPath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (File.Exists(localPath))
-                            {
-                                var fileStream = File.OpenRead(localPath);
-                                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                    fileStream, 200, "OK", MimeTypes.GetContentType() + "\r\nAccess-Control-Allow-Origin: *");
-                                args.Response = response;
-                            }
-                        }
+                        var fileStream = File.OpenRead(localPath);
+                        var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            fileStream, 200, "OK", MimeTypes.GetContentTypeHeader());
+                        args.Response = response;
                     }
                 }
-                catch (Exception e)
+            }
+            else if (requestedUri.Scheme == "https" || requestedUri.Scheme == "http")
+            {
+                var localPath = Uri.UnescapeDataString($"{requestedUri.Authority}:{requestedUri.AbsolutePath}".Replace('/', '\\'));
+
+                if (localPath.StartsWith(_fallbackPath, StringComparison.OrdinalIgnoreCase))
                 {
-                    // We don't need to feel burdened by any exceptions
-                    Debug.WriteLine(e);
+                    if (File.Exists(localPath))
+                    {
+                        var fileStream = File.OpenRead(localPath);
+                        var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            fileStream, 200, "OK",
+                            $"""
+                            Access-Control-Allow-Origin: *
+                            Content-Type: {MimeTypes.GetMimeType()}
+                            """
+                        );
+                        args.Response = response;
+                    }
                 }
-            };
+            }
+        }
+        catch (Exception e)
+        {
+            // We don't need to feel burdened by any exceptions
+            Debug.WriteLine(e);
         }
     }
 
@@ -191,14 +188,16 @@ public class SvgImagePanel : WebpagePanel
     {
         public const string Html = "text/html";
         public const string JavaScript = "application/javascript";
+        public const string Json = "application/json";
         public const string Css = "text/css";
         public const string Binary = "application/octet-stream";
 
-        public static string GetContentType(string extension = null) => $"Content-Type: {GetMimeType(extension)}";
+        public static string GetContentTypeHeader(string extension = null) => $"Content-Type: {GetMimeType(extension)}";
 
         public static string GetMimeType(string extension = null) => extension?.ToLowerInvariant() switch
         {
             ".js" => JavaScript, // Only handle known extensions from resources
+            ".json" => Json,
             ".css" => Css,
             ".html" => Html,
             _ => Binary,
@@ -215,11 +214,6 @@ public sealed class ScriptHandler(string path)
     public async Task<string> GetPath()
     {
         return await Task.FromResult(new Uri(Path).AbsolutePath);
-    }
-
-    public async Task<string> GetUri()
-    {
-        return await Task.FromResult(new Uri(Path).AbsoluteUri);
     }
 
     public async Task<string> GetSvgContent()

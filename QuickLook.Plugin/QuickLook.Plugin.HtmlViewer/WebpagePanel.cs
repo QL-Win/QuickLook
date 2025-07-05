@@ -176,51 +176,52 @@ public class WebpagePanel : UserControl
         if (e.IsSuccess)
         {
             _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+            _webView.CoreWebView2.WebResourceRequested += WebView_WebResourceRequested;
+        }
+    }
 
-            _webView.CoreWebView2.WebResourceRequested += (sender, args) =>
+    protected virtual void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
+    {
+        if (string.IsNullOrWhiteSpace(_fallbackPath) || !Directory.Exists(_fallbackPath))
+        {
+            return;
+        }
+
+        try
+        {
+            var requestedUri = new Uri(args.Request.Uri);
+
+            // Check if the request is for a local file
+            if (requestedUri.Scheme == "file" && !File.Exists(requestedUri.LocalPath))
             {
-                if (string.IsNullOrWhiteSpace(_fallbackPath) || !Directory.Exists(_fallbackPath))
-                {
-                    return;
-                }
+                // Try loading from fallback directory
+                var fileName = Path.GetFileName(requestedUri.LocalPath);
+                var fileDirectoryName = Path.GetDirectoryName(requestedUri.LocalPath);
 
-                try
+                // Convert the primary path to fallback path
+                if (fileDirectoryName.StartsWith(_primaryPath))
                 {
-                    var requestedUri = new Uri(args.Request.Uri);
+                    var fallbackFilePath = Path.Combine(
+                        _fallbackPath.Trim('/', '\\'), // Make it combinable
+                        fileDirectoryName.Substring(_primaryPath.Length).Trim('/', '\\'), // Make it combinable
+                        fileName
+                    );
 
-                    // Check if the request is for a local file
-                    if (requestedUri.Scheme == "file" && !File.Exists(requestedUri.LocalPath))
+                    if (File.Exists(fallbackFilePath))
                     {
-                        // Try loading from fallback directory
-                        var fileName = Path.GetFileName(requestedUri.LocalPath);
-                        var fileDirectoryName = Path.GetDirectoryName(requestedUri.LocalPath);
-
-                        // Convert the primary path to fallback path
-                        if (fileDirectoryName.StartsWith(_primaryPath))
-                        {
-                            var fallbackFilePath = Path.Combine(
-                                _fallbackPath.Trim('/', '\\'), // Make it combinable
-                                fileDirectoryName.Substring(_primaryPath.Length).Trim('/', '\\'), // Make it combinable
-                                fileName
-                            );
-
-                            if (File.Exists(fallbackFilePath))
-                            {
-                                // Serve the file from the fallback directory
-                                var fileStream = File.OpenRead(fallbackFilePath);
-                                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                                    fileStream, 200, "OK", "Content-Type: application/octet-stream");
-                                args.Response = response;
-                            }
-                        }
+                        // Serve the file from the fallback directory
+                        var fileStream = File.OpenRead(fallbackFilePath);
+                        var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            fileStream, 200, "OK", "Content-Type: application/octet-stream");
+                        args.Response = response;
                     }
                 }
-                catch (Exception e)
-                {
-                    // We don't need to feel burdened by any exceptions
-                    Debug.WriteLine(e);
-                }
-            };
+            }
+        }
+        catch (Exception e)
+        {
+            // We don't need to feel burdened by any exceptions
+            Debug.WriteLine(e);
         }
     }
 

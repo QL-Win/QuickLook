@@ -55,6 +55,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+		<PackageReference Include="System.IO.Compression" Version="4.3.0" />
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -91,7 +92,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\svg*">
+        <EmbeddedResource Include="Resources\Web\*">
             <LogicalName>QuickLook.Plugin.ImageViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
         </EmbeddedResource>
     </ItemGroup>

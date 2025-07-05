@@ -18,6 +18,7 @@
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
+using QuickLook.Plugin.ImageViewer.Webview;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,7 +49,7 @@ public class Plugin : IViewer
         ".pbm", ".pcx", ".pef", ".pgm", ".png", ".pnm", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
         ".qoi",
         ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
-        ".sr2", ".srf", ".srw", ".svg", ".svga", ".svgz",
+        ".sr2", ".srf", ".srw", ".svg", ".svgz",
         ".tga", ".tif", ".tiff",
         ".wdp", ".webp", ".wmf",
         ".x3f", ".xcf", ".xbm", ".xpm",
@@ -57,8 +58,8 @@ public class Plugin : IViewer
     private ImagePanel _ip;
     private MetaProvider _meta;
 
-    private SvgImagePanel _ipSvg;
-    private SvgMetaProvider _metaSvg;
+    private IWebImagePanel _ipWeb;
+    private IWebMetaProvider _metaWeb;
 
     public int Priority => 0;
 
@@ -100,44 +101,20 @@ public class Plugin : IViewer
                 typeof(ImageMagickProvider)));
     }
 
-    private bool IsWellKnownImageExtension(string path)
-    {
-        return WellKnownImageExtensions.Contains(Path.GetExtension(path.ToLower()));
-    }
-
     public bool CanHandle(string path)
     {
+        if (WebHandler.TryCanHandle(path))
+            return true;
+
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && IsWellKnownImageExtension(path);
+        return !Directory.Exists(path) && WellKnownImageExtensions.Contains(Path.GetExtension(path).ToLower());
     }
 
     public void Prepare(string path, ContextObject context)
     {
-        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
-        {
-            if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
-            {
-                _metaSvg = new SvgMetaProvider(path);
-                var sizeSvg = _metaSvg.GetSize();
-
-                if (!sizeSvg.IsEmpty)
-                    context.SetPreferredSizeFit(sizeSvg, 0.8d);
-                else
-                    context.PreferredSize = new Size(800, 600);
-
-                context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
-                return;
-            }
-        }
-        else if (path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
-        {
-            _metaSvg = new SvgMetaProvider(path);
-
-            context.PreferredSize = new Size(800, 600);
-            context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
+        if (WebHandler.TryPrepare(path, context, out _metaWeb))
             return;
-        }
 
         _meta = new MetaProvider(path);
 
@@ -153,25 +130,8 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        if (path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
-         || path.EndsWith(".svga", StringComparison.OrdinalIgnoreCase))
-        {
-            if (SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"))
-            {
-                _ipSvg = new SvgImagePanel();
-                _ipSvg.PreviewSvg(path);
-
-                var sizeSvg = _metaSvg.GetSize();
-
-                context.ViewerContent = _ipSvg;
-                context.Title = sizeSvg.IsEmpty
-                    ? $"{Path.GetFileName(path)}"
-                    : $"{sizeSvg.Width}×{sizeSvg.Height}: {Path.GetFileName(path)}";
-
-                context.IsBusy = false;
-                return;
-            }
-        }
+        if (WebHandler.TryView(path, context, _metaWeb, out _ipWeb))
+            return;
 
         _ip = new ImagePanel(context, _meta);
         var size = _meta.GetSize();
@@ -197,7 +157,7 @@ public class Plugin : IViewer
         _ip?.Dispose();
         _ip = null;
 
-        _ipSvg?.Dispose();
-        _ipSvg = null;
+        _ipWeb?.Dispose();
+        _ipWeb = null;
     }
 }
