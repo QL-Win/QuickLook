@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Protobuf" extensions=".proto">
+
+    <Environment>
+        <Default color="#000000" bgcolor="#FFFFFF"/>
+        <Selection color="#000000" bgcolor="#ADD6FF"/>
+        <LineNumbers color="#2B91AF" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F0"/>
+        <VRuler color="#E0E0E0"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="#000000" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="#000000" bgcolor="#FFFFFF"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#098658" bold="false" italic="false"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[]:;"'&lt;&gt; , .?</Delimiters>
+            
+            <Span name="LineComment1" stopateol="true" color="#008000" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="LineComment2" stopateol="true" color="#008000" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="BlockComment1" rule="ProtoDoc" stopateol="false" color="#008000" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="BlockComment2" stopateol="false" color="#008000" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#A31515" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#A31515" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="#000000" bold="false" italic="true">service</MarkFollowing>
+            <MarkFollowing color="#000000" bold="false" italic="true">message</MarkFollowing>
+            <MarkFollowing color="#000000" bold="false" italic="true">enum</MarkFollowing>
+                                
+            <KeyWords name="Keywords1" color="#0000FF" bold="false" italic="false">
+                <Key word="syntax"/>
+                <Key word="package"/>
+                <Key word="import"/>
+                <Key word="option"/>
+                <Key word="message"/>
+                <Key word="enum"/>
+                <Key word="service"/>
+                <Key word="rpc"/>
+                <Key word="returns"/>
+                <Key word="repeated"/>
+                <Key word="optional"/>
+                <Key word="required"/>
+                <Key word="oneof"/>
+                <Key word="map"/>
+                <Key word="reserved"/>
+                <Key word="extend"/>
+                <Key word="extensions"/>
+                <Key word="group"/>
+                <Key word="public"/>
+                <Key word="weak"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#2B91AF" bold="false" italic="false">
+                <Key word="double"/>
+                <Key word="float"/>
+                <Key word="int32"/>
+                <Key word="int64"/>
+                <Key word="uint32"/>
+                <Key word="uint64"/>
+                <Key word="sint32"/>
+                <Key word="sint64"/>
+                <Key word="fixed32"/>
+                <Key word="fixed64"/>
+                <Key word="sfixed32"/>
+                <Key word="sfixed64"/>
+                <Key word="bool"/>
+                <Key word="string"/>
+                <Key word="bytes"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="ProtoDoc" ignorecase="false">
+            <Delimiters>~!%^*()-+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="#808080" bold="false" italic="false">
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="@deprecated"/>
+                <Key word="@see"/>
+                <Key word="@since"/>
+                <Key word="@author"/>
+                <Key word="@version"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
