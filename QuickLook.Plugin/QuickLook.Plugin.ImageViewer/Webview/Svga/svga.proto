@@ -1,0 +1,129 @@
+syntax = "proto3";
+package com.opensource.svga;
+option objc_class_prefix = "SVGAProto";
+option java_package = "com.opensource.svgaplayer.proto";
+
+message MovieParams {
+    float viewBoxWidth = 1;     // Canvas width
+    float viewBoxHeight = 2;    // Canvas height
+    int32 fps = 3;              // Animation frames per second, valid values are any of [1, 2, 3, 5, 6, 10, 12, 15, 20, 30, 60].
+    int32 frames = 4;           // Total number of animation frames
+}
+
+message SpriteEntity {
+    string imageKey = 1;                // Bitmap key name for the element. If imageKey has a .vector suffix, the sprite is a vector layer. If it has a .matte suffix, the sprite is a matte layer.
+    repeated FrameEntity frames = 2;    // Frame list
+    string matteKey = 3;                // The matteKey of the masked layer corresponds to the imageKey of its matte layer.
+}
+
+message AudioEntity {
+    string audioKey = 1;        // Audio file name
+    int32 startFrame = 2;       // Audio playback start frame
+    int32 endFrame = 3;         // Audio playback end frame
+    int32 startTime = 4;        // Audio playback start time (relative to audio length)
+    int32 totalTime = 5;        // Total audio length
+}
+
+message Layout {
+    float x = 1;
+    float y = 2;
+    float width = 3;
+    float height = 4;
+}
+
+message Transform {
+    float a = 1;
+    float b = 2;
+    float c = 3;
+    float d = 4;
+    float tx = 5;
+    float ty = 6;
+}
+
+message ShapeEntity {
+
+    enum ShapeType {
+        SHAPE = 0;      // Path
+        RECT = 1;       // Rectangle
+        ELLIPSE = 2;    // Ellipse
+        KEEP = 3;       // Same as previous frame
+    }
+
+    message ShapeArgs {
+        string d = 1;   // SVG path
+    }
+
+    message RectArgs {
+        float x = 1;
+        float y = 2;
+        float width = 3;
+        float height = 4;
+        float cornerRadius = 5; // Corner radius
+    }
+
+    message EllipseArgs {
+        float x = 1;            // Center X of ellipse
+        float y = 2;            // Center Y of ellipse
+        float radiusX = 3;      // Horizontal radius
+        float radiusY = 4;      // Vertical radius
+    }
+
+    message ShapeStyle {
+
+        message RGBAColor {
+            float r = 1;
+            float g = 2;
+            float b = 3;
+            float a = 4;
+        }
+
+        enum LineCap {
+            LineCap_BUTT = 0;
+            LineCap_ROUND = 1;
+            LineCap_SQUARE = 2;
+        }
+
+        enum LineJoin {
+            LineJoin_MITER = 0;
+            LineJoin_ROUND = 1;
+            LineJoin_BEVEL = 2;
+        }
+
+        RGBAColor fill = 1;         // Fill color
+        RGBAColor stroke = 2;       // Stroke color
+        float strokeWidth = 3;      // Stroke width
+        LineCap lineCap = 4;        // Line cap style
+        LineJoin lineJoin = 5;      // Line join style
+        float miterLimit = 6;       // Miter limit
+        float lineDashI = 7;        // Dash parameter
+        float lineDashII = 8;       // Gap parameter
+        float lineDashIII = 9;      // Offset parameter
+
+    }
+
+    ShapeType type = 1;                 // Vector type
+    oneof args {
+        ShapeArgs shape = 2;
+        RectArgs rect = 3;
+        EllipseArgs ellipse = 4;
+    }                                   // Vector parameters
+    ShapeStyle styles = 10;             // Render parameters
+    Transform transform = 11;           // 2D transform matrix for vector layer
+    
+}
+
+message FrameEntity {
+    float alpha = 1;                    // Opacity
+    Layout layout = 2;                  // Initial constraint size
+    Transform transform = 3;            // 2D transform matrix
+    string clipPath = 4;                // Mask path, use SVG standard Path to draw pattern for mask.
+    repeated ShapeEntity shapes = 5;    // Vector element list
+}
+
+message MovieEntity {
+    string version = 1;                 // SVGA format version
+    MovieParams params = 2;             // Animation parameters
+    map<string, bytes> images = 3;      // Key is bitmap key name, Value is bitmap file name or binary PNG data.
+    repeated SpriteEntity sprites = 4;  // Element list
+    repeated AudioEntity audios = 5;    // Audio list
+}

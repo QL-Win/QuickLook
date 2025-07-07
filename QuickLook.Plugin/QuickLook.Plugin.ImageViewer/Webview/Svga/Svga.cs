@@ -145,7 +145,7 @@ namespace Com.Opensource.Svga
         public const int ViewBoxWidthFieldNumber = 1;
         private float viewBoxWidth_;
         /// <summary>
-        /// 画布宽
+        /// Canvas width
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public float ViewBoxWidth
@@ -161,7 +161,7 @@ namespace Com.Opensource.Svga
         public const int ViewBoxHeightFieldNumber = 2;
         private float viewBoxHeight_;
         /// <summary>
-        /// 画布高
+        /// Canvas height
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public float ViewBoxHeight
@@ -177,7 +177,7 @@ namespace Com.Opensource.Svga
         public const int FpsFieldNumber = 3;
         private int fps_;
         /// <summary>
-        /// 动画每秒播放帧数，合法值是 [1, 2, 3, 5, 6, 10, 12, 15, 20, 30, 60] 中的任意一个。
+        /// Animation frames per second, valid values are any of [1, 2, 3, 5, 6, 10, 12, 15, 20, 30, 60].
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int Fps
@@ -193,7 +193,7 @@ namespace Com.Opensource.Svga
         public const int FramesFieldNumber = 4;
         private int frames_;
         /// <summary>
-        /// 动画总帧数
+        /// Total animation frames
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int Frames
@@ -414,7 +414,7 @@ namespace Com.Opensource.Svga
         public const int ImageKeyFieldNumber = 1;
         private string imageKey_ = "";
         /// <summary>
-        /// 元件所对应的位图键名, 如果 imageKey 含有 .vector 后缀，该 sprite 为矢量图层。
+        /// The bitmap key name corresponding to the component. If imageKey contains the .vector suffix, this sprite is a vector layer.
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public string ImageKey
@@ -432,7 +432,7 @@ namespace Com.Opensource.Svga
             = pb::FieldCodec.ForMessage(18, global::Com.Opensource.Svga.FrameEntity.Parser);
         private readonly pbc::RepeatedField<global::Com.Opensource.Svga.FrameEntity> frames_ = new pbc::RepeatedField<global::Com.Opensource.Svga.FrameEntity>();
         /// <summary>
-        /// 帧列表
+        /// Frame list
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<global::Com.Opensource.Svga.FrameEntity> Frames
@@ -602,7 +602,7 @@ namespace Com.Opensource.Svga
         public const int AudioKeyFieldNumber = 1;
         private string audioKey_ = "";
         /// <summary>
-        /// 音频文件名
+        /// Audio file name
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public string AudioKey
@@ -618,7 +618,7 @@ namespace Com.Opensource.Svga
         public const int StartFrameFieldNumber = 2;
         private int startFrame_;
         /// <summary>
-        /// 音频播放起始帧
+        /// Audio playback start frame
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int StartFrame
@@ -634,7 +634,7 @@ namespace Com.Opensource.Svga
         public const int EndFrameFieldNumber = 3;
         private int endFrame_;
         /// <summary>
-        /// 音频播放结束帧
+        /// Audio playback end frame
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int EndFrame
@@ -650,7 +650,7 @@ namespace Com.Opensource.Svga
         public const int StartTimeFieldNumber = 4;
         private int startTime_;
         /// <summary>
-        /// 音频播放起始时间（相对音频长度）
+        /// Audio playback start time (relative to audio length)
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int StartTime
@@ -666,7 +666,7 @@ namespace Com.Opensource.Svga
         public const int TotalTimeFieldNumber = 5;
         private int totalTime_;
         /// <summary>
-        /// 音频总长度
+        /// Total audio duration
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int TotalTime
@@ -1507,7 +1507,7 @@ namespace Com.Opensource.Svga
         public const int TypeFieldNumber = 1;
         private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeType type_ = 0;
         /// <summary>
-        /// 矢量类型
+        /// Vector type
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeType Type
@@ -1562,7 +1562,7 @@ namespace Com.Opensource.Svga
         public const int StylesFieldNumber = 10;
         private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle styles_;
         /// <summary>
-        /// 渲染参数
+        /// Rendering parameters
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle Styles
@@ -1578,7 +1578,7 @@ namespace Com.Opensource.Svga
         public const int TransformFieldNumber = 11;
         private global::Com.Opensource.Svga.Transform transform_;
         /// <summary>
-        /// 矢量图层 2D 变换矩阵
+        /// Vector layer 2D transformation matrix
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.Transform Transform
@@ -1872,19 +1872,19 @@ namespace Com.Opensource.Svga
             public enum ShapeType
             {
                 /// <summary>
-                /// 路径
+                /// Path
                 /// </summary>
                 [pbr::OriginalName("SHAPE")] Shape = 0,
                 /// <summary>
-                /// 矩形
+                /// Rectangle
                 /// </summary>
                 [pbr::OriginalName("RECT")] Rect = 1,
                 /// <summary>
-                /// 圆形
+                /// Ellipse
                 /// </summary>
                 [pbr::OriginalName("ELLIPSE")] Ellipse = 2,
                 /// <summary>
-                /// 与前帧一致
+                /// Keep same as previous frame
                 /// </summary>
                 [pbr::OriginalName("KEEP")] Keep = 3,
             }
@@ -1933,7 +1933,7 @@ namespace Com.Opensource.Svga
                 public const int DFieldNumber = 1;
                 private string d_ = "";
                 /// <summary>
-                /// SVG 路径
+                /// SVG path
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public string D
@@ -2149,7 +2149,7 @@ namespace Com.Opensource.Svga
                 public const int CornerRadiusFieldNumber = 5;
                 private float cornerRadius_;
                 /// <summary>
-                /// 圆角半径
+                /// Corner radius
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float CornerRadius
@@ -2392,7 +2392,7 @@ namespace Com.Opensource.Svga
                 public const int XFieldNumber = 1;
                 private float x_;
                 /// <summary>
-                /// 圆中心点 X
+                /// Circle center point X
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float X
@@ -2408,7 +2408,7 @@ namespace Com.Opensource.Svga
                 public const int YFieldNumber = 2;
                 private float y_;
                 /// <summary>
-                /// 圆中心点 Y
+                /// Circle center point Y
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float Y
@@ -2424,7 +2424,7 @@ namespace Com.Opensource.Svga
                 public const int RadiusXFieldNumber = 3;
                 private float radiusX_;
                 /// <summary>
-                /// 横向半径
+                /// Horizontal radius
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float RadiusX
@@ -2440,7 +2440,7 @@ namespace Com.Opensource.Svga
                 public const int RadiusYFieldNumber = 4;
                 private float radiusY_;
                 /// <summary>
-                /// 纵向半径
+                /// Vertical radius
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float RadiusY
@@ -2668,7 +2668,7 @@ namespace Com.Opensource.Svga
                 public const int FillFieldNumber = 1;
                 private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.RGBAColor fill_;
                 /// <summary>
-                /// 填充色
+                /// Fill color
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.RGBAColor Fill
@@ -2684,7 +2684,7 @@ namespace Com.Opensource.Svga
                 public const int StrokeFieldNumber = 2;
                 private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.RGBAColor stroke_;
                 /// <summary>
-                /// 描边色
+                /// Stroke color
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.RGBAColor Stroke
@@ -2700,7 +2700,7 @@ namespace Com.Opensource.Svga
                 public const int StrokeWidthFieldNumber = 3;
                 private float strokeWidth_;
                 /// <summary>
-                /// 描边宽
+                /// Stroke width
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float StrokeWidth
@@ -2716,7 +2716,7 @@ namespace Com.Opensource.Svga
                 public const int LineCapFieldNumber = 4;
                 private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.LineCap lineCap_ = 0;
                 /// <summary>
-                /// 线段端点样式
+                /// Line cap style
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.LineCap LineCap
@@ -2732,7 +2732,7 @@ namespace Com.Opensource.Svga
                 public const int LineJoinFieldNumber = 5;
                 private global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.LineJoin lineJoin_ = 0;
                 /// <summary>
-                /// 线段连接样式
+                /// Line join style
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public global::Com.Opensource.Svga.ShapeEntity.Types.ShapeStyle.Types.LineJoin LineJoin
@@ -2748,7 +2748,7 @@ namespace Com.Opensource.Svga
                 public const int MiterLimitFieldNumber = 6;
                 private float miterLimit_;
                 /// <summary>
-                /// 尖角限制
+                /// Miter limit
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float MiterLimit
@@ -2764,7 +2764,7 @@ namespace Com.Opensource.Svga
                 public const int LineDashIFieldNumber = 7;
                 private float lineDashI_;
                 /// <summary>
-                /// 虚线参数 Dash
+                /// Dash parameter
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float LineDashI
@@ -2780,7 +2780,7 @@ namespace Com.Opensource.Svga
                 public const int LineDashIIFieldNumber = 8;
                 private float lineDashII_;
                 /// <summary>
-                /// 虚线参数 Gap
+                /// Gap parameter
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float LineDashII
@@ -2796,7 +2796,7 @@ namespace Com.Opensource.Svga
                 public const int LineDashIIIFieldNumber = 9;
                 private float lineDashIII_;
                 /// <summary>
-                /// 虚线参数 Offset
+                /// Offset parameter
                 /// </summary>
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public float LineDashIII
@@ -3422,7 +3422,7 @@ namespace Com.Opensource.Svga
         public const int AlphaFieldNumber = 1;
         private float alpha_;
         /// <summary>
-        /// 透明度
+        /// Transparency
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public float Alpha
@@ -3438,7 +3438,7 @@ namespace Com.Opensource.Svga
         public const int LayoutFieldNumber = 2;
         private global::Com.Opensource.Svga.Layout layout_;
         /// <summary>
-        /// 初始约束大小
+        /// Initial constraint size
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.Layout Layout
@@ -3454,7 +3454,7 @@ namespace Com.Opensource.Svga
         public const int TransformFieldNumber = 3;
         private global::Com.Opensource.Svga.Transform transform_;
         /// <summary>
-        /// 2D 变换矩阵
+        /// 2D transformation matrix
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.Transform Transform
@@ -3470,7 +3470,7 @@ namespace Com.Opensource.Svga
         public const int ClipPathFieldNumber = 4;
         private string clipPath_ = "";
         /// <summary>
-        /// 遮罩路径，使用 SVG 标准 Path 绘制图案进行 Mask 遮罩。
+        /// Mask path, using SVG standard Path drawing patterns for mask clipping.
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public string ClipPath
@@ -3488,7 +3488,7 @@ namespace Com.Opensource.Svga
             = pb::FieldCodec.ForMessage(42, global::Com.Opensource.Svga.ShapeEntity.Parser);
         private readonly pbc::RepeatedField<global::Com.Opensource.Svga.ShapeEntity> shapes_ = new pbc::RepeatedField<global::Com.Opensource.Svga.ShapeEntity>();
         /// <summary>
-        /// 矢量元素列表
+        /// Vector element list
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<global::Com.Opensource.Svga.ShapeEntity> Shapes
@@ -3734,7 +3734,7 @@ namespace Com.Opensource.Svga
         public const int VersionFieldNumber = 1;
         private string version_ = "";
         /// <summary>
-        /// SVGA 格式版本号
+        /// SVGA format version number
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public string Version
@@ -3750,7 +3750,7 @@ namespace Com.Opensource.Svga
         public const int ParamsFieldNumber = 2;
         private global::Com.Opensource.Svga.MovieParams params_;
         /// <summary>
-        /// 动画参数
+        /// Animation parameters
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public global::Com.Opensource.Svga.MovieParams Params
@@ -3768,7 +3768,7 @@ namespace Com.Opensource.Svga
             = new pbc::MapField<string, pb::ByteString>.Codec(pb::FieldCodec.ForString(10), pb::FieldCodec.ForBytes(18), 26);
         private readonly pbc::MapField<string, pb::ByteString> images_ = new pbc::MapField<string, pb::ByteString>();
         /// <summary>
-        /// Key 是位图键名，Value 是位图文件名或二进制 PNG 数据。
+        /// Key is the bitmap key name, Value is the bitmap file name or binary PNG data.
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::MapField<string, pb::ByteString> Images
@@ -3782,7 +3782,7 @@ namespace Com.Opensource.Svga
             = pb::FieldCodec.ForMessage(34, global::Com.Opensource.Svga.SpriteEntity.Parser);
         private readonly pbc::RepeatedField<global::Com.Opensource.Svga.SpriteEntity> sprites_ = new pbc::RepeatedField<global::Com.Opensource.Svga.SpriteEntity>();
         /// <summary>
-        /// 元素列表
+        /// Element list
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<global::Com.Opensource.Svga.SpriteEntity> Sprites
@@ -3796,7 +3796,7 @@ namespace Com.Opensource.Svga
             = pb::FieldCodec.ForMessage(42, global::Com.Opensource.Svga.AudioEntity.Parser);
         private readonly pbc::RepeatedField<global::Com.Opensource.Svga.AudioEntity> audios_ = new pbc::RepeatedField<global::Com.Opensource.Svga.AudioEntity>();
         /// <summary>
-        /// 音频列表
+        /// Audio list
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<global::Com.Opensource.Svga.AudioEntity> Audios
