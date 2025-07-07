@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using QuickLook.Common.Plugin;
 using System.IO;
 using System.Linq;
 
@@ -45,9 +44,5 @@ internal static class Handler
         }
 
         return false;
-    }
-
-    public static void Prepare(string path, ContextObject context)
-    {
     }
 }

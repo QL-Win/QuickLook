@@ -11,11 +11,35 @@
     <Grid>
         <helix:HelixViewport3D x:Name="viewer"
                                CameraRotationMode="Turnball"
+                               CoordinateSystemHorizontalPosition="Left"
+                               CoordinateSystemLabelForeground="Black"
+                               CoordinateSystemVerticalPosition="Bottom"
+                               IsViewCubeEdgeClicksEnabled="False"
+                               RotateAroundMouseDownPoint="False"
+                               ShowCameraInfo="False"
+                               ShowCameraTarget="True"
+                               ShowCoordinateSystem="False"
+                               ShowFrameRate="False"
                                ShowViewCube="False"
                                ZoomAroundMouseDownPoint="True"
                                ZoomExtentsWhenLoaded="true">
             <ModelVisual3D x:Name="modelVisual" />
             <helix:DefaultLights />
+            <helix:HelixViewport3D.Camera>
+                <PerspectiveCamera x:Name="camera"
+                                   FarPlaneDistance="30000"
+                                   FieldOfView="45"
+                                   LookDirection="0,0,-1"
+                                   NearPlaneDistance="0.1"
+                                   Position="0,91,414"
+                                   UpDirection="0,1,0" />
+            </helix:HelixViewport3D.Camera>
+            <helix:HelixViewport3D.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Offset="0" Color="Transparent" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                </LinearGradientBrush>
+            </helix:HelixViewport3D.Background>
             <helix:HelixViewport3D.RotateGesture>
                 <MouseGesture MouseAction="LeftClick" />
             </helix:HelixViewport3D.RotateGesture>

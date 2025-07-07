@@ -54,7 +54,7 @@ public class Plugin : IViewer
     {
         _hp = new HelixPanel(path);
         context.ViewerContent = _hp;
-        context.Title = $"{Path.GetFileName(path)}";
+        context.Title = Path.GetFileName(path);
         context.IsBusy = false;
     }
 

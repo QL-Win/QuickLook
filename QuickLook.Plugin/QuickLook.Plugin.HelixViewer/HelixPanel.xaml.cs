@@ -42,7 +42,7 @@ public partial class HelixPanel : UserControl
     {
         var modelImporter = new ModelImporter();
         var model3DGroup = modelImporter.Load(_path);
-        var diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Colors.DarkGray));
+        var diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(0xA0, 0xA0, 0xA0)));
 
         foreach (GeometryModel3D child in model3DGroup.Children.Cast<GeometryModel3D>())
         {
