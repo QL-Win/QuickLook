@@ -44,8 +44,6 @@ internal class TrayIconManager : IDisposable
             })
         { Enabled = !App.IsUWP };
 
-    private readonly string _attr = App.IsUWP ? $" (UWP{(App.IsSandBox ? string.Empty : "-SandBox")})" : string.Empty;
-
     private TrayIconManager()
     {
         _icon = new NotifyIcon
@@ -55,7 +53,7 @@ internal class TrayIconManager : IDisposable
             Icon = GetTrayIconByDPI(),
             ContextMenu = new ContextMenu(
             [
-                new MenuItem($"v{Application.ProductVersion}{_attr}") {Enabled = false},
+                new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : string.Empty)}") {Enabled = false},
                 new MenuItem("-"),
                 new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (_, _) => Updater.CheckForUpdates()),
                 new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
