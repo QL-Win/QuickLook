@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<SyntaxDefinition name="Markdown" extensions=".md;.markdown;.mdx;.mmd;.mkd;.mdwn;.mdown;.mdc;.qmd;.rmd;.rmarkdown;.apib;.mdtxt;.mdtext" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Heading" foreground="Maroon" exampleText="# Title #" />
+	<Color name="Emphasis" fontStyle="italic" exampleText="*this* is important!" />
+	<Color name="StrongEmphasis" fontWeight="bold" exampleText="**this** is more important!" />
+	<Color name="InlineCode" foreground="#705711"  fontFamily="Consolas" background="#F0F0F0" exampleText="this is `int.GetHashCode()`" />
+	<Color name="Code" foreground="#705711"  fontFamily="Consolas" exampleText="this is `int.GetHashCode()`" />
+	<Color name="BlockQuote" foreground="DarkBlue" exampleText="&gt; This is a\r\n&gt; quote." />
+	<Color name="Link" foreground="Blue" exampleText="[text](http://example.com)" />
+	<Color name="Image" foreground="Green" exampleText="[text][http://example.com/test.png]" />
+	<Color name="LineBreak" background="LightGray" exampleText="end of line      \r\n2nd line   " />
+	<Color name="think" foreground="#999999" />
+
+	<RuleSet ignoreCase="true">
+		<Rule color="Heading">
+			^\#.*
+		</Rule>
+		<Rule color="StrongEmphasis">
+			\*\*.*\*\*
+		</Rule>
+		<Rule color="StrongEmphasis">
+			__.*__
+		</Rule>
+		<Rule color="Emphasis">
+			\*(?![ ]).*\*
+		</Rule>
+		<Rule color="Emphasis">
+			_.*_
+		</Rule>
+		<Rule color="InlineCode">
+			`(.*?)`
+		</Rule>
+		<Span color="Code" ruleSet="C#/" multiline="true">
+			<Begin>^```</Begin>
+			<End>^```$</End>
+		</Span>
+		<Span color="Code" ruleSet="C#/" multiline="true">
+			<Begin>^\t</Begin>
+			<End>^(?!\t)</End>
+		</Span>
+		<Span color="Code" ruleSet="C#/" multiline="true">
+			<Begin>^[ ]{4}</Begin>
+			<End>^(?![ ]{4})</End>
+		</Span>
+		<Span color="BlockQuote" multiline="true">
+			<Begin>^&gt;</Begin>
+			<End>^(?!&gt;)</End>
+		</Span>
+		<Rule color="Image">
+			\!\[.*\]\[.*\]
+		</Rule>
+		<Rule color="Link">
+			\[.*\]\(.*\)
+		</Rule>
+		<Rule color="Link">
+			\[.*\]\[.*\]
+		</Rule>
+		<Rule color="LineBreak">
+			[ ]{2}$
+		</Rule>
+		<Span color="think" multiline="true">
+			<Begin>&lt;think&gt;</Begin>
+			<End>&lt;/think&gt;</End>
+		</Span>
+	</RuleSet>
+</SyntaxDefinition>
