@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Text.RegularExpressions;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
@@ -29,24 +30,27 @@ public class JSONDetector : IFormatDetector
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
 
-        // TODO: Use AsSpan to improve
+        var span = text.AsSpan();
 
-        var trimmedStart = text.TrimStart();
+        // TrimStart
+        int start = 0;
+        while (start < span.Length && char.IsWhiteSpace(span[start]))
+            start++;
 
-        if (trimmedStart.StartsWith("{") || trimmedStart.StartsWith("["))
-        {
-            var trimmedEnd = text.TrimEnd();
+        if (start >= span.Length)
+            return false;
 
-            if (trimmedEnd.EndsWith("}") || trimmedEnd.EndsWith("]"))
-            {
-                // At least one key exists
-                if (Regex.IsMatch(text, @"""[^""]+""\s*:"))
-                {
-                    return true;
-                }
-            }
-        }
+        if (span[start] != '{' && span[start] != '[')
+            return false;
 
-        return false;
+        // TrimEnd
+        int end = span.Length - 1;
+        while (end >= 0 && char.IsWhiteSpace(span[end]))
+            end--;
+
+        if (end < 0 || (span[end] != '}' && span[end] != ']'))
+            return false;
+
+        return Regex.IsMatch(text, @"""[^""]+""\s*:");
     }
 }
