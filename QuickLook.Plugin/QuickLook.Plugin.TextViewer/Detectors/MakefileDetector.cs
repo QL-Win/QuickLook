@@ -20,7 +20,7 @@ using System.IO;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
 
-public class MakefileDetector : IFormatDetector
+public sealed class MakefileDetector : IFormatDetector
 {
     public string Name => "Makefile";
 

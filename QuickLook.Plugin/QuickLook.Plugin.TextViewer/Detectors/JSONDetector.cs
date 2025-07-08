@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
 
-public class JSONDetector : IFormatDetector
+public sealed class JSONDetector : IFormatDetector
 {
     public string Name => "JSON";
 

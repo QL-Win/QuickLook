@@ -28,6 +28,7 @@ public class FormatDetector
         new XMLDetector(),
         new JSONDetector(),
         new MakefileDetector(),
+        //new CMakeListsDetector(),
     ];
 
     public static IFormatDetector Detect(string path, string text)

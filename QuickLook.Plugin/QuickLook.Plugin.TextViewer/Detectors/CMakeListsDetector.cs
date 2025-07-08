@@ -15,22 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Text.RegularExpressions;
+using System;
+using System.IO;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
 
-public sealed class XMLDetector : IFormatDetector
+public sealed class CMakeListsDetector : IFormatDetector
 {
-    internal Regex Signature { get; } = new(@"<\?xml\b[^>]*\bversion\s*=\s*""[^""]*""[^\?>]*\?>", RegexOptions.IgnoreCase);
+    public string Name => "CMakeLists";
 
-    public string Name => "XML";
-
-    public string Extension => ".xml";
+    public string Extension => ".txt";
 
     public bool Detect(string path, string text)
     {
-        _ = path;
+        if (string.IsNullOrWhiteSpace(text)) return false;
 
-        return Signature.IsMatch(text);
+        return "CMakeLists.txt".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
     }
 }
