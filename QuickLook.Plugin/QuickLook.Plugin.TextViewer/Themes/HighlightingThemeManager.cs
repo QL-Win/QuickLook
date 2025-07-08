@@ -65,7 +65,9 @@ public class HighlightingThemeManager
         }
 
         // Unsupported highlighting
-        highlightingTheme ??= HighlightingTheme.Default;
+        highlightingTheme ??= GetDefinitionByExtension(nameof(Dark), ".txt")
+                          ?? GetDefinitionByExtension(nameof(Light), ".txt")
+                          ?? HighlightingTheme.Default;
 
         var darkThemeAllowed = SettingHelper.Get("AllowDarkTheme", highlightingTheme.IsDark, "QuickLook.Plugin.TextViewer");
         var isDark = darkThemeAllowed && OSThemeHelper.AppsUseDarkTheme();
