@@ -27,25 +27,17 @@ namespace QuickLook.Plugin.TextViewer;
 
 public class Plugin : IViewer
 {
+    private static readonly HashSet<string> WellKnownExtensions = new(
+    [
+        ".txt", ".rtf",
+    ]);
+
     private TextViewerPanel _tvp;
 
     public int Priority => -5;
 
     public void Init()
     {
-        // Implementation of the Search Panel Styled with Fluent Theme
-        {
-            var groupDictionary = new ResourceDictionary();
-            groupDictionary.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/QuickLook.Plugin.TextViewer;component/Controls/DropDownButton.xaml", UriKind.Absolute)
-            });
-            groupDictionary.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/QuickLook.Plugin.TextViewer;component/Controls/SearchPanel.xaml", UriKind.Absolute)
-            });
-            Application.Current.Resources.MergedDictionaries.Add(groupDictionary);
-        }
     }
 
     public bool CanHandle(string path)
@@ -53,14 +45,10 @@ public class Plugin : IViewer
         if (Directory.Exists(path))
             return false;
 
-        if (new[] { ".txt", ".rtf" }.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+        if (WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
             return true;
 
-        // if there is a matched highlighting scheme (by file extension), treat it as a plain text file
-        // if (HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(path)) != null)
-        //     return true;
-
-        // otherwise, read the first 16KB, check if we can get something.
+        // Read the first 16KB, check if we can get something.
         using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         const int bufferLength = 16 * 1024;
         var buffer = new byte[bufferLength];
@@ -94,7 +82,7 @@ public class Plugin : IViewer
             _tvp.LoadFileAsync(path, context);
             context.ViewerContent = _tvp;
         }
-        context.Title = $"{Path.GetFileName(path)}";
+        context.Title = Path.GetFileName(path);
     }
 
     public void Cleanup()

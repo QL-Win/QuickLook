@@ -25,7 +25,7 @@ namespace QuickLook.Plugin.HelixViewer;
 
 public class Plugin : IViewer
 {
-    private static readonly HashSet<string> WellKnownImageExtensions = new(
+    private static readonly HashSet<string> WellKnownExtensions = new(
     [
         ".stl", ".obj", ".3ds", ".lwo", ".ply",
     ]);
@@ -41,7 +41,7 @@ public class Plugin : IViewer
     public bool CanHandle(string path)
     {
         return !Directory.Exists(path)
-            && WellKnownImageExtensions.Contains(Path.GetExtension(path.ToLower()))
+            && WellKnownExtensions.Contains(Path.GetExtension(path.ToLower()))
             && Handler.CanHandle(path);
     }
 

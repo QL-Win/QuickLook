@@ -29,6 +29,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -42,6 +43,21 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     static TextViewerPanel()
     {
+        // Implementation of the Search Panel Styled with Fluent Theme
+        {
+            var groupDictionary = new ResourceDictionary();
+            groupDictionary.MergedDictionaries.Add(new ResourceDictionary()
+            {
+                Source = new Uri("pack://application:,,,/QuickLook.Plugin.TextViewer;component/Controls/DropDownButton.xaml", UriKind.Absolute)
+            });
+            groupDictionary.MergedDictionaries.Add(new ResourceDictionary()
+            {
+                Source = new Uri("pack://application:,,,/QuickLook.Plugin.TextViewer;component/Controls/SearchPanel.xaml", UriKind.Absolute)
+            });
+            Application.Current.Resources.MergedDictionaries.Add(groupDictionary);
+        }
+
+        // Initialize the Highlighting Theme Manager
         HighlightingThemeManager.Initialize();
     }
 

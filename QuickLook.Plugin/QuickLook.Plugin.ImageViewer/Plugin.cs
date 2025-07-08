@@ -30,7 +30,7 @@ namespace QuickLook.Plugin.ImageViewer;
 
 public class Plugin : IViewer
 {
-    private static readonly HashSet<string> WellKnownImageExtensions = new(
+    private static readonly HashSet<string> WellKnownExtensions = new(
     [
         ".apng", ".ari", ".arw", ".avif", ".ani",
         ".bay", ".bmp",
@@ -108,7 +108,7 @@ public class Plugin : IViewer
 
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && WellKnownImageExtensions.Contains(Path.GetExtension(path).ToLower());
+        return !Directory.Exists(path) && WellKnownExtensions.Contains(Path.GetExtension(path).ToLower());
     }
 
     public void Prepare(string path, ContextObject context)

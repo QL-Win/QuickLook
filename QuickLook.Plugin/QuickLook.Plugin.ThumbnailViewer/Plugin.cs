@@ -28,7 +28,7 @@ namespace QuickLook.Plugin.ThumbnailViewer;
 
 public class Plugin : IViewer
 {
-    private static readonly HashSet<string> WellKnownImageExtensions = new(
+    private static readonly HashSet<string> WellKnownExtensions = new(
     [
         ".cdr", // CorelDraw
         ".fig", // Figma
@@ -47,7 +47,7 @@ public class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && WellKnownImageExtensions.Contains(Path.GetExtension(path.ToLower()));
+        return !Directory.Exists(path) && WellKnownExtensions.Contains(Path.GetExtension(path.ToLower()));
     }
 
     public void Prepare(string path, ContextObject context)
