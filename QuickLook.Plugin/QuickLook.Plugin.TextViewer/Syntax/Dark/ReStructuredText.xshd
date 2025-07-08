@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<SyntaxDefinition name="reStructuredText" extensions=".rst" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Heading" foreground="#FF00C0FF" exampleText="Title\n=====" />
+	<Color name="Emphasis" fontStyle="italic" exampleText="*this* is important!" />
+	<Color name="StrongEmphasis" fontWeight="bold" exampleText="**this** is more important!" />
+	<Color name="InlineCode" foreground="#D0D0D0"  fontFamily="Consolas" background="#282828" exampleText="``int.GetHashCode()``" />
+	<Color name="Code" exampleText="::\n\n    code block" />
+	<Color name="BlockQuote" foreground="#FF55FF00" exampleText="    This is a\n    block quote." />
+	<Color name="Link" foreground="#FF4080FF" exampleText="`link text &lt;http://example.com&gt;`_" />
+	<Color name="Image" foreground="#FF4080FF" exampleText=".. image:: path/to/image.png" />
+	<Color name="Directive" foreground="#FFFF8000" exampleText=".. note::" />
+	<Color name="Role" foreground="#FF8080FF" exampleText=":doc:`reference`" />
+	<Color name="LineBreak" background="#FF222222" exampleText="end of line\n2nd line" />
+	<Color name="Comment" foreground="#999999" exampleText=".. This is a comment" />
+
+	<RuleSet ignoreCase="false">
+		<!-- RST heading with underline -->
+		<Rule color="Heading">
+			^.+\r?\n[=\-`:'\"~^_*+#&lt;&gt;]{4,}\s*$
+		</Rule>
+		<!-- RST heading with overline and underline -->
+		<Rule color="Heading">
+			^[=\-`:'\"~^_*+#&lt;&gt;]{4,}\s*\r?\n.+\r?\n[=\-`:'\"~^_*+#&lt;&gt;]{4,}\s*$
+		</Rule>
+		<!-- Strong emphasis (bold) -->
+		<Rule color="StrongEmphasis">
+			\*\*[^\s*].*?[^\s*]\*\*
+		</Rule>
+		<!-- Emphasis (italic) -->
+		<Rule color="Emphasis">
+			\*[^\s*].*?[^\s*]\*
+		</Rule>
+		<!-- Inline code -->
+		<Rule color="InlineCode">
+			``.*?``
+		</Rule>
+		<!-- RST directives -->
+		<Rule color="Directive">
+			^\.\.\s+\w+::.*$
+		</Rule>
+		<!-- RST roles -->
+		<Rule color="Role">
+			:\w+:`[^`]*`
+		</Rule>
+		<!-- External links -->
+		<Rule color="Link">
+			`[^`]+\s+&lt;[^&gt;]+&gt;`_
+		</Rule>
+		<!-- Internal link references -->
+		<Rule color="Link">
+			\w+_
+		</Rule>
+		<!-- Comments -->
+		<Rule color="Comment">
+			^\.\.\s.*$
+		</Rule>
+		<!-- RST code blocks: indented content after :: -->
+		<Span color="Code" multiline="true">
+			<Begin>^::\s*$</Begin>
+			<End>^(?!\s)</End>
+		</Span>
+		<!-- RST literal blocks: indented content -->
+		<Span color="Code" multiline="true">
+			<Begin>^[ \t]+\S</Begin>
+			<End>^(?![ \t])</End>
+		</Span>
+		<!-- RST block quotes -->
+		<Span color="BlockQuote" multiline="true">
+			<Begin>^[ \t]+</Begin>
+			<End>^(?![ \t])</End>
+		</Span>
+	</RuleSet>
+</SyntaxDefinition>
