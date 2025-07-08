@@ -34,6 +34,7 @@ public class Plugin : IViewer
         ".fig", // Figma
         ".kra", // Krita
         ".pip", ".pix", // Pixso
+        ".sketch", // Sketch
         ".xd", // AdobeXD
         ".xmind", // XMind
     ]);
