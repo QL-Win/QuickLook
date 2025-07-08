@@ -15,7 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Assimp;
 using HelixToolkit.Wpf;
+using System;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,7 +27,7 @@ namespace QuickLook.Plugin.HelixViewer;
 
 public partial class HelixPanel : UserControl
 {
-    private string _path;
+    private readonly string _path;
 
     public HelixPanel(string path) : this()
     {
@@ -40,16 +42,40 @@ public partial class HelixPanel : UserControl
 
     private void Load()
     {
-        var modelImporter = new ModelImporter();
-        var model3DGroup = modelImporter.Load(_path);
-        var diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(0xA0, 0xA0, 0xA0)));
-
-        foreach (GeometryModel3D child in model3DGroup.Children.Cast<GeometryModel3D>())
+        if (_path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
         {
-            child.Material = diffuseMaterial;
-            child.BackMaterial = diffuseMaterial;
-        }
+            var context = new AssimpContext();
+            var scene = context.ImportFile(_path, PostProcessSteps.Triangulate);
 
-        modelVisual.Content = model3DGroup;
+            foreach (var mesh in scene.Meshes)
+            {
+                var geometry = new MeshGeometry3D()
+                {
+                    Positions = [.. mesh.Vertices.Select(v => new Point3D(v.X, v.Y, v.Z))],
+                    TriangleIndices = [.. mesh.GetIndices()],
+                };
+                var model = new GeometryModel3D()
+                {
+                    Geometry = geometry,
+                    Material = Materials.Gray,
+                };
+
+                modelVisual.Content = model;
+            }
+        }
+        else
+        {
+            var modelImporter = new ModelImporter();
+            var model3DGroup = modelImporter.Load(_path);
+            var diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(0xA0, 0xA0, 0xA0)));
+
+            foreach (GeometryModel3D child in model3DGroup.Children.Cast<GeometryModel3D>())
+            {
+                child.Material = diffuseMaterial;
+                child.BackMaterial = diffuseMaterial;
+            }
+
+            modelVisual.Content = model3DGroup;
+        }
     }
 }

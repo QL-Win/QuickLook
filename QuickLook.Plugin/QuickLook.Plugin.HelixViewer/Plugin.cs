@@ -28,6 +28,7 @@ public class Plugin : IViewer
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
         ".stl", ".obj", ".3ds", ".lwo", ".ply",
+        ".fbx",
     ]);
 
     private HelixPanel _hp;

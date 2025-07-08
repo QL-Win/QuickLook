@@ -54,6 +54,7 @@
     <ItemGroup>
         <PackageReference Include="HelixToolkit" Version="2.27.0" />
         <PackageReference Include="HelixToolkit.Wpf" Version="2.27.0" />
+        <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
     </ItemGroup>
 
     <ItemGroup>
