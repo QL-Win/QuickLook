@@ -33,6 +33,7 @@ public class Plugin : IViewer
         ".cdr", // CorelDraw
         ".fig", // Figma
         ".kra", // Krita
+        ".pip", ".pix", // Pixso
         ".xd", // AdobeXD
         ".xmind", // XMind
     ]);

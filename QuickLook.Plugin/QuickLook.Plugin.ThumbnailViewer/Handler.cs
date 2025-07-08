@@ -60,6 +60,20 @@ internal static class Handler
                 context.PreferredSize = new Size { Width = 100, Height = 100 };
             }
         }
+        else if (path.EndsWith(".pip", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".pix", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                using Stream imageData = ViewImage(path);
+                BitmapImage bitmap = imageData.ReadAsBitmapImage();
+                context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
+            }
+            catch (Exception e)
+            {
+                _ = e;
+                context.PreferredSize = new Size { Width = 100, Height = 100 };
+            }
+        }
         else if (path.EndsWith(".xmind", StringComparison.OrdinalIgnoreCase))
         {
             try
@@ -139,6 +153,32 @@ internal static class Handler
                 while (reader.MoveToNextEntry())
                 {
                     if (reader.Entry.Key!.Equals("thumbnail.png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        MemoryStream ms = new();
+                        using EntryStream stream = reader.OpenEntryStream();
+                        stream.CopyTo(ms);
+                        return ms;
+                    }
+                }
+            }
+            catch
+            {
+                ///
+            }
+
+            StreamResourceInfo info = Application.GetResourceStream(new Uri("pack://application:,,,/QuickLook.Plugin.ThumbnailViewer;component/Resources/broken.png"));
+            return info?.Stream;
+        }
+        else if (path.EndsWith(".pip", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".pix", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                using ZipArchive archive = ZipArchive.Open(path, new());
+                using IReader reader = archive.ExtractAllEntries();
+
+                while (reader.MoveToNextEntry())
+                {
+                    if (reader.Entry.Key!.EndsWith(".thumb.png", StringComparison.OrdinalIgnoreCase))
                     {
                         MemoryStream ms = new();
                         using EntryStream stream = reader.OpenEntryStream();

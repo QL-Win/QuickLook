@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -48,7 +49,7 @@ public class Plugin : IViewer
         if (WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
             return true;
 
-        // Read the first 16KB, check if we can get something.
+        // Read the first 16KB, check if we can get something
         using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         const int bufferLength = 16 * 1024;
         var buffer = new byte[bufferLength];
@@ -91,6 +92,7 @@ public class Plugin : IViewer
         _tvp = null;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsText(IReadOnlyList<byte> buffer, int size)
     {
         for (var i = 1; i < size; i++)
