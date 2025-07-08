@@ -3,58 +3,58 @@
 <SyntaxDefinition name="CMake" extensions=".cmake">
 
     <Environment> 
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
+        <Default color="#FFFFFF" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#424242"/>
     </Environment>
 
     <Properties>
         <Property name="LineComment" value="#"/>
     </Properties>
 
-    <Digits name="Digits" color="#BF382A"/>
+    <Digits name="Digits" color="#B5CEA8"/>
 
     <RuleSets>
         <RuleSet ignorecase="false">
                         
             <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
             
-            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
                 <Begin>#</Begin>
             </Span>
             
-            <Span name="BracketComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Span name="BracketComment" stopateol="false" color="#6A9955" bold="false" italic="false">
                 <Begin>#[[</Begin>
                 <End>]]</End>
             </Span>
                         
-            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
             
-            <Span name="Char" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
                 <Begin>'</Begin>
                 <End>'</End>
             </Span>
             
-            <Span name="Preprocessor" stopateol="true" color="Sienna" bold="false" italic="false">
+            <Span name="Preprocessor" stopateol="true" color="#C586C0" bold="false" italic="false">
                 <Begin>$</Begin>
             </Span>
 
-            <Span name="Variable" stopateol="false" color="Purple" bold="false" italic="false">
+            <Span name="Variable" stopateol="false" color="#9CDCFE" bold="false" italic="false">
                 <Begin>${</Begin>
                 <End>}</End>
             </Span>
             
-            <Span name="GeneratorExpression" stopateol="false" color="DarkBlue" bold="true" italic="false">
+            <Span name="GeneratorExpression" stopateol="false" color="#4EC9B0" bold="true" italic="false">
                 <Begin>$&lt;</Begin>
                 <End>&gt;</End>
             </Span>
 
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
                 <Key word="add_custom_command"/>
                 <Key word="add_custom_target"/>
                 <Key word="add_definitions"/>
@@ -88,7 +88,7 @@
                 <Key word="unset"/>
             </KeyWords>
                         
-            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+            <KeyWords name="Keywords2" color="#C586C0" bold="false" italic="false">
                 <Key word="if"/>
                 <Key word="else"/>
                 <Key word="elseif"/>
@@ -103,7 +103,7 @@
                 <Key word="endmacro"/>
             </KeyWords>
             
-            <KeyWords name="Keywords3" color="Red" bold="false" italic="false">
+            <KeyWords name="Keywords3" color="#F44747" bold="false" italic="false">
                 <Key word="ON"/>
                 <Key word="OFF"/>
                 <Key word="TRUE"/>
@@ -119,7 +119,7 @@
                 <Key word="PRIVATE"/>
             </KeyWords>
             
-            <KeyWords name="Keywords4" color="Sienna" bold="false" italic="false">
+            <KeyWords name="Keywords4" color="#DCDCAA" bold="false" italic="false">
                 <Key word="EQUAL"/>
                 <Key word="LESS"/>
                 <Key word="GREATER"/>
@@ -142,7 +142,7 @@
                 <Key word="TARGET"/>
             </KeyWords>
             
-            <KeyWords name="Keywords5" color="DarkMagenta" bold="false" italic="false">
+            <KeyWords name="Keywords5" color="#4FC1FF" bold="false" italic="false">
                 <Key word="CMAKE_SOURCE_DIR"/>
                 <Key word="CMAKE_BINARY_DIR"/>
                 <Key word="CMAKE_CURRENT_SOURCE_DIR"/>
@@ -170,7 +170,7 @@
         <RuleSet name="Doxygen" ignorecase="false">
             <Delimiters>~!%^*()+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
             
-            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#808080" bold="false" italic="false">
                 <Key word="@author"/>
                 <Key word="@brief"/>
                 <Key word="@param"/>
