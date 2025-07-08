@@ -49,7 +49,7 @@ public class HighlightingThemeManager
         var useFormatDetector = SettingHelper.Get("UseFormatDetector", true, "QuickLook.Plugin.TextViewer");
         var highlightingTheme = GetDefinitionByExtension(nameof(Dark), extension);
 
-        if (useFormatDetector && FormatDetector.ResolveConfusedFormat(path, text) is IConfusedFormatDetector confusedFormatDetector)
+        if (useFormatDetector && FormatDetector.Confuse(path, text) is IFormatDetector confusedFormatDetector)
         {
             if (!string.IsNullOrEmpty(confusedFormatDetector.Extension))
             {
@@ -77,7 +77,7 @@ public class HighlightingThemeManager
             }
         }
 
-        // Unsupported highlighting
+        // The unsupported highlighting will be fallback to not highlighted text
         highlightingTheme ??= GetDefinitionByExtension(nameof(Dark), ".txt")
                           ?? GetDefinitionByExtension(nameof(Light), ".txt")
                           ?? HighlightingTheme.Default;

@@ -33,13 +33,13 @@ public class FormatDetector
         //new DockerfileDetector(),
     ];
 
-    public static IConfusedFormatDetector ResolveConfusedFormat(string path, string text)
+    public static IFormatDetector Confuse(string path, string text)
     {
         if (string.IsNullOrWhiteSpace(text)) return null;
 
         return Instance.TextDetectors
             .Where(detector => detector is IConfusedFormatDetector && detector.Detect(path, text))
-            .FirstOrDefault() as IConfusedFormatDetector;
+            .FirstOrDefault();
     }
 
     public static IFormatDetector Detect(string path, string text)
