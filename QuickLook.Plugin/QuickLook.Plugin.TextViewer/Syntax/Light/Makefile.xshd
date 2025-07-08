@@ -3,18 +3,18 @@
 <SyntaxDefinition name="Makefile" extensions=".makefile;.mk;.mak">
 
 	<Environment>
-		<Default color="#D4D4D4" bgcolor="#1E1E1E"/>
-		<Selection color="#1E1E1E" bgcolor="#264F78"/>
-		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
-		<CaretMarker color="#AEAFAD"/>
-		<VRuler color="#333337"/>
+		<Default color="#000000" bgcolor="#FFFFFF"/>
+		<Selection color="#FFFFFF" bgcolor="#0078D4"/>
+		<LineNumbers color="#2B91AF" bgcolor="#FFFFFF"/>
+		<CaretMarker color="#000000"/>
+		<VRuler color="#E0E0E0"/>
 	</Environment>
 
 	<Properties>
 		<Property name="LineCommentBegin" value="#"/>
 	</Properties>
 
-	<Digits name="Digits" color="#B5CEA8"/>
+	<Digits name="Digits" color="#098658"/>
 
 	<RuleSets>
 		<RuleSet ignorecase="false">
@@ -22,39 +22,39 @@
 			<Delimiters>:=(){}[]$@%*?</Delimiters>
 
 			<!-- Line comments starting with # -->
-			<Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+			<Span name="LineComment" stopateol="true" color="#008000" bold="false" italic="false">
 				<Begin>#</Begin>
 			</Span>
 
 			<!-- Variables (pattern: $(VAR) or ${VAR}) -->
-			<Span name="Variable" color="#DCDCAA" bold="false" italic="false">
+			<Span name="Variable" color="#0070C1" bold="false" italic="false">
 				<Begin>$(</Begin>
 				<End>)</End>
 			</Span>
 
-			<Span name="Variable" color="#DCDCAA" bold="false" italic="false">
+			<Span name="Variable" color="#0070C1" bold="false" italic="false">
 				<Begin>${</Begin>
 				<End>}</End>
 			</Span>
 
 			<!-- String literals -->
-			<Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+			<Span name="String" color="#A31515" stopateol="true" bold="false" italic="false">
 				<Begin>"</Begin>
 				<End>"</End>
 			</Span>
 
-			<Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+			<Span name="String" color="#A31515" stopateol="true" bold="false" italic="false">
 				<Begin>'</Begin>
 				<End>'</End>
 			</Span>
 
 			<!-- Special characters and operators -->
-			<MarkFollowing markmarker="true" color="#D7BA7D" bold="false" italic="false">@</MarkFollowing>
-			<MarkFollowing markmarker="true" color="#FF6B6B" bold="false" italic="false">-</MarkFollowing>
-			<MarkFollowing markmarker="true" color="#C586C0" bold="false" italic="false">+</MarkFollowing>
+			<MarkFollowing markmarker="true" color="#B8860B" bold="false" italic="false">@</MarkFollowing>
+			<MarkFollowing markmarker="true" color="#FF0000" bold="false" italic="false">-</MarkFollowing>
+			<MarkFollowing markmarker="true" color="#AF00DB" bold="false" italic="false">+</MarkFollowing>
 
 			<!-- Keywords for common make functions and directives -->
-			<KeyWords name="Keywords" color="#C586C0" bold="false" italic="false">
+			<KeyWords name="Keywords" color="#AF00DB" bold="false" italic="false">
 				<Key word="include"/>
 				<Key word="ifdef"/>
 				<Key word="ifndef"/>
@@ -70,7 +70,7 @@
 			</KeyWords>
 
 			<!-- Make functions -->
-			<KeyWords name="Functions" color="#4EC9B0" bold="false" italic="false">
+			<KeyWords name="Functions" color="#267F99" bold="false" italic="false">
 				<Key word="patsubst"/>
 				<Key word="subst"/>
 				<Key word="strip"/>
@@ -109,7 +109,7 @@
 			</KeyWords>
 
 			<!-- Built-in variables -->
-			<KeyWords name="BuiltinVars" color="#9CDCFE" bold="false" italic="false">
+			<KeyWords name="BuiltinVars" color="#001080" bold="false" italic="false">
 				<Key word="CC"/>
 				<Key word="CXX"/>
 				<Key word="CFLAGS"/>
@@ -127,7 +127,7 @@
 			</KeyWords>
 
 			<!-- Automatic variables -->
-			<KeyWords name="AutoVars" color="#FFD700" bold="true" italic="false">
+			<KeyWords name="AutoVars" color="#795E26" bold="true" italic="false">
 				<Key word="$@"/>
 				<Key word="$%"/>
 				<Key word="$&lt;"/>
