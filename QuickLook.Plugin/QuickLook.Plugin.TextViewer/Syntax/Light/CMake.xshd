@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="CMake" extensions=".cmake">
+
+    <Environment> 
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="BracketComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>#[[</Begin>
+                <End>]]</End>
+            </Span>
+                        
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <Span name="Preprocessor" stopateol="true" color="Sienna" bold="false" italic="false">
+                <Begin>$</Begin>
+            </Span>
+
+            <Span name="Variable" stopateol="false" color="Purple" bold="false" italic="false">
+                <Begin>${</Begin>
+                <End>}</End>
+            </Span>
+            
+            <Span name="GeneratorExpression" stopateol="false" color="DarkBlue" bold="true" italic="false">
+                <Begin>$&lt;</Begin>
+                <End>&gt;</End>
+            </Span>
+
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+                <Key word="add_custom_command"/>
+                <Key word="add_custom_target"/>
+                <Key word="add_definitions"/>
+                <Key word="add_dependencies"/>
+                <Key word="add_executable"/>
+                <Key word="add_library"/>
+                <Key word="add_subdirectory"/>
+                <Key word="add_test"/>
+                <Key word="cmake_minimum_required"/>
+                <Key word="configure_file"/>
+                <Key word="enable_testing"/>
+                <Key word="find_library"/>
+                <Key word="find_package"/>
+                <Key word="find_path"/>
+                <Key word="find_program"/>
+                <Key word="include"/>
+                <Key word="include_directories"/>
+                <Key word="install"/>
+                <Key word="link_directories"/>
+                <Key word="link_libraries"/>
+                <Key word="list"/>
+                <Key word="message"/>
+                <Key word="project"/>
+                <Key word="set"/>
+                <Key word="set_property"/>
+                <Key word="set_target_properties"/>
+                <Key word="target_compile_definitions"/>
+                <Key word="target_compile_options"/>
+                <Key word="target_include_directories"/>
+                <Key word="target_link_libraries"/>
+                <Key word="unset"/>
+            </KeyWords>
+                        
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+                <Key word="if"/>
+                <Key word="else"/>
+                <Key word="elseif"/>
+                <Key word="endif"/>
+                <Key word="while"/>
+                <Key word="endwhile"/>
+                <Key word="foreach"/>
+                <Key word="endforeach"/>
+                <Key word="function"/>
+                <Key word="endfunction"/>
+                <Key word="macro"/>
+                <Key word="endmacro"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="Red" bold="false" italic="false">
+                <Key word="ON"/>
+                <Key word="OFF"/>
+                <Key word="TRUE"/>
+                <Key word="FALSE"/>
+                <Key word="CACHE"/>
+                <Key word="INTERNAL"/>
+                <Key word="FORCE"/>
+                <Key word="STATIC"/>
+                <Key word="SHARED"/>
+                <Key word="MODULE"/>
+                <Key word="INTERFACE"/>
+                <Key word="PUBLIC"/>
+                <Key word="PRIVATE"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="Sienna" bold="false" italic="false">
+                <Key word="EQUAL"/>
+                <Key word="LESS"/>
+                <Key word="GREATER"/>
+                <Key word="STREQUAL"/>
+                <Key word="STRLESS"/>
+                <Key word="STRGREATER"/>
+                <Key word="MATCHES"/>
+                <Key word="VERSION_EQUAL"/>
+                <Key word="VERSION_LESS"/>
+                <Key word="VERSION_GREATER"/>
+                <Key word="EXISTS"/>
+                <Key word="IS_DIRECTORY"/>
+                <Key word="IS_NEWER_THAN"/>
+                <Key word="AND"/>
+                <Key word="OR"/>
+                <Key word="NOT"/>
+                <Key word="DEFINED"/>
+                <Key word="COMMAND"/>
+                <Key word="POLICY"/>
+                <Key word="TARGET"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords5" color="DarkMagenta" bold="false" italic="false">
+                <Key word="CMAKE_SOURCE_DIR"/>
+                <Key word="CMAKE_BINARY_DIR"/>
+                <Key word="CMAKE_CURRENT_SOURCE_DIR"/>
+                <Key word="CMAKE_CURRENT_BINARY_DIR"/>
+                <Key word="CMAKE_CURRENT_LIST_DIR"/>
+                <Key word="CMAKE_CURRENT_LIST_FILE"/>
+                <Key word="CMAKE_MODULE_PATH"/>
+                <Key word="CMAKE_PREFIX_PATH"/>
+                <Key word="CMAKE_INSTALL_PREFIX"/>
+                <Key word="CMAKE_BUILD_TYPE"/>
+                <Key word="CMAKE_CXX_STANDARD"/>
+                <Key word="CMAKE_C_STANDARD"/>
+                <Key word="CMAKE_CXX_COMPILER"/>
+                <Key word="CMAKE_C_COMPILER"/>
+                <Key word="CMAKE_SYSTEM_NAME"/>
+                <Key word="CMAKE_SYSTEM_VERSION"/>
+                <Key word="CMAKE_SYSTEM_PROCESSOR"/>
+                <Key word="PROJECT_NAME"/>
+                <Key word="PROJECT_VERSION"/>
+                <Key word="PROJECT_SOURCE_DIR"/>
+                <Key word="PROJECT_BINARY_DIR"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet name="Doxygen" ignorecase="false">
+            <Delimiters>~!%^*()+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+            
+            <KeyWords name="Keywords1" color="DimGray" bold="false" italic="false">
+                <Key word="@author"/>
+                <Key word="@brief"/>
+                <Key word="@param"/>
+                <Key word="@return"/>
+                <Key word="@note"/>
+                <Key word="@warning"/>
+                <Key word="@deprecated"/>
+                <Key word="@since"/>
+                <Key word="@see"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

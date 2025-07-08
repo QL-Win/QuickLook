@@ -28,18 +28,26 @@ public class FormatDetector
         new XMLDetector(),
         new JSONDetector(),
         new MakefileDetector(),
+        new CMakeListsDetector(),
         //new HostsDetector(),
-        //new CMakeListsDetector(),
         //new DockerfileDetector(),
     ];
 
-    public static IFormatDetector Detect(string path, string text)
+    public static IConfusedFormatDetector ResolveConfusedFormat(string path, string text)
     {
-        _ = path;
-
         if (string.IsNullOrWhiteSpace(text)) return null;
 
-        return Instance.TextDetectors.Where(detector => detector.Detect(path, text))
+        return Instance.TextDetectors
+            .Where(detector => detector is IConfusedFormatDetector && detector.Detect(path, text))
+            .FirstOrDefault() as IConfusedFormatDetector;
+    }
+
+    public static IFormatDetector Detect(string path, string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return null;
+
+        return Instance.TextDetectors
+            .Where(detector => detector is not IConfusedFormatDetector && detector.Detect(path, text))
             .FirstOrDefault();
     }
 }
@@ -52,3 +60,5 @@ public interface IFormatDetector
 
     public bool Detect(string path, string text);
 }
+
+public interface IConfusedFormatDetector : IFormatDetector;

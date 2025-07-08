@@ -24,7 +24,7 @@ public sealed class DockerfileDetector : IFormatDetector
 {
     public string Name => "Dockerfile";
 
-    public string Extension => ".df";
+    public string Extension => null;
 
     public bool Detect(string path, string text)
     {

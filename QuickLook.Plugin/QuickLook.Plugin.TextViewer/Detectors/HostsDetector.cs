@@ -24,7 +24,7 @@ public sealed class HostsDetector : IFormatDetector
 {
     public string Name => "Hosts";
 
-    public string Extension => ".hosts";
+    public string Extension => null;
 
     public bool Detect(string path, string text)
     {

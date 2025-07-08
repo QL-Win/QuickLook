@@ -46,7 +46,22 @@ public class HighlightingThemeManager
     {
         if (Light is null || Dark is null) return HighlightingTheme.Default;
 
+        var useFormatDetector = SettingHelper.Get("UseFormatDetector", true, "QuickLook.Plugin.TextViewer");
         var highlightingTheme = GetDefinitionByExtension(nameof(Dark), extension);
+
+        if (useFormatDetector && FormatDetector.ResolveConfusedFormat(path, text) is IConfusedFormatDetector confusedFormatDetector)
+        {
+            if (!string.IsNullOrEmpty(confusedFormatDetector.Extension))
+            {
+                highlightingTheme = GetDefinitionByExtension(nameof(Dark), confusedFormatDetector.Extension)
+                                 ?? GetDefinitionByExtension(nameof(Light), confusedFormatDetector.Extension);
+            }
+            else
+            {
+                highlightingTheme = GetDefinition(nameof(Dark), confusedFormatDetector.Name)
+                                 ?? GetDefinition(nameof(Light), confusedFormatDetector.Name);
+            }
+        }
 
         if (highlightingTheme == null)
         {
@@ -54,8 +69,6 @@ public class HighlightingThemeManager
 
             if (highlightingTheme == null)
             {
-                var useFormatDetector = SettingHelper.Get("UseFormatDetector", true, "QuickLook.Plugin.TextViewer");
-
                 if (useFormatDetector && FormatDetector.Detect(path, text)?.Extension is string detectExtension)
                 {
                     highlightingTheme = GetDefinitionByExtension(nameof(Dark), detectExtension)
@@ -83,6 +96,24 @@ public class HighlightingThemeManager
         }
 
         return highlightingTheme;
+    }
+
+    private static HighlightingTheme GetDefinition(string theme, string extension)
+    {
+        var highlightingManager = theme == nameof(Dark) ? Dark : Light;
+        var def = highlightingManager.GetDefinition(extension);
+
+        if (def != null)
+        {
+            return new HighlightingTheme()
+            {
+                Theme = theme,
+                HighlightingManager = highlightingManager,
+                SyntaxHighlighting = def,
+                Extension = extension,
+            };
+        }
+        return null;
     }
 
     private static HighlightingTheme GetDefinitionByExtension(string theme, string extension)

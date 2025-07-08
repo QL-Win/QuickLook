@@ -20,11 +20,11 @@ using System.IO;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
 
-public sealed class CMakeListsDetector : IFormatDetector
+public sealed class CMakeListsDetector : IConfusedFormatDetector
 {
-    public string Name => "CMakeLists";
+    public string Name => "CMake";
 
-    public string Extension => ".txt";
+    public string Extension => ".cmake";
 
     public bool Detect(string path, string text)
     {
