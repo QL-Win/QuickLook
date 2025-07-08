@@ -27,8 +27,10 @@ public class XMLDetector : IFormatDetector
 
     public string Extension => ".xml";
 
-    public bool Detect(string text)
+    public bool Detect(string path, string text)
     {
+        _ = path;
+
         return Signature.IsMatch(text);
     }
 }

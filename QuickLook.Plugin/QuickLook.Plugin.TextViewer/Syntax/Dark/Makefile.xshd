@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Makefile" extensions=".makefile;.mk;.mak">
+
+	<Environment>
+		<Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+		<Selection color="#1E1E1E" bgcolor="#264F78"/>
+		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+		<CaretMarker color="#AEAFAD"/>
+		<VRuler color="#333337"/>
+
+		<FoldLine color="#858585" bgcolor="#1E1E1E"/>
+		<FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+		<SelectedFoldLine color="#D4D4D4" bgcolor="#23272E"/>
+
+		<EOLMarkers color="#404040"/>
+		<SpaceMarkers color="#404040"/>
+		<TabMarkers color="#404040"/>
+		<InvalidLines color="#F44747"/>
+	</Environment>
+
+	<Properties>
+		<Property name="LineCommentBegin" value="#"/>
+	</Properties>
+
+	<Digits name="Digits" color="#B5CEA8"/>
+
+	<RuleSets>
+		<RuleSet ignorecase="false">
+
+			<Delimiters>:=(){}[]$@%*?</Delimiters>
+
+			<!-- Line comments starting with # -->
+			<Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+				<Begin>#</Begin>
+			</Span>
+
+			<!-- Variables (pattern: $(VAR) or ${VAR}) -->
+			<Span name="Variable" color="#DCDCAA" bold="false" italic="false">
+				<Begin>$(</Begin>
+				<End>)</End>
+			</Span>
+
+			<Span name="Variable" color="#DCDCAA" bold="false" italic="false">
+				<Begin>${</Begin>
+				<End>}</End>
+			</Span>
+
+			<!-- String literals -->
+			<Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+				<Begin>"</Begin>
+				<End>"</End>
+			</Span>
+
+			<Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+				<Begin>'</Begin>
+				<End>'</End>
+			</Span>
+
+			<!-- Special characters and operators -->
+			<MarkFollowing markmarker="true" color="#D7BA7D" bold="false" italic="false">@</MarkFollowing>
+			<MarkFollowing markmarker="true" color="#FF6B6B" bold="false" italic="false">-</MarkFollowing>
+			<MarkFollowing markmarker="true" color="#C586C0" bold="false" italic="false">+</MarkFollowing>
+
+			<!-- Keywords for common make functions and directives -->
+			<KeyWords name="Keywords" color="#C586C0" bold="false" italic="false">
+				<Key word="include"/>
+				<Key word="ifdef"/>
+				<Key word="ifndef"/>
+				<Key word="ifeq"/>
+				<Key word="ifneq"/>
+				<Key word="else"/>
+				<Key word="endif"/>
+				<Key word="define"/>
+				<Key word="endef"/>
+				<Key word="export"/>
+				<Key word="unexport"/>
+				<Key word="override"/>
+			</KeyWords>
+
+			<!-- Make functions -->
+			<KeyWords name="Functions" color="#4EC9B0" bold="false" italic="false">
+				<Key word="patsubst"/>
+				<Key word="subst"/>
+				<Key word="strip"/>
+				<Key word="findstring"/>
+				<Key word="filter"/>
+				<Key word="filter-out"/>
+				<Key word="sort"/>
+				<Key word="word"/>
+				<Key word="wordlist"/>
+				<Key word="words"/>
+				<Key word="firstword"/>
+				<Key word="lastword"/>
+				<Key word="dir"/>
+				<Key word="notdir"/>
+				<Key word="suffix"/>
+				<Key word="basename"/>
+				<Key word="addsuffix"/>
+				<Key word="addprefix"/>
+				<Key word="join"/>
+				<Key word="wildcard"/>
+				<Key word="realpath"/>
+				<Key word="abspath"/>
+				<Key word="if"/>
+				<Key word="or"/>
+				<Key word="and"/>
+				<Key word="foreach"/>
+				<Key word="call"/>
+				<Key word="value"/>
+				<Key word="eval"/>
+				<Key word="origin"/>
+				<Key word="flavor"/>
+				<Key word="shell"/>
+				<Key word="error"/>
+				<Key word="warning"/>
+				<Key word="info"/>
+			</KeyWords>
+
+			<!-- Built-in variables -->
+			<KeyWords name="BuiltinVars" color="#9CDCFE" bold="false" italic="false">
+				<Key word="CC"/>
+				<Key word="CXX"/>
+				<Key word="CFLAGS"/>
+				<Key word="CXXFLAGS"/>
+				<Key word="LDFLAGS"/>
+				<Key word="MAKE"/>
+				<Key word="MAKEFILE_LIST"/>
+				<Key word="CURDIR"/>
+				<Key word="SHELL"/>
+				<Key word="AR"/>
+				<Key word="AS"/>
+				<Key word="LD"/>
+				<Key word="YACC"/>
+				<Key word="LEX"/>
+			</KeyWords>
+
+			<!-- Automatic variables -->
+			<KeyWords name="AutoVars" color="#FFD700" bold="true" italic="false">
+				<Key word="$@"/>
+				<Key word="$%"/>
+				<Key word="$&lt;"/>
+				<Key word="$?"/>
+				<Key word="$^"/>
+				<Key word="$+"/>
+				<Key word="$*"/>
+				<Key word="$(@D)"/>
+				<Key word="$(@F)"/>
+				<Key word="$(*D)"/>
+				<Key word="$(*F)"/>
+				<Key word="$(%D)"/>
+				<Key word="$(%F)"/>
+				<Key word="$(&lt;D)"/>
+				<Key word="$(&lt;F)"/>
+				<Key word="$(^D)"/>
+				<Key word="$(^F)"/>
+				<Key word="$(+D)"/>
+				<Key word="$(+F)"/>
+				<Key word="$(?D)"/>
+				<Key word="$(?F)"/>
+			</KeyWords>
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>

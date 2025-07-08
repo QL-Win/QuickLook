@@ -26,8 +26,10 @@ public class JSONDetector : IFormatDetector
 
     public string Extension => ".json";
 
-    public bool Detect(string text)
+    public bool Detect(string path, string text)
     {
+        _ = path;
+
         if (string.IsNullOrWhiteSpace(text)) return false;
 
         var span = text.AsSpan();

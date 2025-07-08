@@ -220,7 +220,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             Dispatcher.BeginInvoke(() =>
             {
                 var extension = Path.GetExtension(path);
-                var highlighting = HighlightingThemeManager.GetHighlightingByExtensionOrDetector(extension, text);
+                var highlighting = HighlightingThemeManager.GetHighlightingByExtensionOrDetector(path, extension, text);
 
                 Encoding = encoding;
                 SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength

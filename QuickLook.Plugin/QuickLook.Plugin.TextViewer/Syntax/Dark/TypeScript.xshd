@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="TypeScript" extensions=".ts;.tsx;.uts;">
+<SyntaxDefinition name="TypeScript" extensions=".ts;.tsx;.uts">
 
     <Environment>
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>

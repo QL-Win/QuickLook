@@ -15,37 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Linq;
+using System;
+using System.IO;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
 
-public class FormatDetector
+public class MakefileDetector : IFormatDetector
 {
-    public static FormatDetector Instance { get; } = new();
+    public string Name => "Makefile";
 
-    internal IFormatDetector[] TextDetectors =
-    [
-        new XMLDetector(),
-        new JSONDetector(),
-        new MakefileDetector(),
-    ];
+    public string Extension => ".mk";
 
-    public static IFormatDetector Detect(string path, string text)
+    public bool Detect(string path, string text)
     {
-        _ = path;
+        if (string.IsNullOrWhiteSpace(text)) return false;
 
-        if (string.IsNullOrWhiteSpace(text)) return null;
-
-        return Instance.TextDetectors.Where(detector => detector.Detect(path, text))
-            .FirstOrDefault();
+        return "Makefile".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
     }
-}
-
-public interface IFormatDetector
-{
-    public string Name { get; }
-
-    public string Extension { get; }
-
-    public bool Detect(string path, string text);
 }

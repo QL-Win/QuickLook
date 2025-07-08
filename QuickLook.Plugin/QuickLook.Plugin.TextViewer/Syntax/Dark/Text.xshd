@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Text" extensions=".txt;">
+<SyntaxDefinition name="Text" extensions=".txt">
 	<Environment />
 	<Properties />
 	<Digits />

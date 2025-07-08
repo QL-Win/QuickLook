@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs;" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 	<Color name="Digits"                    foreground="#FFb5cea8" fontStyle="normal" fontWeight="normal" exampleText="3.14"/>
 	<Color name="Comment"                   foreground="#FF57A64A" exampleText="// comment"/>
 	<Color name="String"                    foreground="#FFD69D85" exampleText="var text = &quot;Hello, World!&quot;;" />

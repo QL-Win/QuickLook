@@ -42,7 +42,7 @@ public class HighlightingThemeManager
         InitCustomHighlighting();
     }
 
-    public static HighlightingTheme GetHighlightingByExtensionOrDetector(string extension, string text = null)
+    public static HighlightingTheme GetHighlightingByExtensionOrDetector(string path, string extension, string text = null)
     {
         if (Light is null || Dark is null) return HighlightingTheme.Default;
 
@@ -56,7 +56,7 @@ public class HighlightingThemeManager
             {
                 var useFormatDetector = SettingHelper.Get("UseFormatDetector", true, "QuickLook.Plugin.TextViewer");
 
-                if (useFormatDetector && FormatDetector.Detect(text)?.Extension is string detectExtension)
+                if (useFormatDetector && FormatDetector.Detect(path, text)?.Extension is string detectExtension)
                 {
                     highlightingTheme = GetDefinitionByExtension(nameof(Dark), detectExtension)
                                      ?? GetDefinitionByExtension(nameof(Light), detectExtension);

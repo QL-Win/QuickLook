@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs;">
+<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
