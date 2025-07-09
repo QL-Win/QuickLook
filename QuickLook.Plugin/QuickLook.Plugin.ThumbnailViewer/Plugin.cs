@@ -64,6 +64,7 @@ public class Plugin : IViewer
             ContextObject = context,
             SaveAsVisibility = Visibility.Visible,
             ReverseColorVisibility = Visibility.Visible,
+            MetaIconVisibility = Visibility.Collapsed,
         };
 
         _ = Task.Run(() =>
