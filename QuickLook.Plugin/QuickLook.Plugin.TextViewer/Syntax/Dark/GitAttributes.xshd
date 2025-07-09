@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="GitAttributes" extensions=".gitattributes">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&amp;|\/"',;=:-</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+			<Span name="MacroDefinition" stopateol="true" color="#569CD6" bold="true" italic="false">
+				<Begin startofline="true">[attr]</Begin>
+			</Span>
+
+			<Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\"> 
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="GitAttributes" color="#4FC1FF" bold="false" italic="false">
+                <Key word="text"/>
+                <Key word="binary"/>
+                <Key word="diff"/>
+                <Key word="merge"/>
+                <Key word="filter"/>
+                <Key word="eol"/>
+                <Key word="ident"/>
+                <Key word="working-tree-encoding"/>
+                <Key word="export-ignore"/>
+                <Key word="export-subst"/>
+                <Key word="delta"/>
+                <Key word="linguist-detectable"/>
+                <Key word="linguist-documentation"/>
+                <Key word="linguist-generated"/>
+                <Key word="linguist-language"/>
+                <Key word="linguist-vendored"/>
+            </KeyWords>
+            
+            <KeyWords name="AttributeValues" color="#B5CEA8" bold="false" italic="false">
+                <Key word="auto"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="lf"/>
+                <Key word="crlf"/>
+                <Key word="native"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
