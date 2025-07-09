@@ -30,6 +30,7 @@ public sealed class DockerfileDetector : IFormatDetector
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
 
-        return "Dockerfile".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
+        var fileName = Path.GetFileName(path).AsSpan();
+        return "Dockerfile".AsSpan().Equals(fileName, StringComparison.OrdinalIgnoreCase);
     }
 }

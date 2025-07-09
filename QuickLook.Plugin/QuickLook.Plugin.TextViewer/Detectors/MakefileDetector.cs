@@ -30,6 +30,7 @@ public sealed class MakefileDetector : IFormatDetector
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
 
-        return "Makefile".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
+        var fileName = Path.GetFileName(path).AsSpan();
+        return "Makefile".AsSpan().Equals(fileName, StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -30,6 +30,7 @@ public sealed class HostsDetector : IFormatDetector
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
 
-        return "hosts".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
+        var fileName = Path.GetFileName(path).AsSpan();
+        return "hosts".AsSpan().Equals(fileName, StringComparison.OrdinalIgnoreCase);
     }
 }

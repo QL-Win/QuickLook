@@ -30,6 +30,7 @@ public sealed class CMakeListsDetector : IConfusedFormatDetector
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
 
-        return "CMakeLists.txt".Equals(Path.GetFileName(path), StringComparison.OrdinalIgnoreCase);
+        var fileName = Path.GetFileName(path).AsSpan();
+        return "CMakeLists.txt".AsSpan().Equals(fileName, StringComparison.OrdinalIgnoreCase);
     }
 }
