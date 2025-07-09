@@ -23,6 +23,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace QuickLook.Plugin.TextViewer;
 
@@ -68,7 +69,8 @@ public class Plugin : IViewer
         if (path.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
         {
             var rtfBox = new RichTextBox();
-            FileStream fs = File.OpenRead(path);
+            using FileStream fs = File.OpenRead(path);
+            rtfBox.Background = new SolidColorBrush(Colors.Transparent);
             rtfBox.Selection.Load(fs, DataFormats.Rtf);
             rtfBox.IsReadOnly = true;
             rtfBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
