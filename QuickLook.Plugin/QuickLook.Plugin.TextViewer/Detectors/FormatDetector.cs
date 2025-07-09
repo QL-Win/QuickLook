@@ -30,7 +30,7 @@ public class FormatDetector
         new MakefileDetector(),
         new CMakeListsDetector(),
         //new HostsDetector(),
-        //new DockerfileDetector(),
+        new DockerfileDetector(),
     ];
 
     public static IFormatDetector Confuse(string path, string text)
