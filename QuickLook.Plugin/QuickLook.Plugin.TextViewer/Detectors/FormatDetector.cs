@@ -25,11 +25,11 @@ public class FormatDetector
 
     internal IFormatDetector[] TextDetectors =
     [
+        new CMakeListsDetector(),
         new XMLDetector(),
         new JSONDetector(),
         new MakefileDetector(),
-        new CMakeListsDetector(),
-        //new HostsDetector(),
+        new HostsDetector(),
         new DockerfileDetector(),
     ];
 

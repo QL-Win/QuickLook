@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Hosts" extensions=".hosts">
+
+    <Environment> 
+        <Default color="#FFFFFF" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#424242"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters> \t</Delimiters>
+            
+            <!-- Comment lines -->
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <!-- Domain names -->
+            <KeyWords name="Domains" color="#CE9178" bold="false" italic="false">
+                <Key word="localhost"/>
+                <Key word="broadcasthost"/>
+            </KeyWords>
+            
+            <!-- Special IP addresses -->
+            <KeyWords name="SpecialIPs" color="#B5CEA8" bold="false" italic="false">
+                <Key word="::1"/>
+            </KeyWords>
+            
+            <!-- IPv6 address patterns -->
+            <KeyWords name="IPv6" color="#9CDCFE" bold="false" italic="false">
+                <Key word="fe80::"/>
+                <Key word="ff02::"/>
+                <Key word="ff00::"/>
+            </KeyWords>
+            
+            <!-- Common domain keywords -->
+            <KeyWords name="DomainKeywords" color="#DCDCAA" bold="false" italic="false">
+                <Key word="www"/>
+                <Key word="ftp"/>
+                <Key word="mail"/>
+                <Key word="smtp"/>
+                <Key word="pop"/>
+                <Key word="imap"/>
+                <Key word="api"/>
+                <Key word="cdn"/>
+                <Key word="static"/>
+                <Key word="img"/>
+                <Key word="images"/>
+                <Key word="media"/>
+                <Key word="admin"/>
+                <Key word="blog"/>
+                <Key word="shop"/>
+                <Key word="store"/>
+            </KeyWords>
+            
+            <!-- Protocols and ports -->
+            <KeyWords name="Protocol" color="#C586C0" bold="false" italic="false">
+                <Key word="http"/>
+                <Key word="https"/>
+                <Key word="ftp"/>
+                <Key word="ssh"/>
+                <Key word="telnet"/>
+            </KeyWords>
+            
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

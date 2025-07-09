@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Hosts" extensions=".hosts">
+
+	<Environment>
+		<Default color="#1E1E1E" bgcolor="#FFFFFF"/>
+		<Selection color="#1E1E1E" bgcolor="#CBE7FF"/>
+		<LineNumbers color="#2B91AF" bgcolor="#FFFFFF"/>
+		<CaretMarker color="#2B91AF"/>
+		<VRuler color="#E0E0E0"/>
+	</Environment>
+
+	<Properties>
+		<Property name="LineComment" value="#"/>
+	</Properties>
+
+<Digits name="Digits" color="#800080"/>
+
+	<RuleSets>
+		<RuleSet ignorecase="false">
+			<Delimiters> \t</Delimiters>
+
+			<!-- Comment lines -->
+			<Span name="LineComment" stopateol="true" color="#008000" bold="false" italic="false">
+				<Begin>#</Begin>
+			</Span>
+
+			<!-- Domain names -->
+			<KeyWords name="Domains" color="#A31515" bold="false" italic="false">
+				<Key word="localhost"/>
+				<Key word="broadcasthost"/>
+			</KeyWords>
+
+			<!-- Special IP addresses -->
+<KeyWords name="SpecialIPs" color="#800080" bold="false" italic="false">
+				<Key word="::1"/>
+			</KeyWords>
+
+			<!-- IPv6 address patterns -->
+			<KeyWords name="IPv6" color="#0451A5" bold="false" italic="false">
+				<Key word="fe80::"/>
+				<Key word="ff02::"/>
+				<Key word="ff00::"/>
+			</KeyWords>
+
+			<!-- Common domain keywords -->
+			<KeyWords name="DomainKeywords" color="#795E26" bold="false" italic="false">
+				<Key word="www"/>
+				<Key word="ftp"/>
+				<Key word="mail"/>
+				<Key word="smtp"/>
+				<Key word="pop"/>
+				<Key word="imap"/>
+				<Key word="api"/>
+				<Key word="cdn"/>
+				<Key word="static"/>
+				<Key word="img"/>
+				<Key word="images"/>
+				<Key word="media"/>
+				<Key word="admin"/>
+				<Key word="blog"/>
+				<Key word="shop"/>
+				<Key word="store"/>
+			</KeyWords>
+
+			<!-- Protocols and ports -->
+			<KeyWords name="Protocol" color="#AF00DB" bold="false" italic="false">
+				<Key word="http"/>
+				<Key word="https"/>
+				<Key word="ftp"/>
+				<Key word="ssh"/>
+				<Key word="telnet"/>
+			</KeyWords>
+
+		</RuleSet>
+	</RuleSets>
+</SyntaxDefinition>
