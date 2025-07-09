@@ -22,6 +22,8 @@ namespace QuickLook.Plugin.TextViewer.Detectors;
 
 public sealed class JSONDetector : IFormatDetector
 {
+    internal Regex Signature { get; } = new(@"""[^""]+""\s*:", RegexOptions.IgnoreCase);
+
     public string Name => "JSON";
 
     public string Extension => ".json";
@@ -53,6 +55,6 @@ public sealed class JSONDetector : IFormatDetector
         if (end < 0 || (span[end] != '}' && span[end] != ']'))
             return false;
 
-        return Regex.IsMatch(text, @"""[^""]+""\s*:");
+        return Signature.IsMatch(text);
     }
 }
