@@ -8,15 +8,6 @@
         <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
         <CaretMarker color="#AEAFAD"/>
         <VRuler color="#2A2A2A"/>
-        
-        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
-        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
-        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
-        
-        <EOLMarkers color="#404040"/>
-        <SpaceMarkers color="#404040"/>
-        <TabMarkers color="#404040"/>
-        <InvalidLines color="#404040"/>
     </Environment>
     
     <Properties>
