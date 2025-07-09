@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Configuration" extensions=".conf;.config;.cfg">
+  
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+    </Environment>
+  
+    <Properties>
+        <Property name="LineCommentBegin" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+  
+    <RuleSets>
+        <RuleSet ignorecase="false">
+   
+            <Delimiters>:;{}()[]= </Delimiters>
+          
+            <Span name="ConfigBlock" rule="ConfigBlock" stopateol="false" color="#D4D4D4" bold="false" italic="false">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+          
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+            
+            <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String2" color="#CE9178" stopateol="true" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="NginxDirectives" color="#569CD6" bold="false" italic="false">
+                <Key word="server"/>
+                <Key word="location"/>
+                <Key word="upstream"/>
+                <Key word="listen"/>
+                <Key word="server_name"/>
+                <Key word="root"/>
+                <Key word="index"/>
+                <Key word="proxy_pass"/>
+                <Key word="proxy_set_header"/>
+                <Key word="include"/>
+                <Key word="error_page"/>
+                <Key word="access_log"/>
+                <Key word="error_log"/>
+                <Key word="rewrite"/>
+                <Key word="return"/>
+                <Key word="try_files"/>
+                <Key word="fastcgi_pass"/>
+                <Key word="fastcgi_param"/>
+                <Key word="ssl_certificate"/>
+                <Key word="ssl_certificate_key"/>
+                <Key word="worker_processes"/>
+                <Key word="worker_connections"/>
+                <Key word="client_max_body_size"/>
+                <Key word="keepalive_timeout"/>
+                <Key word="gzip"/>
+                <Key word="gzip_types"/>
+                <Key word="expires"/>
+                <Key word="add_header"/>
+            </KeyWords>
+            
+            <KeyWords name="HttpMethods" color="#C586C0" bold="false" italic="false">
+                <Key word="GET"/>
+                <Key word="POST"/>
+                <Key word="PUT"/>
+                <Key word="DELETE"/>
+                <Key word="HEAD"/>
+                <Key word="OPTIONS"/>
+                <Key word="PATCH"/>
+            </KeyWords>
+            
+            <KeyWords name="Boolean" color="#569CD6" bold="false" italic="false">
+                <Key word="on"/>
+                <Key word="off"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="yes"/>
+                <Key word="no"/>
+            </KeyWords>
+        </RuleSet>
+   
+    <RuleSet name="ValueRules" ignorecase="false">
+
+        <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+            <Begin>#</Begin>
+        </Span>
+
+        <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+            <Begin>"</Begin>
+            <End>"</End>
+        </Span>
+
+        <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false">
+            <Begin>'</Begin>
+            <End>'</End>
+        </Span>
+
+        <KeyWords name="Units" color="#B5CEA8" bold="false" italic="false">
+            <Key word="k"/>
+            <Key word="m"/>
+            <Key word="g"/>
+            <Key word="s"/>
+            <Key word="ms"/>
+            <Key word="d"/>
+            <Key word="h"/>
+            <Key word="M"/>
+            <Key word="G"/>
+        </KeyWords>
+    </RuleSet>
+    
+    <RuleSet name="ConfigBlock" ignorecase="false">
+        <Delimiters>:;= </Delimiters>
+    
+        <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+            <Begin>#</Begin>
+        </Span>
+        
+        <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false">
+            <Begin>"</Begin>
+            <End>"</End>
+        </Span>
+        
+        <Span name="String2" color="#CE9178" stopateol="true" bold="false" italic="false">
+            <Begin>'</Begin>
+            <End>'</End>
+        </Span>
+        
+        <KeyWords name="ConfigDirectives" color="#569CD6" bold="false" italic="false">
+            <Key word="listen"/>
+            <Key word="server_name"/>
+            <Key word="root"/>
+            <Key word="index"/>
+            <Key word="proxy_pass"/>
+            <Key word="proxy_set_header"/>
+            <Key word="include"/>
+            <Key word="error_page"/>
+            <Key word="access_log"/>
+            <Key word="error_log"/>
+            <Key word="rewrite"/>
+            <Key word="return"/>
+            <Key word="try_files"/>
+            <Key word="fastcgi_pass"/>
+            <Key word="fastcgi_param"/>
+            <Key word="ssl_certificate"/>
+            <Key word="ssl_certificate_key"/>
+            <Key word="client_max_body_size"/>
+            <Key word="keepalive_timeout"/>
+            <Key word="gzip"/>
+            <Key word="gzip_types"/>
+            <Key word="expires"/>
+            <Key word="add_header"/>
+        </KeyWords>
+        
+        <KeyWords name="Boolean" color="#569CD6" bold="false" italic="false">
+            <Key word="on"/>
+            <Key word="off"/>
+            <Key word="true"/>
+            <Key word="false"/>
+            <Key word="yes"/>
+            <Key word="no"/>
+        </KeyWords>
+    </RuleSet>
+  </RuleSets>
+</SyntaxDefinition>
