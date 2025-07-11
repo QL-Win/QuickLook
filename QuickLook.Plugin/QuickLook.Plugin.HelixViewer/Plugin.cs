@@ -19,21 +19,34 @@ using QuickLook.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace QuickLook.Plugin.HelixViewer;
 
 public class Plugin : IViewer
 {
+    /// <summary>
+    /// <seealso cref="ImporterType"/>
+    /// </summary>
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
+        // Default
         ".stl", ".obj", ".3ds", ".lwo", ".ply",
-        ".fbx",
+
+        // Extended
+        ".fbx", ".3mf", ".blend", ".glb", ".gltf", ".dae",
+#if S_DXF
+        ".dxf",
+#endif
+
+        // Extended_MMD
+        ".pmx",
     ]);
 
     private HelixPanel _hp;
 
-    public int Priority => 0;
+    public int Priority => -5;
 
     public void Init()
     {
@@ -42,7 +55,7 @@ public class Plugin : IViewer
     public bool CanHandle(string path)
     {
         return !Directory.Exists(path)
-            && WellKnownExtensions.Contains(Path.GetExtension(path.ToLower()))
+            && WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
             && Handler.CanHandle(path);
     }
 

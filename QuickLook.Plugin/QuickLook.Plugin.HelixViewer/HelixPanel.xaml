@@ -9,6 +9,12 @@
              d:DesignWidth="800"
              mc:Ignorable="d">
     <Grid>
+        <TextBlock x:Name="errorInfo"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="12"
+                   TextWrapping="Wrap"
+                   Visibility="Collapsed" />
         <helix:HelixViewport3D x:Name="viewer"
                                CameraRotationMode="Turnball"
                                CoordinateSystemHorizontalPosition="Left"

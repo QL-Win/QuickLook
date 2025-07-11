@@ -15,8 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace QuickLook.Plugin.HelixViewer;
 
@@ -26,6 +28,7 @@ internal static class Handler
     {
         var ext = Path.GetExtension(path).ToLower();
 
+        // Simple solution to doubts
         if (ext == ".obj")
         {
             var firstLines = File.ReadLines(path).Take(10);
@@ -38,9 +41,27 @@ internal static class Handler
                 }
             }
         }
+#if S_DXF
+        else if (ext == ".dxf")
+        {
+            using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            const int bufferLength = 16 * 1024;
+            var buffer = new byte[bufferLength];
+            int size = s.Read(buffer, 0, buffer.Length);
+
+            for (int i = 0; i < size - 1; i++)
+            {
+                if (buffer[i] == (byte)'3' && buffer[i + 1] == (byte)'D')
+                {
+                    return true;
+                }
+            }
+        }
+#endif
         else
         {
-            return true; // Assume other formats are supported
+            // Assume other formats are supported
+            return true;
         }
 
         return false;
