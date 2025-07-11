@@ -108,7 +108,7 @@ public class Plugin : IViewer
 
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && WellKnownExtensions.Contains(Path.GetExtension(path).ToLower());
+        return !Directory.Exists(path) && WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
     }
 
     public void Prepare(string path, ContextObject context)

@@ -20,6 +20,7 @@ using QuickLook.Plugin.ImageViewer;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -49,7 +50,7 @@ public class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && WellKnownExtensions.Contains(Path.GetExtension(path.ToLower()));
+        return !Directory.Exists(path) && WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
     }
 
     public void Prepare(string path, ContextObject context)
