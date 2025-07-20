@@ -49,14 +49,10 @@
 
 ## 4.0.2
 
-[Major Change]
-
 - Support .pcx image [#1638](https://github.com/QL-Win/QuickLook/issues/1638)
 - Improve PE parsing with extended buffer size
 - Fix flickering [#1628](https://github.com/QL-Win/QuickLook/issues/1628)
 - Fix DpiAwareness for PerMonitor [#1626](https://github.com/QL-Win/QuickLook/issues/1626)
-
-[Small Change]
 
 - Hide PEViewer Title just like InfoPanel
 - Avoid audio cover null exception in xaml
@@ -74,8 +70,8 @@
 
 ## 4.0.0
 
-[Common]
-
+- Add built-in PE viewer plugin
+- Add built-in font viewer plugin
 - Update translations
 - Update dependent packages
 - Add support for Multi Commander
@@ -90,53 +86,27 @@
 - Fix plugin installer description length limit
 - Prevent crash when WMI fails [#1379](https://github.com/QL-Win/QuickLook/issues/1379)
 - Show toast when "Prevent Closing" cannot be cancelled [#1368](https://github.com/QL-Win/QuickLook/issues/1368)
-
-[ImageViewer]
-
-- Add support for multi-layer GIMP .xcf files [#1224](https://github.com/QL-Win/QuickLook/issues/1224)
-- Fix .xcf file extension check [#1229](https://github.com/QL-Win/QuickLook/issues/1229)
-- Fix HEIC preview rendering [#1470](https://github.com/QL-Win/QuickLook/issues/1470)
-- Add support for .qoi, .icns, .dds, .svgz, .psb, .cur, and .ani formats
-- Improve animated WebP support (x64 only) [#1024](https://github.com/QL-Win/QuickLook/issues/1024) [#1324](https://github.com/QL-Win/QuickLook/issues/1324)
-- Improve GIF decoding performance [#993](https://github.com/QL-Win/QuickLook/issues/993)
-- Add copy button to image viewer [#1399](https://github.com/QL-Win/QuickLook/issues/1399)
-- Fix SVG rendering error [#1430](https://github.com/QL-Win/QuickLook/issues/1430)
-
-[TextViewer]
-
-- Add double-encoding detection [#471](https://github.com/QL-Win/QuickLook/issues/471) [#600](https://github.com/QL-Win/QuickLook/issues/600) ...
-- Improve dark mode rendering
-- Catch exceptions from XSHD loader
-- Add syntax highlighting for shell scripts [#668](https://github.com/QL-Win/QuickLook/issues/668)
-- Add dark mode support for C# syntax highlighting
-
-[ArchiveViewer]
-
-- Improve support for comic archive formats [#1276](https://github.com/QL-Win/QuickLook/issues/1276)
-- Redesign file list with Fluent UI
-
-[CsvViewer]
-
-- Change default background color to blue
-- Fix issue with non-UTF8 CSV encoding
-
-[MarkdownViewer]
-
-- Improve rendering and stability
-
-[PDFViewer]
-
-- Add support for password-protected PDFs [#155](https://github.com/QL-Win/QuickLook/issues/155)
-- Enable auto-resizing of the viewer window
-
-[VideoViewer]
-
-- Fix audio cover parsing error for multiple embedded images
-- Add lyric (.lrc) support for audio files [#1506](https://github.com/QL-Win/QuickLook/issues/1506)
-- Add support for .mid audio format [#931](https://github.com/QL-Win/QuickLook/issues/931)
-- Fix time label overflow in long videos
-
-[PEViewer & FontViewer]
-
-- Add built-in PE viewer plugin
-- Add built-in font viewer plugin
+- Add support for multi-layer GIMP .xcf files [#1224](https://github.com/QL-Win/QuickLook/issues/1224) for ImageViewer
+- Fix .xcf file extension check [#1229](https://github.com/QL-Win/QuickLook/issues/1229) for ImageViewer
+- Fix HEIC preview rendering [#1470](https://github.com/QL-Win/QuickLook/issues/1470) for ImageViewer
+- Add support for .qoi, .icns, .dds, .svgz, .psb, .cur, and .ani formats for ImageViewer
+- Improve animated WebP support (x64 only) [#1024](https://github.com/QL-Win/QuickLook/issues/1024) [#1324](https://github.com/QL-Win/QuickLook/issues/1324) for ImageViewer
+- Improve GIF decoding performance [#993](https://github.com/QL-Win/QuickLook/issues/993) for ImageViewer
+- Add copy button to image viewer [#1399](https://github.com/QL-Win/QuickLook/issues/1399) for ImageViewer
+- Fix SVG rendering error [#1430](https://github.com/QL-Win/QuickLook/issues/1430) for ImageViewer
+- Add double-encoding detection [#471](https://github.com/QL-Win/QuickLook/issues/471) [#600](https://github.com/QL-Win/QuickLook/issues/600) for TextViewer
+- Improve dark mode rendering for TextViewer
+- Catch exceptions from XSHD loader for TextViewer
+- Add syntax highlighting for shell scripts [#668](https://github.com/QL-Win/QuickLook/issues/668) for TextViewer
+- Add dark mode support for C# syntax highlighting for TextViewer
+- Improve support for comic archive formats [#1276](https://github.com/QL-Win/QuickLook/issues/1276) for ArchiveViewer
+- Redesign file list with Fluent UI for ArchiveViewer
+- Change default background color to blue for CsvViewer
+- Fix issue with non-UTF8 CSV encoding for CsvViewer
+- Improve rendering and stability for MarkdownViewer
+- Add support for password-protected PDFs [#155](https://github.com/QL-Win/QuickLook/issues/155) for PDFViewer
+- Enable auto-resizing of the viewer window for PDFViewer
+- Fix audio cover parsing error for multiple embedded images for VideoViewer
+- Add lyric (.lrc) support for audio files [#1506](https://github.com/QL-Win/QuickLook/issues/1506) for VideoViewer
+- Add support for .mid audio format [#931](https://github.com/QL-Win/QuickLook/issues/931) for VideoViewer
+- Fix time label overflow in long videos for VideoViewer
