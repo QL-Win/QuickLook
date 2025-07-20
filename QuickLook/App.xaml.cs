@@ -213,15 +213,15 @@ public partial class App : Application
         // Initialize MessageBox patching
         bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
         if (modernMessageBox) MessageBoxPatcher.Initialize();
-        // Initialize TrayIcon patching
-        bool modernTrayIcon = SettingHelper.Get("ModernTrayIcon", true, "QuickLook");
-        if (modernTrayIcon) TrayIconPatcher.Initialize();
 
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         SystemEvents.UserPreferenceChanged += (_, _) =>
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
+
+        // Initialize TrayIcon
+        _ = TrayIconManager.GetInstance();
 
         base.OnStartup(e);
     }
@@ -240,7 +240,7 @@ public partial class App : Application
         CheckUpdate();
         RunListener(e);
 
-        // first instance: run and preview this file
+        // First instance: run and preview this file
         if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
             PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
     }
@@ -318,12 +318,12 @@ public partial class App : Application
         if (isFirst)
             return true;
 
-        // second instance: preview this file
+        // Second instance: preview this file
         if (args.Any() && (Directory.Exists(args.First()) || File.Exists(args.First())))
         {
             PipeServerManager.SendMessage(PipeMessages.Toggle, args.First(), [.. args.Skip(1)]);
         }
-        // second instance: duplicate
+        // Second instance: duplicate
         else
             MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
                 MessageBoxButton.OK, MessageBoxImage.Information);

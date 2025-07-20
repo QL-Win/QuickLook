@@ -15,79 +15,91 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Commands;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Wpf.Ui.Violeta.Win32;
+using ToolTipIcon = Wpf.Ui.Violeta.Win32.ToolTipIcon;
 
 namespace QuickLook;
 
-internal class TrayIconManager : IDisposable
+internal partial class TrayIconManager : IDisposable
 {
     private static TrayIconManager _instance;
 
-    private readonly NotifyIcon _icon;
+    private readonly TrayIconHost _icon;
 
-    private readonly MenuItem _itemAutorun =
-        new(TranslationHelper.Get("Icon_RunAtStartup"),
-            (sender, e) =>
+    private readonly TrayMenuItem _itemAutorun =
+        new()
+        {
+            Header = TranslationHelper.Get("Icon_RunAtStartup"),
+            Command = new RelayCommand(() =>
             {
                 if (AutoStartupHelper.IsAutorun())
                     AutoStartupHelper.RemoveAutorunShortcut();
                 else
                     AutoStartupHelper.CreateAutorunShortcut();
-            })
-        { Enabled = !App.IsUWP };
+            }),
+            IsEnabled = !App.IsUWP,
+        };
 
     private TrayIconManager()
     {
-        _icon = new NotifyIcon
+        _icon = new TrayIconHost
         {
-            Text = string.Format(TranslationHelper.Get("Icon_ToolTip"),
+            ToolTipText = string.Format(TranslationHelper.Get("Icon_ToolTip"),
                 Application.ProductVersion),
             Icon = GetTrayIconByDPI(),
-            ContextMenu = new ContextMenu(
+            Menu =
             [
-                new MenuItem($"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : string.Empty)}") {Enabled = false},
-                new MenuItem("-"),
-                new MenuItem(TranslationHelper.Get("Icon_CheckUpdate"), (_, _) => Updater.CheckForUpdates()),
-                new MenuItem(TranslationHelper.Get("Icon_GetPlugin"),
-                    (_, _) => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
-                new MenuItem(TranslationHelper.Get("Icon_OpenDataFolder"), (_, _) => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
+                new TrayMenuItem()
+                {
+                    Header = $"v{Application.ProductVersion}{(App.IsUWP ? " (UWP)" : string.Empty)}",
+                    IsEnabled = false,
+                },
+                new TraySeparator(),
+                new TrayMenuItem()
+                {
+                   Header = TranslationHelper.Get("Icon_CheckUpdate"),
+                   Command = new RelayCommand(() => Updater.CheckForUpdates()),
+                },
+                new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_GetPlugin"),
+                    Command = new RelayCommand(() => Process.Start("https://github.com/QL-Win/QuickLook/wiki/Available-Plugins")),
+                },
+                new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_OpenDataFolder"),
+                    Command = new RelayCommand(() => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
+                },
                 _itemAutorun,
-                new MenuItem(TranslationHelper.Get("Icon_Restart"), (_, _) => Restart(forced: true)),
-                new MenuItem(TranslationHelper.Get("Icon_Quit"),
-                    (_, _) => System.Windows.Application.Current.Shutdown())
-            ]),
-            Visible = SettingHelper.Get("ShowTrayIcon", true)
+                new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_Restart"),
+                    Command = new RelayCommand(() => Restart(forced: true)),
+                },
+                new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_Quit"),
+                    Command = new RelayCommand(System.Windows.Application.Current.Shutdown),
+                }
+            ],
+            IsVisible = SettingHelper.Get("ShowTrayIcon", true)
         };
 
-        _icon.ContextMenu.Popup += (sender, e) => { _itemAutorun.Checked = AutoStartupHelper.IsAutorun(); };
-
-        // Readjust the display position of ContextMenu
-        if (SettingHelper.Get("ModernTrayIcon", true, "QuickLook"))
-        {
-            _icon.MouseDown += (_, e) =>
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    // Call ShowContextMenu here will be later than the native call,
-                    // so here can readjust the ContextMenu position.
-                    // You can check the source code to determine the behavior.
-                    _icon.ShowContextMenu();
-                }
-            };
-        }
+        _icon.RightDown += (sender, e) => { _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun(); };
     }
 
     public void Dispose()
     {
-        _icon.Visible = false;
+        _icon.IsVisible = false;
     }
 
     public void Restart(string fileName = null, string dir = null, string args = null, int? exitCode = null, bool forced = false)
@@ -118,16 +130,16 @@ internal class TrayIconManager : IDisposable
         Environment.Exit(exitCode ?? 'r' + 'e' + 's' + 't' + 'a' + 'r' + 't');
     }
 
-    private Icon GetTrayIconByDPI()
+    private nint GetTrayIconByDPI()
     {
         var scale = DisplayDeviceHelper.GetCurrentScaleFactor().Vertical;
 
         if (!App.IsWin10)
-            return scale > 1 ? Resources.app : Resources.app_16;
+            return scale > 1 ? Resources.app.Handle : Resources.app_16.Handle;
 
         return OSThemeHelper.SystemUsesDarkTheme()
-            ? (scale > 1 ? Resources.app_white : Resources.app_white_16)
-            : (scale > 1 ? Resources.app_black : Resources.app_black_16);
+            ? (scale > 1 ? Resources.app_white.Handle : Resources.app_white_16.Handle)
+            : (scale > 1 ? Resources.app_black.Handle : Resources.app_black_16.Handle);
     }
 
     public static void ShowNotification(string title, string content, bool isError = false, int timeout = 5000,
