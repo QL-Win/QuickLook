@@ -83,9 +83,6 @@
         <EmbeddedResource Include="Resources\**\*">
             <LogicalName>QuickLook.Plugin.MarkdownViewer.Resources.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="Translations.config">
-            <LogicalName>QuickLook.Plugin.MarkdownViewer.Translations.config</LogicalName>
-        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
