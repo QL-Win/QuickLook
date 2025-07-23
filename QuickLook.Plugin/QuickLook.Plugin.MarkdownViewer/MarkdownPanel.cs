@@ -94,7 +94,7 @@ public class MarkdownPanel : WebpagePanel
         }
         
         var html = template.Replace("{{content}}", content)
-                          .Replace("{{rtl}}", isRtl ? "rtl" : "ltr");
+                           .Replace("{{rtl}}", isRtl ? "rtl" : "ltr");
 
         return html;
     }
