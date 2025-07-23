@@ -220,6 +220,9 @@ public partial class App : Application
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
 
+        // Handle power management events to prevent crashes after sleep/wake
+        SystemEvents.PowerModeChanged += OnPowerModeChanged;
+
         // Initialize TrayIcon
         _ = TrayIconManager.GetInstance();
 
@@ -303,6 +306,9 @@ public partial class App : Application
         if (!_cleanExit)
             return;
 
+        // Unsubscribe from power management events
+        SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+
         _isRunning.ReleaseMutex();
 
         PipeServerManager.GetInstance().Dispose();
@@ -329,5 +335,29 @@ public partial class App : Application
                 MessageBoxButton.OK, MessageBoxImage.Information);
 
         return false;
+    }
+
+    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+    {
+        try
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Suspend:
+                    // System is going to sleep - close any open preview windows to prevent graphics issues
+                    ProcessHelper.WriteLog("System entering sleep mode - closing preview windows");
+                    ViewWindowManager.GetInstance().ClosePreview();
+                    break;
+                case PowerModes.Resume:
+                    // System waking up - log for debugging
+                    ProcessHelper.WriteLog("System resumed from sleep mode");
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't let power management exceptions crash the app
+            ProcessHelper.WriteLog($"Error handling power mode change: {ex}");
+        }
     }
 }
