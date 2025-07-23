@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="{{rtl}}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -143,6 +143,34 @@
         z-index: 9999;
         cursor: ew-resize;
         user-select: none;
+      }
+
+      /* RTL support */
+      html[dir="rtl"] .container {
+        flex-direction: row-reverse;
+      }
+
+      html[dir="rtl"] #toc {
+        right: 0;
+        left: auto;
+      }
+
+      html[dir="rtl"] .table-of-contents a {
+        border-right: 2px solid transparent;
+        border-left: none;
+        margin-right: -1em;
+        margin-left: 0;
+        padding-right: calc(1em - 2px);
+        padding-left: 0;
+      }
+
+      html[dir="rtl"] .table-of-contents .active {
+        border-right: 2px solid var(--fgColor-accent);
+        border-left: none;
+        margin-right: -1em;
+        margin-left: 0;
+        padding-right: calc(1em - 2px);
+        padding-left: 0;
       }
     </style>
 
@@ -336,6 +364,21 @@
         document.addEventListener("keydown", function (e) {
           if (e.code === "Space") {
             e.preventDefault();
+          }
+          
+          // Support keyboard shortcuts for RTL and LTR text direction
+          // RTL: Ctrl + RShift
+          // LTR: Ctrl + LShift
+          if ((e.ctrlKey || e.metaKey)) {
+            if (e.shiftKey && e.location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
+              // Right Shift + Ctrl: RTL
+              document.documentElement.setAttribute('dir', 'rtl');
+              e.preventDefault();
+            } else if (e.shiftKey && e.location === KeyboardEvent.DOM_KEY_LOCATION_LEFT) {
+              // Left Shift + Ctrl: LTR
+              document.documentElement.setAttribute('dir', 'ltr');
+              e.preventDefault();
+            }
           }
         });
       });
