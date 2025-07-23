@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using UtfUnknown;
@@ -81,28 +80,16 @@ public class MarkdownPanel : WebpagePanel
 
         var template = ReadString("/md2html.html");
         
-        // Check for RTL support similar to TextViewer
+        // Support automatic RTL for markdown files
         bool isRtl = false;
-        var extension = Path.GetExtension(path);
-        
-        // Apply RTL support to all markdown-like extensions handled by this plugin
-        var supportedExtensions = new[]
+        if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
         {
-            ".md", ".markdown", ".mdx", ".mmd", ".mkd", ".mdwn", ".mdown",
-            ".mdc", ".qmd", ".rmd", ".rmarkdown", ".apib", ".mdtxt", ".mdtext"
-        };
-        
-        if (supportedExtensions.Any(ext => extension.Equals(ext, StringComparison.OrdinalIgnoreCase)))
-        {
-            if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
-            {
-                string isSupportRTL = TranslationHelper.Get("IsSupportRTL",
-                    failsafe: bool.TrueString,
-                    domain: Assembly.GetExecutingAssembly().GetName().Name);
+            string isSupportRTL = TranslationHelper.Get("IsSupportRTL",
+                failsafe: bool.TrueString,
+                domain: Assembly.GetExecutingAssembly().GetName().Name);
 
-                if (bool.TrueString.Equals(isSupportRTL, StringComparison.OrdinalIgnoreCase))
-                    isRtl = true;
-            }
+            if (bool.TrueString.Equals(isSupportRTL, StringComparison.OrdinalIgnoreCase))
+                isRtl = true;
         }
         
         var html = template.Replace("{{content}}", content)
