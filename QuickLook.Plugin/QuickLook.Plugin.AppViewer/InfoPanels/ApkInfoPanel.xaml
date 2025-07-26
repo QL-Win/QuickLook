@@ -89,6 +89,7 @@
                            Padding="3"
                            FontSize="19"
                            FontWeight="SemiBold"
+                           IsTextSelectionEnabled="True"
                            LineHeight="25"
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="Wrap">
@@ -110,6 +111,7 @@
                        Margin="8,0,0,0"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       IsTextSelectionEnabled="True"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
