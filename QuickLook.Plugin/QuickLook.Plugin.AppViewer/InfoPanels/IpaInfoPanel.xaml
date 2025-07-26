@@ -110,6 +110,7 @@
                        Margin="8,0,0,0"
                        Padding="3"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       IsTextSelectionEnabled="True"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="Wrap" />
