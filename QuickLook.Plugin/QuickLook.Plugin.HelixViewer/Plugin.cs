@@ -31,17 +31,20 @@ public class Plugin : IViewer
     /// </summary>
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
-        // Default
+        // Default supported by HelixToolkit
         ".stl", ".obj", ".3ds", ".lwo", ".ply",
 
-        // Extended
+        // Extended supported by Assimp
         ".fbx", ".3mf", ".blend", ".glb", ".gltf", ".dae",
 #if S_DXF
         ".dxf",
 #endif
 
-        // Extended_MMD
+        // TBD: MMD (MikuMikuDance)
         //".pmx",
+
+        // PCD (Point Cloud Data)
+        ".pcd",
     ]);
 
     private HelixPanel _hp;
