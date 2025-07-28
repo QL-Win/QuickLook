@@ -41,7 +41,7 @@ public class Plugin : IViewer
 #endif
 
         // Extended_MMD
-        ".pmx",
+        //".pmx",
     ]);
 
     private HelixPanel _hp;
