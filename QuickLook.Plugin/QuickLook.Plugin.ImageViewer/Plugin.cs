@@ -79,8 +79,7 @@ public class Plugin : IViewer
                 useColorProfile ? [] : [".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"],
                 typeof(NativeProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
-            new KeyValuePair<string[], Type>(
-                useColorProfile ? [] : [".jxr"],
+            new KeyValuePair<string[], Type>([".jxr"],
                 typeof(WmpProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".icns"],
