@@ -107,11 +107,28 @@ internal class ImageMagickProvider : AnimationProvider
             }
             if (SettingHelper.Get("UseColorProfile", true, "QuickLook.Plugin.ImageViewer"))
             {
-                if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
+                try
                 {
-                    mi.SetProfile(ColorProfile.SRGB);
-                    if (ContextObject.ColorProfileName != null)
-                        mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
+                    // Apply color management for any color space that has embedded color profiles
+                    // This includes Display P3, Adobe RGB, ProPhoto RGB, and other wide-gamut spaces
+                    if (mi.HasColorProfile)
+                    {
+                        // If the image already has a color profile, preserve it and convert to monitor color space
+                        if (ContextObject.ColorProfileName != null)
+                            mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
+                    }
+                    else if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
+                    {
+                        // For images without embedded profiles, assume sRGB and convert to monitor color space
+                        mi.SetProfile(ColorProfile.SRGB);
+                        if (ContextObject.ColorProfileName != null)
+                            mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
+                    }
+                }
+                catch (Exception e)
+                {
+                    ProcessHelper.WriteLog($"Color profile conversion failed: {e}");
+                    // Continue without color management if it fails
                 }
             }
 
