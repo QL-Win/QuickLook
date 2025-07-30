@@ -65,7 +65,7 @@ public class Plugin : IViewer
 
     public void Init()
     {
-        var useColorProfile = SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer");
+        var useColorProfile = SettingHelper.Get("UseColorProfile", true, "QuickLook.Plugin.ImageViewer");
 
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(

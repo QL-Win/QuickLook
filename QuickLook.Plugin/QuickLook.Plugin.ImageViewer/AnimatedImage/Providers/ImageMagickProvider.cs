@@ -105,7 +105,7 @@ internal class ImageMagickProvider : AnimationProvider
             {
                 mi = layers[0];
             }
-            if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
+            if (SettingHelper.Get("UseColorProfile", true, "QuickLook.Plugin.ImageViewer"))
             {
                 if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
                 {
