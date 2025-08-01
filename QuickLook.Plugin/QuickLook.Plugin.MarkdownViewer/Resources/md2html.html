@@ -216,6 +216,9 @@
           typographer: false,
           quotes: "“”‘’",
           highlight: function (str, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + str + '</div>';
+            }
             if (lang && hljs.getLanguage(lang)) {
               try {
                 return (
@@ -273,7 +276,7 @@
         // Render Mermaid diagrams with error handling
         setTimeout(() => {
           try {
-            mermaid.init(undefined, document.querySelectorAll('pre code.language-mermaid'));
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
           } catch (error) {
             console.warn('Mermaid rendering error:', error);
           }
@@ -293,7 +296,7 @@
             // Re-render all Mermaid diagrams
             setTimeout(() => {
               try {
-                mermaid.init(undefined, document.querySelectorAll('pre code.language-mermaid'));
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
               } catch (error) {
                 console.warn('Mermaid re-rendering error:', error);
               }
