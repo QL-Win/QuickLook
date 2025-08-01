@@ -34,6 +34,7 @@ public class Plugin : IViewer
         ".cdr", // CorelDraw
         ".fig", // Figma
         ".kra", // Krita
+        ".pdn", // Paint.NET
         ".pip", ".pix", // Pixso
         ".sketch", // Sketch
         ".xd", // AdobeXD
@@ -46,6 +47,8 @@ public class Plugin : IViewer
 
     public void Init()
     {
+        Handler.Providers.Add(new KeyValuePair<string[], Type>(
+            [".pdn"], typeof(PdnProvider)));
     }
 
     public bool CanHandle(string path)

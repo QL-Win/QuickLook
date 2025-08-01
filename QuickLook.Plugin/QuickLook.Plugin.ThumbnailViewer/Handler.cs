@@ -21,6 +21,7 @@ using PureSharpCompress.Readers;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -30,8 +31,18 @@ namespace QuickLook.Plugin.ThumbnailViewer;
 
 internal static class Handler
 {
+    // List<Pair<formats, type>>
+    public static List<KeyValuePair<string[], Type>> Providers = [];
+
     public static void Prepare(string path, ContextObject context)
     {
+        // Temporary codes
+        if (path.EndsWith(".pdn", StringComparison.OrdinalIgnoreCase))
+        {
+            new PdnProvider().Prepare(path, context);
+            return;
+        }
+
         try
         {
             using Stream imageData = ViewImage(path);
@@ -47,6 +58,12 @@ internal static class Handler
 
     public static Stream ViewImage(string path)
     {
+        // Temporary codes
+        if (path.EndsWith(".pdn", StringComparison.OrdinalIgnoreCase))
+        {
+            return new PdnProvider().ViewImage(path);
+        }
+
         try
         {
             using ZipArchive archive = ZipArchive.Open(path, new());
