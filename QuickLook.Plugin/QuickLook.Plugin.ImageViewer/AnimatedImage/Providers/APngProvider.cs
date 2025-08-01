@@ -17,6 +17,7 @@
 
 using LibAPNG;
 using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -30,20 +31,28 @@ using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 
+/// <summary>
+/// This provider is only for Animated PNG.
+/// The others will fall back to another provider.
+/// </summary>
 internal class APngProvider : AnimationProvider
 {
     private readonly Frame _baseFrame;
     private readonly List<FrameInfo> _frames;
     private readonly List<BitmapSource> _renderedFrames;
     private int _lastEffectivePreviousPreviousFrameIndex;
-    private NativeProvider _nativeImageProvider;
+    private AnimationProvider _fallbackImageProvider;
 
     public APngProvider(Uri path, MetaProvider meta, ContextObject contextObject) : base(path, meta, contextObject)
     {
         if (!IsAnimatedPng(path.LocalPath))
         {
-            _nativeImageProvider = new NativeProvider(path, meta, contextObject);
-            Animator = _nativeImageProvider.Animator;
+            var useNativeProvider = SettingHelper.Get("UseNativeProvider", true, "QuickLook.Plugin.ImageViewer");
+
+            _fallbackImageProvider = useNativeProvider ?
+                new NativeProvider(path, meta, contextObject) :
+                new ImageMagickProvider(path, meta, contextObject);
+            Animator = _fallbackImageProvider.Animator;
             return;
         }
 
@@ -71,8 +80,8 @@ internal class APngProvider : AnimationProvider
 
     public override Task<BitmapSource> GetThumbnail(Size renderSize)
     {
-        if (_nativeImageProvider != null)
-            return _nativeImageProvider.GetThumbnail(renderSize);
+        if (_fallbackImageProvider != null)
+            return _fallbackImageProvider.GetThumbnail(renderSize);
 
         return new Task<BitmapSource>(() =>
         {
@@ -85,8 +94,8 @@ internal class APngProvider : AnimationProvider
 
     public override Task<BitmapSource> GetRenderedFrame(int index)
     {
-        if (_nativeImageProvider != null)
-            return _nativeImageProvider.GetRenderedFrame(index);
+        if (_fallbackImageProvider != null)
+            return _fallbackImageProvider.GetRenderedFrame(index);
 
         if (_renderedFrames[index] != null)
             return new Task<BitmapSource>(() => _renderedFrames[index]);
@@ -102,10 +111,10 @@ internal class APngProvider : AnimationProvider
 
     public override void Dispose()
     {
-        if (_nativeImageProvider != null)
+        if (_fallbackImageProvider != null)
         {
-            _nativeImageProvider.Dispose();
-            _nativeImageProvider = null;
+            _fallbackImageProvider.Dispose();
+            _fallbackImageProvider = null;
             return;
         }
 
@@ -214,7 +223,7 @@ internal class APngProvider : AnimationProvider
             return false;
         }
 
-        uint ToUInt32BE(byte[] data)
+        static uint ToUInt32BE(byte[] data)
         {
             Array.Reverse(data);
             return BitConverter.ToUInt32(data, 0);

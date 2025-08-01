@@ -65,7 +65,15 @@ public class Plugin : IViewer
 
     public void Init()
     {
+        // Option of UseColorProfile:
+        // Default is False (disable color profile conversion)
+        // Note that enabling this feature will slow down image previewing, especially on large images.
         var useColorProfile = SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer");
+
+        // Option of UseNativeProvider:
+        // Default is True (disable precise colors and choose faster response)
+        // Note that disabling this feature may slightly slow down image previewing but you can get precise colors.
+        var useNativeProvider = SettingHelper.Get("UseNativeProvider", true, "QuickLook.Plugin.ImageViewer");
 
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(
@@ -76,7 +84,7 @@ public class Plugin : IViewer
                 typeof(GifProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(
-                useColorProfile ? [] : [".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"],
+                useColorProfile ? [] : (useNativeProvider ? [".bmp", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff"] : []),
                 typeof(NativeProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".jxr"],

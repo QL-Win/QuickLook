@@ -40,11 +40,6 @@ internal class NativeProvider : AnimationProvider
     public override Task<BitmapSource> GetThumbnail(Size renderSize)
     {
         var fullSize = Meta.GetSize();
-
-        //var decodeWidth = (int) Math.Round(fullSize.Width *
-        //                                   Math.Min(renderSize.Width / 2 / fullSize.Width,
-        //                                       renderSize.Height / 2 / fullSize.Height));
-        //var decodeHeight = (int) Math.Round(fullSize.Height / fullSize.Width * decodeWidth);
         var decodeWidth =
             (int)Math.Round(Math.Min(Meta.GetSize().Width, Math.Max(1d, Math.Floor(renderSize.Width))));
         var decodeHeight =
