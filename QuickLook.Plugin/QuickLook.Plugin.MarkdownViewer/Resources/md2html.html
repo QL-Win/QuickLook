@@ -19,6 +19,7 @@
     <script src="highlight.js/highlight.min.js"></script>
 
     <script src="js/markdownItAnchor.umd.js"></script>
+    <script src="js/mermaid.min.js"></script>
   </head>
   <body class="markdown-body">
     <link rel="stylesheet" href="css/github-markdown.css" />
@@ -172,6 +173,33 @@
         padding-right: calc(1em - 2px);
         padding-left: 0;
       }
+
+      /* Mermaid diagram styles */
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        margin: 1em 0;
+      }
+
+      .mermaid svg {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .mermaid-placeholder {
+        border: 2px dashed var(--borderColor-default);
+        background: var(--bgColor-muted);
+        color: var(--fgColor-muted);
+        border-radius: 6px;
+      }
+
+      .mermaid-placeholder pre {
+        background: var(--bgColor-default);
+        border: 1px solid var(--borderColor-default);
+        color: var(--fgColor-default);
+      }
     </style>
 
     <textarea id="text-input" style="display: none">{{content}}</textarea>
@@ -217,6 +245,62 @@
       document.getElementById("preview").innerHTML = md.render(
         document.getElementById("text-input").value
       );
+
+      // Initialize Mermaid after markdown rendering
+      if (window.mermaid) {
+        // Determine theme based on system preference
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDarkMode ? 'dark' : 'default',
+          securityLevel: 'loose', // Allow HTML in diagrams for enhanced features
+          fontFamily: 'Segoe UI, Helvetica, Arial, sans-serif',
+          themeVariables: {
+            primaryColor: isDarkMode ? '#58a6ff' : '#0969da',
+            primaryTextColor: isDarkMode ? '#f0f6fc' : '#24292f',
+            primaryBorderColor: isDarkMode ? '#30363d' : '#d0d7de',
+            lineColor: isDarkMode ? '#484f58' : '#656d76',
+            sectionBkgColor: isDarkMode ? '#21262d' : '#f6f8fa',
+            altSectionBkgColor: isDarkMode ? '#161b22' : '#ffffff',
+            gridColor: isDarkMode ? '#21262d' : '#f6f8fa',
+            cScale0: isDarkMode ? '#58a6ff' : '#0969da',
+            cScale1: isDarkMode ? '#a5f3fc' : '#54aeff',
+            cScale2: isDarkMode ? '#ff7b72' : '#d1242f'
+          }
+        });
+        
+        // Render Mermaid diagrams with error handling
+        setTimeout(() => {
+          try {
+            mermaid.init(undefined, document.querySelectorAll('pre code.language-mermaid'));
+          } catch (error) {
+            console.warn('Mermaid rendering error:', error);
+          }
+        }, 100);
+        
+        // Listen for theme changes and re-render diagrams
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (window.mermaid) {
+            const newTheme = e.matches ? 'dark' : 'default';
+            mermaid.initialize({
+              startOnLoad: false,
+              theme: newTheme,
+              securityLevel: 'loose',
+              fontFamily: 'Segoe UI, Helvetica, Arial, sans-serif'
+            });
+            
+            // Re-render all Mermaid diagrams
+            setTimeout(() => {
+              try {
+                mermaid.init(undefined, document.querySelectorAll('pre code.language-mermaid'));
+              } catch (error) {
+                console.warn('Mermaid re-rendering error:', error);
+              }
+            }, 100);
+          }
+        });
+      }
 
       /* codes below are adopted from https://codepen.io/jtojnar/full/Juiop */
       var ToC = `<nav role='navigation' class='table-of-contents'>
