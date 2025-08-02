@@ -36,6 +36,7 @@
   "IsRefreshExplorer": true,
   "IsInstallCertificate": false,
   "IsEnableUninstallDelayUntilReboot": true,
+  "IsUseTempPathFork": false,
   "IsEnvironmentVariable": false,
   "OverlayInstallRemoveExt": "exe,dll,pdb,config,winmd,txt,bat,ax,manifest,xshd",
   "UnpackingPassword": null,
