@@ -59,21 +59,19 @@ public class AnimatedImage : Image, IDisposable
         return provider;
     }
 
-    #region DependencyProperty
-
     public static readonly DependencyProperty AnimationFrameIndexProperty =
-        DependencyProperty.Register("AnimationFrameIndex", typeof(int), typeof(AnimatedImage),
+        DependencyProperty.Register(nameof(AnimationFrameIndex), typeof(int), typeof(AnimatedImage),
             new UIPropertyMetadata(-1, AnimationFrameIndexChanged));
 
     public static readonly DependencyProperty AnimationUriProperty =
-        DependencyProperty.Register("AnimationUri", typeof(Uri), typeof(AnimatedImage),
+        DependencyProperty.Register(nameof(AnimationUri), typeof(Uri), typeof(AnimatedImage),
             new UIPropertyMetadata(null, AnimationUriChanged));
 
     public static readonly DependencyProperty MetaProperty =
-        DependencyProperty.Register("Meta", typeof(MetaProvider), typeof(AnimatedImage));
+        DependencyProperty.Register(nameof(Meta), typeof(MetaProvider), typeof(AnimatedImage));
 
     public static readonly DependencyProperty ContextObjectProperty =
-        DependencyProperty.Register("ContextObject", typeof(ContextObject), typeof(AnimatedImage));
+        DependencyProperty.Register(nameof(ContextObject), typeof(ContextObject), typeof(AnimatedImage));
 
     public int AnimationFrameIndex
     {
@@ -103,9 +101,6 @@ public class AnimatedImage : Image, IDisposable
     {
         if (obj is not AnimatedImage instance)
             return;
-
-        //var thumbnail = instance.Meta?.GetThumbnail(true);
-        //instance.Source = thumbnail;
 
         instance._animation = InitAnimationProvider((Uri)ev.NewValue, instance.Meta, instance.ContextObject);
         ShowThumbnailAndStartAnimation(instance);
@@ -161,6 +156,4 @@ public class AnimatedImage : Image, IDisposable
         }));
         task.Start();
     }
-
-    #endregion DependencyProperty
 }
