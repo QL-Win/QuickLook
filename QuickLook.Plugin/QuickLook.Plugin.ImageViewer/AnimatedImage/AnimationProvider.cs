@@ -24,20 +24,13 @@ using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ImageViewer.AnimatedImage;
 
-internal abstract class AnimationProvider : IDisposable
+internal abstract class AnimationProvider(Uri path, MetaProvider meta, ContextObject contextObject) : IDisposable
 {
-    protected AnimationProvider(Uri path, MetaProvider meta, ContextObject contextObject)
-    {
-        Path = path;
-        Meta = meta;
-        ContextObject = contextObject;
-    }
+    public Uri Path { get; } = path;
 
-    public Uri Path { get; }
+    public MetaProvider Meta { get; } = meta;
 
-    public MetaProvider Meta { get; }
-
-    public ContextObject ContextObject { get; }
+    public ContextObject ContextObject { get; } = contextObject;
 
     public Int32AnimationUsingKeyFrames Animator { get; protected set; }
 
