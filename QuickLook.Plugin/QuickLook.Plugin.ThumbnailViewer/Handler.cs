@@ -15,165 +15,43 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using PureSharpCompress.Archives.Zip;
-using PureSharpCompress.Common;
-using PureSharpCompress.Readers;
-using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using QuickLook.Plugin.ThumbnailViewer.Providors;
 using System.IO;
-using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ThumbnailViewer;
 
 internal static class Handler
 {
-    // List<Pair<formats, type>>
-    public static List<KeyValuePair<string[], Type>> Providers = [];
-
     public static void Prepare(string path, ContextObject context)
     {
-        // Temporary codes
-        if (path.EndsWith(".pdn", StringComparison.OrdinalIgnoreCase))
+        (Path.GetExtension(path).ToLower() switch
         {
-            new PdnProvider().Prepare(path, context);
-            return;
-        }
-
-        try
-        {
-            using Stream imageData = ViewImage(path);
-            BitmapImage bitmap = imageData.ReadAsBitmapImage();
-            context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error reading thumbnail from {path}: {ex.Message}");
-            context.PreferredSize = new Size { Width = 800, Height = 600 };
-        }
+            ".cdr" => new CdrProvider(),
+            ".fig" => new FigProvidor(),
+            ".kra" => new KraProvidor(),
+            ".pdn" => new PdnProvider(),
+            ".pip" or ".pix" => new PixProvidor(),
+            ".sketch" => new SketchProvidor(),
+            ".xd" => new XdProvidor(),
+            ".xmind" => new XmindProvidor(),
+            _ => (AbstractProvidor)null,
+        })?.Prepare(path, context);
     }
 
     public static Stream ViewImage(string path)
     {
-        // Temporary codes
-        if (path.EndsWith(".pdn", StringComparison.OrdinalIgnoreCase))
+        return (Path.GetExtension(path).ToLower() switch
         {
-            return new PdnProvider().ViewImage(path);
-        }
-
-        try
-        {
-            using ZipArchive archive = ZipArchive.Open(path, new());
-            using IReader reader = archive.ExtractAllEntries();
-
-            if (path.EndsWith(".xd", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.Equals("preview.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                    else if (reader.Entry.Key!.Equals("thumbnail.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".fig", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.Equals("thumbnail.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".pip", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".pix", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.EndsWith(".thumb.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".sketch", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.EndsWith("previews/preview.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".xmind", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.Equals("Thumbnails/thumbnail.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".kra", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.Contains("mergedimage"))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-            else if (path.EndsWith(".cdr", StringComparison.OrdinalIgnoreCase))
-            {
-                while (reader.MoveToNextEntry())
-                {
-                    if (reader.Entry.Key!.Equals("previews/thumbnail.png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MemoryStream ms = new();
-                        using EntryStream stream = reader.OpenEntryStream();
-                        stream.CopyTo(ms);
-                        return ms;
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error reading thumbnail from {path}: {ex.Message}");
-            ProcessHelper.WriteLog(ex.ToString());
-        }
-
-        return null;
+            ".cdr" => new CdrProvider(),
+            ".fig" => new FigProvidor(),
+            ".kra" => new KraProvidor(),
+            ".pdn" => new PdnProvider(),
+            ".pip" or ".pix" => new PixProvidor(),
+            ".sketch" => new SketchProvidor(),
+            ".xd" => new XdProvidor(),
+            ".xmind" => new XmindProvidor(),
+            _ => (AbstractProvidor)null,
+        })?.ViewImage(path);
     }
 }

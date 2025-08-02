@@ -16,36 +16,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Helpers;
-using QuickLook.Common.Plugin;
-using QuickLook.Plugin.ImageViewer;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 
-namespace QuickLook.Plugin.ThumbnailViewer;
+namespace QuickLook.Plugin.ThumbnailViewer.Providors;
 
-internal class PdnProvider
+internal class PdnProvider : AbstractProvidor
 {
-    public void Prepare(string path, ContextObject context)
-    {
-        try
-        {
-            using Stream imageData = ViewImage(path);
-            BitmapImage bitmap = imageData.ReadAsBitmapImage();
-            context.SetPreferredSizeFit(new Size(bitmap.PixelWidth, bitmap.PixelHeight), 0.8d);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error reading thumbnail from {path}: {ex.Message}");
-            context.PreferredSize = new Size { Width = 800, Height = 600 };
-        }
-    }
-
-    public Stream ViewImage(string path)
+    public override Stream ViewImage(string path)
     {
         try
         {

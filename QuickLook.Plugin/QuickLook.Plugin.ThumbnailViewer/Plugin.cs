@@ -47,8 +47,6 @@ public class Plugin : IViewer
 
     public void Init()
     {
-        Handler.Providers.Add(new KeyValuePair<string[], Type>(
-            [".pdn"], typeof(PdnProvider)));
     }
 
     public bool CanHandle(string path)
