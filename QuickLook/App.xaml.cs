@@ -210,27 +210,24 @@ public partial class App : Application
             }
         };
 
-        // Initialize MessageBox patching
-        bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
-        if (modernMessageBox) MessageBoxPatcher.Initialize();
-
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         SystemEvents.UserPreferenceChanged += (_, _) =>
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
 
-        // Initialize TrayIcon
-        _ = TrayIconManager.GetInstance();
-
         base.OnStartup(e);
+
+        // Initialize MessageBox patching
+        bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
+        if (modernMessageBox) MessageBoxPatcher.Initialize();
     }
 
     private void Application_Startup(object sender, StartupEventArgs e)
     {
         if (!EnsureOSVersion()
-            || !EnsureFirstInstance(e.Args)
-            || !EnsureFolderWritable(SettingHelper.LocalDataPath))
+         || !EnsureFirstInstance(e.Args)
+         || !EnsureFolderWritable(SettingHelper.LocalDataPath))
         {
             _cleanExit = false;
             Shutdown();
@@ -325,8 +322,10 @@ public partial class App : Application
         }
         // Second instance: duplicate
         else
+        {
             MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
                 MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
         return false;
     }
