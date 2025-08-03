@@ -210,13 +210,13 @@ public partial class App : Application
             }
         };
 
+        base.OnStartup(e);
+
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         SystemEvents.UserPreferenceChanged += (_, _) =>
             ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
         UxTheme.ApplyPreferredAppMode();
-
-        base.OnStartup(e);
 
         // Initialize MessageBox patching
         bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
