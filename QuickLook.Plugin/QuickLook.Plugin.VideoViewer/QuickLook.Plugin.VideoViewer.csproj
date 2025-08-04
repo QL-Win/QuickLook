@@ -41,7 +41,7 @@
         <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3">
             <Aliases>MediaInfoWrapper</Aliases>
         </PackageReference>
-        <PackageReference Include="MediaInfoDLL" Version="25.4.0">
+        <PackageReference Include="MediaInfoDLL" Version="25.7.0">
             <Aliases>MediaInfoDLL</Aliases>
         </PackageReference>
         <Reference Include="WindowsBase" />
@@ -187,17 +187,17 @@
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\swscale-lav-8.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.4.0\lib\netstandard2.0\x64\MediaInfo.dll">
+        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\x64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)MediaInfo-x64\</DestinationFolder>
             <Link>MediaInfo-x64\MediaInfo.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.4.0\lib\netstandard2.0\x86\MediaInfo.dll">
+        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\x86\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)MediaInfo-x86\</DestinationFolder>
             <Link>MediaInfo-x86\MediaInfo.dll</Link>
         </Content>
-        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.4.0\lib\netstandard2.0\arm64\MediaInfo.dll">
+        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\arm64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)MediaInfo-ARM64\</DestinationFolder>
             <Link>MediaInfo-ARM64\MediaInfo.dll</Link>

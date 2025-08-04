@@ -56,6 +56,7 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "QuickLook.Installer", "Quic
 		{63C00175-0FF3-42C7-8621-2F1959F26064} = {63C00175-0FF3-42C7-8621-2F1959F26064}
 		{B4F7C88D-C79D-49E7-A1FB-FB69CF72585F} = {B4F7C88D-C79D-49E7-A1FB-FB69CF72585F}
 		{311E6E78-3A5B-4E51-802A-5755BD5F9F97} = {311E6E78-3A5B-4E51-802A-5755BD5F9F97}
+		{B0054A16-472E-44AC-BA40-349303E524FF} = {B0054A16-472E-44AC-BA40-349303E524FF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QuickLook.Native64", "QuickLook.Native\QuickLook.Native64\QuickLook.Native64.vcxproj", "{794E4DCF-F715-4836-9D30-ABD296586D23}"
@@ -85,6 +86,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.ThumbnailViewer", "QuickLook.Plugin\QuickLook.Plugin.ThumbnailViewer\QuickLook.Plugin.ThumbnailViewer.csproj", "{B4F7C88D-C79D-49E7-A1FB-FB69CF72585F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.HelixViewer", "QuickLook.Plugin\QuickLook.Plugin.HelixViewer\QuickLook.Plugin.HelixViewer.csproj", "{311E6E78-3A5B-4E51-802A-5755BD5F9F97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.MediaInfoViewer", "QuickLook.Plugin\QuickLook.Plugin.MediaInfoViewer\QuickLook.Plugin.MediaInfoViewer.csproj", "{B0054A16-472E-44AC-BA40-349303E524FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -278,6 +281,14 @@ Global
 		{311E6E78-3A5B-4E51-802A-5755BD5F9F97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{311E6E78-3A5B-4E51-802A-5755BD5F9F97}.Release|x64.ActiveCfg = Release|Any CPU
 		{311E6E78-3A5B-4E51-802A-5755BD5F9F97}.Release|x64.Build.0 = Release|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0054A16-472E-44AC-BA40-349303E524FF}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -303,6 +314,7 @@ Global
 		{63C00175-0FF3-42C7-8621-2F1959F26064} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 		{B4F7C88D-C79D-49E7-A1FB-FB69CF72585F} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 		{311E6E78-3A5B-4E51-802A-5755BD5F9F97} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
+		{B0054A16-472E-44AC-BA40-349303E524FF} = {06EFDBE0-6408-4B37-BCF2-0CF9EBEA2E93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3761C32-8C5F-498A-892B-3B0882994B62}
