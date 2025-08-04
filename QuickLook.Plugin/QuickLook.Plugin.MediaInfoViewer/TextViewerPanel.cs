@@ -17,8 +17,6 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
-using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,22 +30,26 @@ public class TextViewerPanel : TextBox
     {
         _ = context;
 
-        Margin = new Thickness(8, 0, 0, 0);
-        FontSize = 14;
+        TextWrapping = TextWrapping.Wrap;
+        VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+        Margin = new Thickness(8d, 0d, 0d, 0d);
+        BorderThickness = new Thickness(0d);
+        FontSize = 14d;
         IsReadOnly = true;
         IsManipulationEnabled = true;
 
         ContextMenu = new ContextMenu();
         ContextMenu.Items.Add(new MenuItem
         {
-            Header = TranslationHelper.Get("Editor_Copy", domain: Assembly.GetExecutingAssembly().GetName().Name),
-            Command = ApplicationCommands.Copy
+            Header = TranslationHelper.Get("Editor_Copy", domain: "QuickLook.Plugin.TextViewer"),
+            Command = ApplicationCommands.Copy,
         });
         ContextMenu.Items.Add(new MenuItem
         {
             Header = TranslationHelper.Get("Editor_SelectAll",
-                domain: Assembly.GetExecutingAssembly().GetName().Name),
-            Command = ApplicationCommands.SelectAll
+                domain: "QuickLook.Plugin.TextViewer"),
+            Command = ApplicationCommands.SelectAll,
         });
 
         ManipulationInertiaStarting += Viewer_ManipulationInertiaStarting;
@@ -57,7 +59,7 @@ public class TextViewerPanel : TextBox
         PreviewMouseWheel += Viewer_MouseWheel;
 
         FontFamily = new FontFamily("Consolas, " + TranslationHelper.Get("Editor_FontFamily",
-            domain: Assembly.GetExecutingAssembly().GetName().Name));
+            domain: "QuickLook.Plugin.TextViewer"));
 
         LoadTextAsync(text);
     }
@@ -67,7 +69,7 @@ public class TextViewerPanel : TextBox
         e.TranslationBehavior = new InertiaTranslationBehavior
         {
             InitialVelocity = e.InitialVelocities.LinearVelocity,
-            DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0)
+            DesiredDeceleration = 10d * 96d / (1000d * 1000d)
         };
     }
 
