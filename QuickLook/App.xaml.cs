@@ -210,6 +210,8 @@ public partial class App : Application
             }
         };
 
+        // We should improve the performance of the CLI application
+        // Therefore, the time-consuming initialization code can't be placed before `OnStartup`
         base.OnStartup(e);
 
         // Set initial theme based on system settings
@@ -219,8 +221,7 @@ public partial class App : Application
         UxTheme.ApplyPreferredAppMode();
 
         // Initialize MessageBox patching
-        bool modernMessageBox = SettingHelper.Get("ModernMessageBox", true, "QuickLook");
-        if (modernMessageBox) MessageBoxPatcher.Initialize();
+        MessageBoxPatcher.Initialize();
     }
 
     private void Application_Startup(object sender, StartupEventArgs e)
