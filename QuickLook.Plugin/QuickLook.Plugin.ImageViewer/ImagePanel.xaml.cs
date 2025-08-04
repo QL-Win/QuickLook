@@ -103,9 +103,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         ContextObject = context;
         Meta = meta;
 
-        var s = meta.GetSize();
-        //_minZoomFactor = Math.Min(200d / s.Height, 400d / s.Width);
-        //_maxZoomFactor = Math.Min(9000d / s.Height, 9000d / s.Width);
+        _ = meta.GetSize();
 
         ShowMeta();
         Theme = ContextObject.Theme;

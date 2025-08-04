@@ -22,6 +22,7 @@ using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -67,6 +68,9 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
             {
                 UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
             },
+
+            // Prevent white flash in dark mode
+            DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White,
         };
         _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
         Content = _webView;
