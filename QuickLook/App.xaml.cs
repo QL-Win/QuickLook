@@ -117,22 +117,8 @@ public partial class App : Application
         // Exception handling events which are not caught in the Task thread
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
-            try
-            {
-                ProcessHelper.WriteLog(e.Exception.ToString());
-                Current?.Dispatcher?.BeginInvoke(() =>
-                {
-                    Wpf.Ui.Violeta.Controls.ExceptionReport.Show(e.Exception);
-                });
-            }
-            catch (Exception ex)
-            {
-                ProcessHelper.WriteLog(ex.ToString());
-            }
-            finally
-            {
-                e.SetObserved();
-            }
+            ProcessHelper.WriteLog(e.Exception.ToString());
+            e.SetObserved();
         };
 
         // Exception handling events which are not caught in UI thread
