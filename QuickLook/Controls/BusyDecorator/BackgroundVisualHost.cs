@@ -81,8 +81,7 @@ public class BackgroundVisualHost : FrameworkElement
         private readonly CreateContentFunction _createContent;
         private readonly Action _invalidateMeasure;
 
-        private readonly AutoResetEvent _sync =
-            new AutoResetEvent(false);
+        private readonly AutoResetEvent _sync = new(false);
 
         public ThreadedVisualHelper(
             CreateContentFunction createContent,
@@ -125,17 +124,11 @@ public class BackgroundVisualHost : FrameworkElement
         }
     }
 
-    #region Private Fields
-
     public ThreadedVisualHelper ThreadedHelper;
     private HostVisual _hostVisual;
 
-    #endregion Private Fields
-
-    #region IsContentShowingProperty
-
     /// <summary>
-    ///     Identifies the IsContentShowing dependency property.
+    /// Identifies the IsContentShowing dependency property.
     /// </summary>
     public static readonly DependencyProperty IsContentShowingProperty = DependencyProperty.Register(
         "IsContentShowing",
@@ -144,7 +137,7 @@ public class BackgroundVisualHost : FrameworkElement
         new FrameworkPropertyMetadata(false, OnIsContentShowingChanged));
 
     /// <summary>
-    ///     Gets or sets if the content is being displayed.
+    /// Gets or sets if the content is being displayed.
     /// </summary>
     public bool IsContentShowing
     {
@@ -163,12 +156,8 @@ public class BackgroundVisualHost : FrameworkElement
                 bvh.HideContentHelper();
     }
 
-    #endregion IsContentShowingProperty
-
-    #region CreateContent Property
-
     /// <summary>
-    ///     Identifies the CreateContent dependency property.
+    /// Identifies the CreateContent dependency property.
     /// </summary>
     public static readonly DependencyProperty CreateContentProperty = DependencyProperty.Register(
         "CreateContent",
@@ -177,7 +166,7 @@ public class BackgroundVisualHost : FrameworkElement
         new FrameworkPropertyMetadata(OnCreateContentChanged));
 
     /// <summary>
-    ///     Gets or sets the function used to create the visual to display in a background thread.
+    /// Gets or sets the function used to create the visual to display in a background thread.
     /// </summary>
     public CreateContentFunction CreateContent
     {
@@ -196,6 +185,4 @@ public class BackgroundVisualHost : FrameworkElement
                 bvh.CreateContentHelper();
         }
     }
-
-    #endregion CreateContent Property
 }

@@ -43,7 +43,7 @@ public partial class GlassLayer : UserControl
     #region public Visual BlurredElement
 
     /// <summary>
-    ///     Identifies the BlurredElement dependency property.
+    /// Identifies the BlurredElement dependency property.
     /// </summary>
     public static DependencyProperty BlurredElementProperty =
         DependencyProperty.Register("BlurredElement", typeof(Visual), typeof(GlassLayer), null);
@@ -62,7 +62,7 @@ public partial class GlassLayer : UserControl
     #region public SolidColorBrush OverlayColor
 
     /// <summary>
-    ///     Identifies the OverlayColor dependency property.
+    /// Identifies the OverlayColor dependency property.
     /// </summary>
     public static DependencyProperty OverlayColorProperty =
         DependencyProperty.Register("OverlayColor", typeof(SolidColorBrush), typeof(GlassLayer),
@@ -82,7 +82,7 @@ public partial class GlassLayer : UserControl
     #region public Visibility ColorOverlayVisibility
 
     /// <summary>
-    ///     Identifies the ColorOverlayVisibilityProperty dependency property.
+    /// Identifies the ColorOverlayVisibilityProperty dependency property.
     /// </summary>
     public static DependencyProperty ColorOverlayVisibilityProperty =
         DependencyProperty.Register("ColorOverlayVisibility", typeof(Visibility), typeof(GlassLayer),
@@ -100,7 +100,7 @@ public partial class GlassLayer : UserControl
     #region public Visibility NoiseVisibility
 
     /// <summary>
-    ///     Identifies the NoiseVisibility dependency property.
+    /// Identifies the NoiseVisibility dependency property.
     /// </summary>
     public static DependencyProperty NoiseVisibilityProperty =
         DependencyProperty.Register("NoiseVisibility", typeof(Visibility), typeof(GlassLayer),
@@ -120,7 +120,7 @@ public partial class GlassLayer : UserControl
     #region public Visibility GlassVisibility
 
     /// <summary>
-    ///     Identifies the GlassVisibility dependency property.
+    /// Identifies the GlassVisibility dependency property.
     /// </summary>
     public static DependencyProperty GlassVisibilityProperty =
         DependencyProperty.Register("GlassVisibility", typeof(Visibility), typeof(GlassLayer),

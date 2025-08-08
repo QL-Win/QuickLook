@@ -18,17 +18,17 @@
 namespace QuickLook.Controls.BusyDecorator;
 
 /// <summary>
-///     Represents a spinable control
+/// Represents a spinable control
 /// </summary>
 internal interface ISpinable
 {
     /// <summary>
-    ///     Gets or sets the current spin (angle) animation of the icon.
+    /// Gets or sets the current spin (angle) animation of the icon.
     /// </summary>
     public bool Spin { get; set; }
 
     /// <summary>
-    ///     Gets or sets the duration of the spinning animation (in seconds). This will stop and start the spin animation.
+    /// Gets or sets the duration of the spinning animation (in seconds). This will stop and start the spin animation.
     /// </summary>
     public double SpinDuration { get; set; }
 }

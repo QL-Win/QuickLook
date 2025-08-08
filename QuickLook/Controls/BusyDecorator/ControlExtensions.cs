@@ -24,17 +24,17 @@ using System.Windows.Media.Animation;
 namespace QuickLook.Controls.BusyDecorator;
 
 /// <summary>
-///     Control extensions
+/// Control extensions
 /// </summary>
 internal static class ControlExtensions
 {
     /// <summary>
-    ///     The key used for storing the spinner Storyboard.
+    /// The key used for storing the spinner Storyboard.
     /// </summary>
     private static readonly string SpinnerStoryBoardName = $"{typeof(FrameworkElement).Name}Spinner";
 
     /// <summary>
-    ///     Start the spinning animation
+    /// Start the spinning animation
     /// </summary>
     /// <typeparam name="T">FrameworkElement and ISpinable</typeparam>
     /// <param name="control">Control to apply the rotation </param>
@@ -78,7 +78,7 @@ internal static class ControlExtensions
     }
 
     /// <summary>
-    ///     Stop the spinning animation
+    /// Stop the spinning animation
     /// </summary>
     /// <typeparam name="T">FrameworkElement and ISpinable</typeparam>
     /// <param name="control">Control to stop the rotation.</param>

@@ -135,7 +135,7 @@ public class BusyDecorator : Decorator, IDisposable
     #region IsBusyIndicatorShowing Property
 
     /// <summary>
-    ///     Identifies the IsBusyIndicatorShowing dependency property.
+    /// Identifies the IsBusyIndicatorShowing dependency property.
     /// </summary>
     public static readonly DependencyProperty IsBusyIndicatorShowingProperty = DependencyProperty.Register(
         "IsBusyIndicatorShowing",
@@ -146,7 +146,7 @@ public class BusyDecorator : Decorator, IDisposable
             OnIsBusyIndicatorShowingChanged));
 
     /// <summary>
-    ///     Gets or sets if the BusyIndicator is being shown.
+    /// Gets or sets if the BusyIndicator is being shown.
     /// </summary>
     public bool IsBusyIndicatorShowing
     {
@@ -178,7 +178,7 @@ public class BusyDecorator : Decorator, IDisposable
     #region BusyStyle
 
     /// <summary>
-    ///     Identifies the <see cref="BusyStyle" /> property.
+    /// Identifies the <see cref="BusyStyle" /> property.
     /// </summary>
     public static readonly DependencyProperty BusyStyleProperty =
         DependencyProperty.Register(
@@ -188,7 +188,7 @@ public class BusyDecorator : Decorator, IDisposable
             new FrameworkPropertyMetadata(OnBusyStyleChanged));
 
     /// <summary>
-    ///     Gets or sets the Style to apply to the Control that is displayed as the busy indication.
+    /// Gets or sets the Style to apply to the Control that is displayed as the busy indication.
     /// </summary>
     public Style BusyStyle
     {
@@ -208,7 +208,7 @@ public class BusyDecorator : Decorator, IDisposable
     #region BusyHorizontalAlignment
 
     /// <summary>
-    ///     Identifies the <see cref="BusyHorizontalAlignment" /> property.
+    /// Identifies the <see cref="BusyHorizontalAlignment" /> property.
     /// </summary>
     public static readonly DependencyProperty BusyHorizontalAlignmentProperty = DependencyProperty.Register(
         "BusyHorizontalAlignment",
@@ -217,7 +217,7 @@ public class BusyDecorator : Decorator, IDisposable
         new FrameworkPropertyMetadata(HorizontalAlignment.Center));
 
     /// <summary>
-    ///     Gets or sets the HorizontalAlignment to use to layout the control that contains the busy indicator control.
+    /// Gets or sets the HorizontalAlignment to use to layout the control that contains the busy indicator control.
     /// </summary>
     public HorizontalAlignment BusyHorizontalAlignment
     {
@@ -230,7 +230,7 @@ public class BusyDecorator : Decorator, IDisposable
     #region BusyVerticalAlignment
 
     /// <summary>
-    ///     Identifies the <see cref="BusyVerticalAlignment" /> property.
+    /// Identifies the <see cref="BusyVerticalAlignment" /> property.
     /// </summary>
     public static readonly DependencyProperty BusyVerticalAlignmentProperty = DependencyProperty.Register(
         "BusyVerticalAlignment",
@@ -239,7 +239,7 @@ public class BusyDecorator : Decorator, IDisposable
         new FrameworkPropertyMetadata(VerticalAlignment.Center));
 
     /// <summary>
-    ///     Gets or sets the the VerticalAlignment to use to layout the control that contains the busy indicator.
+    /// Gets or sets the the VerticalAlignment to use to layout the control that contains the busy indicator.
     /// </summary>
     public VerticalAlignment BusyVerticalAlignment
     {

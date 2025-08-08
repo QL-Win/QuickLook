@@ -25,7 +25,7 @@ internal class SpinIcon : TextBlock, ISpinable
     #region public bool Spin
 
     /// <summary>
-    ///     Identifies the Spin dependency property.
+    /// Identifies the Spin dependency property.
     /// </summary>
     public static DependencyProperty SpinProperty =
         DependencyProperty.Register("Spin", typeof(bool), typeof(SpinIcon),
@@ -44,7 +44,7 @@ internal class SpinIcon : TextBlock, ISpinable
     }
 
     /// <summary>
-    ///     Gets or sets the current spin (angle) animation of the icon.
+    /// Gets or sets the current spin (angle) animation of the icon.
     /// </summary>
     public bool Spin
     {
@@ -58,7 +58,7 @@ internal class SpinIcon : TextBlock, ISpinable
     #region public double SpinDuration
 
     /// <summary>
-    ///     Identifies the SpinDuration dependency property.
+    /// Identifies the SpinDuration dependency property.
     /// </summary>
     public static DependencyProperty SpinDurationProperty =
         DependencyProperty.Register("SpinDuration", typeof(double), typeof(SpinIcon),
@@ -76,7 +76,7 @@ internal class SpinIcon : TextBlock, ISpinable
     }
 
     /// <summary>
-    ///     Gets or sets the duration of the spinning animation (in seconds). This will stop and start the spin animation.
+    /// Gets or sets the duration of the spinning animation (in seconds). This will stop and start the spin animation.
     /// </summary>
     public double SpinDuration
     {

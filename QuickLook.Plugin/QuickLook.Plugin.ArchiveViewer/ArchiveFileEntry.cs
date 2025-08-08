@@ -45,7 +45,7 @@ public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
     public DateTime ModifiedDate { get; set; }
 
     /// <summary>
-    ///     Returns the maximum depth of all siblings
+    /// Returns the maximum depth of all siblings
     /// </summary>
     public int Level
     {
@@ -75,7 +75,7 @@ public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
     }
 
     /// <summary>
-    ///     Returns the number of nodes in the longest path to a leaf
+    /// Returns the number of nodes in the longest path to a leaf
     /// </summary>
     private int GetDepth()
     {

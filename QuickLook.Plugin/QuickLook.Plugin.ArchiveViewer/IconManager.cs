@@ -28,9 +28,9 @@ using System.Windows.Media.Imaging;
 namespace QuickLook.Plugin.ArchiveViewer;
 
 /// <summary>
-///     Internals are mostly from here:
-///     http://www.codeproject.com/Articles/2532/Obtaining-and-managing-file-and-folder-icons-using
-///     Caches all results.
+/// Internals are mostly from here:
+/// http://www.codeproject.com/Articles/2532/Obtaining-and-managing-file-and-folder-icons-using
+/// Caches all results.
 /// </summary>
 public static class IconManager
 {
@@ -48,7 +48,7 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     Get the icon of a directory
+    /// Get the icon of a directory
     /// </summary>
     /// <param name="large">16x16 or 32x32 icon</param>
     /// <returns>an icon</returns>
@@ -68,7 +68,7 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     Get an icon for a given filename
+    /// Get an icon for a given filename
     /// </summary>
     /// <param name="fileName">any filename</param>
     /// <param name="large">16x16 or 32x32 icon</param>
@@ -89,7 +89,7 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     http://stackoverflow.com/a/6580799/1943849
+    /// http://stackoverflow.com/a/6580799/1943849
     /// </summary>
     private static ImageSource ToImageSource(this Icon icon)
     {
@@ -101,31 +101,31 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     Provides static methods to read system icons for both folders and files.
+    /// Provides static methods to read system icons for both folders and files.
     /// </summary>
     /// <example>
-    ///     <code>IconReader.GetFileIcon("c:\\general.xls");</code>
+    /// <code>IconReader.GetFileIcon("c:\\general.xls");</code>
     /// </example>
     private static class IconReader
     {
         /// <summary>
-        ///     Options to specify the size of icons to return.
+        /// Options to specify the size of icons to return.
         /// </summary>
         public enum IconSize
         {
             /// <summary>
-            ///     Specify large icon - 32 pixels by 32 pixels.
+            /// Specify large icon - 32 pixels by 32 pixels.
             /// </summary>
             Large = 0,
 
             /// <summary>
-            ///     Specify small icon - 16 pixels by 16 pixels.
+            /// Specify small icon - 16 pixels by 16 pixels.
             /// </summary>
             Small = 1
         }
 
         /// <summary>
-        ///     Returns the icon of a folder.
+        /// Returns the icon of a folder.
         /// </summary>
         /// <param name="size">Large or small</param>
         /// <param name="linkOverlay">Whether to include the link icon</param>
@@ -152,7 +152,7 @@ public static class IconManager
         }
 
         /// <summary>
-        ///     Returns an icon for a given file - indicated by the name parameter.
+        /// Returns an icon for a given file - indicated by the name parameter.
         /// </summary>
         /// <param name="name">Pathname for file.</param>
         /// <param name="size">Large or small</param>
@@ -181,8 +181,8 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     Wraps necessary Shell32.dll structures and functions required to retrieve Icon Handles using SHGetFileInfo. Code
-    ///     courtesy of MSDN Cold Rooster Consulting case study.
+    /// Wraps necessary Shell32.dll structures and functions required to retrieve Icon Handles using SHGetFileInfo. Code
+    /// courtesy of MSDN Cold Rooster Consulting case study.
     /// </summary>
     private static class Shell32
     {
@@ -221,13 +221,13 @@ public static class IconManager
     }
 
     /// <summary>
-    ///     Wraps necessary functions imported from User32.dll. Code courtesy of MSDN Cold Rooster Consulting example.
+    /// Wraps necessary functions imported from User32.dll. Code courtesy of MSDN Cold Rooster Consulting example.
     /// </summary>
     private static class User32
     {
         /// <summary>
-        ///     Provides access to function required to delete handle. This method is used internally
-        ///     and is not required to be called separately.
+        /// Provides access to function required to delete handle. This method is used internally
+        /// and is not required to be called separately.
         /// </summary>
         /// <param name="hIcon">Pointer to icon handle.</param>
         /// <returns>N/A</returns>

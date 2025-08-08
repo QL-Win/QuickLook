@@ -8,16 +8,16 @@ using System.Xml.Serialization;
 namespace RegFileParser;
 
 /// <summary>
-///     The main reg file parsing class.
-///     Reads the given reg file and stores the content as
-///     a Dictionary of registry keys and values as a Dictionary of registry values <see cref="RegValueObject" />
+/// The main reg file parsing class.
+/// Reads the given reg file and stores the content as
+/// a Dictionary of registry keys and values as a Dictionary of registry values <see cref="RegValueObject" />
 /// </summary>
 public class RegFileObject
 {
     #region Public Properties
 
     /// <summary>
-    ///     Gets the dictionary containing all entries
+    /// Gets the dictionary containing all entries
     /// </summary>
     public Dictionary<string, Dictionary<string, RegValueObject>> RegValues => regvalues;
 
@@ -26,12 +26,12 @@ public class RegFileObject
     #region Private Fields
 
     /// <summary>
-    ///     Raw content of the reg file
+    /// Raw content of the reg file
     /// </summary>
     private string content;
 
     /// <summary>
-    ///     the dictionary containing parsed registry values
+    /// the dictionary containing parsed registry values
     /// </summary>
     private readonly Dictionary<string, Dictionary<string, RegValueObject>> regvalues;
 
@@ -61,7 +61,7 @@ public class RegFileObject
     #region Private Methods
 
     /// <summary>
-    ///     Imports the reg file
+    /// Imports the reg file
     /// </summary>
     public void Read(string path)
     {
@@ -70,7 +70,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Imports the reg file
+    /// Imports the reg file
     /// </summary>
     public void Read(byte[] bytes)
     {
@@ -109,7 +109,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Parses the reg file for reg keys and reg values
+    /// Parses the reg file for reg keys and reg values
     /// </summary>
     /// <returns>A Dictionary with reg keys as Dictionary keys and a Dictionary of (valuename, valuedata)</returns>
     private Dictionary<string, Dictionary<string, string>> ParseFile()
@@ -141,7 +141,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Creates a flat Dictionary using given searcn pattern
+    /// Creates a flat Dictionary using given searcn pattern
     /// </summary>
     /// <param name="content">The content string to be parsed</param>
     /// <returns>A Dictionary with retrieved keys and remaining content</returns>
@@ -202,7 +202,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Creates a flat Dictionary using given searcn pattern
+    /// Creates a flat Dictionary using given searcn pattern
     /// </summary>
     /// <param name="content">The content string to be parsed</param>
     /// <returns>A Dictionary with retrieved keys and remaining content</returns>
@@ -254,7 +254,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Removes the leading and ending characters from the given string
+    /// Removes the leading and ending characters from the given string
     /// </summary>
     /// <param name="sLine">given string</param>
     /// <returns>edited string</returns>
@@ -268,7 +268,7 @@ public class RegFileObject
     }
 
     /// <summary>
-    ///     Removes the leading and ending parenthesis from the given string
+    /// Removes the leading and ending parenthesis from the given string
     /// </summary>
     /// <param name="sLine">given string</param>
     /// <returns>edited string</returns>
@@ -294,7 +294,7 @@ public class RegValueObject
     private string value;
 
     /// <summary>
-    ///     Parameterless constructor
+    /// Parameterless constructor
     /// </summary>
     public RegValueObject()
     {
@@ -307,7 +307,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Overloaded constructor
+    /// Overloaded constructor
     /// </summary>
     /// <param name="propertyString">A line from the [Registry] section of the *.sig signature file</param>
     public RegValueObject(string regKeyName, string regValueName, string regValueData, string encoding)
@@ -326,7 +326,7 @@ public class RegValueObject
     #region Public Methods
 
     /// <summary>
-    ///     Overriden Method
+    /// Overriden Method
     /// </summary>
     /// <returns>An entry for the [Registry] section of the *.sig signature file</returns>
     public override string ToString()
@@ -339,7 +339,7 @@ public class RegValueObject
     #region Public Properties
 
     /// <summary>
-    ///     Regsitry value name
+    /// Regsitry value name
     /// </summary>
     [XmlElement("entry", typeof(string))]
     public string Entry
@@ -349,7 +349,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Registry value parent key
+    /// Registry value parent key
     /// </summary>
     [XmlElement("key", typeof(string))]
     public string ParentKey
@@ -364,7 +364,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Registry value root hive
+    /// Registry value root hive
     /// </summary>
     [XmlElement("root", typeof(string))]
     public string Root
@@ -374,7 +374,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Registry value type
+    /// Registry value type
     /// </summary>
     [XmlElement("type", typeof(string))]
     public string Type
@@ -384,7 +384,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Registry value data
+    /// Registry value data
     /// </summary>
     [XmlElement("value", typeof(string))]
     public string Value
@@ -447,7 +447,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Retrieves the reg value type, parsing the prefix of the value
+    /// Retrieves the reg value type, parsing the prefix of the value
     /// </summary>
     /// <param name="sTextLine">Registry value row string</param>
     /// <returns>Value</returns>
@@ -546,7 +546,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Removes the leading and ending characters from the given string
+    /// Removes the leading and ending characters from the given string
     /// </summary>
     /// <param name="sline">given string</param>
     /// <returns>edited string</returns>
@@ -560,7 +560,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Removes the leading and ending parenthesis from the given string
+    /// Removes the leading and ending parenthesis from the given string
     /// </summary>
     /// <param name="sline">given string</param>
     /// <returns>edited string</returns>
@@ -573,7 +573,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Removes the ending backslashes from the given string
+    /// Removes the ending backslashes from the given string
     /// </summary>
     /// <param name="sline">given string</param>
     /// <returns>edited string</returns>
@@ -585,7 +585,7 @@ public class RegValueObject
     }
 
     /// <summary>
-    ///     Converts the byte arrays (saved as array of string) into string
+    /// Converts the byte arrays (saved as array of string) into string
     /// </summary>
     /// <param name="stringArray">Array of string</param>
     /// <returns>String value</returns>
