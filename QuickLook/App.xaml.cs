@@ -37,16 +37,72 @@ namespace QuickLook;
 
 public partial class App : Application
 {
-    public static readonly string LocalDataPath = SettingHelper.LocalDataPath;
-    public static readonly string UserPluginPath = Path.Combine(SettingHelper.LocalDataPath, @"QuickLook.Plugin\");
-    public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
-    public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
+    public static readonly string LocalDataPath = GetSafeLocalDataPath();
+    public static readonly string UserPluginPath = Path.Combine(LocalDataPath, @"QuickLook.Plugin\");
+    public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location ?? string.Empty;
+    public static readonly string AppPath = GetSafeAppPath();
     public static readonly bool Is64Bit = Environment.Is64BitProcess;
     public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
     public static readonly bool IsWin11 = Environment.OSVersion.Version >= new Version(10, 0, 21996);
     public static readonly bool IsWin10 = !IsWin11 && Environment.OSVersion.Version >= new Version(10, 0);
     public static readonly bool IsGPUInBlacklist = SystemHelper.IsGPUInBlacklist();
-    public static readonly bool IsPortable = SettingHelper.IsPortableVersion();
+    public static readonly bool IsPortable = SafeIsPortableVersion();
+
+    private static string GetSafeLocalDataPath()
+    {
+        try
+        {
+            return SettingHelper.LocalDataPath;
+        }
+        catch (ArgumentException)
+        {
+            // Fallback: determine data path based on portable mode detection
+            var isPortable = SafeIsPortableVersion();
+            if (isPortable)
+            {
+                var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                var assemblyDir = !string.IsNullOrEmpty(assemblyLocation) 
+                    ? Path.GetDirectoryName(assemblyLocation) 
+                    : AppDomain.CurrentDomain.BaseDirectory;
+                
+                return Path.Combine(assemblyDir ?? string.Empty, @"UserData\");
+            }
+            else
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    @"pooi.moe\QuickLook\");
+            }
+        }
+    }
+
+    private static bool SafeIsPortableVersion()
+    {
+        try
+        {
+            return SettingHelper.IsPortableVersion();
+        }
+        catch (ArgumentException)
+        {
+            // Fallback: check for portable.lock file in current directory or base directory
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var assemblyDir = !string.IsNullOrEmpty(assemblyLocation) 
+                ? Path.GetDirectoryName(assemblyLocation) 
+                : AppDomain.CurrentDomain.BaseDirectory;
+            
+            var lck = Path.Combine(assemblyDir ?? string.Empty, "portable.lock");
+            return File.Exists(lck);
+        }
+    }
+
+    private static string GetSafeAppPath()
+    {
+        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        if (!string.IsNullOrEmpty(assemblyLocation))
+        {
+            return Path.GetDirectoryName(assemblyLocation) ?? string.Empty;
+        }
+        return AppDomain.CurrentDomain.BaseDirectory;
+    }
 
     private bool _cleanExit = true;
     private Mutex _isRunning;
