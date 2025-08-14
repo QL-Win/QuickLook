@@ -149,7 +149,7 @@ public class WebfontPanel : WebpagePanel
                 }
                 else
                 {
-                    var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
+                    var localPath = _fallbackPath + Uri.UnescapeDataString(requestedUri.AbsolutePath).Replace('/', '\\');
 
                     if (File.Exists(localPath))
                     {
