@@ -40,12 +40,19 @@ internal unsafe static class FreeTypeApi
 
         error = FT_New_Face(lib, (byte*)Marshal.StringToHGlobalAnsi(path), IntPtr.Zero, &face);
 
-        if (error == FT_Error.FT_Err_Ok)
+        try
         {
-            var familyName = Marshal.PtrToStringAnsi((nint)face->family_name);
-            return familyName;
+            if (error == FT_Error.FT_Err_Ok)
+            {
+                var familyName = Marshal.PtrToStringAnsi((nint)face->family_name);
+                return familyName;
+            }
         }
-
+        finally
+        {
+            FT_Done_Face(face);
+            FT_Done_FreeType(lib);
+        }
         return null;
     }
 }
