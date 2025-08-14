@@ -61,8 +61,8 @@ public class AppImageReader
 
     public AppImageReader(string path)
     {
-        using FileStream fs = File.OpenRead(path);
-        Open(fs);
+        using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        Open(fileStream);
     }
 
     private void Open(Stream stream)

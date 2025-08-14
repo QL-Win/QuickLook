@@ -130,11 +130,11 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
                 }
                 else
                 {
-                    var localPath = _fallbackPath + requestedUri.AbsolutePath.Replace('/', '\\');
+                    var localPath = _fallbackPath + Uri.UnescapeDataString(requestedUri.AbsolutePath).Replace('/', '\\');
 
                     if (File.Exists(localPath))
                     {
-                        var fileStream = File.OpenRead(localPath);
+                        var fileStream = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                             fileStream, 200, "OK", MimeTypes.GetContentTypeHeader());
                         args.Response = response;
@@ -149,7 +149,7 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
                 {
                     if (File.Exists(localPath))
                     {
-                        var fileStream = File.OpenRead(localPath);
+                        var fileStream = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                             fileStream, 200, "OK",
                             $"""

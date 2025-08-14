@@ -187,8 +187,8 @@ public class HighlightingThemeManager
             {
                 Debug.WriteLine(file);
                 var ext = Path.GetFileNameWithoutExtension(file);
-                using Stream s = File.OpenRead(Path.GetFullPath(file));
-                using var reader = new XmlTextReader(s);
+                using var fileStream = new FileStream(Path.GetFullPath(file), FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                using var reader = new XmlTextReader(fileStream);
                 var xshd = HighlightingLoader.LoadXshd(reader);
                 var highlightingDefinition = HighlightingLoader.Load(xshd, hlm);
                 if (xshd.Extensions.Count > 0)

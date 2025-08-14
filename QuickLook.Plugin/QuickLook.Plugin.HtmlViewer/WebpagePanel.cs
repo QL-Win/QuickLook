@@ -210,7 +210,7 @@ public class WebpagePanel : UserControl
                     if (File.Exists(fallbackFilePath))
                     {
                         // Serve the file from the fallback directory
-                        var fileStream = File.OpenRead(fallbackFilePath);
+                        var fileStream = new FileStream(fallbackFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                             fileStream, 200, "OK", "Content-Type: application/octet-stream");
                         args.Response = response;

@@ -69,9 +69,9 @@ public class Plugin : IViewer
         if (path.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
         {
             var rtfBox = new RichTextBox();
-            using FileStream fs = File.OpenRead(path);
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
             rtfBox.Background = new SolidColorBrush(Colors.Transparent);
-            rtfBox.Selection.Load(fs, DataFormats.Rtf);
+            rtfBox.Selection.Load(fileStream, DataFormats.Rtf);
             rtfBox.IsReadOnly = true;
             rtfBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             rtfBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;

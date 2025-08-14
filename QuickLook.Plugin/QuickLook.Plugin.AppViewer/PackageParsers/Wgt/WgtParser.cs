@@ -29,7 +29,7 @@ internal static class WgtParser
 {
     public static WgtInfo Parse(string path)
     {
-        using var fileStream = File.OpenRead(path);
+        using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         using var zipArchive = new ZipArchive(fileStream, ZipArchiveMode.Read);
         var manifestEntry = zipArchive.GetEntry("manifest.json");
 

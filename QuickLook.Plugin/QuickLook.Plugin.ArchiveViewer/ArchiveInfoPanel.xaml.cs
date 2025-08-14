@@ -134,14 +134,14 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
 
     private void LoadItemsFromArchive(string path)
     {
-        using var stream = File.OpenRead(path);
+        using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
 
         // ReaderFactory is slow... so limit its usage
         string[] useReader = [".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"];
 
         if (useReader.Any(path.ToLower().EndsWith))
         {
-            var reader = ReaderFactory.Open(stream, new ChardetReaderOptions());
+            var reader = ReaderFactory.Open(fileStream, new ChardetReaderOptions());
 
             _type = reader.ArchiveType.ToString();
 
@@ -149,13 +149,13 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
             {
                 if (_disposed)
                     return;
-                LoadPercent = 100d * stream.Position / stream.Length;
+                LoadPercent = 100d * fileStream.Position / fileStream.Length;
                 ProcessByLevel(reader.Entry);
             }
         }
         else
         {
-            var archive = ArchiveFactory.Open(stream, new ChardetReaderOptions());
+            var archive = ArchiveFactory.Open(fileStream, new ChardetReaderOptions());
 
             _type = archive.Type.ToString();
 
@@ -163,7 +163,7 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
             {
                 if (_disposed)
                     return;
-                LoadPercent = 100d * stream.Position / stream.Length;
+                LoadPercent = 100d * fileStream.Position / fileStream.Length;
                 ProcessByLevel(entry);
             }
         }

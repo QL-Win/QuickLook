@@ -27,7 +27,7 @@ internal static class LottieExtractor
 {
     public static string GetJsonContent(string path)
     {
-        using var fileStream = File.OpenRead(path);
+        using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         using var zipArchive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
         var manifestEntry = zipArchive.GetEntry("manifest.json");
