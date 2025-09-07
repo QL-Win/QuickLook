@@ -34,6 +34,7 @@ public class Plugin : IViewer
         ".xls", ".xlsx", ".xlsm", ".xlsb", ".ods",
         ".ppt", ".pptx", ".odp",
         ".vsd", ".vsdx",
+        ".ofd",
     ];
 
     private PreviewPanel _panel;
