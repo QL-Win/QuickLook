@@ -52,8 +52,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="HelixToolkit" Version="2.27.0" />
-        <PackageReference Include="HelixToolkit.Wpf" Version="2.27.0" />
+        <PackageReference Include="HelixToolkit" Version="2.27.3" />
+        <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" />
         <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
         <PackageReference Include="PcdSharp" Version="1.0.1" />
     </ItemGroup>

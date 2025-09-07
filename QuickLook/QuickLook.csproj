@@ -102,10 +102,10 @@
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="WPF-UI.Violeta" Version="4.0.3.2">
+        <PackageReference Include="WPF-UI.Violeta" Version="4.0.3.6">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Lib.Harmony" Version="2.3.6">
+        <PackageReference Include="Lib.Harmony" Version="2.4.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="UnblockZoneIdentifier" Version="1.0.0">

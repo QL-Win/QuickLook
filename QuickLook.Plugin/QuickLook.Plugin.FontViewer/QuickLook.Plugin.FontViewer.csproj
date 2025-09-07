@@ -71,9 +71,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FreeTypeSharp" Version="3.0.0" />
+        <PackageReference Include="FreeTypeSharp" Version="3.0.1" />
         <PackageReference Include="QuickLook.Typography.OpenFont" Version="1.0.1" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3351.48">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3405.78">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

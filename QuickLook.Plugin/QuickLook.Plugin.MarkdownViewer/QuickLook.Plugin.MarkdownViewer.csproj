@@ -59,9 +59,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="UTF.Unknown" Version="2.6.0" />
         <Reference Include="WindowsBase" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3351.48">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3405.78">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

@@ -53,7 +53,7 @@
 
     <ItemGroup>
         <PackageReference Include="PureSharpCompress" Version="0.40.0" />
-        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="UTF.Unknown" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
