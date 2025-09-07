@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace QuickLook.Plugin.FontViewer;
 
@@ -34,6 +35,7 @@ public class WebfontPanel : WebpagePanel
     protected const string _resourcePrefix = "QuickLook.Plugin.FontViewer.Resources.";
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
     protected byte[] _homePage;
+    protected ObservableFileStream _fontStream = null;
 
     static WebfontPanel()
     {
@@ -153,10 +155,11 @@ public class WebfontPanel : WebpagePanel
 
                     if (File.Exists(localPath))
                     {
-                        var fileStream = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                        var fileStream = new ObservableFileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                             fileStream, 200, "OK", MimeTypes.GetContentType());
                         args.Response = response;
+                        _fontStream = fileStream; // Only the font request will set this
                     }
                 }
             }
@@ -166,6 +169,19 @@ public class WebfontPanel : WebpagePanel
             // We don't need to feel burdened by any exceptions
             Debug.WriteLine(e);
         }
+    }
+
+    public bool WaitForFontSent()
+    {
+        bool timeout = SpinWait.SpinUntil(
+            () => _fontStream is not null && _fontStream.IsEndOfStream,
+            TimeSpan.FromSeconds(1.5d) // The prediction is MAX 100MB
+        );
+
+        // Only when the `IsEndOfStream` is true
+        // Delay 15ms per MB for webview2 to render the font
+        if (timeout) Thread.Sleep(15 * (int)(_fontStream.Position / 1_048_576));
+        return timeout;
     }
 
     public static bool ContainsKey(string key)

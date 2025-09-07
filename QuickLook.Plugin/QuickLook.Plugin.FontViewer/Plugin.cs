@@ -19,6 +19,7 @@ using QuickLook.Common.Plugin;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace QuickLook.Plugin.FontViewer;
@@ -52,7 +53,12 @@ public class Plugin : IViewer
 
         context.ViewerContent = _panel;
         context.Title = Path.GetFileName(path);
-        context.IsBusy = false;
+
+        _ = Task.Run(() =>
+        {
+            _ = _panel.WaitForFontSent();
+            context.IsBusy = false;
+        });
     }
 
     public void Cleanup()
