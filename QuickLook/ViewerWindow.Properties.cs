@@ -22,12 +22,13 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 
 namespace QuickLook;
 
 public partial class ViewerWindow : INotifyPropertyChanged
 {
-    private readonly ResourceDictionary _darkDict = new ResourceDictionary
+    private readonly ResourceDictionary _darkDict = new()
     {
         Source = new Uri("pack://application:,,,/QuickLook.Common;component/Styles/MainWindowStyles.Dark.xaml")
     };
@@ -49,6 +50,8 @@ public partial class ViewerWindow : INotifyPropertyChanged
     public IViewer Plugin { get; private set; }
     public ContextObject ContextObject { get; private set; }
     public Themes CurrentTheme { get; private set; }
+
+    public ICommand CloseCommand { get; private set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
 

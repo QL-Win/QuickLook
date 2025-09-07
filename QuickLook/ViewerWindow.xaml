@@ -6,7 +6,10 @@
         xmlns:converters="clr-namespace:QuickLook.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:glassLayer="clr-namespace:QuickLook.Controls.GlassLayer"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:vio="http://schemas.lepo.co/wpfui/2022/xaml/violeta"
         x:Name="mainWindow"
         Title="QuickLook"
         MinWidth="400"
@@ -122,15 +125,24 @@
                             DockPanel.Dock="Right"
                             Style="{StaticResource CaptionButtonStyle}"
                             ToolTip="Reload" />
-                    <!--<Button x:Name="buttonOpen" DockPanel.Dock="Right"
-                            Style="{StaticResource CaptionTextButtonStyle}"
-                            Visibility="{Binding ActualWidth, ElementName=windowCaptionContainer, Converter={StaticResource WidthToVisibilityCollapsedConverter}}">
-                        <Button.Content>
-                            <TextBlock x:Name="buttonOpenText" VerticalAlignment="Center">
-                                Open with <Bold>AppName</Bold>
-                            </TextBlock>
-                        </Button.Content>
-                    </Button>-->
+                    <Button x:Name="buttonMore"
+                            Content="&#xE712;"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource CaptionButtonStyle}"
+                            ToolTip="More">
+                        <Button.ContextMenu>
+                            <ContextMenu FontSize="12">
+                                <MenuItem Command="{Binding OpenSettingsFileFolderCommand}" Header="SettingsFile">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.OpenLocal}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                        <i:Interaction.Behaviors>
+                            <controls:LeftContextMenuBehavior />
+                        </i:Interaction.Behaviors>
+                    </Button>
                     <Button x:Name="buttonTop"
                             DockPanel.Dock="Left"
                             Tag="Auto"

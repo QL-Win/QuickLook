@@ -116,6 +116,7 @@ public partial class ViewerWindow : Window
         buttonOpenWith.ToolTip = TranslationHelper.Get("MW_OpenWithMenu");
         buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
         buttonReload.ToolTip = TranslationHelper.Get("MW_Reload", failsafe: "Reload");
+        buttonMore.ToolTip = TranslationHelper.Get("MW_More", failsafe: "More");
     }
 
     public new void Close()
