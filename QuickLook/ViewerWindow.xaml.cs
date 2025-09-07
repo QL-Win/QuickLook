@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -110,6 +111,24 @@ public partial class ViewerWindow : Window
 
         buttonReload.Visibility = SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
 
+        moreItemCopyAsPath.Click += (_, _) =>
+        {
+            try
+            {
+                Clipboard.SetText(_path);
+                Toast.Success(TranslationHelper.Get("InfoPanelMoreItem_CopySucc"));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        };
+
+        moreItemOpenSettings.Click += (_, _) =>
+        {
+            Toast.Warning("Coming soon...");
+        };
+
         // Set UI translations
         buttonTop.ToolTip = TranslationHelper.Get("MW_StayTop");
         buttonPin.ToolTip = TranslationHelper.Get("MW_PreventClosing");
@@ -117,6 +136,7 @@ public partial class ViewerWindow : Window
         buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
         buttonReload.ToolTip = TranslationHelper.Get("MW_Reload", failsafe: "Reload");
         buttonMore.ToolTip = TranslationHelper.Get("MW_More", failsafe: "More");
+        moreItemCopyAsPath.Header = TranslationHelper.Get("InfoPanelMoreItem_CopyAsPath");
     }
 
     public new void Close()

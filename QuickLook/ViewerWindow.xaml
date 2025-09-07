@@ -132,9 +132,17 @@
                             ToolTip="More">
                         <Button.ContextMenu>
                             <ContextMenu FontSize="12">
-                                <MenuItem Command="{Binding OpenSettingsFileFolderCommand}" Header="SettingsFile">
+                                <MenuItem x:Name="moreItemCopyAsPath">
                                     <MenuItem.Icon>
-                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.OpenLocal}" />
+                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.Copy}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator Visibility="Collapsed" />
+                                <MenuItem x:Name="moreItemOpenSettings"
+                                          Header="Settings"
+                                          Visibility="Collapsed">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.Settings}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
