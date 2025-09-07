@@ -35,19 +35,7 @@ internal partial class TrayIconManager : IDisposable
 
     private readonly TrayIconHost _icon;
 
-    private readonly TrayMenuItem _itemAutorun =
-        new()
-        {
-            Header = TranslationHelper.Get("Icon_RunAtStartup"),
-            Command = new RelayCommand(() =>
-            {
-                if (AutoStartupHelper.IsAutorun())
-                    AutoStartupHelper.RemoveAutorunShortcut();
-                else
-                    AutoStartupHelper.CreateAutorunShortcut();
-            }),
-            IsEnabled = !App.IsUWP,
-        };
+    private readonly TrayMenuItem _itemAutorun = null!;
 
     private TrayIconManager()
     {
@@ -79,7 +67,18 @@ internal partial class TrayIconManager : IDisposable
                     Header = TranslationHelper.Get("Icon_OpenDataFolder"),
                     Command = new RelayCommand(() => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
                 },
-                _itemAutorun,
+                _itemAutorun = new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_RunAtStartup"),
+                    Command = new RelayCommand(() =>
+                    {
+                        if (AutoStartupHelper.IsAutorun())
+                            AutoStartupHelper.RemoveAutorunShortcut();
+                        else
+                            AutoStartupHelper.CreateAutorunShortcut();
+                    }),
+                    IsEnabled = !App.IsUWP,
+                },
                 new TrayMenuItem()
                 {
                     Header = TranslationHelper.Get("Icon_Restart"),
@@ -94,7 +93,10 @@ internal partial class TrayIconManager : IDisposable
             IsVisible = SettingHelper.Get("ShowTrayIcon", true)
         };
 
-        _icon.RightDown += (sender, e) => { _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun(); };
+        _icon.RightDown += (_, _) =>
+        {
+            _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun();
+        };
     }
 
     public void Dispose()
