@@ -53,17 +53,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.0\runtimes\win-x64\native\freetype.dll">
+        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.1\runtimes\win-x64\native\freetype.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)win-x64\</DestinationFolder>
             <Link>runtimes\win-x64\freetype.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.0\runtimes\win-x86\native\freetype.dll">
+        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.1\runtimes\win-x86\native\freetype.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)win-x86\</DestinationFolder>
             <Link>runtimes\win-x86\freetype.dll</Link>
         </Content>
-        <!--<Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.0\runtimes\win-arm64\native\freetype.dll">
+        <!--<Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.0.1\runtimes\win-arm64\native\freetype.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)win-arm64\</DestinationFolder>
             <Link>runtimes\win-arm64\freetype.dll</Link>
