@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="XML" extensions=".xml;.xsl;.xslt;.xsd;.syn;.lang;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.resx;.user;.ilproj;.booproj;.build;.xfrm;.targets;.axaml;.xaml;.xpt;.xft;.map;.wsdl;.disco;.ascx;.atom;.bpmn;.cpt;.csl;.props;.dotsettings">
+<SyntaxDefinition name="XML" extensions=".xml;.xsl;.xslt;.xsd;.syn;.lang;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.resx;.user;.ilproj;.booproj;.build;.xfrm;.targets;.axaml;.xaml;.xpt;.xft;.map;.wsdl;.disco;.ascx;.atom;.bpmn;.cpt;.csl;.props;.dotsettings;.slnx">
     
     <Environment> 
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
