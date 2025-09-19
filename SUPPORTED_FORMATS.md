@@ -1,0 +1,186 @@
+
+
+## Supported Formats in QuickLook
+
+### Text files
+- `.txt` (Plain text file)
+- `.rtf` (Rich Text Format)
+- Most other plain text files
+
+### Image files
+- `.apng` (Animated PNG)
+- `.ari`, `.arw` (Sony RAW image)
+- `.avif` (AV1 Image File Format)
+- `.ani` (Animated cursor)
+- `.bay` (Casio RAW image)
+- `.bmp` (Bitmap image)
+- `.cap` (Phase One RAW image)
+- `.cr2`, `.cr3`, `.crw` (Canon RAW image)
+- `.cur` (Windows cursor)
+- `.dcr`, `.dcs`, `.drf` (Kodak RAW image)
+- `.dds` (DirectDraw Surface)
+- `.dng` (Digital Negative RAW)
+- `.eip` (Capture One Enhanced Image Package)
+- `.emf` (Enhanced Metafile)
+- `.erf` (Epson RAW image)
+- `.exr` (OpenEXR image)
+- `.fff` (Imacon/Hasselblad RAW)
+- `.gif` (Graphics Interchange Format)
+- `.hdr` (High Dynamic Range image)
+- `.heic`, `.heif` (High Efficiency Image Format)
+- `.ico`, `.icon` (Windows icon)
+- `.icns` (macOS icon)
+- `.iiq` (Phase One RAW image)
+- `.jfif` (JPEG File Interchange Format)
+- `.jp2`, `.j2k`, `.jpf`, `.jpx`, `.jpm` (JPEG 2000)
+- `.jpeg`, `.jpg` (JPEG image)
+- `.jxl` (JPEG XL)
+- `.jxr` (JPEG XR)
+- `.k25`, `.kdc` (Kodak RAW image)
+- `.mdc` (MagicDraw UML)
+- `.mef` (Mamiya RAW image)
+- `.mos` (Leaf RAW image)
+- `.mrw` (Minolta RAW image)
+- `.mj2` (Motion JPEG 2000)
+- `.miff` (Magick Image File Format)
+- `.nef`, `.nrw` (Nikon RAW image)
+- `.obm` (Open BIM)
+- `.orf` (Olympus RAW image)
+- `.pbm`, `.pgm`, `.pnm`, `.ppm` (Portable bitmap/graymap/pixmap)
+- `.pcx` (Paintbrush image)
+- `.pef` (Pentax RAW image)
+- `.png` (Portable Network Graphics)
+- `.psb`, `.psd` (Adobe Photoshop)
+- `.ptx` (Pentax RAW image)
+- `.pxn` (PixelNet image)
+- `.qoi` (Quite OK Image)
+- `.r3d` (REDCODE RAW)
+- `.raf` (Fujifilm RAW image)
+- `.raw` (Generic RAW image)
+- `.rw2`, `.rwl`, `.rwz` (Panasonic/Leica RAW image)
+- `.sr2`, `.srf`, `.srw` (Sony RAW image)
+- `.svg`, `.svgz` (Scalable Vector Graphics)
+- `.tga` (Truevision TGA)
+- `.tif`, `.tiff` (Tagged Image File Format)
+- `.wdp` (Windows Media Photo)
+- `.webp` (WebP image)
+- `.wmf` (Windows Metafile)
+- `.x3f` (Sigma RAW image)
+- `.xcf` (GIMP image)
+- `.xbm`, `.xpm` (X11 bitmap/pixmap)
+
+### PDF files
+- `.pdf` (Portable Document Format)
+
+### Archive files
+- `.7z` (7-Zip archive)
+- `.bz2` (Bzip2 archive)
+- `.cb7`, `.cbr`, `.cbt`, `.cbz` (Comic book archive)
+- `.crx` (Chrome extension)
+- `.gz` (Gzip archive)
+- `.jar` (Java archive)
+- `.lz` (Lzip archive)
+- `.nupkg` (NuGet package)
+- `.rar` (RAR archive)
+- `.tar`, `.tgz` (TAR archive)
+- `.vsix` (Visual Studio extension)
+- `.xz` (XZ archive)
+- `.zip` (ZIP archive)
+
+### Markdown files
+- `.md`, `.markdown` (Markdown)
+- `.mdx` (MDX: Markdown + JSX)
+- `.mmd` (MultiMarkdown)
+- `.mkd`, `.mdwn`, `.mdown` (Markdown variants)
+- `.mdc` (Cursor AI Markdown)
+- `.qmd` (Quarto Markdown)
+- `.rmd`, `.rmarkdown` (R Markdown)
+- `.apib` (API Blueprint)
+- `.mdtxt`, `.mdtext` (Other Markdown variants)
+
+### CSV/TSV files
+- `.csv` (Comma-separated values)
+- `.tsv` (Tab-separated values)
+
+### Font files
+- `.ttf` (TrueType Font)
+- `.otf` (OpenType Font)
+- `.woff`, `.woff2` (Web Open Font Format)
+- `.ttc` (TrueType Collection)
+
+### Office files
+- `.doc`, `.docx`, `.docm` (Microsoft Word)
+- `.odt` (OpenDocument Text)
+- `.xls`, `.xlsx`, `.xlsm`, `.xlsb` (Microsoft Excel)
+- `.ods` (OpenDocument Spreadsheet)
+- `.ppt`, `.pptx`, `.odp` (Microsoft PowerPoint / OpenDocument Presentation)
+- `.vsd`, `.vsdx` (Microsoft Visio)
+
+### Video/Audio files
+- Most common video formats (e.g., `.mp4`, `.mkv`, `.avi`, `.mov`, `.wmv`, `.flv`, `.webm`, etc.)
+- Most common audio formats (e.g., `.mp3`, `.flac`, `.wav`, `.aac`, `.ogg`, `.m4a`, etc.)
+
+### HTML/Web files
+- `.mht`, `.mhtml` (MHTML web archive)
+- `.htm`, `.html` (HTML file)
+- `.url` (Internet shortcut, http/https)
+
+### Mail files
+- `.eml` (Email message)
+- `.msg` (Outlook message)
+
+### Thumbnail/Design files
+- `.cdr` (CorelDRAW project file)
+- `.fig` (Figma project file)
+- `.kra` (Krita project file)
+- `.pdn` (Paint.NET project file)
+- `.pip`, `.pix` (Pixso project file)
+- `.sketch` (Sketch project file)
+- `.xd` (Adobe XD project file)
+- `.xmind` (XMind mind map file)
+
+### ELF/Mach-O/UImage files
+- `.axf` (ARM Executable)
+- `.bin` (Binary file)
+- `.elf` (Executable and Linkable Format)
+- `.o`, `.out` (Object file)
+- `.prx` (PSP executable)
+- `.puff` (Puff executable)
+- `.ko`, `.mod` (Linux kernel module)
+- `.so` (Shared object)
+- `.uimage` (U-Boot image)
+- `.dylib` (macOS dynamic library)
+
+### PE (Portable Executable) files
+- `.exe` (Windows executable)
+- `.sys` (Windows system file)
+- `.scr` (Windows screensaver)
+- `.ocx` (ActiveX control)
+- `.cpl` (Control panel item)
+- `.bpl` (Borland package library)
+- `.dll` (Dynamic-link library)
+- `.ax` (DirectShow filter)
+- `.drv` (Driver file)
+- `.vxd` (Virtual device driver)
+- `.mui` (Multilingual User Interface)
+- `.mun` (Windows resource file)
+- `.tlb` (Type library)
+- `.efi` (Extensible Firmware Interface)
+- `.mz` (DOS executable)
+
+### App Installer files
+- `.apk` (Android Package)
+- `.aab` (Android App Bundle)
+- `.appx`, `.appxbundle` (Windows AppX installer)
+- `.msi` (Windows Installer)
+- `.msix`, `.msixbundle` (Windows MSIX installer)
+- `.dmg` (macOS Disk Image)
+- `.ipa` (iOS App Package)
+- `.hap` (HarmonyOS App Package)
+- `.deb` (Debian package)
+- `.appimage` (Linux AppImage)
+- `.rpm` (Red Hat Package Manager)
+- `.wgt`, `.wgtu` (UniApp Widget)
+
+### Plugin Installer files
+- `.qlplugin` (QuickLook plugin package)
