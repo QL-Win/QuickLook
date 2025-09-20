@@ -69,7 +69,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         _context = context;
 
         mediaElement.MediaUriPlayer.LAVFilterDirectory =
-            IntPtr.Size == 8 ? "LAVFilters-x64\\" : "LAVFilters-x86\\";
+            IntPtr.Size == 8 ? @"LAVFilters-x64\" : @"LAVFilters-x86\";
 
         //ShowViedoControlContainer(null, null);
         viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
@@ -83,21 +83,21 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         buttonPlayPause.Click += TogglePlayPause;
         buttonLoop.Click += ToggleShouldLoop;
-        buttonTime.Click += (sender, e) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
-        buttonMute.Click += (sender, e) => volumeSliderLayer.Visibility = Visibility.Visible;
-        volumeSliderLayer.MouseDown += (sender, e) => volumeSliderLayer.Visibility = Visibility.Collapsed;
+        buttonTime.Click += (_, _) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
+        buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
+        volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
 
-        sliderProgress.PreviewMouseDown += (sender, e) =>
+        sliderProgress.PreviewMouseDown += (_, e) =>
         {
             _wasPlaying = mediaElement.IsPlaying;
             mediaElement.Pause();
         };
-        sliderProgress.PreviewMouseUp += (sender, e) =>
+        sliderProgress.PreviewMouseUp += (_, _) =>
         {
             if (_wasPlaying) mediaElement.Play();
         };
 
-        PreviewMouseWheel += (sender, e) => ChangeVolume((double)e.Delta / 120 * 0.04);
+        PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
     }
 
     private partial void LoadAndInsertGlassLayer();
@@ -285,22 +285,30 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             metaArtists.Text = artist;
             metaAlbum.Text = album;
 
-            var coverData = info.Get(StreamKind.General, 0, "Cover_Data");
-            if (!string.IsNullOrEmpty(coverData))
+            // Extract cover art
+            try
             {
-                var coverBytes = Convert.FromBase64String
-                (
-                    coverData.Contains(' ') // MediaInfo may will return multiple covers
-                        ? coverData.Split(" / ")[0] // Get the first cover only
-                        : coverData
-                );
-                using var ms = new MemoryStream(coverBytes);
-
-                CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                var coverData = info.Get(StreamKind.General, 0, "Cover_Data").Trim();
+                if (!string.IsNullOrEmpty(coverData))
+                {
+                    var coverBytes = Convert.FromBase64String
+                    (
+                        coverData.Contains(' ') // MediaInfo may will return multiple covers
+                            ? coverData.Split(" / ")[0] // Get the first cover only
+                            : coverData
+                    );
+                    using var ms = new MemoryStream(coverBytes);
+                    CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Debug.WriteLine(e);
             metaTitle.Text = Path.GetFileName(path);
             metaArtists.Text = metaAlbum.Text = string.Empty;
         }

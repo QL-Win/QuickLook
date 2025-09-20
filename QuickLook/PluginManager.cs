@@ -36,7 +36,7 @@ internal class PluginManager
     private PluginManager()
     {
         LoadPlugins(App.UserPluginPath);
-        LoadPlugins(Path.Combine(App.AppPath, "QuickLook.Plugin\\"));
+        LoadPlugins(Path.Combine(App.AppPath, @"QuickLook.Plugin\"));
         InitLoadedPlugins();
     }
 
