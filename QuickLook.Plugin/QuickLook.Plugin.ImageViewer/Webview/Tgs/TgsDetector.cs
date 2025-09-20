@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+// Copyright © 2017-2025 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -15,20 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using System.Collections.Generic;
 using System.IO;
 
-namespace QuickLook.Plugin.ImageViewer.Webview.Lottie;
+namespace QuickLook.Plugin.ImageViewer.Webview.Tgs;
 
-internal static class LottieDetector
+internal static class TgsDetector
 {
-    public static bool IsVaild(string path)
+    public static bool IsValid(string path)
     {
         try
         {
-            var jsonString = File.ReadAllText(path);
+            // Extract JSON content from gzipped TGS file
+            var jsonString = TgsExtractor.GetJsonContent(path);
 
-            // No exception will be thrown here
+            // Use Lottie parser to validate the JSON structure
             var jsonLottie = LottieParser.Parse<Dictionary<string, object>>(jsonString);
 
             if (jsonLottie != null
@@ -43,7 +45,7 @@ internal static class LottieDetector
         }
         catch
         {
-            // If any exception occurs, assume it's not a valid Lottie file
+            // If any exception occurs, assume it's not a valid TGS file
         }
 
         return false;

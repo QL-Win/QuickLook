@@ -20,6 +20,7 @@ using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using QuickLook.Plugin.ImageViewer.Webview.Svga;
+using QuickLook.Plugin.ImageViewer.Webview.Tgs;
 using System;
 using System.IO;
 using System.Windows;
@@ -36,7 +37,8 @@ internal static class WebHandler
         return Path.GetExtension(path).ToLower() switch
         {
             ".svg" => SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"),
-            ".svga" or ".lottie" or ".tgs" => true,
+            ".svga" or ".lottie" => true,
+            ".tgs" => TgsDetector.IsValid(path), // Check for TGS files
             ".json" => LottieDetector.IsVaild(path), // Check for Lottie files
             _ => false,
         };
@@ -62,7 +64,8 @@ internal static class WebHandler
             {
                 ".svg" => new SvgMetaProvider(path),
                 ".svga" => new SvgaMetaProvider(path),
-                ".lottie" or ".tgs" or ".json" => new LottieMetaProvider(path),
+                ".lottie" or ".json" => new LottieMetaProvider(path),
+                ".tgs" => new TgsMetaProvider(path),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -100,7 +103,8 @@ internal static class WebHandler
             {
                 ".svg" => new SvgImagePanel(),
                 ".svga" => new SvgaImagePanel(metaWeb),
-                ".lottie" or ".tgs" or ".json" => new LottieImagePanel(),
+                ".lottie" or ".json" => new LottieImagePanel(),
+                ".tgs" => new TgsImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 
