@@ -1,4 +1,21 @@
-﻿using QuickLook.Common.ExtensionMethods;
+﻿// Copyright © 2017-2025 QL-Win Contributors
+//
+// This file is part of QuickLook program.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Plugin.VideoViewer.Extensions;
 using System;
 using System.Diagnostics;
@@ -51,6 +68,9 @@ internal static class CoverDataExtractor
     /// <returns><see cref="BitmapSource"/> if successful; otherwise, null.</returns>
     public static BitmapSource Extract(byte[] coverBytes)
     {
+        // Supported formats: JPEG, PNG, BMP, GIF (first frame only), TIFF (first page only), ICO.
+        // Not supported: WebP, HEIC/HEIF, AVIF, JPEG 2000, animated WebP/APNG, and other raw image formats (e.g., CR2, NEF).
+
         using var ms = new MemoryStream(coverBytes);
 
         try
