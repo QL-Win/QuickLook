@@ -22,7 +22,6 @@ using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.VideoViewer.AudioTrack;
-using QuickLook.Plugin.VideoViewer.Extensions;
 using QuickLook.Plugin.VideoViewer.LyricTrack;
 using System;
 using System.ComponentModel;
@@ -286,25 +285,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             metaAlbum.Text = album;
 
             // Extract cover art
-            try
-            {
-                var coverData = info.Get(StreamKind.General, 0, "Cover_Data").Trim();
-                if (!string.IsNullOrEmpty(coverData))
-                {
-                    var coverBytes = Convert.FromBase64String
-                    (
-                        coverData.Contains(' ') // MediaInfo may will return multiple covers
-                            ? coverData.Split(" / ")[0] // Get the first cover only
-                            : coverData
-                    );
-                    using var ms = new MemoryStream(coverBytes);
-                    CoverArt = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
+            var coverData = info.Get(StreamKind.General, 0, "Cover_Data");
+            var coverBytes = CoverDataExtractor.Extract(coverData);
+            CoverArt = CoverDataExtractor.Extract(coverBytes);
         }
         catch (Exception e)
         {
