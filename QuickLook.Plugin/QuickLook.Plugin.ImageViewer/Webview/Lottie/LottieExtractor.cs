@@ -27,6 +27,15 @@ internal static class LottieExtractor
 {
     public static string GetJsonContent(string path)
     {
+        var ext = Path.GetExtension(path).ToLower();
+        
+        if (ext == ".tgs")
+        {
+            // TGS files are gzipped Lottie JSON files
+            return TgsExtractor.GetJsonContent(path);
+        }
+        
+        // Handle .lottie files (ZIP archives)
         using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         using var zipArchive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 

@@ -36,7 +36,7 @@ internal static class WebHandler
         return Path.GetExtension(path).ToLower() switch
         {
             ".svg" => SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"),
-            ".svga" or ".lottie" => true,
+            ".svga" or ".lottie" or ".tgs" => true,
             ".json" => LottieDetector.IsVaild(path), // Check for Lottie files
             _ => false,
         };
@@ -47,7 +47,7 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".json")
+         || ext == ".lottie" || ext == ".tgs" || ext == ".json")
         {
             if (ext == ".svg")
             {
@@ -62,7 +62,7 @@ internal static class WebHandler
             {
                 ".svg" => new SvgMetaProvider(path),
                 ".svga" => new SvgaMetaProvider(path),
-                ".lottie" or ".json" => new LottieMetaProvider(path),
+                ".lottie" or ".tgs" or ".json" => new LottieMetaProvider(path),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -85,7 +85,7 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".json")
+         || ext == ".lottie" || ext == ".tgs" || ext == ".json")
         {
             if (ext == ".svg")
             {
@@ -100,7 +100,7 @@ internal static class WebHandler
             {
                 ".svg" => new SvgImagePanel(),
                 ".svga" => new SvgaImagePanel(metaWeb),
-                ".lottie" or ".json" => new LottieImagePanel(),
+                ".lottie" or ".tgs" or ".json" => new LottieImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 

@@ -26,7 +26,18 @@ internal static class LottieDetector
     {
         try
         {
-            var jsonString = File.ReadAllText(path);
+            string jsonString;
+            var ext = Path.GetExtension(path).ToLower();
+            
+            if (ext == ".tgs")
+            {
+                // TGS files are gzipped Lottie JSON files
+                jsonString = TgsExtractor.GetJsonContent(path);
+            }
+            else
+            {
+                jsonString = File.ReadAllText(path);
+            }
 
             // No exception will be thrown here
             var jsonLottie = LottieParser.Parse<Dictionary<string, object>>(jsonString);
