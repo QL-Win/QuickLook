@@ -38,8 +38,8 @@ internal static class WebHandler
         {
             ".svg" => SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"),
             ".svga" or ".lottie" => true,
-            ".tgs" => TgsDetector.IsValid(path), // Check for TGS files
-            ".json" => LottieDetector.IsVaild(path), // Check for Lottie files
+            ".tgs" => TgsDetector.IsValidFile(path), // Check for TGS files
+            ".json" => LottieDetector.IsVaildFile(path), // Check for Lottie files
             _ => false,
         };
     }
@@ -88,7 +88,8 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".tgs" || ext == ".json")
+         || ext == ".lottie" || ext == ".json"
+         || ext == ".tgs")
         {
             if (ext == ".svg")
             {

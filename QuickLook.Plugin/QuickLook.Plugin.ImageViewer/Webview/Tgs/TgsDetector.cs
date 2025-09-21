@@ -16,32 +16,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
-using System.Collections.Generic;
-using System.IO;
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Tgs;
 
 internal static class TgsDetector
 {
-    public static bool IsValid(string path)
+    public static bool IsValidFile(string path)
     {
         try
         {
             // Extract JSON content from gzipped TGS file
             var jsonString = TgsExtractor.GetJsonContent(path);
-
-            // Use Lottie parser to validate the JSON structure
-            var jsonLottie = LottieParser.Parse<Dictionary<string, object>>(jsonString);
-
-            if (jsonLottie != null
-             && jsonLottie.ContainsKey("v")
-             && jsonLottie.ContainsKey("fr")
-             && jsonLottie.ContainsKey("ip")
-             && jsonLottie.ContainsKey("op")
-             && jsonLottie.ContainsKey("layers"))
-            {
-                return true;
-            }
+            return IsVaildContent(jsonString);
         }
         catch
         {
@@ -50,4 +36,7 @@ internal static class TgsDetector
 
         return false;
     }
+
+    public static bool IsVaildContent(string jsonString)
+        => LottieDetector.IsVaildContent(jsonString);
 }

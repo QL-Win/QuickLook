@@ -22,12 +22,25 @@ namespace QuickLook.Plugin.ImageViewer.Webview.Lottie;
 
 internal static class LottieDetector
 {
-    public static bool IsVaild(string path)
+    public static bool IsVaildFile(string path)
     {
         try
         {
             var jsonString = File.ReadAllText(path);
+            return IsVaildContent(jsonString);
+        }
+        catch
+        {
+            // If any exception occurs, assume it's not a valid Lottie file
+        }
 
+        return false;
+    }
+
+    public static bool IsVaildContent(string jsonString)
+    {
+        try
+        {
             // No exception will be thrown here
             var jsonLottie = LottieParser.Parse<Dictionary<string, object>>(jsonString);
 
