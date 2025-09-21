@@ -20,6 +20,7 @@ using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using QuickLook.Plugin.ImageViewer.Webview.Svga;
+using QuickLook.Plugin.ImageViewer.Webview.Tgs;
 using System;
 using System.IO;
 using System.Windows;
@@ -37,7 +38,8 @@ internal static class WebHandler
         {
             ".svg" => SettingHelper.Get("RenderSvgWeb", true, "QuickLook.Plugin.ImageViewer"),
             ".svga" or ".lottie" => true,
-            ".json" => LottieDetector.IsVaild(path), // Check for Lottie files
+            ".tgs" => TgsDetector.IsValidFile(path), // Check for TGS files
+            ".json" => LottieDetector.IsVaildFile(path), // Check for Lottie files
             _ => false,
         };
     }
@@ -47,7 +49,7 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".json")
+         || ext == ".lottie" || ext == ".tgs" || ext == ".json")
         {
             if (ext == ".svg")
             {
@@ -63,6 +65,7 @@ internal static class WebHandler
                 ".svg" => new SvgMetaProvider(path),
                 ".svga" => new SvgaMetaProvider(path),
                 ".lottie" or ".json" => new LottieMetaProvider(path),
+                ".tgs" => new TgsMetaProvider(path),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -85,7 +88,8 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".json")
+         || ext == ".lottie" || ext == ".json"
+         || ext == ".tgs")
         {
             if (ext == ".svg")
             {
@@ -101,6 +105,7 @@ internal static class WebHandler
                 ".svg" => new SvgImagePanel(),
                 ".svga" => new SvgaImagePanel(metaWeb),
                 ".lottie" or ".json" => new LottieImagePanel(),
+                ".tgs" => new TgsImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 

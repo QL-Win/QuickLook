@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+// Copyright © 2017-2025 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -15,50 +15,48 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 
-namespace QuickLook.Plugin.ImageViewer.Webview.Lottie;
+namespace QuickLook.Plugin.ImageViewer.Webview.Tgs;
 
-internal static class LottieDetector
+public class TgsMetaProvider(string path) : IWebMetaProvider
 {
-    public static bool IsVaildFile(string path)
+    private readonly string _path = path;
+    private Size _size = Size.Empty;
+
+    public Size GetSize()
     {
-        try
+        if (_size != Size.Empty)
         {
-            var jsonString = File.ReadAllText(path);
-            return IsVaildContent(jsonString);
-        }
-        catch
-        {
-            // If any exception occurs, assume it's not a valid Lottie file
+            return _size;
         }
 
-        return false;
-    }
+        if (!File.Exists(_path))
+        {
+            return _size;
+        }
 
-    public static bool IsVaildContent(string jsonString)
-    {
         try
         {
-            // No exception will be thrown here
+            var jsonString = TgsExtractor.GetJsonContent(_path);
             var jsonLottie = LottieParser.Parse<Dictionary<string, object>>(jsonString);
 
-            if (jsonLottie != null
-             && jsonLottie.ContainsKey("v")
-             && jsonLottie.ContainsKey("fr")
-             && jsonLottie.ContainsKey("ip")
-             && jsonLottie.ContainsKey("op")
-             && jsonLottie.ContainsKey("layers"))
+            if (jsonLottie.ContainsKey("w")
+             && jsonLottie.ContainsKey("h")
+             && double.TryParse(jsonLottie["w"].ToString(), out double width)
+             && double.TryParse(jsonLottie["h"].ToString(), out double height))
             {
-                return true;
+                return _size = new Size(width, height);
             }
         }
         catch
         {
-            // If any exception occurs, assume it's not a valid Lottie file
+            // That's fine, just return the default size.
         }
 
-        return false;
+        return new Size(800, 600);
     }
 }
