@@ -64,7 +64,7 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = new Size { Width = 800, Height = 800 };
+        context.PreferredSize = new Size { Width = 800, Height = 600 };
     }
 
     public void View(string path, ContextObject context)
