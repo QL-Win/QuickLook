@@ -19,6 +19,8 @@ using QuickLook.Common.Commands;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
@@ -34,10 +36,12 @@ public partial class Plugin
 
     public IEnumerable<IMenuItem> GetMenuItems()
     {
+        string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+
         yield return new MoreMenuItem()
         {
             Icon = "\xea69",
-            Header = "Show Media Info",
+            Header = TranslationHelper.Get("MW_ShowMediaInfo", translationFile),
             MenuItems = null,
             Command = ShowWithMediaInfoCommand,
         };
