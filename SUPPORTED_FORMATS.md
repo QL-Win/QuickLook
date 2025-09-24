@@ -1,6 +1,8 @@
 
 
-## Supported Formats in QuickLook
+## Supported formats in QuickLook
+
+Update not completed yet...
 
 ### Text files
 - `.txt` (Plain text file)
