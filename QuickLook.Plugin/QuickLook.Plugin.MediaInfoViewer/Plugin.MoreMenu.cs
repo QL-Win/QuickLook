@@ -18,24 +18,21 @@
 using QuickLook.Common.Commands;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
-using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
 
-public sealed class MoreMenuProvider
+public partial class Plugin
 {
-    public static Lazy<MoreMenuProvider> Instance { get; set; } = new(() => new());
-
     public ICommand ShowWithMediaInfoCommand { get; }
 
-    public MoreMenuProvider()
+    public Plugin()
     {
         ShowWithMediaInfoCommand = new RelayCommand(ShowWithMediaInfo);
     }
 
-    public IEnumerable<IMenuItem> Get()
+    public IEnumerable<IMenuItem> GetMenuItems()
     {
         yield return new MoreMenuItem()
         {
