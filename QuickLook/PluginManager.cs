@@ -29,7 +29,7 @@ using UnblockZoneIdentifier;
 
 namespace QuickLook;
 
-internal class PluginManager
+public class PluginManager
 {
     private static PluginManager _instance;
 

@@ -17,15 +17,22 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Helpers;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
+using Wpf.Ui.Controls;
+using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace QuickLook;
 
@@ -57,7 +64,7 @@ public partial class ViewerWindow
 
     private void PositionWindow(Size size)
     {
-        // if the window is now now maximized, do not move it
+        // If the window is now now maximized, do not move it
         if (WindowState == WindowState.Maximized)
             return;
 
@@ -70,7 +77,7 @@ public partial class ViewerWindow
 
     private Rect ResizeAndCentreExistingWindow(Size size)
     {
-        // align window just like in macOS ...
+        // Align window just like in macOS ...
         //
         // |10%|    80%    |10%|
         // |---|-----------|---|---
@@ -88,11 +95,11 @@ public partial class ViewerWindow
         var limitPercentX = 0.1 * scale.Horizontal;
         var limitPercentY = 0.1 * scale.Vertical;
 
-        // use absolute pixels for calculation
+        // Use absolute pixels for calculation
         var pxSize = new Size(scale.Horizontal * size.Width, scale.Vertical * size.Height);
         var pxOldRect = this.GetWindowRectInPixel();
 
-        // scale to new size, maintain centre
+        // Scale to new size, maintain centre
         var pxNewRect = Rect.Inflate(pxOldRect,
             (pxSize.Width - pxOldRect.Width) / 2,
             (pxSize.Height - pxOldRect.Height) / 2);
@@ -121,7 +128,7 @@ public partial class ViewerWindow
             pxNewRect.Offset(0,
                 Math.Max(0, desktopRect.Top - pxNewRect.Top) + Math.Min(0, desktopRect.Bottom - pxNewRect.Bottom));
 
-        // return absolute location and relative size
+        // Return absolute location and relative size
         return new Rect(pxNewRect.Location, size);
     }
 
@@ -135,13 +142,13 @@ public partial class ViewerWindow
             desktopRect.X + (desktopRect.Width - pxSize.Width) / 2,
             desktopRect.Y + (desktopRect.Height - pxSize.Height) / 2);
 
-        // return absolute location and relative size
+        // Return absolute location and relative size
         return new Rect(pxLocation, size);
     }
 
     internal void UnloadPlugin()
     {
-        // the focused element will not processed by GC: https://stackoverflow.com/questions/30848939/memory-leak-due-to-window-efectivevalues-retention
+        // The focused element will not processed by GC: https://stackoverflow.com/questions/30848939/memory-leak-due-to-window-efectivevalues-retention
         FocusManager.SetFocusedElement(this, null);
         Keyboard.DefaultRestoreFocusMode =
             RestoreFocusMode.None; // WPF will put the focused item into a "_restoreFocus" list ... omg
@@ -180,10 +187,10 @@ public partial class ViewerWindow
 
         ContextObject.Reset();
 
-        // assign monitor color profile
+        // Assign monitor color profile
         ContextObject.ColorProfileName = DisplayDeviceHelper.GetMonitorColorProfileFromWindow(this);
 
-        // get window size before showing it
+        // Get window size before showing it
         try
         {
             Plugin.Prepare(path, ContextObject);
@@ -194,9 +201,30 @@ public partial class ViewerWindow
             return;
         }
 
+        // Initial the more menu
+        ClearMoreMenuUnpin();
+        foreach (var plugin in PluginManager.GetInstance().LoadedPlugins)
+        {
+            if (plugin == Plugin)
+            {
+                if (Plugin is IMoreMenu moreMenu && moreMenu.MenuItems is not null)
+                {
+                    InsertMoreMenu(moreMenu.MenuItems);
+                }
+                continue;
+            }
+            else
+            {
+                if (plugin is IMoreMenuExtended moreMenu && moreMenu.MenuItems is not null)
+                {
+                    InsertMoreMenu(moreMenu.MenuItems);
+                }
+            }
+        }
+
         SetOpenWithButtonAndPath();
 
-        // revert UI changes
+        // Revert UI changes
         ContextObject.IsBusy = true;
 
         var newHeight = ContextObject.PreferredSize.Height + BorderThickness.Top + BorderThickness.Bottom +
@@ -204,7 +232,7 @@ public partial class ViewerWindow
         var newWidth = ContextObject.PreferredSize.Width + BorderThickness.Left + BorderThickness.Right;
 
         var newSize = new Size(newWidth, newHeight);
-        // if use has adjusted the window size, keep it
+        // If use has adjusted the window size, keep it
         if (_customWindowSize != Size.Empty)
             newSize = _customWindowSize;
         else
@@ -231,7 +259,7 @@ public partial class ViewerWindow
             _autoReloadWatcher.EnableRaisingEvents = true;
         }
 
-        // load plugin, do not block UI
+        // Load plugin, do not block UI
         Dispatcher.BeginInvoke(new Action(() =>
         {
             try
@@ -246,12 +274,79 @@ public partial class ViewerWindow
         DispatcherPriority.Input);
     }
 
+    private void ClearMoreMenuUnpin()
+    {
+        var toRemove = buttonMore.ContextMenu.Items
+            .OfType<FrameworkElement>() // MenuItem and Separator
+            .Where(item => item.Tag is not "PinMenu")
+            .ToArray();
+
+        foreach (var item in toRemove)
+        {
+            buttonMore.ContextMenu.Items.Remove(item);
+        }
+    }
+
+    private void InsertMoreMenu(IEnumerable<IMenuItem> moreMenu)
+    {
+        int count = 0;
+
+        foreach (IMenuItem item in moreMenu)
+        {
+            if (item is null) continue;
+
+            if (!item.IsSeparator)
+            {
+                MenuItem menuItem = new()
+                {
+                    Header = item.Header,
+                    Icon = ResolveIcon(item.Icon),
+                    Visibility = item.IsVisible ? Visibility.Visible : Visibility.Collapsed,
+                    Command = item.Command,
+                };
+
+                buttonMore.ContextMenu.Items.Insert(count++, menuItem);
+            }
+            else
+            {
+                buttonMore.ContextMenu.Items.Insert(count++, new Separator());
+            }
+        }
+
+        if (moreMenu.Any())
+        {
+            buttonMore.ContextMenu.Items.Insert(count++, new Separator());
+        }
+    }
+
+    private object ResolveIcon(object icon)
+    {
+        if (icon is string glyph)
+        {
+            return new FontIcon()
+            {
+                FontFamily = (FontFamily)Application.Current.Resources["SymbolThemeFontFamily"],
+                Glyph = glyph,
+            };
+        }
+        else if (icon is UIElement)
+        {
+            return icon;
+        }
+        else
+        {
+            // Not supported yet
+        }
+
+        return null;
+    }
+
     private void SetOpenWithButtonAndPath()
     {
-        // share icon
+        // Share icon
         buttonShare.Visibility = ShareHelper.IsShareSupported(_path) ? Visibility.Visible : Visibility.Collapsed;
 
-        // open icon
+        // Open icon
         if (Directory.Exists(_path))
         {
             buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_BrowseFolder"), Path.GetFileName(_path));
@@ -265,7 +360,7 @@ public partial class ViewerWindow
             return;
         }
 
-        // not an exe
+        // Not an exe
         var found = FileHelper.GetAssocApplication(_path, out appFriendlyName);
         if (found)
         {
@@ -273,7 +368,7 @@ public partial class ViewerWindow
             return;
         }
 
-        // assoc not found
+        // Assoc not found
         buttonOpen.ToolTip = string.Format(TranslationHelper.Get("MW_Open"), Path.GetFileName(_path));
     }
 

@@ -18,7 +18,9 @@
 using MediaInfoLib;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -26,11 +28,13 @@ using System.Windows.Media;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
 
-public class Plugin : IViewer
+public class Plugin : IViewer, IMoreMenuExtended
 {
     private TextViewerPanel _tvp;
 
     public int Priority => 0;
+
+    public IEnumerable<IMenuItem> MenuItems => MoreMenuProvider.Instance.Value.Get();
 
     public void Init()
     {

@@ -27,7 +27,7 @@ using System.Windows.Threading;
 
 namespace QuickLook;
 
-internal static class PipeMessages
+public static class PipeMessages
 {
     public const string RunAndClose = "QuickLook.App.PipeMessages.RunAndClose";
     public const string Switch = "QuickLook.App.PipeMessages.Switch";
@@ -38,7 +38,7 @@ internal static class PipeMessages
     public const string Quit = "QuickLook.App.PipeMessages.Quit";
 }
 
-internal class PipeServerManager : IDisposable
+public class PipeServerManager : IDisposable
 {
     private static readonly string PipeName = "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value;
     private static PipeServerManager _instance;

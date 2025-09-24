@@ -22,11 +22,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
-using System.Windows;
 
 namespace QuickLook;
 
-internal class ViewWindowManager : IDisposable
+public class ViewWindowManager : IDisposable
 {
     private static ViewWindowManager _instance;
 
@@ -239,7 +238,7 @@ internal class ViewWindowManager : IDisposable
         };
     }
 
-    internal static ViewWindowManager GetInstance()
+    public static ViewWindowManager GetInstance()
     {
         return _instance ??= new ViewWindowManager();
     }
