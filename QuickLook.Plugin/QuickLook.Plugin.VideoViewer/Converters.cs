@@ -30,15 +30,22 @@ public sealed class TimeTickToShortStringConverter : DependencyObject, IValueCon
         if (value == null)
             return "00:00";
 
-        var v = TimeSpan.FromTicks((long)value);
+        try
+        {
+            var v = TimeSpan.FromTicks((long)value);
 
-        var s = string.Empty;
-        if (v.Hours > 0)
-            s += $"{v.Hours:D2}:";
+            var s = string.Empty;
+            if (v.Hours > 0)
+                s += $"{v.Hours:D2}:";
 
-        s += $"{v.Minutes:D2}:{v.Seconds:D2}";
+            s += $"{v.Minutes:D2}:{v.Seconds:D2}";
 
-        return s;
+            return s;
+        }
+        catch
+        {
+            return "00:00";
+        }
     }
 
     object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -53,14 +60,16 @@ public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is double v)
+        if (value is double v && !double.IsNaN(v) && !double.IsInfinity(v))
         {
-            // Clump to range [0, 1]
+            // Clamp to range [0, 1]
             v = Math.Max(0d, Math.Min(v, 1d));
 
             if (v < 0.01d) return Volumes[0];
 
-            return Volumes[1 + (int)(v / 0.34d)];
+            // Calculate index and ensure it's within bounds to prevent IndexOutOfRangeException
+            int index = Math.Min(1 + (int)(v / 0.34d), Volumes.Length - 1);
+            return Volumes[index];
         }
 
         return Volumes[0];
