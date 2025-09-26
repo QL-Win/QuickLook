@@ -33,7 +33,7 @@ public class Plugin : IViewer
         ".gz",
         ".jar",
         ".lz",
-        ".nupkg",
+        ".nupkg", ".snupkg",
         ".rar",
         ".tar", ".tgz",
         ".vsix",
