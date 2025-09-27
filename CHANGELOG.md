@@ -1,3 +1,7 @@
+## 4.2.0
+
+- Add built-in MediaInfoViewer plugin
+
 ## 4.1.1
 
 - Add built-in ThumbnailViewer plugin [#1662](https://github.com/QL-Win/QuickLook/issues/1662)

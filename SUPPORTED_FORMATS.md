@@ -207,7 +207,7 @@ Update not completed yet...
 - `.gz` (Gzip archive)
 - `.jar` (Java archive)
 - `.lz` (Lzip archive)
-- `.nupkg` (NuGet package)
+- `.nupkg`, `.snupkg` (NuGet package)
 - `.rar` (RAR archive)
 - `.tar`, `.tgz` (TAR archive)
 - `.vsix` (Visual Studio extension)
