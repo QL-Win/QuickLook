@@ -34,6 +34,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Encoding = System.Text.Encoding;
 
 namespace QuickLook.Plugin.TextViewer;
 
@@ -184,10 +185,17 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             const int maxLength = 5 * 1024 * 1024;
             const int maxHighlightingLength = (int)(0.5d * 1024 * 1024);
             var buffer = new MemoryStream();
-            bool fileTooLong;
+            bool fileTooLong = false;
 
-            using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            // Read file to memory stream
+            if (FormatDetector.Transfer(path, out string transferred))
             {
+                byte[] bytes = Encoding.UTF8.GetBytes(transferred);
+                buffer.Write(bytes, 0, bytes.Length);
+            }
+            else
+            {
+                using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 fileTooLong = s.Length > maxLength;
                 while (s.Position < s.Length && buffer.Length < maxLength)
                 {

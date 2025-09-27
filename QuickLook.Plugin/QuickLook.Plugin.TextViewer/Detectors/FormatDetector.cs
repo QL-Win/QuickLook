@@ -31,6 +31,7 @@ public class FormatDetector
         new MakefileDetector(),
         new HostsDetector(),
         new DockerfileDetector(),
+        new KrcDetector(),
     ];
 
     public static IFormatDetector Confuse(string path, string text)
@@ -50,6 +51,26 @@ public class FormatDetector
             .Where(detector => detector is not IConfusedFormatDetector && detector.Detect(path, text))
             .FirstOrDefault();
     }
+
+    public static bool Transfer(string path, out string text)
+    {
+        ITransferFormatDetector detector = Instance.TextDetectors
+            .Where(detector => detector is ITransferFormatDetector)
+            .Select(detector => detector as ITransferFormatDetector)
+            .FirstOrDefault();
+
+        text = null;
+        if (detector is null)
+        {
+            return false;
+        }
+        if (detector.Detect(path, null))
+        {
+            text = detector.Transfer(path);
+            return true;
+        }
+        return false;
+    }
 }
 
 public interface IFormatDetector
@@ -62,3 +83,8 @@ public interface IFormatDetector
 }
 
 public interface IConfusedFormatDetector : IFormatDetector;
+
+public interface ITransferFormatDetector : IFormatDetector
+{
+    public string Transfer(string path);
+}
