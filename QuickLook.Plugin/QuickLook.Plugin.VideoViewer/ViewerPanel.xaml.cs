@@ -204,8 +204,12 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     {
         ((MediaUriElement)sender).Dispatcher.BeginInvoke(new Action(() =>
         {
-            _context.ViewerContent =
-                new Label { Content = e.Exception, VerticalAlignment = VerticalAlignment.Center };
+            _context.ViewerContent = new TextBlock()
+            {
+                Text = e.Exception.ToString(),
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
             _context.IsBusy = false;
         }));
     }
@@ -215,7 +219,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         if (mediaElement == null)
             return;
 
-        mediaElement.MediaPosition = 0;
+        mediaElement.MediaPosition = 0L;
         if (ShouldLoop)
         {
             IsPlaying = true;
@@ -233,7 +237,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private void ShowViedoControlContainer(object sender, MouseEventArgs e)
     {
         var show = (Storyboard)videoControlContainer.FindResource("ShowControlStoryboard");
-        if (videoControlContainer.Opacity == 0 || videoControlContainer.Opacity == 1)
+        if (videoControlContainer.Opacity == 0d || videoControlContainer.Opacity == 1d)
             show.Begin();
     }
 
