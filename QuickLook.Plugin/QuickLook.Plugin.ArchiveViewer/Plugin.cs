@@ -27,19 +27,25 @@ public class Plugin : IViewer
 {
     private static readonly string[] _extensions =
     [
-        ".asar",
-        ".7z",
-        ".bz2",
-        ".cb7", ".cbr", ".cbt", ".cbz", ".crx",
-        ".gz",
-        ".jar",
-        ".lz",
-        ".nupkg", ".snupkg",
-        ".rar",
-        ".tar", ".tgz",
-        ".vsix",
-        ".xz",
-        ".zip",
+        ".asar",    // Electron archive (used to package Electron app resources)
+        ".7z",      // 7-Zip compressed archive (uses LZMA/LZMA2 compression)
+        ".bz2",     // bzip2 compressed file (often used with tar, e.g. .tar.bz2)
+        ".cb7",     // Comic book archive based on 7z format
+        ".cbr",     // Comic book archive based on RAR format
+        ".cbt",     // Comic book archive based on TAR format
+        ".cbz",     // Comic book archive based on ZIP format
+        ".crx",     // Chrome extension package (used for Chrome browser add-ons)
+        ".gz",      // gzip compressed file (commonly used with tar, e.g. .tar.gz)
+        ".jar",     // Java archive (used for Java applications; ZIP-based)
+        ".lz",      // lzip compressed file (uses LZMA compression)
+        ".nupkg",   // NuGet package (for distributing .NET libraries; ZIP-based)
+        ".snupkg",  // Symbol NuGet package (stores debug symbols; ZIP-based)
+        ".rar",     // RAR compressed archive (proprietary compression format)
+        ".tar",     // TAR archive (packs multiple files without compression)
+        ".tgz",     // Gzipped TAR archive (short for .tar.gz)
+        ".vsix",    // Visual Studio extension package (ZIP-based)
+        ".xz",      // XZ compressed file (uses LZMA2 compression)
+        ".zip",     // ZIP compressed archive (most common compression format)
     ];
 
     private ArchiveInfoPanel _panel;
