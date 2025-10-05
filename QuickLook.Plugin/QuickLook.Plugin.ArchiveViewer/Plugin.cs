@@ -27,6 +27,7 @@ public class Plugin : IViewer
 {
     private static readonly string[] _extensions =
     [
+        ".asar",
         ".7z",
         ".bz2",
         ".cb7", ".cbr", ".cbt", ".cbz", ".crx",
