@@ -40,7 +40,7 @@ Get it from one of the following sources:
 
 [What are the differences between `.msi`, `.zip`, Nightly and Store versions?](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions)
 
-**Note:** Don't forget to check out the [plugins](https://github.com/QL-Win/QuickLook/wiki/Available-Plugins) for previewing office-files, epubs, fonts and more!
+**Note:** Don't forget to check out the [plugins](https://github.com/QL-Win/QuickLook?tab=readme-ov-file#plugins) for previewing office-files, epubs, fonts and more!
 
 
 ### Typical usecase
@@ -61,6 +61,19 @@ Get it from one of the following sources:
  - <kbd>Mouse Wheel</kbd> Zoom in/out (images)
  - <kbd>Ctrl</kbd>+<kbd>Mouse Wheel</kbd> Zoom in/out (PDFs)
  - <kbd>Wheel</kbd> Increase/decrease volume
+
+## Plugins
+
+### Official Plugins
+
+| Name                                                         | Description                                                | URL                                                          |
+| ------------------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------ |
+| [OfficeViewer](https://github.com/QL-Win/QuickLook.Plugin.OfficeViewer) | View Office formats **without installing MS Office**.      | [Link](https://github.com/QL-Win/QuickLook.Plugin.OfficeViewer/releases) |
+| [PdfViewer-Native](https://github.com/QL-Win/QuickLook.Plugin.PdfViewer-Native) | View the PDF files with WebView2.                          | [Link](https://github.com/QL-Win/QuickLook.Plugin.PdfViewer-Native/releases) |
+| [PostScriptViewer](https://github.com/QL-Win/QuickLook.Plugin.PostScriptViewer) | Preview PostScript `.ps` and `.eps` files.                 | [Link](https://github.com/QL-Win/QuickLook.Plugin.PostScriptViewer/releases) |
+| [CADImport](https://github.com/emako/QuickLook.Plugin.CADImport) | Preview CAD file formats (`.dwg`, `.dxf`, `.plt`, `.cgm`). | [Link](https://github.com/emako/QuickLook.Plugin.CADImport/releases) |
+
+Here is the complete list of plugins from [Available-Plugins](https://github.com/QL-Win/QuickLook/wiki/Available-Plugins).
 
 ## Supported file formats
 
