@@ -48,7 +48,7 @@ internal static class Helper
                 uri.Append('/');
             else
                 uri.Append($"%{(int)v:X2}");
-        if (uri.Length >= 2 && uri[0] == '/' && uri[1] == '/') // UNC path
+        if (uri.Length >= 2 && uri[0] == '/' && uri[1] == '/') // UNC path - Universal Naming Convention
             uri.Insert(0, "file:");
         else
             uri.Insert(0, "file:///");

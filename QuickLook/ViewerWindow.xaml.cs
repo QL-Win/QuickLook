@@ -115,7 +115,7 @@ public partial class ViewerWindow : Window
         {
             try
             {
-                Clipboard.SetText(_path);
+                Clipboard.SetText($"\"{(_path.Length >= 260 ? @"\\?\" + _path : _path)}\"");
                 Toast.Success(TranslationHelper.Get("InfoPanelMoreItem_CopySucc"));
             }
             catch (Exception e)
