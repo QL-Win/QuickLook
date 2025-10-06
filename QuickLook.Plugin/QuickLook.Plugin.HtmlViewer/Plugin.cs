@@ -16,7 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -24,14 +26,17 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.HtmlViewer;
 
-public class Plugin : IViewer
+public partial class Plugin : IViewer, IMoreMenu
 {
-    private static readonly string[] _extensions = [".mht", ".mhtml", ".htm", ".html"];
+    private static readonly string[] _extensions = [".mht", ".mhtml", ".htm", ".html", ".svg"];
     private static readonly string[] _supportedProtocols = ["http", "https"];
 
     private WebpagePanel _panel;
+    private string _currentPath;
 
     public int Priority => 0;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
@@ -53,6 +58,7 @@ public class Plugin : IViewer
     public void View(string path, ContextObject context)
     {
         _panel = new WebpagePanel();
+        _currentPath = path;
         context.ViewerContent = _panel;
         context.Title = Path.IsPathRooted(path) ? Path.GetFileName(path) : path;
 
