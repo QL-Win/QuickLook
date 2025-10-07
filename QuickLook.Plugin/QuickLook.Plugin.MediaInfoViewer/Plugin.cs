@@ -32,7 +32,7 @@ public partial class Plugin : IViewer, IMoreMenuExtended
 {
     private TextViewerPanel _tvp;
 
-    public int Priority => 0;
+    public int Priority => int.MinValue;
 
     public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 

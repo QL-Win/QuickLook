@@ -203,9 +203,12 @@ public partial class ViewerWindow
 
         // Initial the more menu
         ClearMoreMenuUnpin();
-        foreach (var plugin in PluginManager.GetInstance().LoadedPlugins)
+        foreach (var plugin in
+            PluginManager.GetInstance().LoadedPlugins
+                .GroupBy(x => x.ToString()).Select(g => g.First()) // DistinctBy plugin name
+                .OrderBy(p => p.Priority)) // OrderBy plugin priority
         {
-            if (plugin == Plugin)
+            if (plugin.ToString() == Plugin.ToString())
             {
                 if (Plugin is IMoreMenu moreMenu && moreMenu.MenuItems is not null)
                 {
