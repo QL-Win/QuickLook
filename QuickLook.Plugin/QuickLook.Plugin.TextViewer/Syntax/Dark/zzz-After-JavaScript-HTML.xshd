@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="HTML" extensions=".html;.htm;.xhtml;.shtml;.shtm;.xht;.hta">
+
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#3E3E42"/>
+        
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#3E3E42"/>
+        <SpaceMarkers color="#3E3E42"/>
+        <TabMarkers color="#3E3E42"/>
+        <InvalidLines color="#3E3E42"/>
+    </Environment>
+
+    <Properties>
+        <Property name="BlockCommentBegin" value="&lt;!--"/>
+        <Property name="BlockCommentEnd" value="--&gt;"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8" bold="false" italic="false"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters></Delimiters>
+            
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>&lt;!--</Begin>
+                <End>--&gt;</End>
+            </Span>
+           
+            <Span name="ScriptTag" rule="JavaScriptSet" stopateol="false" color="#D4D4D4" bold="false" italic="false">
+                <Begin color="#569CD6">&lt;script&gt;</Begin>
+                <End color="#569CD6">&lt;/script&gt;</End>
+            </Span>
+                   
+            <Span name="HtmlTag" rule="HtmlTagSet" stopateol="false" color="#569CD6" bold="false" italic="false">
+                <Begin>&lt;</Begin>
+                <End>&gt;</End>
+            </Span>
+            
+            <Span name="Entity" stopateol="true" color="#D4D4D4" bgcolor="#1E1E1E" bold="false" italic="true">
+                <Begin bgcolor="#1E1E1E">&amp;</Begin>
+                <End bgcolor="#1E1E1E">;</End>
+            </Span>
+        </RuleSet>
+        
+        <RuleSet name="JavaScriptSet" reference="JavaScript"/>
+        
+        <RuleSet name="HtmlTagSet" ignorecase="false">
+            <Delimiters>/=</Delimiters>
+            
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkPrevious color="#9CDCFE" bold="false" italic="false">=</MarkPrevious>
+            
+            <KeyWords name="Slash" color="#569CD6" bold="false" italic="false">
+                <Key word="/"/>
+            </KeyWords>
+            
+            <KeyWords name="Assignment" color="#D4D4D4" bold="false" italic="false">
+                <Key word="="/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
