@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,7 @@ using System.Windows.Media;
 
 namespace QuickLook.Plugin.TextViewer;
 
-public class Plugin : IViewer
+public partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
@@ -35,8 +36,11 @@ public class Plugin : IViewer
     ]);
 
     private TextViewerPanel _tvp;
+    private string _currentPath;
 
     public int Priority => -5;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
@@ -82,6 +86,7 @@ public class Plugin : IViewer
         else
         {
             _tvp = new TextViewerPanel();
+            _currentPath = path;
             _tvp.LoadFileAsync(path, context);
             context.ViewerContent = _tvp;
         }

@@ -201,30 +201,6 @@ public partial class ViewerWindow
             return;
         }
 
-        // Initial the more menu
-        ClearMoreMenuUnpin();
-        foreach (var plugin in
-            PluginManager.GetInstance().LoadedPlugins
-                .GroupBy(x => x.ToString()).Select(g => g.First()) // DistinctBy plugin name
-                .OrderBy(p => p.Priority)) // OrderBy plugin priority
-        {
-            if (plugin.ToString() == Plugin.ToString())
-            {
-                if (Plugin is IMoreMenu moreMenu && moreMenu.MenuItems is not null)
-                {
-                    InsertMoreMenu(moreMenu.MenuItems);
-                }
-                continue;
-            }
-            else
-            {
-                if (plugin is IMoreMenuExtended moreMenu && moreMenu.MenuItems is not null)
-                {
-                    InsertMoreMenu(moreMenu.MenuItems);
-                }
-            }
-        }
-
         SetOpenWithButtonAndPath();
 
         // Revert UI changes
@@ -263,18 +239,41 @@ public partial class ViewerWindow
         }
 
         // Load plugin, do not block UI
-        Dispatcher.BeginInvoke(new Action(() =>
+        Dispatcher.BeginInvoke(() =>
         {
             try
             {
                 Plugin.View(path, ContextObject);
+
+                // Initial the more menu
+                ClearMoreMenuUnpin();
+                foreach (var plugin in
+                    PluginManager.GetInstance().LoadedPlugins
+                        .GroupBy(x => x.ToString()).Select(g => g.First()) // DistinctBy plugin name
+                        .OrderBy(p => p.Priority)) // OrderBy plugin priority
+                {
+                    if (plugin.ToString() == Plugin.ToString())
+                    {
+                        if (Plugin is IMoreMenu moreMenu && moreMenu.MenuItems is not null)
+                        {
+                            InsertMoreMenu(moreMenu.MenuItems);
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        if (plugin is IMoreMenuExtended moreMenu && moreMenu.MenuItems is not null)
+                        {
+                            InsertMoreMenu(moreMenu.MenuItems);
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
                 exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
             }
-        }),
-        DispatcherPriority.Input);
+        }, DispatcherPriority.Input);
     }
 
     private void ClearMoreMenuUnpin()
