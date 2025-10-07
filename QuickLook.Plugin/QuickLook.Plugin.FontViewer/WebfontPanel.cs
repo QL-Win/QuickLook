@@ -200,22 +200,4 @@ public class WebfontPanel : WebpagePanel
         using var reader = new StreamReader(ReadStream(key), Encoding.UTF8);
         return reader.ReadToEnd();
     }
-
-    public static class MimeTypes
-    {
-        public const string Html = "text/html";
-        public const string JavaScript = "application/javascript";
-        public const string Css = "text/css";
-        public const string Binary = "application/octet-stream";
-
-        public static string GetContentType(string extension = null) => $"Content-Type: {GetMimeType(extension)}";
-
-        public static string GetMimeType(string extension = null) => extension?.ToLowerInvariant() switch
-        {
-            ".js" => JavaScript, // Only handle known extensions from resources
-            ".css" => Css,
-            ".html" => Html,
-            _ => Binary,
-        };
-    }
 }

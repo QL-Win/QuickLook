@@ -191,28 +191,42 @@ public class WebpagePanel : UserControl
         {
             var requestedUri = new Uri(args.Request.Uri);
 
-            // Check if the request is for a local file
-            if (requestedUri.Scheme == "file" && !File.Exists(requestedUri.LocalPath))
+            if (requestedUri.Scheme == "file")
             {
-                // Try loading from fallback directory
-                var fileName = Path.GetFileName(requestedUri.LocalPath);
-                var fileDirectoryName = Path.GetDirectoryName(requestedUri.LocalPath);
-
-                // Convert the primary path to fallback path
-                if (fileDirectoryName.StartsWith(_primaryPath))
+                // Check if the request is for a local file
+                if (!File.Exists(requestedUri.LocalPath))
                 {
-                    var fallbackFilePath = Path.Combine(
-                        _fallbackPath.Trim('/', '\\'), // Make it combinable
-                        fileDirectoryName.Substring(_primaryPath.Length).Trim('/', '\\'), // Make it combinable
-                        fileName
-                    );
+                    // Try loading from fallback directory
+                    var fileName = Path.GetFileName(requestedUri.LocalPath);
+                    var fileDirectoryName = Path.GetDirectoryName(requestedUri.LocalPath);
 
-                    if (File.Exists(fallbackFilePath))
+                    // Convert the primary path to fallback path
+                    if (fileDirectoryName.StartsWith(_primaryPath))
                     {
-                        // Serve the file from the fallback directory
-                        var fileStream = new FileStream(fallbackFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                        var fallbackFilePath = Path.Combine(
+                            _fallbackPath.Trim('/', '\\'), // Make it combinable
+                            fileDirectoryName.Substring(_primaryPath.Length).Trim('/', '\\'), // Make it combinable
+                            fileName
+                        );
+
+                        if (File.Exists(fallbackFilePath))
+                        {
+                            // Serve the file from the fallback directory
+                            var fileStream = new FileStream(fallbackFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                            var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                                fileStream, 200, "OK", "Content-Type: application/octet-stream");
+                            args.Response = response;
+                        }
+                    }
+                }
+                // Check if the request exceeds MAX_PATH (260) limitation
+                else if (requestedUri.LocalPath.Length >= 260)
+                {
+                    if (File.Exists(requestedUri.LocalPath))
+                    {
+                        var fileStream = new FileStream(requestedUri.LocalPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                            fileStream, 200, "OK", "Content-Type: application/octet-stream");
+                            fileStream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.LocalPath)));
                         args.Response = response;
                     }
                 }
@@ -244,5 +258,79 @@ public class WebpagePanel : UserControl
         button.Click += (sender, e) => Process.Start("https://go.microsoft.com/fwlink/p/?LinkId=2124703");
 
         return button;
+    }
+
+    public static class MimeTypes
+    {
+        public const string Html = "text/html";
+        public const string JavaScript = "application/javascript";
+        public const string Css = "text/css";
+        public const string Json = "application/json";
+        public const string Xml = "application/xml";
+        public const string Svg = "image/svg+xml";
+        public const string Png = "image/png";
+        public const string Jpeg = "image/jpeg";
+        public const string Gif = "image/gif";
+        public const string Webp = "image/webp";
+        public const string Ico = "image/x-icon";
+        public const string Avif = "image/avif";
+        public const string Woff = "font/woff";
+        public const string Woff2 = "font/woff2";
+        public const string Ttf = "font/ttf";
+        public const string Otf = "font/otf";
+        public const string Mp3 = "audio/mpeg";
+        public const string Mp4 = "video/mp4";
+        public const string Webm = "video/webm";
+        public const string Pdf = "application/pdf";
+        public const string Binary = "application/octet-stream";
+        public const string Text = "text/plain";
+
+        public static string GetContentType(string extension = null) => $"Content-Type: {GetMimeType(extension)}";
+
+        /// <summary>
+        /// Only handle known extensions from resources
+        /// </summary>
+        public static string GetMimeType(string extension = null) => extension?.ToLowerInvariant() switch
+        {
+            // Core web files
+            ".html" or ".htm" => Html,
+            ".js" => JavaScript,
+            ".css" => Css,
+            ".json" => Json,
+            ".xml" => Xml,
+
+            // Images
+            ".png" => Png,
+            ".jpg" or ".jpeg" => Jpeg,
+            ".gif" => Gif,
+            ".webp" => Webp,
+            ".svg" => Svg,
+            ".ico" => Ico,
+            ".avif" => Avif,
+
+            // Fonts
+            ".woff" => Woff,
+            ".woff2" => Woff2,
+            ".ttf" => Ttf,
+            ".otf" => Otf,
+
+            // Media
+            ".mp3" => Mp3,
+            ".mp4" => Mp4,
+            ".webm" => Webm,
+
+            // Documents
+            ".pdf" => Pdf,
+            ".txt" => Text,
+
+            // Archives
+            ".zip" => "application/zip",
+            ".gz" => "application/gzip",
+            ".rar" => "application/vnd.rar",
+            ".7z" => "application/x-7z-compressed",
+
+            // Default
+            _ => Binary,
+        };
     }
 }

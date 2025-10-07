@@ -58,6 +58,7 @@ public class Plugin : IViewer
 
         if (path.ToLower().EndsWith(".url"))
             path = Helper.GetUrlPath(path);
+        _panel.FallbackPath = Path.GetDirectoryName(path); // Reserve opportunities for requesting exceeds MAX_PATH (260) limitation
         _panel.NavigateToFile(path);
         _panel.Dispatcher.Invoke(() => { context.IsBusy = false; }, DispatcherPriority.Loaded);
     }
