@@ -41,8 +41,7 @@ public partial class Plugin
         yield return new MoreMenuItem()
         {
             Icon = "\uE943",
-            Header = TranslationHelper.Get("MW_ViewSourceCode", translationFile),
-            MenuItems = null,
+            Header = TranslationHelper.Get("MW_ReopenAsSourceCode", translationFile),
             Command = ViewSourceCodeCommand,
         };
     }
