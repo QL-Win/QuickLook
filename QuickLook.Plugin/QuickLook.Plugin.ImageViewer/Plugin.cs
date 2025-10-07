@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
 using QuickLook.Plugin.ImageViewer.Webview;
 using System;
@@ -28,7 +29,7 @@ using System.Windows.Input;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-public class Plugin : IViewer
+public partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
@@ -56,12 +57,15 @@ public class Plugin : IViewer
     ]);
 
     private ImagePanel _ip;
+    private string _currentPath;
     private MetaProvider _meta;
 
     private IWebImagePanel _ipWeb;
     private IWebMetaProvider _metaWeb;
 
     public int Priority => 0;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
@@ -137,6 +141,8 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
+        _currentPath = path;
+
         if (WebHandler.TryView(path, context, _metaWeb, out _ipWeb))
             return;
 

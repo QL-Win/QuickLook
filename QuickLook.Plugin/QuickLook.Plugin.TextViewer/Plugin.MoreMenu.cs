@@ -21,19 +21,11 @@ using QuickLook.Common.Plugin.MoreMenu;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Input;
 
 namespace QuickLook.Plugin.TextViewer;
 
 public partial class Plugin
 {
-    public ICommand ReopenAsHtmlPreviewCommand { get; }
-
-    public Plugin()
-    {
-        ReopenAsHtmlPreviewCommand = new RelayCommand(ReopenAsHtmlPreview);
-    }
-
     public IEnumerable<IMenuItem> GetMenuItems()
     {
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
@@ -41,23 +33,27 @@ public partial class Plugin
 
         var reopen = extension switch
         {
+            // HTML <=> HTML TEXT
             // \QuickLook\QuickLook.Plugin\QuickLook.Plugin.TextViewer\Syntax\Light\zzz-After-JavaScript-HTML.xshd
             // .html;.htm;.xhtml;.shtml;.shtm;.xht;.hta
             ".html" or ".htm" or ".xhtml" or ".shtml" or ".shtm" or ".xht" or ".hta" => new MoreMenuItem()
             {
                 Icon = "\uE774",
                 Header = TranslationHelper.Get("MW_ReopenAsHtmlPreview", translationFile),
-                Command = ReopenAsHtmlPreviewCommand,
+                Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.HtmlViewer", _currentPath)),
             },
-            _ => null
+
+            // SVG IMAGE <=> XML TEXT
+            ".svg" => new MoreMenuItem()
+            {
+                Icon = "\uE774",
+                Header = TranslationHelper.Get("MW_ReopenAsImagePreview", translationFile),
+                Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.ImageViewer", _currentPath)),
+            },
+            _ => null,
         };
 
         if (reopen is not null)
             yield return reopen;
-    }
-
-    public void ReopenAsHtmlPreview()
-    {
-        PluginHelper.InvokePluginPreview("QuickLook.Plugin.HtmlViewer", _currentPath);
     }
 }

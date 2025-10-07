@@ -22,20 +22,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace QuickLook.Plugin.HtmlViewer;
+namespace QuickLook.Plugin.ImageViewer;
 
 public partial class Plugin
 {
     public IEnumerable<IMenuItem> GetMenuItems()
     {
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+        string extension = Path.GetExtension(_currentPath).ToLower();
 
-        // HTML <=> HTML TEXT
-        yield return new MoreMenuItem()
+        var reopen = extension switch
         {
-            Icon = "\uE943",
-            Header = TranslationHelper.Get("MW_ReopenAsSourceCode", translationFile),
-            Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.TextViewer", _currentPath)),
+            // SVG IMAGE <=> XML TEXT
+            ".svg" => new MoreMenuItem()
+            {
+                Icon = "\uE943",
+                Header = TranslationHelper.Get("MW_ReopenAsSourceCode", translationFile),
+                Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.TextViewer", _currentPath)),
+            },
+            _ => null,
         };
+
+        if (reopen is not null)
+            yield return reopen;
     }
 }

@@ -138,4 +138,10 @@
         </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="Translations.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
