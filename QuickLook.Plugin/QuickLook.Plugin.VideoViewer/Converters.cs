@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Controls;
 using System;
 using System.Globalization;
 using System.Windows;
@@ -49,7 +50,7 @@ public sealed class TimeTickToShortStringConverter : DependencyObject, IValueCon
 
 public sealed class VolumeToIconConverter : DependencyObject, IValueConverter
 {
-    private static readonly string[] Volumes = ["\xE74F", "\xE993", "\xE994", "\xE995"];
+    private static readonly string[] Volumes = [FontSymbols.Mute, FontSymbols.Volume1, FontSymbols.Volume2, FontSymbols.Volume3];
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

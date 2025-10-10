@@ -19,6 +19,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using QuickLook.Common.Annotations;
+using QuickLook.Common.Controls;
 using QuickLook.Common.Plugin;
 using System;
 using System.ComponentModel;
@@ -207,15 +208,5 @@ internal class MidiPlayer : IDisposable, INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    /// <summary>
-    /// Segoe Fluent Icons
-    /// https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-fluent-icons-font
-    /// </summary>
-    private sealed class FontSymbols
-    {
-        public const string Play = "\xe768";
-        public const string Pause = "\xe769";
     }
 }

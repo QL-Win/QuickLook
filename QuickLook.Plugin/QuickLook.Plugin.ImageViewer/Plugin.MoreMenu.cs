@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Commands;
+using QuickLook.Common.Controls;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ public partial class Plugin
             // SVG IMAGE <=> XML TEXT
             ".svg" => new MoreMenuItem()
             {
-                Icon = "\uE943",
+                Icon = FontSymbols.Code,
                 Header = TranslationHelper.Get("MW_ReopenAsSourceCode", translationFile),
                 Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.TextViewer", _currentPath)),
             },

@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Commands;
+using QuickLook.Common.Controls;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ public partial class Plugin
             // .html;.htm;.xhtml;.shtml;.shtm;.xht;.hta
             ".html" or ".htm" or ".xhtml" or ".shtml" or ".shtm" or ".xht" or ".hta" => new MoreMenuItem()
             {
-                Icon = "\uE774",
+                Icon = FontSymbols.Globe,
                 Header = TranslationHelper.Get("MW_ReopenAsHtmlPreview", translationFile),
                 Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.HtmlViewer", _currentPath)),
             },
@@ -46,7 +47,7 @@ public partial class Plugin
             // SVG IMAGE <=> XML TEXT
             ".svg" => new MoreMenuItem()
             {
-                Icon = "\uE774",
+                Icon = FontSymbols.Picture,
                 Header = TranslationHelper.Get("MW_ReopenAsImagePreview", translationFile),
                 Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.ImageViewer", _currentPath)),
             },
