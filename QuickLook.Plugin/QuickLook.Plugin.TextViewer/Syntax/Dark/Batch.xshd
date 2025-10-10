@@ -4,19 +4,19 @@
 
     <Environment>
         <Default color="White" bgcolor="#000000"/>
-        <Selection color="#000080" bgcolor="#C3C3FF"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
         <LineNumbers color="#A9A9A9" bgcolor="#000000"/>
-        <CaretMarker color="#A9A9A9"/>
+        <CaretMarker color="#FFFFFF"/>
         <VRuler color="#808080"/>
 
-        <FoldLine color="#D3D3D3" bgcolor="#000000"/>
-        <FoldMarker color="#D3D3D3" bgcolor="#000000"/>
-        <SelectedFoldLine color="#D3D3D3" bgcolor="#000000"/>
+        <FoldLine color="#3C3C3C" bgcolor="#000000"/>
+        <FoldMarker color="#3C3C3C" bgcolor="#000000"/>
+        <SelectedFoldLine color="#3C3C3C" bgcolor="#000000"/>
 
-        <EOLMarkers color="#A9A9A9"/>
-        <SpaceMarkers color="#A9A9A9"/>
-        <TabMarkers color="#A9A9A9"/>
-        <InvalidLines color="#A9A9A9"/>
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
     </Environment>
 
     <Properties>
@@ -30,23 +30,23 @@
 
             <Delimiters>@+*\/=|'&lt;&gt;?;</Delimiters>
 
-            <Span name="LineComment1" stopateol="true" color="#00FF00" bold="false" italic="false">
+            <Span name="LineComment1" stopateol="true" color="#6A9955" bold="false" italic="false">
                 <Begin singleword="true">REM </Begin>
             </Span>
 
-            <Span name="LineComment2" stopateol="true" color="#00FF00" bold="false" italic="false">
+            <Span name="LineComment2" stopateol="true" color="#6A9955" bold="false" italic="false">
                 <Begin startofline="true">::</Begin>
             </Span>
 
-            <Span name="Label" stopateol="true" color="#FF0000" bgcolor="#FFFF80" bold="false" italic="false">
+            <Span name="Label" stopateol="true" color="#FF8800" bold="false" italic="false">
                 <Begin startofline="true">:</Begin>
             </Span>
 
-            <Span name="Output" stopateol="true" color="White" bold="false" italic="false">
-                <Begin color="Blue">echo</Begin>
+            <Span name="Output" stopateol="true" color="#9CDCFE" bold="false" italic="false">
+                <Begin>echo</Begin>
             </Span>
 
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
                 <Key word="aux"/>
                 <Key word="baud"/>
                 <Key word="break"/>
@@ -147,7 +147,7 @@
                 <Key word="xon"/>
             </KeyWords>
 
-            <KeyWords name="Keywords2" color="#008080" bold="false" italic="false">
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false" italic="false">
                 <Key word="append"/>
                 <Key word="assoc"/>
                 <Key word="at"/>
