@@ -61,6 +61,8 @@ Get it from one of the following sources:
  - <kbd>Mouse Wheel</kbd> Zoom in/out (images)
  - <kbd>Ctrl</kbd>+<kbd>Mouse Wheel</kbd> Zoom in/out (PDFs)
  - <kbd>Wheel</kbd> Increase/decrease volume
+ - <kbd>Left Mouse</kbd> Rotate (3D models)
+ - <kbd>Middle Mouse</kbd> Pan (3D models)
 
 ## Plugins
 
