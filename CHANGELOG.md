@@ -1,6 +1,32 @@
 ## 4.2.0
 
-- Add built-in MediaInfoViewer plugin
+- Add built-in MediaInfoViewer plugin and support it in more menu
+- Add 'Copy as path' option to more menu
+- Add cross-plugin 'Reopen as' menu for SVG and HTML [#1690](https://github.com/QL-Win/QuickLook/issues/1690)
+- Support Point Cloud Data (.pcd) for 3D spatial (Only PCD files with the PointXYZ format are supported, while Color and Intensity formats are not.)
+- Support Mermaid diagram rendering in MarkdownViewer [#1730](https://github.com/QL-Win/QuickLook/issues/1730)
+- Support .pdn in ThumbnailViewer [#1708](https://github.com/QL-Win/QuickLook/issues/1708)
+- Improve CLI performance [#1706](https://github.com/QL-Win/QuickLook/issues/1706) [#1731](https://github.com/QL-Win/QuickLook/issues/1731)
+- Set default background to transparent for SVG panel
+- Improve UI/UX of font loading
+- Add diff file syntax highlighting
+- Add Swedish translation [#1755](https://github.com/QL-Win/QuickLook/issues/1755)
+- Add .slnx extension to XML syntax highlighting
+- Add support for Telegram Sticker (.tgs) files [#1762](https://github.com/QL-Win/QuickLook/issues/1762)
+- Add .snupkg and .asar support to archive viewer
+- Add .krc file support to TextViewer
+- Add UseNativeProvider option [#1726](https://github.com/QL-Win/QuickLook/issues/1726)
+- Fix image .jxr error reading from UseColorProfile
+- Fix issue where font file stays locked [#77](https://github.com/QL-Win/QuickLook/issues/77)
+- Fix font file unicode name is not supported
+- Fix extracting cover art will not cause the title to be lost [#1759](https://github.com/QL-Win/QuickLook/issues/1759)
+- Fix HelixViewer default height being too large
+- Fix long path handling issue in HtmlViewer [#1643](https://github.com/QL-Win/QuickLook/issues/1643)
+- Update Batch syntax highlighting colors
+- Refactor tray icon to use TrayIconHost
+- Refactor to make exe-installer no forked relaunching
+- Remove unimportant UnobservedTaskException [#1691](https://github.com/QL-Win/QuickLook/issues/1691)
+- Remove configuration `ModernMessageBox`
 
 ## 4.1.1
 
