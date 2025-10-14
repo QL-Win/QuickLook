@@ -186,24 +186,13 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
         return reader.ReadToEnd();
     }
 
-    public static class MimeTypes
+    public new static class MimeTypes
     {
-        public const string Html = "text/html";
-        public const string JavaScript = "application/javascript";
-        public const string Json = "application/json";
-        public const string Css = "text/css";
-        public const string Binary = "application/octet-stream";
+        public static string GetContentTypeHeader(string extension = null)
+            => $"Content-Type: {WebpagePanel.MimeTypes.GetMimeType(extension)}";
 
-        public static string GetContentTypeHeader(string extension = null) => $"Content-Type: {GetMimeType(extension)}";
-
-        public static string GetMimeType(string extension = null) => extension?.ToLowerInvariant() switch
-        {
-            ".js" => JavaScript, // Only handle known extensions from resources
-            ".json" => Json,
-            ".css" => Css,
-            ".html" => Html,
-            _ => Binary,
-        };
+        public static string GetMimeType(string extension = null)
+            => WebpagePanel.MimeTypes.GetMimeType(extension);
     }
 }
 
