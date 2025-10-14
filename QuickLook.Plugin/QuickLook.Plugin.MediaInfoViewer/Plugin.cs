@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
@@ -100,14 +101,15 @@ public partial class Plugin : IViewer, IMoreMenuExtended
         if (isDark)
         {
             context.Theme = Themes.Dark;
-            tvp.Foreground = new BrushConverter().ConvertFromString("#FFEFEFEF") as SolidColorBrush;
             tvp.Background = Brushes.Transparent;
+            tvp.SetResourceReference(TextBlock.ForegroundProperty, "WindowTextForeground");
         }
         else
         {
             context.Theme = Themes.Light;
-            tvp.Foreground = new BrushConverter().ConvertFromString("#BBFAFAFA") as SolidColorBrush;
-            tvp.Background = Brushes.Transparent;
+            tvp.Background = OSThemeHelper.AppsUseDarkTheme()
+                ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
+                : Brushes.Transparent;
         }
     }
 }
