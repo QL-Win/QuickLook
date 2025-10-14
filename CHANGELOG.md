@@ -1,3 +1,8 @@
+## 4.2.1
+
+- Fix theme error in MediaInfoViewer plugin [#1775](https://github.com/QL-Win/QuickLook/issues/1775)
+- Fix theme error in any theme-changable plugin [#1507](https://github.com/QL-Win/QuickLook/issues/1507)
+
 ## 4.2.0
 
 - Add built-in MediaInfoViewer plugin and support it in more menu
