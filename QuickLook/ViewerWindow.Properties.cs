@@ -23,6 +23,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Violeta.Appearance;
 
 namespace QuickLook;
 
@@ -105,14 +107,24 @@ public partial class ViewerWindow : INotifyPropertyChanged
         if (isDark)
         {
             CurrentTheme = Themes.Dark;
+
+            // Update theme for QuickLook controls
             if (!Resources.MergedDictionaries.Contains(_darkDict))
                 Resources.MergedDictionaries.Add(_darkDict);
+
+            // Update theme for WPF-UI controls
+            ThemeManager.Apply(ApplicationTheme.Dark);
         }
         else
         {
             CurrentTheme = Themes.Light;
+
+            // Update theme for QuickLook controls
             if (Resources.MergedDictionaries.Contains(_darkDict))
                 Resources.MergedDictionaries.Remove(_darkDict);
+
+            // Update theme for WPF-UI controls
+            ThemeManager.Apply(ApplicationTheme.Light);
         }
     }
 }
