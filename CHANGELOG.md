@@ -1,3 +1,7 @@
+## 4.2.2
+
+- Fix version display issue [#1776](https://github.com/QL-Win/QuickLook/issues/1776)
+
 ## 4.2.1
 
 - Fix theme error in MediaInfoViewer plugin [#1775](https://github.com/QL-Win/QuickLook/issues/1775)
