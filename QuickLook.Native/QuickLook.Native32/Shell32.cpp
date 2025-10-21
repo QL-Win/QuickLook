@@ -169,7 +169,7 @@ void Shell32::getSelectedFromDesktop(PWCHAR buffer)
         &pwba))))
         return;
 
-    if (HelperMethods::IsCursorActivated(reinterpret_cast<HWND>(LongToHandle(phwnd))))
+    if (HelperMethods::IsCursorActivated(0))
         return;
 
     CComPtr<IServiceProvider> psp;
