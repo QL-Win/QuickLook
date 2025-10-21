@@ -282,17 +282,83 @@ public partial class App : Application
         PipeServerManager.GetInstance();
     }
 
+    private void App_OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
+    {
+        // Windows is shutting down or user is logging off
+        // Clean up resources gracefully to prevent CLR exceptions during shutdown
+        try
+        {
+            PerformCleanup();
+        }
+        catch (Exception ex)
+        {
+            // Log the error but don't prevent shutdown
+            ProcessHelper.WriteLog($"Error during SessionEnding: {ex}");
+        }
+    }
+
     private void App_OnExit(object sender, ExitEventArgs e)
     {
         if (!_cleanExit)
             return;
 
-        _isRunning.ReleaseMutex();
+        try
+        {
+            PerformCleanup();
+        }
+        catch (Exception ex)
+        {
+            // Log the error but don't crash during exit
+            ProcessHelper.WriteLog($"Error during Exit: {ex}");
+        }
+    }
 
-        PipeServerManager.GetInstance().Dispose();
-        TrayIconManager.GetInstance().Dispose();
-        KeystrokeDispatcher.GetInstance().Dispose();
-        ViewWindowManager.GetInstance().Dispose();
+    private void PerformCleanup()
+    {
+        try
+        {
+            _isRunning?.ReleaseMutex();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Error releasing mutex: {ex}");
+        }
+
+        try
+        {
+            PipeServerManager.GetInstance()?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Error disposing PipeServerManager: {ex}");
+        }
+
+        try
+        {
+            TrayIconManager.GetInstance()?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Error disposing TrayIconManager: {ex}");
+        }
+
+        try
+        {
+            KeystrokeDispatcher.GetInstance()?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Error disposing KeystrokeDispatcher: {ex}");
+        }
+
+        try
+        {
+            ViewWindowManager.GetInstance()?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Error disposing ViewWindowManager: {ex}");
+        }
     }
 
     private bool EnsureFirstInstance(string[] args)

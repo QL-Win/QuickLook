@@ -5,6 +5,7 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:vio="http://schemas.lepo.co/wpfui/2022/xaml/violeta"
              Exit="App_OnExit"
+             SessionEnding="App_OnSessionEnding"
              ShutdownMode="OnExplicitShutdown"
              Startup="Application_Startup">
     <Application.Resources>
