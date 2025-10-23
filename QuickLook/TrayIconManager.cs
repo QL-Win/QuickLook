@@ -23,6 +23,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Wpf.Ui.Violeta.Win32;
 using ToolTipIcon = Wpf.Ui.Violeta.Win32.ToolTipIcon;
@@ -152,15 +153,26 @@ internal partial class TrayIconManager : IDisposable
         
         try
         {
-            icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
-            icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
-            icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+            // Use reflection to call ShowBalloonTip to avoid JIT compilation errors
+            // when the method signature doesn't match the expected one
+            var showBalloonTipMethod = icon.GetType().GetMethod("ShowBalloonTip", 
+                new[] { typeof(int), typeof(string), typeof(string), typeof(ToolTipIcon) });
+            
+            if (showBalloonTipMethod != null)
+            {
+                showBalloonTipMethod.Invoke(icon, new object[] { timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info });
+                icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
+                icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"ShowBalloonTip method not found: {title} - {content}");
+            }
         }
-        catch (MissingMethodException)
+        catch (Exception ex)
         {
-            // Fallback: ShowBalloonTip method signature may have changed in the library
-            // Try alternative approach or silently fail to prevent crash
-            System.Diagnostics.Debug.WriteLine($"ShowBalloonTip failed: {title} - {content}");
+            // Fallback: If reflection fails, log and continue without showing notification
+            System.Diagnostics.Debug.WriteLine($"ShowBalloonTip failed: {title} - {content}. Error: {ex.Message}");
         }
 
         void OnIconOnBalloonTipClicked(object sender, EventArgs e)
