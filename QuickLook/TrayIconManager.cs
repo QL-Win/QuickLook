@@ -149,9 +149,19 @@ internal partial class TrayIconManager : IDisposable
         Action closeEvent = null)
     {
         var icon = GetInstance()._icon;
-        icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
-        icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
-        icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+        
+        try
+        {
+            icon.ShowBalloonTip(timeout, title, content, isError ? ToolTipIcon.Error : ToolTipIcon.Info);
+            icon.BalloonTipClicked += OnIconOnBalloonTipClicked;
+            icon.BalloonTipClosed += OnIconOnBalloonTipClosed;
+        }
+        catch (MissingMethodException)
+        {
+            // Fallback: ShowBalloonTip method signature may have changed in the library
+            // Try alternative approach or silently fail to prevent crash
+            System.Diagnostics.Debug.WriteLine($"ShowBalloonTip failed: {title} - {content}");
+        }
 
         void OnIconOnBalloonTipClicked(object sender, EventArgs e)
         {
