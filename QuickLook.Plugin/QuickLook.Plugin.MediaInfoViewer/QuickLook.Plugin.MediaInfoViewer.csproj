@@ -14,6 +14,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{B0054A16-472E-44AC-BA40-349303E524FF}</ProjectGuid>
+        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>ARM64</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -25,12 +27,29 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <Optimize>false</Optimize>
+      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.MediaInfoViewer\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.MediaInfoViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <DebugType>pdbonly</DebugType>
+      <Optimize>true</Optimize>
+      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.MediaInfoViewer\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

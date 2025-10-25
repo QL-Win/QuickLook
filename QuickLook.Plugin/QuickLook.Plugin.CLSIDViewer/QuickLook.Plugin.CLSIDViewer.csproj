@@ -14,6 +14,7 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{538FD6BA-2AF1-4DDA-93A2-6C0A12B00843}</ProjectGuid>
+        <Platforms>AnyCPU;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -25,12 +26,29 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <Optimize>false</Optimize>
+      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CLSIDViewer\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CLSIDViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <DebugType>pdbonly</DebugType>
+      <Optimize>true</Optimize>
+      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CLSIDViewer\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

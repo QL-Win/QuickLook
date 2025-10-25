@@ -30,7 +30,14 @@ public partial class Plugin
     public IEnumerable<IMenuItem> GetMenuItems()
     {
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
-        string extension = Path.GetExtension(_currentPath).ToLower();
+        string extension = "";
+        try
+        {
+            extension = Path.GetExtension(_currentPath).ToLower();
+        } catch (System.Exception)
+        { 
+        }
+            
 
         var reopen = extension switch
         {

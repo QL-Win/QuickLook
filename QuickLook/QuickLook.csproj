@@ -5,13 +5,13 @@
         <TargetFramework>net462</TargetFramework>
         <AssemblyName>QuickLook</AssemblyName>
         <FileAlignment>512</FileAlignment>
-        <PlatformTarget>AnyCPU</PlatformTarget>
+        <PlatformTarget>ARM64</PlatformTarget>
         <ApplicationIcon>Resources\app.ico</ApplicationIcon>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
         <LangVersion>latest</LangVersion>
-        <Platforms>AnyCPU;x64</Platforms>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -47,6 +47,15 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <OutputPath>..\Build\Debug\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <Prefer32Bit>false</Prefer32Bit>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
         <OutputPath>..\Build\Debug\</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -63,6 +72,15 @@
         <DebugType>pdbonly</DebugType>
         <Prefer32Bit>false</Prefer32Bit>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <OutputPath>..\Build\Release\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <Optimize>true</Optimize>
+      <DebugType>pdbonly</DebugType>
+      <Prefer32Bit>false</Prefer32Bit>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
