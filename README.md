@@ -77,6 +77,8 @@ Get it from one of the following sources:
 
 Here is the complete list of plugins from [Available-Plugins](https://github.com/QL-Win/QuickLook/wiki/Available-Plugins).
 
+See [here](https://github.com/QL-Win/QuickLook/wiki/Available-Plugins#how-to-install-or-upgrade-a-plugin) for instructions on how to install plugins.
+
 ## Supported file formats
 
 See the [Supported formats](SUPPORTED_FORMATS.md)
