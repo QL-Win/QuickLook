@@ -88,7 +88,7 @@
 
     <ItemGroup>
         <PackageReference Include="PdfiumViewer.Updated" Version="2.14.5" />
-        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="141.0.7388" />
+        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="143.0.7483" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
 
@@ -109,7 +109,7 @@
         <!-- Not support to ARM64 -->
     </Target>
 
-	<Target Name="AfterBuildARM64" AfterTargets="Build" >
+	<Target Name="AfterBuildARM64" AfterTargets="Build">
 		<Copy SourceFiles="$(OutputPath)\arm64\pdfium.dll" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
 	</Target>
     
