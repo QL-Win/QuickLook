@@ -138,6 +138,13 @@ LRESULT CALLBACK DOpus::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
             auto buf = static_cast<PCHAR>(cds->lpData);
 
+            // Clean up any previous buffer before allocating a new one
+            if (pXmlBuffer != nullptr)
+            {
+                delete[] pXmlBuffer;
+                pXmlBuffer = nullptr;
+            }
+
             pXmlBuffer = new CHAR[cds->cbData + 1]{'\0'};
             memcpy(pXmlBuffer, buf, cds->cbData);
 
