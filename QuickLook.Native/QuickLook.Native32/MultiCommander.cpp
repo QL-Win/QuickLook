@@ -46,6 +46,10 @@ void MultiCommander::GetSelected(PWCHAR buffer)
         return;
     }
 
+    if (pCurrentItemPath == nullptr) {
+        return;
+    }
+
     auto path = reinterpret_cast<PWCHAR>(pCurrentItemPath);
     wcscpy_s(buffer, wcslen(path) + 1, path);
 
@@ -84,6 +88,7 @@ LRESULT CALLBACK MultiCommander::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wPar
         case WM_COPYDATA:
         {
             delete[] pCurrentItemPath;
+            pCurrentItemPath = nullptr;
 
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
             auto buf = static_cast<PCHAR>(cds->lpData);
