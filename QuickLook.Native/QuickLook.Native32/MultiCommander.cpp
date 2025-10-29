@@ -92,7 +92,7 @@ LRESULT CALLBACK MultiCommander::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wPar
 
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
             // Validate COPYDATASTRUCT and enforce reasonable size limit (10MB)
-            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0 || cds->cbData > 10 * 1024 * 1024)
+            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0 || cds->cbData > MAX_BUFFER_SIZE)
             {
                 SetEvent(hGetResultEvent);
                 return 0;
