@@ -59,13 +59,13 @@
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.0">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3405.78">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3537.50">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.32.0">
+        <PackageReference Include="Google.Protobuf" Version="3.33.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Memory" Version="4.6.3">

@@ -93,7 +93,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3">
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0">

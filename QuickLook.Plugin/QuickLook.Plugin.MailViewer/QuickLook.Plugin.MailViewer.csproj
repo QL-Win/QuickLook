@@ -55,7 +55,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MsgReader" Version="6.0.4" />
+        <PackageReference Include="MsgReader" Version="6.0.5" />
     </ItemGroup>
 
     <ItemGroup>
