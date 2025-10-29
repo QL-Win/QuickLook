@@ -136,6 +136,9 @@ LRESULT CALLBACK DOpus::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
     case WM_COPYDATA:
         {
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
+            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0)
+                return 0;
+
             auto buf = static_cast<PCHAR>(cds->lpData);
 
             // Clean up any previous buffer before allocating a new one

@@ -91,6 +91,11 @@ LRESULT CALLBACK MultiCommander::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wPar
             pCurrentItemPath = nullptr;
 
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
+            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0) {
+                SetEvent(hGetResultEvent);
+                return 0;
+            }
+
             auto buf = static_cast<PCHAR>(cds->lpData);
 
             pCurrentItemPath = new CHAR[cds->cbData + 1]{ '\0' };
