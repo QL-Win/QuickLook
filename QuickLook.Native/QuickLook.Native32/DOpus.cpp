@@ -136,8 +136,11 @@ LRESULT CALLBACK DOpus::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
     case WM_COPYDATA:
         {
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
-            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0)
+            // Validate COPYDATASTRUCT and enforce reasonable size limit (10MB)
+            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0 || cds->cbData > 10 * 1024 * 1024)
+            {
                 return 0;
+            }
 
             auto buf = static_cast<PCHAR>(cds->lpData);
 
