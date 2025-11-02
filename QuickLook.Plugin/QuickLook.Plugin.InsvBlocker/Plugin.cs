@@ -45,7 +45,8 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        // Set a minimal window size
+        // Set a minimal window size (1x1 pixels) to make the window as small as possible
+        // This window will be closed immediately in View() before becoming visible
         context.PreferredSize = new Size { Width = 1, Height = 1 };
     }
 
@@ -60,14 +61,15 @@ public class Plugin : IViewer
         context.ViewerContent = textBlock;
         context.IsBusy = false;
         
-        // Close the window immediately using a dispatcher
+        // Close the window immediately using Send priority for immediate execution
+        // This prevents the window from becoming visible to the user
         Application.Current?.Dispatcher?.BeginInvoke(new Action(() =>
         {
             if (context.Source is Window window)
             {
                 window.Close();
             }
-        }), DispatcherPriority.ApplicationIdle);
+        }), DispatcherPriority.Send);
     }
 
     public void Cleanup()
