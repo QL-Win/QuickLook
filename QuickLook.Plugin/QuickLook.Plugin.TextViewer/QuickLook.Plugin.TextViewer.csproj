@@ -8,7 +8,7 @@
         <FileAlignment>512</FileAlignment>
         <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
