@@ -45,31 +45,16 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        // Set a minimal window size (1x1 pixels) to make the window as small as possible
-        // This window will be closed immediately in View() before becoming visible
-        context.PreferredSize = new Size { Width = 1, Height = 1 };
+        // Set Ignore to true to display "blocked" in the preview window
+        context.IsBlocked = true;
+        context.Title = $"[BLOCKED] {Path.GetFileName(path)}";
+        context.PreferredSize = new Size(400, 200);
     }
 
     public void View(string path, ContextObject context)
     {
-        // Create an empty text block as content (required to avoid errors)
-        var textBlock = new TextBlock
-        {
-            Text = "",
-            Visibility = Visibility.Collapsed
-        };
-        context.ViewerContent = textBlock;
-        context.IsBusy = false;
-        
-        // Close the window immediately using Send priority for immediate execution
-        // This prevents the window from becoming visible to the user
-        Application.Current?.Dispatcher?.BeginInvoke(new Action(() =>
-        {
-            if (context.Source is Window window)
-            {
-                window.Close();
-            }
-        }), DispatcherPriority.Send);
+        // This should not be called since Ignore is set to true in Prepare
+        // But if called, do nothing
     }
 
     public void Cleanup()

@@ -201,6 +201,19 @@ public partial class ViewerWindow
             return;
         }
 
+        if (ContextObject.IsBlocked)
+        {
+            ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
+            {
+                Text = "This file type is blocked.",
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 14,
+            };
+            ContextObject.IsBusy = false;
+            return;
+        }
+
         SetOpenWithButtonAndPath();
 
         // Revert UI changes
