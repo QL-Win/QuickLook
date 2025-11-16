@@ -205,7 +205,7 @@ public partial class ViewerWindow
         {
             ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
             {
-                Text = "This file type is blocked.",
+                Text = TranslationHelper.Get("MW_FileBlocked", failsafe: "This file type is blocked."),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 FontSize = 14,
