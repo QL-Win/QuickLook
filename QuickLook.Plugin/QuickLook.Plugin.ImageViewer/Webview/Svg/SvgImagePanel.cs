@@ -276,7 +276,7 @@ public partial class SvgImagePanel : UserControl, IWebImagePanel
         _webView = null;
     }
 
-    public new static class MimeTypes
+    public static class MimeTypes
     {
         public static string GetContentTypeHeader(string extension = null)
             => $"Content-Type: {WebpagePanel.MimeTypes.GetMimeType(extension)}";
