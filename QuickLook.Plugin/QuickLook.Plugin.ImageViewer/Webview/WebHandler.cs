@@ -103,9 +103,9 @@ internal static class WebHandler
             ipWeb = ext switch
             {
                 ".svg" => new SvgImagePanel() { ContextObject = context },
-                ".svga" => new SvgaImagePanel(metaWeb),
-                ".lottie" or ".json" => new LottieImagePanel(),
-                ".tgs" => new TgsImagePanel(),
+                ".svga" => new SvgaImagePanel(metaWeb) { ContextObject = context },
+                ".lottie" or ".json" => new LottieImagePanel() { ContextObject = context },
+                ".tgs" => new TgsImagePanel() { ContextObject = context },
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 

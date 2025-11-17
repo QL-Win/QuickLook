@@ -126,7 +126,7 @@ public partial class SvgImagePanel : UserControl, IWebImagePanel
         UpdateWebViewBackgroundColor();
     }
 
-    private void UpdateWebViewBackgroundColor()
+    protected void UpdateWebViewBackgroundColor()
     {
         if (_webView == null) return;
 
