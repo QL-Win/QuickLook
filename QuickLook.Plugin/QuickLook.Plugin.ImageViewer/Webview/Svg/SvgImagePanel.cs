@@ -18,6 +18,7 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
@@ -29,16 +30,35 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Svg;
 
-public class SvgImagePanel : WebpagePanel, IWebImagePanel
+public partial class SvgImagePanel : UserControl, IWebImagePanel
 {
     protected const string _resourcePrefix = "QuickLook.Plugin.ImageViewer.Resources.";
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
     protected byte[] _homePage;
+    protected WebView2 _webView;
+    protected Uri _currentUri;
+    protected string _primaryPath;
+    protected string _fallbackPath;
+    private ContextObject _contextObject;
 
     private object _objectForScripting;
+
+    public string FallbackPath
+    {
+        get => _fallbackPath;
+        set => _fallbackPath = value;
+    }
+
+    public ContextObject ContextObject
+    {
+        get => _contextObject;
+        set => _contextObject = value;
+    }
 
     public object ObjectForScripting
     {
@@ -60,7 +80,21 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
         InitializeResources();
     }
 
-    protected override void InitializeComponent()
+    public SvgImagePanel()
+    {
+        InitializeComponent();
+
+        // Clear merged dictionaries from design time
+        Resources.MergedDictionaries.Clear();
+
+        // Initialize WebView2
+        InitializeWebView();
+
+        // Wire up the theme toggle button
+        buttonBackgroundColour.Click += OnBackgroundColourOnClick;
+    }
+
+    protected void InitializeWebView()
     {
         _webView = new WebView2()
         {
@@ -71,7 +105,53 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
             DefaultBackgroundColor = Color.Transparent,
         };
         _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
-        Content = _webView;
+        
+        // Add WebView2 to the Grid at the first position (behind the button)
+        var grid = (Grid)Content;
+        grid.Children.Insert(0, _webView);
+    }
+
+    private void OnBackgroundColourOnClick(object sender, RoutedEventArgs e)
+    {
+        if (ContextObject == null) return;
+
+        // Toggle the theme
+        var newTheme = ContextObject.Theme == Themes.Dark ? Themes.Light : Themes.Dark;
+        ContextObject.Theme = newTheme;
+
+        // Save the theme preference
+        SettingHelper.Set("LastTheme", (int)newTheme, "QuickLook.Plugin.ImageViewer");
+
+        // Update WebView2 background color
+        UpdateWebViewBackgroundColor();
+    }
+
+    private void UpdateWebViewBackgroundColor()
+    {
+        if (_webView == null) return;
+
+        var isDark = ContextObject?.Theme == Themes.Dark;
+        _webView.DefaultBackgroundColor = isDark 
+            ? Color.FromArgb(255, 32, 32, 32) 
+            : Color.White;
+    }
+
+    public void NavigateToUri(Uri uri)
+    {
+        if (_webView == null)
+            return;
+
+        _webView.Source = uri;
+        _currentUri = _webView.Source;
+    }
+
+    protected virtual void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+    {
+        if (e.IsSuccess)
+        {
+            _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+            _webView.CoreWebView2.WebResourceRequested += WebView_WebResourceRequested;
+        }
     }
 
     protected static void InitializeResources()
@@ -102,10 +182,14 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
         ObjectForScripting ??= new ScriptHandler(path);
 
         _homePage = _resources["/svg2html.html"];
+        
+        // Update WebView2 background color based on current theme
+        UpdateWebViewBackgroundColor();
+        
         NavigateToUri(new Uri("file://quicklook/"));
     }
 
-    protected override void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
+    protected virtual void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
     {
         Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
 
@@ -184,6 +268,12 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
     {
         using var reader = new StreamReader(ReadStream(key), Encoding.UTF8);
         return reader.ReadToEnd();
+    }
+
+    public void Dispose()
+    {
+        _webView?.Dispose();
+        _webView = null;
     }
 
     public new static class MimeTypes

@@ -102,7 +102,7 @@ internal static class WebHandler
 
             ipWeb = ext switch
             {
-                ".svg" => new SvgImagePanel(),
+                ".svg" => new SvgImagePanel() { ContextObject = context },
                 ".svga" => new SvgaImagePanel(metaWeb),
                 ".lottie" or ".json" => new LottieImagePanel(),
                 ".tgs" => new TgsImagePanel(),
