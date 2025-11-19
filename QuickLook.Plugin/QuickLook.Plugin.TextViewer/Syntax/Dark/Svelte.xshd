@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SyntaxDefinition name="Svelte" extensions=".svelte" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Comment" foreground="#6A9955" />
+	<Color name="Tag" foreground="#569CD6" exampleText="div" />
+	<Color name="Attribute" foreground="#9CDCFE" exampleText="on:click" />
+	<Color name="String" foreground="#CE9178" exampleText="&quot;text&quot;" />
+	<Color name="Directive" foreground="#DCDCAA" exampleText="bind:" />
+	<Color name="Keyword" foreground="#C586C0" exampleText="import" />
+	<Color name="Script" foreground="#D4D4D4" />
+	<Color name="Style" foreground="#4EC9B0" />
+
+	<RuleSet name="Html">
+		<Span color="Comment" begin="&lt;!--" end="--&gt;" />
+		<Span color="String" begin="&quot;" end="&quot;" />
+		<Span color="String" begin="&apos;" end="&apos;" />
+
+		<!-- Tags -->
+		<Span color="Tag" begin="&lt;" end="&gt;">
+			<RuleSet>
+				<Keywords color="Tag">
+					<Word>script</Word>
+					<Word>style</Word>
+					<Word>div</Word>
+					<Word>span</Word>
+					<Word>input</Word>
+					<Word>button</Word>
+					<Word>section</Word>
+					<Word>article</Word>
+					<Word>header</Word>
+					<Word>footer</Word>
+					<Word>main</Word>
+					<Word>nav</Word>
+					<Word>aside</Word>
+					<Word>p</Word>
+					<Word>h1</Word>
+					<Word>h2</Word>
+					<Word>h3</Word>
+					<Word>ul</Word>
+					<Word>li</Word>
+					<Word>a</Word>
+					<Word>img</Word>
+				</Keywords>
+				<Keywords color="Directive">
+					<Word>bind:</Word>
+					<Word>on:</Word>
+					<Word>use:</Word>
+					<Word>transition:</Word>
+					<Word>in:</Word>
+					<Word>out:</Word>
+					<Word>animate:</Word>
+					<Word>class:</Word>
+					<Word>style:</Word>
+				</Keywords>
+				<Keywords color="Attribute">
+					<Word>export</Word>
+					<Word>let</Word>
+					<Word>const</Word>
+				</Keywords>
+			</RuleSet>
+		</Span>
+	</RuleSet>
+
+	<RuleSet name="JavaScript">
+		<Span color="Comment" begin="//" end="\n" />
+		<Span color="Comment" begin="/\*" end="\*/" />
+		<Span color="String" begin="&quot;" end="&quot;" />
+		<Span color="String" begin="&apos;" end="&apos;" />
+		<Keywords color="Keyword">
+			<Word>import</Word>
+			<Word>export</Word>
+			<Word>default</Word>
+			<Word>return</Word>
+			<Word>const</Word>
+			<Word>let</Word>
+			<Word>var</Word>
+			<Word>if</Word>
+			<Word>else</Word>
+			<Word>for</Word>
+			<Word>while</Word>
+			<Word>function</Word>
+			<Word>async</Word>
+			<Word>await</Word>
+			<Word>new</Word>
+			<Word>this</Word>
+			<Word>true</Word>
+			<Word>false</Word>
+			<Word>null</Word>
+			<Word>undefined</Word>
+			<Word>each</Word>
+			<Word>if</Word>
+			<Word>else</Word>
+			<Word>await</Word>
+			<Word>then</Word>
+			<Word>catch</Word>
+		</Keywords>
+	</RuleSet>
+
+	<RuleSet name="CSS">
+		<Span color="Comment" begin="/\*" end="\*/" />
+		<Span color="String" begin="&quot;" end="&quot;" />
+		<Span color="String" begin="&apos;" end="&apos;" />
+	</RuleSet>
+
+	<RuleSet name="MainRuleSet">
+		<Import ruleSet="Html" />
+		<Import ruleSet="JavaScript" />
+		<Import ruleSet="CSS" />
+	</RuleSet>
+
+	<RuleSet>
+		<Import ruleSet="MainRuleSet" />
+	</RuleSet>
+</SyntaxDefinition>
