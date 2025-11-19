@@ -109,7 +109,7 @@ internal class ImageMagickProvider : AnimationProvider
             {
                 if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
                 {
-                    mi.SetProfile(ColorProfile.SRGB);
+                    mi.SetProfile(ColorProfiles.SRGB);
                     if (ContextObject.ColorProfileName != null)
                         mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
                 }
