@@ -19,6 +19,7 @@
 
 #define MULTICMD_CPF_GETCURITEMFULL 0x00000010L // Get full path of current item (file or folder) in focus
 #define MULTICMD_CPF_SOURCE         0x00000400L // Go to the new path in the source panel side
+#define MAX_BUFFER_SIZE             (10 * 1024 * 1024) // 10MB limit for IPC data
 
 #define MULTICMD_CLASS              L"MultiCommander MainWnd"
 #define MULTICMD_MSGWINDOW_CLASS    L"QuickLook.Native.MultiCmd.MsgWindow"

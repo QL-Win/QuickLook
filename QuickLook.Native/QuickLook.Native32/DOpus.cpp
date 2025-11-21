@@ -26,11 +26,12 @@
 #define DOPUS_CLASS L"DOpus.ParentWindow"
 #define DOPUS_NAME L"Directory Opus"
 #define MSGWINDOW_CLASS L"QuickLook.Native.DOpus.MsgWindow"
+#define MAX_BUFFER_SIZE (10 * 1024 * 1024)  // 10MB limit for IPC data
 
 HWND hMsgWnd;
 HANDLE hGetResultEvent;
 
-PCHAR pXmlBuffer;
+PCHAR pXmlBuffer = nullptr;
 
 void DOpus::GetSelected(PWCHAR buffer)
 {
@@ -72,9 +73,12 @@ void DOpus::GetSelected(PWCHAR buffer)
 
     WaitForSingleObject(hGetResultEvent, 2000);
 
-    ParseXmlBuffer(buffer);
-
-    delete[] pXmlBuffer;
+    if (pXmlBuffer != nullptr)
+    {
+        ParseXmlBuffer(buffer);
+        delete[] pXmlBuffer;
+        pXmlBuffer = nullptr;
+    }
 }
 
 void DOpus::ParseXmlBuffer(PWCHAR buffer)
@@ -87,6 +91,9 @@ void DOpus::ParseXmlBuffer(PWCHAR buffer)
      *         <item id="12" name="2.zip" path="C:\folder\2.zip" type="1" />
      *         ...
      */
+
+    if (pXmlBuffer == nullptr)
+        return;
 
     using namespace rapidxml;
 
@@ -130,7 +137,20 @@ LRESULT CALLBACK DOpus::msgWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
     case WM_COPYDATA:
         {
             auto cds = reinterpret_cast<PCOPYDATASTRUCT>(lParam);
+            // Validate COPYDATASTRUCT and enforce reasonable size limit (10MB)
+            if (cds == nullptr || cds->lpData == nullptr || cds->cbData == 0 || cds->cbData > MAX_BUFFER_SIZE)
+            {
+                return 0;
+            }
+
             auto buf = static_cast<PCHAR>(cds->lpData);
+
+            // Clean up any previous buffer before allocating a new one
+            if (pXmlBuffer != nullptr)
+            {
+                delete[] pXmlBuffer;
+                pXmlBuffer = nullptr;
+            }
 
             pXmlBuffer = new CHAR[cds->cbData + 1]{'\0'};
             memcpy(pXmlBuffer, buf, cds->cbData);
