@@ -351,7 +351,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void ChangeVolume(double delta)
     {
-        LinearVolume += delta;
+        LinearVolume = Math.Max(0.0, Math.Min(1.0, LinearVolume + delta));
     }
 
     private void TogglePlayPause(object sender, EventArgs e)
@@ -394,7 +394,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         mediaElement.Source = new Uri(path);
         // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-        LinearVolume = SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer");
+        LinearVolume = Math.Max(0.0, Math.Min(1.0, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
 
         mediaElement.Play();
     }
