@@ -351,7 +351,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void ChangeVolume(double delta)
     {
-        LinearVolume = Math.Max(0.0, Math.Min(1.0, LinearVolume + delta));
+        LinearVolume = Math.Max(0d, Math.Min(1d, LinearVolume + delta));
     }
 
     private void TogglePlayPause(object sender, EventArgs e)
@@ -385,16 +385,16 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         UpdateMeta(path, info);
 
         // detect rotation
-        double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+        _ = double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
         // Correct rotation: on some machine the value "90" becomes "90000" by some reason
-        if (rotation > 360)
+        if (rotation > 360d)
             rotation /= 1e3;
-        if (Math.Abs(rotation) > 0.1)
-            mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5, 0.5);
+        if (Math.Abs(rotation) > 0.1d)
+            mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5d, 0.5d);
 
         mediaElement.Source = new Uri(path);
         // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-        LinearVolume = Math.Max(0.0, Math.Min(1.0, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
+        LinearVolume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
 
         mediaElement.Play();
     }
