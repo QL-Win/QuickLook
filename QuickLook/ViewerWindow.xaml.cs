@@ -64,6 +64,8 @@ public partial class ViewerWindow : Window
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
 
+        ShowInTaskbar = SettingHelper.Get("ShowInTaskbar", false);
+
         buttonTop.Click += (_, _) =>
         {
             Topmost = !Topmost;
