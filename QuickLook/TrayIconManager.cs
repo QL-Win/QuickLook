@@ -36,6 +36,7 @@ internal partial class TrayIconManager : IDisposable
     private readonly TrayIconHost _icon;
 
     private readonly TrayMenuItem _itemAutorun = null!;
+    private readonly TrayMenuItem _itemDisableAutoUpdateCheck = null!;
 
     private TrayIconManager()
     {
@@ -79,6 +80,15 @@ internal partial class TrayIconManager : IDisposable
                     }),
                     IsEnabled = !App.IsUWP,
                 },
+                _itemDisableAutoUpdateCheck = new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_DisableAutoUpdateCheck"),
+                    Command = new RelayCommand(() =>
+                    {
+                        var current = SettingHelper.Get("DisableAutoUpdateCheck", false);
+                        SettingHelper.Set("DisableAutoUpdateCheck", !current);
+                    }),
+                },
                 new TrayMenuItem()
                 {
                     Header = TranslationHelper.Get("Icon_Restart"),
@@ -96,6 +106,7 @@ internal partial class TrayIconManager : IDisposable
         _icon.RightDown += (_, _) =>
         {
             _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun();
+            _itemDisableAutoUpdateCheck.IsChecked = SettingHelper.Get("DisableAutoUpdateCheck", false);
         };
     }
 

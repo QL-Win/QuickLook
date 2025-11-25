@@ -259,6 +259,9 @@ public partial class App : Application
 
     private void CheckUpdate()
     {
+        if (SettingHelper.Get("DisableAutoUpdateCheck", false))
+            return;
+
         if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(30).Ticks)
             return;
 
