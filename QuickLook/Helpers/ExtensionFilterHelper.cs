@@ -42,6 +42,7 @@ public static class ExtensionFilterHelper
     private const string AllowlistKey = "ExtensionAllowlist";
     private const string BlocklistKey = "ExtensionBlocklist";
     private const string UseAllowlistModeKey = "UseExtensionAllowlistMode";
+    private static readonly char[] ExtensionSeparators = [';', ','];
 
     private static HashSet<string> _allowlistCache;
     private static HashSet<string> _blocklistCache;
@@ -169,7 +170,7 @@ public static class ExtensionFilterHelper
             return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         return new HashSet<string>(
-            list.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
+            list.Split(ExtensionSeparators, StringSplitOptions.RemoveEmptyEntries)
                 .Select(NormalizeExtension)
                 .Where(e => !string.IsNullOrEmpty(e)),
             StringComparer.OrdinalIgnoreCase);
