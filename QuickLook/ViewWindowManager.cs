@@ -151,9 +151,14 @@ public class ViewWindowManager : IDisposable
         if (_viewerWindow.IsVisible && path == _invokedPath)
             return;
 
-        if (!Directory.Exists(path) && !File.Exists(path))
+        var isDirectory = Directory.Exists(path);
+        if (!isDirectory && !File.Exists(path))
             if (!path.StartsWith("::")) // CLSID
                 return;
+
+        // Check extension filtering before proceeding (skip for directories)
+        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+            return;
 
         _invokedPath = path;
 
@@ -172,7 +177,12 @@ public class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             return;
 
-        if (!Directory.Exists(path) && !File.Exists(path))
+        var isDirectory = Directory.Exists(path);
+        if (!isDirectory && !File.Exists(path))
+            return;
+
+        // Check extension filtering before proceeding (skip for directories)
+        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
             return;
 
         RunFocusMonitor();
