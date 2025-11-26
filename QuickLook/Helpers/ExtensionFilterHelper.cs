@@ -25,8 +25,17 @@ namespace QuickLook.Helpers;
 
 /// <summary>
 /// Helper class for managing file extension allowlist/blocklist filtering.
-/// When allowlist mode is enabled, only extensions in the allowlist can be previewed.
-/// When blocklist mode is enabled (default), extensions in the blocklist are blocked from preview.
+/// <para>
+/// <b>Blocklist mode (default):</b> All extensions are allowed except those in the blocklist.
+/// If the blocklist is empty, all files are allowed.
+/// </para>
+/// <para>
+/// <b>Allowlist mode:</b> Only extensions in the allowlist can be previewed.
+/// If the allowlist is empty in allowlist mode, all files are allowed (no filtering).
+/// </para>
+/// <para>
+/// Directories and files without extensions are always allowed regardless of the mode.
+/// </para>
 /// </summary>
 public static class ExtensionFilterHelper
 {
@@ -123,11 +132,9 @@ public static class ExtensionFilterHelper
         if (string.IsNullOrEmpty(path))
             return true;
 
-        // Directories are always allowed (extension filtering only applies to files)
-        if (Directory.Exists(path))
-            return true;
-
         var extension = Path.GetExtension(path);
+        
+        // Files without extensions are always allowed (includes directories)
         if (string.IsNullOrEmpty(extension))
             return true;
 
