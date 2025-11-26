@@ -155,6 +155,10 @@ public class ViewWindowManager : IDisposable
             if (!path.StartsWith("::")) // CLSID
                 return;
 
+        // Check extension filtering before proceeding
+        if (!ExtensionFilterHelper.IsExtensionAllowed(path))
+            return;
+
         _invokedPath = path;
 
         RunFocusMonitor();
@@ -173,6 +177,10 @@ public class ViewWindowManager : IDisposable
             return;
 
         if (!Directory.Exists(path) && !File.Exists(path))
+            return;
+
+        // Check extension filtering before proceeding
+        if (!ExtensionFilterHelper.IsExtensionAllowed(path))
             return;
 
         RunFocusMonitor();
