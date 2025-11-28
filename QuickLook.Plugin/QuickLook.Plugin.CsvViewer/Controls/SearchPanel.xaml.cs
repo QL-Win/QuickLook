@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,9 +24,6 @@ namespace QuickLook.Plugin.CsvViewer.Controls;
 
 public partial class SearchPanel : UserControl
 {
-    private List<(int Row, int Column)> _searchResults = new List<(int, int)>();
-    private int _currentResultIndex = -1;
-
     public event EventHandler<SearchEventArgs> SearchRequested;
     public event EventHandler<NavigateEventArgs> NavigateRequested;
     public event EventHandler CloseRequested;
@@ -46,18 +42,15 @@ public partial class SearchPanel : UserControl
         searchTextBox.SelectAll();
     }
 
-    public void UpdateMatchCount(List<(int Row, int Column)> results, int currentIndex)
+    public void UpdateMatchCount(int totalCount, int currentIndex)
     {
-        _searchResults = results ?? new List<(int, int)>();
-        _currentResultIndex = currentIndex;
-
-        if (_searchResults.Count == 0)
+        if (totalCount == 0)
         {
             matchCountText.Text = string.IsNullOrEmpty(searchTextBox.Text) ? "" : "0/0";
         }
         else
         {
-            matchCountText.Text = $"{currentIndex + 1}/{_searchResults.Count}";
+            matchCountText.Text = $"{currentIndex + 1}/{totalCount}";
         }
     }
 

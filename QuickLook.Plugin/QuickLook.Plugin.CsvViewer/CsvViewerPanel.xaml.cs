@@ -36,10 +36,14 @@ namespace QuickLook.Plugin.CsvViewer;
 
 public partial class CsvViewerPanel : UserControl
 {
+    // Highlight color for search results (semi-transparent yellow)
+    private static readonly SolidColorBrush HighlightBrush = new SolidColorBrush(Color.FromArgb(128, 255, 255, 0));
+
     private List<(int Row, int Column)> _searchResults = new List<(int, int)>();
     private int _currentResultIndex = -1;
     private string _currentSearchText = string.Empty;
     private bool _currentMatchCase;
+    private DataGridCell _highlightedCell;  // Track currently highlighted cell for efficient clearing
 
     public CsvViewerPanel()
     {
@@ -129,7 +133,7 @@ public partial class CsvViewerPanel : UserControl
 
         if (string.IsNullOrEmpty(_currentSearchText))
         {
-            searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+            searchPanel.UpdateMatchCount(0, _currentResultIndex);
             return;
         }
 
@@ -153,7 +157,7 @@ public partial class CsvViewerPanel : UserControl
             NavigateToCurrentResult();
         }
 
-        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+        searchPanel.UpdateMatchCount(_searchResults.Count, _currentResultIndex);
     }
 
     private void NavigateToNextResult()
@@ -163,7 +167,7 @@ public partial class CsvViewerPanel : UserControl
 
         _currentResultIndex = (_currentResultIndex + 1) % _searchResults.Count;
         NavigateToCurrentResult();
-        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+        searchPanel.UpdateMatchCount(_searchResults.Count, _currentResultIndex);
     }
 
     private void NavigateToPreviousResult()
@@ -173,7 +177,7 @@ public partial class CsvViewerPanel : UserControl
 
         _currentResultIndex = (_currentResultIndex - 1 + _searchResults.Count) % _searchResults.Count;
         NavigateToCurrentResult();
-        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+        searchPanel.UpdateMatchCount(_searchResults.Count, _currentResultIndex);
     }
 
     private void NavigateToCurrentResult()
@@ -199,6 +203,9 @@ public partial class CsvViewerPanel : UserControl
 
     private void HighlightCurrentCell(int rowIndex, int colIndex)
     {
+        // Clear previous highlight first
+        ClearHighlighting();
+
         try
         {
             var row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
@@ -210,38 +217,26 @@ public partial class CsvViewerPanel : UserControl
                     var cell = presenter.ItemContainerGenerator.ContainerFromIndex(colIndex) as DataGridCell;
                     if (cell != null)
                     {
-                        cell.Background = new SolidColorBrush(Color.FromArgb(128, 255, 255, 0)); // Semi-transparent yellow
+                        cell.Background = HighlightBrush;
+                        _highlightedCell = cell;
                     }
                 }
             }
         }
-        catch
+        catch (InvalidOperationException)
         {
-            // Ignore errors when highlighting
+            // Can occur when visual tree is being rebuilt during scrolling.
+            // Safe to ignore as the cell will be highlighted on next navigation.
         }
     }
 
     private void ClearHighlighting()
     {
-        // Reset cell backgrounds by iterating through visible rows
-        foreach (var item in dataGrid.Items)
+        // Only clear the previously highlighted cell instead of iterating all cells
+        if (_highlightedCell != null)
         {
-            var row = dataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-            if (row != null)
-            {
-                var presenter = FindVisualChild<DataGridCellsPresenter>(row);
-                if (presenter != null)
-                {
-                    for (int i = 0; i < dataGrid.Columns.Count; i++)
-                    {
-                        var cell = presenter.ItemContainerGenerator.ContainerFromIndex(i) as DataGridCell;
-                        if (cell != null)
-                        {
-                            cell.ClearValue(DataGridCell.BackgroundProperty);
-                        }
-                    }
-                }
-            }
+            _highlightedCell.ClearValue(DataGridCell.BackgroundProperty);
+            _highlightedCell = null;
         }
     }
 
