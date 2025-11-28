@@ -17,6 +17,7 @@
 
 using CsvHelper;
 using CsvHelper.Configuration;
+using QuickLook.Plugin.CsvViewer.Controls;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,7 +26,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using UtfUnknown;
 
@@ -33,12 +36,232 @@ namespace QuickLook.Plugin.CsvViewer;
 
 public partial class CsvViewerPanel : UserControl
 {
+    private List<(int Row, int Column)> _searchResults = new List<(int, int)>();
+    private int _currentResultIndex = -1;
+    private string _currentSearchText = string.Empty;
+    private bool _currentMatchCase;
+
     public CsvViewerPanel()
     {
         InitializeComponent();
+
+        KeyDown += CsvViewerPanel_KeyDown;
+        searchPanel.SearchRequested += SearchPanel_SearchRequested;
+        searchPanel.NavigateRequested += SearchPanel_NavigateRequested;
+        searchPanel.CloseRequested += SearchPanel_CloseRequested;
     }
 
     public List<string[]> Rows { get; private set; } = [];
+
+    private void CsvViewerPanel_KeyDown(object sender, KeyEventArgs e)
+    {
+        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.F)
+        {
+            OpenSearchPanel();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape && searchPanel.Visibility == Visibility.Visible)
+        {
+            CloseSearchPanel();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.F3)
+        {
+            if (searchPanel.Visibility == Visibility.Visible && _searchResults.Count > 0)
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    NavigateToPreviousResult();
+                }
+                else
+                {
+                    NavigateToNextResult();
+                }
+            }
+            e.Handled = true;
+        }
+    }
+
+    private void OpenSearchPanel()
+    {
+        searchPanel.Visibility = Visibility.Visible;
+        searchPanel.Focus();
+    }
+
+    private void CloseSearchPanel()
+    {
+        searchPanel.Visibility = Visibility.Collapsed;
+        ClearHighlighting();
+        _searchResults.Clear();
+        _currentResultIndex = -1;
+        dataGrid.Focus();
+    }
+
+    private void SearchPanel_SearchRequested(object sender, SearchEventArgs e)
+    {
+        _currentSearchText = e.SearchText;
+        _currentMatchCase = e.MatchCase;
+        PerformSearch();
+    }
+
+    private void SearchPanel_NavigateRequested(object sender, NavigateEventArgs e)
+    {
+        if (e.Forward)
+        {
+            NavigateToNextResult();
+        }
+        else
+        {
+            NavigateToPreviousResult();
+        }
+    }
+
+    private void SearchPanel_CloseRequested(object sender, EventArgs e)
+    {
+        CloseSearchPanel();
+    }
+
+    private void PerformSearch()
+    {
+        ClearHighlighting();
+        _searchResults.Clear();
+        _currentResultIndex = -1;
+
+        if (string.IsNullOrEmpty(_currentSearchText))
+        {
+            searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+            return;
+        }
+
+        var comparison = _currentMatchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+        for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
+        {
+            var row = Rows[rowIndex];
+            for (int colIndex = 0; colIndex < row.Length; colIndex++)
+            {
+                if (row[colIndex] != null && row[colIndex].IndexOf(_currentSearchText, comparison) >= 0)
+                {
+                    _searchResults.Add((rowIndex, colIndex));
+                }
+            }
+        }
+
+        if (_searchResults.Count > 0)
+        {
+            _currentResultIndex = 0;
+            NavigateToCurrentResult();
+        }
+
+        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+    }
+
+    private void NavigateToNextResult()
+    {
+        if (_searchResults.Count == 0)
+            return;
+
+        _currentResultIndex = (_currentResultIndex + 1) % _searchResults.Count;
+        NavigateToCurrentResult();
+        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+    }
+
+    private void NavigateToPreviousResult()
+    {
+        if (_searchResults.Count == 0)
+            return;
+
+        _currentResultIndex = (_currentResultIndex - 1 + _searchResults.Count) % _searchResults.Count;
+        NavigateToCurrentResult();
+        searchPanel.UpdateMatchCount(_searchResults, _currentResultIndex);
+    }
+
+    private void NavigateToCurrentResult()
+    {
+        if (_currentResultIndex < 0 || _currentResultIndex >= _searchResults.Count)
+            return;
+
+        var (rowIndex, colIndex) = _searchResults[_currentResultIndex];
+
+        // Scroll to the row
+        if (rowIndex < dataGrid.Items.Count)
+        {
+            dataGrid.ScrollIntoView(dataGrid.Items[rowIndex]);
+            dataGrid.UpdateLayout();
+
+            // Select the cell
+            dataGrid.SelectedIndex = rowIndex;
+
+            // Try to highlight the specific cell
+            HighlightCurrentCell(rowIndex, colIndex);
+        }
+    }
+
+    private void HighlightCurrentCell(int rowIndex, int colIndex)
+    {
+        try
+        {
+            var row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            if (row != null)
+            {
+                var presenter = FindVisualChild<DataGridCellsPresenter>(row);
+                if (presenter != null)
+                {
+                    var cell = presenter.ItemContainerGenerator.ContainerFromIndex(colIndex) as DataGridCell;
+                    if (cell != null)
+                    {
+                        cell.Background = new SolidColorBrush(Color.FromArgb(128, 255, 255, 0)); // Semi-transparent yellow
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Ignore errors when highlighting
+        }
+    }
+
+    private void ClearHighlighting()
+    {
+        // Reset cell backgrounds by iterating through visible rows
+        foreach (var item in dataGrid.Items)
+        {
+            var row = dataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+            if (row != null)
+            {
+                var presenter = FindVisualChild<DataGridCellsPresenter>(row);
+                if (presenter != null)
+                {
+                    for (int i = 0; i < dataGrid.Columns.Count; i++)
+                    {
+                        var cell = presenter.ItemContainerGenerator.ContainerFromIndex(i) as DataGridCell;
+                        if (cell != null)
+                        {
+                            cell.ClearValue(DataGridCell.BackgroundProperty);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T typedChild)
+            {
+                return typedChild;
+            }
+            var result = FindVisualChild<T>(child);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
+    }
 
     public void LoadFile(string path)
     {
