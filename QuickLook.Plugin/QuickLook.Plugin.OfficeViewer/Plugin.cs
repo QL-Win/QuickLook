@@ -108,19 +108,34 @@ public class Plugin : IViewer
         {
             context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
 
-            MessageBoxResult result = MessageBox.Show(
-                """
-                Be careful - files from the Internet can contain viruses.
-                The Office interface prevents loading in Protected View.
+            // Check if user has previously chosen to always unblock
+            var alwaysUnblock = SettingHelper.Get("AlwaysUnblockProtectedView", false, "QuickLook.Plugin.OfficeViewer");
 
-                Would you like OfficeViewer-Native to unblock the ZoneIdentifier of Internet?
-                """,
-                "PROTECTED VIEW",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question
-            );
+            bool shouldUnblock = alwaysUnblock;
 
-            if (result == MessageBoxResult.Yes)
+            if (!alwaysUnblock)
+            {
+                // Show dialog to ask user
+                var dialog = new ProtectedViewDialog();
+                var dialogResult = dialog.ShowDialog();
+
+                if (dialogResult == true)
+                {
+                    shouldUnblock = true;
+
+                    // Save preference if user checked "Remember my choice"
+                    if (dialog.RememberChoice)
+                    {
+                        SettingHelper.Set("AlwaysUnblockProtectedView", true, "QuickLook.Plugin.OfficeViewer");
+                    }
+                }
+                else
+                {
+                    shouldUnblock = false;
+                }
+            }
+
+            if (shouldUnblock)
             {
                 _ = ZoneIdentifierManager.UnblockZone(path);
             }
