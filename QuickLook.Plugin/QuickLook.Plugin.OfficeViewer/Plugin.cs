@@ -108,30 +108,28 @@ public class Plugin : IViewer
         {
             context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
 
-            // Check if user has previously chosen to always unblock
-            var alwaysUnblock = SettingHelper.Get("AlwaysUnblockProtectedView", false, "QuickLook.Plugin.OfficeViewer");
+            // Check if user has a saved preference
+            var savedPreference = SettingHelper.Get<bool?>("AlwaysUnblockProtectedView", null, "QuickLook.Plugin.OfficeViewer");
 
-            bool shouldUnblock = alwaysUnblock;
+            bool shouldUnblock;
 
-            if (!alwaysUnblock)
+            if (savedPreference.HasValue)
+            {
+                // Use saved preference
+                shouldUnblock = savedPreference.Value;
+            }
+            else
             {
                 // Show dialog to ask user
                 var dialog = new ProtectedViewDialog();
                 var dialogResult = dialog.ShowDialog();
 
-                if (dialogResult == true)
-                {
-                    shouldUnblock = true;
+                shouldUnblock = dialogResult == true;
 
-                    // Save preference if user checked "Remember my choice"
-                    if (dialog.RememberChoice)
-                    {
-                        SettingHelper.Set("AlwaysUnblockProtectedView", true, "QuickLook.Plugin.OfficeViewer");
-                    }
-                }
-                else
+                // Save preference if user checked "Remember my choice"
+                if (dialog.RememberChoice)
                 {
-                    shouldUnblock = false;
+                    SettingHelper.Set("AlwaysUnblockProtectedView", shouldUnblock, "QuickLook.Plugin.OfficeViewer");
                 }
             }
 

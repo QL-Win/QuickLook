@@ -38,7 +38,6 @@ public partial class ProtectedViewDialog : Window
 
     private void NoButton_Click(object sender, RoutedEventArgs e)
     {
-        UserSelectedYes = false;
         DialogResult = false;
         Close();
     }
