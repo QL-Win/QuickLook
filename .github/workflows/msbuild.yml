@@ -1,6 +1,6 @@
 # run a build for the latest version and upload the artifacts to a "latest" pre-release
 
-name: MSBuild
+name: build
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
