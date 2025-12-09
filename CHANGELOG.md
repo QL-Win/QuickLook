@@ -1,3 +1,14 @@
+## 4.3.0
+
+- Add Svelte syntax highlighting support
+- Add ShowInTaskbar setting to display window in taskbar [#1789](https://github.com/QL-Win/QuickLook/issues/1789)
+- Add option to disable automatic update check at startup [#1801](https://github.com/QL-Win/QuickLook/issues/1801)
+- Update PowerShell syntax colors in dark theme
+- Improve TextViewerPanel UI and usability
+- Fix DOpus crash when QuickLook runs with different privilege level [#1781](https://github.com/QL-Win/QuickLook/issues/1781)
+- Fix volume control exceeding limits during mouse wheel scroll [#1813](https://github.com/QL-Win/QuickLook/issues/1813)
+- Fix error in RTF file originating from version 4.2.1 [#1826](https://github.com/QL-Win/QuickLook/issues/1826)
+
 ## 4.2.2
 
 - Fix version display issue [#1776](https://github.com/QL-Win/QuickLook/issues/1776)
