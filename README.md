@@ -5,7 +5,6 @@
 <a href="https://trendshift.io/repositories/3258" target="_blank"><img src="https://trendshift.io/api/badge/repositories/3258" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 [![license](https://img.shields.io/github/license/QL-Win/QuickLook.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![AppVeyor](https://img.shields.io/appveyor/ci/xupefei/QuickLook.svg)](https://ci.appveyor.com/project/xupefei/QuickLook)
 [![Actions](https://github.com/QL-Win/QuickLook/actions/workflows/msbuild.yml/badge.svg)](https://github.com/QL-Win/QuickLook/actions/workflows/msbuild.yml)
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?logo=windowsxp&color=1E9BFA)](https://dotnet.microsoft.com/en-us/download/dotnet/latest/runtime)
 [![Github All Releases](https://img.shields.io/github/downloads/QL-Win/QuickLook/total.svg)](https://github.com/QL-Win/QuickLook/releases)
@@ -38,7 +37,7 @@ Get it from one of the following sources:
   * Microsoft Store (Windows 10 and later only). Not supported on Windows 10 S. Not support file preview in Open-File or Save-File dialogs. <a href="https://www.microsoft.com/store/apps/9nv4bs3l1h4s?ocid=badge" target="_blank"><img src="https://developer.microsoft.com/store/badges/images/English_get_L.png" height="22px" alt="Store Link" /></a> 
   * Installer or portable archive of the stable version from [GitHub Release](https://github.com/QL-Win/QuickLook/releases)
   * Using [Scoop](https://scoop.sh/): `scoop bucket add extras && scoop install extras/quicklook`
-  * Nightly builds from [AppVeyor](https://ci.appveyor.com/project/xupefei/quicklook/build/artifacts) and [GitHub Action](https://github.com/QL-Win/QuickLook/releases/)
+  * Nightly builds from [GitHub Action](https://github.com/QL-Win/QuickLook/releases/)
 
 [What are the differences between `.msi`, `.zip`, Nightly and Store versions?](https://github.com/QL-Win/QuickLook/wiki/Differences-Between-Distributions)
 
