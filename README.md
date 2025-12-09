@@ -8,6 +8,7 @@
 [![AppVeyor](https://img.shields.io/appveyor/ci/xupefei/QuickLook.svg)](https://ci.appveyor.com/project/xupefei/QuickLook)
 [![Github All Releases](https://img.shields.io/github/downloads/QL-Win/QuickLook/total.svg)](https://github.com/QL-Win/QuickLook/releases)
 [![GitHub release](https://img.shields.io/github/release/QL-Win/QuickLook.svg)](https://github.com/QL-Win/QuickLook/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows-blue?logo=windowsxp&color=1E9BFA)](https://dotnet.microsoft.com/en-us/download/dotnet/latest/runtime)
 
 <img src="https://user-images.githubusercontent.com/1687847/64730506-2a60d100-d4e8-11e9-95a6-f13dbd869b2a.jpeg" width="400">
 
