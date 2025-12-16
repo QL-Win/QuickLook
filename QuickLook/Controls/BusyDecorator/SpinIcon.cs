@@ -33,9 +33,7 @@ internal class SpinIcon : TextBlock, ISpinable
 
     private static void OnSpinPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var b = d as SpinIcon;
-
-        if (b == null) return;
+        if (d is not SpinIcon b) return;
 
         if ((bool)e.NewValue)
             b.BeginSpin();
