@@ -21,7 +21,7 @@ namespace QuickLook.Plugin.TextViewer.Detectors;
 
 public sealed class XMLDetector : IFormatDetector
 {
-    internal Regex Signature { get; } = new(@"<\?xml\b[^>]*\bversion\s*=\s*""[^""]*""[^\?>]*\?>", RegexOptions.IgnoreCase);
+    internal Regex Signature { get; } = new(@"<\?xml\b[^>]*\bversion\s*=\s*(['""])[^'""]*\1[^\?>]*\?>", RegexOptions.IgnoreCase);
 
     public string Name => "XML";
 
