@@ -114,6 +114,21 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        if (!EnsureOSVersion()
+         || !EnsureFirstInstance(e.Args)
+         || !EnsureFolderWritable(SettingHelper.LocalDataPath))
+        {
+            _cleanExit = false;
+            Shutdown();
+            return;
+        }
+
+        RunListener(e);
+
+        // First instance: run and preview this file
+        if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
+            PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
+
         // Exception handling events which are not caught in the Task thread
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
@@ -202,31 +217,41 @@ public partial class App : Application
 
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
-        SystemEvents.UserPreferenceChanged += (_, _) =>
-            ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
-        UxTheme.ApplyPreferredAppMode();
+        UxTheme.ApplyPreferredAppMode(isTracked: true);
+        SystemEvents.SessionEnding += OnSessionEnding;
 
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
-    }
-
-    private void Application_Startup(object sender, StartupEventArgs e)
-    {
-        if (!EnsureOSVersion()
-         || !EnsureFirstInstance(e.Args)
-         || !EnsureFolderWritable(SettingHelper.LocalDataPath))
-        {
-            _cleanExit = false;
-            Shutdown();
-            return;
-        }
 
         CheckUpdate();
-        RunListener(e);
+    }
 
-        // First instance: run and preview this file
-        if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
-            PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
+    protected virtual void OnSessionEnding(object sender, SessionEndingEventArgs e)
+    {
+        SystemEvents.SessionEnding -= OnSessionEnding;
+
+        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
+        // https://github.com/QL-Win/QuickLook/issues/1782
+        UxTheme.ApplyPreferredAppMode(isTracked: false);
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
+        // https://github.com/QL-Win/QuickLook/issues/1782
+        UxTheme.ApplyPreferredAppMode(isTracked: false);
+
+        base.OnExit(e);
+
+        if (!_cleanExit)
+            return;
+
+        _isRunning.ReleaseMutex();
+
+        PipeServerManager.GetInstance().Dispose();
+        TrayIconManager.GetInstance().Dispose();
+        KeystrokeDispatcher.GetInstance().Dispose();
+        ViewWindowManager.GetInstance().Dispose();
     }
 
     private bool EnsureOSVersion()
@@ -257,47 +282,6 @@ public partial class App : Application
         return true;
     }
 
-    private void CheckUpdate()
-    {
-        if (SettingHelper.Get("DisableAutoUpdateCheck", false))
-            return;
-
-        if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(30).Ticks)
-            return;
-
-        Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
-        SettingHelper.Set("LastUpdateTicks", DateTime.Now.Ticks);
-    }
-
-    private void RunListener(StartupEventArgs e)
-    {
-        TrayIconManager.GetInstance();
-        if (!e.Args.Contains("/autorun") && !IsUWP)
-            TrayIconManager.ShowNotification(string.Empty, TranslationHelper.Get("APP_START"));
-        if (e.Args.Contains("/first"))
-            AutoStartupHelper.CreateAutorunShortcut();
-
-        NativeMethods.QuickLook.Init();
-
-        PluginManager.GetInstance();
-        ViewWindowManager.GetInstance();
-        KeystrokeDispatcher.GetInstance();
-        PipeServerManager.GetInstance();
-    }
-
-    private void App_OnExit(object sender, ExitEventArgs e)
-    {
-        if (!_cleanExit)
-            return;
-
-        _isRunning.ReleaseMutex();
-
-        PipeServerManager.GetInstance().Dispose();
-        TrayIconManager.GetInstance().Dispose();
-        KeystrokeDispatcher.GetInstance().Dispose();
-        ViewWindowManager.GetInstance().Dispose();
-    }
-
     private bool EnsureFirstInstance(string[] args)
     {
         _isRunning = new Mutex(true, "QuickLook.App.Mutex", out bool isFirst);
@@ -318,5 +302,33 @@ public partial class App : Application
         }
 
         return false;
+    }
+
+    private void CheckUpdate()
+    {
+        if (SettingHelper.Get("DisableAutoUpdateCheck", false))
+            return;
+
+        if (DateTime.Now.Ticks - SettingHelper.Get<long>("LastUpdateTicks") < TimeSpan.FromDays(30).Ticks)
+            return;
+
+        _ = Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
+        SettingHelper.Set("LastUpdateTicks", DateTime.Now.Ticks);
+    }
+
+    private void RunListener(StartupEventArgs e)
+    {
+        TrayIconManager.GetInstance();
+        if (!e.Args.Contains("/autorun") && !IsUWP)
+            TrayIconManager.ShowNotification(string.Empty, TranslationHelper.Get("APP_START"));
+        if (e.Args.Contains("/first"))
+            AutoStartupHelper.CreateAutorunShortcut();
+
+        NativeMethods.QuickLook.Init();
+
+        PluginManager.GetInstance();
+        ViewWindowManager.GetInstance();
+        KeystrokeDispatcher.GetInstance();
+        PipeServerManager.GetInstance();
     }
 }
