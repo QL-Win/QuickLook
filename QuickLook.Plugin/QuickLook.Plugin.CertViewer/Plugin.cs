@@ -56,18 +56,8 @@ public class Plugin : IViewer
 
         context.IsBusy = true;
 
-        var result = CertUtils.TryLoadCertificate(path);
-
         _control = new CertViewerControl();
-
-        if (result.Success && result.Certificate != null)
-        {
-            _control.LoadCertificate(result.Certificate);
-        }
-        else
-        {
-            _control.LoadRaw(path, result.Message, result.RawContent);
-        }
+        _control.LoadFromPath(path);
 
         context.ViewerContent = _control;
         context.Title = Path.GetFileName(path);

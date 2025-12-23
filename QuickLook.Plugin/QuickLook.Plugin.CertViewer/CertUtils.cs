@@ -14,7 +14,7 @@ internal static class CertUtils
     /// - Message: an informational or error message
     /// - RawContent: original file text or hex when parsing failed
     /// </summary>
-    public static CertLoadResult TryLoadCertificate(string path)
+    public static CertLoadResult TryLoadCertificate(string path, string password = null)
     {
         try
         {
@@ -24,12 +24,16 @@ internal static class CertUtils
             {
                 try
                 {
-                    var cert = new X509Certificate2(path);
+                    var cert = !string.IsNullOrEmpty(password)
+                        ? new X509Certificate2(path, password)
+                        : new X509Certificate2(path);
                     return new CertLoadResult(true, cert, string.Empty, null);
                 }
                 catch (Exception ex)
                 {
-                    return new CertLoadResult(false, null, "Failed to load PFX/P12: " + ex.Message, null);
+                    var isPasswordError = ex is System.Security.Cryptography.CryptographicException ||
+                                          (ex.Message?.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0);
+                    return new CertLoadResult(false, null, "Failed to load PFX/P12: " + ex.Message, null, isPasswordError);
                 }
             }
 

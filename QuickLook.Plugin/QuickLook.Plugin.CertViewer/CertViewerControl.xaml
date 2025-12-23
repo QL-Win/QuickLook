@@ -12,29 +12,41 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="PropertyList"
-                  Grid.Column="0"
-                  Margin="8"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  HeadersVisibility="Column"
-                  RowHeaderWidth="0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Field" Binding="{Binding Key}" Width="150" />
-                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- Password panel (hidden by default) -->
+        <StackPanel x:Name="PasswordPanel" Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="8" Visibility="Collapsed" VerticalAlignment="Center">
+            <TextBlock Text="This certificate appears to be password-protected. Enter password:" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <PasswordBox x:Name="InlinePasswordBox" Width="220" Margin="0,0,8,0" />
+            <Button x:Name="LoadWithPasswordButton" Content="Load" Width="80" Margin="0,0,8,0" Click="LoadWithPasswordButton_Click" />
+            <Button x:Name="CancelPasswordButton" Content="Cancel" Width="80" Click="CancelPasswordButton_Click" />
+        </StackPanel>
 
-        <TextBox x:Name="RawText"
-                 Grid.Column="1"
-                 Margin="8"
-                 AcceptsReturn="True"
-                 HorizontalScrollBarVisibility="Auto"
-                 IsReadOnly="True"
-                 TextWrapping="Wrap"
-                 VerticalScrollBarVisibility="Auto" />
+        <TabControl Grid.Row="1" Grid.ColumnSpan="2" Margin="8">
+            <TabItem Header="Details">
+                <DataGrid x:Name="PropertyList"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          HeadersVisibility="Column"
+                          RowHeaderWidth="0"
+                          Margin="0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Field" Binding="{Binding Key}" Width="150" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Raw">
+                <TextBox x:Name="RawText"
+                         AcceptsReturn="True"
+                         HorizontalScrollBarVisibility="Auto"
+                         IsReadOnly="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="0" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
