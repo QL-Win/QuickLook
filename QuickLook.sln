@@ -1,4 +1,5 @@
 ﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
@@ -20,6 +21,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.PdfViewer", "QuickLook.Plugin\QuickLook.Plugin.PDFViewer\QuickLook.Plugin.PdfViewer.csproj", "{A82AC69C-EDF5-4F0D-8CBD-8E5E3C06E64D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.TextViewer", "QuickLook.Plugin\QuickLook.Plugin.TextViewer\QuickLook.Plugin.TextViewer.csproj", "{AE041682-E3A1-44F6-8BB4-916A98D89FBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.CertViewer", "QuickLook.Plugin\QuickLook.Plugin.CertViewer\QuickLook.Plugin.CertViewer.csproj", "{C8B9F6D1-1234-4AAB-9C3D-ABCDEF123456}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickLook.Plugin.VideoViewer", "QuickLook.Plugin\QuickLook.Plugin.VideoViewer\QuickLook.Plugin.VideoViewer.csproj", "{1B746D92-49A5-4A37-9D75-DCC490393290}"
 EndProject
