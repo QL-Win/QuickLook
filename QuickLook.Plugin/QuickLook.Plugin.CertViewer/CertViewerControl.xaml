@@ -15,20 +15,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ListView x:Name="PropertyList"
+        <DataGrid x:Name="PropertyList"
                   Grid.Column="0"
-                  Margin="8">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="150"
-                                    DisplayMemberBinding="{Binding Key}"
-                                    Header="Field" />
-                    <GridViewColumn Width="300"
-                                    DisplayMemberBinding="{Binding Value}"
-                                    Header="Value" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+                  Margin="8"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  HeadersVisibility="Column"
+                  RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Field" Binding="{Binding Key}" Width="150" />
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
 
         <TextBox x:Name="RawText"
                  Grid.Column="1"
