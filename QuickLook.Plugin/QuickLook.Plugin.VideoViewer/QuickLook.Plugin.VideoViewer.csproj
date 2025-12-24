@@ -49,7 +49,7 @@
             <SpecificVersion>False</SpecificVersion>
         </Reference>
         <PackageReference Include="UTF.Unknown" Version="2.6.0" />
-        <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.2" />
+        <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
     </ItemGroup>
 
     <ItemGroup>
