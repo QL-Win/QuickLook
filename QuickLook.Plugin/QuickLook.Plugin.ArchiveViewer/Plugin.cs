@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Plugin;
 using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
@@ -27,6 +27,7 @@ public class Plugin : IViewer
 {
     private static readonly string[] _extensions =
     [
+        // List of supported archive file extensions
         ".asar",    // Electron archive (used to package Electron app resources)
         ".7z",      // 7-Zip compressed archive (uses LZMA/LZMA2 compression)
         ".bz2",     // bzip2 compressed file (often used with tar, e.g. .tar.bz2)
@@ -46,6 +47,10 @@ public class Plugin : IViewer
         ".vsix",    // Visual Studio extension package (ZIP-based)
         ".xz",      // XZ compressed file (uses LZMA2 compression)
         ".zip",     // ZIP compressed archive (most common compression format)
+
+        // List of supported compound file binary file extensions
+        //".cfb",     // Compound File Binary format (used by older Microsoft Office files)
+        //".eif",     // QQ emoji file (Compound File Binary format)
     ];
 
     private ArchiveInfoPanel _panel;
