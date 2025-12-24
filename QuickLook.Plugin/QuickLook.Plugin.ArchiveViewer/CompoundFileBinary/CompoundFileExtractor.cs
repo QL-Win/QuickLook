@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 
 namespace QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
@@ -40,6 +41,22 @@ public static class CompoundFileExtractor
         if (!Directory.Exists(destinationDirectory))
         {
             Directory.CreateDirectory(destinationDirectory);
+        }
+
+        // Ensure the compound file exists
+        if (!File.Exists(compoundFilePath))
+            throw new FileNotFoundException("Compound file not found.", compoundFilePath);
+
+        // Validate magic header for OLE compound file: D0 CF 11 E0 A1 B1 1A E1
+        byte[] magicHeader = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
+        byte[] header = new byte[8];
+        using (FileStream fs = new(compoundFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            int read = fs.Read(header, 0, header.Length);
+            if (read < header.Length || !header.SequenceEqual(magicHeader))
+            {
+                throw new InvalidDataException("The specified file does not appear to be an OLE Compound File (invalid header).");
+            }
         }
 
         // Open the compound file as an IStorage implementation wrapped by DisposableIStorage.
