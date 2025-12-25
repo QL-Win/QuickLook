@@ -21,7 +21,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public sealed class Percent100ToVisibilityVisibleConverter : DependencyObject, IValueConverter
 {

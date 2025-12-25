@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 using System;
 using System.IO;
 using System.Linq;
@@ -53,7 +54,7 @@ public class Plugin : IViewer
         //".eif",     // QQ emoji file (Compound File Binary format)
     ];
 
-    private ArchiveInfoPanel _panel;
+    private IDisposable _panel;
 
     public int Priority => -5;
 

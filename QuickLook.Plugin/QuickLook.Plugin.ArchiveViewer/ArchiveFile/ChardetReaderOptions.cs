@@ -21,7 +21,7 @@ using System;
 using System.Text;
 using UtfUnknown;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 internal class ChardetReaderOptions : ReaderOptions
 {

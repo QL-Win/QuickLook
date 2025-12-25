@@ -25,7 +25,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 /// <summary>
 /// Internals are mostly from here:

@@ -15,10 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 using System;
 using System.Windows.Controls;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public partial class ArchiveFileListView : UserControl, IDisposable
 {
