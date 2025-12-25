@@ -16,16 +16,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-public class Plugin : IViewer
+public partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly string[] _extensions =
     [
@@ -56,8 +58,11 @@ public class Plugin : IViewer
     ];
 
     private IDisposable _panel;
+    private string _path;
 
     public int Priority => -5;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
@@ -70,6 +75,7 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
+        _path = path;
         context.PreferredSize = new Size { Width = 800, Height = 400 };
     }
 
