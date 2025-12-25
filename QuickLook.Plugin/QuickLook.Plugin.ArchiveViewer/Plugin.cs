@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
+using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 using System;
 using System.IO;
 using System.Linq;
@@ -50,8 +51,8 @@ public class Plugin : IViewer
         ".zip",     // ZIP compressed archive (most common compression format)
 
         // List of supported compound file binary file extensions
-        //".cfb",     // Compound File Binary format (used by older Microsoft Office files)
-        //".eif",     // QQ emoji file (Compound File Binary format)
+        ".cfb",     // Compound File Binary format (used by older Microsoft Office files)
+        ".eif",     // QQ emoji file (Compound File Binary format)
     ];
 
     private IDisposable _panel;
@@ -74,7 +75,15 @@ public class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        _panel = new ArchiveInfoPanel(path);
+        if (path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+        {
+            _panel = new CompoundInfoPanel(path);
+        }
+        else
+        {
+            _panel = new ArchiveInfoPanel(path);
+        }
 
         context.ViewerContent = _panel;
         context.Title = $"{Path.GetFileName(path)}";
