@@ -6,6 +6,7 @@
 - Add support for Compound File Binary formats (`.cfb` and `.eif` is now supported)
 - Add a restart button after plugin installation [#1823](https://github.com/QL-Win/QuickLook/issues/1823)
 - Improve XML version attribute detection in `XMLDetector` (e.g. `<?xml version='1.0'?>` is now supported)
+- Improve YAML highlighting and support `.clang-format`
 - Fix a crash that could occur when shutting down or restarting Windows [#1782](https://github.com/QL-Win/QuickLook/issues/1782)
 
 ## 4.3.0
