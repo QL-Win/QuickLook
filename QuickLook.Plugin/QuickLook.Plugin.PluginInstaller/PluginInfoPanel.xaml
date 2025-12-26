@@ -7,6 +7,24 @@
              Height="200"
              FontSize="14"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="UnderlineTextButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundAccentBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock Foreground="{TemplateBinding Foreground}"
+                                   Text="{TemplateBinding Content}"
+                                   TextDecorations="Underline" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -51,15 +69,23 @@
                        TextWrapping="WrapWithOverflow">
                 I am a potato.
             </TextBlock>
-            <Button x:Name="btnInstall"
-                    Grid.Row="6"
-                    Grid.Column="1"
-                    Margin="0,0,20,0"
-                    HorizontalAlignment="Right"
-                    Content="Click here to install this plugin."
-                    FontWeight="SemiBold"
-                    Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                    Style="{DynamicResource CaptionTextButtonStyle}" />
+            <StackPanel Grid.Row="6"
+                        Grid.Column="1"
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button x:Name="btnInstall"
+                        Content="Click here to install this plugin."
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                        Style="{DynamicResource CaptionTextButtonStyle}" />
+                <Button x:Name="btnRestart"
+                        Margin="0,2,0,0"
+                        Content="Restart now..."
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        Style="{DynamicResource UnderlineTextButtonStyle}"
+                        Visibility="Collapsed" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>
