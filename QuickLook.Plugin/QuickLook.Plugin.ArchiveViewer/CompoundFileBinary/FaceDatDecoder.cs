@@ -29,6 +29,7 @@ namespace QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 /// - Locates a repeating-key pattern and extracts the XOR-encrypted block
 /// - XOR-decodes the block and parses group\filename entries
 /// Provides a method to build the same group -> (filename -> index) mapping as the Python tool.
+/// Reference: https://github.com/readme9txt/QQEIF-Extractor
 /// </summary>
 public static class FaceDatDecoder
 {

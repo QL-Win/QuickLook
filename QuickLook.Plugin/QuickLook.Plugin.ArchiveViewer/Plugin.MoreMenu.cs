@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WindowsAPICodePack.Dialogs;
 
@@ -32,17 +33,30 @@ namespace QuickLook.Plugin.ArchiveViewer;
 
 public partial class Plugin
 {
+    /// <summary>
+    /// Command to extract archive contents to a directory. Executed asynchronously.
+    /// </summary>
     public ICommand ExtractToDirectoryCommand { get; }
 
+    /// <summary>
+    /// Constructor - initializes commands used by the plugin.
+    /// </summary>
     public Plugin()
     {
         ExtractToDirectoryCommand = new AsyncRelayCommand(ExtractToDirectoryAsync);
     }
 
+    /// <summary>
+    /// Return additional "More" menu items for the plugin.
+    /// When the current file is an EIF archive, a menu item to extract to directory is provided.
+    /// </summary>
     public IEnumerable<IMenuItem> GetMenuItems()
     {
-        if (_path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+        // Currently only supports for CFB and EIF files
+        if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
         {
+            // Use external Translations.config shipped next to the executing assembly
             string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
 
             yield return new MoreMenuItem()
@@ -55,6 +69,10 @@ public partial class Plugin
         }
     }
 
+    /// <summary>
+    /// Show folder picker and extract archive contents to the chosen directory.
+    /// For EIF files, prompt the user whether to apply EIF-specific Face.dat ordering.
+    /// </summary>
     public async Task ExtractToDirectoryAsync()
     {
         using CommonOpenFileDialog dialog = new()
@@ -64,25 +82,39 @@ public partial class Plugin
 
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
-            await Task.Run(() =>
+            if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase))
             {
-                if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase))
+                // Generic compound file extraction
+                await Task.Run(() =>
                 {
                     CompoundFileExtractor.ExtractToDirectory(_path, dialog.FileName);
-                }
-                else if (_path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+                });
+            }
+            else if (_path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+            {
+                string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+
+                // Ask the user whether to apply EIF-specific `Face.dat` ordering during extraction
+                MessageBoxResult result = MessageBox.Show(TranslationHelper.Get("MW_ExtractToDirectory_EIFOrderFaceDat",
+                    translationFile), "QuickLook", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                // If user chooses Yes, use EifExtractor which reorders images according to `Face.dat`
+                if (result == MessageBoxResult.Yes)
                 {
-                    CompoundFileExtractor.ExtractToDirectory(_path, dialog.FileName);
-
-                    string faceDatPath = Path.Combine(dialog.FileName, "face.dat");
-
-                    if (File.Exists(faceDatPath))
+                    await Task.Run(() =>
                     {
-                        Dictionary<string, Dictionary<string, int>> faceDat = FaceDatDecoder.Decode(File.ReadAllBytes(faceDatPath));
-                        _ = faceDat;
-                    }
+                        EifExtractor.ExtractToDirectory(_path, dialog.FileName);
+                    });
                 }
-            });
+                else
+                {
+                    // Fallback: generic compound file extraction
+                    await Task.Run(() =>
+                    {
+                        CompoundFileExtractor.ExtractToDirectory(_path, dialog.FileName);
+                    });
+                }
+            }
         }
     }
 }

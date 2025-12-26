@@ -27,7 +27,7 @@ namespace QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 /// Utility class to extract streams and storages from a COM compound file (IStorage) into the file system.
 /// This is a thin managed wrapper that enumerates entries inside the compound file and writes streams to disk.
 /// </summary>
-public static class CompoundFileExtractor
+public static partial class CompoundFileExtractor
 {
     /// <summary>
     /// Extracts all streams and storages from the compound file at <paramref name="compoundFilePath"/>
@@ -138,6 +138,80 @@ public static class CompoundFileExtractor
             else if (entryStat.type == (int)STGTY.STGTY_STORAGE)
             {
                 ExtractStorageToDirectory(subStorage, entryStat.pwcsName, currentDirectory);
+            }
+        }
+    }
+}
+
+/// <summary>
+/// Utility class to extract streams and storages from a COM compound file (IStorage) into the memory.
+/// This is a thin managed wrapper that enumerates entries inside the compound file and writes streams to dictionary.
+/// </summary>
+public static partial class CompoundFileExtractor
+{
+    /// <summary>
+    /// Extracts all streams from the compound file at <paramref name="compoundFilePath"/>
+    /// into a dictionary where the key is the relative path and the value is the file content.
+    /// </summary>
+    /// <param name="compoundFilePath">Path to the compound file (OLE compound file / structured storage).</param>
+    /// <returns>A dictionary containing the extracted files.</returns>
+    public static Dictionary<string, byte[]> ExtractToDictionary(string compoundFilePath)
+    {
+        var result = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+
+        // Ensure the compound file exists
+        if (!File.Exists(compoundFilePath))
+            throw new FileNotFoundException("Compound file not found.", compoundFilePath);
+
+        // Validate magic header for OLE compound file: D0 CF 11 E0 A1 B1 1A E1
+        byte[] magicHeader = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
+        byte[] header = new byte[8];
+        using (FileStream fs = new(compoundFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            int read = fs.Read(header, 0, header.Length);
+            if (read < header.Length || !header.SequenceEqual(magicHeader))
+            {
+                throw new InvalidDataException("The specified file does not appear to be an OLE Compound File (invalid header).");
+            }
+        }
+
+        // Open the compound file as an IStorage implementation wrapped by DisposableIStorage.
+        using DisposableIStorage storage = new(compoundFilePath, STGM.DIRECT | STGM.READ | STGM.SHARE_EXCLUSIVE, IntPtr.Zero);
+        ExtractStorageToDictionary(storage, string.Empty, result);
+
+        return result;
+    }
+
+    private static void ExtractStorageToDictionary(DisposableIStorage storage, string currentPath, Dictionary<string, byte[]> result)
+    {
+        IEnumerator<STATSTG> enumerator = storage.EnumElements();
+
+        // Enumerate all elements (streams and storages) at the root of the compound file.
+        while (enumerator.MoveNext())
+        {
+            STATSTG entryStat = enumerator.Current;
+            string entryPath = string.IsNullOrEmpty(currentPath) ? entryStat.pwcsName : Path.Combine(currentPath, entryStat.pwcsName);
+
+            // STGTY_STREAM indicates the element is a stream (treat as a file).
+            if (entryStat.type == (int)STGTY.STGTY_STREAM)
+            {
+                // Open the stream for reading from the compound file.
+                using DisposableIStream stream = storage.OpenStream(entryStat.pwcsName, IntPtr.Zero, STGM.READ | STGM.SHARE_EXCLUSIVE);
+
+                // Query stream statistics to determine its size.
+                STATSTG streamStat = stream.Stat((int)STATFLAG.STATFLAG_DEFAULT);
+
+                // Allocate a buffer exactly the size of the stream and read it in one call.
+                byte[] buffer = new byte[streamStat.cbSize];
+                stream.Read(buffer, buffer.Length);
+
+                result[entryPath] = buffer;
+            }
+            // STGTY_STORAGE indicates the element is a nested storage (treat as a directory).
+            else if (entryStat.type == (int)STGTY.STGTY_STORAGE)
+            {
+                using DisposableIStorage subStorage = storage.OpenStorage(entryStat.pwcsName, null, STGM.READ | STGM.SHARE_EXCLUSIVE, IntPtr.Zero);
+                ExtractStorageToDictionary(subStorage, entryPath, result);
             }
         }
     }
