@@ -213,6 +213,8 @@ Update not completed yet...
 - `.vsix` (Visual Studio extension)
 - `.xz` (XZ archive)
 - `.zip` (ZIP archive)
+- `.cfb` (Compound File Binary)
+- `.eif` (QQ EIF package with Compound File Binary format)
 
 ### Markdown files
 - `.md`, `.markdown` (Markdown)
