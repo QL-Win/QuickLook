@@ -48,7 +48,7 @@ internal static class UxTheme
 
     public enum PreferredAppMode : int { Default, AllowDark, ForceDark, ForceLight, Max };
 
-    public static void ApplyPreferredAppMode()
+    public static void ApplyPreferredAppMode(bool isTracked = true)
     {
         // Enable dark mode for context menus if using dark theme
         if (Environment.OSVersion.Version.Build >= 18362) // Windows 10 1903
@@ -65,20 +65,31 @@ internal static class UxTheme
                 FlushMenuThemes();
             }
 
-            // Synchronize the theme with system settings
-            SystemEvents.UserPreferenceChanged += (_, _) =>
+            // If you want to follow the system theme
+            if (isTracked)
             {
-                if (OSThemeHelper.SystemUsesDarkTheme())
-                {
-                    SetPreferredAppMode(PreferredAppMode.ForceDark);
-                    FlushMenuThemes();
-                }
-                else
-                {
-                    SetPreferredAppMode(PreferredAppMode.ForceLight);
-                    FlushMenuThemes();
-                }
-            };
+                // Synchronize the theme with system settings
+                SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+                SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
+            }
+            else
+            {
+                SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+            }
+        }
+
+        static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            if (OSThemeHelper.SystemUsesDarkTheme())
+            {
+                SetPreferredAppMode(PreferredAppMode.ForceDark);
+                FlushMenuThemes();
+            }
+            else
+            {
+                SetPreferredAppMode(PreferredAppMode.ForceLight);
+                FlushMenuThemes();
+            }
         }
     }
 }

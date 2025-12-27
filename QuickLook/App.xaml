@@ -4,9 +4,7 @@
              xmlns:local="clr-namespace:QuickLook"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:vio="http://schemas.lepo.co/wpfui/2022/xaml/violeta"
-             Exit="App_OnExit"
-             ShutdownMode="OnExplicitShutdown"
-             Startup="Application_Startup">
+             ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

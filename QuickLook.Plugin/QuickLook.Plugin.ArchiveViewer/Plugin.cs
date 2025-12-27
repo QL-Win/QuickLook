@@ -15,18 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
+using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
+using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using QuickLook.Common.Plugin;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-public class Plugin : IViewer
+public partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly string[] _extensions =
     [
+        // List of supported archive file extensions
         ".asar",    // Electron archive (used to package Electron app resources)
         ".7z",      // 7-Zip compressed archive (uses LZMA/LZMA2 compression)
         ".bz2",     // bzip2 compressed file (often used with tar, e.g. .tar.bz2)
@@ -46,11 +51,18 @@ public class Plugin : IViewer
         ".vsix",    // Visual Studio extension package (ZIP-based)
         ".xz",      // XZ compressed file (uses LZMA2 compression)
         ".zip",     // ZIP compressed archive (most common compression format)
+
+        // List of supported compound file binary file extensions
+        ".cfb",     // Compound File Binary format (used by older Microsoft Office files)
+        ".eif",     // QQ emoji file (Compound File Binary format)
     ];
 
-    private ArchiveInfoPanel _panel;
+    private IDisposable _panel;
+    private string _path;
 
     public int Priority => -5;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
@@ -63,12 +75,21 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
+        _path = path;
         context.PreferredSize = new Size { Width = 800, Height = 400 };
     }
 
     public void View(string path, ContextObject context)
     {
-        _panel = new ArchiveInfoPanel(path);
+        if (path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+        {
+            _panel = new CompoundInfoPanel(path);
+        }
+        else
+        {
+            _panel = new ArchiveInfoPanel(path);
+        }
 
         context.ViewerContent = _panel;
         context.Title = $"{Path.GetFileName(path)}";

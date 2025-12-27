@@ -113,6 +113,11 @@ public partial class ViewerWindow : Window
 
         buttonReload.Visibility = SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
 
+        moreItemReload.Click += (_, _) =>
+        {
+            ViewWindowManager.GetInstance().ReloadPreview();
+        };
+
         moreItemCopyAsPath.Click += (_, _) =>
         {
             try
@@ -138,6 +143,7 @@ public partial class ViewerWindow : Window
         buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
         buttonReload.ToolTip = TranslationHelper.Get("MW_Reload", failsafe: "Reload");
         buttonMore.ToolTip = TranslationHelper.Get("MW_More", failsafe: "More");
+        moreItemReload.Header = TranslationHelper.Get("MW_Reload");
         moreItemCopyAsPath.Header = TranslationHelper.Get("InfoPanelMoreItem_CopyAsPath");
     }
 

@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public static class Extensions
 {
@@ -33,7 +33,7 @@ public static class Extensions
     public static T GetDescendantByType<T>(this Visual element) where T : class
     {
         if (element == null)
-            return default(T);
+            return default;
         if (element.GetType() == typeof(T))
             return element as T;
 

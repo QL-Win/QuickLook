@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using QuickLook.Common.Annotations;
-using QuickLook.Common.ExtensionMethods;
-using QuickLook.Common.Helpers;
 using PureSharpCompress.Archives;
 using PureSharpCompress.Common;
 using PureSharpCompress.Readers;
+using QuickLook.Common.Annotations;
+using QuickLook.Common.ExtensionMethods;
+using QuickLook.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +30,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
 {

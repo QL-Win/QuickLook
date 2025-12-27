@@ -18,6 +18,8 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Plugin;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
@@ -42,6 +44,7 @@ public partial class PluginInfoPanel : UserControl
         ReadInfo();
 
         btnInstall.Click += BtnInstall_Click;
+        btnRestart.Click += BtnRestartNow_Click;
     }
 
     private void BtnInstall_Click(object sender, RoutedEventArgs e)
@@ -51,8 +54,35 @@ public partial class PluginInfoPanel : UserControl
 
         var t = DoInstall();
         t.ContinueWith(_ =>
-            Dispatcher.BeginInvoke(new Action(() => btnInstall.Content = "Done! Please restart QuickLook.")));
+            Dispatcher.BeginInvoke(() =>
+            {
+                btnInstall.Content = "Done! Please restart QuickLook.";
+                btnRestart.Visibility = Visibility.Visible;
+            }));
         t.Start();
+    }
+
+    private void BtnRestartNow_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            using Process process = new()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.FriendlyName),
+                    WorkingDirectory = Environment.CurrentDirectory,
+                    UseShellExecute = true,
+                },
+            };
+            process.Start();
+        }
+        catch (Win32Exception)
+        {
+            return;
+        }
+        Process.GetCurrentProcess().Kill();
+        Environment.Exit('r' + 'e' + 's' + 't' + 'a' + 'r' + 't');
     }
 
     private Task DoInstall()

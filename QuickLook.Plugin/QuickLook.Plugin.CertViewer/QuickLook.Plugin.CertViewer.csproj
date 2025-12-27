@@ -1,60 +1,67 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <TargetFramework>net462</TargetFramework>
-        <RootNamespace>QuickLook.Plugin.ArchiveViewer</RootNamespace>
-        <AssemblyName>QuickLook.Plugin.ArchiveViewer</AssemblyName>
+        <RootNamespace>QuickLook.Plugin.CertViewer</RootNamespace>
+        <AssemblyName>QuickLook.Plugin.CertViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <SignAssembly>false</SignAssembly>
         <UseWPF>true</UseWPF>
-        <UseWindowsForms>true</UseWindowsForms>
-        <LangVersion>latest</LangVersion>
-        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-        <ProjectGuid>{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}</ProjectGuid>
+        <ProjectGuid>{C8B9F6D1-1234-4AAB-9C3D-ABCDEF123456}</ProjectGuid>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
         <DebugSymbols>true</DebugSymbols>
-        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
         <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CertViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
         <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <Optimize>true</Optimize>
         <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CertViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
         <PlatformTarget>x86</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
         <DebugSymbols>true</DebugSymbols>
-        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
         <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.CertViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
         <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <Optimize>true</Optimize>
         <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.CertViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
         <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PureSharpCompress" Version="0.40.0" />
-        <PackageReference Include="UTF.Unknown" Version="2.6.0" />
-        <PackageReference Include="WindowsAPICodePack.Shell.CommonFileDialogs" Version="1.1.5" />
+        <Reference Include="WindowsBase" />
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
     </ItemGroup>
 
     <ItemGroup>
@@ -69,12 +76,6 @@
         <Compile Include="..\..\GitVersion.cs">
             <Link>Properties\GitVersion.cs</Link>
         </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Translations.config">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>
