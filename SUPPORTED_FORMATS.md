@@ -306,7 +306,7 @@ Update not completed yet...
 - `.dmg` (macOS Disk Image)
 - `.ipa` (iOS App Package)
 - `.hap` (HarmonyOS App Package)
-- `.deb` (Debian package)
+- `.ddeb`, `.deb` (Debian package)
 - `.appimage` (Linux AppImage)
 - `.rpm` (Red Hat Package Manager)
 - `.wgt`, `.wgtu` (UniApp Widget)
