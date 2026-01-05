@@ -36,6 +36,10 @@ public sealed class JSONDetector : IFormatDetector
 
         var span = text.AsSpan();
 
+        // Remove UTF-8 BOM if present
+        if (span.Length > 0 && span[0] == '\uFEFF')
+            span = span.Slice(1);
+
         // TrimStart
         int start = 0;
         while (start < span.Length && char.IsWhiteSpace(span[start]))

@@ -49,7 +49,8 @@ public class Plugin : IViewer
         //".har", // HarmonyOS Archive
 
         // Ubuntu
-        ".deb", // Debian Package
+        ".ddeb", // Debian Debug Symbol Package
+        ".deb", // Debian Binary Package
         ".appimage", // AppImage Format
         ".rpm", // Red Hat Package Manager
 
@@ -80,7 +81,7 @@ public class Plugin : IViewer
             ".hap" => new Size { Width = 560, Height = 500 },
             ".msi" => new Size { Width = 560, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
-            ".deb" => new Size { Width = 600, Height = 345 },
+            ".ddeb" or ".deb" => new Size { Width = 600, Height = 345 },
             ".dmg" => new Size { Width = 560, Height = 510 },
             ".appimage" => new Size { Width = 600, Height = 300 },
             ".rpm" => new Size { Width = 600, Height = 260 },
@@ -104,7 +105,7 @@ public class Plugin : IViewer
             ".hap" => new HapInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
-            ".deb" => new DebInfoPanel(context),
+            ".ddeb" or ".deb" => new DebInfoPanel(context),
             ".dmg" => new DmgInfoPanel(context),
             ".appimage" => new AppImageInfoPanel(context),
             ".rpm" => new RpmInfoPanel(context),
@@ -125,7 +126,7 @@ public class Plugin : IViewer
         _ip = null;
     }
 
-    public static string ConfirmPath(string path)
+    internal static string ConfirmPath(string path)
     {
         if (Path.GetExtension(path) == ".1")
         {
