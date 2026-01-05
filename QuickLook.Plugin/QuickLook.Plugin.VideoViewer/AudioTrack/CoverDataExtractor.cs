@@ -35,6 +35,8 @@ internal static class CoverDataExtractor
     /// <returns>Byte array of the cover image, or null if extraction fails.</returns>
     public static byte[] Extract(string base64strings)
     {
+        if (string.IsNullOrWhiteSpace(base64strings)) return null;
+
         try
         {
             var coverData = base64strings.Trim();
@@ -68,6 +70,8 @@ internal static class CoverDataExtractor
     /// <returns><see cref="BitmapSource"/> if successful; otherwise, null.</returns>
     public static BitmapSource Extract(byte[] coverBytes)
     {
+        if (coverBytes is null || coverBytes.Length is 0) return null;
+
         // Supported formats: JPEG, PNG, BMP, GIF (first frame only), TIFF (first page only), ICO.
         // Not supported: WebP, HEIC/HEIF, AVIF, JPEG 2000, animated WebP/APNG, and other raw image formats (e.g., CR2, NEF).
 
