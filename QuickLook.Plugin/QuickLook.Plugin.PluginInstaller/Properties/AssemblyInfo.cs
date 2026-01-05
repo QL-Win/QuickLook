@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("pooi.moe")]
 [assembly: AssemblyProduct("QuickLook.Plugin.PluginInstaller")]
-[assembly: AssemblyCopyright("Copyright © 2017-2025 QL-Win Contributors")]
+[assembly: AssemblyCopyright("Copyright © 2017-2026 QL-Win Contributors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
