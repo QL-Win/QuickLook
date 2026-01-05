@@ -50,6 +50,7 @@
         </Reference>
         <PackageReference Include="UTF.Unknown" Version="2.6.0" />
         <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
+        <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>

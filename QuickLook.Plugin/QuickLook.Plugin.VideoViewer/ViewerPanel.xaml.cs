@@ -27,7 +27,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -309,12 +308,40 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         var lyricPath = Path.ChangeExtension(path, ".lrc");
 
+        // Stop previous timer if any.
+        _lyricTimer?.Stop();
+        _lyricTimer = null;
+        _lyricLines = null;
+
         if (File.Exists(lyricPath))
         {
             var buffer = File.ReadAllBytes(lyricPath);
             var encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
 
-            _lyricLines = LrcHelper.ParseText(encoding.GetString(buffer)).ToArray();
+            _lyricLines = [.. LrcHelper.ParseText(encoding.GetString(buffer))];
+        }
+        else
+        {
+            // Use embedded lyrics from MediaInfo if present.
+            // Common tag: General/Lyrics (may contain LRC formatted content).
+            var embeddedLyrics = info?.Get(StreamKind.General, 0, "Lyrics");
+
+            // Only check whether the tag of lyrics is present by MediaInfo
+            if (!string.IsNullOrWhiteSpace(embeddedLyrics))
+            {
+                var file = TagLib.File.Create(path);
+                embeddedLyrics = file.Tag.Lyrics;
+
+                // Check whether the tag of lyrics is present by TagLib#
+                if (!string.IsNullOrWhiteSpace(embeddedLyrics))
+                {
+                    _lyricLines = [.. LrcHelper.ParseText(embeddedLyrics)];
+                }
+            }
+        }
+
+        if (_lyricLines != null && _lyricLines.Length != 0)
+        {
             _lyricTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
             _lyricTimer.Tick += (sender, e) =>
             {
