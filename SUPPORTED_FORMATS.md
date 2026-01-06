@@ -608,6 +608,7 @@
 - `.hap`  
 
 **Linux**  
+- `.ddeb`
 - `.deb`  
 - `.rpm`  
 - `.appimage`  
