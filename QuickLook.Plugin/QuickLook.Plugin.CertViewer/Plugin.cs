@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.CertViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -15,13 +15,13 @@ public class Plugin : IViewer
         ".cer", // Certificate file (DER or PEM encoded, usually contains only the public certificate)
         ".crt", // Certificate file (similar to .cer, common on UNIX/Linux)
         ".pem", // PEM encoded certificate or key file (can contain certificate, private key, or CA chain)
-        ".snk", // Strong Name Key file (.NET strong name key pair)
-        ".pvk", // Private key file (usually used with .spc)
-        ".spc", // Software Publisher Certificate
+        //".snk", // Strong Name Key file (.NET strong name key pair)
+        //".pvk", // Private key file (usually used with .spc)
+        //".spc", // Software Publisher Certificate
         ".mobileprovision", // Apple mobile device provisioning profile (contains certificates, public keys, etc.)
         ".certSigningRequest", // Certificate Signing Request (usually .csr)
-        ".csr", // Certificate Signing Request
-        ".keystore", // Java keystore file (usually stores certificates and private keys)
+        //".csr", // Certificate Signing Request
+        //".keystore", // Java keystore file (usually stores certificates and private keys)
     };
 
     private CertViewerControl _control;
