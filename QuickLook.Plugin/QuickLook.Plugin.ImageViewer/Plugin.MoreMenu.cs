@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-public partial class Plugin
+public sealed partial class Plugin
 {
     public IEnumerable<IMenuItem> GetMenuItems()
     {

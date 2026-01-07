@@ -24,7 +24,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.HelixViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     /// <summary>
     /// <seealso cref="ImporterType"/>

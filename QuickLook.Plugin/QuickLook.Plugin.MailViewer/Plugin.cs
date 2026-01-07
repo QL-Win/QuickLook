@@ -26,7 +26,7 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.MailViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private WebpagePanel _panel;
     private string _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());

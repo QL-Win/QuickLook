@@ -26,7 +26,7 @@ using UnblockZoneIdentifier;
 
 namespace QuickLook.Plugin.OfficeViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private static readonly string[] Extensions =
     [

@@ -23,7 +23,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.MarkdownViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private MarkdownPanel _panel;
 

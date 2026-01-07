@@ -22,7 +22,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.CsvViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private CsvViewerPanel _panel;
 

@@ -27,7 +27,7 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private ContextObject _context;
     private string _path;

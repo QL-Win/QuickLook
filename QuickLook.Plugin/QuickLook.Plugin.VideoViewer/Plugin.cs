@@ -26,7 +26,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.VideoViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private static MediaInfoLib _mediaInfo;
 

@@ -26,7 +26,7 @@ using System.Windows.Input;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
 
-public partial class Plugin
+public sealed partial class Plugin
 {
     public ICommand ShowWithMediaInfoCommand { get; }
 

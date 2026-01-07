@@ -22,7 +22,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private CLSIDInfoPanel _ip;
 

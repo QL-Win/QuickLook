@@ -27,7 +27,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-public partial class Plugin : IViewer, IMoreMenu
+public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly string[] _extensions =
     [

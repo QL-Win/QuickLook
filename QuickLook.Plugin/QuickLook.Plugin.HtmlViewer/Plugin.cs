@@ -26,7 +26,7 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.HtmlViewer;
 
-public partial class Plugin : IViewer, IMoreMenu
+public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly string[] _extensions = [".mht", ".mhtml", ".htm", ".html"];
     private static readonly string[] _supportedProtocols = ["http", "https"];

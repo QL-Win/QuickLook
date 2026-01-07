@@ -24,7 +24,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.FontViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private WebfontPanel _panel;
 

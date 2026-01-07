@@ -31,7 +31,7 @@ using WindowsAPICodePack.Dialogs;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-public partial class Plugin
+public sealed partial class Plugin
 {
     /// <summary>
     /// Command to extract archive contents to a directory. Executed asynchronously.

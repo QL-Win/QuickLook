@@ -27,7 +27,7 @@ using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.ThumbnailViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownExtensions = new(
     [

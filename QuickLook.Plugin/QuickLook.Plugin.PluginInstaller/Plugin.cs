@@ -23,7 +23,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.PluginInstaller;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     public int Priority => int.MaxValue;
 

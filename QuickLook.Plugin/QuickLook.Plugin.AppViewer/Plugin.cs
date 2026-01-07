@@ -24,7 +24,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.AppViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private static readonly string[] _extensions =
     [

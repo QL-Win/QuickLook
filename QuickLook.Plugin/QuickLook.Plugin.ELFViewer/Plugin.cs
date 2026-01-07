@@ -27,7 +27,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.ELFViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     /// <summary>
     /// Magic number of ELF files

@@ -20,7 +20,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.InfoPanel;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private InfoPanel _ip;
 
