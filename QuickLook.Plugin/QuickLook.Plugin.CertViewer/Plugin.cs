@@ -10,18 +10,18 @@ public class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
-        ".p12",
-        ".pfx",
-        ".cer",
-        ".crt",
-        ".pem",
-        ".snk",
-        ".pvk",
-        ".spc",
-        ".mobileprovision",
-        ".certSigningRequest",
-        ".csr",
-        ".keystore",
+        ".p12", // PKCS #12 certificate store (usually contains certificate and private key)
+        ".pfx", // PKCS #12 certificate store (similar to .p12, common on Windows)
+        ".cer", // Certificate file (DER or PEM encoded, usually contains only the public certificate)
+        ".crt", // Certificate file (similar to .cer, common on UNIX/Linux)
+        ".pem", // PEM encoded certificate or key file (can contain certificate, private key, or CA chain)
+        ".snk", // Strong Name Key file (.NET strong name key pair)
+        ".pvk", // Private key file (usually used with .spc)
+        ".spc", // Software Publisher Certificate
+        ".mobileprovision", // Apple mobile device provisioning profile (contains certificates, public keys, etc.)
+        ".certSigningRequest", // Certificate Signing Request (usually .csr)
+        ".csr", // Certificate Signing Request
+        ".keystore", // Java keystore file (usually stores certificates and private keys)
     };
 
     private CertViewerControl _control;
