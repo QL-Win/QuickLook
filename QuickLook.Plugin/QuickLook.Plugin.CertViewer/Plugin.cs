@@ -12,7 +12,7 @@ public sealed class Plugin : IViewer
     {
         ".p7s", ".pkcs7", // PKCS #7 detached signature (signature only, no original content)
         ".p12", // PKCS #12 certificate store (usually contains certificate and private key)
-        ".pfx", // PKCS #12 certificate store (similar to .p12, common on Windows)
+        ".pfx", // PKCS #12 certificate store (similar to .p12, common on Windows / IIS / .NET)
         ".cer", // Certificate file (DER or PEM encoded, usually contains only the public certificate)
         ".crt", // Certificate file (similar to .cer, common on UNIX/Linux)
         ".pem", // PEM encoded certificate or key file (can contain certificate, private key, or CA chain)
