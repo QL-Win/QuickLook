@@ -68,10 +68,10 @@
                               RowHeaderWidth="0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150"
-                                                Binding="{Binding Key}"
+                                                Binding="{Binding Key, Mode=OneWay}"
                                                 Header="Field" />
                             <DataGridTextColumn Width="*"
-                                                Binding="{Binding Value}"
+                                                Binding="{Binding Value, Mode=OneWay}"
                                                 Header="Value" />
                         </DataGrid.Columns>
                     </DataGrid>

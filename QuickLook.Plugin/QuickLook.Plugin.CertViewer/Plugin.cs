@@ -10,6 +10,7 @@ public sealed class Plugin : IViewer
 {
     private static readonly HashSet<string> WellKnownExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
+        ".p7s", ".pkcs7", // PKCS #7 detached signature (signature only, no original content)
         ".p12", // PKCS #12 certificate store (usually contains certificate and private key)
         ".pfx", // PKCS #12 certificate store (similar to .p12, common on Windows)
         ".cer", // Certificate file (DER or PEM encoded, usually contains only the public certificate)
