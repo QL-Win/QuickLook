@@ -3,47 +3,47 @@
 <SyntaxDefinition name="Fortran 95" extensions=".f90;.f95;.f03">
 
     <Environment> 
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
+        <Default color="#FFC8C8C8" bgcolor="#FF1E1E1E"/>
+        <Selection color="#FFC8C8C8" bgcolor="#FF264F78"/>
+        <LineNumbers color="#FF808080" bgcolor="#FF1E1E1E"/>
+        <CaretMarker color="#FFF0F0F1"/>
+        <VRuler color="#FF2A2A2A"/>
         
-        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
-        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        <FoldLine color="#FFA0A0A0" bgcolor="#FF1E1E1E"/>
+        <FoldMarker color="#FFC8C8C8" bgcolor="#FF1E1E1E"/>
+        <SelectedFoldLine color="#FFC8C8C8" bgcolor="#FF1E1E1E"/>
         
-        <EOLMarkers color="#CACAD2"/>
-        <SpaceMarkers color="#B6B6C0"/>
-        <TabMarkers color="#B6B6C0"/>
-        <InvalidLines color="#B6B6C0"/>
+        <EOLMarkers color="#FF3A3A3A"/>
+        <SpaceMarkers color="#FF3A3A3A"/>
+        <TabMarkers color="#FF3A3A3A"/>
+        <InvalidLines color="#FF3A3A3A"/>
     </Environment>
     
     <Properties>
         <Property name="LineComment" value="!"/>
     </Properties>
     
-    <Digits name="Digits" bold="false" italic="false" color="DarkBlue"/>
+    <Digits name="Digits" bold="false" italic="false" color="#FFB5CEA8"/>
 
     <RuleSets>
         <RuleSet ignorecase="true">
             <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;\"' ,   ?</Delimiters>
             
-            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+            <Span name="LineComment" stopateol="true" color="#FF6A9955" bold="false" italic="false">
                 <Begin>!</Begin>
             </Span>
             
-            <Span name="String" stopateol="true" noescapesequences="true" color="Maroon" bold="false" italic="false">
+            <Span name="String" stopateol="true" noescapesequences="true" color="#FFD69D85" bold="false" italic="false">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
             
-            <Span name="Char" stopateol="true" noescapesequences="true" color="Maroon" bold="false" italic="false">
+            <Span name="Char" stopateol="true" noescapesequences="true" color="#FFD69D85" bold="false" italic="false">
                 <Begin>&apos;</Begin>
                 <End>&apos;</End>
             </Span>
             
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#FF569CD6" bold="false" italic="false">
                 <Key word=".and."/>
                 <Key word=".eq."/>
                 <Key word=".eqv."/>
@@ -364,7 +364,7 @@
                 <Key word="zsqrt"/>
             </KeyWords>
             
-            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+            <KeyWords name="Keywords2" color="#FFC586C0" bold="false" italic="false">
                 <Key word="ccos"/>
                 <Key word="cdabs"/>
                 <Key word="cdcos"/>
@@ -388,7 +388,7 @@
                 <Key word="csqrt"/>
             </KeyWords>
             
-            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+            <KeyWords name="Keywords3" color="#FF4EC9B0" bold="false" italic="false">
                 <Key word="qabs"/>
                 <Key word="qacos"/>
                 <Key word="qasin"/>
