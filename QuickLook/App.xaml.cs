@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -134,7 +135,8 @@ public partial class App : Application
                 if (Directory.Exists(path) || File.Exists(path))
                     PipeServerManager.SendMessage(PipeMessages.Toggle, path);
             }
-            catch
+            catch (Exception ex) when (ex is ArgumentException || ex is SecurityException || 
+                                       ex is NotSupportedException || ex is PathTooLongException)
             {
                 // Invalid path, ignore
             }
@@ -312,7 +314,8 @@ public partial class App : Application
                     return false;
                 }
             }
-            catch
+            catch (Exception ex) when (ex is ArgumentException || ex is SecurityException || 
+                                       ex is NotSupportedException || ex is PathTooLongException)
             {
                 // Invalid path, continue to show duplicate message
             }
