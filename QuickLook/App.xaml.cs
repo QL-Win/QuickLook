@@ -126,8 +126,19 @@ public partial class App : Application
         RunListener(e);
 
         // First instance: run and preview this file
-        if (e.Args.Any() && (Directory.Exists(e.Args.First()) || File.Exists(e.Args.First())))
-            PipeServerManager.SendMessage(PipeMessages.Toggle, e.Args.First());
+        if (e.Args.Any())
+        {
+            try
+            {
+                var path = Path.GetFullPath(e.Args.First());
+                if (Directory.Exists(path) || File.Exists(path))
+                    PipeServerManager.SendMessage(PipeMessages.Toggle, path);
+            }
+            catch
+            {
+                // Invalid path, ignore
+            }
+        }
 
         // Exception handling events which are not caught in the Task thread
         TaskScheduler.UnobservedTaskException += (_, e) =>
@@ -290,16 +301,26 @@ public partial class App : Application
             return true;
 
         // Second instance: preview this file
-        if (args.Any() && (Directory.Exists(args.First()) || File.Exists(args.First())))
+        if (args.Any())
         {
-            PipeServerManager.SendMessage(PipeMessages.Toggle, args.First(), [.. args.Skip(1)]);
+            try
+            {
+                var path = Path.GetFullPath(args.First());
+                if (Directory.Exists(path) || File.Exists(path))
+                {
+                    PipeServerManager.SendMessage(PipeMessages.Toggle, path, [.. args.Skip(1)]);
+                    return false;
+                }
+            }
+            catch
+            {
+                // Invalid path, continue to show duplicate message
+            }
         }
+        
         // Second instance: duplicate
-        else
-        {
-            MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
-                MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
+            MessageBoxButton.OK, MessageBoxImage.Information);
 
         return false;
     }
