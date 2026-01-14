@@ -18,6 +18,7 @@
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
+using QuickLook.Plugin.ArchiveViewer.ChromiumResourcePackage;
 using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         // List of supported compound file binary file extensions
         ".cfb",     // Compound File Binary format (used by older Microsoft Office files)
         ".eif",     // QQ emoji file (Compound File Binary format)
+
+        // List of supported chromium resource package file extensions
+        ".pak",     // Chromium resource package file, used by Chromium-based applications (e.g., Google Chrome)
     ];
 
     private IDisposable _panel;
@@ -85,6 +89,13 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             || path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
         {
             _panel = new CompoundInfoPanel(path);
+        }
+        else if (path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
+        {
+            var dict = PakExtractor.ExtractToDictionary(path);
+
+            // TODO
+            _ = dict;
         }
         else
         {
