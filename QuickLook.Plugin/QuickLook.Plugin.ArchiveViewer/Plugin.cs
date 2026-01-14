@@ -92,10 +92,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         }
         else if (path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
         {
-            var dict = PakExtractor.ExtractToDictionary(path);
-
-            // TODO
-            _ = dict;
+            _panel = new PakInfoPanel(path);
         }
         else
         {
