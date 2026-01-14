@@ -113,14 +113,38 @@ public static class LrcHelper
         return lrcList;
     }
 
-    public static LrcLine GetNearestLrc(IEnumerable<LrcLine> lrcList, TimeSpan time)
+    /// <summary>
+    /// Returns the nearest <see cref="LrcLine"/> in the list whose timestamp is less than or equal to the specified time.
+    /// If multiple lines have the same timestamp, their lyrics are merged using the specified separator.
+    /// </summary>
+    /// <param name="lrcList">The collection of <see cref="LrcLine"/> objects to search.</param>
+    /// <param name="time">The target time to find the nearest lyric line for.</param>
+    /// <param name="separator">The separator used to join lyrics with duplicate timestamps. Default is a newline ("\n").</param>
+    /// <returns>The nearest <see cref="LrcLine"/> at or before the specified time, or <c>null</c> if none found.</returns>
+    public static LrcLine GetNearestLrc(IEnumerable<LrcLine> lrcList, TimeSpan time, string separator = "\n")
     {
-        LrcLine line = lrcList
+        IEnumerable<LrcLine> lines = lrcList
             .Where(x => x.LrcTime != null && x.LrcTime <= time)
-            .OrderByDescending(x => x.LrcTime)
-            .FirstOrDefault();
+            .OrderByDescending(x => x.LrcTime);
 
-        return line;
+        LrcLine first = lines.FirstOrDefault();
+
+        if (first is not null)
+        {
+            LrcLine[] mergingLines = [.. lines.Where(x => x.LrcTime == first.LrcTime)];
+
+            // If any duplicate timestamps exist, merge them
+            if (mergingLines.Length > 1)
+            {
+                // Create a new LrcLine can keep original ones unchanged
+                return new LrcLine(
+                    first.LrcTime,
+                    string.Join(separator, lines.Where(x => x.LrcTime == first.LrcTime).Select(x => x.LrcText))
+                );
+            }
+        }
+
+        return first;
     }
 
     /// <summary>
