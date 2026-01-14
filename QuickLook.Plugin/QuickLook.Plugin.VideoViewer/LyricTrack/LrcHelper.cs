@@ -123,28 +123,24 @@ public static class LrcHelper
     /// <returns>The nearest <see cref="LrcLine"/> at or before the specified time, or <c>null</c> if none found.</returns>
     public static LrcLine GetNearestLrc(IEnumerable<LrcLine> lrcList, TimeSpan time, string separator = "\n")
     {
-        IEnumerable<LrcLine> lines = lrcList
-            .Where(x => x.LrcTime != null && x.LrcTime <= time)
-            .OrderByDescending(x => x.LrcTime);
+        // Use LINQ to filter valid candidates
+        List<LrcLine> candidates = [.. lrcList.Where(x => x.LrcTime != null && x.LrcTime <= time)];
 
-        LrcLine first = lines.FirstOrDefault();
+        if (!candidates.Any())
+            return null;
 
-        if (first is not null)
-        {
-            LrcLine[] mergingLines = [.. lines.Where(x => x.LrcTime == first.LrcTime)];
+        // Find the latest timestamp not greater than the specified time
+        TimeSpan? nearestTime = candidates.Max(x => x.LrcTime);
 
-            // If any duplicate timestamps exist, merge them
-            if (mergingLines.Length > 1)
-            {
-                // Create a new LrcLine can keep original ones unchanged
-                return new LrcLine(
-                    first.LrcTime,
-                    string.Join(separator, lines.Where(x => x.LrcTime == first.LrcTime).Select(x => x.LrcText))
-                );
-            }
-        }
+        // Get all lines with the latest timestamp (could be multiple if there are duplicate timestamps)
+        LrcLine[] nearestLines = [.. candidates.Where(x => x.LrcTime == nearestTime)];
 
-        return first;
+        // If only one line matches, return the original object
+        if (nearestLines.Length == 1)
+            return nearestLines.First();
+
+        // Otherwise, merge texts and create a new LrcLine to keep original ones unchanged
+        return new LrcLine(nearestTime, string.Join(separator, nearestLines.Select(x => x.LrcText)));
     }
 
     /// <summary>
