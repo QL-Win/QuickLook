@@ -34,7 +34,7 @@ public sealed class Plugin : IViewer
     private PdfViewerControl _pdfControl;
     private PasswordControl _passwordControl;
 
-    public int Priority => 0;
+    public int Priority => -1;
 
     public void Init()
     {
