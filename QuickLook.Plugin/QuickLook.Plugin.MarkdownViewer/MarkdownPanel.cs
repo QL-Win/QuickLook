@@ -124,7 +124,19 @@ public class MarkdownPanel : WebpagePanel
                 }
                 else
                 {
-                    var localPath = _fallbackPath + Uri.UnescapeDataString(requestedUri.AbsolutePath).Replace('/', '\\');
+                    // URL path is encoded, e.g. "%20" for spaces.
+                    var unescapedAbsolutePath = Uri.UnescapeDataString(requestedUri.AbsolutePath);
+
+                    // Convert URL path to Windows path format (e.g. "/C:/Users/..." -> "C:\Users\...")
+                    var potentialAbsolutePath = unescapedAbsolutePath.TrimStart('/').Replace('/', '\\');
+
+                    string localPath;
+                    // Check if it is an absolute path (e.g. ![Alt](C:\Path\To\Image.png))
+                    if (Path.IsPathRooted(potentialAbsolutePath) && File.Exists(potentialAbsolutePath))
+                        localPath = potentialAbsolutePath;
+                    else
+                        // Treat as relative path (e.g. ![Alt](Image.png))
+                        localPath = _fallbackPath + unescapedAbsolutePath.Replace('/', '\\');
 
                     if (File.Exists(localPath))
                     {
