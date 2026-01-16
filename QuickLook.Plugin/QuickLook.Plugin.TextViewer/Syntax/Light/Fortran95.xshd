@@ -23,11 +23,11 @@
         <Property name="LineComment" value="!"/>
     </Properties>
     
-    <Digits name="Digits" bold="false" italic="false" color="Red"/>
+    <Digits name="Digits" bold="false" italic="false" color="DarkBlue"/>
 
     <RuleSets>
         <RuleSet ignorecase="true">
-            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,   ?</Delimiters>
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;\"' ,   ?</Delimiters>
             
             <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
                 <Begin>!</Begin>
@@ -116,7 +116,6 @@
                 <Key word="dacos"/>
                 <Key word="dasin"/>
                 <Key word="data"/>
-                <Key word="data"/>
                 <Key word="datan"/>
                 <Key word="datan2"/>
                 <Key word="date_and_time"/>
@@ -163,7 +162,6 @@
                 <Key word="elseif"/>
                 <Key word="elsewhere"/>
                 <Key word="end"/>
-                <Key word="end"/>
                 <Key word="enddo"/>
                 <Key word="endfile"/>
                 <Key word="endif"/>
@@ -180,7 +178,6 @@
                 <Key word="exit"/>
                 <Key word="exp"/>
                 <Key word="exponent"/>
-                <Key word="external"/>
                 <Key word="external"/>
                 <Key word="file"/>
                 <Key word="float"/>
@@ -223,8 +220,6 @@
                 <Key word="integer"/>
                 <Key word="intent"/>
                 <Key word="interface"/>
-                <Key word="interface"/>
-                <Key word="intrinsic"/>
                 <Key word="intrinsic"/>
                 <Key word="iolength"/>
                 <Key word="ior"/>
@@ -236,9 +231,7 @@
                 <Key word="ishftc"/>
                 <Key word="isign"/>
                 <Key word="kind"/>
-                <Key word="kind"/>
                 <Key word="lbound"/>
-                <Key word="len"/>
                 <Key word="len"/>
                 <Key word="len_trim"/>
                 <Key word="lge"/>
@@ -248,7 +241,6 @@
                 <Key word="loc"/>
                 <Key word="log"/>
                 <Key word="log10"/>
-                <Key word="logical"/>
                 <Key word="logical"/>
                 <Key word="matmul"/>
                 <Key word="max"/>
@@ -300,11 +292,9 @@
                 <Key word="present"/>
                 <Key word="print"/>
                 <Key word="private"/>
-                <Key word="private"/>
                 <Key word="procedure"/>
                 <Key word="product"/>
                 <Key word="program"/>
-                <Key word="public"/>
                 <Key word="public"/>
                 <Key word="pure"/>
                 <Key word="radix"/>
@@ -313,7 +303,6 @@
                 <Key word="range"/>
                 <Key word="read"/>
                 <Key word="readwrite"/>
-                <Key word="real"/>
                 <Key word="real"/>
                 <Key word="rec"/>
                 <Key word="recl"/>
@@ -325,7 +314,6 @@
                 <Key word="return"/>
                 <Key word="rewind"/>
                 <Key word="rrspacing"/>
-                <Key word="save"/>
                 <Key word="save"/>
                 <Key word="scale"/>
                 <Key word="scan"/>
@@ -367,7 +355,6 @@
                 <Key word="verify"/>
                 <Key word="where"/>
                 <Key word="while"/>
-                <Key word="write"/>
                 <Key word="write"/>
                 <Key word="zabs"/>
                 <Key word="zcos"/>

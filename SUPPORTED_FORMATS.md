@@ -1,707 +1,315 @@
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/File%20Folder.png" width="120">
-
-# Supported File Formats
-
-### 🎯 QuickLook supports 500+ file formats out of the box
-
-*Preview almost anything with just a spacebar press*
-
-<br>
-
-<p>
-  <img src="https://img.shields.io/badge/Formats-500+-00C853?style=for-the-badge&labelColor=1a1a1a" alt="Formats">
-  <img src="https://img.shields.io/badge/Images-100+-FF6D00?style=for-the-badge&labelColor=1a1a1a" alt="Images">
-  <img src="https://img.shields.io/badge/Languages-50+-FFD700?style=for-the-badge&labelColor=1a1a1a" alt="Languages">
-  <img src="https://img.shields.io/badge/Extensible-Plugins-3DA639?style=for-the-badge&labelColor=1a1a1a" alt="Plugins">
-</p>
-
-<br>
-
-**Quick Navigation**
-
-<p>
-  <a href="#-text-code">
-    <img src="https://img.shields.io/badge/📝_Text_&_Code-white?style=for-the-badge" alt="Text & Code">
-  </a>
-  <a href="#-images">
-    <img src="https://img.shields.io/badge/🖼️_Images-white?style=for-the-badge" alt="Images">
-  </a>
-  <a href="#-media">
-    <img src="https://img.shields.io/badge/🎬_Media-white?style=for-the-badge" alt="Media">
-  </a>
-  <a href="#-documents">
-    <img src="https://img.shields.io/badge/📄_Documents-white?style=for-the-badge" alt="Documents">
-  </a>
-  <a href="#-developer">
-    <img src="https://img.shields.io/badge/🔧_Developer-white?style=for-the-badge" alt="Developer">
-  </a>
-</p>
-
-</div>
-
----
-
-<br>
-
-## 📝 Text & Code
-
-### General Text Files
-
-- `.txt`  
-- `.rtf`  
-- `.log`  
-- `.ini`  
-- `.conf`  
-- `.config`  
-- `.env`  
-- `.properties`  
-- `.hosts`  
-- `.registry`  
-- `.resource`  
-
-<br>
-
-### Data Formats
-
-- `.json`  
-- `.xml`  
-- `.yaml`  
-- `.yml`  
-- `.csv`  
-- `.tsv`  
-- `.protobuf`  
-
-<br>
-
-### Markdown & Documentation
-
-- `.md`  
-- `.markdown`  
-- `.mdx`  
-- `.mmd`  
-- `.mkd`  
-- `.mdwn`  
-- `.mdown`  
-- `.mdc`  
-- `.qmd`  
-- `.rmd`  
-- `.rmarkdown`  
-- `.apib`  
-- `.mdtxt`  
-- `.mdtext`  
-- `.restructuredtext`  
-
-<br>
-
-### 🌐 Web Development
-
-- `.html`  
-- `.htm`  
-- `.css`  
-- `.js`  
-- `.ts`  
-- `.tsx`  
-- `.uts`  
-- `.vue`  
-- `.php`  
-- `.coffeescript`  
-- `.haxe`  
-
-<br>
-
-### 💻 Popular Programming Languages
-
-- `.c`  
-- `.cpp`  
-- `.h`  
-- `.hpp`  
-- `.cs`  
-- `.java`  
-- `.py`  
-- `.js`  
-- `.ts`  
-- `.go`  
-- `.php`  
-- `.rb`  
-- `.ruby`  
-- `.swift`  
-- `.scala`  
-- `.kotlin`  
-- `.lua`  
-- `.rust`  
-- `.dart`  
-- `.r`  
-- `.sql`  
-- `.vbnet`  
-- `.vbscript`  
-
-<br>
-
-### 🎯 Functional Languages
-
-- `.haskell`  
-- `.fsharp`  
-- `.elixir`  
-- `.erlang`  
-- `.clojure`  
-- `.lisp`  
-- `.scheme`  
-- `.ocaml`  
-- `.purescript`  
-
-<br>
-
-### 📜 Shell & Scripting
-
-- `.sh`  
-- `.bash`  
-- `.shellscript`  
-- `.bat`  
-- `.cmd`  
-- `.ps1`  
-- `.vbscript`  
-- `.autohotkey`  
-- `.rexx`  
-- `.tcl`  
-- `.nsis`  
-- `.kixtart`  
-- `.pike`  
-- `.falcon`  
-
-<br>
-
-### 🔨 Build Tools & Configuration
-
-- `.makefile`  
-- `.mk`  
-- `.cmake`  
-- `.gradle`  
-- `.gitignore`  
-- `.gitattributes`  
-- `.diff`  
-- `.patch`  
-- `.xshd`  
-
-<br>
-
-### ⚙️ System & Low-Level
-
-- `.assembly`  
-- `.verilog`  
-- `.vhdl`  
-- `.hlsl`  
-- `.solidity`  
-- `.ada`  
-- `.fortran`  
-
-<br>
-
-### 🚀 Modern & Emerging Languages
-
-- `.nim`  
-- `.crystal`  
-- `.d`  
-- `.ceylon`  
-- `.eiffel`  
-- `.fantom`  
-- `.nemerle`  
-- `.parasail`  
-- `.pascal`  
-- `.delphi`  
-- `.prolog`  
-- `.qml`  
-- `.spike`  
-- `.sqf`  
-- `.thrift`  
-- `.vala`  
-- `.volt`  
-- `.x10`  
-- `.xc`  
-- `.xtend`  
-- `.lean`  
-- `.icon`  
-- `.ilyc`  
-- `.cool`  
-- `.boo`  
-- `.io`  
-- `.chuck`  
-- `.gui4cli`  
-
-<br>
-
-*...and most other plain text and script formats*
-
-<br>
-
----
-
-<br>
-
-## 🖼️ Images
-
-
-### 📸 Common Formats
-
-- `.jpg`  
-- `.jpeg`  
-- `.jfif`  
-- `.png`  
-- `.apng`  
-- `.gif`  
-- `.bmp`  
-- `.webp`  
-- `.tga`  
-- `.pcx`  
-- `.ico`  
-- `.icon`  
-- `.icns`  
-- `.cur`  
-- `.ani`  
-- `.svg`  
-- `.svgz`  
-
-<br>
-
-### ✨ Modern & Next-Gen Formats
-
-- `.heic`  
-- `.heif`  
-- `.avif`  
-- `.jxl`  
-- `.jxr`  
-- `.qoi`  
-
-<br>
-
-### 🎨 Professional & Advanced
-
-- `.jp2`  
-- `.j2k`  
-- `.jpf`  
-- `.jpx`  
-- `.jpm`  
-- `.mj2`  
-- `.exr`  
-- `.hdr`  
-- `.tif`  
-- `.tiff`  
-- `.dds`  
-- `.psd`  
-- `.psb`  
-- `.xcf`  
-
-<br>
-
-### 📐 Vector & Special Formats
-
-- `.emf`  
-- `.wmf`  
-- `.pbm`  
-- `.pgm`  
-- `.pnm`  
-- `.ppm`  
-- `.xbm`  
-- `.xpm`  
-- `.miff`  
-- `.pxn`  
-- `.obm`  
-- `.lottie`  
-- `.tgs`  
-- `.svga`  
-- `.wdp`  
-
-<br>
-
-### 📷 RAW Camera Formats
-
-**Canon**  
-- `.cr2`  
-- `.cr3`  
-- `.crw`  
-
-**Nikon**  
-- `.nef`  
-- `.nrw`  
-
-**Sony**  
-- `.ari`  
-- `.arw`  
-- `.sr2`  
-- `.srf`  
-- `.srw`  
-
-**Fujifilm**  
-- `.raf`  
-
-**Olympus**  
-- `.orf`  
-
-**Pentax**  
-- `.pef`  
-- `.ptx`  
-
-**Panasonic/Leica**  
-- `.rw2`  
-- `.rwl`  
-- `.rwz`  
-
-**Kodak**  
-- `.dcr`  
-- `.dcs`  
-- `.drf`  
-- `.k25`  
-- `.kdc`  
-
-**Phase One**  
-- `.cap`  
-- `.iiq`  
-
-**Hasselblad**  
-- `.fff`  
-
-**Mamiya**  
-- `.mef`  
-
-**Minolta**  
-- `.mrw`  
-
-**Sigma**  
-- `.x3f`  
-
-**Epson**  
-- `.erf`  
-
-**Casio**  
-- `.bay`  
-
-**RED**  
-- `.r3d`  
-
-**Generic**  
-- `.raw`  
-- `.dng`  
-
-<br>
-
----
-
-<br>
-
-## 🎬 Media
-
-
-### 🎥 Video Formats
-
-- `.mp4`  
-- `.mkv`  
-- `.avi`  
-- `.mov`  
-- `.wmv`  
-- `.flv`  
-- `.webm`  
-- `.m4v`  
-- `.mpg`  
-- `.mpeg`  
-- `.3gp`  
-- `.3g2`  
-- `.ogv`  
-- `.vob`  
-- `.ts`  
-- `.mts`  
-- `.m2ts`  
-
-*Most common video formats supported*
-
-<br>
-
-### 🎵 Audio Formats
-
-- `.mp3`  
-- `.flac`  
-- `.wav`  
-- `.aac`  
-- `.ogg`  
-- `.m4a`  
-- `.wma`  
-- `.ape`  
-- `.opus`  
-- `.aiff`  
-- `.aif`  
-- `.alac`  
-
-*Most common audio formats supported*
-
-<br>
-
-### 💬 Subtitles
-
-- `.srt`  
-- `.sub`  
-- `.ass`  
-- `.ssa`  
-
-<br>
-
----
-
-<br>
-
-## 📄 Documents
-
-
-### 📋 PDF
-
-- `.pdf`  
-
-<br>
-
-### 📊 Microsoft Office
-
-- `.doc`  
-- `.docx`  
-- `.docm`  
-- `.xls`  
-- `.xlsx`  
-- `.xlsm`  
-- `.xlsb`  
-- `.ppt`  
-- `.pptx`  
-- `.pptm`  
-- `.vsd`  
-- `.vsdx`  
-
-<br>
-
-### 📑 OpenDocument
-
-- `.odt`  
-- `.ods`  
-- `.odp`  
-
-<br>
-
-### 📚 E-Books & Comics
-
-- `.epub`  
-- `.mobi`  
-- `.cb7`  
-- `.cbr`  
-- `.cbt`  
-- `.cbz`  
-
-<br>
-
-### 📧 Email
-
-- `.eml`  
-- `.msg`  
-
-<br>
-
-### 🌐 Web Archives
-
-- `.mht`  
-- `.mhtml`  
-- `.htm`  
-- `.html`  
-- `.url`  
-
-<br>
-
-### 🔤 Fonts
-
-- `.ttf`  
-- `.otf`  
-- `.woff`  
-- `.woff2`  
-- `.ttc`  
-
-<br>
-
----
-
-<br>
-
-## 🔧 Developer
-
-
-### 📦 Archives & Packages
-
-- `.7z`  
-- `.zip`  
-- `.rar`  
-- `.tar`  
-- `.tgz`  
-- `.gz`  
-- `.bz2`  
-- `.xz`  
-- `.lz`  
-- `.jar`  
-- `.nupkg`  
-- `.snupkg`  
-- `.crx`  
-- `.vsix`  
-- `.cfb`  
-- `.eif`  
-
-<br>
-
-### 🪟 Windows Executables & Libraries
-
-- `.exe`  
-- `.dll`  
-- `.sys`  
-- `.scr`  
-- `.ocx`  
-- `.cpl`  
-- `.bpl`  
-- `.ax`  
-- `.drv`  
-- `.vxd`  
-- `.mui`  
-- `.mun`  
-- `.tlb`  
-- `.efi`  
-- `.mz`  
-
-<br>
-
-### 🐧 Unix/Linux/macOS
-
-- `.elf`  
-- `.axf`  
-- `.bin`  
-- `.o`  
-- `.out`  
-- `.so`  
-- `.dylib`  
-- `.ko`  
-- `.mod`  
-- `.prx`  
-- `.puff`  
-- `.uimage`  
-
-<br>
-
-### 📱 App Installers
-
-**Android**  
-- `.apk`  
-- `.aab`  
-
-**iOS**  
-- `.ipa`  
-
-**Windows**  
-- `.msi`  
-- `.msix`  
-- `.msixbundle`  
-- `.appx`  
-- `.appxbundle`  
-
-**macOS**  
-- `.dmg`  
-
-**HarmonyOS**  
-- `.hap`  
-
-**Linux**  
-- `.ddeb`
-- `.deb`  
-- `.rpm`  
-- `.appimage`  
-
-**UniApp**  
-- `.wgt`  
-- `.wgtu`  
-
-<br>
-
-### 🎨 Design & Project Files
-
-- `.cdr`  
-- `.fig`  
-- `.kra`  
-- `.pdn`  
-- `.pip`  
-- `.pix`  
-- `.sketch`  
-- `.xd`  
-- `.xmind`  
-
-<br>
-
-### 🧩 QuickLook Extensions
-
-- `.qlplugin`  
-
-
-<br>
-
----
-
-<br>
-
-
-## 🎯 Need More Formats?
-
-QuickLook's plugin system makes it easy to add support for additional file types
-
-<br>
-
-<a href="https://github.com/QL-Win/QuickLook/wiki/Available-Plugins">
-  <img src="https://img.shields.io/badge/🔍_Browse_All_Plugins-black?style=for-the-badge&logoColor=white" alt="Browse Plugins">
-</a>
-<a href="https://github.com/QL-Win/QuickLook">
-  <img src="https://img.shields.io/badge/🏠_Back_to_README-black?style=for-the-badge&logoColor=white" alt="Back to README">
-</a>
-
-<br><br>
-
-### 💎 Popular Plugin Extensions
-
-<br>
-
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png" width="60">
-
-**📊 Office Files**
-
-Word, Excel, PowerPoint
-
-<a href="https://github.com/QL-Win/QuickLook.Plugin.OfficeViewer">
-  <img src="https://img.shields.io/badge/Download_Plugin-00C853?style=for-the-badge&logo=github&logoColor=white" alt="Download">
-</a>
-
-<br>
-
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" width="60">
-
-**📄 Enhanced PDF**
-
-Advanced PDF features
-
-<a href="https://github.com/QL-Win/QuickLook.Plugin.PdfViewer-Native">
-  <img src="https://img.shields.io/badge/Download_Plugin-0078D4?style=for-the-badge&logo=github&logoColor=white" alt="Download">
-</a>
-
-<br>
-
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Triangular%20Ruler.png" width="60">
-
-**📐 CAD Files**
-
-`.dwg` · `.dxf` · `.plt` · `.cgm`
-
-<a href="https://github.com/emako/QuickLook.Plugin.CADImport">
-  <img src="https://img.shields.io/badge/Download_Plugin-FF6D00?style=for-the-badge&logo=github&logoColor=white" alt="Download">
-</a>
-
-<br>
-
----
-
-<br>
-
-💡 **Note:** This list is continuously updated. Some formats may require specific plugins or system codecs.
+## Supported formats in QuickLook
+
+Update not completed yet...
+
+### Text files
+- `.txt` (Plain text file)
+- `.rtf` (Rich Text Format)
+- `.log` (Log file)
+- `.ini` (Initialization/config file)
+- `.json` (JavaScript Object Notation)
+- `.xml` (Extensible Markup Language)
+- `.yaml`, `.yml` (YAML Ain't Markup Language)
+- `.md`, `.markdown`, `.mdx`, `.mmd`, `.mkd`, `.mdwn`, `.mdown`, `.mdc`, `.qmd`, `.rmd`, `.rmarkdown`, `.apib`, `.mdtxt`, `.mdtext` (Markdown and variants)
+- `.csv` (Comma-separated values)
+- `.tsv` (Tab-separated values)
+- `.bat`, `.cmd` (Batch script)
+- `.ps1` (PowerShell script)
+- `.sh` (Shell script)
+- `.c`, `.cpp`, `.h`, `.hpp` (C/C++ source/header)
+- `.cs` (C# source)
+- `.java` (Java source)
+- `.py` (Python source)
+- `.js` (JavaScript source)
+- `.ts`, `.tsx`, `.uts` (TypeScript source)
+- `.go` (Go source)
+- `.php` (PHP source)
+- `.rb` (Ruby source)
+- `.swift` (Swift source)
+- `.scala` (Scala source)
+- `.kotlin` (Kotlin source)
+- `.lua` (Lua source)
+- `.sql` (SQL script)
+- `.css` (Cascading Style Sheets)
+- `.html`, `.htm` (HTML file)
+- `.xshd` (Highlighting definition)
+- `.properties` (Java properties/config)
+- `.diff`, `.patch`, `.rej` (Diff/Patch file)
+- `.sub`, `.srt` (Subtitle file)
+- `.conf`, `.config` (Configuration file)
+- `.env` (Environment config)
+- `.makefile`, `.mk` (Makefile)
+- `.gitignore`, `.gitattributes` (Git config)
+- `.registry` (Windows registry file)
+- `.resource` (Resource file)
+- `.hosts` (Hosts file)
+- `.boo` (Boo script)
+- `.ada` (Ada source)
+- `.antlr` (ANTLR grammar)
+- `.assembly` (Assembly source)
+- `.autohotkey` (AutoHotkey script)
+- `.ceylon` (Ceylon source)
+- `.chuck` (ChucK script)
+- `.clojure` (Clojure source)
+- `.cmake` (CMake config)
+- `.cocoa` (Cocoa source)
+- `.coffeescript` (CoffeeScript source)
+- `.cool` (Cool source)
+- `.d` (D source)
+- `.dart` (Dart source)
+- `.delphi` (Delphi source)
+- `.eiffel` (Eiffel source)
+- `.elixir` (Elixir source)
+- `.env` (Environment config)
+- `.erlang` (Erlang source)
+- `.fsharp` (F# source)
+- `.falcon` (Falcon script)
+- `.fantom` (Fantom source)
+- `.fortran` (Fortran source)
+- `.gitattributes` (Git attributes)
+- `.gitignore` (Git ignore)
+- `.goovy` (Goovy source)
+- `.gui4cli` (Gui4Cli script)
+- `.haskell` (Haskell source)
+- `.haxe` (Haxe source)
+- `.hlsl` (HLSL shader)
+- `.hosts` (Hosts file)
+- `.icon` (Icon source)
+- `.ilyc` (ILYC source)
+- `.ini` (INI config)
+- `.io` (Io source)
+- `.java` (Java source)
+- `.justbasic` (Just BASIC source)
+- `.kixtart` (KiXtart script)
+- `.kotlin` (Kotlin source)
+- `.lean` (Lean source)
+- `.lisp` (Lisp source)
+- `.log` (Log file)
+- `.lua` (Lua source)
+- `.lyric` (Lyric file)
+- `.makefile`, `.mk` (Makefile)
+- `.nemerle` (Nemerle source)
+- `.nim` (Nim source)
+- `.nsis` (NSIS script)
+- `.objective-c` (Objective-C source)
+- `.ocaml` (OCaml source)
+- `.parasail` (ParaSail source)
+- `.pascal` (Pascal source)
+- `.php` (PHP source)
+- `.pike` (Pike source)
+- `.prolog` (Prolog source)
+- `.protobuf` (Protocol Buffers)
+- `.purescript` (PureScript source)
+- `.qml` (QML source)
+- `.r` (R script)
+- `.restructuredtext` (reStructuredText)
+- `.rexx` (Rexx script)
+- `.ruby` (Ruby source)
+- `.rust` (Rust source)
+- `.scala` (Scala source)
+- `.scheme` (Scheme source)
+- `.shellscript`, `.sh` (Shell script)
+- `.solidity` (Solidity source)
+- `.spike` (Spike source)
+- `.sqf` (SQF script)
+- `.subripsubtitle`, `.sub`, `.srt` (SubRip Subtitle)
+- `.swift` (Swift source)
+- `.tcl` (TCL script)
+- `.thrift` (Thrift source)
+- `.vala` (Vala source)
+- `.vbnet` (VB.NET source)
+- `.vbscript` (VBScript)
+- `.verilog` (Verilog source)
+- `.vhdl` (VHDL source)
+- `.visualsolution` (VisualSolution source)
+- `.volt` (Volt source)
+- `.vue` (Vue component)
+- `.x10` (X10 source)
+- `.xc` (XC source)
+- `.xml` (Extensible Markup Language)
+- `.xtend` (Xtend source)
+
+- Most other plain text and script formats
+
+### Image files
+- `.apng` (Animated PNG)
+- `.ari`, `.arw` (Sony RAW image)
+- `.avif` (AV1 Image File Format)
+- `.ani` (Animated cursor)
+- `.bay` (Casio RAW image)
+- `.bmp` (Bitmap image)
+- `.cap` (Phase One RAW image)
+- `.cr2`, `.cr3`, `.crw` (Canon RAW image)
+- `.cur` (Windows cursor)
+- `.dcr`, `.dcs`, `.drf` (Kodak RAW image)
+- `.dds` (DirectDraw Surface)
+- `.dng` (Digital Negative RAW)
+- `.eip` (Capture One Enhanced Image Package)
+- `.emf` (Enhanced Metafile)
+- `.erf` (Epson RAW image)
+- `.exr` (OpenEXR image)
+- `.fff` (Imacon/Hasselblad RAW)
+- `.gif` (Graphics Interchange Format)
+- `.hdr` (High Dynamic Range image)
+- `.heic`, `.heif` (High Efficiency Image Format)
+- `.ico`, `.icon` (Windows icon)
+- `.icns` (macOS icon)
+- `.iiq` (Phase One RAW image)
+- `.jfif` (JPEG File Interchange Format)
+- `.jp2`, `.j2k`, `.jpf`, `.jpx`, `.jpm` (JPEG 2000)
+- `.jpeg`, `.jpg` (JPEG image)
+- `.jxl` (JPEG XL)
+- `.jxr` (JPEG XR)
+- `.k25`, `.kdc` (Kodak RAW image)
+- `.lottie` (Lottie animation)
+- `.mdc` (MagicDraw UML)
+- `.mef` (Mamiya RAW image)
+- `.mos` (Leaf RAW image)
+- `.mrw` (Minolta RAW image)
+- `.mj2` (Motion JPEG 2000)
+- `.miff` (Magick Image File Format)
+- `.nef`, `.nrw` (Nikon RAW image)
+- `.obm` (Open BIM)
+- `.orf` (Olympus RAW image)
+- `.pbm`, `.pgm`, `.pnm`, `.ppm` (Portable bitmap/graymap/pixmap)
+- `.pcx` (Paintbrush image)
+- `.pef` (Pentax RAW image)
+- `.png` (Portable Network Graphics)
+- `.psb`, `.psd` (Adobe Photoshop)
+- `.ptx` (Pentax RAW image)
+- `.pxn` (PixelNet image)
+- `.qoi` (Quite OK Image)
+- `.r3d` (REDCODE RAW)
+- `.raf` (Fujifilm RAW image)
+- `.raw` (Generic RAW image)
+- `.rw2`, `.rwl`, `.rwz` (Panasonic/Leica RAW image)
+- `.sr2`, `.srf`, `.srw` (Sony RAW image)
+- `.svg`, `.svgz` (Scalable Vector Graphics)
+- `.svga` (SVGA animation)
+- `.tga` (Truevision TGA)
+- `.tgs` (Telegram sticker, Lottie animation)
+- `.tif`, `.tiff` (Tagged Image File Format)
+- `.wdp` (Windows Media Photo)
+- `.webp` (WebP image)
+- `.wmf` (Windows Metafile)
+- `.x3f` (Sigma RAW image)
+- `.xcf` (GIMP image)
+- `.xbm`, `.xpm` (X11 bitmap/pixmap)
+
+### PDF files
+- `.pdf` (Portable Document Format)
+
+### Archive files
+- `.7z` (7-Zip archive)
+- `.bz2` (Bzip2 archive)
+- `.cb7`, `.cbr`, `.cbt`, `.cbz` (Comic book archive)
+- `.crx` (Chrome extension)
+- `.gz` (Gzip archive)
+- `.jar` (Java archive)
+- `.lz` (Lzip archive)
+- `.nupkg`, `.snupkg` (NuGet package)
+- `.rar` (RAR archive)
+- `.tar`, `.tgz` (TAR archive)
+- `.vsix` (Visual Studio extension)
+- `.xz` (XZ archive)
+- `.zip` (ZIP archive)
+- `.cfb` (Compound File Binary)
+- `.eif` (QQ EIF package with Compound File Binary format)
+
+### Markdown files
+- `.md`, `.markdown` (Markdown)
+- `.mdx` (MDX: Markdown + JSX)
+- `.mmd` (MultiMarkdown)
+- `.mkd`, `.mdwn`, `.mdown` (Markdown variants)
+- `.mdc` (Cursor AI Markdown)
+- `.qmd` (Quarto Markdown)
+- `.rmd`, `.rmarkdown` (R Markdown)
+- `.apib` (API Blueprint)
+- `.mdtxt`, `.mdtext` (Other Markdown variants)
+
+### CSV/TSV files
+- `.csv` (Comma-separated values)
+- `.tsv` (Tab-separated values)
+
+### Font files
+- `.ttf` (TrueType Font)
+- `.otf` (OpenType Font)
+- `.woff`, `.woff2` (Web Open Font Format)
+- `.ttc` (TrueType Collection)
+
+### Office files
+- `.doc`, `.docx`, `.docm` (Microsoft Word)
+- `.odt` (OpenDocument Text)
+- `.xls`, `.xlsx`, `.xlsm`, `.xlsb` (Microsoft Excel)
+- `.ods` (OpenDocument Spreadsheet)
+- `.ppt`, `.pptx`, `.odp` (Microsoft PowerPoint / OpenDocument Presentation)
+- `.vsd`, `.vsdx` (Microsoft Visio)
+
+### Video/Audio files
+- Most common video formats (e.g., `.mp4`, `.mkv`, `.avi`, `.mov`, `.wmv`, `.flv`, `.webm`, etc.)
+- Most common audio formats (e.g., `.mp3`, `.flac`, `.wav`, `.aac`, `.ogg`, `.m4a`, etc.)
+
+### HTML/Web files
+- `.mht`, `.mhtml` (MHTML web archive)
+- `.htm`, `.html` (HTML file)
+- `.url` (Internet shortcut, http/https)
+
+### Mail files
+- `.eml` (Email message)
+- `.msg` (Outlook message)
+
+### Thumbnail/Design files
+- `.cdr` (CorelDRAW project file)
+- `.fig` (Figma project file)
+- `.kra` (Krita project file)
+- `.pdn` (Paint.NET project file)
+- `.pip`, `.pix` (Pixso project file)
+- `.sketch` (Sketch project file)
+- `.xd` (Adobe XD project file)
+- `.xmind` (XMind mind map file)
+
+### ELF/Mach-O/UImage files
+- `.axf` (ARM Executable)
+- `.bin` (Binary file)
+- `.elf` (Executable and Linkable Format)
+- `.o`, `.out` (Object file)
+- `.prx` (PSP executable)
+- `.puff` (Puff executable)
+- `.ko`, `.mod` (Linux kernel module)
+- `.so` (Shared object)
+- `.uimage` (U-Boot image)
+- `.dylib` (macOS dynamic library)
+
+### PE (Portable Executable) files
+- `.exe` (Windows executable)
+- `.sys` (Windows system file)
+- `.scr` (Windows screensaver)
+- `.ocx` (ActiveX control)
+- `.cpl` (Control panel item)
+- `.bpl` (Borland package library)
+- `.dll` (Dynamic-link library)
+- `.ax` (DirectShow filter)
+- `.drv` (Driver file)
+- `.vxd` (Virtual device driver)
+- `.mui` (Multilingual User Interface)
+- `.mun` (Windows resource file)
+- `.tlb` (Type library)
+- `.efi` (Extensible Firmware Interface)
+- `.mz` (DOS executable)
+
+### App Installer files
+- `.apk` (Android Package)
+- `.aab` (Android App Bundle)
+- `.appx`, `.appxbundle` (Windows AppX installer)
+- `.msi` (Windows Installer)
+- `.msix`, `.msixbundle` (Windows MSIX installer)
+- `.dmg` (macOS Disk Image)
+- `.ipa` (iOS App Package)
+- `.hap` (HarmonyOS App Package)
+- `.ddeb`, `.deb` (Debian package)
+- `.appimage` (Linux AppImage)
+- `.rpm` (Red Hat Package Manager)
+- `.wgt`, `.wgtu` (UniApp Widget)
+
+### Plugin Installer files
+- `.qlplugin` (QuickLook plugin package)

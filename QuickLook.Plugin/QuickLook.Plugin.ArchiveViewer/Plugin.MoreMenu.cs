@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -31,7 +31,7 @@ using WindowsAPICodePack.Dialogs;
 
 namespace QuickLook.Plugin.ArchiveViewer;
 
-public partial class Plugin
+public sealed partial class Plugin
 {
     /// <summary>
     /// Command to extract archive contents to a directory. Executed asynchronously.

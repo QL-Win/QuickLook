@@ -65,7 +65,7 @@
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.33.2">
+        <PackageReference Include="Google.Protobuf" Version="3.33.4">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Memory" Version="4.6.3">

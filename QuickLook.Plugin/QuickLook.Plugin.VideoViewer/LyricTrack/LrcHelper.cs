@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -113,14 +113,34 @@ public static class LrcHelper
         return lrcList;
     }
 
-    public static LrcLine GetNearestLrc(IEnumerable<LrcLine> lrcList, TimeSpan time)
+    /// <summary>
+    /// Returns the nearest <see cref="LrcLine"/> in the list whose timestamp is less than or equal to the specified time.
+    /// If multiple lines have the same timestamp, their lyrics are merged using the specified separator.
+    /// </summary>
+    /// <param name="lrcList">The collection of <see cref="LrcLine"/> objects to search.</param>
+    /// <param name="time">The target time to find the nearest lyric line for.</param>
+    /// <param name="separator">The separator used to join lyrics with duplicate timestamps. Default is a newline ("\n").</param>
+    /// <returns>The nearest <see cref="LrcLine"/> at or before the specified time, or <c>null</c> if none found.</returns>
+    public static LrcLine GetNearestLrc(IEnumerable<LrcLine> lrcList, TimeSpan time, string separator = "\n")
     {
-        LrcLine line = lrcList
-            .Where(x => x.LrcTime != null && x.LrcTime <= time)
-            .OrderByDescending(x => x.LrcTime)
-            .FirstOrDefault();
+        // Use LINQ to filter valid candidates
+        List<LrcLine> candidates = [.. lrcList.Where(x => x.LrcTime != null && x.LrcTime <= time)];
 
-        return line;
+        if (!candidates.Any())
+            return null;
+
+        // Find the latest timestamp not greater than the specified time
+        TimeSpan? nearestTime = candidates.Max(x => x.LrcTime);
+
+        // Get all lines with the latest timestamp (could be multiple if there are duplicate timestamps)
+        LrcLine[] nearestLines = [.. candidates.Where(x => x.LrcTime == nearestTime)];
+
+        // If only one line matches, return the original object
+        if (nearestLines.Length == 1)
+            return nearestLines.First();
+
+        // Otherwise, merge texts and create a new LrcLine to keep original ones unchanged
+        return new LrcLine(nearestTime, string.Join(separator, nearestLines.Select(x => x.LrcText)));
     }
 
     /// <summary>

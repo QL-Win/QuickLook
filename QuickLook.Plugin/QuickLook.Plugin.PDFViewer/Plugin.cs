@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -27,14 +27,14 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.PDFViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private ContextObject _context;
     private string _path;
     private PdfViewerControl _pdfControl;
     private PasswordControl _passwordControl;
 
-    public int Priority => 0;
+    public int Priority => -1;
 
     public void Init()
     {

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding ="utf-8"?>
+
+<SyntaxDefinition name="Rexx" extensions=".rex">
+    
+    <Environment> 
+        <Default color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        <Selection color="#FFD4D4D4" bgcolor="#C3C3FF"/>
+        <LineNumbers color="#FF858585" bgcolor="#FF1E1E1E"/>
+        <CaretMarker color="#FF2A2A2A"/>
+        <VRuler color="#FF424242"/>
+        
+        <FoldLine color="#FF606060" bgcolor="#FF1E1E1E"/>
+        <FoldMarker color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        <SelectedFoldLine color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        
+        <EOLMarkers color="#FF606060"/>
+        <SpaceMarkers color="#FF505050"/>
+        <TabMarkers color="#FF505050"/>
+        <InvalidLines color="#FF505050"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#FFD4D4D4"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="true">
+        
+        <Delimiters>=+-*/`,#":;.@|^$&gt;&lt;[]{}()</Delimiters>
+            
+            <Span name="BlockComment" rule="CommentSet1" stopateol="false" color="#FF57A64A" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="true" color="#FFD4D4D4" bold="false" italic="false">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#FFD4D4D4" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="Keywords1" color="#FF569CD6" bold="false" italic="false">
+                <Key word="address"/>
+                <Key word="arg"/>
+                <Key word="by"/>
+                <Key word="call"/>
+                <Key word="do"/>
+                <Key word="drop"/>
+                <Key word="else"/>
+                <Key word="end"/>
+                <Key word="exist"/>
+                <Key word="exit"/>
+                <Key word="expose"/>
+                <Key word="for"/>
+                <Key word="forever"/>
+                <Key word="forward"/>
+                <Key word="guard"/>
+                <Key word="if"/>
+                <Key word="interpret"/>
+                <Key word="iterate"/>
+                <Key word="leave"/>
+                <Key word="loop"/>
+                <Key word="lower"/>
+                <Key word="nop"/>
+                <Key word="numeric"/>
+                <Key word="options"/>
+                <Key word="otherwise"/>
+                <Key word="parse"/>
+                <Key word="procedure"/>
+                <Key word="pull"/>
+                <Key word="push"/>
+                <Key word="queue"/>
+                <Key word="raise"/>
+                <Key word="reply"/>
+                <Key word="return"/>
+                <Key word="say"/>
+                <Key word="select"/>
+                <Key word="signal"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="trace"/>
+                <Key word="until"/>
+                <Key word="upper"/>
+                <Key word="use"/>
+                <Key word="value"/>
+                <Key word="var"/>
+                <Key word="when"/>
+                <Key word="while"/>
+                <Key word="with"/>
+            </KeyWords>
+        </RuleSet>
+        
+        <RuleSet ignorecase="false" name="CommentSet1">
+            <Delimiters>&amp;&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,  .?</Delimiters>
+
+            <Span name="BlockComment" stopateol="false" color="#FF57A64A" bold="false" italic="false">
+                <Begin >/*</Begin>
+                <End >*/</End>
+            </Span>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

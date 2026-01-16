@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -29,7 +29,7 @@ using System.Windows.Input;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-public partial class Plugin : IViewer, IMoreMenu
+public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly HashSet<string> WellKnownExtensions = new(
     [
