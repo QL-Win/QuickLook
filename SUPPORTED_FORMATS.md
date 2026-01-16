@@ -34,7 +34,7 @@ Update not completed yet...
 - `.html`, `.htm` (HTML file)
 - `.xshd` (Highlighting definition)
 - `.properties` (Java properties/config)
-- `.diff`, `.patch` (Diff/Patch file)
+- `.diff`, `.patch`, `.rej` (Diff/Patch file)
 - `.sub`, `.srt` (Subtitle file)
 - `.conf`, `.config` (Configuration file)
 - `.env` (Environment config)

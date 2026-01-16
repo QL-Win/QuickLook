@@ -27,7 +27,7 @@ public class DiffHighlightingDefinition : DarkHighlightingDefinition
 {
     public override string Name => "Diff";
 
-    public override string Extension => ".diff";
+    public override string Extension => ".diff;.patch;.rej";
 
     public override HighlightingRuleSet MainRuleSet => new()
     {
