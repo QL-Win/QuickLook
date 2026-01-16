@@ -3,19 +3,19 @@
 <SyntaxDefinition name="AutoHotkey" extensions=".ahk">
 
     <Environment>
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#D4D4D4" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
         
-        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
-        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        <FoldLine color="#444444" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#2D2D2D"/>
         
-        <EOLMarkers color="#CACAD2"/>
-        <SpaceMarkers color="#B6B6C0"/>
-        <TabMarkers color="#B6B6C0"/>
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
         <InvalidLines color="#B6B6C0"/>
     </Environment>
 
@@ -25,28 +25,28 @@
         <Property name="BlockCommentEnd" value="*/"/>
     </Properties>
 
-    <Digits name="Digits" color="Black"/>
+    <Digits name="Digits" color="#B5CEA8"/>
 
     <RuleSets>
         <RuleSet ignorecase="true">
                         
             <Delimiters>()[]{}@,.`=;+-*/~ &amp;|^&gt;&lt;</Delimiters>
             
-            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
                 <Begin>;</Begin>
             </Span>
                         
-            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
                 <Begin>/*</Begin>
                 <End>*/</End>
             </Span>
                         
-            <Span name="String" stopateol="false" color="#808080" bold="false" italic="false">
+            <Span name="String" stopateol="false" color="#CE9178" bold="false" italic="false">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
                         
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
                 <Key word="And"/>
                 <Key word="Break"/>
                 <Key word="Byref"/>
@@ -96,7 +96,7 @@
                 <Key word="While"/>
             </KeyWords>
                         
-            <KeyWords name="Keywords2" color="DarkViolet" bold="false" italic="false">
+            <KeyWords name="Keywords2" color="#C586C0" bold="false" italic="false">
                 <Key word="ACos"/>
                 <Key word="ASin"/>
                 <Key word="ATan"/>
@@ -144,7 +144,7 @@
                 <Key word="WinExist"/>
             </KeyWords>
             
-            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+            <KeyWords name="Keywords3" color="#4EC9B0" bold="false" italic="false">
                 <Key word="A_AhkPath"/>
                 <Key word="A_AhkVersion"/>
                 <Key word="A_AppData"/>
@@ -301,7 +301,7 @@
                 <Key word="ErrorLevel"/>
             </KeyWords>
             
-            <KeyWords name="Keywords4" color="Black" bold="false" italic="true">
+            <KeyWords name="Keywords4" color="#9CDCFE" bold="false" italic="true">
                 <Key word="Alt"/>
                 <Key word="AppsKey"/>
                 <Key word="Backspace"/>
@@ -449,7 +449,7 @@
                 <Key word="XButton2"/>            
             </KeyWords>
             
-            <KeyWords name="Keywords5" color="Sienna" bold="false" italic="false">
+            <KeyWords name="Keywords5" color="#DCDCAA" bold="false" italic="false">
                 <Key word="#AllowSameLineComments"/>
                 <Key word="#ClipboardTimeout"/>
                 <Key word="#CommentFlag"/>
