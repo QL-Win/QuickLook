@@ -3,19 +3,17 @@
 <SyntaxDefinition name="Assembly" extensions=".asm">
 
     <Environment> 
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
-        
-        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
-        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
-        
-        <EOLMarkers color="#CACAD2"/>
-        <SpaceMarkers color="#B6B6C0"/>
-        <TabMarkers color="#B6B6C0"/>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#D4D4D4" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
+        <FoldLine color="#444444" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
         <InvalidLines color="#B6B6C0"/>
     </Environment>
 
@@ -25,33 +23,33 @@
         <Property name="BlockCommentEnd" value="%endcomment"/>
     </Properties>
 
-    <Digits name="Digits" color="Black"/>
+    <Digits name="Digits" color="#B5CEA8"/>
 
     <RuleSets>
         <RuleSet ignorecase="true">
             
             <Delimiters>&amp;&lt;&gt;~!^*()+=|\/{}[]:;"',</Delimiters>
             
-            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
                 <Begin>;</Begin>
             </Span>
             
-            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
                 <Begin>%comment</Begin>
                 <End>%endcomment</End>
             </Span>
             
-            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
             
-            <Span name="Char" stopateol="true" color="#D50000" bold="false" italic="false" escapecharacter="\">
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
                 <Begin>'</Begin>
                 <End>'</End>
             </Span>
             
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
                 <!-- Data Transfer Instructions -->
                 <Key word="bswap"/>
                 <Key word="bswapreg"/>
@@ -452,7 +450,7 @@
                 <Key word="wrshr"/>
             </KeyWords>
             
-            <KeyWords name="Keywords2" color="Sienna" bold="false" italic ="false">
+            <KeyWords name="Keywords2" color="#D7BA7D" bold="false" italic ="false">
                 <!-- Data Transfer Instructions (Floating Point) -->
                 <Key word="fbld"/>
                 <Key word="fbst"/>
@@ -577,7 +575,7 @@
                 <Key word="wait"/>
             </KeyWords>
             
-            <KeyWords name="Keywords3" color="#68615E" bold="false" italic ="false">
+            <KeyWords name="Keywords3" color="#B5CEA8" bold="false" italic ="false">
                 <!-- SIMD State Management Instructions -->
                 <Key word="fxrstor"/>
                 <Key word="fxsave"/>
@@ -837,7 +835,7 @@
                 <Key word="pause"/>
             </KeyWords>
             
-            <KeyWords name="Keywords4" color="Black" bold="false" italic="false">
+            <KeyWords name="Keywords4" color="#9CDCFE" bold="false" italic="false">
                 <!-- General Registers -->
                 <Key word="ah"/>
                 <Key word="al"/>
@@ -919,7 +917,7 @@
                 <Key word="eflags"/>
             </KeyWords>
             
-            <KeyWords name="Keywords5" color="SteelBlue" bold="false" italic="false">
+            <KeyWords name="Keywords5" color="#4FC1FF" bold="false" italic="false">
                 <Key word="%arg"/>
                 <Key word="%assign"/>
                 <Key word="%define"/>
@@ -1347,7 +1345,7 @@
                 <Key word="width"/>
             </KeyWords>
             
-            <KeyWords name="Keywords6" color="Navy" bold="false" italic="false">
+            <KeyWords name="Keywords6" color="#4E8CC1" bold="false" italic="false">
                 <Key word="$"/>
                 <Key word="addr"/>
                 <Key word="basic"/>
@@ -1392,7 +1390,7 @@
                 <Key word="word"/>
             </KeyWords>
             
-            <KeyWords name="Keywords7" color="DarkViolet" bold="false" italic="false">
+            <KeyWords name="Keywords7" color="#C586C0" bold="false" italic="false">
                 <!-- MSP430 Mathematical Functions -->
                 <Key word="$acos"/>
                 <Key word="$asin"/>
