@@ -130,12 +130,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             if (value == _shouldLoop) return;
             _shouldLoop = value;
             OnPropertyChanged();
-            if (!IsPlaying)
-            {
-                IsPlaying = true;
-
-                mediaElement.Play();
-            }
         }
     }
 
