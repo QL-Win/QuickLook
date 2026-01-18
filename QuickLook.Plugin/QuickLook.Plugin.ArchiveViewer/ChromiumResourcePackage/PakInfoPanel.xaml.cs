@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -57,7 +58,6 @@ public partial class PakInfoPanel : UserControl, IDisposable, INotifyPropertyCha
     {
         GC.SuppressFinalize(this);
         _disposed = true;
-        fileListView?.Dispose();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -106,7 +106,7 @@ public partial class PakInfoPanel : UserControl, IDisposable, INotifyPropertyCha
             {
                 if (_disposed)
                     return;
-                fileListView?.SetDataContext(_fileEntries[string.Empty].Children.Keys);
+                fileListView?.DataContext = _fileEntries[string.Empty].Children.Keys;
                 archiveCount.Content = $"PAK File{t}";
                 archiveSizeC.Content = string.Empty;
                 archiveSizeU.Content = $"Total resource size {((long)sizeU).ToPrettySize(2)}";
@@ -118,14 +118,40 @@ public partial class PakInfoPanel : UserControl, IDisposable, INotifyPropertyCha
     private void LoadItemsFromPak(string path)
     {
         var dict = PakExtractor.ExtractToDictionary(path, true);
+        var modifiedDate = File.GetLastWriteTime(path);
+
         foreach (var kv in dict)
         {
-            _fileEntries.TryGetValue(string.Empty, out var parent);
-            var entry = new ArchiveFileEntry(kv.Key, false, parent)
+            var fragments = kv.Key.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+            string currentPath = string.Empty;
+            ArchiveFileEntry parent = _fileEntries[string.Empty];
+
+            for (int i = 0; i < fragments.Length - 1; i++)
             {
-                Size = (ulong)kv.Value.Length
-            };
-            _fileEntries.Add(kv.Key, entry);
+                var dirName = fragments[i];
+                currentPath = string.IsNullOrEmpty(currentPath) ? dirName : currentPath + "\\" + dirName;
+                if (!_fileEntries.TryGetValue(currentPath, out var dirEntry))
+                {
+                    dirEntry = new ArchiveFileEntry(dirName, true, parent)
+                    {
+                        ModifiedDate = modifiedDate,
+                    };
+                    _fileEntries.Add(currentPath, dirEntry);
+                }
+                parent = dirEntry;
+            }
+
+            var fileName = fragments.Last();
+            var filePath = fragments.Length > 1 ? currentPath + "\\" + fileName : fileName;
+            if (!_fileEntries.ContainsKey(filePath))
+            {
+                var entry = new ArchiveFileEntry(fileName, false, parent)
+                {
+                    Size = (ulong)kv.Value.Length,
+                    ModifiedDate = modifiedDate,
+                };
+                _fileEntries.Add(filePath, entry);
+            }
         }
     }
 

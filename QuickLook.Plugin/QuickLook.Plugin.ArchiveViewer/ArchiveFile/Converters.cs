@@ -20,6 +20,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
@@ -142,10 +143,13 @@ public sealed class FileExtToIconConverter : DependencyObject, IMultiValueConver
         var name = (string)values[0];
         var isFolder = (bool)values[1];
 
+        object result;
         if (isFolder)
-            return IconManager.FindIconForDir(false);
+            result = IconManager.FindIconForDir(false);
+        else
+            result = IconManager.FindIconForFilename(name, false);
 
-        return IconManager.FindIconForFilename(name, false);
+        return result is ImageSource img ? img : DependencyProperty.UnsetValue;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

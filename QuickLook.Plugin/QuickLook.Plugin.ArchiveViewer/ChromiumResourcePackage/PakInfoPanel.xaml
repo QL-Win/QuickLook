@@ -16,10 +16,14 @@
             </ResourceDictionary.MergedDictionaries>
             <archive:Percent100ToVisibilityVisibleConverter x:Key="Percent100ToVisibilityVisibleConverter" />
             <archive:Percent100ToVisibilityCollapsedConverter x:Key="Percent100ToVisibilityCollapsedConverter" />
+            <archive:FileExtToIconConverter x:Key="FileExtToIconConverter" />
+            <archive:BooleanToAsteriskConverter x:Key="BooleanToAsteriskConverter" />
+            <archive:SizePrettyPrintConverter x:Key="SizePrettyPrintConverter" />
+            <archive:DatePrintConverter x:Key="DatePrintConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}" ZIndex="9999">
+        <Grid Panel.ZIndex="9999" Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label x:Name="lblLoading"
                        HorizontalAlignment="Center"
@@ -37,10 +41,182 @@
                 <RowDefinition />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <archive:ArchiveFileListView x:Name="fileListView"
-                                         Grid.Row="0"
-                                         Focusable="False"
-                                         Foreground="{DynamicResource WindowTextForeground}" />
+            <ListView x:Name="fileListView"
+                      Grid.Row="0"
+                      Background="Transparent"
+                      BorderBrush="Transparent"
+                      BorderThickness="0"
+                      Focusable="False"
+                      Foreground="{DynamicResource WindowTextForeground}"
+                      ItemsSource="{Binding}"
+                      ScrollViewer.CanContentScroll="True"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Setter Property="Height" Value="20" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Foreground" Value="{DynamicResource ListViewItemForeground}" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Border.CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+                        <Setter Property="Margin" Value="0,0,0,2" />
+                        <Setter Property="Padding" Value="4" />
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="ContentBorder"
+                                            Margin="4,0,4,0"
+                                            Padding="3,4"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            CornerRadius="6">
+                                        <Grid>
+                                            <GridViewRowPresenter Margin="12,0,0,0"
+                                                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                                                  Columns="{Binding Path=View.Columns, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                                  Content="{TemplateBinding Content}" />
+                                            <Rectangle x:Name="ActiveRectangle"
+                                                       Width="3"
+                                                       Height="14"
+                                                       Margin="0"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Fill="{DynamicResource ListViewItemPillFillBrush}"
+                                                       RadiusX="2"
+                                                       RadiusY="2"
+                                                       Visibility="Collapsed" />
+                                        </Grid>
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ListViewItemBackgroundPointerOver}" />
+                                            <Setter TargetName="ActiveRectangle" Property="Visibility" Value="Visible" />
+                                        </Trigger>
+
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="False" />
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <MultiTrigger.Setters>
+                                                <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ListViewItemBackgroundPointerOver}" />
+                                            </MultiTrigger.Setters>
+                                            <MultiTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                                                         From="0.0"
+                                                                         To="1.0"
+                                                                         Duration="00:00:00.167" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </MultiTrigger.EnterActions>
+                                            <MultiTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                                                         From="1.0"
+                                                                         To="0.0"
+                                                                         Duration="00:00:00.167" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </MultiTrigger.ExitActions>
+                                        </MultiTrigger>
+
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <MultiTrigger.Setters>
+                                                <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ListViewItemBackgroundPointerOver}" />
+                                            </MultiTrigger.Setters>
+                                            <MultiTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                                                         From="0.0"
+                                                                         To="1.0"
+                                                                         Duration="00:00:00.0" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </MultiTrigger.EnterActions>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="32" Header="">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="16"
+                                           Height="16"
+                                           Margin="0,2,0,0"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
+                                        <Image.Source>
+                                            <MultiBinding Converter="{StaticResource FileExtToIconConverter}">
+                                                <Binding Path="Name" />
+                                                <Binding Path="IsFolder" />
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="300" Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" />
+                                        <TextBlock Text="{Binding Encrypted, Converter={StaticResource BooleanToAsteriskConverter}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="120" Header="Size">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource SizePrettyPrintConverter}">
+                                                <Binding Path="Size" />
+                                                <Binding Path="IsFolder" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="180" Header="Modified Date">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource DatePrintConverter}">
+                                                <Binding Path="ModifiedDate" />
+                                                <Binding Path="IsFolder" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
