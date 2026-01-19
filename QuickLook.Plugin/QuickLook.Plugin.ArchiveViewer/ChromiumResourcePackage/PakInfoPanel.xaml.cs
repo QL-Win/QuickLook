@@ -117,7 +117,7 @@ public partial class PakInfoPanel : UserControl, IDisposable, INotifyPropertyCha
 
     private void LoadItemsFromPak(string path)
     {
-        var dict = PakExtractor.ExtractToDictionary(path, true);
+        var dict = PakExtractor.ExtractToDictionary(path, appendExtension: true);
         var modifiedDate = File.GetLastWriteTime(path);
 
         foreach (var kv in dict)

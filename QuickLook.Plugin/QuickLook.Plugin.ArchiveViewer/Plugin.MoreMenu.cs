@@ -19,6 +19,7 @@ using QuickLook.Common.Commands;
 using QuickLook.Common.Controls;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
+using QuickLook.Plugin.ArchiveViewer.ChromiumResourcePackage;
 using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,8 @@ public sealed partial class Plugin
     {
         // Currently only supports for CFB and EIF files
         if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
-            || _path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
+            || _path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
         {
             // Use external Translations.config shipped next to the executing assembly
             string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
@@ -114,6 +116,14 @@ public sealed partial class Plugin
                         CompoundFileExtractor.ExtractToDirectory(_path, dialog.FileName);
                     });
                 }
+            }
+            else if (_path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
+            {
+                // Chromium resource package file v5 extraction
+                await Task.Run(() =>
+                {
+                    PakExtractor.ExtractToDirectory(_path, dialog.FileName);
+                });
             }
         }
     }
