@@ -58,7 +58,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         ".eif",     // QQ emoji file (Compound File Binary format)
 
         // List of supported chromium resource package file extensions
-        ".pak",     // Chromium resource package file, used by Chromium-based applications (e.g., Google Chrome)
+        ".pak",     // Chromium resource package file v5, used by Chromium-based applications (e.g., Google Chrome)
     ];
 
     private IDisposable _panel;
@@ -74,7 +74,31 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && _extensions.Any(path.ToLower().EndsWith);
+        if (Directory.Exists(path))
+            return false;
+
+        if (path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
+        {
+            // Chromium PAK files usually start with header as version
+            try
+            {
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using var br = new BinaryReader(fs);
+                var version = br.ReadUInt32();
+
+                // Check for Chromium PAK version
+                // if v5 → PASS
+                // if v4 → FAIL (NOT Supported)
+                if (version == 5) return true;
+            }
+            catch
+            {
+                // Ignore file read errors, treat as not handled
+            }
+            return false;
+        }
+
+        return _extensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
     }
 
     public void Prepare(string path, ContextObject context)

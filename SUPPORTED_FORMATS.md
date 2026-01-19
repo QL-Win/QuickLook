@@ -215,6 +215,7 @@ Update not completed yet...
 - `.zip` (ZIP archive)
 - `.cfb` (Compound File Binary)
 - `.eif` (QQ EIF package with Compound File Binary format)
+- `.pak` (Chromium resource package file v5, used by Chromium-based applications (e.g., Google Chrome))
 
 ### Markdown files
 - `.md`, `.markdown` (Markdown)
