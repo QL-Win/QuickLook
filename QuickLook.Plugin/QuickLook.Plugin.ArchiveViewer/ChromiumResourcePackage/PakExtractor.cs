@@ -33,7 +33,8 @@ public static class PakExtractor
     /// </summary>
     /// <param name="fileName">The path to the .pak file to extract.</param>
     /// <param name="outputDirectory">The directory where extracted resource files will be saved.</param>
-    public static void ExtractToDirectory(string fileName, string outputDirectory)
+    /// <param name="appendExtension">If true, append guessed file extension to the filename (e.g., "000000001.png").</param>
+    public static void ExtractToDirectory(string fileName, string outputDirectory, bool appendExtension = true)
     {
         using var stream = File.OpenRead(fileName);
         using var br = new BinaryReader(stream);
@@ -78,6 +79,11 @@ public static class PakExtractor
                     read += n;
                 }
                 string resourceName = entries[i].ResourceId.ToString("D9");
+                if (appendExtension)
+                {
+                    string ext = GuessFileExtension(buffer, length);
+                    resourceName += ext;
+                }
                 using var file = File.Create(Path.Combine(outputDirectory, resourceName));
                 file.Write(buffer, 0, length);
             }

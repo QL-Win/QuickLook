@@ -122,7 +122,7 @@ public sealed partial class Plugin
                 // Chromium resource package file v5 extraction
                 await Task.Run(() =>
                 {
-                    PakExtractor.ExtractToDirectory(_path, dialog.FileName);
+                    PakExtractor.ExtractToDirectory(_path, dialog.FileName, appendExtension: true);
                 });
             }
         }
