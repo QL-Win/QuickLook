@@ -35,6 +35,10 @@ public class LottieImagePanel : SvgImagePanel
         ObjectForScripting ??= new ScriptHandler(path);
 
         _homePage = _resources["/lottie2html.html"];
+        
+        // Update WebView2 background color based on current theme
+        UpdateWebViewBackgroundColor();
+        
         NavigateToUri(new Uri("file://quicklook/"));
     }
 
