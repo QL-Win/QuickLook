@@ -117,9 +117,83 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         if (WebHandler.TryCanHandle(path))
             return true;
 
+        if (Directory.Exists(path))
+            return false;
+
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+        if (WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        // For files without extensions, check magic numbers for common image formats
+        if (!Path.HasExtension(path))
+        {
+            return IsImageByMagicNumber(path);
+        }
+
+        return false;
+    }
+
+    private static bool IsImageByMagicNumber(string path)
+    {
+        try
+        {
+            if (!File.Exists(path))
+                return false;
+
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            if (fs.Length < 12)
+                return false;
+
+            var buffer = new byte[12];
+            var bytesRead = fs.Read(buffer, 0, buffer.Length);
+            if (bytesRead < 4)
+                return false;
+
+            // PNG: 89 50 4E 47 0D 0A 1A 0A
+            if (bytesRead >= 8 &&
+                buffer[0] == 0x89 && buffer[1] == 0x50 && buffer[2] == 0x4E && buffer[3] == 0x47 &&
+                buffer[4] == 0x0D && buffer[5] == 0x0A && buffer[6] == 0x1A && buffer[7] == 0x0A)
+            {
+                return true;
+            }
+
+            // JPEG: FF D8 FF
+            if (bytesRead >= 3 &&
+                buffer[0] == 0xFF && buffer[1] == 0xD8 && buffer[2] == 0xFF)
+            {
+                return true;
+            }
+
+            // GIF: GIF87a or GIF89a
+            if (bytesRead >= 6 &&
+                buffer[0] == 0x47 && buffer[1] == 0x49 && buffer[2] == 0x46 &&
+                buffer[3] == 0x38 && (buffer[4] == 0x37 || buffer[4] == 0x39) && buffer[5] == 0x61)
+            {
+                return true;
+            }
+
+            // BMP: BM
+            if (bytesRead >= 2 &&
+                buffer[0] == 0x42 && buffer[1] == 0x4D)
+            {
+                return true;
+            }
+
+            // WebP: RIFF....WEBP
+            if (bytesRead >= 12 &&
+                buffer[0] == 0x52 && buffer[1] == 0x49 && buffer[2] == 0x46 && buffer[3] == 0x46 &&
+                buffer[8] == 0x57 && buffer[9] == 0x45 && buffer[10] == 0x42 && buffer[11] == 0x50)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public void Prepare(string path, ContextObject context)
