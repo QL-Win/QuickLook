@@ -213,6 +213,8 @@ Update not completed yet...
 - `.vsix` (Visual Studio extension)
 - `.xz` (XZ archive)
 - `.zip` (ZIP archive)
+- `.whl` (Python Wheel package)
+- `.egg` (Python Egg package)
 - `.cfb` (Compound File Binary)
 - `.eif` (QQ EIF package with Compound File Binary format)
 - `.pak` (Chromium resource package file v5, used by Chromium-based applications (e.g., Google Chrome))

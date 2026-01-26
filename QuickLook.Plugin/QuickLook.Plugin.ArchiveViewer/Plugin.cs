@@ -52,6 +52,8 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         ".vsix",    // Visual Studio extension package (ZIP-based)
         ".xz",      // XZ compressed file (uses LZMA2 compression)
         ".zip",     // ZIP compressed archive (most common compression format)
+        ".whl",     // Python Wheel package (ZIP-based)
+        ".egg",     // Python Egg package (ZIP-based)
 
         // List of supported compound file binary file extensions
         ".cfb",     // Compound File Binary format (used by older Microsoft Office files)
