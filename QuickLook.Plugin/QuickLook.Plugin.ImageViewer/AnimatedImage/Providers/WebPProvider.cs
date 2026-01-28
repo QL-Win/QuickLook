@@ -52,7 +52,7 @@ internal class WebPProvider : ImageMagickProvider
                 {
                     OutputColor = DngOutputColor.SRGB,
                     UseCameraWhiteBalance = true,
-                    DisableAutoBrightness = false
+                    DisableAutoBrightness = false,
                 }
             };
 

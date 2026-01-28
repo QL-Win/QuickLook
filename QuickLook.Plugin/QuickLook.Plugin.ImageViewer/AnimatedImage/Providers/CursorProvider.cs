@@ -97,7 +97,7 @@ internal class CursorProvider : ImageMagickProvider
                 {
                     OutputColor = DngOutputColor.SRGB,
                     UseCameraWhiteBalance = true,
-                    DisableAutoBrightness = false
+                    DisableAutoBrightness = false,
                 }
             };
 
