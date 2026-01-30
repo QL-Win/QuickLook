@@ -2,7 +2,7 @@
 
 <SyntaxDefinition name="AutoHotkey" extensions=".ahk">
 
-    <Environment> 
+    <Environment>
         <Default color="Black" bgcolor="#FFFFFF"/>
         <Selection color="Black" bgcolor="#C3C3FF"/>
         <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
@@ -18,13 +18,13 @@
         <TabMarkers color="#B6B6C0"/>
         <InvalidLines color="#B6B6C0"/>
     </Environment>
-        
+
     <Properties>
         <Property name="LineComment" value=";"/>
         <Property name="BlockCommentBegin" value="/*"/>
         <Property name="BlockCommentEnd" value="*/"/>
     </Properties>
-        
+
     <Digits name="Digits" color="Black"/>
 
     <RuleSets>

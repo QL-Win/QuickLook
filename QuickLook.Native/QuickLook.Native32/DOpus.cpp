@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 // 
 // This file is part of QuickLook program.
 // 
@@ -30,7 +30,7 @@
 HWND hMsgWnd;
 HANDLE hGetResultEvent;
 
-PCHAR pXmlBuffer;
+PCHAR pXmlBuffer = nullptr;
 
 void DOpus::GetSelected(PWCHAR buffer)
 {
@@ -72,9 +72,12 @@ void DOpus::GetSelected(PWCHAR buffer)
 
     WaitForSingleObject(hGetResultEvent, 2000);
 
-    ParseXmlBuffer(buffer);
-
-    delete[] pXmlBuffer;
+    if (pXmlBuffer != nullptr)
+    {
+        ParseXmlBuffer(buffer);
+        delete[] pXmlBuffer;
+        pXmlBuffer = nullptr;
+    }
 }
 
 void DOpus::ParseXmlBuffer(PWCHAR buffer)
@@ -87,6 +90,9 @@ void DOpus::ParseXmlBuffer(PWCHAR buffer)
      *         <item id="12" name="2.zip" path="C:\folder\2.zip" type="1" />
      *         ...
      */
+
+    if (pXmlBuffer == nullptr)
+        return;
 
     using namespace rapidxml;
 

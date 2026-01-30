@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="GitIgnore" extensions=".gitignore">
+<SyntaxDefinition name="GitIgnore" extensions=".gitignore;.cursorignore">
 
     <Environment> 
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>

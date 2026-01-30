@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -198,6 +198,19 @@ public partial class ViewerWindow
         catch (Exception e)
         {
             exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
+            return;
+        }
+
+        if (ContextObject.IsBusy)
+        {
+            ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
+            {
+                Text = TranslationHelper.Get("MW_FileBlocked", failsafe: "This file type is blocked."),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 14,
+            };
+            ContextObject.IsBusy = false;
             return;
         }
 

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -35,6 +35,10 @@ public sealed class JSONDetector : IFormatDetector
         if (string.IsNullOrWhiteSpace(text)) return false;
 
         var span = text.AsSpan();
+
+        // Remove UTF-8 BOM if present
+        if (span.Length > 0 && span[0] == '\uFEFF')
+            span = span.Slice(1);
 
         // TrimStart
         int start = 0;

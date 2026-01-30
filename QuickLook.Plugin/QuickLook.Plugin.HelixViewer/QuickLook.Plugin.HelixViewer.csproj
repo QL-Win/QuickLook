@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.HelixViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.HelixViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -70,8 +70,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="HelixToolkit" Version="2.27.3" />
-        <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" />
+        <PackageReference Include="HelixToolkit" Version="3.1.2" />
+        <PackageReference Include="HelixToolkit.Wpf" Version="3.1.2" />
         <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
         <PackageReference Include="PcdSharp" Version="1.0.1" />
     </ItemGroup>

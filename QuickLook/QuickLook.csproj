@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <AssemblyName>QuickLook</AssemblyName>
         <FileAlignment>512</FileAlignment>
         <PlatformTarget>ARM64</PlatformTarget>
@@ -120,10 +120,10 @@
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="WPF-UI.Violeta" Version="4.0.3.6">
+        <PackageReference Include="WPF-UI.Violeta" Version="4.2.0.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Lib.Harmony" Version="2.4.1">
+        <PackageReference Include="Lib.Harmony" Version="2.4.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="UnblockZoneIdentifier" Version="1.0.0">

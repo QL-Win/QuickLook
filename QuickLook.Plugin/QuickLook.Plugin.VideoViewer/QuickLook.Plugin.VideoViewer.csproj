@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.VideoViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.VideoViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -69,7 +69,8 @@
             <SpecificVersion>False</SpecificVersion>
         </Reference>
         <PackageReference Include="UTF.Unknown" Version="2.6.0" />
-        <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.2" />
+        <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
+        <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>

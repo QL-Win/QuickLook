@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -70,6 +70,8 @@ public partial class Plugin : IViewer, IMoreMenu
 
     public void View(string path, ContextObject context)
     {
+        _currentPath = path;
+
         if (path.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
         {
             var rtfBox = new RichTextBox();
@@ -86,7 +88,6 @@ public partial class Plugin : IViewer, IMoreMenu
         else
         {
             _tvp = new TextViewerPanel();
-            _currentPath = path;
             _tvp.LoadFileAsync(path, context);
             context.ViewerContent = _tvp;
         }

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -20,15 +20,15 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
-public class Percent100ToVisibilityVisibleConverter : DependencyObject, IValueConverter
+public sealed class Percent100ToVisibilityVisibleConverter : DependencyObject, IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value == null)
-            value = 0;
+        value ??= 0;
 
         var percent = (double)value;
         return Math.Abs(percent - 100) < 0.00001 ? Visibility.Visible : Visibility.Collapsed;
@@ -40,12 +40,11 @@ public class Percent100ToVisibilityVisibleConverter : DependencyObject, IValueCo
     }
 }
 
-public class Percent100ToVisibilityCollapsedConverter : DependencyObject, IValueConverter
+public sealed class Percent100ToVisibilityCollapsedConverter : DependencyObject, IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value == null)
-            value = 0;
+        value ??= 0;
 
         var percent = (double)value;
         return Math.Abs(percent - 100) < 0.00001 ? Visibility.Collapsed : Visibility.Visible;
@@ -57,7 +56,7 @@ public class Percent100ToVisibilityCollapsedConverter : DependencyObject, IValue
     }
 }
 
-public class LevelToIndentConverter : DependencyObject, IMultiValueConverter
+public sealed class LevelToIndentConverter : DependencyObject, IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
@@ -75,7 +74,7 @@ public class LevelToIndentConverter : DependencyObject, IMultiValueConverter
     }
 }
 
-public class LevelToBooleanConverter : DependencyObject, IValueConverter
+public sealed class LevelToBooleanConverter : DependencyObject, IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -90,7 +89,7 @@ public class LevelToBooleanConverter : DependencyObject, IValueConverter
     }
 }
 
-public class BooleanToAsteriskConverter : DependencyObject, IValueConverter
+public sealed class BooleanToAsteriskConverter : DependencyObject, IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -105,7 +104,7 @@ public class BooleanToAsteriskConverter : DependencyObject, IValueConverter
     }
 }
 
-public class SizePrettyPrintConverter : DependencyObject, IMultiValueConverter
+public sealed class SizePrettyPrintConverter : DependencyObject, IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
@@ -121,7 +120,7 @@ public class SizePrettyPrintConverter : DependencyObject, IMultiValueConverter
     }
 }
 
-public class DatePrintConverter : DependencyObject, IMultiValueConverter
+public sealed class DatePrintConverter : DependencyObject, IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
@@ -137,17 +136,20 @@ public class DatePrintConverter : DependencyObject, IMultiValueConverter
     }
 }
 
-public class FileExtToIconConverter : DependencyObject, IMultiValueConverter
+public sealed class FileExtToIconConverter : DependencyObject, IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
         var name = (string)values[0];
         var isFolder = (bool)values[1];
 
+        object result;
         if (isFolder)
-            return IconManager.FindIconForDir(false);
+            result = IconManager.FindIconForDir(false);
+        else
+            result = IconManager.FindIconForFilename(name, false);
 
-        return IconManager.FindIconForFilename(name, false);
+        return result is ImageSource img ? img : DependencyProperty.UnsetValue;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

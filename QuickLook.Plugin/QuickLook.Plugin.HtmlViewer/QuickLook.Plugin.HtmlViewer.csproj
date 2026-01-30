@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.HtmlViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.HtmlViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -80,7 +80,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3537.50">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

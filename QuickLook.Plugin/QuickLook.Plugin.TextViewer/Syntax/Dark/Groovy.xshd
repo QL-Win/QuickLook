@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Groovy" extensions=".groovy">
+
+    <Environment> 
+        <Default color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        <Selection color="#FFD4D4D4" bgcolor="#C3C3FF"/>
+        <LineNumbers color="#FF858585" bgcolor="#FF1E1E1E"/>
+        <CaretMarker color="#FF2A2A2A"/>
+        <VRuler color="#FF424242"/>
+        
+        <FoldLine color="#FF606060" bgcolor="#FF1E1E1E"/>
+        <FoldMarker color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        <SelectedFoldLine color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>
+        
+        <EOLMarkers color="#FF606060"/>
+        <SpaceMarkers color="#FF505050"/>
+        <TabMarkers color="#FF505050"/>
+        <InvalidLines color="#FF505050"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+        
+    <Digits name="Digits" color="#FFD4D4D4"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+                        
+            <Delimiters>()[]{}@,.:`=;+-*%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="#FF57A64A" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+                            
+            <Span name="BlockComment" stopateol="false" color="#FF57A64A" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String1" stopateol="false" color="#FFD69D85" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="String2" stopateol="true" color="#FFD69D85" bold="false" italic="false">
+                <Begin>/@! @@!/@</Begin>
+                <End>/</End>
+            </Span>
+            
+            <Span name="Char" stopateol="false" color="#FFD69D85" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>  
+            
+            <Span name="ShebangLine" stopateol="true" color="#FF57A64A" bold="false" italic="false">
+                <Begin>#!</Begin>
+            </Span>
+
+            <MarkFollowing color="#FFD4D4D4" bold="false" italic="true">class</MarkFollowing>
+            <MarkFollowing color="#BB7700" bold="false" italic="false">implements</MarkFollowing>
+            <MarkFollowing color="#A0911F" bold="false" italic="false">def</MarkFollowing>
+
+            <KeyWords name="Keywords1" color="#FF569CD6" bold="false">
+                <Key word="as"/>
+                <Key word="assert"/>
+                <Key word="break"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="def"/>
+                <Key word="default"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="extends"/>
+                <Key word="false"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="instanceof"/>
+                <Key word="interface"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="package"/>
+                <Key word="return"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="trait"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="while"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords2" color="#FFC586C0" bold="false">
+                <Key word="abstract"/>
+                <Key word="final"/>
+                <Key word="native"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="static"/>
+                <Key word="synchronized"/>
+                <Key word="threadsafe"/>
+                <Key word="transient"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords3" color="#FF4EC9B0" bold="false">
+                <Key word="boolean"/>
+                <Key word="byte"/>
+                <Key word="char"/>
+                <Key word="double"/>
+                <Key word="float"/>
+                <Key word="int"/>
+                <Key word="long"/>
+                <Key word="short"/>
+                <Key word="void"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords4" color="#804040" bold="false">
+                <Key word="abs"/>
+                <Key word="any"/>
+                <Key word="append"/>
+                <Key word="asList"/>
+                <Key word="asWritable"/>
+                <Key word="call"/>
+                <Key word="collect"/>
+                <Key word="compareTo"/>
+                <Key word="count"/>
+                <Key word="div"/>
+                <Key word="dump"/>
+                <Key word="each"/>
+                <Key word="eachByte"/>
+                <Key word="eachFile"/>
+                <Key word="eachLine"/>
+                <Key word="every"/>
+                <Key word="fail"/>
+                <Key word="find"/>
+                <Key word="findAll"/>
+                <Key word="flatten"/>
+                <Key word="getAt"/>
+                <Key word="getErr"/>
+                <Key word="getIn"/>
+                <Key word="getOut"/>
+                <Key word="getText"/>
+                <Key word="grep"/>
+                <Key word="immutable"/>
+                <Key word="inject"/>
+                <Key word="inspect"/>
+                <Key word="intersect"/>
+                <Key word="invokeMethods"/>
+                <Key word="isCase"/>
+                <Key word="join"/>
+                <Key word="leftShift"/>
+                <Key word="minus"/>
+                <Key word="multiply"/>
+                <Key word="newInputStream"/>
+                <Key word="newOutputStream"/>
+                <Key word="newPrintWriter"/>
+                <Key word="newReader"/>
+                <Key word="newWriter"/>
+                <Key word="next"/>
+                <Key word="plus"/>
+                <Key word="pop"/>
+                <Key word="power"/>
+                <Key word="previous"/>
+                <Key word="print"/>
+                <Key word="println"/>
+                <Key word="push"/>
+                <Key word="putAt"/>
+                <Key word="read"/>
+                <Key word="readBytes"/>
+                <Key word="readLines"/>
+                <Key word="reverse"/>
+                <Key word="reverseEach"/>
+                <Key word="round"/>
+                <Key word="shouldFail"/>
+                <Key word="size"/>
+                <Key word="sleep"/>
+                <Key word="sort"/>
+                <Key word="splitEachLine"/>
+                <Key word="sprintf"/>
+                <Key word="step"/>
+                <Key word="subMap"/>
+                <Key word="times"/>
+                <Key word="toInteger"/>
+                <Key word="toList"/>
+                <Key word="tokenize"/>
+                <Key word="upto"/>
+                <Key word="use"/>
+                <Key word="waitForOrKill"/>
+                <Key word="with"/>
+                <Key word="withPrintWriter"/>
+                <Key word="withReader"/>
+                <Key word="withStream"/>
+                <Key word="withWriter"/>
+                <Key word="withWriterAppend"/>
+                <Key word="write"/>
+                <Key word="writeLine"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

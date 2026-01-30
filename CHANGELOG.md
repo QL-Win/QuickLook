@@ -1,3 +1,29 @@
+## 4.4.0
+
+- Add support for `.cnf` files to INI syntax highlighting
+- Add support for `.ddeb` Debian debug symbol packages
+- Add a **Reload** option to the **More** context menu [#1839](https://github.com/QL-Win/QuickLook/issues/1839)
+- Add support for embedded lyrics in music file [#1847](https://github.com/QL-Win/QuickLook/issues/1847)
+- Add a certificate viewer plugin to support extensions `.p12`, `.pfx`, `.cer`, `.crt`, `.pem`, `.mobileprovision` and `.certSigningRequest` 
+- Add support for Compound File Binary formats (`.cfb` and `.eif` is now supported)
+- Add a restart button after plugin installation [#1823](https://github.com/QL-Win/QuickLook/issues/1823)
+- Improve XML version attribute detection in `XMLDetector` (e.g. `<?xml version='1.0'?>` is now supported)
+- Improve YAML highlighting and support `.clang-format`
+- Fix a crash that could occur when shutting down or restarting Windows [#1782](https://github.com/QL-Win/QuickLook/issues/1782)
+- Fix JSON detection with UTF-8 BOM present
+- Fix tags not displayed due to empty cover art [#1845](https://github.com/QL-Win/QuickLook/issues/1845)
+
+## 4.3.0
+
+- Add Svelte syntax highlighting support
+- Add ShowInTaskbar setting to display window in taskbar [#1789](https://github.com/QL-Win/QuickLook/issues/1789)
+- Add option to disable automatic update check at startup [#1801](https://github.com/QL-Win/QuickLook/issues/1801)
+- Update PowerShell syntax colors in dark theme
+- Improve TextViewerPanel UI and usability
+- Fix DOpus crash when QuickLook runs with different privilege level [#1781](https://github.com/QL-Win/QuickLook/issues/1781)
+- Fix volume control exceeding limits during mouse wheel scroll [#1813](https://github.com/QL-Win/QuickLook/issues/1813)
+- Fix error in RTF file originating from version 4.2.1 [#1826](https://github.com/QL-Win/QuickLook/issues/1826)
+
 ## 4.2.2
 
 - Fix version display issue [#1776](https://github.com/QL-Win/QuickLook/issues/1776)

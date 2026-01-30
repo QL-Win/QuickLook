@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuickLook.Plugin.ArchiveViewer;
+namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
 {
@@ -36,7 +36,7 @@ public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
         _parent?.Children.Add(this, false);
     }
 
-    public SortedList<ArchiveFileEntry, bool> Children { get; set; } = new SortedList<ArchiveFileEntry, bool>();
+    public SortedList<ArchiveFileEntry, bool> Children { get; set; } = [];
 
     public string Name { get; set; }
     public bool Encrypted { get; set; }

@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -17,6 +17,7 @@
 
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 using ICSharpCode.AvalonEdit.Search;
 using QuickLook.Common.Helpers;
@@ -27,6 +28,7 @@ using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -68,16 +70,33 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         ShowLineNumbers = true;
         WordWrap = true;
         IsReadOnly = true;
+
+        // Enable manipulation events (touch gestures like pan/scroll).
         IsManipulationEnabled = true;
+
+        // Disable automatic hyperlink detection for email addresses.
         Options.EnableEmailHyperlinks = false;
+
+        // Disable automatic hyperlink detection for general URLs.
         Options.EnableHyperlinks = false;
 
+        // Search for the separator line inside the left margins of the TextArea.
+        // The default LineNumberMargin in AvalonEdit often contains a thin Line element
+        // used as a visual separator between line numbers and the text.
+        // If found, set its Stroke to Transparent to hide the separator visually.
+        TextArea.LeftMargins
+            .OfType<System.Windows.Shapes.Line>()
+            .FirstOrDefault()
+            ?.Stroke = Brushes.Transparent;
+
         ContextMenu = new ContextMenu();
+        // Add "Copy" menu item.
         ContextMenu.Items.Add(new MenuItem
         {
             Header = TranslationHelper.Get("Editor_Copy", domain: Assembly.GetExecutingAssembly().GetName().Name),
             Command = ApplicationCommands.Copy
         });
+        // Add "Select All" menu item.
         ContextMenu.Items.Add(new MenuItem
         {
             Header = TranslationHelper.Get("Editor_SelectAll",
@@ -95,8 +114,10 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         FontFamily = new FontFamily(TranslationHelper.Get("Editor_FontFamily",
             domain: Assembly.GetExecutingAssembly().GetName().Name));
 
+        // Add a custom element generator (e.g., to truncate extremely long lines).
         TextArea.TextView.ElementGenerators.Add(new TruncateLongLines());
 
+        // Install the search panel (Ctrl+F style search UI).
         SearchPanel.Install(this);
     }
 

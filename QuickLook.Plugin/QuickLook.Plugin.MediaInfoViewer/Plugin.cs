@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -29,7 +29,7 @@ using System.Windows.Media;
 
 namespace QuickLook.Plugin.MediaInfoViewer;
 
-public partial class Plugin : IViewer, IMoreMenuExtended
+public sealed partial class Plugin : IViewer, IMoreMenuExtended
 {
     private TextViewerPanel _tvp;
 

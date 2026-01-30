@@ -132,6 +132,11 @@
                             ToolTip="More">
                         <Button.ContextMenu>
                             <ContextMenu FontSize="12">
+                                <MenuItem x:Name="moreItemReload" Tag="PinMenu">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.Refresh}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                                 <MenuItem x:Name="moreItemCopyAsPath" Tag="PinMenu">
                                     <MenuItem.Icon>
                                         <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.Copy}" />

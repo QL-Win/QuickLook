@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.CLSIDViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.CLSIDViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>

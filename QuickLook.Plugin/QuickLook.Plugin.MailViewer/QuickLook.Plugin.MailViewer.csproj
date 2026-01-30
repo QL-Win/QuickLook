@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.MailViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.MailViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -73,7 +73,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MsgReader" Version="6.0.5" />
+        <PackageReference Include="MsgReader" Version="6.0.6" />
     </ItemGroup>
 
     <ItemGroup>

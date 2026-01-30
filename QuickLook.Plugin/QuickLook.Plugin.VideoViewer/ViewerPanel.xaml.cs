@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -27,7 +27,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -423,12 +422,40 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         var lyricPath = Path.ChangeExtension(path, ".lrc");
 
+        // Stop previous timer if any.
+        _lyricTimer?.Stop();
+        _lyricTimer = null;
+        _lyricLines = null;
+
         if (File.Exists(lyricPath))
         {
             var buffer = File.ReadAllBytes(lyricPath);
             var encoding = CharsetDetector.DetectFromBytes(buffer).Detected?.Encoding ?? Encoding.Default;
 
-            _lyricLines = LrcHelper.ParseText(encoding.GetString(buffer)).ToArray();
+            _lyricLines = [.. LrcHelper.ParseText(encoding.GetString(buffer))];
+        }
+        else
+        {
+            // Use embedded lyrics from MediaInfo if present.
+            // Common tag: General/Lyrics (may contain LRC formatted content).
+            var embeddedLyrics = info?.Get(StreamKind.General, 0, "Lyrics");
+
+            // Only check whether the tag of lyrics is present by MediaInfo
+            if (!string.IsNullOrWhiteSpace(embeddedLyrics))
+            {
+                var file = TagLib.File.Create(path);
+                embeddedLyrics = file.Tag.Lyrics;
+
+                // Check whether the tag of lyrics is present by TagLib#
+                if (!string.IsNullOrWhiteSpace(embeddedLyrics))
+                {
+                    _lyricLines = [.. LrcHelper.ParseText(embeddedLyrics)];
+                }
+            }
+        }
+
+        if (_lyricLines != null && _lyricLines.Length != 0)
+        {
             _lyricTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
             _lyricTimer.Tick += (sender, e) =>
             {
@@ -463,7 +490,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void ChangeVolume(double delta)
     {
-        LinearVolume += delta;
+        LinearVolume = Math.Max(0d, Math.Min(1d, LinearVolume + delta));
     }
 
     private void TogglePlayPause(object sender, EventArgs e)
@@ -533,16 +560,16 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         UpdateMeta(path, info);
 
         // detect rotation
-        double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
+        _ = double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
         // Correct rotation: on some machine the value "90" becomes "90000" by some reason
-        if (rotation > 360)
+        if (rotation > 360d)
             rotation /= 1e3;
-        if (Math.Abs(rotation) > 0.1)
-            mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5, 0.5);
+        if (Math.Abs(rotation) > 0.1d)
+            mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5d, 0.5d);
 
         mediaElement.Source = new Uri(path);
         // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-        LinearVolume = SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer");
+        LinearVolume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
 
         mediaElement.Play();
     }

@@ -1,4 +1,4 @@
-// Copyright © 2017-2025 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace QuickLook.Plugin.HtmlViewer;
 
-public partial class Plugin
+public sealed partial class Plugin
 {
     public IEnumerable<IMenuItem> GetMenuItems()
     {

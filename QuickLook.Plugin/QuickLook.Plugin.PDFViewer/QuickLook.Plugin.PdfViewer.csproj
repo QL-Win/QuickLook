@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.PDFViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.PDFViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -88,7 +88,7 @@
 
     <ItemGroup>
         <PackageReference Include="PdfiumViewer.Updated" Version="2.14.5" />
-        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="143.0.7483" />
+        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="145.0.7630" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
 

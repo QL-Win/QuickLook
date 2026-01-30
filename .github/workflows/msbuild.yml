@@ -1,6 +1,6 @@
 # run a build for the latest version and upload the artifacts to a "latest" pre-release
 
-name: MSBuild
+name: build
 
 on:
   push:
@@ -26,14 +26,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
         ref: master
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.1.3
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -46,7 +46,7 @@ jobs:
       run: msbuild /m /p:BuildInParallel=true /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
     # upload msi and zip artifacts so the publish job below can download and then update latest release via Linux
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: quicklook-build-files
         path: Build/QuickLook-*.*
@@ -64,13 +64,13 @@ jobs:
     if: github.event_name == 'push'
     
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v6
       with:
         name: quicklook-build-files
     
     - name: Update latest release
-      # see https://github.com/pyTooling/Actions/tree/main/releaser
-      uses: pyTooling/Actions/releaser@main
+      # see https://github.com/pyTooling/Actions/tree/r6/releaser
+      uses: pyTooling/Actions/releaser@r6
       with:
         tag: latest
         rm: true

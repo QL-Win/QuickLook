@@ -93,7 +93,7 @@
                 <Key word="workflow"/>
             </KeyWords>
 
-            <KeyWords name="Keywords2" color="Purple" bold="false" italic="false">
+            <KeyWords name="Keywords2" color="#D8A0DF" bold="false" italic="false">
                 <Key word="Add-Computer"/>
                 <Key word="Add-Content"/>
                 <Key word="Add-History"/>
@@ -439,7 +439,7 @@
                 <Key word="Write-Zip"/>
             </KeyWords>
 
-            <KeyWords name="Keywords3" color="Teal" bold="false" italic="false">
+            <KeyWords name="Keywords3" color="#80CBC4" bold="false" italic="false">
                 <Key word="ac"/>
                 <Key word="asnp"/>
                 <Key word="cat"/>

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.CsvViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.CsvViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>

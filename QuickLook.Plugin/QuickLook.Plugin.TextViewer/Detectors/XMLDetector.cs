@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -21,7 +21,7 @@ namespace QuickLook.Plugin.TextViewer.Detectors;
 
 public sealed class XMLDetector : IFormatDetector
 {
-    internal Regex Signature { get; } = new(@"<\?xml\b[^>]*\bversion\s*=\s*""[^""]*""[^\?>]*\?>", RegexOptions.IgnoreCase);
+    internal Regex Signature { get; } = new(@"<\?xml\b[^>]*\bversion\s*=\s*(['""])[^'""]*\1[^\?>]*\?>", RegexOptions.IgnoreCase);
 
     public string Name => "XML";
 

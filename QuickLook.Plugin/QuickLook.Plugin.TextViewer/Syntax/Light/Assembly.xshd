@@ -18,13 +18,13 @@
         <TabMarkers color="#B6B6C0"/>
         <InvalidLines color="#B6B6C0"/>
     </Environment>
-        
+
     <Properties>
         <Property name="LineComment" value=";"/>
         <Property name="BlockCommentBegin" value="%comment"/>
         <Property name="BlockCommentEnd" value="%endcomment"/>
     </Properties>
-        
+
     <Digits name="Digits" color="Black"/>
 
     <RuleSets>

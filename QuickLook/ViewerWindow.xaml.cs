@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -64,6 +64,8 @@ public partial class ViewerWindow : Window
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
 
+        ShowInTaskbar = SettingHelper.Get("ShowInTaskbar", false);
+
         buttonTop.Click += (_, _) =>
         {
             Topmost = !Topmost;
@@ -111,6 +113,11 @@ public partial class ViewerWindow : Window
 
         buttonReload.Visibility = SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
 
+        moreItemReload.Click += (_, _) =>
+        {
+            ViewWindowManager.GetInstance().ReloadPreview();
+        };
+
         moreItemCopyAsPath.Click += (_, _) =>
         {
             try
@@ -136,6 +143,7 @@ public partial class ViewerWindow : Window
         buttonShare.ToolTip = TranslationHelper.Get("MW_Share");
         buttonReload.ToolTip = TranslationHelper.Get("MW_Reload", failsafe: "Reload");
         buttonMore.ToolTip = TranslationHelper.Get("MW_More", failsafe: "More");
+        moreItemReload.Header = TranslationHelper.Get("MW_Reload");
         moreItemCopyAsPath.Header = TranslationHelper.Get("InfoPanelMoreItem_CopyAsPath");
     }
 

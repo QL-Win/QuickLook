@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="GDScript" extensions=".gd">
+
+    <Environment>
+        <Default color="White" bgcolor="#000000"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#A9A9A9" bgcolor="#000000"/>
+        <CaretMarker color="#FFFFFF"/>
+        <VRuler color="#808080"/>
+
+        <FoldLine color="#3C3C3C" bgcolor="#000000"/>
+        <FoldMarker color="#3C3C3C" bgcolor="#000000"/>
+        <SelectedFoldLine color="#3C3C3C" bgcolor="#000000"/>
+
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+
+    <Digits name="Digits" color="#B5CEA8" bold="false" italic="false"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+
+            <Delimiters>~!%^&amp;*()-+=|\{}[]:;\&quot;'&lt;&gt;,.?/</Delimiters>
+
+            <!-- Comments -->
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <!-- Strings -->
+            <Span name="StringDQ" color="#CE9178" escapecharacter="\\" bold="false" italic="false">
+                <Begin>\&quot;</Begin>
+                <End>\&quot;</End>
+            </Span>
+
+            <Span name="StringSQ" color="#CE9178" escapecharacter="\\" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <!-- Triple-quoted strings -->
+            <Span name="StringTripleDQ" color="#CE9178" escapecharacter="\\" bold="false" italic="false">
+                <Begin>\&quot;\&quot;\&quot;</Begin>
+                <End>\&quot;\&quot;\&quot;</End>
+            </Span>
+
+            <Span name="StringTripleSQ" color="#CE9178" escapecharacter="\\" bold="false" italic="false">
+                <Begin>'''</Begin>
+                <End>'''</End>
+            </Span>
+
+            <!-- Keywords -->
+            <KeyWords name="Keywords" color="#569CD6" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="or"/>
+                <Key word="not"/>
+                <Key word="in"/>
+                <Key word="is"/>
+
+                <Key word="if"/>
+                <Key word="elif"/>
+                <Key word="else"/>
+                <Key word="for"/>
+                <Key word="while"/>
+                <Key word="break"/>
+                <Key word="continue"/>
+                <Key word="pass"/>
+                <Key word="return"/>
+                <Key word="match"/>
+
+                <Key word="class"/>
+                <Key word="class_name"/>
+                <Key word="extends"/>
+                <Key word="func"/>
+                <Key word="static"/>
+                <Key word="var"/>
+                <Key word="const"/>
+                <Key word="enum"/>
+                <Key word="setget"/>
+                <Key word="assert"/>
+                <Key word="await"/>
+                <Key word="yield"/>
+                <Key word="super"/>
+
+                <Key word="self"/>
+
+                <Key word="as"/>
+
+                <Key word="signal"/>
+
+                <Key word="tool"/>
+                <Key word="onready"/>
+                <Key word="export"/>
+            </KeyWords>
+
+            <!-- Built-in constants / literals -->
+            <KeyWords name="Literals" color="#4EC9B0" bold="false" italic="false">
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="null"/>
+                <Key word="PI"/>
+                <Key word="TAU"/>
+                <Key word="INF"/>
+                <Key word="NAN"/>
+            </KeyWords>
+
+            <!-- Built-in types (partial) -->
+            <KeyWords name="Types" color="#DCDCAA" bold="false" italic="false">
+                <Key word="bool"/>
+                <Key word="int"/>
+                <Key word="float"/>
+                <Key word="String"/>
+                <Key word="StringName"/>
+                <Key word="NodePath"/>
+                <Key word="Array"/>
+                <Key word="Dictionary"/>
+                <Key word="PackedStringArray"/>
+                <Key word="PackedByteArray"/>
+                <Key word="Vector2"/>
+                <Key word="Vector2i"/>
+                <Key word="Vector3"/>
+                <Key word="Vector3i"/>
+                <Key word="Vector4"/>
+                <Key word="Vector4i"/>
+                <Key word="Rect2"/>
+                <Key word="Rect2i"/>
+                <Key word="Color"/>
+                <Key word="Transform2D"/>
+                <Key word="Transform3D"/>
+                <Key word="Basis"/>
+                <Key word="Quaternion"/>
+            </KeyWords>
+
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

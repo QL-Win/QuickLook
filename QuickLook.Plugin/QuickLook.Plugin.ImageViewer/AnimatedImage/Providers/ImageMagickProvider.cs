@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -87,29 +87,40 @@ internal class ImageMagickProvider : AnimationProvider
             {
                 OutputColor = DngOutputColor.SRGB,
                 UseCameraWhiteBalance = true,
-                DisableAutoBrightness = false
+                DisableAutoBrightness = false,
             }
         };
 
+        IMagickImage<byte> mi = null;
+        var isImageOwned = false;  // Track whether this provider owns the Magick image instance and must dispose it.
+
         try
         {
-            using var layers = new MagickImageCollection(Path.LocalPath, settings);
-            IMagickImage<byte> mi;
-            // Only flatten multi-layer gimp xcf files.
-            if (Path.LocalPath.ToLower().EndsWith(".xcf") && layers.Count > 1)
+            // Only flatten multi-layer gimp xcf files. Other formats (e.g. PSD) should avoid
+            // loading all layers via MagickImageCollection for performance.
+            if (Path.LocalPath.ToLower().EndsWith(".xcf"))
             {
-                // Flatten crops layers to canvas
-                mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
+                using var layers = new MagickImageCollection(Path.LocalPath, settings);
+                if (layers.Count > 1)
+                {
+                    mi = layers.Flatten(MagickColor.FromRgba(0, 0, 0, 0));
+                    isImageOwned = true; // Flatten creates a new image instance we must dispose.
+                }
+                else
+                {
+                    mi = layers[0];
+                }
             }
             else
             {
-                mi = layers[0];
+                mi = new MagickImage(Path.LocalPath, settings);
+                isImageOwned = true; // New MagickImage created here must be disposed by this provider.
             }
             if (SettingHelper.Get("UseColorProfile", false, "QuickLook.Plugin.ImageViewer"))
             {
                 if (mi.ColorSpace == ColorSpace.RGB || mi.ColorSpace == ColorSpace.sRGB || mi.ColorSpace == ColorSpace.scRGB)
                 {
-                    mi.SetProfile(ColorProfile.SRGB);
+                    mi.SetProfile(ColorProfiles.SRGB);
                     if (ContextObject.ColorProfileName != null)
                         mi.SetProfile(new ColorProfile(ContextObject.ColorProfileName)); // map to monitor color
                 }
@@ -132,6 +143,11 @@ internal class ImageMagickProvider : AnimationProvider
         {
             ProcessHelper.WriteLog(e.ToString());
             return null!;
+        }
+        finally
+        {
+            if (isImageOwned)
+                mi?.Dispose();
         }
     }
 

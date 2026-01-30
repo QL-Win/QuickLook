@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -29,7 +29,7 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
 {
     public override string Name => "YAML";
 
-    public override string Extension => ".yaml;.yml";
+    public override string Extension => ".yaml;.yml;.clang-format";
 
     public override HighlightingRuleSet MainRuleSet => new()
     {
@@ -52,6 +52,11 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
                 Name = "Comment",
                 Foreground = new SimpleHighlightingBrush("#008000".ToColor()),
             },
+            "DocumentSeparator" => new HighlightingColor
+            {
+                Name = "DocumentSeparator",
+                Foreground = new SimpleHighlightingBrush("#A2A2A2".ToColor()),
+            },
             _ => null
         };
     }
@@ -59,6 +64,7 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
     public override IEnumerable<HighlightingColor> NamedHighlightingColors =>
     [
         GetNamedColor("Comment"),
+        GetNamedColor("DocumentSeparator"),
     ];
 
     public override DocumentColorizingTransformer[] LineTransformers { get; } = [new KeyHighlighter()];
@@ -68,6 +74,45 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
         protected override void ColorizeLine(DocumentLine line)
         {
             var text = CurrentContext.Document.GetText(line);
+
+            // Handle YAML document separator lines (---)
+            var trimmedStart = text.TrimStart();
+            if (trimmedStart.StartsWith("---") || trimmedStart.StartsWith("..."))
+            {
+                int idx = trimmedStart.StartsWith("---") ? text.IndexOf("---") : text.IndexOf("...");
+                if (idx < 0)
+                    return;
+
+                int sepEnd = idx + 3; // end of the '---' or '...' sequence
+
+                // If there's a comment after the separator, color the separator and the comment separately
+                int idxSharp = text.IndexOf('#', sepEnd);
+                if (idxSharp >= 0)
+                {
+                    // Separator
+                    ChangeLinePart(line.Offset + idx, line.Offset + sepEnd, el =>
+                    {
+                        el.TextRunProperties.SetForegroundBrush("#A2A2A2".ToBrush());
+                    });
+
+                    // Comment
+                    ChangeLinePart(line.Offset + idxSharp, line.Offset + text.Length, el =>
+                    {
+                        el.TextRunProperties.SetForegroundBrush("#6A9949".ToBrush());
+                    });
+                }
+                else
+                {
+                    // Only separator
+                    ChangeLinePart(line.Offset + idx, line.Offset + sepEnd, el =>
+                    {
+                        el.TextRunProperties.SetForegroundBrush("#A2A2A2".ToBrush());
+                    });
+                }
+
+                // Return early so other colorization rules don't override this line
+                return;
+            }
 
             // Skip empty lines and comments
             if (string.IsNullOrWhiteSpace(text) || text.TrimStart().StartsWith("#"))
@@ -112,7 +157,7 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
             else
             {
                 int idx = text.IndexOf(':');
-                var val = text.Substring(idx + 1);
+                var val = idx >= 0 ? text.Substring(idx + 1) : string.Empty;
                 var valTrimmed = val.Trim();
 
                 if (idx <= 0)

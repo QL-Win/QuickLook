@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2025 QL-Win Contributors
+﻿// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -26,7 +26,7 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.MailViewer;
 
-public class Plugin : IViewer
+public sealed class Plugin : IViewer
 {
     private WebpagePanel _panel;
     private string _tmpDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
