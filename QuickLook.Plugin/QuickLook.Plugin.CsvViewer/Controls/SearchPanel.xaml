@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="QuickLook.Plugin.CsvViewer.Controls.SearchPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="35"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <Border Margin="0,-1,16,0"
+            Padding="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="{DynamicResource WindowBackground}"
+            BorderBrush="#102E2E3E"
+            BorderThickness="1"
+            CornerRadius="4"
+            Cursor="Arrow">
+        <StackPanel Orientation="Horizontal">
+            <TextBox Name="searchTextBox"
+                     Width="150"
+                     Height="29"
+                     Padding="4,5,0,0"
+                     FocusVisualStyle="{x:Null}"
+                     Focusable="True"
+                     KeyDown="SearchTextBox_KeyDown"
+                     TextChanged="SearchTextBox_TextChanged" />
+            <TextBlock Name="matchCountText"
+                       Width="50"
+                       Margin="4,0,0,0"
+                       VerticalAlignment="Center"
+                       FontSize="11"
+                       Foreground="{DynamicResource WindowTextForeground}"
+                       Text="" />
+            <Button Width="24"
+                    Height="24"
+                    Margin="3,3,0,3"
+                    Padding="0"
+                    Click="FindPrevious_Click"
+                    ToolTip="Find Previous (Shift+Enter)">
+                <!--  ChevronUp  -->
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                           FontSize="12"
+                           Text="&#xe70e;" />
+            </Button>
+            <Button Width="24"
+                    Height="24"
+                    Margin="3"
+                    Padding="0"
+                    Click="FindNext_Click"
+                    ToolTip="Find Next (Enter)">
+                <!--  ChevronDown  -->
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                           FontSize="12"
+                           Text="&#xe70d;" />
+            </Button>
+            <CheckBox Name="matchCaseCheckBox"
+                      Margin="3,0"
+                      VerticalAlignment="Center"
+                      Checked="MatchCase_Changed"
+                      Content="Match case"
+                      Unchecked="MatchCase_Changed" />
+            <Button Width="16"
+                    Height="16"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Click="CloseSearch_Click"
+                    Focusable="False"
+                    ToolTip="Close (Escape)">
+                <!--  CalculatorMultiply  -->
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                           FontSize="10"
+                           Text="&#xe947;" />
+            </Button>
+        </StackPanel>
+    </Border>
+</UserControl>
