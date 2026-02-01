@@ -239,7 +239,7 @@ public class BusyDecorator : Decorator, IDisposable
         new FrameworkPropertyMetadata(VerticalAlignment.Center));
 
     /// <summary>
-    /// Gets or sets the the VerticalAlignment to use to layout the control that contains the busy indicator.
+    /// Gets or sets the VerticalAlignment to use to layout the control that contains the busy indicator.
     /// </summary>
     public VerticalAlignment BusyVerticalAlignment
     {
