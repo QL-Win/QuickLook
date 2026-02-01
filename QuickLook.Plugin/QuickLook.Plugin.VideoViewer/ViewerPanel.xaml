@@ -12,8 +12,10 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <local:TimeTickToShortStringConverter x:Key="TimeTickToShortStringConverter" />
-            <local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
+			<local:TimeTickToShortStringConverter x:Key="TimeTickToShortStringConverter" />
+			<local:TimeToShortStringConverter x:Key="TimeToShortStringConverter" />
+			<local:TimeToLongConverter x:Key="TimeToLongConverter" />
+			<local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
             <local:CoverArtConverter x:Key="CoverArtConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
@@ -22,6 +24,7 @@
     </UserControl.Resources>
     <Grid MouseLeftButtonDown="Panel_MouseLeftButtonDown">
         <mediakit:MediaUriElement x:Name="mediaElement" />
+        <MediaElement x:Name="mediaElementWPF" LoadedBehavior="Manual" Stretch="UniformToFill" Margin="0,0,0,0" />
         <Grid x:Name="coverArtPersenter"
               Background="{StaticResource MainWindowBackground}"
               ClipToBounds="True">
@@ -204,6 +207,7 @@
                     </Button.Style>
                 </Button>
                 <Button x:Name="buttonTime"
+						Visibility="Hidden"
                         Width="NaN"
                         MinWidth="37"
                         DockPanel.Dock="Right"
@@ -228,14 +232,51 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
+                <Button x:Name="buttonTimeWPF"
+						Visibility="Hidden"
+                        Width="NaN"
+                        MinWidth="37"
+                        DockPanel.Dock="Right"
+                        Style="{StaticResource ControlButtonStyle}"
+                        Tag="Time"
+                        ToolTip="Time Elapsed/Remaining">
+                    <TextBlock VerticalAlignment="Center"
+							   x:Name="textProgress"
+                               FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
+                               FontSize="11"
+                               Foreground="{DynamicResource CaptionButtonIconForeground}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=buttonTimeWPF, Path=Tag}" Value="Time">
+                                        <Setter Property="Text" Value="{Binding ElementName=mediaElementWPF, Path=Position, Converter={StaticResource TimeToShortStringConverter}}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=buttonTimeWPF, Path=Tag}" Value="Length">
+                                        <Setter Property="Text" Value="{Binding ElementName=mediaElementWPF, Path=NaturalDuration.TimeSpan, Converter={StaticResource TimeToShortStringConverter}}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Button>
                 <Slider x:Name="sliderProgress"
+						Visibility="Hidden"
                         Delay="1"
                         LargeChange="1"
                         Maximum="{Binding ElementName=mediaElement, Path=MediaDuration}"
                         SmallChange="1"
                         Style="{StaticResource PositionSliderStyle}"
                         Value="{Binding MediaPosition, ElementName=mediaElement}" />
-            </DockPanel>
+				<Slider x:Name="sliderProgressWPF"
+						Thumb.DragStarted="Seek_Drag_Started"  Thumb.DragCompleted="Seek_Drag_Completed" ValueChanged="Seek_Value_Changed"
+						Visibility="Hidden"
+                        Delay="1"
+                        LargeChange="1"
+                        Maximum="{Binding ElementName=mediaElementWPF, Path=NaturalDuration, Converter={StaticResource TimeToLongConverter}}"
+                        SmallChange="1"
+                        Style="{StaticResource PositionSliderStyle}"
+                        Value="{Binding Position, ElementName=mediaElementWPF, Converter={StaticResource TimeToLongConverter}}" />
+			</DockPanel>
         </Grid>
         <Grid x:Name="volumeSliderLayer"
               Background="Transparent"

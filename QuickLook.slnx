@@ -8,10 +8,14 @@
       <Platform Project="Win32" />
     </Project>
     <Project Path="QuickLook.Native/QuickLook.Native64/QuickLook.Native64.vcxproj" Id="794e4dcf-f715-4836-9d30-abd296586d23" />
+    <Project Path="QuickLook.Native/QuickLook.NativeArm64/QuickLook.NativeArm64.vcxproj" Id="aa5c5a28-0f81-4fc2-b777-6d6d6d10a9b8">
+      <Platform Solution="Debug|Any CPU" Project="ARM64" />
+    </Project>
   </Folder>
   <Folder Name="/QuickLook.Plugin/">
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.AppViewer/QuickLook.Plugin.AppViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ArchiveViewer/QuickLook.Plugin.ArchiveViewer.csproj" />
+    <Project Path="QuickLook.Plugin/QuickLook.Plugin.CertViewer/QuickLook.Plugin.CertViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.CLSIDViewer/QuickLook.Plugin.CLSIDViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.CsvViewer/QuickLook.Plugin.CsvViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj" />
@@ -27,7 +31,6 @@
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.PEViewer/QuickLook.Plugin.PEViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.PluginInstaller/QuickLook.Plugin.PluginInstaller.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.TextViewer/QuickLook.Plugin.TextViewer.csproj" />
-    <Project Path="QuickLook.Plugin/QuickLook.Plugin.CertViewer/QuickLook.Plugin.CertViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ThumbnailViewer/QuickLook.Plugin.ThumbnailViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.VideoViewer/QuickLook.Plugin.VideoViewer.csproj" />
   </Folder>
@@ -36,6 +39,7 @@
   </Folder>
   <Project Path="QuickLook.Common/QuickLook.Common.csproj">
     <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="Debug|Any CPU" Project="ARM64" />
   </Project>
   <Project Path="QuickLook.Installer/QuickLook.Installer.wixproj" Id="f0214fc2-efbe-426c-842d-b42bc37d9525">
     <BuildDependency Project="QuickLook.Common/QuickLook.Common.csproj" />
@@ -43,6 +47,7 @@
     <BuildDependency Project="QuickLook.Native/QuickLook.Native64/QuickLook.Native64.vcxproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.AppViewer/QuickLook.Plugin.AppViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ArchiveViewer/QuickLook.Plugin.ArchiveViewer.csproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CertViewer/QuickLook.Plugin.CertViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CLSIDViewer/QuickLook.Plugin.CLSIDViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CsvViewer/QuickLook.Plugin.CsvViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj" />
@@ -58,7 +63,6 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PEViewer/QuickLook.Plugin.PEViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PluginInstaller/QuickLook.Plugin.PluginInstaller.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.TextViewer/QuickLook.Plugin.TextViewer.csproj" />
-    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CertViewer/QuickLook.Plugin.CertViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ThumbnailViewer/QuickLook.Plugin.ThumbnailViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.VideoViewer/QuickLook.Plugin.VideoViewer.csproj" />
     <BuildDependency Project="QuickLook/QuickLook.csproj" />
@@ -69,5 +73,6 @@
     <BuildDependency Project="QuickLook.Native/QuickLook.Native32/QuickLook.Native32.vcxproj" />
     <BuildDependency Project="QuickLook.Native/QuickLook.Native64/QuickLook.Native64.vcxproj" />
     <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="Debug|Any CPU" Project="ARM64" />
   </Project>
 </Solution>

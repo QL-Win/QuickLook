@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.ImageViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.ImageViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -16,6 +16,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{FE5A5111-9607-4721-A7BE-422754002ED8}</ProjectGuid>
+        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>ARM64</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -45,6 +47,15 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <DebugSymbols>true</DebugSymbols>
+      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
@@ -54,9 +65,18 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ImageViewer\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <Optimize>true</Optimize>
+      <DebugType>pdbonly</DebugType>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-        <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
+		<PackageReference Include="System.IO.Compression" Version="4.3.0" />
+		<PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.2">
@@ -110,13 +130,8 @@
     </ItemGroup>
 
     <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-        <!-- Not support to ARM64 -->
-        <Delete Files="$(OutputPath)\arm64\libHarfBuzzSharp.dll" Condition="Exists('$(OutputPath)\arm64\libHarfBuzzSharp.dll')" />
-        <Delete Files="$(OutputPath)\arm64\libSkiaSharp.dll" Condition="Exists('$(OutputPath)\arm64\libSkiaSharp.dll')" />
-        <RemoveDir Directories="$(OutputPath)\arm64" Condition="Exists('$(OutputPath)\arm64')" />
         <Delete Files="$(OutputPath)\libHarfBuzzSharp.dylib" Condition="Exists('$(OutputPath)\libHarfBuzzSharp.dylib')" />
         <Delete Files="$(OutputPath)\libSkiaSharp.dylib" Condition="Exists('$(OutputPath)\libSkiaSharp.dylib')" />
-        <Delete Files="$(OutputPath)\Magick.Native-Q8-arm64.dll" Condition="Exists('$(OutputPath)\Magick.Native-Q8-arm64.dll')" />
     </Target>
 
     <ItemGroup>

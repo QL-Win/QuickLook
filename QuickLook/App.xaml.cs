@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -42,6 +43,7 @@ public partial class App : Application
     public static readonly string AppFullPath = Assembly.GetExecutingAssembly().Location;
     public static readonly string AppPath = Path.GetDirectoryName(AppFullPath);
     public static readonly bool Is64Bit = Environment.Is64BitProcess;
+    public static readonly bool IsArm64 = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
     public static readonly bool IsUWP = ProcessHelper.IsRunningAsUWP();
     public static readonly bool IsWin11 = Environment.OSVersion.Version >= new Version(10, 0, 21996);
     public static readonly bool IsWin10 = !IsWin11 && Environment.OSVersion.Version >= new Version(10, 0);
