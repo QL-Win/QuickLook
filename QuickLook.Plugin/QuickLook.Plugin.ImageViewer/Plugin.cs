@@ -36,7 +36,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         ".apng", ".ari", ".arw", ".avif", ".ani",
         ".bay", ".bmp",
         ".cap", ".cr2", ".cr3", ".crw", ".cur",
-        ".dcr", ".dcs", ".dds", ".dng", ".drf",
+        ".dcr", ".dcs", ".dds", ".dng", ".drf", ".dcm", ".dicom",
         ".eip", ".emf", ".erf", ".exr",
         ".fff",
         ".gif",
@@ -107,6 +107,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             new KeyValuePair<string[], Type>([".svg"],
                 typeof(SvgProvider)));
 #endif
+        AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".dcm", ".dicom"],
+                typeof(DicomProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>(["*"],
                 typeof(ImageMagickProvider)));

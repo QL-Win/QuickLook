@@ -143,6 +143,7 @@ Update not completed yet...
 - `.cur` (Windows cursor)
 - `.dcr`, `.dcs`, `.drf` (Kodak RAW image)
 - `.dds` (DirectDraw Surface)
+- `.dcm`, `.dicom` (DICOM medical image, preview)
 - `.dng` (Digital Negative RAW)
 - `.eip` (Capture One Enhanced Image Package)
 - `.emf` (Enhanced Metafile)

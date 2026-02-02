@@ -55,6 +55,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="fo-dicom" Version="5.2.5">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.2.5">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="System.IO.Compression" Version="4.3.0" />
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
