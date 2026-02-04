@@ -49,7 +49,7 @@
 <br><br>
 
 <!-- Hero Image with Modern Styling -->
-<img src="https://user-images.githubusercontent.com/1687847/64730506-2a60d100-d4e8-11e9-95a6-f13dbd869b2a.jpeg" width="800" alt="QuickLook Preview" style="border-radius: 20px;">
+<img src="https://raw.githubusercontent.com/QL-Win/QuickLook/refs/heads/master/Build/Assets/Branding/01.png" width="800" alt="QuickLook Preview" style="border-radius: 20px;">
 
 <br><br>
 
