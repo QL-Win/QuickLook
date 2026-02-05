@@ -298,3 +298,6 @@ __pycache__/
 !/Build/sideload.crt
 !/Build/sideload.key
 !/Build/sideload.pfx
+
+# CodeQL temporary files
+_codeql_*
