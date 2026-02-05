@@ -63,7 +63,15 @@ bool MultiCommander::PrepareMessageWindow()
         wx.lpszClassName = MULTICMD_MSGWINDOW_CLASS;
 
         if (RegisterClassEx(&wx))
+        {
             hMsgWnd = CreateWindowEx(0, MULTICMD_MSGWINDOW_CLASS, L"", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr, nullptr, nullptr);
+            
+            // Allow WM_COPYDATA from processes with different privilege levels
+            if (nullptr != hMsgWnd)
+            {
+                ChangeWindowMessageFilterEx(hMsgWnd, WM_COPYDATA, MSGFLT_ALLOW, nullptr);
+            }
+        }
 
         if (nullptr == hMsgWnd) {
             return false;

@@ -124,7 +124,15 @@ void DOpus::PrepareMessageWindow()
     wx.lpszClassName = MSGWINDOW_CLASS;
 
     if (RegisterClassEx(&wx))
+    {
         hMsgWnd = CreateWindowEx(0, MSGWINDOW_CLASS, L"", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr, nullptr, nullptr);
+        
+        // Allow WM_COPYDATA from processes with different privilege levels
+        if (hMsgWnd != nullptr)
+        {
+            ChangeWindowMessageFilterEx(hMsgWnd, WM_COPYDATA, MSGFLT_ALLOW, nullptr);
+        }
+    }
 
     hGetResultEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
