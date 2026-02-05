@@ -129,9 +129,7 @@ void DOpus::PrepareMessageWindow()
         
         // Allow WM_COPYDATA from processes with different privilege levels
         if (hMsgWnd != nullptr)
-        {
             ChangeWindowMessageFilterEx(hMsgWnd, WM_COPYDATA, MSGFLT_ALLOW, nullptr);
-        }
     }
 
     hGetResultEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
