@@ -120,9 +120,103 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         if (WebHandler.TryCanHandle(path))
             return true;
 
+        if (Directory.Exists(path))
+            return false;
+
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
-        return !Directory.Exists(path) && WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+        if (WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        // For files without extensions, check magic numbers for common image formats
+        if (!Path.HasExtension(path))
+        {
+            return IsImageByMagicNumber(path);
+        }
+
+        return false;
+    }
+
+    private static bool IsImageByMagicNumber(string path)
+    {
+        try
+        {
+            if (!File.Exists(path))
+                return false;
+
+            ReadOnlySpan<byte> pngSignature = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+            ReadOnlySpan<byte> jpegSignature = new byte[] { 0xFF, 0xD8, 0xFF };
+            ReadOnlySpan<byte> gif87Signature = new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 };
+            ReadOnlySpan<byte> gif89Signature = new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
+            ReadOnlySpan<byte> bmpSignature = new byte[] { 0x42, 0x4D };
+            ReadOnlySpan<byte> webpRiffSignature = new byte[] { 0x52, 0x49, 0x46, 0x46 };
+            ReadOnlySpan<byte> webpWebpSignature = new byte[] { 0x57, 0x45, 0x42, 0x50 };
+
+            const int maxSignatureLength = 12;
+
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            if (fs.Length < bmpSignature.Length)
+                return false;
+
+            var buffer = new byte[maxSignatureLength];
+            var bytesRead = fs.Read(buffer, 0, buffer.Length);
+            if (bytesRead < bmpSignature.Length)
+                return false;
+
+            // PNG: 89 50 4E 47 0D 0A 1A 0A
+           if (bytesRead >= pngSignature.Length &&
+                buffer.AsSpan(0, pngSignature.Length).SequenceEqual(pngSignature))
+            {
+                return true;
+            }
+
+            // JPEG: FF D8 FF
+            if (bytesRead >= jpegSignature.Length &&
+                buffer.AsSpan(0, jpegSignature.Length).SequenceEqual(jpegSignature))
+            {
+                return true;
+            }
+
+            // GIF: GIF87a or GIF89a
+            if (bytesRead >= gif87Signature.Length &&
+                (buffer.AsSpan(0, gif87Signature.Length).SequenceEqual(gif87Signature) ||
+                 buffer.AsSpan(0, gif89Signature.Length).SequenceEqual(gif89Signature)))
+            {
+                return true;
+            }
+
+            // BMP: BM
+            if (bytesRead >= bmpSignature.Length &&
+                buffer.AsSpan(0, bmpSignature.Length).SequenceEqual(bmpSignature))
+            {
+                return true;
+            }
+
+            // WebP: RIFF....WEBP
+            if (bytesRead >= 12 &&
+                buffer.AsSpan(0, webpRiffSignature.Length).SequenceEqual(webpRiffSignature) &&
+                buffer.AsSpan(8, webpWebpSignature.Length).SequenceEqual(webpWebpSignature))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch (IOException ex)
+        {
+            ProcessHelper.WriteLog($"IO error while checking image magic number for {path}: {ex.Message}");
+            return false;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            ProcessHelper.WriteLog($"Access denied while checking image magic number for {path}: {ex.Message}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Unexpected error while checking image magic number for {path}: {ex}");
+            return false;
+        }
     }
 
     public void Prepare(string path, ContextObject context)
