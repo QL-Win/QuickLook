@@ -34,6 +34,10 @@ public class SvgaImagePanel(IWebMetaProvider metaWeb) : SvgImagePanel()
         ObjectForScripting ??= new ScriptHandler(path, _metaWeb);
 
         _homePage = _resources["/svga2html.html"];
+        
+        // Update WebView2 background color based on current theme
+        UpdateWebViewBackgroundColor();
+        
         NavigateToUri(new Uri("file://quicklook/"));
     }
 }
