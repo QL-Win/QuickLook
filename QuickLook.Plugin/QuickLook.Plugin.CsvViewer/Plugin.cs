@@ -34,7 +34,12 @@ public sealed class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && (path.ToLower().EndsWith(".csv") || path.ToLower().EndsWith(".tsv"));
+        if (Directory.Exists(path))
+            return false;
+
+        return path.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".tsv", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".psv", StringComparison.OrdinalIgnoreCase);
     }
 
     public void Prepare(string path, ContextObject context)
