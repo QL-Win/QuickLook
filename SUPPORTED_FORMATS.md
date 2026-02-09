@@ -106,6 +106,7 @@ Update not completed yet...
 - `.rexx` (Rexx script)
 - `.ruby` (Ruby source)
 - `.rust` (Rust source)
+- `.rhai` (Embedded scripting language for Rust)
 - `.scala` (Scala source)
 - `.scheme` (Scheme source)
 - `.shellscript`, `.sh` (Shell script)

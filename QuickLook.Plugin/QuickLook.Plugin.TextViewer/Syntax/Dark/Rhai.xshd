@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Embedded scripting language for Rust -->
+<SyntaxDefinition name="Rhai" extensions=".rhai">
+    
+    <Environment> 
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#2F2F2F"/>
+        <VRuler color="#404040"/>
+        
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#505050"/>
+        <TabMarkers color="#505050"/>
+        <InvalidLines color="#505050"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+    
+    <RuleSets>
+        <RuleSet ignorecase="false">
+        
+        <Delimiters>&lt;&gt;&amp;~!%^*()-_+=|\#/{}[]:;"' ,  ?</Delimiters>
+        
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+                        
+            <Span name="String" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter='"'>
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="CharString" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="'">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <MarkFollowing color="#C586C0" bold="true">fn</MarkFollowing>
+                
+            <KeyWords name="Punctuation" color="#A0A0A0" bold="false">
+                <Key word="!"/>
+                <Key word="$"/>
+                <Key word="%"/>
+                <Key word="^"/>
+                <Key word="&amp;"/>
+                <Key word="*"/>
+                <Key word="-"/>
+                <Key word="_"/>
+                <Key word="+"/>
+                <Key word="="/>
+                <Key word="/"/>
+                <Key word="|"/>
+                <Key word="&lt;"/>
+                <Key word="&gt;"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords1" color="#569CD6" bold="false">
+                <Key word="as"/>
+                <Key word="break"/>
+                <Key word="catch"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="else"/>
+                <Key word="export"/>
+                <Key word="fn"/>
+                <Key word="for"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="is"/>
+                <Key word="let"/>
+                <Key word="loop"/>
+                <Key word="private"/>
+                <Key word="return"/>
+                <Key word="switch"/>
+                <Key word="case"/>
+                <Key word="default"/>
+                <Key word="throw"/>
+                <Key word="try"/>
+                <Key word="while"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="this"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false">
+                <Key word="bool"/>
+                <Key word="char"/>
+                <Key word="int"/>
+                <Key word="float"/>
+                <Key word="decimal"/>
+                <Key word="string"/>
+                <Key word="array"/>
+                <Key word="map"/>
+                <Key word="object"/>
+                <Key word="dynamic"/>
+            </KeyWords>
+            
+            <KeyWords name="Keywords3" color="#C586C0" bold="false">
+                <Key word="print"/>
+                <Key word="debug"/>
+                <Key word="eval"/>
+                <Key word="type_of"/>
+                <Key word="len"/>
+                <Key word="push"/>
+                <Key word="pop"/>
+                <Key word="shift"/>
+                <Key word="unshift"/>
+                <Key word="keys"/>
+                <Key word="values"/>
+            </KeyWords>
+        </RuleSet>  
+    </RuleSets>
+</SyntaxDefinition>
