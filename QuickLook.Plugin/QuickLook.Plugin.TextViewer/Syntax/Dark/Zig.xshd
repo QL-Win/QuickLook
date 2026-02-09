@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Zig" extensions=".zig">
+
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#2A2A2A"/>
+        
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="#608B4E" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            
+            <KeyWords name="Keywords" color="#569CD6" bold="false" italic ="false">
+                <Key word="addrspace"/>
+                <Key word="align"/>
+                <Key word="allowzero"/>
+                <Key word="and"/>
+                <Key word="anyframe"/>
+                <Key word="anytype"/>
+                <Key word="asm"/>
+                <Key word="async"/>
+                <Key word="await"/>
+                <Key word="break"/>
+                <Key word="callconv"/>
+                <Key word="catch"/>
+                <Key word="comptime"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="defer"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="errdefer"/>
+                <Key word="error"/>
+                <Key word="export"/>
+                <Key word="extern"/>
+                <Key word="false"/>
+                <Key word="for"/>
+                <Key word="if"/>
+                <Key word="inline"/>
+                <Key word="linksection"/>
+                <Key word="noalias"/>
+                <Key word="noinline"/>
+                <Key word="nosuspend"/>
+                <Key word="opaque"/>
+                <Key word="or"/>
+                <Key word="orelse"/>
+                <Key word="packed"/>
+                <Key word="pub"/>
+                <Key word="resume"/>
+                <Key word="return"/>
+                <Key word="struct"/>
+                <Key word="suspend"/>
+                <Key word="switch"/>
+                <Key word="test"/>
+                <Key word="threadlocal"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="union"/>
+                <Key word="unreachable"/>
+                <Key word="usingnamespace"/>
+                <Key word="var"/>
+                <Key word="volatile"/>
+                <Key word="while"/>
+                <Key word="null"/>
+                <Key word="undefined"/>
+            </KeyWords>
+
+            <KeyWords name="Types" color="#4EC9B0" bold="false" italic ="false">
+                <Key word="bool"/>
+                <Key word="void"/>
+                <Key word="noreturn"/>
+                <Key word="type"/>
+                <Key word="anyopaque"/>
+                <Key word="i8"/>
+                <Key word="i16"/>
+                <Key word="i32"/>
+                <Key word="i64"/>
+                <Key word="i128"/>
+                <Key word="isize"/>
+                <Key word="u8"/>
+                <Key word="u16"/>
+                <Key word="u32"/>
+                <Key word="u64"/>
+                <Key word="u128"/>
+                <Key word="usize"/>
+                <Key word="f16"/>
+                <Key word="f32"/>
+                <Key word="f64"/>
+                <Key word="f80"/>
+                <Key word="f128"/>
+                <Key word="c_short"/>
+                <Key word="c_ushort"/>
+                <Key word="c_int"/>
+                <Key word="c_uint"/>
+                <Key word="c_long"/>
+                <Key word="c_ulong"/>
+                <Key word="c_longlong"/>
+                <Key word="c_ulonglong"/>
+                <Key word="c_longdouble"/>
+                <Key word="c_void"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
