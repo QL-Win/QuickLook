@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="GraphQL" extensions=".graphql;.gql;.gqls">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;!$</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="BlockString" stopateol="false" color="Maroon" bold="false" italic="false">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Keywords" color="Blue" bold="false" italic ="false">
+                <Key word="query"/>
+                <Key word="mutation"/>
+                <Key word="subscription"/>
+                <Key word="fragment"/>
+                <Key word="on"/>
+                <Key word="schema"/>
+                <Key word="type"/>
+                <Key word="interface"/>
+                <Key word="union"/>
+                <Key word="enum"/>
+                <Key word="input"/>
+                <Key word="scalar"/>
+                <Key word="directive"/>
+                <Key word="implements"/>
+                <Key word="extend"/>
+                <Key word="repeatable"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="null"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
