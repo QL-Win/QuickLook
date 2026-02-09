@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Mermaid" extensions=".mmd;.mermaid">
+
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#2A2A2A"/>
+        
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="%%"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>%%</Begin>
+            </Span>
+
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Keywords" color="#569CD6" bold="false" italic ="false">
+                <Key word="graph"/>
+                <Key word="flowchart"/>
+                <Key word="sequenceDiagram"/>
+                <Key word="classDiagram"/>
+                <Key word="stateDiagram"/>
+                <Key word="stateDiagram-v2"/>
+                <Key word="erDiagram"/>
+                <Key word="gantt"/>
+                <Key word="pie"/>
+                <Key word="journey"/>
+                <Key word="gitGraph"/>
+                <Key word="mindmap"/>
+                <Key word="timeline"/>
+                <Key word="C4Context"/>
+                <Key word="C4Container"/>
+                <Key word="C4Component"/>
+                <Key word="C4Dynamic"/>
+                <Key word="C4Deployment"/>
+                <Key word="subgraph"/>
+                <Key word="end"/>
+                <Key word="direction"/>
+                <Key word="classDef"/>
+                <Key word="class"/>
+                <Key word="linkStyle"/>
+                <Key word="style"/>
+                <Key word="note"/>
+                <Key word="participant"/>
+                <Key word="actor"/>
+                <Key word="loop"/>
+                <Key word="alt"/>
+                <Key word="opt"/>
+                <Key word="par"/>
+                <Key word="rect"/>
+                <Key word="critical"/>
+                <Key word="break"/>
+                <Key word="activate"/>
+                <Key word="deactivate"/>
+                <Key word="title"/>
+                <Key word="section"/>
+                <Key word="dateFormat"/>
+                <Key word="axisFormat"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
