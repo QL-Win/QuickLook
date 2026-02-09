@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="KustoKQL" extensions=".kql">
+
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#1E1E1E" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#2A2A2A"/>
+        
+        <FoldLine color="#858585" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#1E1E1E"/>
+        
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#404040"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="#608B4E" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="#608B4E" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="StringSingle" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <Span name="StringDouble" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <KeyWords name="Keywords" color="#569CD6" bold="false" italic ="false">
+                <Key word="let"/>
+                <Key word="where"/>
+                <Key word="project"/>
+                <Key word="project-away"/>
+                <Key word="project-rename"/>
+                <Key word="extend"/>
+                <Key word="summarize"/>
+                <Key word="by"/>
+                <Key word="distinct"/>
+                <Key word="join"/>
+                <Key word="inner"/>
+                <Key word="leftouter"/>
+                <Key word="rightouter"/>
+                <Key word="fullouter"/>
+                <Key word="lookup"/>
+                <Key word="union"/>
+                <Key word="take"/>
+                <Key word="limit"/>
+                <Key word="top"/>
+                <Key word="order"/>
+                <Key word="asc"/>
+                <Key word="desc"/>
+                <Key word="sort"/>
+                <Key word="count"/>
+                <Key word="dcount"/>
+                <Key word="avg"/>
+                <Key word="sum"/>
+                <Key word="min"/>
+                <Key word="max"/>
+                <Key word="percentile"/>
+                <Key word="make-series"/>
+                <Key word="render"/>
+                <Key word="parse"/>
+                <Key word="extract"/>
+                <Key word="mv-expand"/>
+                <Key word="bag_unpack"/>
+                <Key word="bag_keys"/>
+                <Key word="has"/>
+                <Key word="has_any"/>
+                <Key word="has_all"/>
+                <Key word="contains"/>
+                <Key word="startswith"/>
+                <Key word="endswith"/>
+                <Key word="matches"/>
+                <Key word="between"/>
+                <Key word="in"/>
+                <Key word="notin"/>
+                <Key word="case"/>
+                <Key word="iff"/>
+                <Key word="tostring"/>
+                <Key word="toint"/>
+                <Key word="todouble"/>
+                <Key word="toreal"/>
+                <Key word="tobool"/>
+                <Key word="todatetime"/>
+                <Key word="ago"/>
+                <Key word="now"/>
+                <Key word="datetime"/>
+                <Key word="datetime_add"/>
+                <Key word="bin"/>
+                <Key word="bin_at"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
