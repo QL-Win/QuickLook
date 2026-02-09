@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Moji" extensions=".moji">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            
+            <Span name="Char" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <!-- Attribute-style decorators like @inline -->
+            <Span name="Decorator" stopateol="true" color="#800080" bold="false" italic="false">
+                <Begin>@@</Begin>
+                <End> </End>
+            </Span>
+            
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
+            
+            <KeyWords name="Keywords" color="Blue" bold="false" italic ="false">
+                <Key word="fn"/>
+                <Key word="func"/>
+                <Key word="def"/>
+                <Key word="let"/>
+                <Key word="var"/>
+                <Key word="const"/>
+                <Key word="mut"/>
+                <Key word="struct"/>
+                <Key word="enum"/>
+                <Key word="trait"/>
+                <Key word="interface"/>
+                <Key word="impl"/>
+                <Key word="module"/>
+                <Key word="import"/>
+                <Key word="from"/>
+                <Key word="as"/>
+                <Key word="pub"/>
+                <Key word="async"/>
+                <Key word="await"/>
+                <Key word="if"/>
+                <Key word="else"/>
+                <Key word="match"/>
+                <Key word="for"/>
+                <Key word="while"/>
+                <Key word="loop"/>
+                <Key word="break"/>
+                <Key word="continue"/>
+                <Key word="return"/>
+                <Key word="yield"/>
+                <Key word="in"/>
+                <Key word="where"/>
+                <Key word="with"/>
+                <Key word="try"/>
+                <Key word="catch"/>
+                <Key word="throw"/>
+                <Key word="raise"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="nil"/>
+                <Key word="null"/>
+            </KeyWords>
+
+            <KeyWords name="Types" color="#2B91AF" bold="false" italic ="false">
+                <Key word="Bool"/>
+                <Key word="Int"/>
+                <Key word="Int8"/>
+                <Key word="Int16"/>
+                <Key word="Int32"/>
+                <Key word="Int64"/>
+                <Key word="UInt"/>
+                <Key word="UInt8"/>
+                <Key word="UInt16"/>
+                <Key word="UInt32"/>
+                <Key word="UInt64"/>
+                <Key word="Float"/>
+                <Key word="Float32"/>
+                <Key word="Float64"/>
+                <Key word="String"/>
+                <Key word="Char"/>
+                <Key word="Bytes"/>
+                <Key word="Array"/>
+                <Key word="Vector"/>
+                <Key word="Map"/>
+                <Key word="Result"/>
+                <Key word="Option"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
