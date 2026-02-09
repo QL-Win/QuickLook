@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="C++" extensions=".c;.h;.cc;.cpp;.cxx;.hpp;.ino;.cu;.cuh">
+<SyntaxDefinition name="C++" extensions=".c;.h;.cc;.cpp;.cxx;.hpp;.cu;.cuh;.hip;.ino">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
