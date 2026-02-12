@@ -36,7 +36,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="QuickLook.LAVFilters" Version="0.79.2.1" />
+        <PackageReference Include="QuickLook.LAVFilters" Version="0.80.0" />
         <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.1" />
         <PackageReference Include="MediaInfo.Wrapper" Version="21.9.3">
             <Aliases>MediaInfoWrapper</Aliases>
@@ -68,125 +68,125 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\avcodec-lav-61.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\avcodec-lav-62.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\avcodec-lav-61.dll</Link>
+            <Link>LAVFilters-x64\avcodec-lav-62.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\avfilter-lav-10.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\avfilter-lav-11.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\avfilter-lav-10.dll</Link>
+            <Link>LAVFilters-x64\avfilter-lav-11.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\avformat-lav-61.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\avformat-lav-62.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\avformat-lav-61.dll</Link>
+            <Link>LAVFilters-x64\avformat-lav-62.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\avutil-lav-59.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\avutil-lav-60.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\avutil-lav-59.dll</Link>
+            <Link>LAVFilters-x64\avutil-lav-60.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\IntelQuickSyncDecoder.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\IntelQuickSyncDecoder.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\IntelQuickSyncDecoder.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\LAVAudio.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\LAVAudio.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\LAVAudio.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\LAVFilters.Dependencies.manifest">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\LAVFilters.Dependencies.manifest">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\LAVFilters.Dependencies.manifest</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\LAVSplitter.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\LAVSplitter.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\LAVSplitter.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\LAVVideo.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\LAVVideo.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\LAVVideo.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\libbluray.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\libbluray.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
             <Link>LAVFilters-x64\libbluray.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\swresample-lav-5.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\swresample-lav-6.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\swresample-lav-5.dll</Link>
+            <Link>LAVFilters-x64\swresample-lav-6.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x64\swscale-lav-8.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x64\swscale-lav-9.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x64\</DestinationFolder>
-            <Link>LAVFilters-x64\swscale-lav-8.dll</Link>
+            <Link>LAVFilters-x64\swscale-lav-9.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\avcodec-lav-61.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\avcodec-lav-62.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\avcodec-lav-61.dll</Link>
+            <Link>LAVFilters-x86\avcodec-lav-62.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\avfilter-lav-10.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\avfilter-lav-11.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\avfilter-lav-10.dll</Link>
+            <Link>LAVFilters-x86\avfilter-lav-11.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\avformat-lav-61.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\avformat-lav-62.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\avformat-lav-61.dll</Link>
+            <Link>LAVFilters-x86\avformat-lav-62.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\avutil-lav-59.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\avutil-lav-60.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\avutil-lav-59.dll</Link>
+            <Link>LAVFilters-x86\avutil-lav-60.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\IntelQuickSyncDecoder.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\IntelQuickSyncDecoder.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\IntelQuickSyncDecoder.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\LAVAudio.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\LAVAudio.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\LAVAudio.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\LAVFilters.Dependencies.manifest">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\LAVFilters.Dependencies.manifest">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\LAVFilters.Dependencies.manifest</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\LAVSplitter.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\LAVSplitter.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\LAVSplitter.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\LAVVideo.ax">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\LAVVideo.ax">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\LAVVideo.ax</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\libbluray.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\libbluray.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\libbluray.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\swresample-lav-5.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\swresample-lav-6.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\swresample-lav-5.dll</Link>
+            <Link>LAVFilters-x86\swresample-lav-6.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.79.2.1\build\LAVFilters-x86\swscale-lav-8.dll">
+        <Content Include="$(NuGetPackageRoot)\QuickLook.LAVFilters\0.80.0\build\LAVFilters-x86\swscale-lav-9.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
-            <Link>LAVFilters-x86\swscale-lav-8.dll</Link>
+            <Link>LAVFilters-x86\swscale-lav-9.dll</Link>
         </Content>
         <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\x64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
