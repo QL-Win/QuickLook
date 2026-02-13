@@ -106,6 +106,13 @@ public partial class ViewerWindow
             
             // Get the screen bounds where the window is currently located
             var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle) ?? WinForms.Screen.PrimaryScreen;
+            if (screen == null)
+            {
+                // Fallback to default screen bounds if no screen is available
+                Debug.WriteLine("Unable to get screen bounds for fullscreen mode");
+                return;
+            }
+            
             var screenBounds = screen.Bounds;
             
             // Set to normal state first to allow manual positioning
