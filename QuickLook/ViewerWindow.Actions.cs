@@ -28,7 +28,9 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
@@ -70,7 +72,6 @@ public partial class ViewerWindow
             _isFullscreen = false;
             
             // Restore window properties
-            WindowState = _preFullscreenWindowState;
             WindowStyle = _preFullscreenWindowStyle;
             ResizeMode = _preFullscreenResizeMode;
             
@@ -79,36 +80,45 @@ public partial class ViewerWindow
             Top = _preFullscreenBounds.Top;
             Width = _preFullscreenBounds.Width;
             Height = _preFullscreenBounds.Height;
+            
+            // Restore window state last to avoid flicker
+            WindowState = _preFullscreenWindowState;
         }
         else
         {
             // Enter fullscreen
             _isFullscreen = true;
             
-            // Save current window properties
+            // Save current window properties before any changes
             _preFullscreenWindowState = WindowState;
             _preFullscreenWindowStyle = WindowStyle;
             _preFullscreenResizeMode = ResizeMode;
-            _preFullscreenBounds = new Rect(Left, Top, Width, Height);
             
-            // Set to normal state first to get proper bounds
+            // Get current bounds (account for maximized state)
+            if (WindowState == WindowState.Maximized)
+            {
+                _preFullscreenBounds = RestoreBounds;
+            }
+            else
+            {
+                _preFullscreenBounds = new Rect(Left, Top, Width, Height);
+            }
+            
+            // Get the screen bounds where the window is currently located
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            
+            // Set to normal state first to allow manual positioning
             WindowState = WindowState.Normal;
             
             // Hide window chrome for true fullscreen
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             
-            // Get the screen bounds where the window is currently located
-            var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
-            
             // Set window to cover the entire screen
             Left = screen.Bounds.Left;
             Top = screen.Bounds.Top;
             Width = screen.Bounds.Width;
             Height = screen.Bounds.Height;
-            
-            // Ensure the window is on top
-            WindowState = WindowState.Maximized;
         }
     }
 
