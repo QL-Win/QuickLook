@@ -37,6 +37,11 @@ public partial class ViewerWindow : INotifyPropertyChanged
 
     private bool _canOldPluginResize;
     private bool _pinned;
+    private bool _isFullscreen;
+    private WindowState _preFullscreenWindowState;
+    private WindowStyle _preFullscreenWindowStyle;
+    private ResizeMode _preFullscreenResizeMode;
+    private Rect _preFullscreenBounds;
 
     public bool Pinned
     {

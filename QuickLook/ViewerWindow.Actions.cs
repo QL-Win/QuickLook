@@ -64,7 +64,52 @@ public partial class ViewerWindow
 
     internal void ToggleFullscreen()
     {
-        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        if (_isFullscreen)
+        {
+            // Exit fullscreen
+            _isFullscreen = false;
+            
+            // Restore window properties
+            WindowState = _preFullscreenWindowState;
+            WindowStyle = _preFullscreenWindowStyle;
+            ResizeMode = _preFullscreenResizeMode;
+            
+            // Restore position and size
+            Left = _preFullscreenBounds.Left;
+            Top = _preFullscreenBounds.Top;
+            Width = _preFullscreenBounds.Width;
+            Height = _preFullscreenBounds.Height;
+        }
+        else
+        {
+            // Enter fullscreen
+            _isFullscreen = true;
+            
+            // Save current window properties
+            _preFullscreenWindowState = WindowState;
+            _preFullscreenWindowStyle = WindowStyle;
+            _preFullscreenResizeMode = ResizeMode;
+            _preFullscreenBounds = new Rect(Left, Top, Width, Height);
+            
+            // Set to normal state first to get proper bounds
+            WindowState = WindowState.Normal;
+            
+            // Hide window chrome for true fullscreen
+            WindowStyle = WindowStyle.None;
+            ResizeMode = ResizeMode.NoResize;
+            
+            // Get the screen bounds where the window is currently located
+            var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
+            
+            // Set window to cover the entire screen
+            Left = screen.Bounds.Left;
+            Top = screen.Bounds.Top;
+            Width = screen.Bounds.Width;
+            Height = screen.Bounds.Height;
+            
+            // Ensure the window is on top
+            WindowState = WindowState.Maximized;
+        }
     }
 
     private void PositionWindow(Size size)
