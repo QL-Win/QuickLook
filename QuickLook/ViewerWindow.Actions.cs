@@ -62,6 +62,11 @@ public partial class ViewerWindow
         Close();
     }
 
+    internal void ToggleFullscreen()
+    {
+        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+    }
+
     private void PositionWindow(Size size)
     {
         // If the window is now maximized, do not move it
