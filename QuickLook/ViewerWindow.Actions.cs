@@ -109,6 +109,7 @@ public partial class ViewerWindow
             var screenBounds = screen.Bounds;
             
             // Get DPI scale factor for proper coordinate conversion
+            // scale.Horizontal and scale.Vertical contain the DPI scaling ratios (e.g., 1.5 for 150%)
             var scale = DisplayDeviceHelper.GetScaleFactorFromWindow(this);
             
             // Set to normal state first to allow manual positioning
