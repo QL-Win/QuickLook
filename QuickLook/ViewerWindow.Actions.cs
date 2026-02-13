@@ -108,6 +108,9 @@ public partial class ViewerWindow
             var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
             var screenBounds = screen.Bounds;
             
+            // Get DPI scale factor for proper coordinate conversion
+            var scale = DisplayDeviceHelper.GetScaleFactorFromWindow(this);
+            
             // Set to normal state first to allow manual positioning
             WindowState = WindowState.Normal;
             
@@ -115,11 +118,12 @@ public partial class ViewerWindow
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             
-            // Set window to cover the entire screen
-            Left = screenBounds.Left;
-            Top = screenBounds.Top;
-            Width = screenBounds.Width;
-            Height = screenBounds.Height;
+            // Convert screen bounds from physical pixels to DIPs for WPF
+            var dipWidth = screenBounds.Width / scale.Horizontal;
+            var dipHeight = screenBounds.Height / scale.Vertical;
+            
+            // Use MoveWindow to set position and size with proper DPI handling
+            this.MoveWindow(screenBounds.Left, screenBounds.Top, dipWidth, dipHeight);
         }
     }
 
