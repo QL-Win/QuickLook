@@ -28,12 +28,12 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
+using WinForms = System.Windows.Forms;
 using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace QuickLook;
@@ -105,7 +105,8 @@ public partial class ViewerWindow
             }
             
             // Get the screen bounds where the window is currently located
-            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle) ?? WinForms.Screen.PrimaryScreen;
+            var screenBounds = screen.Bounds;
             
             // Set to normal state first to allow manual positioning
             WindowState = WindowState.Normal;
@@ -115,10 +116,10 @@ public partial class ViewerWindow
             ResizeMode = ResizeMode.NoResize;
             
             // Set window to cover the entire screen
-            Left = screen.Bounds.Left;
-            Top = screen.Bounds.Top;
-            Width = screen.Bounds.Width;
-            Height = screen.Bounds.Height;
+            Left = screenBounds.Left;
+            Top = screenBounds.Top;
+            Width = screenBounds.Width;
+            Height = screenBounds.Height;
         }
     }
 
