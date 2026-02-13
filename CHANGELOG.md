@@ -1,9 +1,15 @@
 # QuickLook Changelog
 
+> QuickLook Changelog starting from version `4.0.0`.
+
 ## 4.5.0
 
 - Update LAVFilters to `0.81.0` [#1362](https://github.com/QL-Win/QuickLook/issues/1362) [#1855](https://github.com/QL-Win/QuickLook/issues/1855) [#1863](https://github.com/QL-Win/QuickLook/issues/1863)
-  > A possible side effect is that users with older GPUs or without the latest VC++ Redistributable installed may experience video playback failures. Nevertheless, QuickLook has chosen to continue with an up-to-date update strategy.
+  > A possible side effect is that users with older GPUs or without the latest VC++ Redistributable installed may experience video playback failures.
+  >
+  > Nevertheless, QuickLook has chosen to continue with an up-to-date update strategy.
+  >
+  > If you encounter any issues, you can refer to [#1362](https://github.com/QL-Win/QuickLook/issues/1362) and consider downgrading your LAVFilters version.
 - TODO
 
 ## 4.4.0
