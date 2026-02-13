@@ -1,3 +1,11 @@
+# QuickLook Changelog
+
+## 4.5.0
+
+- Update LAVFilters to `0.81.0` [#1362](https://github.com/QL-Win/QuickLook/issues/1362) [#1855](https://github.com/QL-Win/QuickLook/issues/1855) [#1863](https://github.com/QL-Win/QuickLook/issues/1863)
+  > A possible side effect is that users with older GPUs or without the latest VC++ Redistributable installed may experience video playback failures. Nevertheless, QuickLook has chosen to continue with an up-to-date update strategy.
+- TODO
+
 ## 4.4.0
 
 - Add support for `.cnf` files to INI syntax highlighting
@@ -124,7 +132,7 @@
 
 ## 4.0.1
 
-- Support more Markdown file extensions [#1562](https://github.com/QL-Win/QuickLook/issues/1562), [#1601](https://github.com/QL-Win/QuickLook/issues/1601)
+- Support more Markdown file extensions [#1562](https://github.com/QL-Win/QuickLook/issues/1562) [#1601](https://github.com/QL-Win/QuickLook/issues/1601)
 - Support CLI options [#1620](https://github.com/QL-Win/QuickLook/issues/1620)
 - Update pt-BR translations in Translations.config
 - Delay initialization of MarkdownViewer
