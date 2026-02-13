@@ -105,18 +105,7 @@ public partial class ViewerWindow
             }
             
             // Get the screen bounds where the window is currently located
-            // Screen.FromHandle never returns null, but PrimaryScreen can be null in edge cases
             var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
-            if (screen == null)
-                screen = WinForms.Screen.PrimaryScreen;
-            
-            if (screen == null)
-            {
-                // Edge case: no screen available (e.g., no monitors connected)
-                Debug.WriteLine("Unable to get screen bounds for fullscreen mode");
-                return;
-            }
-            
             var screenBounds = screen.Bounds;
             
             // Set to normal state first to allow manual positioning
