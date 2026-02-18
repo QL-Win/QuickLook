@@ -68,7 +68,7 @@
         <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3800.47">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Google.Protobuf" Version="3.33.5">

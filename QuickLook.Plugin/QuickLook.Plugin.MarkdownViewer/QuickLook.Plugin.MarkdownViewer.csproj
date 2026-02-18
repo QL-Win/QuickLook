@@ -61,7 +61,7 @@
     <ItemGroup>
         <PackageReference Include="UTF.Unknown" Version="2.6.0" />
         <Reference Include="WindowsBase" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3800.47">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
