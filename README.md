@@ -25,24 +25,12 @@
 
 <!-- Animated Badges -->
 <p>
-  <a href="https://github.com/QL-Win/QuickLook/releases">
-    <img src="https://img.shields.io/github/v/release/QL-Win/QuickLook?style=for-the-badge&logo=github&color=00C853&labelColor=000000" alt="Release">
-  </a>
-  <a href="https://github.com/QL-Win/QuickLook/releases">
+    <img src="https://img.shields.io/github/v/release/QL-Win/QuickLook?style=for-the-badge&logo=github&color=00C853&labelColor=000000" alt="Release"> 
     <img src="https://img.shields.io/github/downloads/QL-Win/QuickLook/total?style=for-the-badge&logo=download&color=FF6D00&labelColor=000000" alt="Downloads">
-  </a>
-  <a href="https://github.com/QL-Win/QuickLook/stargazers">
     <img src="https://img.shields.io/github/stars/QL-Win/QuickLook?style=for-the-badge&logo=starship&color=FFD700&labelColor=000000" alt="Stars">
-  </a>
-  <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
     <img src="https://img.shields.io/badge/License-GPL_v3-blue?style=for-the-badge&logo=opensourceinitiative&color=3DA639&labelColor=000000" alt="License">
-  </a>
-<a href="https://github.com/QL-Win/QuickLook/actions/workflows/msbuild.yml">
   <img src="https://img.shields.io/github/actions/workflow/status/QL-Win/QuickLook/msbuild.yml?style=for-the-badge&logo=github&label=Build&labelColor=000000" alt="Build Status">
-</a>
-<a href="https://dotnet.microsoft.com/en-us/download/dotnet/latest/runtime">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D4?style=for-the-badge&logo=windows&labelColor=000000" alt="Platform">
-</a>
 </p>
 
 
