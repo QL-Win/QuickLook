@@ -36,6 +36,7 @@ public static class PipeMessages
     public const string Forget = "QuickLook.App.PipeMessages.Forget";
     public const string Close = "QuickLook.App.PipeMessages.Close";
     public const string Quit = "QuickLook.App.PipeMessages.Quit";
+    public const string Fullscreen = "QuickLook.App.PipeMessages.Fullscreen";
 }
 
 public class PipeServerManager : IDisposable
@@ -158,6 +159,12 @@ public class PipeServerManager : IDisposable
             case PipeMessages.Close:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().ClosePreview()),
+                    DispatcherPriority.ApplicationIdle);
+                return false;
+
+            case PipeMessages.Fullscreen:
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => ViewWindowManager.GetInstance().ToggleFullscreen()),
                     DispatcherPriority.ApplicationIdle);
                 return false;
 

@@ -29,9 +29,11 @@ using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
+using WinForms = System.Windows.Forms;
 using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace QuickLook;
@@ -60,6 +62,70 @@ public partial class ViewerWindow
     {
         Run();
         Close();
+    }
+
+    internal void ToggleFullscreen()
+    {
+        if (_isFullscreen)
+        {
+            // Exit fullscreen
+            _isFullscreen = false;
+            
+            // Restore window properties
+            WindowStyle = _preFullscreenWindowStyle;
+            ResizeMode = _preFullscreenResizeMode;
+            
+            // Restore position and size
+            Left = _preFullscreenBounds.Left;
+            Top = _preFullscreenBounds.Top;
+            Width = _preFullscreenBounds.Width;
+            Height = _preFullscreenBounds.Height;
+            
+            // Restore window state last to avoid flicker
+            WindowState = _preFullscreenWindowState;
+        }
+        else
+        {
+            // Enter fullscreen
+            _isFullscreen = true;
+            
+            // Save current window properties before any changes
+            _preFullscreenWindowState = WindowState;
+            _preFullscreenWindowStyle = WindowStyle;
+            _preFullscreenResizeMode = ResizeMode;
+            
+            // Get current bounds (account for maximized state)
+            if (WindowState == WindowState.Maximized)
+            {
+                _preFullscreenBounds = RestoreBounds;
+            }
+            else
+            {
+                _preFullscreenBounds = new Rect(Left, Top, Width, Height);
+            }
+            
+            // Get the screen bounds where the window is currently located
+            var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var screenBounds = screen.Bounds;
+            
+            // Get DPI scale factor for proper coordinate conversion
+            // scale.Horizontal and scale.Vertical contain the DPI scaling ratios (e.g., 1.5 for 150%)
+            var scale = DisplayDeviceHelper.GetScaleFactorFromWindow(this);
+            
+            // Set to normal state first to allow manual positioning
+            WindowState = WindowState.Normal;
+            
+            // Hide window chrome for true fullscreen
+            WindowStyle = WindowStyle.None;
+            ResizeMode = ResizeMode.NoResize;
+            
+            // Convert screen bounds from physical pixels to DIPs for WPF
+            var dipWidth = screenBounds.Width / scale.Horizontal;
+            var dipHeight = screenBounds.Height / scale.Vertical;
+            
+            // Use MoveWindow to set position and size with proper DPI handling
+            this.MoveWindow(screenBounds.Left, screenBounds.Top, dipWidth, dipHeight);
+        }
     }
 
     private void PositionWindow(Size size)
