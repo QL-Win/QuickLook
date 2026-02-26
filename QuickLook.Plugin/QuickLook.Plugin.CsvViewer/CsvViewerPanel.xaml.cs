@@ -48,35 +48,51 @@ public partial class CsvViewerPanel : UserControl
         var encoding = CharsetDetector.DetectFromFile(path).Detected?.Encoding ??
                        Encoding.Default;
 
-        using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), encoding))
+        using var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), encoding);
+      
+        // Use fixed delimiters for known extensions to avoid mis-detection on small samples.
+        var extension = Path.GetExtension(path);
+        var delimiter = extension.Equals(".tsv", StringComparison.OrdinalIgnoreCase)
+            ? "\t"
+            : extension.Equals(".psv", StringComparison.OrdinalIgnoreCase)
+                ? "|"
+                : null;
+
+        var conf = new CsvConfiguration(CultureInfo.CurrentUICulture)
         {
-            var conf = new CsvConfiguration(CultureInfo.CurrentUICulture) { MissingFieldFound = null, BadDataFound = null, DetectDelimiter = true };
+            MissingFieldFound = null,
+            BadDataFound = null,
+            DetectDelimiter = delimiter == null,
+        };
 
-            using (var parser = new CsvParser(sr, conf))
+        if (delimiter != null)
+        {
+            // Force delimiter for TSV/PSV so CsvHelper doesn't auto-detect incorrectly.
+            conf.Delimiter = delimiter;
+        }
+
+        using var parser = new CsvParser(sr, conf);
+        var i = 0;
+        while (parser.Read())
+        {
+            var row = parser.Record;
+            if (row == null)
+                break;
+            row = Concat([$"{i++ + 1}".PadLeft(6)], row);
+
+            if (!binded)
             {
-                var i = 0;
-                while (parser.Read())
-                {
-                    var row = parser.Record;
-                    if (row == null)
-                        break;
-                    row = Concat([$"{i++ + 1}".PadLeft(6)], row);
-
-                    if (!binded)
-                    {
-                        SetupColumnBinding(row.Length);
-                        binded = true;
-                    }
-
-                    if (i > limit)
-                    {
-                        Rows.Add(Enumerable.Repeat("...", row.Length).ToArray());
-                        break;
-                    }
-
-                    Rows.Add(row);
-                }
+                SetupColumnBinding(row.Length);
+                binded = true;
             }
+
+            if (i > limit)
+            {
+                Rows.Add([.. Enumerable.Repeat("...", row.Length)]);
+                break;
+            }
+
+            Rows.Add(row);
         }
     }
 

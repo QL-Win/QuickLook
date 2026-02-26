@@ -64,7 +64,7 @@ public partial class ViewerWindow
 
     private void PositionWindow(Size size)
     {
-        // If the window is now now maximized, do not move it
+        // If the window is now maximized, do not move it
         if (WindowState == WindowState.Maximized)
             return;
 
