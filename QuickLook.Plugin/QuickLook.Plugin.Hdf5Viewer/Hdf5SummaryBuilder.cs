@@ -84,11 +84,27 @@ internal static class Hdf5SummaryBuilder
 
     private static void AppendAttributes(H5AttributableObject attributable, StringBuilder sb, int depth)
     {
-        List<H5Attribute> attributes;
+        var visible = new List<H5Attribute>(MaxAttributesPerObject);
+        var hasMoreAttributes = false;
 
         try
         {
-            attributes = attributable.Attributes.ToList();
+            var count = 0;
+
+            foreach (var attribute in attributable.Attributes)
+            {
+                count++;
+
+                if (count <= MaxAttributesPerObject)
+                {
+                    visible.Add(attribute);
+                }
+                else
+                {
+                    hasMoreAttributes = true;
+                    break;
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -96,10 +112,8 @@ internal static class Hdf5SummaryBuilder
             return;
         }
 
-        if (!attributes.Any())
+        if (visible.Count == 0)
             return;
-
-        var visible = attributes.Take(MaxAttributesPerObject).ToList();
 
         foreach (var attribute in visible)
         {
@@ -111,8 +125,8 @@ internal static class Hdf5SummaryBuilder
                 $"(type={attribute.Type.Class}, shape={shape}, itemSize={attribute.Type.Size}B)");
         }
 
-        if (attributes.Count > MaxAttributesPerObject)
-            sb.AppendLine($"{Indent(depth)}... {attributes.Count - MaxAttributesPerObject} more attributes");
+        if (hasMoreAttributes)
+            sb.AppendLine($"{Indent(depth)}... more attributes");
     }
 
     private static IEnumerable<H5Object> SafeReadChildren(H5Group group)
