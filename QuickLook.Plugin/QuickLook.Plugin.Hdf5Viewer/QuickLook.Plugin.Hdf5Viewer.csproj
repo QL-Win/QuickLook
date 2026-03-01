@@ -55,7 +55,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="HDF5.NET" Version="1.0.0-alpha.22" />
+        <PackageReference Include="PureHDF" Version="1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
