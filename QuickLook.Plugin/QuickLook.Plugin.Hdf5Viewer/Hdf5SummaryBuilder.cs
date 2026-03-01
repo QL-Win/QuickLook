@@ -1,4 +1,4 @@
-using HDF5.NET;
+using PureHDF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,19 +15,15 @@ internal static class Hdf5SummaryBuilder
     public static string Build(string path)
     {
         var sb = new StringBuilder(32 * 1024);
-
-        using (var file = H5File.OpenRead(path))
-        {
-            sb.AppendLine("HDF5 structure summary");
-            sb.AppendLine();
-
-            AppendObject(file, sb, depth: 0);
-        }
+        var file = H5File.OpenRead(path);
+        sb.AppendLine("HDF5 structure summary");
+        sb.AppendLine();
+        AppendObject(file, sb, depth: 0);
 
         return sb.ToString();
     }
 
-    private static void AppendObject(H5Object h5Object, StringBuilder sb, int depth)
+    private static void AppendObject(object h5Object, StringBuilder sb, int depth)
     {
         if (depth > MaxDepth)
         {
@@ -37,25 +33,25 @@ internal static class Hdf5SummaryBuilder
 
         switch (h5Object)
         {
-            case H5Group group:
+            case IH5Group group:
                 AppendGroup(group, sb, depth);
                 return;
-            case H5Dataset dataset:
+            case IH5Dataset dataset:
                 AppendDataset(dataset, sb, depth);
                 return;
-            case H5CommitedDatatype committedDatatype:
+            case IH5CommitedDatatype committedDatatype:
                 sb.AppendLine($"{Indent(depth)}[DATATYPE] {SafeName(committedDatatype.Name)}");
                 return;
-            case H5UnresolvedLink unresolvedLink:
+            case IH5UnresolvedLink unresolvedLink:
                 sb.AppendLine($"{Indent(depth)}[UNRESOLVED] {SafeName(unresolvedLink.Name)}");
                 return;
             default:
-                sb.AppendLine($"{Indent(depth)}[{h5Object.GetType().Name}] {SafeName(h5Object.Name)}");
+                sb.AppendLine($"{Indent(depth)}[{h5Object.GetType().Name}] {SafeName(TryGetName(h5Object))}");
                 return;
         }
     }
 
-    private static void AppendGroup(H5Group group, StringBuilder sb, int depth)
+    private static void AppendGroup(IH5Group group, StringBuilder sb, int depth)
     {
         sb.AppendLine($"{Indent(depth)}[GROUP] {SafeName(group.Name)}");
         AppendAttributes(group, sb, depth + 1);
@@ -70,7 +66,7 @@ internal static class Hdf5SummaryBuilder
             sb.AppendLine($"{Indent(depth + 1)}... {children.Count - MaxChildrenPerGroup} more children");
     }
 
-    private static void AppendDataset(H5Dataset dataset, StringBuilder sb, int depth)
+    private static void AppendDataset(IH5Dataset dataset, StringBuilder sb, int depth)
     {
         var dimensions = string.Join(" x ", dataset.Space.Dimensions.Select(d => d.ToString()));
         var shape = string.IsNullOrWhiteSpace(dimensions) ? "scalar" : dimensions;
@@ -82,16 +78,16 @@ internal static class Hdf5SummaryBuilder
         AppendAttributes(dataset, sb, depth + 1);
     }
 
-    private static void AppendAttributes(H5AttributableObject attributable, StringBuilder sb, int depth)
+    private static void AppendAttributes(IH5Object attributable, StringBuilder sb, int depth)
     {
-        var visible = new List<H5Attribute>(MaxAttributesPerObject);
+        var visible = new List<IH5Attribute>(MaxAttributesPerObject);
         var hasMoreAttributes = false;
 
         try
         {
             var count = 0;
 
-            foreach (var attribute in attributable.Attributes)
+            foreach (var attribute in attributable.Attributes())
             {
                 count++;
 
@@ -129,15 +125,15 @@ internal static class Hdf5SummaryBuilder
             sb.AppendLine($"{Indent(depth)}... more attributes");
     }
 
-    private static IEnumerable<H5Object> SafeReadChildren(H5Group group)
+    private static IEnumerable<object> SafeReadChildren(IH5Group group)
     {
         try
         {
-            return group.Children;
+            return group.Children();
         }
         catch
         {
-            return Array.Empty<H5Object>();
+            return Array.Empty<object>();
         }
     }
 
@@ -149,5 +145,16 @@ internal static class Hdf5SummaryBuilder
     private static string Indent(int level)
     {
         return new string(' ', level * 2);
+    }
+
+    private static string TryGetName(object h5Object)
+    {
+        if (h5Object is IH5Object namedObject)
+            return namedObject.Name;
+
+        if (h5Object is IH5UnresolvedLink unresolvedLink)
+            return unresolvedLink.Name;
+
+        return string.Empty;
     }
 }
