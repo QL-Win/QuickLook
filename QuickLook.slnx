@@ -17,6 +17,7 @@
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.FontViewer/QuickLook.Plugin.FontViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.HelixViewer/QuickLook.Plugin.HelixViewer.csproj" />
+    <Project Path="QuickLook.Plugin/QuickLook.Plugin.Hdf5Viewer/QuickLook.Plugin.Hdf5Viewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.HtmlViewer/QuickLook.Plugin.HtmlViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ImageViewer/QuickLook.Plugin.ImageViewer.csproj" />
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.MailViewer/QuickLook.Plugin.MailViewer.csproj" />
@@ -48,6 +49,7 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.FontViewer/QuickLook.Plugin.FontViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.HelixViewer/QuickLook.Plugin.HelixViewer.csproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.Hdf5Viewer/QuickLook.Plugin.Hdf5Viewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.HtmlViewer/QuickLook.Plugin.HtmlViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ImageViewer/QuickLook.Plugin.ImageViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.MailViewer/QuickLook.Plugin.MailViewer.csproj" />
