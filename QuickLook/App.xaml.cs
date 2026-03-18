@@ -235,6 +235,8 @@ public partial class App : Application
         MessageBoxPatcher.Initialize();
 
         CheckUpdate();
+
+        CheckAndRegisterPluginIcon();
     }
 
     protected virtual void OnSessionEnding(object sender, SessionEndingEventArgs e)
@@ -317,7 +319,7 @@ public partial class App : Application
                 // Invalid path, continue to show duplicate message
             }
         }
-        
+
         // Second instance: duplicate
         MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
             MessageBoxButton.OK, MessageBoxImage.Information);
@@ -335,6 +337,11 @@ public partial class App : Application
 
         _ = Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
         SettingHelper.Set("LastUpdateTicks", DateTime.Now.Ticks);
+    }
+
+    private void CheckAndRegisterPluginIcon()
+    {
+        _ = Task.Delay(3000).ContinueWith(_ => PluginIconRegistrationHelper.CheckAndRegisterPluginIcon());
     }
 
     private void RunListener(StartupEventArgs e)

@@ -790,7 +790,8 @@ Interested in contributing? Check out our development resources:
 
 [@OiCkilL](https://twitter.com/OiCkilL)
 [@QubitsDev](https://twitter.com/qubitsdev)
-[Donno](https://github.com/Donnnno)
+[@Donno](https://github.com/Donnnno)
+[@Shomnipotence](https://github.com/Shomnipotence)
 
 *Fluent UI & Icons*
 
