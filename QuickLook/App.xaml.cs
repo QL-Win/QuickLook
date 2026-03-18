@@ -341,6 +341,7 @@ public partial class App : Application
 
     private void CheckAndRegisterPluginIcon()
     {
+        // TODO: only /register-plugin-icon command to register plugin icon immediately, and can be removed
         _ = Task.Delay(3000).ContinueWith(_ => PluginIconRegistrationHelper.CheckAndRegisterPluginIcon());
     }
 
