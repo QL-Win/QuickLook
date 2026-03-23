@@ -162,6 +162,11 @@ public partial class ViewerWindow : Window
 
         WindowHelper.RemoveWindowControls(this);
 
+        ApplyWindowBackgroundEffects();
+    }
+
+    private void ApplyWindowBackgroundEffects()
+    {
         if (SettingHelper.Get("UseTransparency", true)
             && SystemParameters.IsGlassEnabled
             && !App.IsGPUInBlacklist)
@@ -188,6 +193,7 @@ public partial class ViewerWindow : Window
         }
         else
         {
+            WindowHelper.DisableBlur(this);
             Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
         }
 
