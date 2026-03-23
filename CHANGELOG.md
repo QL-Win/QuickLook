@@ -10,7 +10,42 @@
   > Nevertheless, QuickLook has chosen to continue with an up-to-date update strategy.
   >
   > If you encounter any issues, you can refer to [#1362](https://github.com/QL-Win/QuickLook/issues/1362) and consider downgrading your LAVFilters version.
-- TODO
+- Improve LRC handling by merging duplicate timestamps [#1858](https://github.com/QL-Win/QuickLook/issues/1858)
+- Add PKCS7 extensions to supported file types (`.p7s` and `.pkcs7`)
+- Add dark theme and clean up Fortran95 syntax files (`.f90`, `.f95` and `.f03`)
+- Add GDScript syntax highlighting definitions (`.gd`)
+- Add Chromium `.pak` file extraction support
+- Add support `.patch` and `.rej` extensions for diff highlighting
+- Add Razor syntax highlighting definitions (`.cshtml` and `.razor`)
+- Add ActionScript dark syntax highlighting definition (`.as` and `.mx`)
+- Add `.axml` extension to XML syntax highlighting
+- Add Assembly dark syntax highlighting definition (`.asm`)
+- Add dark theme syntax highlighting for Ada (`.ada`, `.ads` and `.adb`)
+- Add dark syntax highlighting for AutoHotkey (`.ahk`)
+- Add dark syntax highlighting for multiple languages. Introduces dark theme syntax definition (.xshd) files for various programming languages in QuickLook.Plugin.TextViewer, including ANTLR, Boo, Ceylon, ChucK, Clojure, Cocoa, CoffeeScript, Cool, and others. This enhances text viewer support for code files with improved readability in dark mode
+- Add `.cursorignore` extension to GitIgnore syntax
+- Add support for Python `.whl` and `.egg` archives
+- Add Rhai (Embedded scripting language for Rust) syntax definitions (`.rhai`)
+- Add `.cu`/`.cuh` to C++ syntax definitions
+- Add `.hip` extension to C++ syntax files
+- Add Moji syntax highlighting `.moji`
+- Add `.pyx` extension to Python syntax
+- Add PlantUML syntax highlighting (`.puml`, `.plantuml`, `.pu`, `.uml`, `.iuml`, `.wsd`)
+- Add Zig syntax highlighting (`.zig`)
+- Add GraphQL syntax highlighting (`.graphql` `.gql` `.gqls`)
+- Add Mermaid syntax highlighting (`.mmd`, `.mermaid`)
+- Support `.psv` parsing in CsvViewer
+- Add KQL and PromQL syntax definitions (.kql, .promql)
+- Fix markdown not supporting absolute resource paths
+- Fix option `<UseTransparency>False</UseTransparency>` not taking effect in Windows 10 [#1542](https://github.com/QL-Win/QuickLook/issues/1542)
+- Fix loop toggle resuming paused video playback [#1852](https://github.com/QL-Win/QuickLook/issues/1852)
+- Fix unhandled Exception with XLSX and CSV files in OfficeViewer resize with `RPC_E_CANTCALLOUT_ININPUTSYNCCALL` [#1854](https://github.com/QL-Win/QuickLook/issues/1854)
+- Fix command line relative path resolution [#1857](https://github.com/QL-Win/QuickLook/issues/1857)
+- Fix taskbar icon intermittently missing after Explorer restart [#1864](https://github.com/QL-Win/QuickLook/issues/1864)
+- Add plugin icon registration and include `QLPlugin.ico` designed by [@Shomnipotence](https://github.com/Shomnipotence)
+- Add Romanian translation by [@Laszlo19](https://github.com/Laszlo19)
+- Updated the translation of Simplified Chinese by [@stxttkx](https://github.com/stxttkx)
+- Add DICOM image support to ImageViewer plugin [#1866](https://github.com/QL-Win/QuickLook/issues/1866)
 
 ## 4.4.0
 
