@@ -39,7 +39,7 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="{StaticResource MainWindowCaptionHeight}"
                       CornerRadius="0"
-                      GlassFrameThickness=" 1"
+                      GlassFrameThickness="0"
                       ResizeBorderThickness="{StaticResource MainWindowResizeThickness}"
                       UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>

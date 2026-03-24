@@ -25,6 +25,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Shell;
 using Wpf.Ui.Violeta.Controls;
 using Brush = System.Windows.Media.Brush;
 using FontFamily = System.Windows.Media.FontFamily;
@@ -167,9 +168,14 @@ public partial class ViewerWindow : Window
 
     private void ApplyWindowBackgroundEffects()
     {
-        if (SettingHelper.Get("UseTransparency", true)
+        var useTransparency = SettingHelper.Get("UseTransparency", true)
             && SystemParameters.IsGlassEnabled
-            && !App.IsGPUInBlacklist)
+            && !App.IsGPUInBlacklist;
+
+        var windowChrome = WindowChrome.GetWindowChrome(this);
+        windowChrome?.GlassFrameThickness = useTransparency ? new Thickness(1) : new Thickness(0);
+
+        if (useTransparency)
         {
             if (App.IsWin11)
             {
@@ -193,7 +199,6 @@ public partial class ViewerWindow : Window
         }
         else
         {
-            WindowHelper.DisableBlur(this);
             Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
         }
 
