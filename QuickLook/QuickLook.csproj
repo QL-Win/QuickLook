@@ -77,6 +77,8 @@
     <ItemGroup>
         <Reference Include="System.Management" />
         <Reference Include="Microsoft.CSharp" />
+        <!-- If your Windows SDK path is inconsistent with the following `HintPath`, please use a soft link, such as following command. -->
+        <!-- Requires admin permissions: mklink /D "C:\Program Files (x86)\Windows Kits\10\" "C:\Windows Kits\10\" -->
         <Reference Include="windows">
             <HintPath>$(SystemRoot)\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0\Facade\windows.winmd</HintPath>
         </Reference>
