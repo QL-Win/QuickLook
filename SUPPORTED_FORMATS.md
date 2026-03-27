@@ -224,7 +224,8 @@ Update not completed yet...
 ### Markdown files
 - `.md`, `.markdown` (Markdown)
 - `.mdx` (MDX: Markdown + JSX)
-- `.mmd` (MultiMarkdown)
+- `.mmd` (MultiMarkdown or Mermaid diagram source)
+- `.mermaid` (Mermaid diagram source)
 - `.mkd`, `.mdwn`, `.mdown` (Markdown variants)
 - `.mdc` (Cursor AI Markdown)
 - `.qmd` (Quarto Markdown)

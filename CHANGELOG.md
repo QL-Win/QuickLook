@@ -10,8 +10,9 @@
   > Nevertheless, QuickLook has chosen to continue with an up-to-date update strategy.
   >
   > If you encounter any issues, you can refer to [#1362](https://github.com/QL-Win/QuickLook/issues/1362) and consider downgrading your LAVFilters version.
-  
+
 - Improve LRC handling by merging duplicate timestamps [#1858](https://github.com/QL-Win/QuickLook/issues/1858)
+- Improve the translation of Simplified Chinese by [@stxttkx](https://github.com/stxttkx)
 - Add PKCS7 extensions to supported file types (`.p7s` and `.pkcs7`)
 - Add support Fortran95 (`.f90`, `.f95`, `.f03`), GDScript (`.gd`), Diff (`.patch`, `.rej`), Razor (`.cshtml`, `.razor`), ActionScript (`.as`, `.mx`), Assembly (`.asm`), Ada (`.ada`, `.ads`, `.adb`), AutoHotkey (`.ahk`), Rhai (`.rhai`), C++ ( `.cu`, `.cuh`, `.hip`), Python (`.pyx`), PlantUML (`.puml`, `.plantuml`, `.pu`, `.uml`, `.iuml`, `.wsd`), Zig (`.zig`), Moji (`.moji`), GraphQL (`.graphql`, `.gql`, `.gqls`), Mermaid (`.mmd`, `.mermaid`), KQL (`.kql`), PromQL (`.promql`), ANTLR, Boo, Ceylon, ChucK, Clojure, Cocoa, CoffeeScript, Cool, and others syntax highlighting, including the dark mode theme
 - Add support Chromium `.pak` viewer and file extraction
@@ -19,17 +20,17 @@
 - Add `.cursorignore` extension to GitIgnore syntax
 - Add support for Python `.whl` and `.egg` archives
 - Add support `.psv` parsing in CsvViewer
+- Add Mermaid (`.mermaid`) support and `.mmd` detection [#1893](https://github.com/QL-Win/QuickLook/issues/1893)
+- Add plugin icon registration and include `QLPlugin.ico` designed by [@Shomnipotence](https://github.com/Shomnipotence)
+- Add DICOM image support to ImageViewer plugin [#1866](https://github.com/QL-Win/QuickLook/issues/1866) `This is not a long-lasting built-in plugin`
+- Add Romanian translation by [@Laszlo19](https://github.com/Laszlo19)
 - Fix markdown not supporting absolute resource paths
 - Fix option `<UseTransparency>False</UseTransparency>` not taking effect in Windows 10 [#1542](https://github.com/QL-Win/QuickLook/issues/1542)
 - Fix loop toggle resuming paused video playback [#1852](https://github.com/QL-Win/QuickLook/issues/1852)
 - Fix unhandled Exception with XLSX and CSV files in OfficeViewer resize with `RPC_E_CANTCALLOUT_ININPUTSYNCCALL` [#1854](https://github.com/QL-Win/QuickLook/issues/1854)
 - Fix command line relative path resolution [#1857](https://github.com/QL-Win/QuickLook/issues/1857)
 - Fix taskbar icon intermittently missing after Explorer restart [#1864](https://github.com/QL-Win/QuickLook/issues/1864)
-- Fix `{Desktop composition is disabled}` exceptions in GetMonitorColorProfileFromWindow [#4](https://github.com/QL-Win/QuickLook.Common/pull/4)
-- Add plugin icon registration and include `QLPlugin.ico` designed by [@Shomnipotence](https://github.com/Shomnipotence)
-- Add DICOM image support to ImageViewer plugin [#1866](https://github.com/QL-Win/QuickLook/issues/1866) `This is not a long-lasting built-in plugin`
-- Add Romanian translation by [@Laszlo19](https://github.com/Laszlo19)
-- Updated the translation of Simplified Chinese by [@stxttkx](https://github.com/stxttkx)
+- Fix `{Desktop composition is disabled}` exceptions in `GetMonitorColorProfileFromWindow` [#4](https://github.com/QL-Win/QuickLook.Common/pull/4)
 
 ## 4.4.0
 
