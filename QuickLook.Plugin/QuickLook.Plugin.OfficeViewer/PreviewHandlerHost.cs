@@ -133,6 +133,52 @@ public class PreviewHandlerHost : Control
     }
 
     /// <summary>
+    /// Opens the specified file using the appropriate preview handler.
+    /// This overload accepts a pre-captured parent window handle and client rectangle,
+    /// allowing it to be safely called from a background thread without accessing
+    /// thread-affine WinForms control properties.
+    /// </summary>
+    /// <param name="path">The file path to preview.</param>
+    /// <param name="parentHandle">Pre-captured HWND of the host control.</param>
+    /// <param name="clientRect">Pre-captured client rectangle of the host control.</param>
+    /// <returns>True if preview was successfully started; otherwise false.</returns>
+    internal bool OpenBackground(string path, IntPtr parentHandle, Rectangle clientRect)
+    {
+        UnloadPreviewHandler();
+
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        var guid = ShellExRegister.GetPreviewHandlerGUID(Path.GetExtension(path));
+
+        if (guid == Guid.Empty)
+            return false;
+
+        var o = Activator.CreateInstance(Type.GetTypeFromCLSID(guid, true));
+
+        if (o is not IInitializeWithFile fileInit)
+            return false;
+
+        fileInit.Initialize(path, 0);
+        _mCurrentPreviewHandler = o as IPreviewHandler;
+        if (_mCurrentPreviewHandler == null)
+            return false;
+
+        // Record the active handler GUID only after successful initialization
+        // so OnResize never observes a partially-initialized state.
+        CurrentPreviewHandler = guid;
+
+        if (IsDisposed)
+            return false;
+
+        var r = clientRect;
+        _mCurrentPreviewHandler.SetWindow(parentHandle, ref r);
+        _mCurrentPreviewHandler.DoPreview();
+
+        return true;
+    }
+
+    /// <summary>
     /// Unloads the preview handler hosted in this PreviewHandlerHost and closes the file stream.
     /// </summary>
     public void UnloadPreviewHandler()

@@ -144,6 +144,7 @@ public sealed class Plugin : IViewer
             context.ViewerContent = _panel;
             context.Title = Path.GetFileName(path);
             _panel.PreviewFile(path, context);
+            // context.IsBusy = false is set asynchronously by PreviewFile's background thread
         }
         catch (Exception e)
         {
@@ -153,9 +154,8 @@ public sealed class Plugin : IViewer
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
+            context.IsBusy = false;
         }
-
-        context.IsBusy = false;
     }
 
     public void Cleanup()

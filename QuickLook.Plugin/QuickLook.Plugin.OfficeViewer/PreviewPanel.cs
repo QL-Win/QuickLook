@@ -17,7 +17,9 @@
 
 using QuickLook.Common.Plugin;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms.Integration;
 
@@ -26,9 +28,13 @@ namespace QuickLook.Plugin.OfficeViewer;
 public class PreviewPanel : WindowsFormsHost, IDisposable
 {
     private PreviewHandlerHost _control;
+    private CancellationTokenSource _cts;
 
     public new void Dispose()
     {
+        // Cancel any in-progress background load before disposing
+        _cts?.Cancel();
+
         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
         {
             Child = null;
@@ -43,7 +49,40 @@ public class PreviewPanel : WindowsFormsHost, IDisposable
     {
         _control = new PreviewHandlerHost();
         Child = _control;
-        _control.Open(file);
+
+        // Capture the HWND and client rect on the UI thread before going async,
+        // so the background thread never needs to access thread-affine WinForms properties.
+        var hwnd = _control.Handle;
+        var rect = _control.ClientRectangle;
+
+        var cts = new CancellationTokenSource();
+        _cts = cts;
+
+        // Perform the blocking COM preview-handler calls on a dedicated STA background
+        // thread so the WPF UI thread remains responsive during the (potentially slow)
+        // first-time load of the Office preview handler.
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                if (!cts.Token.IsCancellationRequested)
+                    _control.OpenBackground(file, hwnd, rect);
+            }
+            catch (Exception e)
+            {
+                // Log COM/preview-handler errors for diagnostic purposes.
+                // These are non-fatal: the preview simply won't appear.
+                Debug.WriteLine($"[OfficeViewer] Preview failed: {e.Message}");
+            }
+            finally
+            {
+                if (!cts.Token.IsCancellationRequested)
+                    context.IsBusy = false;
+            }
+        });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.IsBackground = true;
+        thread.Start();
     }
 
     [DllImport("user32.dll")]
