@@ -17,6 +17,7 @@
 
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Rendering;
+using QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Light;
 using System.Collections.Generic;
 
 namespace QuickLook.Plugin.TextViewer.Themes.HighlightingDefinitions.Dark;

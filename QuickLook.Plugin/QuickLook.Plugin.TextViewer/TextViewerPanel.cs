@@ -163,9 +163,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             // RTL: Ctrl + RShift
             // LTR: Ctrl + LShift
             if (Keyboard.IsKeyDown(Key.RightShift))
-                FlowDirection = System.Windows.FlowDirection.RightToLeft;
+                FlowDirection = FlowDirection.RightToLeft;
             else if (Keyboard.IsKeyDown(Key.LeftShift))
-                FlowDirection = System.Windows.FlowDirection.LeftToRight;
+                FlowDirection = FlowDirection.LeftToRight;
         }
         else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
         {
