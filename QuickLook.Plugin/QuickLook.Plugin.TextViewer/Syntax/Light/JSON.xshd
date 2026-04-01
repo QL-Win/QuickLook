@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="JSON" extensions=".json">
+<SyntaxDefinition name="JSON" extensions=".json;.jsonl">
     
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
