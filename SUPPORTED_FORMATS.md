@@ -7,7 +7,7 @@ Update not completed yet...
 - `.rtf` (Rich Text Format)
 - `.log` (Log file)
 - `.ini` (Initialization/config file)
-- `.json` (JavaScript Object Notation)
+- `.json`, `.jsonl` (JavaScript Object Notation / JSON Lines)
 - `.xml` (Extensible Markup Language)
 - `.yaml`, `.yml` (YAML Ain't Markup Language)
 - `.md`, `.markdown`, `.mdx`, `.mmd`, `.mkd`, `.mdwn`, `.mdown`, `.mdc`, `.qmd`, `.rmd`, `.rmarkdown`, `.apib`, `.mdtxt`, `.mdtext` (Markdown and variants)
