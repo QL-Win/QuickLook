@@ -36,7 +36,7 @@ public sealed class Plugin : IViewer
         ".md", ".markdown", // The most common Markdown extensions
         ".mdx", // MDX (Markdown + JSX), used in React ecosystems
         ".mmd", // MultiMarkdown (MMD), an extended version of Markdown or Mermaid diagram source file
-        ".mermaid", // Mermaid diagram source file
+        ".mermaid", // Mermaid diagram source file [QuickLook will wrap it in Markdown before rendering it]
         ".mkd", ".mdwn", ".mdown", // Early Markdown variants, used by different parsers like Pandoc, Gitit, and Hakyll
         ".mdc", // A Markdown variant used by Cursor AI [Repeated format from ImageViewer]
         ".qmd", // Quarto Markdown, developed by RStudio for scientific computing and reproducible reports
