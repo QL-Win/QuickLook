@@ -24,6 +24,7 @@
 - Add plugin icon registration and include `QLPlugin.ico` designed by [@Shomnipotence](https://github.com/Shomnipotence)
 - Add DICOM image support to ImageViewer plugin [#1866](https://github.com/QL-Win/QuickLook/issues/1866) `This is not a long-lasting built-in plugin`
 - Add Romanian translation by [@Laszlo19](https://github.com/Laszlo19)
+- Add F11 full screen toggle support [#253](https://github.com/QL-Win/QuickLook/issues/253)
 - Fix markdown not supporting absolute resource paths
 - Fix option `<UseTransparency>False</UseTransparency>` not taking effect in Windows 10 [#1542](https://github.com/QL-Win/QuickLook/issues/1542)
 - Fix loop toggle resuming paused video playback [#1852](https://github.com/QL-Win/QuickLook/issues/1852)
