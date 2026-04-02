@@ -32,7 +32,10 @@ public static class Dwmapi
 
     public enum WindowAttribute
     {
+        UseImmersiveDarkModeOld = 19,
         UseImmersiveDarkMode = 20,
+        WindowCornerPreference = 33,
+        CaptionColor = 35,
         SystembackdropType = 38,
         MicaEffect = 1029,
     }
@@ -41,9 +44,38 @@ public static class Dwmapi
     {
         Auto = 0,
         None = 1,
-        MainWindow = 2,
-        TransientWindow = 3,
-        TabbedWindow = 4,
+        Mica = 2,
+        Acrylic = 3, // Automatically selects the best Acrylic effect available on the system (Acrylic11 > Acrylic10)
+        Tabbed = 4,
+        Acrylic10 = 5, // Windows 10 style, supported on Windows 10 and 11
+        Acrylic11 = 6, // Windows 11 style, supported on Windows 11 22523+ (Insider) and 22621+ (Stable)
+    }
+
+    public enum WindowCornerStyle : uint
+    {
+        /// <summary>
+        /// Let the system decide whether or not to round window corners.
+        /// Equivalent to DWMWCP_DEFAULT
+        /// </summary>
+        Default = 0,
+
+        /// <summary>
+        /// Never round window corners.
+        /// Equivalent to DWMWCP_DONOTROUND
+        /// </summary>
+        DoNotRound = 1,
+
+        /// <summary>
+        /// Round the corners if appropriate.
+        /// Equivalent to DWMWCP_ROUND
+        /// </summary>
+        Round = 2,
+
+        /// <summary>
+        /// Round the corners if appropriate, with a small radius.
+        /// Equivalent to DWMWCP_ROUNDSMALL
+        /// </summary>
+        RoundSmall = 3,
     }
 
     [DllImport("DwmApi.dll")]
