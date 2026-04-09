@@ -193,7 +193,7 @@ public partial class ViewerWindow : Window
         else
         {
             WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
-            WindowHelper.DisableDwmBlur(this);
+            WindowHelper.DisableDwmBlur(this); // Fix white flash in dark mode
             Background = (Brush)FindResource("MainWindowBackgroundNoTransparent");
         }
 
