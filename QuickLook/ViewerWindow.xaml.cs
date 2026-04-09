@@ -263,7 +263,7 @@ public partial class ViewerWindow : Window
                 {
                     var acrylicTint = GetAcrylicTintColor();
 
-                    WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
+                    WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
                 }
                 else
@@ -295,11 +295,19 @@ public partial class ViewerWindow : Window
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBackdropAcrylicBlur(this, CurrentTheme == Themes.Dark);
                 }
-                else if (App.IsWin10 || App.IsWin11)
+                else if (App.IsWin11)
                 {
                     var acrylicTint = GetAcrylicTintColor();
 
-                    WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
+                    WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
+                    WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
+                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                }
+                else if (App.IsWin10)
+                {
+                    var acrylicTint = GetAcrylicTintColor();
+
+                    WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
                 }
                 else
