@@ -188,8 +188,6 @@ public partial class ViewerWindow : Window
 
         if (useTransparency)
         {
-            Background = Brushes.Transparent;
-
             ApplyBackdrop(backdrop);
         }
         else
@@ -234,17 +232,20 @@ public partial class ViewerWindow : Window
                     {
                         WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                         WindowHelper.EnableBackdropMicaBlur(this, CurrentTheme == Themes.Dark);
+                        Background = Brushes.Transparent;
                     }
                     else
                     {
                         WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                         WindowHelper.EnableMicaBlur(this, CurrentTheme == Themes.Dark);
+                        Background = Brushes.Transparent;
                     }
                 }
                 else if (App.IsWin10)
                 {
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBlur(this);
+                    Background = (Brush)FindResource("MainWindowBackground");
                 }
                 else
                 {
@@ -258,6 +259,7 @@ public partial class ViewerWindow : Window
                 {
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBackdropAcrylicBlur(this, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else if (App.IsWin10)
                 {
@@ -265,6 +267,7 @@ public partial class ViewerWindow : Window
 
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else
                 {
@@ -281,6 +284,7 @@ public partial class ViewerWindow : Window
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else
                 {
@@ -294,6 +298,7 @@ public partial class ViewerWindow : Window
                 {
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBackdropAcrylicBlur(this, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else if (App.IsWin11)
                 {
@@ -302,6 +307,7 @@ public partial class ViewerWindow : Window
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else if (App.IsWin10)
                 {
@@ -309,6 +315,7 @@ public partial class ViewerWindow : Window
 
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else
                 {
@@ -322,11 +329,13 @@ public partial class ViewerWindow : Window
                 {
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBackdropTabbedBlur(this, CurrentTheme == Themes.Dark);
+                    Background = Brushes.Transparent;
                 }
                 else if (App.IsWin10)
                 {
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(1d);
                     WindowHelper.EnableBlur(this);
+                    Background = (Brush)FindResource("MainWindowBackground");
                 }
                 else
                 {
