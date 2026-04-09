@@ -13,6 +13,7 @@
 
 - Improve LRC handling by merging duplicate timestamps [#1858](https://github.com/QL-Win/QuickLook/issues/1858)
 - Improve the translation of Simplified Chinese by [@stxttkx](https://github.com/stxttkx)
+- Add support for the `WindowBackdrop` option (Auto/None/Mica/Acrylic/Tabbed/Acrylic10/Acrylic11)
 - Add PKCS7 extensions to supported file types (`.p7s` and `.pkcs7`)
 - Add support Fortran95 (`.f90`, `.f95`, `.f03`), GDScript (`.gd`), Diff (`.patch`, `.rej`), Razor (`.cshtml`, `.razor`), ActionScript (`.as`, `.mx`), Assembly (`.asm`), Ada (`.ada`, `.ads`, `.adb`), AutoHotkey (`.ahk`), Rhai (`.rhai`), C++ ( `.cu`, `.cuh`, `.hip`), Python (`.pyx`), PlantUML (`.puml`, `.plantuml`, `.pu`, `.uml`, `.iuml`, `.wsd`), Zig (`.zig`), Moji (`.moji`), GraphQL (`.graphql`, `.gql`, `.gqls`), Mermaid (`.mmd`, `.mermaid`), KQL (`.kql`), PromQL (`.promql`), JSON Lines (`.jsonl`), ANTLR, Boo, Ceylon, ChucK, Clojure, Cocoa, CoffeeScript, Cool, and others syntax highlighting, including the dark mode theme
 - Add support Chromium `.pak` viewer and file extraction
