@@ -29,6 +29,7 @@
                                 <Setter.Value>
                                     <ImageBrush AlignmentY="Top"
                                                 ImageSource="Resources/background-b.png"
+                                                Opacity="0.5"
                                                 RenderOptions.BitmapScalingMode="NearestNeighbor"
                                                 Stretch="UniformToFill"
                                                 TileMode="Tile"
