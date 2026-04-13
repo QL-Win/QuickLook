@@ -55,10 +55,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="fo-dicom" Version="5.2.5">
+        <PackageReference Include="fo-dicom" Version="5.2.6">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.2.5">
+        <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.2.6">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.IO.Compression" Version="4.3.0" />
@@ -68,10 +68,10 @@
         <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.11.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3800.47">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3912.50">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.33.5">
+        <PackageReference Include="Google.Protobuf" Version="3.34.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Memory" Version="4.6.3">
