@@ -9,12 +9,16 @@
 
 $revision = git describe --always --tags --exclude latest
 
-if ($revision -match '^(\d+\.\d+\.\d+)-(\d+)(?:-g[0-9a-f]+)?$') {
+if ($revision -match '^(\d+\.\d+\.\d+)(?:-(\d+)(?:-g[0-9a-f]+)?)?$') {
     $baseVersion = $matches[1]
     $commitCount = $matches[2]
-    $revision = "$baseVersion-preview$commitCount"
+    if ($commitCount) {
+        $revision = "$baseVersion-preview$commitCount"
+    } else {
+        $revision = $baseVersion
+    }
 } else {
-    $revision = $gitVersion # fallback
+    throw "Unsupported git describe output: '$revision'. Expected 'x.y.z' or 'x.y.z-N-g<sha>'."
 }
 
 Write-Host "NuGet Package Version: $revision"
