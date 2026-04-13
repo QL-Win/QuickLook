@@ -65,9 +65,9 @@
                 <End bgcolor="#1E1E1E">;</End>
             </Span>
 
-			<KeyWords name="At" color="#569CD6" bold="false" italic="false">
-				<Key word="@"/>
-			</KeyWords>
+            <KeyWords name="At" color="#569CD6" bold="false" italic="false">
+                <Key word="@"/>
+            </KeyWords>
         </RuleSet>
         
         <RuleSet name="JavaScriptSet" reference="JavaScript"/>
@@ -96,9 +96,9 @@
                 <Key word="="/>
             </KeyWords>
 
-			<KeyWords name="At" color="#569CD6" bold="false" italic="false">
-				<Key word="@"/>
-			</KeyWords>
+            <KeyWords name="At" color="#569CD6" bold="false" italic="false">
+                <Key word="@"/>
+            </KeyWords>
         </RuleSet>
     </RuleSets>
 </SyntaxDefinition>

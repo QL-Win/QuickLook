@@ -12,7 +12,7 @@
         <LangVersion>latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ProjectGuid>{85FDD6BA-871D-46C8-BD64-F6BB0CB5EA95}</ProjectGuid>
-	    <Authors>QL-Win</Authors>
+        <Authors>QL-Win</Authors>
         <Company>QL-Win</Company>
         <Description>This repository holds the common library of QuickLook. The library is shared among all QuickLook projects.</Description>
         <PackageProjectUrl>https://github.com/QL-Win/QuickLook</PackageProjectUrl>

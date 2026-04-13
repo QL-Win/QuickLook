@@ -3,20 +3,20 @@
 <SyntaxDefinition name="Lua" extensions=".lua">
     
     <Environment>
-		<Default color="White" bgcolor="#1E1E1E"/>
-		<Selection color="White" bgcolor="#264F78"/>
-		<LineNumbers color="LightGray" bgcolor="#1E1E1E"/>
-		<CaretMarker color="#AEAFAD"/>
-		<VRuler color="#3B3A32"/>
+        <Default color="White" bgcolor="#1E1E1E"/>
+        <Selection color="White" bgcolor="#264F78"/>
+        <LineNumbers color="LightGray" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#3B3A32"/>
 
-		<FoldLine color="#808080" bgcolor="#1E1E1E"/>
-		<FoldMarker color="White" bgcolor="#1E1E1E"/>
-		<SelectedFoldLine color="White" bgcolor="#1E1E1E"/>
+        <FoldLine color="#808080" bgcolor="#1E1E1E"/>
+        <FoldMarker color="White" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="White" bgcolor="#1E1E1E"/>
 
-		<EOLMarkers color="#5A5A5A"/>
-		<SpaceMarkers color="#5A5A5A"/>
-		<TabMarkers color="#5A5A5A"/>
-		<InvalidLines color="#5A5A5A"/>
+        <EOLMarkers color="#5A5A5A"/>
+        <SpaceMarkers color="#5A5A5A"/>
+        <TabMarkers color="#5A5A5A"/>
+        <InvalidLines color="#5A5A5A"/>
     </Environment>
     
     <Properties>
