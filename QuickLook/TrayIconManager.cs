@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Wpf.Ui.Violeta.Win32;
+using OSThemeHelper = QuickLook.Common.Helpers.OSThemeHelper;
 using ToolTipIcon = Wpf.Ui.Violeta.Win32.ToolTipIcon;
 
 namespace QuickLook;
@@ -44,6 +45,7 @@ internal partial class TrayIconManager : IDisposable
             ToolTipText = string.Format(TranslationHelper.Get("Icon_ToolTip"),
                 Application.ProductVersion),
             Icon = GetTrayIconByDPI(),
+            ThemeMode = TrayThemeMode.System,
             Menu =
             [
                 new TrayMenuItem()

@@ -101,10 +101,10 @@
         <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135">
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="WPF-UI.Violeta" Version="4.2.0.4">
+        <PackageReference Include="WPF-UI.Violeta" Version="4.2.0.11">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Lib.Harmony" Version="2.4.2">

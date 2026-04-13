@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Microsoft.Win32;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.NativeMethods;
@@ -228,8 +227,6 @@ public partial class App : Application
 
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
-        UxTheme.ApplyPreferredAppMode(isTracked: true);
-        SystemEvents.SessionEnding += OnSessionEnding;
 
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
@@ -239,21 +236,8 @@ public partial class App : Application
         CheckAndRegisterPluginIcon();
     }
 
-    protected virtual void OnSessionEnding(object sender, SessionEndingEventArgs e)
-    {
-        SystemEvents.SessionEnding -= OnSessionEnding;
-
-        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
-        // https://github.com/QL-Win/QuickLook/issues/1782
-        UxTheme.ApplyPreferredAppMode(isTracked: false);
-    }
-
     protected override void OnExit(ExitEventArgs e)
     {
-        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
-        // https://github.com/QL-Win/QuickLook/issues/1782
-        UxTheme.ApplyPreferredAppMode(isTracked: false);
-
         base.OnExit(e);
 
         if (!_cleanExit)
