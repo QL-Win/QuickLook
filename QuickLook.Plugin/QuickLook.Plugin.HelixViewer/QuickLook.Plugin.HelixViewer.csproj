@@ -70,7 +70,10 @@
         <Delete Files="$(OutputPath)\QuickLook.Plugin.HtmlViewer.dll" Condition="Exists('$(OutputPath)\QuickLook.Plugin.HtmlViewer.dll')" />
         <Delete Files="$(OutputPath)\QuickLook.Plugin.HtmlViewer.pdb" Condition="Exists('$(OutputPath)\QuickLook.Plugin.HtmlViewer.pdb')" />
         <Delete Files="$(OutputPath)\lib*.dll" />
-        <RemoveDir Directories="$(OutputPath)\runtimes" Condition="Exists('$(OutputPath)\runtimes')" />
+        <RemoveDir Directories="$(OutputPath)\runtimes\linux-x64" Condition="Exists('$(OutputPath)\runtimes\linux-x64')" />
+        <RemoveDir Directories="$(OutputPath)\runtimes\osx-x64" Condition="Exists('$(OutputPath)\runtimes\osx-x64')" />
+        <!--  There is no reason to support model rendering under x86  -->
+        <RemoveDir Directories="$(OutputPath)\runtimes\win-x86" Condition="Exists('$(OutputPath)\runtimes\win-x86')" />
     </Target>
 
     <ItemGroup>
