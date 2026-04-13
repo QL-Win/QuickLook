@@ -33,6 +33,7 @@
 - Fix command line relative path resolution [#1857](https://github.com/QL-Win/QuickLook/issues/1857)
 - Fix taskbar icon intermittently missing after Explorer restart [#1864](https://github.com/QL-Win/QuickLook/issues/1864)
 - Fix `{Desktop composition is disabled}` exceptions in `GetMonitorColorProfileFromWindow` [#4](https://github.com/QL-Win/QuickLook.Common/pull/4)
+- Fix `assimp.dll` not found for win-x64 [#1741](https://github.com/QL-Win/QuickLook/issues/1741)
 
 ## 4.4.0
 
