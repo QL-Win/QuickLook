@@ -41,6 +41,10 @@ namespace QuickLook;
 
 public partial class ViewerWindow : Window
 {
+    private const double Acrylic10TintOpacity = 0.7;
+    private static readonly Color Acrylic10DarkTintColor = Color.FromRgb(0x17, 0x17, 0x17);
+    private static readonly Color Acrylic10LightTintColor = Color.FromRgb(0xF2, 0xF2, 0xF2);
+
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
     private string _path = string.Empty;
@@ -204,7 +208,7 @@ public partial class ViewerWindow : Window
             {
                 Background = (Brush)new BrushConverter().ConvertFromString(customColor);
             }
-            catch
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
             {
                 // Ignore invalid color
             }
@@ -279,11 +283,11 @@ public partial class ViewerWindow : Window
             case SystembackdropType.Acrylic10:
                 if (App.IsWin10 || App.IsWin11)
                 {
-                    var acrylicTint = GetAcrylicTintColor();
+                    var acrylicTint = GetAcrylic10TintColor();
 
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark, Acrylic10TintOpacity);
                     Background = Brushes.Transparent;
                 }
                 else
@@ -356,13 +360,32 @@ public partial class ViewerWindow : Window
             {
                 return ((SolidColorBrush)new BrushConverter().ConvertFromString(customColor)).Color;
             }
-            catch
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
             {
                 // Ignore invalid color
             }
         }
 
         return ((SolidColorBrush)FindResource("MainWindowBackground")).Color;
+    }
+
+    private Color GetAcrylic10TintColor()
+    {
+        var customColor = SettingHelper.Get("WindowBackgroundColor", string.Empty, "QuickLook");
+
+        if (!string.IsNullOrEmpty(customColor))
+        {
+            try
+            {
+                return ((SolidColorBrush)new BrushConverter().ConvertFromString(customColor)).Color;
+            }
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
+            {
+                // Ignore invalid color
+            }
+        }
+
+        return CurrentTheme == Themes.Dark ? Acrylic10DarkTintColor : Acrylic10LightTintColor;
     }
 
     private static SystembackdropType GetBackdropOption()
