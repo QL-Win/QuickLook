@@ -208,7 +208,7 @@ public partial class ViewerWindow : Window
             {
                 Background = (Brush)new BrushConverter().ConvertFromString(customColor);
             }
-            catch
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
             {
                 // Ignore invalid color
             }
@@ -360,7 +360,7 @@ public partial class ViewerWindow : Window
             {
                 return ((SolidColorBrush)new BrushConverter().ConvertFromString(customColor)).Color;
             }
-            catch
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
             {
                 // Ignore invalid color
             }
@@ -379,7 +379,7 @@ public partial class ViewerWindow : Window
             {
                 return ((SolidColorBrush)new BrushConverter().ConvertFromString(customColor)).Color;
             }
-            catch
+            catch (Exception ex) when (ex is FormatException || ex is NotSupportedException)
             {
                 // Ignore invalid color
             }
