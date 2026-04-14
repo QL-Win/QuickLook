@@ -88,3 +88,47 @@ public sealed class CoverArtConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+public sealed class TimeToLongConverter : DependencyObject, IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is long v)
+            return TimeSpan.FromTicks((long)v);
+        else
+            return TimeSpan.FromTicks(0L);
+    }
+
+    object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is TimeSpan v)
+            return ((TimeSpan)v).Ticks;
+        else
+            return 0L;
+
+    }
+}
+
+public sealed class TimeToShortStringConverter : DependencyObject, IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null)
+            return "00:00";
+
+        var v = (TimeSpan)value;
+
+        var s = string.Empty;
+        if (v.Hours > 0)
+            s += $"{v.Hours:D2}:";
+
+        s += $"{v.Minutes:D2}:{v.Seconds:D2}";
+
+        return s;
+    }
+
+    object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

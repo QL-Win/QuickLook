@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.VideoViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.VideoViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -15,6 +15,8 @@
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{1B746D92-49A5-4A37-9D75-DCC490393290}</ProjectGuid>
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>ARM64</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,6 +28,15 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <DebugSymbols>true</DebugSymbols>
+      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
@@ -33,6 +44,15 @@
         <DebugType>pdbonly</DebugType>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <Optimize>true</Optimize>
+      <DebugType>pdbonly</DebugType>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <ItemGroup>
@@ -198,11 +218,11 @@
             <DestinationFolder>$(OutDir)MediaInfo-x86\</DestinationFolder>
             <Link>MediaInfo-x86\MediaInfo.dll</Link>
         </Content>
-        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\arm64\MediaInfo.dll">
+        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\arm64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)MediaInfo-ARM64\</DestinationFolder>
             <Link>MediaInfo-ARM64\MediaInfo.dll</Link>
-        </Content>-->
+        </Content>
         <Content Include="LibVlc\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

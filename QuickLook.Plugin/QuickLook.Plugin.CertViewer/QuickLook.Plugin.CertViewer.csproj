@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.CertViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.CertViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>

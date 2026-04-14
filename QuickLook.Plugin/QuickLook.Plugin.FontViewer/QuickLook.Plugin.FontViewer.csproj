@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <RootNamespace>QuickLook.Plugin.FontViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.FontViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -15,6 +15,7 @@
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{CE40160D-5E3C-4A41-9BDA-C4F414C174EB}</ProjectGuid>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Platforms>AnyCPU;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -26,12 +27,29 @@
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <Optimize>false</Optimize>
+      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.FontViewer\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.FontViewer\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+      <DebugType>pdbonly</DebugType>
+      <Optimize>true</Optimize>
+      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.FontViewer\</OutputPath>
+      <DefineConstants>TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

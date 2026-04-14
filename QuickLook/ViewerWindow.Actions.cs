@@ -267,7 +267,7 @@ public partial class ViewerWindow
             return;
         }
 
-        if (ContextObject.IsBlocked)
+        if (ContextObject.IsBusy)
         {
             ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
             {
