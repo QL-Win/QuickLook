@@ -130,8 +130,7 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.VideoViewer/QuickLook.Plugin.VideoViewer.csproj" />
     <BuildDependency Project="QuickLook/QuickLook.csproj" />
     <Platform Project="x86" />
-    <Build Solution="*|Any CPU" />
-    <Build Solution="*|x64" />
+    <Build />
   </Project>
   <Project Path="QuickLook/QuickLook.csproj">
     <BuildDependency Project="QuickLook.Native/QuickLook.Native32/QuickLook.Native32.vcxproj" />
