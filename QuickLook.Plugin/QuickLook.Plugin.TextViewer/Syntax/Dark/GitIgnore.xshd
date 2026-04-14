@@ -29,11 +29,11 @@
                 <Begin>#</Begin>
             </Span>
 
-			<Span name="Negation" stopateol="true" color="#D7BA7D" bold="true" italic="false">
-				<Begin startofline="true">!</Begin>
-			</Span>
+            <Span name="Negation" stopateol="true" color="#D7BA7D" bold="true" italic="false">
+                <Begin startofline="true">!</Begin>
+            </Span>
 
-			<Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\"> 
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\"> 
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>

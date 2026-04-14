@@ -52,7 +52,7 @@
 
     <!-- span for escape sequences -->
     <Span  color="Comment" multiline="false">
-	  <Begin>;</Begin>
+      <Begin>;</Begin>
     </Span>
       <Span  color="Comment" multiline="false">
       <Begin>\#</Begin>

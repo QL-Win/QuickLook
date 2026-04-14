@@ -4,19 +4,19 @@
     
     <Environment> 
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
-		<Selection color="#FFFFFF" bgcolor="#264F78"/>
-		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
-		<CaretMarker color="#AEAFAD"/>
-		<VRuler color="#333333"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333333"/>
 
-		<FoldLine color="#555555" bgcolor="#1E1E1E"/>
-		<FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
-		<SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
+        <FoldLine color="#555555" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
 
-		<EOLMarkers color="#3E3E42"/>
-		<SpaceMarkers color="#404040"/>
-		<TabMarkers color="#404040"/>
-		<InvalidLines color="#3E3E42"/>
+        <EOLMarkers color="#3E3E42"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#3E3E42"/>
     </Environment>
     
     <Properties>
@@ -24,7 +24,7 @@
         <Property name="BlockCommentEnd" value="--&gt;"/>
     </Properties>
 
-	<Digits name="Digits" bold="false" italic="false" color="#B5CEA8"/>
+    <Digits name="Digits" bold="false" italic="false" color="#B5CEA8"/>
     
     <RuleSets>
         <RuleSet ignorecase="false">

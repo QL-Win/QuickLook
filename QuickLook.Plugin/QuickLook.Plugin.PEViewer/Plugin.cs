@@ -28,7 +28,7 @@ public sealed class Plugin : IViewer
     private static readonly string[] _extensions =
     [
         ".exe", ".sys", ".scr", ".ocx", ".cpl",  ".bpl",
-        ".dll", ".ax", ".drv", ".vxd",
+        ".dll", ".winmd", ".ax", ".drv", ".vxd",
         ".mui", ".mun",
         ".tlb",
         ".efi", ".mz",

@@ -37,6 +37,11 @@ public partial class ViewerWindow : INotifyPropertyChanged
 
     private bool _canOldPluginResize;
     private bool _pinned;
+    private bool _isFullscreen;
+    private WindowState _preFullscreenWindowState;
+    private WindowStyle _preFullscreenWindowStyle;
+    private ResizeMode _preFullscreenResizeMode;
+    private Rect _preFullscreenBounds;
 
     public bool Pinned
     {
@@ -50,7 +55,9 @@ public partial class ViewerWindow : INotifyPropertyChanged
     }
 
     public IViewer Plugin { get; private set; }
+
     public ContextObject ContextObject { get; private set; }
+
     public Themes CurrentTheme { get; private set; }
 
     public ICommand CloseCommand { get; private set; }
@@ -126,5 +133,8 @@ public partial class ViewerWindow : INotifyPropertyChanged
             // Update theme for WPF-UI controls
             ThemeManager.Apply(ApplicationTheme.Light);
         }
+
+        if (IsLoaded)
+            ApplyWindowBackgroundEffects();
     }
 }

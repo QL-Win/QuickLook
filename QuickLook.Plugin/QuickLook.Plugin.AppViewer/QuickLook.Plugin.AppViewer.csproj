@@ -16,6 +16,7 @@
         <ProjectGuid>{00D8F3B1-5BE9-4AB8-AE68-16374001887A}</ProjectGuid>
         <Platforms>AnyCPU;ARM64</Platforms>
         <PlatformTarget>AnyCPU</PlatformTarget>
+        <AcceptEula>wix7</AcceptEula>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -91,7 +92,7 @@
 
     <ItemGroup>
         <Reference Include="Microsoft.CSharp" />
-        <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="6.0.2" />
+        <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="7.0.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="PureSharpCompress" Version="0.40.0" />

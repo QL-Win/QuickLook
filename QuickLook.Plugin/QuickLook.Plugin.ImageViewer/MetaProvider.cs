@@ -26,7 +26,7 @@ using System.Xml;
 
 namespace QuickLook.Plugin.ImageViewer;
 
-public class MetaProvider
+public partial class MetaProvider
 {
     private readonly SortedDictionary<string, (string, string)> _cache = []; // [key, [label, value]]
 
@@ -78,6 +78,13 @@ public class MetaProvider
 
         if (int.TryParse(w_.Item2, out var w) && int.TryParse(h_.Item2, out var h))
             return new Size(w, h);
+
+        if (IsDicomFile(_path))
+        {
+            var dicomSize = TryGetDicomSize(_path);
+            if (!dicomSize.IsEmpty)
+                return dicomSize;
+        }
 
         // fallback
         try

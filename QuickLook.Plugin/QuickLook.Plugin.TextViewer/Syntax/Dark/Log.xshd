@@ -9,19 +9,19 @@
 <SyntaxDefinition name="LOG" extensions=".log"
      xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 
-	<Color name="Digits"       foreground="#FFb5cea8" fontStyle="normal" fontWeight="normal" />
-	<Color name="Comment"      foreground="#FF57A64A"/>
-	<Color name="Punctuation"  foreground="White"/>
-	<Color name="String"       foreground="#FFD69D85"/>
-	<Color name="String2"      foreground="#FFD69D85"/>
+    <Color name="Digits"       foreground="#FFb5cea8" fontStyle="normal" fontWeight="normal" />
+    <Color name="Comment"      foreground="#FF57A64A"/>
+    <Color name="Punctuation"  foreground="White"/>
+    <Color name="String"       foreground="#FFD69D85"/>
+    <Color name="String2"      foreground="#FFD69D85"/>
 
-	<Color name="Section"      foreground="#FFdcdcaa"/>
+    <Color name="Section"      foreground="#FFdcdcaa"/>
 
-	<Color name="AmericanDate" foreground="#FFd8a0df"/>
-	<Color name="TimeStamp"    foreground="#FFd8a0df"/>
+    <Color name="AmericanDate" foreground="#FFd8a0df"/>
+    <Color name="TimeStamp"    foreground="#FFd8a0df"/>
 
-	<Color name="ImportantKeywords" foreground="#FFd8a0df" fontWeight="bold" />
-	<Color name="InfoKeywords"      foreground="#FF559CD6" fontWeight="bold" />
+    <Color name="ImportantKeywords" foreground="#FFd8a0df" fontWeight="bold" />
+    <Color name="InfoKeywords"      foreground="#FF559CD6" fontWeight="bold" />
   
   <RuleSet ignoreCase="true">
 
@@ -52,7 +52,7 @@
 
     <!-- span for escape sequences -->
     <Span  color="Comment" multiline="false">
-	  <Begin>;</Begin>
+      <Begin>;</Begin>
     </Span>
       <Span  color="Comment" multiline="false">
       <Begin>\#</Begin>

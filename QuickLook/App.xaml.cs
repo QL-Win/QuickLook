@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Microsoft.Win32;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.NativeMethods;
@@ -230,30 +229,17 @@ public partial class App : Application
 
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
-        UxTheme.ApplyPreferredAppMode(isTracked: true);
-        SystemEvents.SessionEnding += OnSessionEnding;
 
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
 
         CheckUpdate();
-    }
 
-    protected virtual void OnSessionEnding(object sender, SessionEndingEventArgs e)
-    {
-        SystemEvents.SessionEnding -= OnSessionEnding;
-
-        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
-        // https://github.com/QL-Win/QuickLook/issues/1782
-        UxTheme.ApplyPreferredAppMode(isTracked: false);
+        CheckAndRegisterPluginIcon();
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
-        // You must unsubscribe from SystemEvents events before your application exits, or the application may crash
-        // https://github.com/QL-Win/QuickLook/issues/1782
-        UxTheme.ApplyPreferredAppMode(isTracked: false);
-
         base.OnExit(e);
 
         if (!_cleanExit)
@@ -319,7 +305,7 @@ public partial class App : Application
                 // Invalid path, continue to show duplicate message
             }
         }
-        
+
         // Second instance: duplicate
         MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
             MessageBoxButton.OK, MessageBoxImage.Information);
@@ -337,6 +323,12 @@ public partial class App : Application
 
         _ = Task.Delay(120 * 1000).ContinueWith(_ => Updater.CheckForUpdates(true));
         SettingHelper.Set("LastUpdateTicks", DateTime.Now.Ticks);
+    }
+
+    private void CheckAndRegisterPluginIcon()
+    {
+        // TODO: only /register-plugin-icon command to register plugin icon immediately, and can be removed
+        _ = Task.Delay(3000).ContinueWith(_ => PluginIconRegistrationHelper.CheckAndRegisterPluginIcon());
     }
 
     private void RunListener(StartupEventArgs e)

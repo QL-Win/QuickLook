@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="PlantUML" extensions=".puml;.plantuml;.pu;.uml;.iuml;.wsd">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="'"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineCommentApostrophe" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>'</Begin>
+            </Span>
+
+            <Span name="LineCommentSlash" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Keywords" color="Blue" bold="false" italic ="false">
+                <Key word="@startuml"/>
+                <Key word="@enduml"/>
+                <Key word="@startmindmap"/>
+                <Key word="@endmindmap"/>
+                <Key word="@startgantt"/>
+                <Key word="@endgantt"/>
+                <Key word="@startjson"/>
+                <Key word="@endjson"/>
+                <Key word="@startyaml"/>
+                <Key word="@endyaml"/>
+
+                <Key word="skinparam"/>
+                <Key word="title"/>
+                <Key word="header"/>
+                <Key word="footer"/>
+                <Key word="legend"/>
+                <Key word="note"/>
+                <Key word="left"/>
+                <Key word="right"/>
+                <Key word="up"/>
+                <Key word="down"/>
+                <Key word="of"/>
+                <Key word="as"/>
+                <Key word="on"/>
+                <Key word="link"/>
+
+                <Key word="actor"/>
+                <Key word="participant"/>
+                <Key word="boundary"/>
+                <Key word="control"/>
+                <Key word="entity"/>
+                <Key word="database"/>
+                <Key word="collections"/>
+
+                <Key word="class"/>
+                <Key word="interface"/>
+                <Key word="enum"/>
+                <Key word="abstract"/>
+                <Key word="package"/>
+                <Key word="namespace"/>
+                <Key word="component"/>
+                <Key word="node"/>
+                <Key word="state"/>
+                <Key word="artifact"/>
+                <Key word="folder"/>
+                <Key word="frame"/>
+                <Key word="cloud"/>
+                <Key word="rectangle"/>
+
+                <Key word="alt"/>
+                <Key word="else"/>
+                <Key word="opt"/>
+                <Key word="loop"/>
+                <Key word="par"/>
+                <Key word="break"/>
+                <Key word="critical"/>
+                <Key word="group"/>
+                <Key word="box"/>
+
+                <Key word="activate"/>
+                <Key word="deactivate"/>
+                <Key word="destroy"/>
+                <Key word="create"/>
+                <Key word="newpage"/>
+                <Key word="hide"/>
+                <Key word="show"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="MainWindowBackground" Color="#CC292929" />
+    <SolidColorBrush x:Key="MainWindowBackgroundNoTransparent" Color="#FF292929" />
+    <SolidColorBrush x:Key="WindowTextForeground" Color="#FFEFEFEF" />
+    <SolidColorBrush x:Key="WindowTextForegroundAlternative" Color="#FFD4D4D4" />
+    <SolidColorBrush x:Key="CaptionTextHoverBorder" Color="#DDB9B9B9" />
+    <SolidColorBrush x:Key="CaptionButtonIconForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="CaptionButtonHoverBackground" Color="#22FFFFFF" />
+    <SolidColorBrush x:Key="CaptionButtonPressBackground" Color="#44FFFFFF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverForeground" Color="#E5EFEFEF" />
+    <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
+    <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
+    <SolidColorBrush x:Key="CaptionBackground" Color="#CC0E0E0E" />
+</ResourceDictionary>

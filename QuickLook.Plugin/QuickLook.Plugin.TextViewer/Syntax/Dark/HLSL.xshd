@@ -2,91 +2,91 @@
 
 <SyntaxDefinition name="HLSL" extensions=".hlsl;.fx">
 
-	<Environment>
-		<Default color="#D4D4D4" bgcolor="#1E1E1E"/>
-		<Selection color="#FFFFFF" bgcolor="#264F78"/>
-		<LineNumbers color="#858585" bgcolor="#1E1E1E"/>
-		<CaretMarker color="#AEAFAD"/>
-		<VRuler color="#333333"/>
-		<FoldLine color="#555555" bgcolor="#1E1E1E"/>
-		<FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
-		<SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
-		<EOLMarkers color="#3E3E42"/>
-		<SpaceMarkers color="#404040"/>
-		<TabMarkers color="#404040"/>
-		<InvalidLines color="#3E3E42"/>
-	</Environment>
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333333"/>
+        <FoldLine color="#555555" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#CCCCCC" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#2A2A2A"/>
+        <EOLMarkers color="#3E3E42"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#3E3E42"/>
+    </Environment>
 
-	<Properties>
-		<Property name="LineComment" value="//"/>
-		<Property name="BlockCommentBegin" value="/*"/>
-		<Property name="BlockCommentEnd" value="*/"/>
-	</Properties>
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
 
-	<Digits name="Number" color="#B5CEA8"/>
+    <Digits name="Number" color="#B5CEA8"/>
 
-	<RuleSets>
-		<RuleSet ignorecase="false">
-			<Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,	?</Delimiters>
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,    ?</Delimiters>
 
-			<!-- Comments -->
-			<Span name="LineComment" stopateol="true" color="#6A9955">
-				<Begin>//</Begin>
-			</Span>
-			<Span name="BlockComment" stopateol="false" color="#6A9955">
-				<Begin>/*</Begin>
-				<End>*/</End>
-			</Span>
+            <!-- Comments -->
+            <Span name="LineComment" stopateol="true" color="#6A9955">
+                <Begin>//</Begin>
+            </Span>
+            <Span name="BlockComment" stopateol="false" color="#6A9955">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
 
-			<!-- Strings -->
-			<Span name="String" stopateol="false" color="#CE9178">
-				<Begin>"</Begin>
-				<End>"</End>
-			</Span>
+            <!-- Strings -->
+            <Span name="String" stopateol="false" color="#CE9178">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
 
-			<!-- Keywords -->
-			<KeyWords name="Keywords" color="#569CD6" bold="true">
-				<Key word="if"/>
-				<Key word="else"/>
-				<Key word="for"/>
-				<Key word="while"/>
-				<Key word="do"/>
-				<Key word="break"/>
-				<Key word="continue"/>
-				<Key word="return"/>
-				<Key word="discard"/>
-				<Key word="struct"/>
-				<Key word="cbuffer"/>
-				<Key word="register"/>
-				<Key word="sampler"/>
-				<Key word="Texture1D"/>
-				<Key word="Texture2D"/>
-				<Key word="Texture3D"/>
-				<Key word="TextureCube"/>
-				<Key word="SamplerState"/>
-				<Key word="RWTexture2D"/>
-			</KeyWords>
+            <!-- Keywords -->
+            <KeyWords name="Keywords" color="#569CD6" bold="true">
+                <Key word="if"/>
+                <Key word="else"/>
+                <Key word="for"/>
+                <Key word="while"/>
+                <Key word="do"/>
+                <Key word="break"/>
+                <Key word="continue"/>
+                <Key word="return"/>
+                <Key word="discard"/>
+                <Key word="struct"/>
+                <Key word="cbuffer"/>
+                <Key word="register"/>
+                <Key word="sampler"/>
+                <Key word="Texture1D"/>
+                <Key word="Texture2D"/>
+                <Key word="Texture3D"/>
+                <Key word="TextureCube"/>
+                <Key word="SamplerState"/>
+                <Key word="RWTexture2D"/>
+            </KeyWords>
 
-			<!-- Types -->
-			<KeyWords name="Types" color="#4EC9B0">
-				<Key word="float"/>
-				<Key word="float2"/>
-				<Key word="float3"/>
-				<Key word="float4"/>
-				<Key word="float4x4"/>
-				<Key word="int"/>
-				<Key word="int2"/>
-				<Key word="int3"/>
-				<Key word="int4"/>
-				<Key word="bool"/>
-				<Key word="bool2"/>
-				<Key word="bool3"/>
-				<Key word="bool4"/>
-				<Key word="uint"/>
-				<Key word="half"/>
-				<Key word="min16float"/>
-			</KeyWords>
+            <!-- Types -->
+            <KeyWords name="Types" color="#4EC9B0">
+                <Key word="float"/>
+                <Key word="float2"/>
+                <Key word="float3"/>
+                <Key word="float4"/>
+                <Key word="float4x4"/>
+                <Key word="int"/>
+                <Key word="int2"/>
+                <Key word="int3"/>
+                <Key word="int4"/>
+                <Key word="bool"/>
+                <Key word="bool2"/>
+                <Key word="bool3"/>
+                <Key word="bool4"/>
+                <Key word="uint"/>
+                <Key word="half"/>
+                <Key word="min16float"/>
+            </KeyWords>
 
-		</RuleSet>
-	</RuleSets>
+        </RuleSet>
+    </RuleSets>
 </SyntaxDefinition>

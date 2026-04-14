@@ -198,6 +198,14 @@ public class ViewWindowManager : IDisposable
         BeginShowNewWindow(_invokedPath, matchedPlugin);
     }
 
+    public void ToggleFullscreen()
+    {
+        if (!_viewerWindow.IsVisible)
+            return;
+
+        _viewerWindow.ToggleFullscreen();
+    }
+
     private void BeginShowNewWindow(string path, IViewer matchedPlugin)
     {
         _viewerWindow.UnloadPlugin();

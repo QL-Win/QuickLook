@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="PromQL" extensions=".promql">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+    
+    <Digits name="Digits" color="Teal"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;!$</Delimiters>
+            
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Keywords" color="Blue" bold="false" italic ="false">
+                <Key word="sum"/>
+                <Key word="min"/>
+                <Key word="max"/>
+                <Key word="avg"/>
+                <Key word="count"/>
+                <Key word="count_values"/>
+                <Key word="stddev"/>
+                <Key word="stdvar"/>
+                <Key word="bottomk"/>
+                <Key word="topk"/>
+                <Key word="quantile"/>
+
+                <Key word="by"/>
+                <Key word="without"/>
+                <Key word="on"/>
+                <Key word="ignoring"/>
+                <Key word="group_left"/>
+                <Key word="group_right"/>
+                <Key word="offset"/>
+                <Key word="bool"/>
+
+                <Key word="and"/>
+                <Key word="or"/>
+                <Key word="unless"/>
+
+                <Key word="rate"/>
+                <Key word="irate"/>
+                <Key word="increase"/>
+                <Key word="delta"/>
+                <Key word="idelta"/>
+                <Key word="avg_over_time"/>
+                <Key word="sum_over_time"/>
+                <Key word="min_over_time"/>
+                <Key word="max_over_time"/>
+                <Key word="count_over_time"/>
+                <Key word="quantile_over_time"/>
+                <Key word="stddev_over_time"/>
+                <Key word="stdvar_over_time"/>
+                <Key word="predict_linear"/>
+                <Key word="holt_winters"/>
+                <Key word="time"/>
+                <Key word="vector"/>
+                <Key word="scalar"/>
+                <Key word="label_replace"/>
+                <Key word="label_join"/>
+                <Key word="clamp_min"/>
+                <Key word="clamp_max"/>
+                <Key word="abs"/>
+                <Key word="ceil"/>
+                <Key word="floor"/>
+                <Key word="sqrt"/>
+                <Key word="ln"/>
+                <Key word="log2"/>
+                <Key word="log10"/>
+                <Key word="exp"/>
+                <Key word="round"/>
+                <Key word="trunc"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>

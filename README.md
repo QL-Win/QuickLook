@@ -25,6 +25,9 @@
 
 <!-- Animated Badges -->
 <p>
+  <a href="https://quicklookapp.vercel.app">
+    <img src="https://img.shields.io/badge/🌐_Official_Website-Visit_Now-00D9FF?style=for-the-badge&labelColor=000000" alt="Official Website">
+  </a>
   <a href="https://github.com/QL-Win/QuickLook/releases">
     <img src="https://img.shields.io/github/v/release/QL-Win/QuickLook?style=for-the-badge&logo=github&color=00C853&labelColor=000000" alt="Release">
   </a>
@@ -49,7 +52,7 @@
 <br><br>
 
 <!-- Hero Image with Modern Styling -->
-<img src="https://user-images.githubusercontent.com/1687847/64730506-2a60d100-d4e8-11e9-95a6-f13dbd869b2a.jpeg" width="800" alt="QuickLook Preview" style="border-radius: 20px;">
+<img src="https://raw.githubusercontent.com/QL-Win/QuickLook/refs/heads/master/Build/Assets/Branding/01.png" width="800" alt="QuickLook Preview" style="border-radius: 20px;">
 
 <br><br>
 
@@ -790,7 +793,8 @@ Interested in contributing? Check out our development resources:
 
 [@OiCkilL](https://twitter.com/OiCkilL)
 [@QubitsDev](https://twitter.com/qubitsdev)
-[Donno](https://github.com/Donnnno)
+[@Donno](https://github.com/Donnnno)
+[@Shomnipotence](https://github.com/Shomnipotence)
 
 *Fluent UI & Icons*
 
@@ -871,7 +875,7 @@ Every User Matters
 
 <br>
 
-<a href="https://github.com/QL-Win/QuickLook">
+<a href="https://quicklookapp.vercel.app">
   <img src="https://img.shields.io/badge/🏠_Visit_Homepage-white?style=for-the-badge" alt="Homepage">
 </a>
 <a href="https://github.com/QL-Win/QuickLook/wiki">
