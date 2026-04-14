@@ -44,6 +44,12 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 {
     private bool _disposed;
 
+    /// <summary>Maximum number of characters allowed on a single line before it is truncated.</summary>
+    private const int MAX_LINE_LENGTH = 10000;
+
+    /// <summary>Marker appended at the end of a truncated line to indicate omitted content.</summary>
+    private const string ELLIPSIS = "⁞⁞[TRUNCATED]⁞⁞";
+
     static TextViewerPanel()
     {
         // Implementation of the Search Panel Styled with Fluent Theme
@@ -176,17 +182,20 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         }
     }
 
+    /// <summary>
+    /// Fallback visual-layer guard: if a line somehow reaches the renderer still over the limit,
+    /// replace the tail with <see cref="ELLIPSIS"/> so AvalonEdit never tries to measure the full run.
+    /// </summary>
     private class TruncateLongLines : VisualLineElementGenerator
     {
-        private const int MAX_LENGTH = 10000;
-        private const string ELLIPSIS = "⁞⁞[TRUNCATED]⁞⁞";
-
         public override int GetFirstInterestedOffset(int startOffset)
         {
             var line = CurrentContext.VisualLine.LastDocumentLine;
-            if (line.Length > MAX_LENGTH)
+            if (line.Length > MAX_LINE_LENGTH)
             {
-                int ellipsisOffset = line.Offset + MAX_LENGTH - ELLIPSIS.Length;
+                // Position the insertion point so that the visible prefix + ELLIPSIS
+                // exactly fills MAX_LINE_LENGTH characters.
+                int ellipsisOffset = line.Offset + MAX_LINE_LENGTH - ELLIPSIS.Length;
                 if (startOffset <= ellipsisOffset)
                     return ellipsisOffset;
             }
@@ -195,7 +204,114 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
         public override VisualLineElement ConstructElement(int offset)
         {
+            // Consume every character from `offset` to end-of-line and replace
+            // them with a single non-interactive text run showing ELLIPSIS.
             return new FormattedTextElement(ELLIPSIS, CurrentContext.VisualLine.LastDocumentLine.EndOffset - offset);
+        }
+    }
+
+    /// <summary>
+    /// Pre-processes the raw text on the background thread before handing it to AvalonEdit.
+    /// Any line longer than <see cref="MAX_LINE_LENGTH"/> is hard-truncated: the excess characters are
+    /// replaced with <see cref="ELLIPSIS"/> directly in the string, so the syntax highlighter and
+    /// WPF word-wrap logic never see the original long content.
+    /// </summary>
+    /// <param name="text">The decoded file text. Modified in-place when truncation occurs.</param>
+    /// <returns>
+    /// <see langword="true"/> when at least one line was shortened; used to decide whether to
+    /// install <see cref="TruncatedLineDecolorizer"/>.
+    /// </returns>
+    private static bool TruncateLongLinesInText(ref string text)
+    {
+        // Fast-path: if the whole text is shorter than the limit, no line can exceed it.
+        if (text.Length <= MAX_LINE_LENGTH)
+            return false;
+
+        bool found = false;
+        var sb = new System.Text.StringBuilder(text.Length);
+        int lineStart = 0;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == '\r' || c == '\n')
+            {
+                int lineLen = i - lineStart;
+                if (lineLen > MAX_LINE_LENGTH)
+                {
+                    // Keep only the first (MAX_LINE_LENGTH - ELLIPSIS.Length) chars,
+                    // then append the marker so the total stays at MAX_LINE_LENGTH.
+                    sb.Append(text, lineStart, MAX_LINE_LENGTH - ELLIPSIS.Length);
+                    sb.Append(ELLIPSIS);
+                    found = true;
+                }
+                else
+                {
+                    sb.Append(text, lineStart, lineLen);
+                }
+
+                sb.Append(c);
+                // Consume the LF that follows a CR so we don't double-count it.
+                if (c == '\r' && i + 1 < text.Length && text[i + 1] == '\n')
+                {
+                    i++;
+                    sb.Append('\n');
+                }
+                lineStart = i + 1;
+            }
+        }
+
+        // Handle the last line when there is no trailing newline.
+        if (lineStart < text.Length)
+        {
+            int lineLen = text.Length - lineStart;
+            if (lineLen > MAX_LINE_LENGTH)
+            {
+                sb.Append(text, lineStart, MAX_LINE_LENGTH - ELLIPSIS.Length);
+                sb.Append(ELLIPSIS);
+                found = true;
+            }
+            else
+            {
+                sb.Append(text, lineStart, lineLen);
+            }
+        }
+
+        if (found)
+            text = sb.ToString();
+
+        return found;
+    }
+
+    /// <summary>
+    /// Runs after the syntax highlighter to strip all coloring from truncated lines.
+    /// A line is considered truncated when its last characters match <see cref="ELLIPSIS"/>.
+    /// Resetting the foreground to the editor's base color effectively removes
+    /// any syntax-highlight spans, keeping the display clean and readable.
+    /// </summary>
+    private class TruncatedLineDecolorizer : DocumentColorizingTransformer
+    {
+        private readonly TextViewerPanel _owner;
+
+        public TruncatedLineDecolorizer(TextViewerPanel owner) => _owner = owner;
+
+        protected override void ColorizeLine(DocumentLine line)
+        {
+            // Skip lines that are too short to contain the marker.
+            if (line.Length < ELLIPSIS.Length)
+                return;
+
+            // Check whether the line ends with the truncation marker.
+            int markerStart = line.EndOffset - ELLIPSIS.Length;
+            if (CurrentContext.Document.GetText(markerStart, ELLIPSIS.Length) == ELLIPSIS)
+            {
+                // Override the entire line's foreground with the editor default,
+                // which removes any previously applied syntax-highlight colors.
+                ChangeLinePart(line.Offset, line.EndOffset, element =>
+                {
+                    element.TextRunProperties.SetForegroundBrush(_owner.Foreground);
+                });
+            }
         }
     }
 
@@ -240,6 +356,10 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
             var encoding = EncodingDetector.DetectFromBytes(bufferCopy);
             var text = encoding.GetString(bufferCopy);
+
+            // Truncate overly long lines to prevent crashes and lag
+            bool hasLongLines = TruncateLongLinesInText(ref text);
+
             var doc = new TextDocument(text);
             doc.SetOwnerThread(Dispatcher.Thread);
 
@@ -263,6 +383,13 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     {
                         TextArea.TextView.LineTransformers.Add(lineTransformer);
                     }
+                }
+
+                // Only install the decolorizer when the file actually contained long lines,
+                // to avoid the per-line overhead on normal files.
+                if (hasLongLines)
+                {
+                    TextArea.TextView.LineTransformers.Add(new TruncatedLineDecolorizer(this));
                 }
 
                 if (highlighting.IsDark)
