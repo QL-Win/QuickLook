@@ -168,7 +168,7 @@ public static class WindowHelper
         Marshal.FreeHGlobal(accentPtr);
     }
 
-    public static void EnableAcrylicBlur(Window window, Color tintColor, bool isDarkTheme)
+    public static void EnableAcrylicBlur(Window window, Color tintColor, bool isDarkTheme, double tintOpacity = 0.8)
     {
         window.Background = Brushes.Transparent;
 
@@ -193,7 +193,7 @@ public static class WindowHelper
         var accent = new AccentPolicy();
         var accentStructSize = Marshal.SizeOf(accent);
         accent.AccentState = AccentState.AccentEnableAcrylicblurbehind;
-        accent.GradientColor = ToAbgr(tintColor, 0.8);
+        accent.GradientColor = ToAbgr(tintColor, tintOpacity);
 
         var accentPtr = Marshal.AllocHGlobal(accentStructSize);
         Marshal.StructureToPtr(accent, accentPtr, false);

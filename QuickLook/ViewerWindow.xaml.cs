@@ -279,11 +279,11 @@ public partial class ViewerWindow : Window
             case SystembackdropType.Acrylic10:
                 if (App.IsWin10 || App.IsWin11)
                 {
-                    var acrylicTint = GetAcrylicTintColor();
+                    var acrylicTint = GetAcrylic10TintColor();
 
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark, 0.7);
                     Background = Brushes.Transparent;
                 }
                 else
@@ -363,6 +363,27 @@ public partial class ViewerWindow : Window
         }
 
         return ((SolidColorBrush)FindResource("MainWindowBackground")).Color;
+    }
+
+    private Color GetAcrylic10TintColor()
+    {
+        var customColor = SettingHelper.Get("WindowBackgroundColor", string.Empty, "QuickLook");
+
+        if (!string.IsNullOrEmpty(customColor))
+        {
+            try
+            {
+                return ((SolidColorBrush)new BrushConverter().ConvertFromString(customColor)).Color;
+            }
+            catch
+            {
+                // Ignore invalid color
+            }
+        }
+
+        return CurrentTheme == Themes.Dark
+            ? Color.FromRgb(0x17, 0x17, 0x17)
+            : Color.FromRgb(0xF2, 0xF2, 0xF2);
     }
 
     private static SystembackdropType GetBackdropOption()
