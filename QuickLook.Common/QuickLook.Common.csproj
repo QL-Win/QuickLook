@@ -4,7 +4,6 @@
         <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Common</RootNamespace>
         <AssemblyName>QuickLook.Common</AssemblyName>
-        <Platforms>AnyCPU;x64</Platforms>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <UseWPF>true</UseWPF>
@@ -22,6 +21,8 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>app.png</PackageIcon>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

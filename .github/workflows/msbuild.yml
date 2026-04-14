@@ -11,7 +11,7 @@ on:
 
 env:
   # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: ./QuickLook.sln
+  SOLUTION_FILE_PATH: ./QuickLook.slnx
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
