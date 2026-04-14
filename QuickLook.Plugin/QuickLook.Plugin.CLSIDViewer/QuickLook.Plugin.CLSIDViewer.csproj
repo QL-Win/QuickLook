@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.CLSIDViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.CLSIDViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -14,7 +14,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{538FD6BA-2AF1-4DDA-93A2-6C0A12B00843}</ProjectGuid>
-        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

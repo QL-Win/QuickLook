@@ -2,11 +2,10 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.ArchiveViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.ArchiveViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
-        <PlatformTarget>AnyCPU</PlatformTarget>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
@@ -17,7 +16,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{DE2E3BC5-6AB2-4420-A160-48C7A7506C1C}</ProjectGuid>
-        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

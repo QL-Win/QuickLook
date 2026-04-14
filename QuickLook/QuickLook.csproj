@@ -2,16 +2,14 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <AssemblyName>QuickLook</AssemblyName>
         <FileAlignment>512</FileAlignment>
-        <PlatformTarget>ARM64</PlatformTarget>
         <ApplicationIcon>Resources\app.ico</ApplicationIcon>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
         <LangVersion>latest</LangVersion>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -20,6 +18,8 @@
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <WarningLevel>4</WarningLevel>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.ThumbnailViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.ThumbnailViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -14,7 +14,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{B4F7C88D-C79D-49E7-A1FB-FB69CF72585F}</ProjectGuid>
-        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

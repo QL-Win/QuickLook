@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.PluginInstaller</RootNamespace>
         <AssemblyName>QuickLook.Plugin.PluginInstaller</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -14,7 +14,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{BD58F3FC-7601-47BA-AAA1-D8A9D54A33DA}</ProjectGuid>
-        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

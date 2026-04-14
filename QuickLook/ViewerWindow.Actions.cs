@@ -70,17 +70,17 @@ public partial class ViewerWindow
         {
             // Exit fullscreen
             _isFullscreen = false;
-            
+
             // Restore window properties
             WindowStyle = _preFullscreenWindowStyle;
             ResizeMode = _preFullscreenResizeMode;
-            
+
             // Restore position and size
             Left = _preFullscreenBounds.Left;
             Top = _preFullscreenBounds.Top;
             Width = _preFullscreenBounds.Width;
             Height = _preFullscreenBounds.Height;
-            
+
             // Restore window state last to avoid flicker
             WindowState = _preFullscreenWindowState;
         }
@@ -88,12 +88,12 @@ public partial class ViewerWindow
         {
             // Enter fullscreen
             _isFullscreen = true;
-            
+
             // Save current window properties before any changes
             _preFullscreenWindowState = WindowState;
             _preFullscreenWindowStyle = WindowStyle;
             _preFullscreenResizeMode = ResizeMode;
-            
+
             // Get current bounds (account for maximized state)
             if (WindowState == WindowState.Maximized)
             {
@@ -103,26 +103,26 @@ public partial class ViewerWindow
             {
                 _preFullscreenBounds = new Rect(Left, Top, Width, Height);
             }
-            
+
             // Get the screen bounds where the window is currently located
             var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
             var screenBounds = screen.Bounds;
-            
+
             // Get DPI scale factor for proper coordinate conversion
             // scale.Horizontal and scale.Vertical contain the DPI scaling ratios (e.g., 1.5 for 150%)
             var scale = DisplayDeviceHelper.GetScaleFactorFromWindow(this);
-            
+
             // Set to normal state first to allow manual positioning
             WindowState = WindowState.Normal;
-            
+
             // Hide window chrome for true fullscreen
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
-            
+
             // Convert screen bounds from physical pixels to DIPs for WPF
             var dipWidth = screenBounds.Width / scale.Horizontal;
             var dipHeight = screenBounds.Height / scale.Vertical;
-            
+
             // Use MoveWindow to set position and size with proper DPI handling
             this.MoveWindow(screenBounds.Left, screenBounds.Top, dipWidth, dipHeight);
         }
@@ -267,7 +267,7 @@ public partial class ViewerWindow
             return;
         }
 
-        if (ContextObject.IsBusy)
+        if (ContextObject.IsBlocked)
         {
             ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
             {

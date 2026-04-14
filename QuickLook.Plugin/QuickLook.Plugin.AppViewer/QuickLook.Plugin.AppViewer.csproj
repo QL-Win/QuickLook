@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.AppViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.AppViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -14,9 +14,9 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{00D8F3B1-5BE9-4AB8-AE68-16374001887A}</ProjectGuid>
-        <Platforms>AnyCPU;ARM64</Platforms>
-        <PlatformTarget>AnyCPU</PlatformTarget>
         <AcceptEula>wix7</AcceptEula>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net481</TargetFramework>
+        <TargetFramework>net462</TargetFramework>
         <RootNamespace>QuickLook.Plugin.FontViewer</RootNamespace>
         <AssemblyName>QuickLook.Plugin.FontViewer</AssemblyName>
         <FileAlignment>512</FileAlignment>
@@ -15,7 +15,8 @@
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{CE40160D-5E3C-4A41-9BDA-C4F414C174EB}</ProjectGuid>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Platforms>AnyCPU;ARM64</Platforms>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

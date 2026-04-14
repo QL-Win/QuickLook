@@ -12,10 +12,10 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-			<local:TimeTickToShortStringConverter x:Key="TimeTickToShortStringConverter" />
-			<local:TimeToShortStringConverter x:Key="TimeToShortStringConverter" />
-			<local:TimeToLongConverter x:Key="TimeToLongConverter" />
-			<local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
+            <local:TimeTickToShortStringConverter x:Key="TimeTickToShortStringConverter" />
+            <local:TimeToShortStringConverter x:Key="TimeToShortStringConverter" />
+            <local:TimeToLongConverter x:Key="TimeToLongConverter" />
+            <local:VolumeToIconConverter x:Key="VolumeToIconConverter" />
             <local:CoverArtConverter x:Key="CoverArtConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
@@ -207,7 +207,7 @@
                     </Button.Style>
                 </Button>
                 <Button x:Name="buttonTime"
-						Visibility="Hidden"
+                        Visibility="Hidden"
                         Width="NaN"
                         MinWidth="37"
                         DockPanel.Dock="Right"
@@ -233,7 +233,7 @@
                     </TextBlock>
                 </Button>
                 <Button x:Name="buttonTimeWPF"
-						Visibility="Hidden"
+                        Visibility="Hidden"
                         Width="NaN"
                         MinWidth="37"
                         DockPanel.Dock="Right"
@@ -241,7 +241,7 @@
                         Tag="Time"
                         ToolTip="Time Elapsed/Remaining">
                     <TextBlock VerticalAlignment="Center"
-							   x:Name="textProgress"
+                               x:Name="textProgress"
                                FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
                                FontSize="11"
                                Foreground="{DynamicResource CaptionButtonIconForeground}">
@@ -260,23 +260,23 @@
                     </TextBlock>
                 </Button>
                 <Slider x:Name="sliderProgress"
-						Visibility="Hidden"
+                        Visibility="Hidden"
                         Delay="1"
                         LargeChange="1"
                         Maximum="{Binding ElementName=mediaElement, Path=MediaDuration}"
                         SmallChange="1"
                         Style="{StaticResource PositionSliderStyle}"
                         Value="{Binding MediaPosition, ElementName=mediaElement}" />
-				<Slider x:Name="sliderProgressWPF"
-						Thumb.DragStarted="Seek_Drag_Started"  Thumb.DragCompleted="Seek_Drag_Completed" ValueChanged="Seek_Value_Changed"
-						Visibility="Hidden"
+                <Slider x:Name="sliderProgressWPF"
+                        Thumb.DragStarted="Seek_Drag_Started"  Thumb.DragCompleted="Seek_Drag_Completed" ValueChanged="Seek_Value_Changed"
+                        Visibility="Hidden"
                         Delay="1"
                         LargeChange="1"
                         Maximum="{Binding ElementName=mediaElementWPF, Path=NaturalDuration, Converter={StaticResource TimeToLongConverter}}"
                         SmallChange="1"
                         Style="{StaticResource PositionSliderStyle}"
                         Value="{Binding Position, ElementName=mediaElementWPF, Converter={StaticResource TimeToLongConverter}}" />
-			</DockPanel>
+            </DockPanel>
         </Grid>
         <Grid x:Name="volumeSliderLayer"
               Background="Transparent"
