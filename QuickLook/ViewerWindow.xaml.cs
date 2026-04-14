@@ -385,11 +385,10 @@ public partial class ViewerWindow : Window
     private static Brush GetAcrylic10TintLuminosityOpacityBackground(bool isDarkTheme)
     {
         var acrylicTintLuminosityOpacity = 0.44d;
-        return new LuminosityBrush
-        {
-            TintLuminosityOpacity = acrylicTintLuminosityOpacity,
-            IsDarkTheme = isDarkTheme,
-        }.ToBrush();
+        var t = acrylicTintLuminosityOpacity * (isDarkTheme ? 0.55d : 1.25d);
+        var brush = new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), 255, 255, 255));
+        brush.Freeze();
+        return brush;
     }
 
     private static SystembackdropType GetBackdropOption()
@@ -448,74 +447,5 @@ public partial class ViewerWindow : Window
         var hide = (Storyboard)windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
 
         hide.Begin();
-    }
-}
-
-public class LuminosityBrush : Freezable
-{
-    public static readonly DependencyProperty TintLuminosityOpacityProperty =
-        DependencyProperty.Register(
-            nameof(TintLuminosityOpacity),
-            typeof(double),
-            typeof(LuminosityBrush),
-            new FrameworkPropertyMetadata(0.5d, FrameworkPropertyMetadataOptions.AffectsRender));
-
-    public double TintLuminosityOpacity
-    {
-        get => (double)GetValue(TintLuminosityOpacityProperty);
-        set => SetValue(TintLuminosityOpacityProperty, value);
-    }
-
-    public static readonly DependencyProperty IsDarkThemeProperty =
-       DependencyProperty.Register(
-           nameof(IsDarkTheme),
-           typeof(bool),
-           typeof(LuminosityBrush),
-           new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
-
-    public bool IsDarkTheme
-    {
-        get => (bool)GetValue(IsDarkThemeProperty);
-        set => SetValue(IsDarkThemeProperty, value);
-    }
-
-    protected override Freezable CreateInstanceCore()
-    {
-        return new LuminosityBrush();
-    }
-
-    private Brush _cached;
-
-    public Brush ToBrush()
-    {
-        if (_cached != null)
-            return _cached;
-
-        double t = TintLuminosityOpacity
-            * (IsDarkTheme ? 0.55d : 1.25d);
-
-        var group = new DrawingGroup();
-
-        // Brightening Layer (White)
-        group.Children.Add(new GeometryDrawing(
-            new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), 255, 255, 255)),
-            null,
-            new RectangleGeometry(new Rect(0d, 0d, 1d, 1d))));
-
-        // Dark Layer (Black)
-        group.Children.Add(new GeometryDrawing(
-            new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.1d), 0, 0, 0)),
-            null,
-            new RectangleGeometry(new Rect(0d, 0d, 1d, 1d))));
-
-        var brush = new DrawingBrush(group)
-        {
-            Stretch = Stretch.Fill,
-        };
-
-        brush.Freeze();
-        _cached = brush;
-
-        return brush;
     }
 }
