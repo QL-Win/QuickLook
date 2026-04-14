@@ -41,6 +41,10 @@ namespace QuickLook;
 
 public partial class ViewerWindow : Window
 {
+    private const double Acrylic10TintOpacity = 0.7;
+    private static readonly Color Acrylic10DarkTintColor = Color.FromRgb(0x17, 0x17, 0x17);
+    private static readonly Color Acrylic10LightTintColor = Color.FromRgb(0xF2, 0xF2, 0xF2);
+
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
     private string _path = string.Empty;
@@ -283,7 +287,7 @@ public partial class ViewerWindow : Window
 
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark, 0.7);
+                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark, Acrylic10TintOpacity);
                     Background = Brushes.Transparent;
                 }
                 else
@@ -381,9 +385,7 @@ public partial class ViewerWindow : Window
             }
         }
 
-        return CurrentTheme == Themes.Dark
-            ? Color.FromRgb(0x17, 0x17, 0x17)
-            : Color.FromRgb(0xF2, 0xF2, 0xF2);
+        return CurrentTheme == Themes.Dark ? Acrylic10DarkTintColor : Acrylic10LightTintColor;
     }
 
     private static SystembackdropType GetBackdropOption()
