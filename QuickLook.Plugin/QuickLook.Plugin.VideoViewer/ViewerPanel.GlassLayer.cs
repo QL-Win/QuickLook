@@ -31,7 +31,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     /// <summary>
     /// Load and insert the GlassLayer control to the videoControlContainer.
     /// </summary>
-    
     private partial void LoadAndInsertGlassLayer()
     {
         // Replace XAML with C# dynamic construction
@@ -116,7 +115,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
             var blurredElementSetter = new Setter((DependencyProperty)blurredElementProperty, new Binding()
             {
-                ElementName = isArm64 ? "mediaElementWPF" : "mediaElement"
+                ElementName = "mediaElement"
             });
             style.Setters.Add(blurredElementSetter);
 
@@ -132,7 +131,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
             var dataTriggerSetter = new Setter((DependencyProperty)blurredElementProperty, new Binding()
             {
-                ElementName = isArm64 ? "mediaElementWPF" : "mediaElement"
+                ElementName = "mediaElement"
             });
             dataTrigger.Setters.Add(dataTriggerSetter);
 

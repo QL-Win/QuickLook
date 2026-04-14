@@ -28,12 +28,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -47,9 +45,6 @@ namespace QuickLook.Plugin.VideoViewer;
 
 public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
-    private DispatcherTimer timer;
-    private bool IsSeeked;
-
     private readonly ContextObject _context;
     private BitmapSource _coverArt;
     private DispatcherTimer _lyricTimer;
@@ -60,7 +55,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private bool _isPlaying;
     private bool _wasPlaying;
     private bool _shouldLoop;
-    private readonly bool isArm64 = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
 
     public ViewerPanel(ContextObject context)
     {
@@ -72,41 +66,25 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         _context = context;
 
+        mediaElement.MediaUriPlayer.LAVFilterDirectory =
+            IntPtr.Size == 8 ? @"LAVFilters-x64\" : @"LAVFilters-x86\";
+
         //ShowViedoControlContainer(null, null);
         viewerPanel.PreviewMouseMove += ShowViedoControlContainer;
 
-
-        if (isArm64)
-        {
-            InitializeArm64();
-        } else
-        {
-            InitializeDefault();
-        }
-
-        ShouldLoop = SettingHelper.Get("ShouldLoop", false, "QuickLook.Plugin.VideoViewer");
-
-        buttonPlayPause.Click += TogglePlayPause;
-        buttonLoop.Click += ToggleShouldLoop;
-        buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
-        volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
-
-
-        PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
-    }
-
-    private void InitializeDefault()
-    {
-        sliderProgress.Visibility = Visibility.Visible;
-        buttonTime.Visibility = Visibility.Visible;
-
-        mediaElement.MediaUriPlayer.LAVFilterDirectory = (IntPtr.Size == 8 ? @"LAVFilters-x64\" : @"LAVFilters-x86\");
         mediaElement.MediaUriPlayer.PlayerStateChanged += PlayerStateChanged;
         mediaElement.MediaOpened += MediaOpened;
         mediaElement.MediaEnded += MediaEnded;
         mediaElement.MediaFailed += MediaFailed;
 
+        ShouldLoop = SettingHelper.Get("ShouldLoop", false, "QuickLook.Plugin.VideoViewer");
+
+        buttonPlayPause.Click += TogglePlayPause;
+        buttonLoop.Click += ToggleShouldLoop;
         buttonTime.Click += (_, _) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
+        buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
+        volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
+
         sliderProgress.PreviewMouseDown += (_, e) =>
         {
             _wasPlaying = mediaElement.IsPlaying;
@@ -116,66 +94,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         {
             if (_wasPlaying) mediaElement.Play();
         };
-    }
 
-    private void InitializeArm64()
-    {
-        sliderProgressWPF.Visibility = Visibility.Visible;
-        buttonTimeWPF.Visibility = Visibility.Visible;
-
-        mediaElementWPF.MediaOpened += MediaOpened;
-        mediaElementWPF.MediaEnded += MediaEnded;
-
-        buttonTimeWPF.Click += (_, _) => buttonTimeWPF.Tag = (string)buttonTimeWPF.Tag == "Time" ? "Length" : "Time";
-
-
-        timer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-        timer.Tick += Seek_Timer;
-        timer.Start();
-
-        buttonTimeWPF.Click += (_, _) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
-
-        sliderProgressWPF.PreviewMouseDown += (_, e) =>
-        {
-            _wasPlaying = IsPlaying;
-            mediaElementWPF.Pause();
-        };
-        sliderProgressWPF.PreviewMouseUp += (_, _) =>
-        {
-            if (_wasPlaying) mediaElementWPF.Play();
-        };
-
-        IsSeeked = false;
-    }
-
-    private void Seek_Timer(object sender, EventArgs e)
-    {
-        if ((mediaElementWPF.Source != null) && (mediaElementWPF.NaturalDuration.HasTimeSpan) && (!IsSeeked))
-        {
-            sliderProgressWPF.Minimum = 0;
-            sliderProgressWPF.Maximum = mediaElementWPF.NaturalDuration.TimeSpan.TotalSeconds;
-            sliderProgressWPF.Value = mediaElementWPF.Position.TotalSeconds;
-
-        }
-    }
-    private void Seek_Drag_Started(object sender, DragStartedEventArgs e)
-    {
-        IsSeeked = true;
-    }
-    private void Seek_Drag_Completed(object sender, DragCompletedEventArgs e)
-    {
-        IsSeeked = false;
-        mediaElementWPF.Position = TimeSpan.FromSeconds(sliderProgressWPF.Value);
-    }
-    private void Seek_Value_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
-    {
-        if ((string)buttonTimeWPF.Tag == "Time")
-            textProgress.Text = TimeSpan.FromSeconds(sliderProgressWPF.Value).ToString(@"hh\:mm\:ss");
-        else
-            textProgress.Text = TimeSpan.FromSeconds(sliderProgressWPF.Maximum).ToString(@"hh\:mm\:ss");
+        PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
     }
 
     private partial void LoadAndInsertGlassLayer();
@@ -210,12 +130,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             if (value == _shouldLoop) return;
             _shouldLoop = value;
             OnPropertyChanged();
-            if (!IsPlaying)
-            {
-                IsPlaying = true;
-
-                if (isArm64) mediaElementWPF.Play(); else mediaElement.Play();
-            }
         }
     }
 
@@ -239,18 +153,15 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
         try
         {
-            if (timer!=null)
-            timer.Stop();
             mediaElement?.Close();
-            mediaElementWPF?.Close();
 
             Task.Run(() =>
             {
                 mediaElement?.MediaUriPlayer.Dispose();
                 mediaElement = null;
-                mediaElementWPF = null;
             });
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.WriteLine(e);
         }
@@ -274,21 +185,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void MediaOpened(object o, RoutedEventArgs args)
     {
-        if (isArm64)
-        {
-            if (mediaElementWPF == null)
-                return;
+        if (mediaElement == null)
+            return;
 
-            HasVideo = mediaElementWPF.HasVideo;
-
-        } else
-        {
-            if (mediaElement == null)
-                return;
-
-            HasVideo = mediaElement.HasVideo;
-
-        }
+        HasVideo = mediaElement.HasVideo;
 
         _context.IsBusy = false;
     }
@@ -309,42 +209,21 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void MediaEnded(object sender, RoutedEventArgs e)
     {
-        if (isArm64)
+        if (mediaElement == null)
+            return;
+
+        mediaElement.MediaPosition = 0L;
+        if (ShouldLoop)
         {
-            if (mediaElementWPF == null)
-                return;
+            IsPlaying = true;
 
-            mediaElementWPF.Position = new TimeSpan(0L);
-            if (ShouldLoop)
-            {
-                IsPlaying = true;
-
-                mediaElementWPF.Play();
-            } else
-            {
-                IsPlaying = false;
-
-                mediaElementWPF.Pause();
-            }
-
-        } else
+            mediaElement.Play();
+        }
+        else
         {
-            if (mediaElement == null)
-                return;
+            IsPlaying = false;
 
-            mediaElement.MediaPosition = 0L;
-            if (ShouldLoop)
-            {
-                IsPlaying = true;
-
-                mediaElement.Play();
-            } else
-            {
-                IsPlaying = false;
-
-                mediaElement.Pause();
-            }
-
+            mediaElement.Pause();
         }
     }
 
@@ -406,7 +285,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             var coverData = info.Get(StreamKind.General, 0, "Cover_Data");
             var coverBytes = CoverDataExtractor.Extract(coverData);
             CoverArt = CoverDataExtractor.Extract(coverBytes);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.WriteLine(e);
             metaTitle.Text = Path.GetFileName(path);
@@ -461,9 +341,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             {
                 if (_lyricLines != null && _lyricLines.Length != 0)
                 {
-                    var lyric = LrcHelper.GetNearestLrc(_lyricLines, new TimeSpan(isArm64 ? mediaElementWPF.Position.Ticks : mediaElement.MediaPosition));
+                    var lyric = LrcHelper.GetNearestLrc(_lyricLines, new TimeSpan(mediaElement.MediaPosition));
                     metaLyric.Text = lyric?.LrcText?.Trim();
-                } else
+                }
+                else
                 {
                     metaLyric.Text = null;
                     metaLyric.Visibility = Visibility.Collapsed;
@@ -472,7 +353,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             _lyricTimer.Start();
 
             metaLyric.Visibility = Visibility.Visible;
-        } else
+        }
+        else
         {
             metaLyric.Visibility = Visibility.Collapsed;
         }
@@ -480,10 +362,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     public double LinearVolume
     {
-        get => (isArm64 ? mediaElementWPF.Volume : mediaElement.Volume);
+        get => mediaElement.Volume;
         set
         {
-            if (isArm64) mediaElementWPF.Volume = value; else mediaElement.Volume = value;
+            mediaElement.Volume = value;
             OnPropertyChanged();
         }
     }
@@ -495,53 +377,17 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void TogglePlayPause(object sender, EventArgs e)
     {
-        if (isArm64)
-        {
-            if (IsPlaying)
-            {
-                IsPlaying = false;
-                mediaElementWPF.Pause();
-            } else
-            {
-                IsPlaying = true;
-                mediaElementWPF.Play();
-            }
-        } else
-        {
-            if (mediaElement.IsPlaying)
-                mediaElement.Pause();
-            else
-                mediaElement.Play();
-        }
+        if (mediaElement.IsPlaying)
+            mediaElement.Pause();
+        else
+            mediaElement.Play();
     }
 
     private void ToggleShouldLoop(object sender, EventArgs e)
     {
         ShouldLoop = !ShouldLoop;
     }
-    public void LoadAndPlayWPF(string path, MediaInfoLib info)
-    {
-        // Detect whether it is other playback formats
-        if (!HasVideo)
-        {
-            string audioCodec = info?.Get(StreamKind.Audio, 0, "Format");
 
-            if (audioCodec?.Equals("MIDI", StringComparison.OrdinalIgnoreCase) ?? false)
-            {
-                _midiPlayer = new MidiPlayer(this, _context);
-                _midiPlayer.LoadAndPlay(path);
-                return; // Midi player will handle the playback at all
-            }
-        }
-
-        UpdateMeta(path, info);
-
-        mediaElementWPF.Source = new Uri(path);
-        // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
-        LinearVolume = SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer");
-
-        mediaElementWPF.Play();
-    }
     public void LoadAndPlay(string path, MediaInfoLib info)
     {
         // Detect whether it is other playback formats
