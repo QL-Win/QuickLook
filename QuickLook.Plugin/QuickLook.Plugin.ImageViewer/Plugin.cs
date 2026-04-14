@@ -144,13 +144,13 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             if (!File.Exists(path))
                 return false;
 
-            ReadOnlySpan<byte> pngSignature = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-            ReadOnlySpan<byte> jpegSignature = new byte[] { 0xFF, 0xD8, 0xFF };
-            ReadOnlySpan<byte> gif87Signature = new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 };
-            ReadOnlySpan<byte> gif89Signature = new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 };
-            ReadOnlySpan<byte> bmpSignature = new byte[] { 0x42, 0x4D };
-            ReadOnlySpan<byte> webpRiffSignature = new byte[] { 0x52, 0x49, 0x46, 0x46 };
-            ReadOnlySpan<byte> webpWebpSignature = new byte[] { 0x57, 0x45, 0x42, 0x50 };
+            ReadOnlySpan<byte> pngSignature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+            ReadOnlySpan<byte> jpegSignature = [0xFF, 0xD8, 0xFF];
+            ReadOnlySpan<byte> gif87Signature = [0x47, 0x49, 0x46, 0x38, 0x37, 0x61];
+            ReadOnlySpan<byte> gif89Signature = [0x47, 0x49, 0x46, 0x38, 0x39, 0x61];
+            ReadOnlySpan<byte> bmpSignature = [0x42, 0x4D];
+            ReadOnlySpan<byte> webpRiffSignature = [0x52, 0x49, 0x46, 0x46];
+            ReadOnlySpan<byte> webpWebpSignature = [0x57, 0x45, 0x42, 0x50];
 
             const int maxSignatureLength = 12;
 
@@ -164,8 +164,8 @@ public sealed partial class Plugin : IViewer, IMoreMenu
                 return false;
 
             // PNG: 89 50 4E 47 0D 0A 1A 0A
-           if (bytesRead >= pngSignature.Length &&
-                buffer.AsSpan(0, pngSignature.Length).SequenceEqual(pngSignature))
+            if (bytesRead >= pngSignature.Length &&
+                 buffer.AsSpan(0, pngSignature.Length).SequenceEqual(pngSignature))
             {
                 return true;
             }
