@@ -22,10 +22,8 @@ using QuickLook.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
@@ -41,10 +39,6 @@ namespace QuickLook;
 
 public partial class ViewerWindow : Window
 {
-    private const double Acrylic10TintOpacity = 0.7;
-    private static readonly Color Acrylic10DarkTintColor = Color.FromRgb(0x17, 0x17, 0x17);
-    private static readonly Color Acrylic10LightTintColor = Color.FromRgb(0xF2, 0xF2, 0xF2);
-
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
     private string _path = string.Empty;
@@ -267,10 +261,8 @@ public partial class ViewerWindow : Window
                 }
                 else if (App.IsWin10)
                 {
-                    var acrylicTint = GetAcrylicTintColor();
-
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    WindowHelper.EnableAcrylicBlur(this, GetAcrylicTintColor(), CurrentTheme == Themes.Dark);
                     Background = Brushes.Transparent;
                 }
                 else
@@ -283,12 +275,10 @@ public partial class ViewerWindow : Window
             case SystembackdropType.Acrylic10:
                 if (App.IsWin10 || App.IsWin11)
                 {
-                    var acrylicTint = GetAcrylic10TintColor();
-
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark, Acrylic10TintOpacity);
-                    Background = Brushes.Transparent;
+                    WindowHelper.EnableAcrylicBlur(this, GetAcrylic10TintColor(), CurrentTheme == Themes.Dark, GetAcrylic10TintOpacity());
+                    Background = GetAcrylic10TintLuminosityOpacityBackground(CurrentTheme == Themes.Dark);
                 }
                 else
                 {
@@ -306,19 +296,15 @@ public partial class ViewerWindow : Window
                 }
                 else if (App.IsWin11)
                 {
-                    var acrylicTint = GetAcrylicTintColor();
-
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
                     WindowHelper.DisableDwmBlur(this); // Restore rounded corners on Windows 11
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    WindowHelper.EnableAcrylicBlur(this, GetAcrylicTintColor(), CurrentTheme == Themes.Dark);
                     Background = Brushes.Transparent;
                 }
                 else if (App.IsWin10)
                 {
-                    var acrylicTint = GetAcrylicTintColor();
-
                     WindowChrome.GetWindowChrome(this)?.GlassFrameThickness = new Thickness(0d);
-                    WindowHelper.EnableAcrylicBlur(this, acrylicTint, CurrentTheme == Themes.Dark);
+                    WindowHelper.EnableAcrylicBlur(this, GetAcrylicTintColor(), CurrentTheme == Themes.Dark);
                     Background = Brushes.Transparent;
                 }
                 else
@@ -385,7 +371,25 @@ public partial class ViewerWindow : Window
             }
         }
 
-        return CurrentTheme == Themes.Dark ? Acrylic10DarkTintColor : Acrylic10LightTintColor;
+        return CurrentTheme == Themes.Dark
+            ? Color.FromRgb(0x17, 0x17, 0x17)
+            : Color.FromRgb(0xF2, 0xF2, 0xF2);
+    }
+
+    private static double GetAcrylic10TintOpacity()
+    {
+        var acrylicTintOpacity = 0.7d;
+        return acrylicTintOpacity;
+    }
+
+    private static Brush GetAcrylic10TintLuminosityOpacityBackground(bool isDarkTheme)
+    {
+        var acrylicTintLuminosityOpacity = 0.44d;
+        return new LuminosityBrush
+        {
+            TintLuminosityOpacity = acrylicTintLuminosityOpacity,
+            IsDarkTheme = isDarkTheme,
+        }.ToBrush();
     }
 
     private static SystembackdropType GetBackdropOption()
@@ -444,5 +448,74 @@ public partial class ViewerWindow : Window
         var hide = (Storyboard)windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
 
         hide.Begin();
+    }
+}
+
+public class LuminosityBrush : Freezable
+{
+    public static readonly DependencyProperty TintLuminosityOpacityProperty =
+        DependencyProperty.Register(
+            nameof(TintLuminosityOpacity),
+            typeof(double),
+            typeof(LuminosityBrush),
+            new FrameworkPropertyMetadata(0.5d, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public double TintLuminosityOpacity
+    {
+        get => (double)GetValue(TintLuminosityOpacityProperty);
+        set => SetValue(TintLuminosityOpacityProperty, value);
+    }
+
+    public static readonly DependencyProperty IsDarkThemeProperty =
+       DependencyProperty.Register(
+           nameof(IsDarkTheme),
+           typeof(bool),
+           typeof(LuminosityBrush),
+           new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public bool IsDarkTheme
+    {
+        get => (bool)GetValue(IsDarkThemeProperty);
+        set => SetValue(IsDarkThemeProperty, value);
+    }
+
+    protected override Freezable CreateInstanceCore()
+    {
+        return new LuminosityBrush();
+    }
+
+    private Brush _cached;
+
+    public Brush ToBrush()
+    {
+        if (_cached != null)
+            return _cached;
+
+        double t = TintLuminosityOpacity
+            * (IsDarkTheme ? 0.55d : 1.25d);
+
+        var group = new DrawingGroup();
+
+        // Brightening Layer (White)
+        group.Children.Add(new GeometryDrawing(
+            new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), 255, 255, 255)),
+            null,
+            new RectangleGeometry(new Rect(0d, 0d, 1d, 1d))));
+
+        // Dark Layer (Black)
+        group.Children.Add(new GeometryDrawing(
+            new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.1d), 0, 0, 0)),
+            null,
+            new RectangleGeometry(new Rect(0d, 0d, 1d, 1d))));
+
+        var brush = new DrawingBrush(group)
+        {
+            Stretch = Stretch.Fill,
+        };
+
+        brush.Freeze();
+        _cached = brush;
+
+        return brush;
     }
 }

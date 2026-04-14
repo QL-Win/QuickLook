@@ -168,7 +168,7 @@ public static class WindowHelper
         Marshal.FreeHGlobal(accentPtr);
     }
 
-    public static void EnableAcrylicBlur(Window window, Color tintColor, bool isDarkTheme, double tintOpacity = 0.8)
+    public static void EnableAcrylicBlur(Window window, Color tintColor, bool isDarkTheme, double tintOpacity = 0.7d)
     {
         window.Background = Brushes.Transparent;
 
