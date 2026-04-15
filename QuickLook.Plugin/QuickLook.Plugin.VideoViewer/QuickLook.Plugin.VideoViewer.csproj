@@ -218,11 +218,11 @@
             <DestinationFolder>$(OutDir)MediaInfo-x86\</DestinationFolder>
             <Link>MediaInfo-x86\MediaInfo.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\arm64\MediaInfo.dll">
+        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\25.7.0\lib\netstandard2.0\arm64\MediaInfo.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DestinationFolder>$(OutDir)MediaInfo-ARM64\</DestinationFolder>
             <Link>MediaInfo-ARM64\MediaInfo.dll</Link>
-        </Content>
+        </Content>-->
         <Content Include="LibVlc\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
