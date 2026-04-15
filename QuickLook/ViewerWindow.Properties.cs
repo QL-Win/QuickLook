@@ -49,7 +49,7 @@ public partial class ViewerWindow : INotifyPropertyChanged
         set
         {
             _pinned = value;
-            buttonPin.Tag = "Pin";
+            buttonPin.Tag = value ? "Pin" : "Auto";
             OnPropertyChanged();
         }
     }

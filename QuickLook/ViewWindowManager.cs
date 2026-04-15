@@ -239,8 +239,12 @@ public class ViewWindowManager : IDisposable
         {
             if (ProcessHelper.IsShuttingDown())
                 return;
-            if (sender is not ViewerWindow w || w.Pinned)
-                return; // Pinned window has already been forgotten
+            if (sender is not ViewerWindow w)
+                return;
+            // Only skip if the window was already forgotten by ForgetCurrentWindow,
+            // which sets Pinned=true AND replaces _viewerWindow with a new instance.
+            if (w.Pinned && _viewerWindow != w)
+                return;
             StopFocusMonitor();
             InitNewViewerWindow();
         };

@@ -27,6 +27,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
+using System.Windows.Threading;
 using Wpf.Ui.Violeta.Controls;
 using static QuickLook.Common.NativeMethods.Dwmapi;
 using Brush = System.Windows.Media.Brush;
@@ -71,6 +72,21 @@ public partial class ViewerWindow : Window
 
         ShowInTaskbar = SettingHelper.Get("ShowInTaskbar", false);
 
+        Deactivated += (_, _) =>
+        {
+            if (!SettingHelper.Get("CloseOnLostFocus", false))
+                return;
+            if (Pinned)
+                return;
+            // Defer close to ContextIdle so pending Render/Input operations
+            // (e.g. MoveWindow, BringToFront) complete before the window is closed.
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (IsVisible && !Pinned)
+                    ViewWindowManager.GetInstance().ClosePreview();
+            }, DispatcherPriority.ContextIdle);
+        };
+
         buttonTop.Click += (_, _) =>
         {
             Topmost = !Topmost;
@@ -80,6 +96,12 @@ public partial class ViewerWindow : Window
 
         buttonPin.Click += (_, _) =>
         {
+            if (SettingHelper.Get("CloseOnLostFocus", false))
+            {
+                Pinned = !Pinned;
+                return;
+            }
+
             if (Pinned)
             {
                 Toast.Information(TranslationHelper.Get("InfoPanel_CantPreventClosing"));
