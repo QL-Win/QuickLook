@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product Id="*" Name="QuickLook" Language="1033"
            Version="!(bind.FileVersion.fil22F7B7F07E63622AD2451459086A3CF2)" Manufacturer="QL-Win"
            UpgradeCode="c83b9c02-87d6-494e-9f5f-cf4c3900a54d">
@@ -59,6 +60,14 @@
         <Directory Id="INSTALLFOLDER" Name="QuickLook" />
       </Directory>
     </Directory>
+
+    <!-- Close QuickLook before install/upgrade/uninstall to prevent locked-file warnings -->
+    <util:CloseApplication Id="CloseQuickLookExe"
+                           Target="QuickLook.exe"
+                           CloseMessage="yes"
+                           RebootPrompt="no"
+                           TerminateProcess="1"
+                           Sequence="800" />
 
     <CustomAction Id="LaunchApplication"
                   FileKey="fil22F7B7F07E63622AD2451459086A3CF2"
