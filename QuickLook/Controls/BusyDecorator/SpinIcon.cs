@@ -47,7 +47,6 @@ internal class SpinIcon : TextBlock, ISpinable
     public bool Spin
     {
         get => (bool)GetValue(SpinProperty);
-
         set => SetValue(SpinProperty, value);
     }
 
@@ -64,9 +63,7 @@ internal class SpinIcon : TextBlock, ISpinable
 
     private static void SpinDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var b = d as SpinIcon;
-
-        if (null == b || !b.Spin || !(e.NewValue is double) ||
+        if (d is not SpinIcon b || !b.Spin || e.NewValue is not double ||
             e.NewValue.Equals(e.OldValue)) return;
 
         b.StopSpin();
@@ -79,7 +76,6 @@ internal class SpinIcon : TextBlock, ISpinable
     public double SpinDuration
     {
         get => (double)GetValue(SpinDurationProperty);
-
         set => SetValue(SpinDurationProperty, value);
     }
 

@@ -11,9 +11,10 @@
                             <ControlTemplate TargetType="{x:Type Control}">
                                 <busyDecorator:SpinIcon FontFamily="{StaticResource SegoeFluent}"
                                                         FontSize="40"
-                                                        Spin="True">
-                                    &#xE72C;
-                                </busyDecorator:SpinIcon>
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                        Opacity="0.9"
+                                                        Spin="True"
+                                                        Text="&#xE72C;" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
