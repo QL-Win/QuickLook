@@ -29,14 +29,14 @@ public class PreviewPanel : WindowsFormsHost, IDisposable
 
     public new void Dispose()
     {
-        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+        Application.Current.Dispatcher.BeginInvoke(() =>
         {
             Child = null;
             _control?.Dispose();
             _control = null;
 
             base.Dispose();
-        }));
+        });
     }
 
     public void PreviewFile(string file, ContextObject context)
@@ -48,9 +48,9 @@ public class PreviewPanel : WindowsFormsHost, IDisposable
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
+    private static extern bool SetForegroundWindow(nint hWnd);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool SetActiveWindow(IntPtr hWnd);
+    private static extern bool SetActiveWindow(nint hWnd);
 }
