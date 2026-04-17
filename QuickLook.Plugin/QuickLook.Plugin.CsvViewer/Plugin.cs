@@ -16,15 +16,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
 using System;
 using System.IO;
 using System.Windows;
 
 namespace QuickLook.Plugin.CsvViewer;
 
-public sealed class Plugin : IViewer
+public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private CsvViewerPanel _panel;
+    private string _currentPath;
 
     public int Priority => 0;
 
@@ -49,6 +51,8 @@ public sealed class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
+        _currentPath = path;
+
         _panel = new CsvViewerPanel();
 
         context.ViewerContent = _panel;

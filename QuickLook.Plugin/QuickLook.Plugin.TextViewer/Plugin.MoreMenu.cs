@@ -19,6 +19,7 @@ using QuickLook.Common.Commands;
 using QuickLook.Common.Controls;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin.MoreMenu;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -30,14 +31,16 @@ public sealed partial class Plugin
     public IEnumerable<IMenuItem> GetMenuItems()
     {
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
-        string extension = "";
+        string extension = string.Empty;
+
         try
         {
+            // Get the file extension in lowercase for comparison
             extension = Path.GetExtension(_currentPath).ToLower();
-        } catch (System.Exception)
-        { 
         }
-            
+        catch (Exception)
+        {
+        }
 
         var reopen = extension switch
         {
@@ -57,6 +60,14 @@ public sealed partial class Plugin
                 Icon = FontSymbols.Picture,
                 Header = TranslationHelper.Get("MW_ReopenAsImagePreview", translationFile),
                 Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.ImageViewer", _currentPath)),
+            },
+
+            // CSV, TSV, PSV <=> CSV viewer
+            ".csv" or ".tsv" or ".psv" => new MoreMenuItem()
+            {
+                Icon = FontSymbols.Code,
+                Header = TranslationHelper.Get("MW_ReopenAsCsvPreview", translationFile),
+                Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.CsvViewer", _currentPath)),
             },
             _ => null,
         };
