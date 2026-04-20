@@ -407,9 +407,9 @@ public partial class ViewerWindow : Window
     private static Brush GetAcrylic10TintLuminosityOpacityBackground(bool isDarkTheme)
     {
         var acrylicTintLuminosityOpacity = 0.44d;
-        var t = acrylicTintLuminosityOpacity * (isDarkTheme ? 0.55d : 1.25d);
-        var v = isDarkTheme ? (byte)25 : (byte)225;
-        var brush = new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), v, v, v));
+        var t = acrylicTintLuminosityOpacity * (isDarkTheme ? 0.6d : 1.25d);
+        var v = isDarkTheme ? (byte)0x22 : (byte)0xE1;
+        var brush = new SolidColorBrush(Color.FromArgb((byte)Math.Round(t * 255d * 0.6d), v, v, v));
         brush.Freeze();
         return brush;
     }
