@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<SyntaxDefinition name="Json" extensions=".json" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+<SyntaxDefinition name="Json" extensions=".json;.jsonc" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
     <Color name="Bool" foreground="#569CD6" exampleText="true | false" />
     <Color name="Number" foreground="#B5CEA8" exampleText="3.14" />
     <Color name="String" foreground="#CE9178" exampleText="" />
