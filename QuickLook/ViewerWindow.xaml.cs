@@ -408,7 +408,8 @@ public partial class ViewerWindow : Window
     {
         var acrylicTintLuminosityOpacity = 0.44d;
         var t = acrylicTintLuminosityOpacity * (isDarkTheme ? 0.55d : 1.25d);
-        var brush = new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), 255, 255, 255));
+        var v = isDarkTheme ? (byte)25 : (byte)225;
+        var brush = new SolidColorBrush(Color.FromArgb((byte)(t * 255d * 0.6d), v, v, v));
         brush.Freeze();
         return brush;
     }
