@@ -132,7 +132,7 @@
                             ToolTip="More">
                         <Button.ContextMenu>
                             <ContextMenu FontSize="12">
-                                <MenuItem x:Name="moreItemReload" Tag="PinMenu">
+                                <MenuItem x:Name="moreItemReload" Tag="PinMenu" InputGestureText="F5">
                                     <MenuItem.Icon>
                                         <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="{x:Static ui:FontSymbols.Refresh}" />
                                     </MenuItem.Icon>
