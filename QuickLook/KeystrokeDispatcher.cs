@@ -46,7 +46,7 @@ internal class KeystrokeDispatcher : IDisposable
         _validKeys =
         [
             Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-            Keys.Enter, Keys.Space, Keys.Escape, Keys.F11
+            Keys.Enter, Keys.Space, Keys.Escape, Keys.F5, Keys.F11
         ];
     }
 
@@ -134,6 +134,10 @@ internal class KeystrokeDispatcher : IDisposable
 
                 case Keys.Space:
                     PipeServerManager.SendMessage(PipeMessages.Toggle);
+                    break;
+
+                case Keys.F5:
+                    PipeServerManager.SendMessage(PipeMessages.Reload);
                     break;
 
                 case Keys.F11:
