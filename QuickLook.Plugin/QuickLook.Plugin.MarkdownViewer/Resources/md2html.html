@@ -245,8 +245,35 @@
               .replace(/\s+/g, "-")
               .replace(/-+/g, "-"),
         });
+      // Feature toggle: convert YAML front matter to a ```yaml``` code fence before rendering
+      const ENABLE_FRONTMATTER_RENDERING = true;
+
+      function processFrontmatter(content) {
+        if (!ENABLE_FRONTMATTER_RENDERING) return content;
+        // Match a YAML front matter block at the very start of the document:
+        // - starts with --- (optionally followed by spaces) then a newline
+        // - followed by any content (non-greedy, stops at the first closing --- line)
+        // - closed by --- (optionally followed by spaces) on its own line
+        const frontmatterRegex = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(\r?\n|$)/;
+        const match = content.match(frontmatterRegex);
+        if (match) {
+          // Preserve the document's original line ending style
+          const eol = match[0].includes('\r\n') ? '\r\n' : '\n';
+          // Trim any leading blank lines from the remainder so we don't accumulate
+          // extra whitespace on top of the blank line the code fence already ends with
+          const rest = content.slice(match[0].length).replace(/^(\r?\n)+/, '');
+          const yamlBlock = "```yaml" + eol + match[1] + eol + "```" + eol + (rest ? eol : '');
+          return yamlBlock + rest;
+        }
+        return content;
+      }
+
+      // Read raw content; strip UTF-8 BOM (U+FEFF) if the file was encoded with one
+      let rawContent = document.getElementById("text-input").value;
+      if (rawContent.charCodeAt(0) === 0xFEFF) rawContent = rawContent.slice(1);
+
       document.getElementById("preview").innerHTML = md.render(
-        document.getElementById("text-input").value
+        processFrontmatter(rawContent)
       );
 
       // Initialize Mermaid after markdown rendering
