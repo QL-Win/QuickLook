@@ -245,8 +245,29 @@
               .replace(/\s+/g, "-")
               .replace(/-+/g, "-"),
         });
+      // Feature toggle: convert YAML front matter to a ```yaml``` code fence before rendering
+      const ENABLE_FRONTMATTER_RENDERING = true;
+
+      function processFrontmatter(content) {
+        if (!ENABLE_FRONTMATTER_RENDERING) return content;
+        // Match a YAML front matter block at the very start of the document:
+        // - starts with --- (optionally followed by spaces) then a newline
+        // - followed by any content (non-greedy, stops at first closing --- line,
+        //   matching the standard behaviour of frontmatter parsers like gray-matter)
+        // - closed by --- (optionally followed by spaces) on its own line
+        const frontmatterRegex = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(\r?\n|$)/;
+        const match = content.match(frontmatterRegex);
+        if (match) {
+          // Preserve the document's original line ending style
+          const eol = match[0].includes('\r\n') ? '\r\n' : '\n';
+          const yamlBlock = "```yaml" + eol + match[1] + eol + "```" + eol + eol;
+          return yamlBlock + content.slice(match[0].length);
+        }
+        return content;
+      }
+
       document.getElementById("preview").innerHTML = md.render(
-        document.getElementById("text-input").value
+        processFrontmatter(document.getElementById("text-input").value)
       );
 
       // Initialize Mermaid after markdown rendering
