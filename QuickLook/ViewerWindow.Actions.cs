@@ -300,7 +300,12 @@ public partial class ViewerWindow
 
         if (!IsVisible)
         {
-            Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.BringToFront(Topmost);
+                if (SettingHelper.Get("FocusWindowOnOpen", false))
+                    Activate();
+            }), DispatcherPriority.Render);
             Show();
         }
 

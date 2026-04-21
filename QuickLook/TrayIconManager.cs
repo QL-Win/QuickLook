@@ -38,6 +38,7 @@ internal partial class TrayIconManager : IDisposable
 
     private readonly TrayMenuItem _itemAutorun = null!;
     private readonly TrayMenuItem _itemCloseOnLostFocus = null!;
+    private readonly TrayMenuItem _itemFocusWindowOnOpen = null!;
 
     private TrayIconManager()
     {
@@ -91,6 +92,15 @@ internal partial class TrayIconManager : IDisposable
                         SettingHelper.Set("CloseOnLostFocus", !current);
                     }),
                 },
+                _itemFocusWindowOnOpen = new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_FocusWindowOnOpen"),
+                    Command = new RelayCommand(() =>
+                    {
+                        var current = SettingHelper.Get("FocusWindowOnOpen", false);
+                        SettingHelper.Set("FocusWindowOnOpen", !current);
+                    }),
+                },
                 new TrayMenuItem()
                 {
                     Header = TranslationHelper.Get("Icon_Restart"),
@@ -109,6 +119,7 @@ internal partial class TrayIconManager : IDisposable
         {
             _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun();
             _itemCloseOnLostFocus.IsChecked = SettingHelper.Get("CloseOnLostFocus", false);
+            _itemFocusWindowOnOpen.IsChecked = SettingHelper.Get("FocusWindowOnOpen", false);
         };
     }
 
