@@ -36,6 +36,7 @@ public sealed class Plugin : IViewer
         // Windows
         ".appx", ".appxbundle", // Windows APPX installer
         ".msi", // Windows MSI installer
+        ".msp", // Windows MSP installer
         ".msix", ".msixbundle", // Windows MSIX installer
 
         // macOS
@@ -79,7 +80,7 @@ public sealed class Plugin : IViewer
             ".apk" or ".aab" => new Size { Width = 600, Height = 510 },
             ".ipa" => new Size { Width = 560, Height = 510 },
             ".hap" => new Size { Width = 560, Height = 500 },
-            ".msi" => new Size { Width = 560, Height = 230 },
+            ".msi" or ".msp" => new Size { Width = 560, Height = 230 },
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new Size { Width = 560, Height = 328 },
             ".ddeb" or ".deb" => new Size { Width = 600, Height = 345 },
             ".dmg" => new Size { Width = 560, Height = 510 },
@@ -104,6 +105,7 @@ public sealed class Plugin : IViewer
             ".ipa" => new IpaInfoPanel(context),
             ".hap" => new HapInfoPanel(context),
             ".msi" => new MsiInfoPanel(context),
+            ".msp" => new MspInfoPanel(context),
             ".msix" or ".msixbundle" or ".appx" or ".appxbundle" => new AppxInfoPanel(context),
             ".ddeb" or ".deb" => new DebInfoPanel(context),
             ".dmg" => new DmgInfoPanel(context),
