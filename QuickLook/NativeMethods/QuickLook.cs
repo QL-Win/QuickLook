@@ -151,6 +151,7 @@ internal static class QuickLook
         Dialog,
         Everything,
         DOpus,
-        MultiCommander
+        MultiCommander,
+        IDM,
     }
 }

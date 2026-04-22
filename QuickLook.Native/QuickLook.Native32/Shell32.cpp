@@ -23,6 +23,7 @@
 #include "Everything.h"
 #include "DOpus.h"
 #include "MultiCommander.h"
+#include "IDMan.h"
 
 using namespace std;
 
@@ -65,6 +66,13 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
     }
     if (wcscmp(classBuffer, L"#32770") == 0)
     {
+        WCHAR titleBuffer[512] = { L'\0' };
+        GetWindowText(hwndfg, titleBuffer, 512);
+        if (wcsncmp(titleBuffer, L"Internet Download Manager", 25) == 0)
+        {
+            return IDM;
+        }
+
         if (FindWindowEx(hwndfg, nullptr, L"DUIViewWndClassName", nullptr) != nullptr)
         {
             if (!HelperMethods::IsExplorerSearchBoxFocused())
@@ -98,6 +106,9 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
         break;
     case MULTICOMMANDER:
         MultiCommander::GetSelected(buffer);
+        break;
+    case IDM:
+        IDMan::GetSelected(buffer);
         break;
     default:
         break;

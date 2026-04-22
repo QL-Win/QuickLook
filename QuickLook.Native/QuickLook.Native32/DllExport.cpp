@@ -21,6 +21,7 @@
 #include "WoW64HookHelper.h"
 #include "DOpus.h"
 #include "MultiCommander.h"
+#include "IDMan.h"
 
 #define EXPORT extern "C" __declspec(dllexport)
 
