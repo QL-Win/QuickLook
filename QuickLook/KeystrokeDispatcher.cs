@@ -46,7 +46,8 @@ internal class KeystrokeDispatcher : IDisposable
         _validKeys =
         [
             Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-            Keys.Enter, Keys.Space, Keys.Escape, Keys.F5, Keys.F11
+            Keys.Enter, Keys.Space, Keys.Escape,
+            Keys.F5, Keys.F11,
         ];
     }
 
@@ -90,7 +91,7 @@ internal class KeystrokeDispatcher : IDisposable
         {
             if (_spaceIsDown)
                 return;
-            _spaceIsDown = true;
+
             _spaceHoldTick = DateTime.Now.Ticks;
         }
 
@@ -109,7 +110,12 @@ internal class KeystrokeDispatcher : IDisposable
         {
             if (isKeyDown || e.KeyCode != Keys.Space ||
                 DateTime.Now.Ticks - _spaceHoldTick >= HOLD_TO_PREVIEW_DURATION)
+            {
                 InvokeRoutine(e.KeyCode, isKeyDown);
+
+                if (isKeyDown && e.KeyCode == Keys.Space)
+                    _spaceIsDown = true;
+            }
         }
 
         // when the key has been released, reset variables
