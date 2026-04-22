@@ -108,12 +108,10 @@
 
     <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <!-- Not support to ARM64 -->
+        <Delete Files="$(OutputPath)\arm64\pdfium.dll" Condition="Exists('$(OutputPath)\arm64\pdfium.dll')" />
+        <RemoveDir Directories="$(OutputPath)\arm64" Condition="Exists('$(OutputPath)\arm64')" />
     </Target>
 
-    <Target Name="AfterBuildARM64" AfterTargets="Build">
-        <Copy SourceFiles="$(OutputPath)\arm64\pdfium.dll" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
-    </Target>
-    
     <ItemGroup>
         <Resource Include="Resources\loading.png" />
     </ItemGroup>
