@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Shell Script" extensions=".sh">
+<SyntaxDefinition name="Shell Script" extensions=".sh;.bashrc;.bash_profile;.bash_login;.profile;.bash_logout;.zshrc;.zprofile;.zlogin;.zlogout;.dashrc;.kshrc;.mkshrc;.ashrc;.shrc">
 
     <RuleSets>
         <RuleSet ignorecase="false">
