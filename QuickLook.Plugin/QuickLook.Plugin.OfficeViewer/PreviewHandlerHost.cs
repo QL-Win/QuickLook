@@ -17,7 +17,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -41,7 +40,6 @@ public class PreviewHandlerHost : Control
     /// </summary>
     public PreviewHandlerHost()
     {
-        Size = new Size(320, 240);
     }
 
     /// <summary>
@@ -85,9 +83,9 @@ public class PreviewHandlerHost : Control
         catch (COMException ex) when (ex.HResult == unchecked((int)0x8001010D))
         {
             // RPC_E_CANTCALLOUT_ININPUTSYNCCALL
-            // This exception occurs when an outgoing call cannot be made because 
+            // This exception occurs when an outgoing call cannot be made because
             // the application is dispatching an input-synchronous call.
-            // It's safe to ignore this exception as the preview handler will be 
+            // It's safe to ignore this exception as the preview handler will be
             // resized on the next resize event.
         }
     }
