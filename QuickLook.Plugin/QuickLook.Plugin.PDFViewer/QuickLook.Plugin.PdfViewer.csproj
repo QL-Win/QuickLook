@@ -89,7 +89,7 @@
 
     <ItemGroup>
         <PackageReference Include="PdfiumViewer.Updated" Version="2.14.5" />
-        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="149.0.7789" />
+        <PackageReference Include="bblanchon.PDFiumV8.Win32" Version="149.0.7802" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
 
