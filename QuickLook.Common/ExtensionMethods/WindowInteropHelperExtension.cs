@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
 using System;
 using System.Windows.Interop;
 
@@ -30,9 +31,10 @@ public static class WindowInteropHelperExtension
             {
                 return windowInteropHelper?.EnsureHandle() ?? IntPtr.Zero;
             }
-            catch
+            catch (Exception e)
             {
                 // Returning 0 is fine, since this error usually only occurs when the window is already closed or being disposed.
+                ProcessHelper.WriteLog(e.ToString());
                 return IntPtr.Zero;
             }
         }
