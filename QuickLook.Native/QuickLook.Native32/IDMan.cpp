@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "IDMan.h"
 #include <UIAutomation.h>
+#include <regex>
+#include <string>
 
 #pragma comment(lib, "UIAutomationCore.lib")
 
@@ -155,6 +157,69 @@ bool IDMan::GetSelectedItemName(PWCHAR nameBuffer)
     return found;
 }
 
+static void PathCombine(PWCHAR buffer, size_t bufferSize, std::initializer_list<std::wstring> parts)
+{
+    if (!buffer || bufferSize == 0)
+        return;
+
+    buffer[0] = L'\0';
+
+    for (const auto& part : parts)
+    {
+        if (part.empty()) continue;
+
+        // Override when the path is absolute
+        if ((part.size() >= 2 && part[1] == L':') ||
+            (part[0] == L'\\' || part[0] == L'/'))
+        {
+            wcsncpy_s(buffer, bufferSize, part.c_str(), _TRUNCATE);
+            continue;
+        }
+
+        size_t len = wcslen(buffer);
+
+        // Append '\'
+        if (len > 0 && buffer[len - 1] != L'\\' && buffer[len - 1] != L'/')
+        {
+            wcscat_s(buffer, bufferSize, L"\\");
+        }
+
+        wcscat_s(buffer, bufferSize, part.c_str());
+    }
+}
+
+static std::wstring RegexEscape(const std::wstring& s)
+{
+    static const std::wstring kMeta = L"\\.^$|()[]{}\"+?";
+    std::wstring out;
+    out.reserve(s.size() * 2);
+    for (wchar_t ch : s)
+    {
+        if (kMeta.find(ch) != std::wstring::npos)
+            out.push_back(L'\\');
+        out.push_back(ch);
+    }
+    return out;
+}
+
+static bool IsMatch(const std::wstring& input, const std::wstring& pattern)
+{
+    std::wstring regexPattern = L"^" + RegexEscape(pattern) + L"$";
+    size_t pos = 0;
+    while ((pos = regexPattern.find(L"\\*", pos)) != std::wstring::npos)
+    {
+        regexPattern.replace(pos, 2, L".*");
+        pos += 2;
+    }
+    try
+    {
+        std::wregex re(regexPattern, std::regex_constants::ECMAScript | std::regex_constants::icase);
+        return std::regex_match(input, re);
+    }
+    catch (const std::regex_error&) { return false; }
+}
+
+__pragma(warning(suppress:6262))
 void IDMan::GetFilePath(PCWSTR name, PWCHAR buffer)
 {
     // Extract the file extension (e.g. ".mp4")
@@ -172,13 +237,16 @@ void IDMan::GetFilePath(PCWSTR name, PWCHAR buffer)
             BYTE data[MAX_PATH * sizeof(WCHAR)] = {};
             DWORD dataSize = sizeof(data);
             DWORD dataType = 0;
+
             if (RegQueryValueExW(hBase, L"LocalPathW", nullptr, &dataType, data, &dataSize) == ERROR_SUCCESS)
             {
-                if (dataType == REG_BINARY)
-                    wcsncpy_s(defaultPath, MAX_PATH, reinterpret_cast<PWSTR>(data), dataSize / sizeof(WCHAR));
-                else if (dataType == REG_SZ)
-                    wcsncpy_s(defaultPath, MAX_PATH, reinterpret_cast<PWSTR>(data), MAX_PATH - 1);
+                // IDM does not set the type as expected binary or string
+                if (dataType == REG_NONE)
+                {
+                    wcsncpy_s(defaultPath, reinterpret_cast<const wchar_t*>(data), _TRUNCATE);
+                }
             }
+
             RegCloseKey(hBase);
         }
     }
@@ -207,10 +275,10 @@ void IDMan::GetFilePath(PCWSTR name, PWCHAR buffer)
                         {
                             WCHAR tokExt[64] = L".";
                             wcscat_s(tokExt, tok);
-                            if (_wcsicmp(tokExt, ext) == 0)
+                            if (IsMatch(std::wstring(ext), std::wstring(tokExt)))
                             {
                                 // Compose: defaultPath\subKeyName\filename
-                                swprintf_s(buffer, MAX_PATH_EX, L"%s\\%s\\%s", defaultPath, subKeyName, name);
+                                PathCombine(buffer, MAX_PATH_EX, { defaultPath, subKeyName, name });
                                 RegCloseKey(hSub);
                                 RegCloseKey(hFolders);
                                 return;
@@ -227,7 +295,7 @@ void IDMan::GetFilePath(PCWSTR name, PWCHAR buffer)
         // Extension not in FoldersTree — use the default download folder
         if (defaultPath[0] != L'\0')
         {
-            swprintf_s(buffer, MAX_PATH_EX, L"%s\\%s", defaultPath, name);
+            PathCombine(buffer, MAX_PATH_EX, { defaultPath, name });
             return;
         }
     }
