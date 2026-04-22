@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.NativeMethods;
 using System;
 using System.Diagnostics;
@@ -80,7 +81,7 @@ public static class WindowHelper
         double width,
         double height)
     {
-        var handle = new WindowInteropHelper(window).EnsureHandle();
+        var handle = new WindowInteropHelper(window).EnsureHandleSafe();
 
         // scale the size to the primary display
         TransformToPixels(window, width, height,
@@ -92,7 +93,7 @@ public static class WindowHelper
 
     public static Rect GetWindowRectInPixel(this Window window)
     {
-        var handle = new WindowInteropHelper(window).EnsureHandle();
+        var handle = new WindowInteropHelper(window).EnsureHandleSafe();
 
         User32.GetWindowRect(handle, out User32.RECT nRect);
 
@@ -172,7 +173,7 @@ public static class WindowHelper
     {
         window.Background = Brushes.Transparent;
 
-        var hwnd = new WindowInteropHelper(window).EnsureHandle();
+        var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
 
         if (!window.AllowsTransparency && HwndSource.FromHwnd(hwnd) is HwndSource hwndSource)
         {
@@ -226,7 +227,7 @@ public static class WindowHelper
             Data = accentPtr
         };
 
-        var hwnd = new WindowInteropHelper(window).EnsureHandle();
+        var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
         User32.SetWindowCompositionAttribute(hwnd, ref data);
 
         Marshal.FreeHGlobal(accentPtr);
@@ -280,7 +281,7 @@ public static class WindowHelper
         // Mica will handle the color
         window.Background = Brushes.Transparent;
 
-        var hwnd = new WindowInteropHelper(window).EnsureHandle();
+        var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
 
         if (!window.AllowsTransparency && HwndSource.FromHwnd(hwnd) is HwndSource hwndSource)
         {

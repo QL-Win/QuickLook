@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.ExtensionMethods;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -32,7 +33,7 @@ public static class DisplayDeviceHelper
 
     public static ScaleFactor GetScaleFactorFromWindow(Window window)
     {
-        return GetScaleFactorFromWindow(new WindowInteropHelper(window).EnsureHandle());
+        return GetScaleFactorFromWindow(new WindowInteropHelper(window).EnsureHandleSafe());
     }
 
     public static ScaleFactor GetCurrentScaleFactor()
@@ -79,7 +80,7 @@ public static class DisplayDeviceHelper
     {
         try
         {
-            var hMonitor = MonitorFromWindow(new WindowInteropHelper(window).EnsureHandle(), MonitorDefaults.TONEAREST);
+            var hMonitor = MonitorFromWindow(new WindowInteropHelper(window).EnsureHandleSafe(), MonitorDefaults.TONEAREST);
             return GetMonitorColorProfile(hMonitor);
         }
         catch (COMException ex) when (ex.HResult == unchecked((int)0x80263001))
