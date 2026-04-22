@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="LayoutRoot">
         <DataGrid Name="dataGrid"
                   AlternatingRowBackground="#1900FF70"
                   AlternationCount="2"
@@ -29,6 +29,13 @@
                   IsReadOnly="True"
                   ItemsSource="{Binding Path=Rows, ElementName=csvViewer}"
                   RowBackground="#00FFFFFF"
+                  SelectionMode="Single"
+                  SelectionUnit="Cell"
                   VerticalGridLinesBrush="#19000000" />
+        <local:SearchPanel x:Name="searchPanel"
+                           Margin="8"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"
+                           Visibility="Collapsed" />
     </Grid>
 </UserControl>
