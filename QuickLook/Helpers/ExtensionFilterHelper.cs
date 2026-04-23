@@ -44,6 +44,13 @@ public static class ExtensionFilterHelper
     private const string UseAllowlistModeKey = "UseExtensionAllowlist";
     private static readonly char[] ExtensionSeparators = [';', ','];
 
+    private static readonly HashSet<string> DefaultBlocklist = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".insv"
+    };
+
+    private static readonly HashSet<string> DefaultAllowlist = new(StringComparer.OrdinalIgnoreCase);
+
     private static HashSet<string> _allowlistCache;
     private static HashSet<string> _blocklistCache;
     private static bool? _useAllowlistModeCache;
@@ -79,6 +86,7 @@ public static class ExtensionFilterHelper
             {
                 var list = SettingHelper.Get(AllowlistKey, string.Empty);
                 _allowlistCache = ParseExtensionList(list);
+                _allowlistCache.UnionWith(DefaultAllowlist);
             }
             return _allowlistCache;
         }
@@ -96,6 +104,7 @@ public static class ExtensionFilterHelper
             {
                 var list = SettingHelper.Get(BlocklistKey, string.Empty);
                 _blocklistCache = ParseExtensionList(list);
+                _blocklistCache.UnionWith(DefaultBlocklist);
             }
             return _blocklistCache;
         }
@@ -188,10 +197,46 @@ public static class ExtensionFilterHelper
         if (string.IsNullOrWhiteSpace(ext))
             return null;
 
-        ext = ext.Trim().ToLowerInvariant();
+        ext = ext.Trim();
+
+        if (IsPlaceholderToken(ext))
+            return null;
+
+        ext = ext.ToLowerInvariant();
         if (!ext.StartsWith("."))
             ext = "." + ext;
 
+        if (!IsValidExtension(ext))
+            return null;
+
         return ext;
+    }
+
+    private static bool IsPlaceholderToken(string token)
+    {
+        // $(ExtensionAllowlist), $(ExtensionBlocklist) or similar tokens are placeholders
+        token = token.Trim();
+        return token.StartsWith("$(", StringComparison.Ordinal) && token.EndsWith(")", StringComparison.Ordinal);
+    }
+
+    private static bool IsValidExtension(string ext)
+    {
+        if (string.IsNullOrWhiteSpace(ext))
+            return false;
+
+        if (!ext.StartsWith("."))
+            return false;
+
+        var extension = ext.Substring(1);
+        if (extension.Length == 0)
+            return false;
+
+        foreach (var c in extension)
+        {
+            if (!char.IsLetterOrDigit(c) && c != '_' && c != '-')
+                return false;
+        }
+
+        return true;
     }
 }
