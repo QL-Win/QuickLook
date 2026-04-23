@@ -1,4 +1,8 @@
+using QuickLook.Common.Helpers;
 using System;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,6 +11,8 @@ namespace QuickLook.Plugin.CsvViewer;
 
 public partial class SearchPanel : UserControl
 {
+    private readonly string _translationFile;
+
     public event EventHandler<string> SearchTextChanged;
 
     public event EventHandler<bool> MatchCaseChanged;
@@ -20,6 +26,15 @@ public partial class SearchPanel : UserControl
     public SearchPanel()
     {
         InitializeComponent();
+
+        _translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+
+        searchTextBox.ToolTip = TranslationHelper.Get("Search_Placeholder", _translationFile, failsafe: "Search...");
+        matchCaseToggle.Content = TranslationHelper.Get("Search_MatchCase", _translationFile, failsafe: "Match case");
+        previousButton.ToolTip = TranslationHelper.Get("Search_PreviousMatch", _translationFile, failsafe: "Previous match");
+        nextButton.ToolTip = TranslationHelper.Get("Search_NextMatch", _translationFile, failsafe: "Next match");
+        matchCountTextBlock.Text = TranslationHelper.Get("Search_NoMatches", _translationFile, failsafe: "No matches");
+        closeButton.ToolTip = TranslationHelper.Get("Search_Close", _translationFile, failsafe: "Close");
     }
 
     public string SearchText
@@ -38,7 +53,15 @@ public partial class SearchPanel : UserControl
 
     public void SetMatchCount(int current, int total)
     {
-        matchCountTextBlock.Text = total == 0 ? "No matches" : $"{current} of {total}";
+        if (total == 0)
+        {
+            matchCountTextBlock.Text = TranslationHelper.Get("Search_NoMatches", _translationFile, failsafe: "No matches");
+        }
+        else
+        {
+            var fmt = TranslationHelper.Get("Search_MatchCount", _translationFile, failsafe: "{0} of {1}");
+            matchCountTextBlock.Text = string.Format(CultureInfo.CurrentCulture, fmt, current, total);
+        }
     }
 
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)

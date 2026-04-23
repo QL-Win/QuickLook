@@ -13,26 +13,26 @@
             CornerRadius="4"
             SnapsToDevicePixels="True">
         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <!--  Search  -->
             <TextBox x:Name="searchTextBox"
                      Width="180"
                      Margin="0,0,8,0"
                      VerticalContentAlignment="Center"
                      FocusVisualStyle="{x:Null}"
                      KeyDown="SearchTextBox_KeyDown"
-                     TextChanged="SearchTextBox_TextChanged"
-                     ToolTip="Search" />
+                     TextChanged="SearchTextBox_TextChanged" />
 
+            <!--  Match case  -->
             <CheckBox x:Name="matchCaseToggle"
                       Margin="0,0,8,0"
                       VerticalAlignment="Center"
                       Checked="MatchCaseToggle_Checked"
-                      Content="Match case"
                       Unchecked="MatchCaseToggle_Checked" />
 
+            <!--  Previous matches  -->
             <Button x:Name="previousButton"
                     Margin="0,0,4,0"
-                    Click="PreviousButton_Click"
-                    ToolTip="Previous match">
+                    Click="PreviousButton_Click">
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
@@ -40,10 +40,10 @@
                            Text="&#xe76b;" />
             </Button>
 
+            <!--  Next matches  -->
             <Button x:Name="nextButton"
                     Margin="0,0,8,0"
-                    Click="NextButton_Click"
-                    ToolTip="Next match">
+                    Click="NextButton_Click">
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
@@ -51,15 +51,15 @@
                            Text="&#xe76c;" />
             </Button>
 
+            <!--  No matches  -->
             <TextBlock x:Name="matchCountTextBlock"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource WindowTextForeground}"
-                       Text="No matches" />
+                       Text="" />
 
             <Button x:Name="closeButton"
                     Margin="8,0,0,0"
-                    Click="CloseButton_Click"
-                    ToolTip="Close">
+                    Click="CloseButton_Click">
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
