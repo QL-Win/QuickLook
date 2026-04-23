@@ -31,6 +31,7 @@ public class FormatDetector
         new MakefileDetector(),
         new HostsDetector(),
         new DockerfileDetector(),
+        new ShellScriptDetector(),
         new KrcDetector(),
     ];
 
