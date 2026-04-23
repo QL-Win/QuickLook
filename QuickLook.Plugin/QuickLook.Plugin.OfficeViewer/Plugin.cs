@@ -108,23 +108,32 @@ public sealed class Plugin : IViewer
         {
             context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
 
-            MessageBoxResult result = MessageBox.Show(
-                """
-                Be careful - files from the Internet can contain viruses.
-                The Office interface prevents loading in Protected View.
+            bool shouldUnblock;
+            var preference = GetSavedProtectedViewPreference();
 
-                Would you like OfficeViewer-Native to unblock the ZoneIdentifier of Internet?
-                """,
-                "PROTECTED VIEW",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question
-            );
-
-            if (result == MessageBoxResult.Yes)
+            if (preference.HasValue)
             {
-                _ = ZoneIdentifierManager.UnblockZone(path);
+                shouldUnblock = preference.Value;
             }
             else
+            {
+                var dialog = new ProtectedViewDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    if (dialog.RememberChoice)
+                    {
+                        SetSavedProtectedViewPreference(dialog.Choice);
+                    }
+
+                    shouldUnblock = dialog.Choice;
+                }
+                else
+                {
+                    shouldUnblock = false;
+                }
+            }
+
+            if (!shouldUnblock)
             {
                 context.ViewerContent = new Label()
                 {
@@ -136,6 +145,8 @@ public sealed class Plugin : IViewer
                 context.IsBusy = false;
                 return;
             }
+
+            _ = ZoneIdentifierManager.UnblockZone(path);
         }
 
         try
@@ -156,6 +167,20 @@ public sealed class Plugin : IViewer
         }
 
         context.IsBusy = false;
+    }
+
+    private static bool? GetSavedProtectedViewPreference()
+    {
+        var savedValue = SettingHelper.Get("AlwaysUnblockProtectedView", string.Empty, "QuickLook.Plugin.OfficeViewer");
+        if (string.IsNullOrWhiteSpace(savedValue))
+            return null;
+
+        return bool.TryParse(savedValue, out var result) ? result : null;
+    }
+
+    private static void SetSavedProtectedViewPreference(bool value)
+    {
+        SettingHelper.Set("AlwaysUnblockProtectedView", value, "QuickLook.Plugin.OfficeViewer");
     }
 
     public void Cleanup()

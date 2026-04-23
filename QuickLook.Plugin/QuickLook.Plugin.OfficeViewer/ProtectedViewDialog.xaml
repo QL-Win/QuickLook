@@ -1,0 +1,48 @@
+<Window x:Class="QuickLook.Plugin.OfficeViewer.ProtectedViewDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PROTECTED VIEW"
+        MinWidth="420"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="SingleBorderWindow">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="12" TextWrapping="Wrap">
+            Be careful - files from the Internet can contain viruses.
+            The Office interface prevents loading in Protected View.
+            Would you like OfficeViewer-Native to unblock the ZoneIdentifier of Internet?
+        </TextBlock>
+
+        <CheckBox x:Name="RememberChoiceCheckBox"
+                  Grid.Row="1"
+                  Margin="0,12,0,0"
+                  Content="Remember my choice" />
+
+        <StackPanel Grid.Row="2"
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button x:Name="ButtonYes"
+                    Width="80"
+                    Margin="0,0,8,0"
+                    Click="ButtonYes_Click"
+                    IsDefault="True">
+                Yes
+            </Button>
+            <Button x:Name="ButtonNo"
+                    Width="80"
+                    Click="ButtonNo_Click"
+                    IsCancel="True">
+                No
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
