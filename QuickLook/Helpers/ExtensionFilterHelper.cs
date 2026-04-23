@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 
 namespace QuickLook.Helpers;
 
@@ -42,6 +43,8 @@ public static class ExtensionFilterHelper
     private const string AllowlistKey = "ExtensionAllowlist";
     private const string BlocklistKey = "ExtensionBlocklist";
     private const string UseAllowlistModeKey = "UseExtensionAllowlist";
+    private const string AllowlistPlaceholder = "$(ExtensionAllowlist)";
+    private const string BlocklistPlaceholder = "$(ExtensionBlocklist)";
     private static readonly char[] ExtensionSeparators = [';', ','];
 
     private static readonly HashSet<string> DefaultBlocklist = new(StringComparer.OrdinalIgnoreCase)
@@ -84,9 +87,10 @@ public static class ExtensionFilterHelper
         {
             if (_allowlistCache == null)
             {
-                var list = SettingHelper.Get(AllowlistKey, string.Empty);
-                _allowlistCache = ParseExtensionList(list);
-                _allowlistCache.UnionWith(DefaultAllowlist);
+                var list = GetSettingNodeValue(AllowlistKey);
+                _allowlistCache = ParseExtensionList(list ?? string.Empty);
+                if (list == null || list.Contains(AllowlistPlaceholder, StringComparison.Ordinal))
+                    _allowlistCache.UnionWith(DefaultAllowlist);
             }
             return _allowlistCache;
         }
@@ -102,9 +106,10 @@ public static class ExtensionFilterHelper
         {
             if (_blocklistCache == null)
             {
-                var list = SettingHelper.Get(BlocklistKey, string.Empty);
-                _blocklistCache = ParseExtensionList(list);
-                _blocklistCache.UnionWith(DefaultBlocklist);
+                var list = GetSettingNodeValue(BlocklistKey);
+                _blocklistCache = ParseExtensionList(list ?? string.Empty);
+                if (list == null || list.Contains(BlocklistPlaceholder, StringComparison.Ordinal))
+                    _blocklistCache.UnionWith(DefaultBlocklist);
             }
             return _blocklistCache;
         }
@@ -238,5 +243,25 @@ public static class ExtensionFilterHelper
         }
 
         return true;
+    }
+
+    private static string GetSettingNodeValue(string key)
+    {
+        var file = Path.Combine(SettingHelper.LocalDataPath, "QuickLook.config");
+        if (!File.Exists(file))
+            return null;
+
+        var doc = new XmlDocument();
+        try
+        {
+            doc.Load(file);
+        }
+        catch (XmlException)
+        {
+            return null;
+        }
+
+        var node = doc.SelectSingleNode($"/Settings/{key}");
+        return node?.InnerText;
     }
 }
