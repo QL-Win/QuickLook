@@ -199,7 +199,8 @@ public class ContextObject : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Get or set whether to block showing the preview window.
+    /// Get or set whether to block showing the preview window
+    /// Display "blocked" in the preview window if true
     /// </summary>
     public bool IsBlocked
     {
