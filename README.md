@@ -888,7 +888,15 @@ Every User Matters
   <img src="https://img.shields.io/badge/📦_Download-white?style=for-the-badge" alt="Download">
 </a>
 
+<a href="https://github.com/adnan-bhaldar/QuickLook-Website">
+  <img src="https://img.shields.io/badge/🌐_Help maintain the homepage-00D9FF?style=for-the-badge&labelColor=000000">
+</a>
+
 <br><br>
+
+<sub>Note: The official website content may be inaccurate or out of date. To help maintain the site, please submit a PR to <a href="https://github.com/adnan-bhaldar/QuickLook-Website">QuickLook Website Repository</a></sub>
+
+<br>
 
 <sub>Made with ❤️ by the QuickLook community</sub>
 
