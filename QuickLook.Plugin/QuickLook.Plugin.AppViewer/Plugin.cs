@@ -57,6 +57,10 @@ public sealed class Plugin : IViewer
 
         // Others
         ".wgt", ".wgtu", // UniApp Widget
+
+        // NuGet
+        ".nupkg", // NuGet Package
+        ".snupkg", // NuGet Symbol Package
     ];
 
     private IAppInfoPanel _ip;
@@ -87,6 +91,7 @@ public sealed class Plugin : IViewer
             ".appimage" => new Size { Width = 600, Height = 300 },
             ".rpm" => new Size { Width = 600, Height = 260 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
+            ".nupkg" or ".snupkg" => new Size { Width = 660, Height = 580 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
         context.Title = string.Empty;
@@ -112,6 +117,7 @@ public sealed class Plugin : IViewer
             ".appimage" => new AppImageInfoPanel(context),
             ".rpm" => new RpmInfoPanel(context),
             ".wgt" or ".wgtu" => new WgtInfoPanel(context),
+            ".nupkg" or ".snupkg" => new NugetInfoPanel(context),
             _ => throw new NotSupportedException("Extension is not supported."),
         };
 
