@@ -53,20 +53,48 @@ public sealed partial class Plugin
     /// </summary>
     public IEnumerable<IMenuItem> GetMenuItems()
     {
+        if (string.IsNullOrEmpty(_path))
+            yield break;
+
+        // Use external Translations.config shipped next to the executing assembly
+        string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+
         // Currently only supports for CFB and EIF files
         if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
             || _path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase)
             || _path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
         {
-            // Use external Translations.config shipped next to the executing assembly
-            string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
-
             yield return new MoreMenuItem()
             {
                 Icon = FontSymbols.MoveToFolder,
                 Header = TranslationHelper.Get("MW_ExtractToDirectory", translationFile),
                 MenuItems = null,
                 Command = ExtractToDirectoryCommand,
+            };
+        }
+        else if (_path.EndsWith(".apk", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".apk.1", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".aab", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".ipa", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".hap", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".hap.1", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".appx", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".appxbundle", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".msix", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".msixbundle", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".nupkg", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".snupkg", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".wgt", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".wgtu", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".aar", StringComparison.OrdinalIgnoreCase)
+            || _path.EndsWith(".har", StringComparison.OrdinalIgnoreCase))
+        {
+            yield return new MoreMenuItem()
+            {
+                Icon = FontSymbols.Package,
+                Header = TranslationHelper.Get("MW_OpenInAppViewer", translationFile),
+                MenuItems = null,
+                Command = new RelayCommand(() => PluginHelper.InvokePluginPreview("QuickLook.Plugin.AppViewer", _path)),
             };
         }
     }

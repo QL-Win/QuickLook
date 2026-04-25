@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Common.Plugin.MoreMenu;
+using System.Collections.Generic;
 using QuickLook.Plugin.AppViewer.InfoPanels;
 using System;
 using System.IO;
@@ -24,7 +26,7 @@ using System.Windows;
 
 namespace QuickLook.Plugin.AppViewer;
 
-public sealed class Plugin : IViewer
+public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private static readonly string[] _extensions =
     [
@@ -67,6 +69,8 @@ public sealed class Plugin : IViewer
     private string _path;
 
     public int Priority => 0;
+
+    public IEnumerable<IMenuItem> MenuItems => GetMenuItems();
 
     public void Init()
     {
