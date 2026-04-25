@@ -91,7 +91,7 @@ public sealed class Plugin : IViewer
             ".appimage" => new Size { Width = 600, Height = 300 },
             ".rpm" => new Size { Width = 600, Height = 260 },
             ".wgt" or ".wgtu" => new Size { Width = 600, Height = 345 },
-            ".nupkg" or ".snupkg" => new Size { Width = 660, Height = 580 },
+            ".nupkg" or ".snupkg" => new Size { Width = 700, Height = 580 },
             _ => throw new NotSupportedException("Extension is not supported."),
         };
         context.Title = string.Empty;

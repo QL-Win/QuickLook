@@ -53,6 +53,7 @@ public partial class NugetInfoPanel : UserControl, IAppInfoPanel
         totalSizeTitle.Text = TranslationHelper.Get("TOTAL_SIZE", translationFile);
         modDateTitle.Text = TranslationHelper.Get("LAST_MODIFIED", translationFile);
         dependenciesGroupBox.Header = TranslationHelper.Get("NUGET_DEPENDENCIES", translationFile);
+        descriptionGroupBox.Header = TranslationHelper.Get("DESCRIPTION", translationFile);
     }
 
     public void DisplayInfo(string path)
@@ -104,6 +105,9 @@ public partial class NugetInfoPanel : UserControl, IAppInfoPanel
 
                 totalSize.Text = size.ToPrettySize(2);
                 modDate.Text = last.ToString(CultureInfo.CurrentCulture);
+
+                // Description
+                description.Text = nugetInfo.Description ?? string.Empty;
 
                 // Dependencies
                 if (nugetInfo.Dependencies?.Length > 0)

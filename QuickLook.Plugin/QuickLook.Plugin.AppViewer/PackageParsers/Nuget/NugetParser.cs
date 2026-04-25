@@ -116,11 +116,10 @@ public static class NugetParser
                 if (groups.Count > 0)
                 {
                     // Collect distinct target frameworks
-                    info.TargetFrameworks = groups
+                    info.TargetFrameworks = [.. groups
                         .Select(g => g.Attribute("targetFramework")?.Value?.Trim())
                         .Where(s => !string.IsNullOrEmpty(s))
-                        .Distinct()
-                        .ToArray();
+                        .Distinct()];
 
                     // Format all dependencies grouped by framework
                     var depLines = new List<string>();
@@ -142,20 +141,19 @@ public static class NugetParser
                             depLines.Add($"  {line}");
                         }
                     }
-                    info.Dependencies = depLines.ToArray();
+                    info.Dependencies = [.. depLines];
                 }
                 else
                 {
                     // No groups — direct top-level dependencies
-                    info.Dependencies = depsEl.Elements(ns + "dependency")
+                    info.Dependencies = [.. depsEl.Elements(ns + "dependency")
                         .Select(d =>
                         {
                             string id = d.Attribute("id")?.Value?.Trim() ?? string.Empty;
                             string ver = d.Attribute("version")?.Value?.Trim() ?? string.Empty;
                             return string.IsNullOrEmpty(ver) ? id : $"{id} ({ver})";
                         })
-                        .Where(s => !string.IsNullOrWhiteSpace(s))
-                        .ToArray();
+                        .Where(s => !string.IsNullOrWhiteSpace(s))];
                 }
             }
         }

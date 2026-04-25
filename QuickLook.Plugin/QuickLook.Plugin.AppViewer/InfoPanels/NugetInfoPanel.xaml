@@ -52,6 +52,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="1"
@@ -143,18 +144,17 @@
                        Grid.Row="7"
                        Grid.Column="1"
                        Padding="3"
-                       Visibility="Collapsed"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Project Website" />
+                       Text="Project Website"
+                       Visibility="Collapsed" />
             <TextBlock x:Name="projectUrlBlock"
                        Grid.Row="7"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
-                       Visibility="Collapsed"
-                       TextTrimming="CharacterEllipsis">
-                <Hyperlink x:Name="projectUrlLink"
-                           RequestNavigate="OnHyperlinkNavigate">
+                       TextTrimming="CharacterEllipsis"
+                       Visibility="Collapsed">
+                <Hyperlink x:Name="projectUrlLink" RequestNavigate="OnHyperlinkNavigate">
                     <Run x:Name="projectUrlText" />
                 </Hyperlink>
             </TextBlock>
@@ -163,18 +163,17 @@
                        Grid.Row="8"
                        Grid.Column="1"
                        Padding="3"
-                       Visibility="Collapsed"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Source Repository" />
+                       Text="Source Repository"
+                       Visibility="Collapsed" />
             <TextBlock x:Name="repoUrlBlock"
                        Grid.Row="8"
                        Grid.Column="2"
                        Margin="8,0,0,0"
                        Padding="3"
-                       Visibility="Collapsed"
-                       TextTrimming="CharacterEllipsis">
-                <Hyperlink x:Name="repoUrlLink"
-                           RequestNavigate="OnHyperlinkNavigate">
+                       TextTrimming="CharacterEllipsis"
+                       Visibility="Collapsed">
+                <Hyperlink x:Name="repoUrlLink" RequestNavigate="OnHyperlinkNavigate">
                     <Run x:Name="repoUrlText" />
                 </Hyperlink>
             </TextBlock>
@@ -223,9 +222,37 @@
                        Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Text="Searching..."
                        TextTrimming="CharacterEllipsis" />
+            <!--  Description  -->
+            <GroupBox x:Name="descriptionGroupBox"
+                      Grid.Row="12"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      Margin="3,3,16,3"
+                      Padding="3"
+                      Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                      BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                      Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                      Header="Description">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Resources>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                        </Style>
+                    </ScrollViewer.Resources>
+                    <TextBox x:Name="description"
+                             Margin="8,3,16,3"
+                             AcceptsReturn="True"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" />
+                </ScrollViewer>
+            </GroupBox>
             <!--  Dependencies  -->
             <GroupBox x:Name="dependenciesGroupBox"
-                      Grid.Row="12"
+                      Grid.Row="13"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="3,3,16,16"
