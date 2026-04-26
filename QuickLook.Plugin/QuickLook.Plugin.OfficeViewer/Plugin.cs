@@ -107,34 +107,42 @@ public sealed class Plugin : IViewer
         if (ZoneIdentifierManager.IsZoneBlocked(path))
         {
             context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
+            var alwaysUnblockProtectedView = SettingHelper.Get("AlwaysUnblockProtectedView", false, "QuickLook.Plugin.OfficeViewer");
 
-            MessageBoxResult result = MessageBox.Show(
-                """
-                Be careful - files from the Internet can contain viruses.
-                The Office interface prevents loading in Protected View.
-
-                Would you like OfficeViewer-Native to unblock the ZoneIdentifier of Internet?
-                """,
-                "PROTECTED VIEW",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question
-            );
-
-            if (result == MessageBoxResult.Yes)
+            if (alwaysUnblockProtectedView)
             {
                 _ = ZoneIdentifierManager.UnblockZone(path);
             }
             else
             {
-                context.ViewerContent = new Label()
+                MessageBoxResult result = MessageBox.Show(
+                    """
+                    Be careful - files from the Internet can contain viruses.
+                    The Office interface prevents loading in Protected View.
+
+                    Would you like OfficeViewer-Native to unblock the ZoneIdentifier of Internet?
+                    """,
+                    "PROTECTED VIEW",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                );
+
+                if (result == MessageBoxResult.Yes)
                 {
-                    Content = "The Office interface prevents loading in Protected View.",
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                };
-                context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
-                context.IsBusy = false;
-                return;
+                    _ = ZoneIdentifierManager.UnblockZone(path);
+                }
+                else
+                {
+                    context.ViewerContent = new Label()
+                    {
+                        Content = "The Office interface prevents loading in Protected View.",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                    };
+                    context.Title = $"[PROTECTED VIEW] {Path.GetFileName(path)}";
+                    context.IsBusy = false;
+                    return;
+                }
             }
         }
 
