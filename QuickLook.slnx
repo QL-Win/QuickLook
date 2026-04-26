@@ -60,6 +60,10 @@
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
+    <Project Path="QuickLook.Plugin/QuickLook.Plugin.ChmViewer/QuickLook.Plugin.ChmViewer.csproj">
+      <Platform Solution="*|ARM64" Project="ARM64" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.MarkdownViewer/QuickLook.Plugin.MarkdownViewer.csproj">
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
@@ -119,6 +123,7 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.HtmlViewer/QuickLook.Plugin.HtmlViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ImageViewer/QuickLook.Plugin.ImageViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.MailViewer/QuickLook.Plugin.MailViewer.csproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ChmViewer/QuickLook.Plugin.ChmViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.MarkdownViewer/QuickLook.Plugin.MarkdownViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.MediaInfoViewer/QuickLook.Plugin.MediaInfoViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.OfficeViewer/QuickLook.Plugin.OfficeViewer.csproj" />
