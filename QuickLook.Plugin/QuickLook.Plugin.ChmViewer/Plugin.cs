@@ -24,7 +24,13 @@ namespace QuickLook.Plugin.ChmViewer;
 
 public sealed class Plugin : IViewer
 {
-    public int Priority => 0;
+    private ChmWebpagePanel _panel;
+
+    /// <summary>
+    /// The implementation of this plugin is better than following
+    /// https://github.com/emako/QuickLook.Plugin.SumatraPDFReader
+    /// </summary>
+    public int Priority => 2;
 
     public void Init()
     {
@@ -32,26 +38,29 @@ public sealed class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return false;
-#pragma warning disable CS0162 // Unreachable code detected
         return !Directory.Exists(path)
             && Path.GetExtension(path).Equals(".chm", StringComparison.OrdinalIgnoreCase);
-#pragma warning restore CS0162 // Unreachable code detected
     }
 
     public void Prepare(string path, ContextObject context)
     {
-        context.Title = Path.GetFileName(path);
-        context.IsBlocked = true;
-        context.PreferredSize = new Size { Width = 800, Height = 600 };
+        context.PreferredSize = new Size(1280, 720);
     }
 
     public void View(string path, ContextObject context)
     {
+        _panel = new ChmWebpagePanel();
+        _panel.PreviewCompiledHtmlHelp(path);
+
+        context.ViewerContent = _panel;
+        context.Title = Path.GetFileName(path);
         context.IsBusy = false;
     }
 
     public void Cleanup()
     {
+        _panel?.Dispose();
+        _panel = null;
+        GC.SuppressFinalize(this);
     }
 }

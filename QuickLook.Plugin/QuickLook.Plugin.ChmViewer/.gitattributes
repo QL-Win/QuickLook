@@ -1,0 +1,8 @@
+# Ignore HTML files in Resources and subdirectories
+Resources/**/*.html linguist-vendored
+
+# Ignore CSS files in Resources and subdirectories
+Resources/**/*.css linguist-vendored
+
+# Ignore JS files in Resources and subdirectories
+Resources/**/*.js linguist-vendored

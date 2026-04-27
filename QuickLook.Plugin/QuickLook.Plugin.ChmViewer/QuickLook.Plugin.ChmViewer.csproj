@@ -76,6 +76,21 @@
             <Name>QuickLook.Common</Name>
             <Private>False</Private>
         </ProjectReference>
+        <ProjectReference Include="..\QuickLook.Plugin.HtmlViewer\QuickLook.Plugin.HtmlViewer.csproj">
+            <Project>{CE22A1F3-7F2C-4EC8-BFDE-B58D0EB625FC}</Project>
+            <Name>QuickLook.Plugin.HtmlViewer</Name>
+            <Private>False</Private>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3912.50">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\chm2html.html" />
     </ItemGroup>
 
 </Project>
