@@ -18,6 +18,7 @@
 using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -72,48 +73,47 @@ public class ChmWebpagePanel : WebpagePanel
         var chmFileUrl = Helper.FilePathToFileUrl(path);
         var pluginUri = new Uri($"file://quicklook/?plugin=1&chm={Uri.EscapeDataString(chmFileUrl.AbsoluteUri)}");
 
+        var chmFile = File.ReadAllBytes(path); // Preload the CHM file to improve performance when the WebView requests it later
+        _resources.Add(Uri.EscapeDataString(chmFileUrl.AbsoluteUri), chmFile);
+
         NavigateToUri(pluginUri);
     }
 
     protected override void WebView_WebResourceRequested(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceRequestedEventArgs args)
     {
+        Debug.WriteLine($"[{args.Request.Method}] {args.Request.Uri}");
+
         try
         {
-            if (string.IsNullOrWhiteSpace(args.Request.Uri))
-            {
-                base.WebView_WebResourceRequested(sender, args);
-                return;
-            }
-
             var requestedUri = new Uri(args.Request.Uri);
-            if (requestedUri.Scheme != "file")
-            {
-                base.WebView_WebResourceRequested(sender, args);
-                return;
-            }
 
-            var requestedPath = Uri.UnescapeDataString(requestedUri.AbsolutePath);
-            if (requestedPath == "/")
+            if (requestedUri.Scheme == "file")
             {
-                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                    new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
-                args.Response = response;
-                return;
-            }
+                string absolutePath = Uri.UnescapeDataString(requestedUri.AbsolutePath);
 
-            if (ContainsKey(requestedPath))
-            {
-                var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                    ReadStream(requestedPath), 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedPath)));
-                args.Response = response;
-                return;
+                if (absolutePath.StartsWith("/?plugin=1"))
+                {
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
+                    args.Response = response;
+                }
+                else if (ContainsKey(requestedUri.AbsolutePath))
+                {
+                    var stream = ReadStream(requestedUri.AbsolutePath);
+                    var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
+                        stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.AbsolutePath)));
+                    args.Response = response;
+                }
+                else
+                {
+                    // It should not need to be dealt with anymore
+                }
             }
-
-            base.WebView_WebResourceRequested(sender, args);
         }
-        catch
+        catch (Exception e)
         {
-            base.WebView_WebResourceRequested(sender, args);
+            // We don't need to feel burdened by any exceptions
+            Debug.WriteLine(e);
         }
     }
 
