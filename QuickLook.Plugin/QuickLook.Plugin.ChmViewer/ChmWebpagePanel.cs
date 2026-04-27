@@ -27,9 +27,11 @@ namespace QuickLook.Plugin.ChmViewer;
 
 public class ChmWebpagePanel : WebpagePanel
 {
-    private const string _resourcePrefix = "QuickLook.Plugin.ChmViewer.Resources.";
-    private static readonly Dictionary<string, byte[]> _resources = [];
-    private readonly byte[] _homePage;
+    protected const string _resourcePrefix = "QuickLook.Plugin.ChmViewer.Resources.";
+    protected internal static readonly Dictionary<string, byte[]> _resources = [];
+    protected readonly byte[] _homePage;
+
+    protected string _path;
 
     static ChmWebpagePanel()
     {
@@ -68,15 +70,9 @@ public class ChmWebpagePanel : WebpagePanel
 
     public void PreviewCompiledHtmlHelp(string path)
     {
-        FallbackPath = Path.GetDirectoryName(path);
+        _path = path;
 
-        var chmFileUrl = Helper.FilePathToFileUrl(path);
-        var pluginUri = new Uri($"file://quicklook/?plugin=1&chm={Uri.EscapeDataString(chmFileUrl.AbsoluteUri)}");
-
-        var chmFile = File.ReadAllBytes(path); // Preload the CHM file to improve performance when the WebView requests it later
-        _resources.Add(Uri.EscapeDataString(chmFileUrl.AbsoluteUri), chmFile);
-
-        NavigateToUri(pluginUri);
+        NavigateToUri(new Uri("http://quicklook/?plugin=1&chm=http://quicklook/.chm"));
     }
 
     protected override void WebView_WebResourceRequested(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceRequestedEventArgs args)
@@ -87,21 +83,21 @@ public class ChmWebpagePanel : WebpagePanel
         {
             var requestedUri = new Uri(args.Request.Uri);
 
-            if (requestedUri.Scheme == "file")
+            if (requestedUri.Scheme == "http")
             {
                 string absolutePath = Uri.UnescapeDataString(requestedUri.AbsolutePath);
 
-                if (absolutePath.StartsWith("/?plugin=1"))
+                if (absolutePath == "/")
                 {
                     var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
                         new MemoryStream(_homePage), 200, "OK", MimeTypes.GetContentType(".html"));
                     args.Response = response;
                 }
-                else if (ContainsKey(requestedUri.AbsolutePath))
+                else if (absolutePath == "/.chm")
                 {
-                    var stream = ReadStream(requestedUri.AbsolutePath);
+                    Stream stream = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                     var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                        stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(requestedUri.AbsolutePath)));
+                        stream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(".chm")));
                     args.Response = response;
                 }
                 else
