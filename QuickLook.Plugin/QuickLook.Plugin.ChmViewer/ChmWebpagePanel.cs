@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
 using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,27 @@ public class ChmWebpagePanel : WebpagePanel
     public ChmWebpagePanel()
     {
         _homePage = ReadResource("/chm2html.html") ?? [];
+
+        if (OSThemeHelper.AppsUseDarkTheme())
+        {
+            // Invoke using reflection: WebView2.CreationProperties.AdditionalBrowserArguments
+            // This approach allows the library to avoid direct dependency on WebView2
+            if (typeof(WebpagePanel).GetField("_webView", BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo fieldInfo)
+            {
+                object webView2 = fieldInfo.GetValue(this);
+
+                if (webView2?.GetType().GetProperty("CreationProperties", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo creationPropertiesProperty)
+                {
+                    object creationProperties = creationPropertiesProperty.GetValue(webView2);
+
+                    if (creationProperties?.GetType().GetProperty("AdditionalBrowserArguments", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo additionalBrowserArgumentsProperty)
+                    {
+                        string additionalBrowserArguments = (additionalBrowserArgumentsProperty.GetValue(creationProperties) as string) ?? string.Empty;
+                        additionalBrowserArgumentsProperty.SetValue(creationProperties, additionalBrowserArguments + " --enable-features=WebContentsForceDark");
+                    }
+                }
+            }
+        }
     }
 
     private static void InitializeResources()
