@@ -81,7 +81,7 @@ public class MarkdownPanel : WebpagePanel
         content = PrepareMarkdownContent(path, content);
 
         var template = ReadString("/md2html.html");
-        
+
         // Support automatic RTL for markdown files
         bool isRtl = false;
         if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
@@ -93,7 +93,7 @@ public class MarkdownPanel : WebpagePanel
             if (bool.TrueString.Equals(isSupportRTL, StringComparison.OrdinalIgnoreCase))
                 isRtl = true;
         }
-        
+
         var html = template.Replace("{{content}}", content)
                            .Replace("{{rtl}}", isRtl ? "rtl" : "ltr");
 
@@ -137,33 +137,33 @@ public class MarkdownPanel : WebpagePanel
                 continue;
 
             return trimmed.StartsWith("graph ", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.Equals("graph", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("flowchart ", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.Equals("flowchart", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("sequenceDiagram", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("classDiagram", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("stateDiagram", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("stateDiagram-v2", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("erDiagram", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("journey", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("gantt", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("pie", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("mindmap", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("timeline", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("gitGraph", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("quadrantChart", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("requirementDiagram", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("c4Context", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("c4Container", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("c4Component", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("c4Dynamic", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("c4Deployment", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("xychart-beta", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("block-beta", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("packet-beta", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("architecture-beta", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("kanban", StringComparison.OrdinalIgnoreCase)
-                   || trimmed.StartsWith("sankey-beta", StringComparison.OrdinalIgnoreCase);
+                || trimmed.Equals("graph", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("flowchart ", StringComparison.OrdinalIgnoreCase)
+                || trimmed.Equals("flowchart", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("sequenceDiagram", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("classDiagram", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("stateDiagram", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("stateDiagram-v2", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("erDiagram", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("journey", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("gantt", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("pie", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("mindmap", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("timeline", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("gitGraph", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("quadrantChart", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("requirementDiagram", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("c4Context", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("c4Container", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("c4Component", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("c4Dynamic", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("c4Deployment", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("xychart-beta", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("block-beta", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("packet-beta", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("architecture-beta", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("kanban", StringComparison.OrdinalIgnoreCase)
+                || trimmed.StartsWith("sankey-beta", StringComparison.OrdinalIgnoreCase);
         }
 
         return false;
@@ -242,7 +242,7 @@ public class MarkdownPanel : WebpagePanel
         return reader.ReadToEnd();
     }
 
-    public static class MimeTypes
+    public new static class MimeTypes
     {
         public const string Html = "text/html";
         public const string JavaScript = "application/javascript";
