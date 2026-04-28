@@ -85,7 +85,7 @@
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.12.0">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.13.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3912.50">

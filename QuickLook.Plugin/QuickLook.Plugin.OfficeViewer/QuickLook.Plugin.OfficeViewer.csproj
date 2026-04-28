@@ -81,7 +81,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="UnblockZoneIdentifier " Version="1.0.0" />
+        <PackageReference Include="UnblockZoneIdentifier " Version="1.0.1" />
     </ItemGroup>
     
     <ItemGroup>
