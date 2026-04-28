@@ -2,21 +2,23 @@
 
 Update not completed yet...
 
-### Text files
+### Text and code files
 - `.txt` (Plain text file)
 - `.rtf` (Rich Text Format)
 - `.log` (Log file)
 - `.ini` (Initialization/config file)
-- `.json`, `.jsonl` (JavaScript Object Notation / JSON Lines)
+- `.json` (JavaScript Object Notation)
+- `.jsonl` (JavaScript Object Notation Lines)
 - `.xml` (Extensible Markup Language)
 - `.yaml`, `.yml` (YAML Ain't Markup Language)
 - `.md`, `.markdown`, `.mdx`, `.mmd`, `.mkd`, `.mdwn`, `.mdown`, `.mdc`, `.qmd`, `.rmd`, `.rmarkdown`, `.apib`, `.mdtxt`, `.mdtext` (Markdown and variants)
 - `.csv` (Comma-separated values)
 - `.tsv` (Tab-separated values)
+- `.psv` (Pipe-separated values)
 - `.bat`, `.cmd` (Batch script)
 - `.ps1` (PowerShell script)
 - `.sh` (Shell script)
-- `.c`, `.cpp`, `.h`, `.hpp` (C/C++ source/header)
+- `.c`, `.cpp`, `.h`, `.hpp` (C/C++ source and header)
 - `.cs` (C# source)
 - `.java` (Java source)
 - `.py` (Python source)
@@ -260,6 +262,9 @@ Update not completed yet...
 - `.htm`, `.html` (HTML file)
 - `.url` (Internet shortcut, http/https)
 
+### CHM files
+- `.chm` (Compiled HTML Help)
+
 ### Mail files
 - `.eml` (Email message)
 - `.msg` (Outlook message)
@@ -286,7 +291,7 @@ Update not completed yet...
 - `.uimage` (U-Boot image)
 - `.dylib` (macOS dynamic library)
 
-### PE (Portable Executable) files
+### Portable Executable (PE) files
 - `.exe` (Windows executable)
 - `.sys` (Windows system file)
 - `.scr` (Windows screensaver)
@@ -306,13 +311,15 @@ Update not completed yet...
 ### App Installer files
 - `.apk` (Android Package)
 - `.aab` (Android App Bundle)
-- `.appx`, `.appxbundle` (Windows AppX installer)
-- `.msi` (Windows Installer)
-- `.msix`, `.msixbundle` (Windows MSIX installer)
+- `.appx`, `.appxbundle` (Windows AppX Installer)
+- `.msi` (Windows MSI Installer)
+- `.msp` (Windows MSP Installer)
+- `.msix`, `.msixbundle` (Windows MSIX Installer)
 - `.dmg` (macOS Disk Image)
 - `.ipa` (iOS App Package)
 - `.hap` (HarmonyOS App Package)
-- `.ddeb`, `.deb` (Debian package)
+- `.ddeb` (Debian Debug Symbol Package)
+- `.deb` (Debian Binary Package)
 - `.appimage` (Linux AppImage)
 - `.rpm` (Red Hat Package Manager)
 - `.wgt`, `.wgtu` (UniApp Widget)
