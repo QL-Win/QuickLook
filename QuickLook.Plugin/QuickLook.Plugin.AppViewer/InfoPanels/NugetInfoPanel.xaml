@@ -155,6 +155,23 @@
                        TextTrimming="CharacterEllipsis"
                        Visibility="Collapsed">
                 <Hyperlink x:Name="projectUrlLink" RequestNavigate="OnHyperlinkNavigate">
+                    <Hyperlink.Style>
+                        <Style TargetType="{x:Type Hyperlink}">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="TextDecorations" Value="Underline" />
+                            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
+                                    <Setter Property="TextDecorations" Value="{x:Null}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Hyperlink.Style>
                     <Run x:Name="projectUrlText" />
                 </Hyperlink>
             </TextBlock>
@@ -174,6 +191,23 @@
                        TextTrimming="CharacterEllipsis"
                        Visibility="Collapsed">
                 <Hyperlink x:Name="repoUrlLink" RequestNavigate="OnHyperlinkNavigate">
+                    <Hyperlink.Style>
+                        <Style TargetType="{x:Type Hyperlink}">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="TextDecorations" Value="Underline" />
+                            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
+                                    <Setter Property="TextDecorations" Value="{x:Null}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Hyperlink.Style>
                     <Run x:Name="repoUrlText" />
                 </Hyperlink>
             </TextBlock>
