@@ -258,3 +258,21 @@ internal class APngProvider : AnimationProvider
         }
     }
 }
+
+file static class FrameExtension
+{
+    public static BitmapSource GetBitmapSource(this Frame frame)
+    {
+        using MemoryStream stream = frame.GetStream();
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        bitmapImage.StreamSource = null;
+        bitmapImage.Freeze();
+
+        return bitmapImage;
+    }
+}

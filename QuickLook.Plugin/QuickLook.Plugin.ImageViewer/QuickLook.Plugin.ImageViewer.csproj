@@ -100,6 +100,9 @@
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="QuickLook.LibAPNG" Version="0.3.1">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup Condition=" '$(DefineConstants)' != '' and $(DefineConstants.Contains('USESVGSKIA')) ">
@@ -109,9 +112,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="LibAPNG">
-            <HintPath>.\LibAPNG.dll</HintPath>
-        </Reference>
         <Reference Include="WindowsBase" />
     </ItemGroup>
 
