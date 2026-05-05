@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<SyntaxDefinition name="ISON" extensions=".ison">
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+
+    <Digits name="Digits" color="#B00000"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+
+            <Span name="Comment" stopateol="true" color="#008000" bold="false" italic="true">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="String" stopateol="true" color="#705711" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Section" color="#0000FF" bold="true" italic="false">
+                <Key word="table"/>
+            </KeyWords>
+
+            <KeyWords name="Boolean" color="#0000FF" bold="false" italic="false">
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+
+            <KeyWords name="Type" color="#800080" bold="false" italic="false">
+                <Key word="int"/>
+                <Key word="bool"/>
+                <Key word="float"/>
+                <Key word="number"/>
+                <Key word="string"/>
+                <Key word="date"/>
+                <Key word="datetime"/>
+                <Key word="decimal"/>
+            </KeyWords>
+
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
