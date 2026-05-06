@@ -237,6 +237,20 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<AllowDarkTheme>True</AllowDarkTheme>`
 
+### `<FontFamily>`
+- Default: default font of the current language
+- Type: `String`
+- Description: Allow setting of the font used in the text viewer.
+- Example:
+  - `<FontFamily>Cascadia Mono SemiLight</FontFamily>`
+
+### `<FontSize>`
+- Default: 14.0
+- Type: `Double`
+- Description: Allow setting of font size used in the text viewer.
+- Example:
+  - `<FontSize>13</FontSize>`
+
 ## Notes
 
 - All option names are case-sensitive and stored as XML element names under `<Settings>`.
