@@ -293,12 +293,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
     /// Resetting the foreground to the editor's base color effectively removes
     /// any syntax-highlight spans, keeping the display clean and readable.
     /// </summary>
-    private class TruncatedLineDecolorizer : DocumentColorizingTransformer
+    private class TruncatedLineDecolorizer(TextViewerPanel owner) : DocumentColorizingTransformer
     {
-        private readonly TextViewerPanel _owner;
-
-        public TruncatedLineDecolorizer(TextViewerPanel owner) => _owner = owner;
-
         protected override void ColorizeLine(DocumentLine line)
         {
             // Skip lines that are too short to contain the marker.
@@ -313,7 +309,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 // which removes any previously applied syntax-highlight colors.
                 ChangeLinePart(line.Offset, line.EndOffset, element =>
                 {
-                    element.TextRunProperties.SetForegroundBrush(_owner.Foreground);
+                    element.TextRunProperties.SetForegroundBrush(owner.Foreground);
                 });
             }
         }
