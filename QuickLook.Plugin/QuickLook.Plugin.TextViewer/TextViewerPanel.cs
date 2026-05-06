@@ -72,7 +72,6 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public TextViewerPanel()
     {
-        FontSize = SettingHelper.Get("FontSize", 14.0, "QuickLook.Plugin.TextViewer");
         ShowLineNumbers = true;
         WordWrap = true;
         IsReadOnly = true;
@@ -117,8 +116,12 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
         PreviewMouseWheel += Viewer_MouseWheel;
 
-        FontFamily = new FontFamily(SettingHelper.Get("FontFamily", TranslationHelper.Get("Editor_FontFamily",
-             domain: Assembly.GetExecutingAssembly().GetName().Name), "QuickLook.Plugin.TextViewer"));
+        FontSize = SettingHelper.Get("FontSize", 14d, "QuickLook.Plugin.TextViewer");
+        FontFamily = new FontFamily(
+            SettingHelper.Get("FontFamily",
+                failsafe: TranslationHelper.Get("Editor_FontFamily",
+                domain: Assembly.GetExecutingAssembly().GetName().Name),
+            "QuickLook.Plugin.TextViewer"));
 
         // Add a custom element generator (e.g., to truncate extremely long lines).
         TextArea.TextView.ElementGenerators.Add(new TruncateLongLines());
