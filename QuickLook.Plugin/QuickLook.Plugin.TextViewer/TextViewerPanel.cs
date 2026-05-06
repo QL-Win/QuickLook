@@ -116,7 +116,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
         PreviewMouseWheel += Viewer_MouseWheel;
 
-        FontSize = SettingHelper.Get("FontSize", 14d, "QuickLook.Plugin.TextViewer");
+        // Read configured font size and validate it to avoid negative or unreasonable values
+        FontSize = Math.Max(1d, Math.Min(72d, SettingHelper.Get("FontSize", 14d, "QuickLook.Plugin.TextViewer")));
         FontFamily = new FontFamily(
             SettingHelper.Get("FontFamily",
                 failsafe: TranslationHelper.Get("Editor_FontFamily",
