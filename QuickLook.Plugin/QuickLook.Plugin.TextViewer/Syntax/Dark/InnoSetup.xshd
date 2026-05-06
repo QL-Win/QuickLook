@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Inno Setup" extensions=".iss;.isl">
+
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#FFFFFF" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#2F2F2F"/>
+        <VRuler color="#404040"/>
+
+        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <SelectedFoldLine color="#FFFFFF" bgcolor="#1E1E1E"/>
+
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#505050"/>
+        <TabMarkers color="#505050"/>
+        <InvalidLines color="#505050"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value=";"/>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="(*"/>
+        <Property name="BlockCommentEnd" value="*)"/>
+    </Properties>
+
+    <Digits name="Digits" color="#B5CEA8" bold="false" italic="false"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&amp;|\/"',;=:-{}[]()#+</Delimiters>
+
+            <Span name="LineComment1" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin startofline="true">;</Begin>
+            </Span>
+
+            <Span name="LineComment2" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin startofline="true">//</Begin>
+            </Span>
+
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+
+            <Span name="StringDouble" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="StringSingle" stopateol="true" color="#CE9178" bold="false" italic="false">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <Span name="Section" stopateol="true" color="#569CD6" bold="true" italic="false">
+                <Begin startofline="true">[</Begin>
+                <End>]</End>
+            </Span>
+
+            <Span name="Preprocessor" stopateol="true" color="#C586C0" bold="false" italic="false">
+                <Begin startofline="true">#</Begin>
+            </Span>
+
+            <Span name="Constants" stopateol="false" color="#D7BA7D" bold="false" italic="false">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+
+            <MarkPrevious color="#4EC9B0" bold="false" italic="false">=</MarkPrevious>
+
+            <KeyWords name="DirectiveKeywords" color="#4FC1FF" bold="false" italic="false">
+                <Key word="Setup"/>
+                <Key word="Types"/>
+                <Key word="Components"/>
+                <Key word="Tasks"/>
+                <Key word="Files"/>
+                <Key word="Dirs"/>
+                <Key word="Icons"/>
+                <Key word="INI"/>
+                <Key word="Registry"/>
+                <Key word="Run"/>
+                <Key word="UninstallRun"/>
+                <Key word="InstallDelete"/>
+                <Key word="UninstallDelete"/>
+                <Key word="Languages"/>
+                <Key word="Messages"/>
+                <Key word="CustomMessages"/>
+                <Key word="LangOptions"/>
+                <Key word="Code"/>
+                <Key word="AppId"/>
+                <Key word="AppName"/>
+                <Key word="AppVersion"/>
+                <Key word="AppVerName"/>
+                <Key word="AppPublisher"/>
+                <Key word="AppPublisherURL"/>
+                <Key word="AppSupportURL"/>
+                <Key word="AppUpdatesURL"/>
+                <Key word="DefaultDirName"/>
+                <Key word="DefaultGroupName"/>
+                <Key word="AllowNoIcons"/>
+                <Key word="OutputDir"/>
+                <Key word="OutputBaseFilename"/>
+                <Key word="SetupIconFile"/>
+                <Key word="WizardStyle"/>
+                <Key word="WizardImageFile"/>
+                <Key word="WizardSmallImageFile"/>
+                <Key word="Compression"/>
+                <Key word="SolidCompression"/>
+                <Key word="ArchitecturesAllowed"/>
+                <Key word="ArchitecturesInstallIn64BitMode"/>
+                <Key word="PrivilegesRequired"/>
+                <Key word="DisableDirPage"/>
+                <Key word="DisableProgramGroupPage"/>
+                <Key word="DisableReadyMemo"/>
+                <Key word="DisableReadyPage"/>
+                <Key word="DisableWelcomePage"/>
+                <Key word="UsePreviousAppDir"/>
+                <Key word="UsePreviousLanguage"/>
+                <Key word="UsePreviousSetupType"/>
+                <Key word="LicenseFile"/>
+                <Key word="InfoBeforeFile"/>
+                <Key word="InfoAfterFile"/>
+                <Key word="UninstallDisplayIcon"/>
+                <Key word="ChangesEnvironment"/>
+                <Key word="ChangesAssociations"/>
+                <Key word="MinVersion"/>
+                <Key word="CloseApplications"/>
+                <Key word="RestartApplications"/>
+            </KeyWords>
+
+            <KeyWords name="EntryKeywords" color="#9CDCFE" bold="false" italic="false">
+                <Key word="Name"/>
+                <Key word="Description"/>
+                <Key word="Type"/>
+                <Key word="Source"/>
+                <Key word="DestDir"/>
+                <Key word="DestName"/>
+                <Key word="Excludes"/>
+                <Key word="Includes"/>
+                <Key word="Flags"/>
+                <Key word="Components"/>
+                <Key word="Tasks"/>
+                <Key word="Languages"/>
+                <Key word="Check"/>
+                <Key word="BeforeInstall"/>
+                <Key word="AfterInstall"/>
+                <Key word="OnlyBelowVersion"/>
+                <Key word="Permissions"/>
+                <Key word="Attribs"/>
+                <Key word="StatusMsg"/>
+                <Key word="Filename"/>
+                <Key word="Parameters"/>
+                <Key word="WorkingDir"/>
+                <Key word="HotKey"/>
+                <Key word="Comment"/>
+                <Key word="IconFilename"/>
+                <Key word="IconIndex"/>
+                <Key word="AppUserModelID"/>
+                <Key word="Root"/>
+                <Key word="Subkey"/>
+                <Key word="ValueType"/>
+                <Key word="ValueName"/>
+                <Key word="ValueData"/>
+                <Key word="MessagesFile"/>
+                <Key word="LanguageName"/>
+                <Key word="LanguageID"/>
+                <Key word="LanguageCodePage"/>
+            </KeyWords>
+
+            <KeyWords name="CodeKeywords" color="#569CD6" bold="false" italic="false">
+                <Key word="begin"/>
+                <Key word="end"/>
+                <Key word="if"/>
+                <Key word="then"/>
+                <Key word="else"/>
+                <Key word="case"/>
+                <Key word="of"/>
+                <Key word="while"/>
+                <Key word="do"/>
+                <Key word="for"/>
+                <Key word="to"/>
+                <Key word="downto"/>
+                <Key word="repeat"/>
+                <Key word="until"/>
+                <Key word="function"/>
+                <Key word="procedure"/>
+                <Key word="var"/>
+                <Key word="const"/>
+                <Key word="type"/>
+                <Key word="record"/>
+                <Key word="class"/>
+                <Key word="try"/>
+                <Key word="except"/>
+                <Key word="finally"/>
+                <Key word="raise"/>
+                <Key word="with"/>
+                <Key word="and"/>
+                <Key word="or"/>
+                <Key word="not"/>
+                <Key word="in"/>
+                <Key word="div"/>
+                <Key word="mod"/>
+                <Key word="nil"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="Result"/>
+                <Key word="Integer"/>
+                <Key word="Boolean"/>
+                <Key word="String"/>
+            </KeyWords>
+
+            <KeyWords name="FlagKeywords" color="#DCDCAA" bold="false" italic="false">
+                <Key word="ignoreversion"/>
+                <Key word="replacesameversion"/>
+                <Key word="restartreplace"/>
+                <Key word="recursesubdirs"/>
+                <Key word="createallsubdirs"/>
+                <Key word="external"/>
+                <Key word="download"/>
+                <Key word="dontcopy"/>
+                <Key word="nocompression"/>
+                <Key word="onlyifdoesntexist"/>
+                <Key word="skipifsourcedoesntexist"/>
+                <Key word="uninsneveruninstall"/>
+                <Key word="postinstall"/>
+                <Key word="nowait"/>
+                <Key word="shellexec"/>
+                <Key word="runasoriginaluser"/>
+                <Key word="skipifsilent"/>
+                <Key word="skipifnotsilent"/>
+                <Key word="unchecked"/>
+                <Key word="checkedonce"/>
+                <Key word="yes"/>
+                <Key word="no"/>
+            </KeyWords>
+
+            <KeyWords name="RegistryRootKeywords" color="#B5CEA8" bold="false" italic="false">
+                <Key word="HKLM"/>
+                <Key word="HKCU"/>
+                <Key word="HKCR"/>
+                <Key word="HKU"/>
+                <Key word="HKCC"/>
+                <Key word="HKA"/>
+                <Key word="HKLM32"/>
+                <Key word="HKLM64"/>
+                <Key word="HKCU32"/>
+                <Key word="HKCU64"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
