@@ -194,6 +194,28 @@
                         </Style>
                     </Button.Style>
                 </Button>
+                <Button x:Name="buttonHardwareAcceleration"
+                        Width="34"
+                        DockPanel.Dock="Left"
+                        Style="{StaticResource ControlButtonStyle}"
+                        ToolTip="Hardware/Software Decoding"
+                        Visibility="{Binding HasVideo, ElementName=viewerPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock VerticalAlignment="Center"
+                               FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
+                               FontSize="11"
+                               Foreground="{DynamicResource CaptionButtonIconForeground}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="S/W" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding UseHardwareAcceleration, ElementName=viewerPanel}" Value="True">
+                                        <Setter Property="Text" Value="H/W" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Button>
                 <Button x:Name="buttonMute"
                         DockPanel.Dock="Right"
                         ToolTip="Volume">

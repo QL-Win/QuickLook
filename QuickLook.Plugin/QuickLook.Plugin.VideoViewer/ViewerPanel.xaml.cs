@@ -55,6 +55,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private bool _isPlaying;
     private bool _wasPlaying;
     private bool _shouldLoop;
+    private bool _useHardwareAcceleration;
 
     public ViewerPanel(ContextObject context)
     {
@@ -78,9 +79,11 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         mediaElement.MediaFailed += MediaFailed;
 
         ShouldLoop = SettingHelper.Get("ShouldLoop", false, "QuickLook.Plugin.VideoViewer");
+        UseHardwareAcceleration = SettingHelper.Get("UseHardwareAcceleration", false, "QuickLook.Plugin.VideoViewer");
 
         buttonPlayPause.Click += TogglePlayPause;
         buttonLoop.Click += ToggleShouldLoop;
+        buttonHardwareAcceleration.Click += ToggleHardwareAcceleration;
         buttonTime.Click += (_, _) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
         buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
         volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
@@ -133,6 +136,17 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
+    public bool UseHardwareAcceleration
+    {
+        get => _useHardwareAcceleration;
+        private set
+        {
+            if (value == _useHardwareAcceleration) return;
+            _useHardwareAcceleration = value;
+            OnPropertyChanged();
+        }
+    }
+
     public BitmapSource CoverArt
     {
         get => _coverArt;
@@ -150,6 +164,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
         SettingHelper.Set("VolumeDouble", LinearVolume, "QuickLook.Plugin.VideoViewer");
         SettingHelper.Set("ShouldLoop", ShouldLoop, "QuickLook.Plugin.VideoViewer");
+        SettingHelper.Set("UseHardwareAcceleration", UseHardwareAcceleration, "QuickLook.Plugin.VideoViewer");
 
         try
         {
@@ -386,6 +401,18 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private void ToggleShouldLoop(object sender, EventArgs e)
     {
         ShouldLoop = !ShouldLoop;
+    }
+
+    private void ToggleHardwareAcceleration(object sender, EventArgs e)
+    {
+        UseHardwareAcceleration = !UseHardwareAcceleration;
+        SettingHelper.Set("UseHardwareAcceleration", UseHardwareAcceleration, "QuickLook.Plugin.VideoViewer");
+        HardwareAccelerationModeChanged(UseHardwareAcceleration);
+    }
+
+    private void HardwareAccelerationModeChanged(bool useHardwareAcceleration)
+    {
+        // TODO: Apply the selected HW/SW decoding mode when playback backend support is implemented.
     }
 
     public void LoadAndPlay(string path, MediaInfoLib info)
