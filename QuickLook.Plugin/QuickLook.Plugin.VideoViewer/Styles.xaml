@@ -10,6 +10,46 @@
         <Setter Property="Width" Value="32" />
     </Style>
 
+    <Style x:Key="HardwareAccelerationButtonStyle"
+           BasedOn="{StaticResource CaptionButtonBaseStyle}"
+           TargetType="Button">
+        <Setter Property="Width" Value="42" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Margin" Value="2,0,0,0" />
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource CaptionButtonIconForeground}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!--  Postion Slider Control  -->
     <ControlTemplate x:Key="PositionSliderThumbTemplate" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center"

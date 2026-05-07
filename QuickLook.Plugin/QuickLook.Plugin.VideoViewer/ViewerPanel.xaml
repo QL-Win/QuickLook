@@ -195,15 +195,11 @@
                     </Button.Style>
                 </Button>
                 <Button x:Name="buttonHardwareAcceleration"
-                        Width="34"
                         DockPanel.Dock="Left"
-                        Style="{StaticResource ControlButtonStyle}"
+                        Style="{StaticResource HardwareAccelerationButtonStyle}"
                         ToolTip="Hardware/Software Decoding"
                         Visibility="{Binding HasVideo, ElementName=viewerPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock VerticalAlignment="Center"
-                               FontFamily="{Binding ElementName=viewerPanel, Path=FontFamily}"
-                               FontSize="11"
-                               Foreground="{DynamicResource CaptionButtonIconForeground}">
+                    <TextBlock VerticalAlignment="Center">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Text" Value="S/W" />
