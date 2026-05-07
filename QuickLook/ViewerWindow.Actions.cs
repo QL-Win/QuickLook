@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Helpers;
+using QuickLook.Common.NativeMethods;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Helpers;
@@ -83,6 +84,9 @@ public partial class ViewerWindow
 
             // Restore window state last to avoid flicker
             WindowState = _preFullscreenWindowState;
+
+            // Restore rounded corners on Windows 11
+            WindowHelper.SetWindowCorner(this, Dwmapi.WindowCornerStyle.Round);
         }
         else
         {
@@ -125,6 +129,9 @@ public partial class ViewerWindow
 
             // Use MoveWindow to set position and size with proper DPI handling
             this.MoveWindow(screenBounds.Left, screenBounds.Top, dipWidth, dipHeight);
+
+            // Remove rounded corners on Windows 11 for true fullscreen
+            WindowHelper.SetWindowCorner(this, Dwmapi.WindowCornerStyle.DoNotRound);
         }
     }
 

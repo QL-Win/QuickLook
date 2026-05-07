@@ -304,6 +304,16 @@ public static class WindowHelper
         Dwmapi.DwmSetWindowAttribute(hwnd, dwAttribute, ref val, Marshal.SizeOf(typeof(int)));
     }
 
+    public static void SetWindowCorner(Window window, Dwmapi.WindowCornerStyle style)
+    {
+        if (Environment.OSVersion.Version < new Version(10, 0, 22000))
+            return;
+
+        var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
+        int cornerPreference = (int)style;
+        Dwmapi.DwmSetWindowAttribute(hwnd, (uint)Dwmapi.WindowAttribute.WindowCornerPreference, ref cornerPreference, Marshal.SizeOf(typeof(int)));
+    }
+
     public static void EnableMicaBlur(Window window, bool isDarkTheme)
     {
         EnableDwmBlur(window, isDarkTheme, (uint)Dwmapi.WindowAttribute.MicaEffect, 1);
