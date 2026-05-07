@@ -308,6 +308,13 @@ Update not completed yet...
 - `.efi` (Extensible Firmware Interface)
 - `.mz` (DOS executable)
 
+### Minidump files
+- `.dmp` (Windows minidump)
+- `.dump` (Dump file)
+- `.mdmp` (Minidump file)
+- `.hdmp` (Heap dump file)
+- `.minidump` (Minidump file)
+
 ### App Installer files
 - `.apk` (Android Package)
 - `.aab` (Android App Bundle)

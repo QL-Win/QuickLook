@@ -36,6 +36,10 @@
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
+    <Project Path="QuickLook.Plugin/QuickLook.Plugin.DumpViewer/QuickLook.Plugin.DumpViewer.csproj">
+      <Platform Solution="*|ARM64" Project="ARM64" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj">
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
@@ -117,6 +121,7 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CertViewer/QuickLook.Plugin.CertViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CLSIDViewer/QuickLook.Plugin.CLSIDViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.CsvViewer/QuickLook.Plugin.CsvViewer.csproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.DumpViewer/QuickLook.Plugin.DumpViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ELFViewer/QuickLook.Plugin.ELFViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.FontViewer/QuickLook.Plugin.FontViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.HelixViewer/QuickLook.Plugin.HelixViewer.csproj" />
@@ -140,6 +145,7 @@
   <Project Path="QuickLook/QuickLook.csproj">
     <BuildDependency Project="QuickLook.Native/QuickLook.Native32/QuickLook.Native32.vcxproj" />
     <BuildDependency Project="QuickLook.Native/QuickLook.Native64/QuickLook.Native64.vcxproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.DumpViewer/QuickLook.Plugin.DumpViewer.csproj" />
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
   </Project>

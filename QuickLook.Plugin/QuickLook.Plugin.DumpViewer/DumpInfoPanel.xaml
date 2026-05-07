@@ -1,0 +1,225 @@
+<UserControl x:Class="QuickLook.Plugin.DumpViewer.DumpInfoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="720"
+             d:DesignWidth="1024"
+             FontSize="14"
+             Foreground="{DynamicResource WindowTextForeground}"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="SectionHeaderTextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
+        </Style>
+        <Style x:Key="ValueTextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="0,1" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="KeyTextStyle"
+               BasedOn="{StaticResource ValueTextStyle}"
+               TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForegroundAlternative}" />
+        </Style>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="Background" Value="#0DFFFFFF" />
+            <Setter Property="BorderBrush" Value="#24FFFFFF" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
+        </Style>
+        <Style TargetType="{x:Type DataGridCell}">
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="BorderBrush" Value="#18FFFFFF" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextForeground}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Padding="16,10,16,10"
+                Background="#3F3F3F">
+            <StackPanel>
+                <TextBlock x:Name="titleText"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Text="Minidump File Summary" />
+                <TextBlock x:Name="timeText"
+                           Margin="0,5,0,0"
+                           FontSize="15"
+                           Foreground="{DynamicResource WindowTextForeground}" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Expander Grid.Row="0"
+                      BorderBrush="#24FFFFFF"
+                      BorderThickness="0,1,0,0"
+                      IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock x:Name="dumpSummaryHeader"
+                               Margin="4,8,0,8"
+                               Style="{StaticResource SectionHeaderTextStyle}"
+                               Text="Dump Summary" />
+                </Expander.Header>
+                <ItemsControl x:Name="dumpSummaryItems" Margin="46,8,16,16">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="260" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           Style="{StaticResource KeyTextStyle}"
+                                           Text="{Binding Key}" />
+                                <TextBlock Grid.Column="1"
+                                           Style="{StaticResource ValueTextStyle}"
+                                           Text="{Binding Value}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Expander>
+
+            <Expander Grid.Row="1"
+                      BorderBrush="#24FFFFFF"
+                      BorderThickness="0,1,0,0"
+                      IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock x:Name="systemInformationHeader"
+                               Margin="4,8,0,8"
+                               Style="{StaticResource SectionHeaderTextStyle}"
+                               Text="System Information" />
+                </Expander.Header>
+                <ItemsControl x:Name="systemInformationItems" Margin="46,8,16,16">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="260" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           Style="{StaticResource KeyTextStyle}"
+                                           Text="{Binding Key}" />
+                                <TextBlock Grid.Column="1"
+                                           Style="{StaticResource ValueTextStyle}"
+                                           Text="{Binding Value}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Expander>
+
+            <Expander Grid.Row="2"
+                      VerticalAlignment="Stretch"
+                      BorderBrush="#24FFFFFF"
+                      BorderThickness="0,1,0,0"
+                      IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock x:Name="modulesHeader"
+                               Margin="4,8,0,8"
+                               Style="{StaticResource SectionHeaderTextStyle}"
+                               Text="Modules" />
+                </Expander.Header>
+                <Grid Margin="48,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0"
+                          Width="260"
+                          Height="28"
+                          Margin="0,0,0,6"
+                          HorizontalAlignment="Left">
+                        <TextBox x:Name="searchTextBox"
+                                 Padding="7,0,28,0"
+                                 VerticalContentAlignment="Center"
+                                 TextChanged="SearchTextBox_TextChanged" />
+                        <TextBlock x:Name="searchPlaceholder"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                                   IsHitTestVisible="False"
+                                   Text="Search" />
+                        <TextBlock Margin="0,0,8,0"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                   FontSize="16"
+                                   Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                                   IsHitTestVisible="False"
+                                   Text="&#xE721;" />
+                    </Grid>
+
+                    <DataGrid x:Name="modulesGrid"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              Background="#00FFFFFF"
+                              BorderBrush="#40FFFFFF"
+                              BorderThickness="1,1,0,0"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+                              EnableColumnVirtualization="True"
+                              EnableRowVirtualization="True"
+                              Foreground="{DynamicResource WindowTextForeground}"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalGridLinesBrush="#24FFFFFF"
+                              IsReadOnly="True"
+                              RowBackground="#00FFFFFF"
+                              RowHeaderWidth="0"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
+                              VerticalGridLinesBrush="#24FFFFFF"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="moduleNameColumn"
+                                                Width="300"
+                                                Binding="{Binding Name}"
+                                                Header="Module Name" />
+                            <DataGridTextColumn x:Name="moduleVersionColumn"
+                                                Width="170"
+                                                Binding="{Binding Version}"
+                                                Header="Module Version" />
+                            <DataGridTextColumn x:Name="modulePathColumn"
+                                                Width="*"
+                                                Binding="{Binding Path}"
+                                                Header="Module Path" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Expander>
+        </Grid>
+    </Grid>
+</UserControl>
