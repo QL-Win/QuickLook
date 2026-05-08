@@ -28,7 +28,7 @@ namespace QuickLook.Plugin.VideoViewer;
 
 public sealed class Plugin : IViewer
 {
-    private static MediaInfoLib _mediaInfo;
+    private static readonly MediaInfoLib _mediaInfo;
 
     private ViewerPanel _vp;
 
@@ -44,7 +44,11 @@ public sealed class Plugin : IViewer
 
     public void Init()
     {
+        // Remove legacy LAV hardware acceleration settings
+        // https://github.com/QL-Win/QuickLook/issues/1928
+#if false
         QLVRegistry.Register();
+#endif
     }
 
     public bool CanHandle(string path)
