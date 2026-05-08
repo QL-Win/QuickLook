@@ -205,6 +205,13 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<VolumeDouble>0.75</VolumeDouble>`
 
+### `<UseHardwareAcceleration>`
+- Default: `False`
+- Type: `Boolean`
+- Description: When `True`, the video backend (e.g. WPFMediaKit + LAVFilters) will attempt to use hardware-accelerated decoding when supported by the system and installed filters. When `False`, prefer software decoding.
+- Example:
+  - `<UseHardwareAcceleration>True</UseHardwareAcceleration>`
+
 ## QuickLook.Plugin.OfficeViewer.config options
 
 ### `<CheckPreviewHandler>`

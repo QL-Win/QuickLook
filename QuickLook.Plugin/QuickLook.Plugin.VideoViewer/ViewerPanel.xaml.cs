@@ -81,6 +81,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         ShouldLoop = SettingHelper.Get("ShouldLoop", false, "QuickLook.Plugin.VideoViewer");
         UseHardwareAcceleration = SettingHelper.Get("UseHardwareAcceleration", false, "QuickLook.Plugin.VideoViewer");
 
+        // Apply persisted HW/SW mode to the underlying player if supported.
+        HardwareAccelerationModeChanged(UseHardwareAcceleration);
+
         buttonPlayPause.Click += TogglePlayPause;
         buttonLoop.Click += ToggleShouldLoop;
         buttonHardwareAcceleration.Click += ToggleHardwareAcceleration;
@@ -415,9 +418,34 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         HardwareAccelerationModeChanged(UseHardwareAcceleration);
     }
 
-    private void HardwareAccelerationModeChanged(bool useHardwareAcceleration)
+    private void HardwareAccelerationModeChanged(bool enable)
     {
-        // TODO: Apply the selected HW/SW decoding mode when playback backend support is implemented.
+        try
+        {
+            var player = mediaElement?.MediaUriPlayer;
+            if (player == null) return;
+
+            if (mediaElement.Source == null)
+            {
+                // No source loaded yet – just store the flag for the next Open
+                player.Dispatcher.BeginInvoke(() =>
+                    player.EnableLAVHardwareAcceleration = enable);
+                return;
+            }
+
+            // Dispatch to the player's own MTA thread.
+            // ApplyHardwareAcceleration will call OpenSource() there, which
+            // rebuilds the full graph (incl. EVR/VMR9 allocator) so that
+            // NewAllocatorSurface fires and the WPF back buffer is refreshed.
+            // Position + play state are restored inside ApplyHardwareAcceleration
+            // via a MediaOpened callback.
+            player.Dispatcher.BeginInvoke(() =>
+                player.ApplyHardwareAcceleration(enable));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
     }
 
     public void LoadAndPlay(string path, MediaInfoLib info)
