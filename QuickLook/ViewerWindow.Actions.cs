@@ -31,6 +31,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Shell;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
@@ -85,6 +86,14 @@ public partial class ViewerWindow
             // Restore window state last to avoid flicker
             WindowState = _preFullscreenWindowState;
 
+            // Restore caption height and resize border thickness saved before fullscreen
+            var chrome = WindowChrome.GetWindowChrome(this);
+            if (chrome != null)
+            {
+                chrome.CaptionHeight = _preFullscreenCaptionHeight;
+                chrome.ResizeBorderThickness = _preFullscreenResizeBorderThickness;
+            }
+
             // Restore rounded corners on Windows 11
             WindowHelper.SetWindowCorner(this, Dwmapi.WindowCornerStyle.Round);
         }
@@ -118,6 +127,16 @@ public partial class ViewerWindow
 
             // Set to normal state first to allow manual positioning
             WindowState = WindowState.Normal;
+
+            // Save and remove caption height and resize border so title area is not draggable and window is not resizable in fullscreen
+            var chrome = WindowChrome.GetWindowChrome(this);
+            if (chrome != null)
+            {
+                _preFullscreenCaptionHeight = chrome.CaptionHeight;
+                _preFullscreenResizeBorderThickness = chrome.ResizeBorderThickness;
+                chrome.CaptionHeight = 0d;
+                chrome.ResizeBorderThickness = new Thickness(0d);
+            }
 
             // Hide window chrome for true fullscreen
             WindowStyle = WindowStyle.None;

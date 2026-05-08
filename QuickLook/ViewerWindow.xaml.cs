@@ -199,6 +199,16 @@ public partial class ViewerWindow : Window
         ApplyWindowBackgroundEffects();
     }
 
+    protected override void OnActivated(EventArgs e)
+    {
+        base.OnActivated(e);
+
+        if (_isFullscreen)
+        {
+            Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
+        }
+    }
+
     private void ApplyWindowBackgroundEffects()
     {
         var useTransparency = SettingHelper.Get("UseTransparency", true)

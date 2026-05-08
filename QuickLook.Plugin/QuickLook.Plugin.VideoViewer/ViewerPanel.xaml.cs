@@ -192,7 +192,12 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     {
         if (e.LeftButton == MouseButtonState.Pressed)
         {
-            Window.GetWindow(this)?.DragMove();
+            var wnd = Window.GetWindow(this);
+            // Do not allow dragging when window is borderless (e.g. fullscreen)
+            if (wnd?.WindowStyle == WindowStyle.None)
+                return;
+
+            wnd?.DragMove();
         }
     }
 

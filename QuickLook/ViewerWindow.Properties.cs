@@ -42,6 +42,8 @@ public partial class ViewerWindow : INotifyPropertyChanged
     private WindowStyle _preFullscreenWindowStyle;
     private ResizeMode _preFullscreenResizeMode;
     private Rect _preFullscreenBounds;
+    private double _preFullscreenCaptionHeight;
+    private Thickness _preFullscreenResizeBorderThickness;
 
     public bool Pinned
     {
