@@ -432,13 +432,17 @@
             tocIsVisible = true;
             localStorage.setItem("tocVisible", "true");
             // Restore overflow after the transition completes
+            // Use "auto" explicitly to override any lingering --toc-overflow-y CSS variable
             setTimeout(function () {
               if (tocIsVisible) {
-                toc.style.overflowY = "";
+                toc.style.overflowY = "auto";
               }
             }, TOC_TRANSITION_MS);
           }
         }
+
+        // Expose toggleToc globally so it can be invoked from the host application (C#) via ExecuteScriptAsync
+        window.toggleToc = toggleToc;
 
         // Helper: check if a KeyboardEvent matches a shortcut string like "Ctrl+Shift+L"
         // Supported modifiers: Ctrl, Shift, Alt. Key name is case-insensitive and matches e.key.
