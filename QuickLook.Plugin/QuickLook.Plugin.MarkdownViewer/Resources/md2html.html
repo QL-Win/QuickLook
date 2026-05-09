@@ -503,6 +503,8 @@
           if (isInResizeArea(e.clientX, rect)) {
             isResizing = true;
             lastDownX = e.clientX;
+            // Disable CSS transition during drag so width follows the cursor without delay
+            toc.style.transition = "none";
             createOverlay();
           }
         });
@@ -526,6 +528,8 @@
             const newWidth = toc.style.width;
             localStorage.setItem("tocWidth", newWidth);
             document.documentElement.style.setProperty("--toc-width", newWidth);
+            // Restore CSS transition after drag ends
+            toc.style.transition = "";
           }
         });
 
