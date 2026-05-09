@@ -17,6 +17,8 @@ Update not completed yet...
 - `.psv` (Pipe-separated values)
 - `.bat`, `.cmd` (Batch script)
 - `.ps1` (PowerShell script)
+- `.psd1` (PowerShell Data File / Module Manifest)
+- `.psm1` (PowerShell Module)
 - `.sh` (Shell script)
 - `.c`, `.cpp`, `.h`, `.hpp` (C/C++ source and header)
 - `.cs` (C# source)
