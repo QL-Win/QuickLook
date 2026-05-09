@@ -1,56 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="JSON" extensions=".json;.jsonc">
-    
-    <Environment> 
-        <Default color="Black" bgcolor="#FFFFFF"/>
-        <Selection color="Black" bgcolor="#C3C3FF"/>
-        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
-        <CaretMarker color="#F0F0F1"/>
-        <VRuler color="#E0E0E5"/>
-        
-        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
-        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
-        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
-        
-        <EOLMarkers color="#CACAD2"/>
-        <SpaceMarkers color="#B6B6C0"/>
-        <TabMarkers color="#B6B6C0"/>
-        <InvalidLines color="#B6B6C0"/>
-    </Environment>
-    
-    <Properties>
-        <Property name="LineComment" value="//"/>
-        <Property name="BlockCommentBegin" value="/*"/>
-        <Property name="BlockCommentEnd" value="*/"/>
-    </Properties>
-    
-    <Digits name="Digits" color="Red"/>
-    
+<SyntaxDefinition name="Json" extensions=".json;.jsonc">
+
+    <Digits name="Number" color="#098658" bold="false" italic="false"/>
+
     <RuleSets>
-        <RuleSet ignorecase="false">
-        
-            <Delimiters>&amp;&lt;&gt;~%^*()-+=!|\/{}[]:;"' ,    ?</Delimiters>
-        
-            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
-                <Begin>//</Begin>
+
+        <!-- Escape handling -->
+        <RuleSet name="String" ignorecase="false">
+            <Span name="Escape" bold="false" italic="false" color="#0451A5" stopateol="false">
+                <Begin>\\</Begin>
+                <End>.</End>
             </Span>
-            
-            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
-                <Begin>/*</Begin>
-                <End>*/</End>
-            </Span>
-            
-            <Span name="String" stopateol="false" color="Maroon" bold="false" italic="false" escapecharacter="\">
+        </RuleSet>
+
+        <!-- Object content: distinguish field names and values -->
+        <RuleSet name="Object" ignorecase="false">
+            <Span name="FieldName" bold="false" italic="false" color="#001080" stopateol="false" rule="String">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
-            
-            <KeyWords name="Keywords1" color="Blue" bold="false">
-                <Key word="null"/>
+            <Span name="FieldNameSingle" bold="false" italic="false" color="#001080" stopateol="false" rule="String">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <Span name="ValueString" bold="false" italic="false" color="#A31515" stopateol="false" rule="String">
+                <Begin>:"</Begin>
+                <End>"</End>
+            </Span>
+            <Span name="InnerObject" bold="false" italic="false" color="#2B91AF" stopateol="false" rule="Object">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+            <Span name="InnerArray" bold="false" italic="false" color="#2B91AF" stopateol="false" rule="Array">
+                <Begin>[</Begin>
+                <End>]</End>
+            </Span>
+            <KeyWords name="Bool" bold="false" italic="false" color="#0000FF">
                 <Key word="true"/>
-                <Key word="false"/>     
+                <Key word="false"/>
+            </KeyWords>
+            <KeyWords name="Null" bold="false" italic="false" color="#0000FF">
+                <Key word="null"/>
             </KeyWords>
         </RuleSet>
+
+        <!-- Array content -->
+        <RuleSet name="Array" ignorecase="false">
+            <Span name="String" bold="false" italic="false" color="#A31515" stopateol="false" rule="String">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            <Span name="StringSingle" bold="false" italic="false" color="#A31515" stopateol="false" rule="String">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <Span name="Object" bold="false" italic="false" color="#2065F9" stopateol="false" rule="Object">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+            <Span name="Array" bold="false" italic="false" color="#9F4126" stopateol="false" rule="Array">
+                <Begin>[</Begin>
+                <End>]</End>
+            </Span>
+            <KeyWords name="Bool" bold="false" italic="false" color="#0000FF">
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+            <KeyWords name="Null" bold="false" italic="false" color="#0000FF">
+                <Key word="null"/>
+            </KeyWords>
+        </RuleSet>
+
+        <!-- Main ruleset -->
+        <RuleSet ignorecase="false">
+            <Span name="Object" bold="false" italic="false" color="#2065F9" stopateol="false" rule="Object">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+            <Span name="Array" bold="false" italic="false" color="#9F4126" stopateol="false" rule="Array">
+                <Begin>[</Begin>
+                <End>]</End>
+            </Span>
+            <Span name="String" bold="false" italic="false" color="#A31515" stopateol="false" rule="String">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            <KeyWords name="Bool" bold="false" italic="false" color="#0000FF">
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+            <KeyWords name="Null" bold="false" italic="false" color="#0000FF">
+                <Key word="null"/>
+            </KeyWords>
+        </RuleSet>
+
     </RuleSets>
 </SyntaxDefinition>
