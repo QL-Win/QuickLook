@@ -2,6 +2,50 @@
 
 > QuickLook Changelog starting from version `4.0.0`.
 
+## 4.6.0
+
+- Add configurable keyboard shortcuts to toggle TOC visibility for Markdown Viewer [#1934](https://github.com/QL-Win/QuickLook/issues/1934)
+- Add `.winmd` to PEViewer supported extensions
+- Prepare building for ARM64 [#1872](https://github.com/QL-Win/QuickLook/issues/1872) but NOT READY
+- Improve acrylic tint opacity and color values [#1912](https://github.com/QL-Win/QuickLook/issues/1912)
+- Add magic number checks to support image files without an extension [#1868](https://github.com/QL-Win/QuickLook/pull/1868)
+- Add option to close preview when losing focus [#484](https://github.com/QL-Win/QuickLook/issues/484) (Experimental)
+- Add auto-terminate QuickLook.exe before install/upgrade/uninstall
+- Add `.csv`, `.tsv` and `.psv` rainbow highlighters support
+- Add `.jsonc` extension to JSON syntax highlighters support
+- Add F5 shortcut key for Reload [#1922](https://github.com/QL-Win/QuickLook/issues/1922)
+- Add `FocusWindowOnOpen` option for window focus on open [#1695](https://github.com/QL-Win/QuickLook/issues/1695)
+- Improve markdown to support frontmatter (YAML Metadata) [#1920](https://github.com/QL-Win/QuickLook/issues/1920)
+- Add `.msp` installer support for AppViewer
+- Add `.m3u` and `.m3u8` highlighting definitions support
+- Add ShellScript syntax extensions for `.bashrc`, `.bash_profile`, `.bash_login`, `.profile`, `.bash_logout`, `.zshrc`, `.zprofile`, `.zlogin`, `.zlogout`, `.dashrc`, `.kshrc`, `.mkshrc`, `.ashrc` and `.shrc`
+- Add IDMan (Internet Download Manager) support instead of [QuickLook.Plugin.IDManViewer](https://github.com/emako/QuickLook.Plugin.IDManViewer)
+- Support search panel in CSV viewer [#1824](https://github.com/QL-Win/QuickLook/issues/1824)
+- Add ShellScriptDetector and register in FormatDetector
+- Support localization for CSV viewer search panel
+- Add extension filter helper and integrate checks
+- Improve extension parsing and add balcklist for .insv [#1802](https://github.com/QL-Win/QuickLook/issues/1802)
+- Add NuGet (`.nupkg` and `.snupkg`) support for AppViewer
+- Add setting to auto-unblock Protected View [#1832](https://github.com/QL-Win/QuickLook/issues/1832)
+- Add built-in plugin support for `.chm`
+- Add `.pyz` to supported archive extensions
+- Add [ISON](https://github.com/ISON-format/ison) syntax definitions support for `.ison`
+- Add options of the font and font size used in the text viewer [#1930](https://github.com/QL-Win/QuickLook/issues/1930)
+- Add Inno Setup syntax definitions support for `.iss` and `.isl`
+- Add built-in dump plugin for minidumps (`.dmp`, `.dump`, `.mdmp`, `.hdmp` and `.minidump`)
+- Support HW/SW (hardware acceleration) decoding toggle to video viewer [#1928](https://github.com/QL-Win/QuickLook/issues/1928)
+- Support localization for video viewer
+- Add `.psd1` and `.psm1` to PowerShell syntax extensions
+- Add Roff (`.ms`, `.man`, `.roff`, `.tmac`, `.me` and `.troff`) syntax highlighting support
+- Add `.gitconfig` to INI syntax extensions
+- Add Graphviz (`.dot` and `.gv`) syntax definitions
+- Improve JSON syntax highlighting color
+- Fix oftentimes doesn't trigger [#1903](https://github.com/QL-Win/QuickLook/issues/1903) [#1483](https://github.com/QL-Win/QuickLook/issues/1483)
+- Fix CSV auto-scroll bug on large files with virtualization enabled
+- Fix fullscreen behavior for window dragging and window corners for Windows 11
+- Fix the busy decorator foreground color error in dark mode
+- Fix rendering lag caused by excessively long lines by truncating and sanitizing them in text viewer
+
 ## 4.5.0
 
 - Update LAVFilters to `0.81.0` [#1362](https://github.com/QL-Win/QuickLook/issues/1362) [#1855](https://github.com/QL-Win/QuickLook/issues/1855) [#1863](https://github.com/QL-Win/QuickLook/issues/1863)
