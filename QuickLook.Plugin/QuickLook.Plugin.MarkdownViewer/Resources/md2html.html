@@ -78,7 +78,7 @@
         max-height: 100vh;
         box-sizing: border-box;
 
-        transition: width 0.3s ease;
+        transition: width 0.3s ease; /* Duration must match TOC_TRANSITION_MS in the resize script */
       }
 
       #toc a {
@@ -404,9 +404,11 @@
         let lastDownX = 0;
         let overlay = null;
         const RESIZE_HANDLE_WIDTH = 8; // Width of the resize handle area in pixels
+        const TOC_TRANSITION_MS = 300; // Must match the CSS transition duration for #toc
+        let tocIsVisible = localStorage.getItem("tocVisible") !== "false";
 
         // Restore initial overflow state when TOC was collapsed before page load
-        if (localStorage.getItem("tocVisible") === "false" && toc.style.display !== "none") {
+        if (!tocIsVisible && toc.style.display !== "none") {
           toc.style.overflowY = "hidden";
           toc.style.minWidth = "0px";
         }
@@ -415,25 +417,26 @@
         function toggleToc() {
           if (count < 2) return; // TOC is not shown when there are fewer than 2 headings
 
-          const isVisible = localStorage.getItem("tocVisible") !== "false";
-          if (isVisible) {
+          if (tocIsVisible) {
             // Collapse TOC
             toc.style.width = "0px";
             toc.style.minWidth = "0px";
             toc.style.overflowY = "hidden";
+            tocIsVisible = false;
             localStorage.setItem("tocVisible", "false");
           } else {
             // Expand TOC
             const width = localStorage.getItem("tocWidth") || "178px";
             toc.style.width = width;
             toc.style.minWidth = "4px";
+            tocIsVisible = true;
+            localStorage.setItem("tocVisible", "true");
             // Restore overflow after the transition completes
             setTimeout(function () {
-              if (localStorage.getItem("tocVisible") !== "false") {
+              if (tocIsVisible) {
                 toc.style.overflowY = "";
               }
-            }, 300);
-            localStorage.setItem("tocVisible", "true");
+            }, TOC_TRANSITION_MS);
           }
         }
 
@@ -469,7 +472,7 @@
 
         // Check if cursor is in resize area
         function isInResizeArea(clientX, rect) {
-          if (localStorage.getItem("tocVisible") === "false") return false; // Disable resize when collapsed
+          if (!tocIsVisible) return false; // Disable resize when collapsed
           const toc = document.getElementById("toc");
           const hasScrollbar = toc.scrollHeight > toc.clientHeight;
           const scrollbarWidth = hasScrollbar ? 17 : 0; // Standard scrollbar width in most browsers
