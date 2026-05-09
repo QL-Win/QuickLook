@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Graphviz" extensions=".dot;.gv">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+        
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+        
+    <Properties>
+        <Property name="LineComment" value="//"/>
+    </Properties>
+    
+    <Digits name="Digits" color="DarkBlue"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            
+            <Delimiters>()[]{},:.@`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
+            
+            <Span name="LineCommentSlash" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+
+            <Span name="LineCommentHash" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="BlockComment" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+
+            <Span name="String" stopateol="true" color="Maroon" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <KeyWords name="Keywords" color="Blue" bold="false" italic ="false">
+                <Key word="graph"/>
+                <Key word="digraph"/>
+                <Key word="strict"/>
+                <Key word="node"/>
+                <Key word="edge"/>
+                <Key word="subgraph"/>
+                <Key word="cluster"/>
+                <Key word="label"/>
+                <Key word="rankdir"/>
+                <Key word="rank"/>
+                <Key word="shape"/>
+                <Key word="style"/>
+                <Key word="color"/>
+                <Key word="fontsize"/>
+                <Key word="fontname"/>
+                <Key word="fontcolor"/>
+                <Key word="xlabel"/>
+                <Key word="URL"/>
+                <Key word="dir"/>
+                <Key word="arrowhead"/>
+                <Key word="arrowtail"/>
+                <Key word="weight"/>
+                <Key word="constraint"/>
+                <Key word="compound"/>
+                <Key word="newrank"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
