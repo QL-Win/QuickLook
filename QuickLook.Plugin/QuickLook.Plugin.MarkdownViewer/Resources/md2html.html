@@ -441,9 +441,11 @@
         }
 
         // Helper: check if a KeyboardEvent matches a shortcut string like "Ctrl+Shift+L"
+        // Supported modifiers: Ctrl, Shift, Alt. Key name is case-insensitive and matches e.key.
         function matchesShortcut(e, shortcut) {
           if (!shortcut) return false;
-          var parts = shortcut.toLowerCase().split("+").map(function (p) { return p.trim(); });
+          var parts = shortcut.toLowerCase().split("+").map(function (p) { return p.trim(); }).filter(Boolean);
+          if (parts.length === 0) return false;
           var key = parts[parts.length - 1];
           return e.key.toLowerCase() === key
             && e.ctrlKey === parts.includes("ctrl")
