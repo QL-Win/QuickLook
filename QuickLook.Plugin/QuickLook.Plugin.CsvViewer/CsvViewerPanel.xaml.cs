@@ -52,8 +52,8 @@ public partial class CsvViewerPanel : UserControl
 
     public List<string[]> Rows { get; private set; } = [];
 
-    private readonly List<(int RowIndex, int ColumnIndex)> _matches = new();
-    private readonly HashSet<(int RowIndex, int ColumnIndex)> _matchSet = new();
+    private readonly List<(int RowIndex, int ColumnIndex)> _matches = [];
+    private readonly HashSet<(int RowIndex, int ColumnIndex)> _matchSet = [];
     private int _currentMatchIndex = -1;
 
     public void LoadFile(string path)
@@ -189,7 +189,7 @@ public partial class CsvViewerPanel : UserControl
 
     private void UpdateRowHighlights(DataGridRow row)
     {
-        if (row.Item is not string[] rowData)
+        if (row.Item is not string[])
         {
             return;
         }
@@ -276,19 +276,19 @@ public partial class CsvViewerPanel : UserControl
             return;
         }
 
-        var match = _matches[_currentMatchIndex];
-        if (match.RowIndex < 0 || match.RowIndex >= Rows.Count)
+        var (RowIndex, ColumnIndex) = _matches[_currentMatchIndex];
+        if (RowIndex < 0 || RowIndex >= Rows.Count)
         {
             return;
         }
 
-        var rowItem = Rows[match.RowIndex];
-        if (match.ColumnIndex < 0 || match.ColumnIndex >= dataGrid.Columns.Count)
+        var rowItem = Rows[RowIndex];
+        if (ColumnIndex < 0 || ColumnIndex >= dataGrid.Columns.Count)
         {
             return;
         }
 
-        var column = dataGrid.Columns[match.ColumnIndex];
+        var column = dataGrid.Columns[ColumnIndex];
         dataGrid.SelectedCells.Clear();
         var cellInfo = new DataGridCellInfo(rowItem, column);
         dataGrid.CurrentCell = cellInfo;
@@ -299,8 +299,8 @@ public partial class CsvViewerPanel : UserControl
         {
             UpdateVisibleCellHighlights();
 
-            var row = GetRow(match.RowIndex);
-            var cell = GetCell(row, match.ColumnIndex);
+            var row = GetRow(RowIndex);
+            var cell = GetCell(row, ColumnIndex);
             cell?.Focus();
         }), System.Windows.Threading.DispatcherPriority.Background);
 
@@ -328,7 +328,7 @@ public partial class CsvViewerPanel : UserControl
     {
         foreach (var row in GetVisibleRows())
         {
-            if (row.Item is not string[] rowData)
+            if (row.Item is not string[])
             {
                 continue;
             }
@@ -361,8 +361,7 @@ public partial class CsvViewerPanel : UserControl
     {
         for (var index = 0; index < dataGrid.Items.Count; index++)
         {
-            var row = dataGrid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
-            if (row != null)
+            if (dataGrid.ItemContainerGenerator.ContainerFromIndex(index) is DataGridRow row)
             {
                 yield return row;
             }
@@ -376,8 +375,7 @@ public partial class CsvViewerPanel : UserControl
             return null;
         }
 
-        var row = dataGrid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
-        if (row != null)
+        if (dataGrid.ItemContainerGenerator.ContainerFromIndex(index) is DataGridRow row)
         {
             return row;
         }
