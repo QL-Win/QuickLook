@@ -197,7 +197,10 @@ public partial class CsvViewerPanel : UserControl
         var rowIndex = dataGrid.ItemContainerGenerator.IndexFromContainer(row);
         for (var columnIndex = 0; columnIndex < dataGrid.Columns.Count; columnIndex++)
         {
-            var cell = GetCell(row, columnIndex);
+            // Do not pass scrollIntoView: true here — this is called from DataGrid_LoadingRow
+            // during initial rendering, and forcing ScrollIntoView causes the cascading
+            // auto-scroll bug on large files with virtualization enabled.
+            var cell = GetCell(row, columnIndex, scrollIntoView: false);
             if (cell == null)
             {
                 continue;
@@ -333,7 +336,8 @@ public partial class CsvViewerPanel : UserControl
             var rowIndex = dataGrid.ItemContainerGenerator.IndexFromContainer(row);
             for (var columnIndex = 0; columnIndex < dataGrid.Columns.Count; columnIndex++)
             {
-                var cell = GetCell(row, columnIndex);
+                // Only update already-visible cells; no need to force scroll here.
+                var cell = GetCell(row, columnIndex, scrollIntoView: false);
                 if (cell == null)
                 {
                     continue;
@@ -383,7 +387,7 @@ public partial class CsvViewerPanel : UserControl
         return dataGrid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
     }
 
-    private DataGridCell GetCell(DataGridRow row, int columnIndex)
+    private DataGridCell GetCell(DataGridRow row, int columnIndex, bool scrollIntoView = true)
     {
         if (row == null)
         {
@@ -403,7 +407,7 @@ public partial class CsvViewerPanel : UserControl
         }
 
         var cell = presenter.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;
-        if (cell == null)
+        if (cell == null && scrollIntoView)
         {
             dataGrid.ScrollIntoView(row.Item, dataGrid.Columns[columnIndex]);
             cell = presenter.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;
