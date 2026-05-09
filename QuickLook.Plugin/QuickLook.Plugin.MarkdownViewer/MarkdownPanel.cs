@@ -94,8 +94,11 @@ public class MarkdownPanel : WebpagePanel
                 isRtl = true;
         }
 
+        var tocShortcut = SettingHelper.Get("ToggleTocKey", "Ctrl+Shift+L", "QuickLook.Plugin.MarkdownViewer");
+
         var html = template.Replace("{{content}}", content)
-                           .Replace("{{rtl}}", isRtl ? "rtl" : "ltr");
+                           .Replace("{{rtl}}", isRtl ? "rtl" : "ltr")
+                           .Replace("{{tocShortcut}}", tocShortcut);
 
         return html;
     }
