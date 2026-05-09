@@ -4,9 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <script>
-      // Load the saved width immediately
+      // Load the saved TOC width and visibility immediately to prevent layout shift
       const savedWidth = localStorage.getItem("tocWidth") || "178px";
-      document.documentElement.style.setProperty("--toc-width", savedWidth);
+      const tocCollapsed = localStorage.getItem("tocVisible") === "false";
+      document.documentElement.style.setProperty("--toc-width", tocCollapsed ? "0px" : savedWidth);
+      if (tocCollapsed) {
+        document.documentElement.style.setProperty("--toc-min-width", "0px");
+        document.documentElement.style.setProperty("--toc-overflow-y", "hidden");
+      }
     </script>
 
     <link rel="stylesheet" href="highlight.js/styles/github.min.css" />
@@ -61,17 +66,19 @@
 
         width: var(--toc-width);
 
-        min-width: 4px;
+        min-width: var(--toc-min-width, 4px);
         max-width: 80%;
 
         height: 100vh;
         background: var(--bgColor-muted);
 
-        overflow-y: auto;
+        overflow-y: var(--toc-overflow-y, auto);
         overflow-x: hidden;
 
         max-height: 100vh;
         box-sizing: border-box;
+
+        transition: width 0.3s ease; /* Duration must match TOC_TRANSITION_MS in the resize script */
       }
 
       #toc a {
@@ -397,6 +404,60 @@
         let lastDownX = 0;
         let overlay = null;
         const RESIZE_HANDLE_WIDTH = 8; // Width of the resize handle area in pixels
+        const TOC_TRANSITION_MS = 300; // Must match the CSS transition duration for #toc
+        let tocIsVisible = localStorage.getItem("tocVisible") !== "false";
+
+        // Restore initial overflow state when TOC was collapsed before page load
+        if (!tocIsVisible && toc.style.display !== "none") {
+          toc.style.overflowY = "hidden";
+          toc.style.minWidth = "0px";
+        }
+
+        // Toggle TOC visibility with smooth animation
+        function toggleToc() {
+          if (count < 2) return; // TOC is not shown when there are fewer than 2 headings
+
+          if (tocIsVisible) {
+            // Collapse TOC
+            toc.style.width = "0px";
+            toc.style.minWidth = "0px";
+            toc.style.overflowY = "hidden";
+            tocIsVisible = false;
+            localStorage.setItem("tocVisible", "false");
+          } else {
+            // Expand TOC
+            const width = localStorage.getItem("tocWidth") || "178px";
+            toc.style.width = width;
+            toc.style.minWidth = "4px";
+            tocIsVisible = true;
+            localStorage.setItem("tocVisible", "true");
+            // Restore overflow after the transition completes
+            // Use "auto" explicitly to override any lingering --toc-overflow-y CSS variable
+            setTimeout(function () {
+              if (tocIsVisible) {
+                toc.style.overflowY = "auto";
+              }
+            }, TOC_TRANSITION_MS);
+          }
+        }
+
+        // Expose toggleToc globally so it can be invoked from the host application (C#) via ExecuteScriptAsync
+        window.toggleToc = toggleToc;
+
+        // Helper: check if a KeyboardEvent matches a shortcut string like "Ctrl+Shift+L"
+        // Supported modifiers: Ctrl, Shift, Alt. Key name is case-insensitive and matches e.key.
+        function matchesShortcut(e, shortcut) {
+          if (!shortcut) return false;
+          var parts = shortcut.toLowerCase().split("+").map(function (p) { return p.trim(); }).filter(Boolean);
+          if (parts.length === 0) return false;
+          var key = parts[parts.length - 1];
+          return e.key.toLowerCase() === key
+            && e.ctrlKey === parts.includes("ctrl")
+            && e.shiftKey === parts.includes("shift")
+            && e.altKey === parts.includes("alt");
+        }
+
+        const TOC_TOGGLE_SHORTCUT = "{{tocShortcut}}";
 
         // Create overlay function
         function createOverlay() {
@@ -417,6 +478,7 @@
 
         // Check if cursor is in resize area
         function isInResizeArea(clientX, rect) {
+          if (!tocIsVisible) return false; // Disable resize when collapsed
           const toc = document.getElementById("toc");
           const hasScrollbar = toc.scrollHeight > toc.clientHeight;
           const scrollbarWidth = hasScrollbar ? 17 : 0; // Standard scrollbar width in most browsers
@@ -441,6 +503,8 @@
           if (isInResizeArea(e.clientX, rect)) {
             isResizing = true;
             lastDownX = e.clientX;
+            // Disable CSS transition during drag so width follows the cursor without delay
+            toc.style.transition = "none";
             createOverlay();
           }
         });
@@ -464,6 +528,8 @@
             const newWidth = toc.style.width;
             localStorage.setItem("tocWidth", newWidth);
             document.documentElement.style.setProperty("--toc-width", newWidth);
+            // Restore CSS transition after drag ends
+            toc.style.transition = "";
           }
         });
 
@@ -479,7 +545,14 @@
           if (e.code === "Space") {
             e.preventDefault();
           }
-          
+
+          // Toggle TOC with configurable shortcut (default: Ctrl+Shift+L, matching Typora)
+          if (matchesShortcut(e, TOC_TOGGLE_SHORTCUT)) {
+            toggleToc();
+            e.preventDefault();
+            return;
+          }
+
           // Support keyboard shortcuts for RTL and LTR text direction
           // RTL: Ctrl + RShift
           // LTR: Ctrl + LShift

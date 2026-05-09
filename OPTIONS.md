@@ -228,6 +228,16 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<AlwaysUnblockProtectedView>True</AlwaysUnblockProtectedView>`
 
+## QuickLook.Plugin.MarkdownViewer.config options
+
+### `<ToggleTocKey>`
+- Default: `Ctrl+Shift+L`
+- Type: `String`
+- Description: Keyboard shortcut to toggle the Table of Contents (TOC) visibility in the Markdown viewer (with a smooth animation). Specify modifier keys (`Ctrl`, `Shift`, `Alt`) and a key name, separated by `+`. The key name is matched case-insensitively against the browser's `KeyboardEvent.key` value (e.g., `L`, `T`, `F1`, `Escape`). This shortcut matches Typora's default TOC shortcut.
+- Example:
+  - `<ToggleTocKey>Ctrl+Shift+L</ToggleTocKey>`
+  - `<ToggleTocKey>Ctrl+Shift+T</ToggleTocKey>`
+
 ## QuickLook.Plugin.TextViewer.config options
 
 ### `<UseFormatDetector>`
