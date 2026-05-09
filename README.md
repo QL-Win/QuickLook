@@ -32,7 +32,7 @@
     <img src="https://img.shields.io/github/v/release/QL-Win/QuickLook?style=for-the-badge&logo=github&color=00C853&labelColor=000000" alt="Release">
   </a>
   <a href="https://github.com/QL-Win/QuickLook/releases">
-    <img src="https://img.shields.io/github/downloads/QL-Win/QuickLook/total?style=for-the-badge&logo=download&color=FF6D00&labelColor=000000" alt="Downloads">
+    <img src="https://img.shields.io/github/downloads/QL-Win/QuickLook/total?style=for-the-badge&logo=github&color=FF6D00&labelColor=000000" alt="Downloads">
   </a>
   <a href="https://github.com/QL-Win/QuickLook/stargazers">
     <img src="https://img.shields.io/github/stars/QL-Win/QuickLook?style=for-the-badge&logo=starship&color=FFD700&labelColor=000000" alt="Stars">
