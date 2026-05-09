@@ -37,6 +37,7 @@ Update not completed yet...
 - `.css` (Cascading Style Sheets)
 - `.html`, `.htm` (HTML file)
 - `.xshd` (Highlighting definition)
+- `.man`, `.ms`, `.roff`, `.tmac`, `.me`, `.troff` (roff/man manual page source files)
 - `.properties` (Java properties/config)
 - `.diff`, `.patch`, `.rej` (Diff/Patch file)
 - `.sub`, `.srt` (Subtitle file)

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Roff" extensions=".ms;.man;.roff;.tmac;.me;.troff">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+        
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+    
+    <Properties>
+        <Property name="LineComment" value="\&quot;"/>
+    </Properties>
+
+    <Digits name="Digits" color="Black" bold="false" italic="false"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+            <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\#/{}[]:;,&quot; , .?</Delimiters>
+
+            <!-- roff comment: starts with backslash + double-quote -->
+            <Span name="Comment" stopateol="true" color="#008000" bold="false" italic="false">
+                <Begin>\&quot;</Begin>
+            </Span>
+
+            <!-- macro lines starting with a dot or an apostrophe -->
+            <Span name="MacroDot" stopateol="true" color="#0000FF" bold="true" italic="false">
+                <Begin startofline="true">.</Begin>
+            </Span>
+
+            <Span name="MacroApostrophe" stopateol="true" color="#0000FF" bold="true" italic="false">
+                <Begin startofline="true">'</Begin>
+            </Span>
+
+            <!-- common man macros (for nicer highlighting when they appear as standalone words) -->
+            <KeyWords name="CommonMacros" color="#00008B" bold="true" italic="false">
+                <Key word="TH"/>
+                <Key word="SH"/>
+                <Key word="SS"/>
+                <Key word="TP"/>
+                <Key word="PP"/>
+                <Key word="LP"/>
+                <Key word="B"/>
+                <Key word="I"/>
+                <Key word="RB"/>
+                <Key word="BR"/>
+                <Key word="RS"/>
+                <Key word="RE"/>
+                <Key word="nf"/>
+                <Key word="fi"/>
+                <Key word="de"/>
+                <Key word="EX"/>
+                <Key word="OP"/>
+                <Key word="SYNOPSIS"/>
+                <Key word="DESCRIPTION"/>
+                <Key word="OPTIONS"/>
+                <Key word="NAME"/>
+                <Key word="AUTHOR"/>
+                <Key word="VERSION"/>
+                <Key word="BUGS"/>
+                <Key word="SEE_ALSO"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
