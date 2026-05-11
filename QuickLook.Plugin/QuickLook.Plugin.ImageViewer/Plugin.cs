@@ -35,7 +35,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
     [
         ".apng", ".ari", ".arw", ".avif", ".ani",
         ".bay", ".bmp",
-        ".cap", ".cr2", ".cr3", ".crw", ".cur",
+        ".cap", ".cr2", ".cr3", ".crw", ".cur", ".clip",
         ".dcr", ".dcs", ".dds", ".dng", ".drf", ".dcm", ".dicom",
         ".eip", ".emf", ".erf", ".exr",
         ".fff",

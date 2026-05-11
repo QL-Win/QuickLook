@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Data.Sqlite;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
-using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,7 +66,7 @@ internal class ClipProvider : AnimationProvider
             _tempSqlitePath = System.IO.Path.GetTempFileName();
             File.WriteAllBytes(_tempSqlitePath, sqliteBytes);
 
-            _conn = new SqliteConnection($"Data Source={_tempSqlitePath};Mode=ReadOnly;");
+            _conn = new SqliteConnection($"Data Source={_tempSqlitePath};Mode=ReadOnly;Pooling=false;");
             _conn.Open();
 
             using var cmd = _conn.CreateCommand();
@@ -113,19 +113,15 @@ internal class ClipProvider : AnimationProvider
             if (_imageData == null)
                 return null;
 
+            if (_frame != null)
+                return _frame;
+
             try
             {
                 using var ms = new MemoryStream(_imageData);
                 var img = new BitmapImage();
                 img.BeginInit();
                 img.CacheOption = BitmapCacheOption.OnLoad;
-                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-
-                var decodeWidth = (int)Math.Round(Math.Min(renderSize.Width, Math.Max(1d, Math.Floor(renderSize.Width))));
-                var decodeHeight = (int)Math.Round(Math.Min(renderSize.Height, Math.Max(1d, Math.Floor(renderSize.Height))));
-
-                img.DecodePixelWidth = decodeWidth;
-                img.DecodePixelHeight = decodeHeight;
                 img.StreamSource = ms;
                 img.EndInit();
 
@@ -159,7 +155,6 @@ internal class ClipProvider : AnimationProvider
                 var img = new BitmapImage();
                 img.BeginInit();
                 img.CacheOption = BitmapCacheOption.OnLoad;
-                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 img.StreamSource = ms;
                 img.EndInit();
 
