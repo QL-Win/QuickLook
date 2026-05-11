@@ -41,6 +41,7 @@ public class FormatDetector
         new ShellScriptDetector(),
         new KrcDetector(),
         new DSStoreDetector(),
+        new ThumbsDbDetector(),
     ];
 
     public static IFormatDetector Confuse(string path, string text)
