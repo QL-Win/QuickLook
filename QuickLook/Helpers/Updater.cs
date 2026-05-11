@@ -131,11 +131,9 @@ internal class Updater
             Proxy = WebRequest.DefaultWebProxy,
             Credentials = CredentialCache.DefaultCredentials
         };
-        web.Headers.Add(HttpRequestHeader.UserAgent, "Wget/1.9.1");
+        web.Headers.Add(HttpRequestHeader.UserAgent, "curl/8.20.0");
 
-        var response =
-            web.DownloadDataStream(url);
-
+        var response = web.DownloadDataStream(url);
         var json = JsonConvert.DeserializeObject<dynamic>(new StreamReader(response).ReadToEnd());
         return json;
     }
