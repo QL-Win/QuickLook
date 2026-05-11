@@ -134,8 +134,6 @@ Update not completed yet...
 - `.xc` (XC source)
 - `.xml` (Extensible Markup Language)
 - `.xtend` (Xtend source)
-- `.DS_Store` (macOS Finder metadata — parsed and rendered as text by DS_Store parser)
-
 - Most other plain text and script formats
 
 ### Image files
@@ -226,6 +224,8 @@ Update not completed yet...
 - `.cfb` (Compound File Binary)
 - `.eif` (QQ EIF package with Compound File Binary format)
 - `.pak` (Chromium resource package file v5, used by Chromium-based applications (e.g., Google Chrome))
+- `.DS_Store` (Apple Desktop Services Store, macOS Finder metadata)
+- `Thumbs.db` (Windows Thumbnails Database)
 
 ### Markdown files
 - `.md`, `.markdown` (Markdown)

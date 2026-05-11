@@ -20,6 +20,7 @@ using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 using QuickLook.Plugin.ArchiveViewer.ChromiumResourcePackage;
 using QuickLook.Plugin.ArchiveViewer.CompoundFileBinary;
+using QuickLook.Plugin.ArchiveViewer.DSStore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -80,6 +81,25 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         if (Directory.Exists(path))
             return false;
 
+        // macOS .DS_Store metadata file
+        if (Path.GetFileName(path).Equals(".DS_Store", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        // Windows thumbnail cache (OLE Compound File Binary)
+        if (Path.GetFileName(path).Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase))
+        {
+            try
+            {
+                byte[] magic = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
+                byte[] header = new byte[8];
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                int read = fs.Read(header, 0, 8);
+                if (read >= 8 && header.SequenceEqual(magic)) return true;
+            }
+            catch { }
+            return false;
+        }
+
         if (path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
         {
             // Chromium PAK files usually start with header as version
@@ -112,7 +132,12 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
     public void View(string path, ContextObject context)
     {
-        if (path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
+        if (Path.GetFileName(path).Equals(".DS_Store", StringComparison.OrdinalIgnoreCase))
+        {
+            _panel = new DSStoreInfoPanel(path);
+        }
+        else if (Path.GetFileName(path).Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
             || path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase))
         {
             _panel = new CompoundInfoPanel(path);
