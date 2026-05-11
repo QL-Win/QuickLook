@@ -27,6 +27,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 
 namespace QuickLook.Plugin.AppViewer.InfoPanels;
@@ -125,6 +127,41 @@ public partial class NugetInfoPanel : UserControl, IAppInfoPanel
                 _context.IsBusy = false;
             });
         });
+    }
+
+    private void InnerScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (sender is not ScrollViewer scrollViewer) return;
+
+        // If inner ScrollViewer can scroll in the wheel direction, let it handle the event.
+        if ((e.Delta > 0 && scrollViewer.VerticalOffset > 0) ||
+            (e.Delta < 0 && scrollViewer.VerticalOffset < scrollViewer.ScrollableHeight))
+        {
+            return;
+        }
+
+        // Otherwise forward the event to the nearest parent ScrollViewer (outer one).
+        e.Handled = true;
+        var parent = FindAncestor<ScrollViewer>(scrollViewer);
+        if (parent != null)
+        {
+            var args = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = UIElement.MouseWheelEvent
+            };
+            parent.RaiseEvent(args);
+        }
+    }
+
+    private static T FindAncestor<T>(DependencyObject child) where T : DependencyObject
+    {
+        DependencyObject parent = child;
+        while (parent != null)
+        {
+            parent = VisualTreeHelper.GetParent(parent);
+            if (parent is T t) return t;
+        }
+        return null;
     }
 
     private void OnHyperlinkNavigate(object sender, RequestNavigateEventArgs e)

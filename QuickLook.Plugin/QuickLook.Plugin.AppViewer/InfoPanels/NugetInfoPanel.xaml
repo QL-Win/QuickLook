@@ -14,307 +14,309 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="15" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Image x:Name="image"
-               Grid.Row="1"
-               Grid.Column="0"
-               Width="120"
-               Height="120"
-               Margin="8"
-               VerticalAlignment="Top"
-               Source="/QuickLook.Plugin.AppViewer;component/Resources/nuget.png"
-               Stretch="Uniform" />
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="0,0,8,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="15" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="image"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Width="120"
+                   Height="120"
+                   Margin="8"
+                   VerticalAlignment="Top"
+                   Source="/QuickLook.Plugin.AppViewer;component/Resources/nuget.png"
+                   Stretch="Uniform" />
+            <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           MaxHeight="60"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               MaxHeight="60"
+                               Padding="3"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               LineHeight="25"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="Wrap">
+                        <TextBlock.Inlines>
+                            <Run x:Name="filename" Text="PackageName.nupkg" />
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                </Grid>
+                <!--  Package ID  -->
+                <TextBlock x:Name="packageIdTitle"
+                           Grid.Row="3"
+                           Grid.Column="1"
                            Padding="3"
-                           FontSize="19"
-                           FontWeight="SemiBold"
-                           LineHeight="25"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Package ID" />
+                <TextBlock x:Name="packageId"
+                           Grid.Row="3"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
                            TextTrimming="CharacterEllipsis"
-                           TextWrapping="Wrap">
-                    <TextBlock.Inlines>
-                        <Run x:Name="filename" Text="PackageName.nupkg" />
-                    </TextBlock.Inlines>
+                           TextWrapping="Wrap" />
+                <!--  Version  -->
+                <TextBlock x:Name="versionTitle"
+                           Grid.Row="4"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Version" />
+                <TextBlock x:Name="version"
+                           Grid.Row="4"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="Wrap" />
+                <!--  Authors  -->
+                <TextBlock x:Name="authorsTitle"
+                           Grid.Row="5"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Authors" />
+                <TextBlock x:Name="authors"
+                           Grid.Row="5"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="Wrap" />
+                <!--  License  -->
+                <TextBlock x:Name="licenseTitle"
+                           Grid.Row="6"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="License" />
+                <TextBlock x:Name="licenseBlock"
+                           Grid.Row="6"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="Wrap" />
+                <!--  Project URL  -->
+                <TextBlock x:Name="projectUrlTitle"
+                           Grid.Row="7"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Project Website"
+                           Visibility="Collapsed" />
+                <TextBlock x:Name="projectUrlBlock"
+                           Grid.Row="7"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           TextTrimming="CharacterEllipsis"
+                           Visibility="Collapsed">
+                    <Hyperlink x:Name="projectUrlLink" RequestNavigate="OnHyperlinkNavigate">
+                        <Hyperlink.Style>
+                            <Style TargetType="{x:Type Hyperlink}">
+                                <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="TextDecorations" Value="Underline" />
+                                <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
+                                        <Setter Property="TextDecorations" Value="{x:Null}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Hyperlink.Style>
+                        <Run x:Name="projectUrlText" />
+                    </Hyperlink>
                 </TextBlock>
+                <!--  Source Repository  -->
+                <TextBlock x:Name="repoUrlTitle"
+                           Grid.Row="8"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Source Repository"
+                           Visibility="Collapsed" />
+                <TextBlock x:Name="repoUrlBlock"
+                           Grid.Row="8"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           TextTrimming="CharacterEllipsis"
+                           Visibility="Collapsed">
+                    <Hyperlink x:Name="repoUrlLink" RequestNavigate="OnHyperlinkNavigate">
+                        <Hyperlink.Style>
+                            <Style TargetType="{x:Type Hyperlink}">
+                                <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="TextDecorations" Value="Underline" />
+                                <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
+                                        <Setter Property="TextDecorations" Value="{x:Null}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Hyperlink.Style>
+                        <Run x:Name="repoUrlText" />
+                    </Hyperlink>
+                </TextBlock>
+                <!--  Target Frameworks  -->
+                <TextBlock x:Name="frameworksTitle"
+                           Grid.Row="9"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Target Frameworks" />
+                <TextBlock x:Name="frameworks"
+                           Grid.Row="9"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="Wrap" />
+                <!--  Total Size  -->
+                <TextBlock x:Name="totalSizeTitle"
+                           Grid.Row="10"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Total Size" />
+                <TextBlock x:Name="totalSize"
+                           Grid.Row="10"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Calculating size..." />
+                <!--  Last Modified  -->
+                <TextBlock x:Name="modDateTitle"
+                           Grid.Row="11"
+                           Grid.Column="1"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Last Modified" />
+                <TextBlock x:Name="modDate"
+                           Grid.Row="11"
+                           Grid.Column="2"
+                           Margin="8,0,0,0"
+                           Padding="3"
+                           Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                           Text="Searching..."
+                           TextTrimming="CharacterEllipsis" />
+                <!--  Description  -->
+                <GroupBox x:Name="descriptionGroupBox"
+                          Grid.Row="12"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Margin="3,3,16,3"
+                          Padding="3"
+                          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                          BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                          Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                          Header="Description">
+                    <ScrollViewer PreviewMouseWheel="InnerScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <TextBox x:Name="description"
+                                 Margin="8,3,16,3"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto" />
+                    </ScrollViewer>
+                </GroupBox>
+                <!--  Dependencies  -->
+                <GroupBox x:Name="dependenciesGroupBox"
+                          Grid.Row="13"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Margin="3,3,16,16"
+                          Padding="3"
+                          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                          BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                          Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                          Header="Dependencies">
+                    <ScrollViewer PreviewMouseWheel="InnerScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <ItemsControl x:Name="dependencies">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBox Margin="4,1,4,1"
+                                             IsReadOnly="True"
+                                             Text="{Binding ., Mode=OneTime}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </GroupBox>
             </Grid>
-            <!--  Package ID  -->
-            <TextBlock x:Name="packageIdTitle"
-                       Grid.Row="3"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Package ID" />
-            <TextBlock x:Name="packageId"
-                       Grid.Row="3"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
-            <!--  Version  -->
-            <TextBlock x:Name="versionTitle"
-                       Grid.Row="4"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Version" />
-            <TextBlock x:Name="version"
-                       Grid.Row="4"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
-            <!--  Authors  -->
-            <TextBlock x:Name="authorsTitle"
-                       Grid.Row="5"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Authors" />
-            <TextBlock x:Name="authors"
-                       Grid.Row="5"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
-            <!--  License  -->
-            <TextBlock x:Name="licenseTitle"
-                       Grid.Row="6"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="License" />
-            <TextBlock x:Name="licenseBlock"
-                       Grid.Row="6"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
-            <!--  Project URL  -->
-            <TextBlock x:Name="projectUrlTitle"
-                       Grid.Row="7"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Project Website"
-                       Visibility="Collapsed" />
-            <TextBlock x:Name="projectUrlBlock"
-                       Grid.Row="7"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       TextTrimming="CharacterEllipsis"
-                       Visibility="Collapsed">
-                <Hyperlink x:Name="projectUrlLink" RequestNavigate="OnHyperlinkNavigate">
-                    <Hyperlink.Style>
-                        <Style TargetType="{x:Type Hyperlink}">
-                            <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-                            <Setter Property="Cursor" Value="Hand" />
-                            <Setter Property="TextDecorations" Value="Underline" />
-                            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
-                                    <Setter Property="TextDecorations" Value="{x:Null}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Hyperlink.Style>
-                    <Run x:Name="projectUrlText" />
-                </Hyperlink>
-            </TextBlock>
-            <!--  Source Repository  -->
-            <TextBlock x:Name="repoUrlTitle"
-                       Grid.Row="8"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Source Repository"
-                       Visibility="Collapsed" />
-            <TextBlock x:Name="repoUrlBlock"
-                       Grid.Row="8"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       TextTrimming="CharacterEllipsis"
-                       Visibility="Collapsed">
-                <Hyperlink x:Name="repoUrlLink" RequestNavigate="OnHyperlinkNavigate">
-                    <Hyperlink.Style>
-                        <Style TargetType="{x:Type Hyperlink}">
-                            <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-                            <Setter Property="Cursor" Value="Hand" />
-                            <Setter Property="TextDecorations" Value="Underline" />
-                            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorSecondaryBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
-                                    <Setter Property="TextDecorations" Value="{x:Null}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Hyperlink.Style>
-                    <Run x:Name="repoUrlText" />
-                </Hyperlink>
-            </TextBlock>
-            <!--  Target Frameworks  -->
-            <TextBlock x:Name="frameworksTitle"
-                       Grid.Row="9"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Target Frameworks" />
-            <TextBlock x:Name="frameworks"
-                       Grid.Row="9"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="Wrap" />
-            <!--  Total Size  -->
-            <TextBlock x:Name="totalSizeTitle"
-                       Grid.Row="10"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Total Size" />
-            <TextBlock x:Name="totalSize"
-                       Grid.Row="10"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Calculating size..." />
-            <!--  Last Modified  -->
-            <TextBlock x:Name="modDateTitle"
-                       Grid.Row="11"
-                       Grid.Column="1"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Last Modified" />
-            <TextBlock x:Name="modDate"
-                       Grid.Row="11"
-                       Grid.Column="2"
-                       Margin="8,0,0,0"
-                       Padding="3"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                       Text="Searching..."
-                       TextTrimming="CharacterEllipsis" />
-            <!--  Description  -->
-            <GroupBox x:Name="descriptionGroupBox"
-                      Grid.Row="12"
-                      Grid.Column="1"
-                      Grid.ColumnSpan="2"
-                      Margin="3,3,16,3"
-                      Padding="3"
-                      Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                      BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                      Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                      Header="Description">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ScrollViewer.Resources>
-                        <Style TargetType="{x:Type TextBox}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                        </Style>
-                    </ScrollViewer.Resources>
-                    <TextBox x:Name="description"
-                             Margin="8,3,16,3"
-                             AcceptsReturn="True"
-                             IsReadOnly="True"
-                             TextWrapping="Wrap"
-                             VerticalScrollBarVisibility="Auto" />
-                </ScrollViewer>
-            </GroupBox>
-            <!--  Dependencies  -->
-            <GroupBox x:Name="dependenciesGroupBox"
-                      Grid.Row="13"
-                      Grid.Column="1"
-                      Grid.ColumnSpan="2"
-                      Margin="3,3,16,16"
-                      Padding="3"
-                      Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                      BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                      Foreground="{DynamicResource WindowTextForegroundAlternative}"
-                      Header="Dependencies">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ScrollViewer.Resources>
-                        <Style TargetType="{x:Type TextBox}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                        </Style>
-                    </ScrollViewer.Resources>
-                    <ItemsControl x:Name="dependencies">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBox Margin="4,1,4,1"
-                                         IsReadOnly="True"
-                                         Text="{Binding ., Mode=OneTime}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </GroupBox>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>
