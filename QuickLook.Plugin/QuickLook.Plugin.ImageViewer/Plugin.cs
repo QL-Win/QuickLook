@@ -100,6 +100,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             new KeyValuePair<string[], Type>([".webp"],
                 typeof(WebPProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".clip"],
+                typeof(ClipProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".cur", ".ani"],
                 typeof(CursorProvider)));
 #if USESVGSKIA
