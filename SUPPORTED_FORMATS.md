@@ -204,6 +204,7 @@ Update not completed yet...
 - `.xbm`, `.xpm` (X11 bitmap/pixmap)
 - `.gv`, `.dot` (Graphviz)
 - `.drawio`, `.dio` (draw.io)
+- `.clip` (Clip Studio Paint)
 
 ### PDF files
 - `.pdf` (Portable Document Format)

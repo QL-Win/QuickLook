@@ -25,6 +25,7 @@
 - Add ShellScriptDetector and register in FormatDetector
 - Add Graphviz (`.gv` and `.dot`) support for image viewer
 - Add draw.io (`.drawio` and `.dio`) support for image viewer
+- Add Clip Studio Paint (`.clip`) support for image viewer
 - Support localization for CSV viewer search panel
 - Add extension filter helper and integrate checks
 - Improve extension parsing and add balcklist for .insv [#1802](https://github.com/QL-Win/QuickLook/issues/1802)
