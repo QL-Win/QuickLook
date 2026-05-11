@@ -19,6 +19,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.ImageViewer.Webview.Graphviz;
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
+using QuickLook.Plugin.ImageViewer.Webview.PlantUml;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using QuickLook.Plugin.ImageViewer.Webview.Svga;
 using QuickLook.Plugin.ImageViewer.Webview.Tgs;
@@ -42,6 +43,7 @@ internal static class WebHandler
             ".tgs" => TgsDetector.IsValidFile(path), // Check for TGS files
             ".json" => LottieDetector.IsVaildFile(path), // Check for Lottie files
             ".gv" or ".dot" => true,
+            ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => true,
             _ => false,
         };
     }
@@ -52,7 +54,8 @@ internal static class WebHandler
 
         if (ext == ".svg" || ext == ".svga"
          || ext == ".lottie" || ext == ".tgs" || ext == ".json"
-         || ext == ".gv" || ext == ".dot")
+         || ext == ".gv" || ext == ".dot"
+         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml")
         {
             if (ext == ".svg")
             {
@@ -70,6 +73,7 @@ internal static class WebHandler
                 ".lottie" or ".json" => new LottieMetaProvider(path),
                 ".tgs" => new TgsMetaProvider(path),
                 ".gv" or ".dot" => new GvMetaProvider(),
+                ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => new PuMetaProvider(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -94,7 +98,8 @@ internal static class WebHandler
         if (ext == ".svg" || ext == ".svga"
          || ext == ".lottie" || ext == ".json"
          || ext == ".tgs"
-         || ext == ".gv" || ext == ".dot")
+         || ext == ".gv" || ext == ".dot"
+         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml")
         {
             if (ext == ".svg")
             {
@@ -112,6 +117,7 @@ internal static class WebHandler
                 ".lottie" or ".json" => new LottieImagePanel(),
                 ".tgs" => new TgsImagePanel(),
                 ".gv" or ".dot" => new GvImagePanel(),
+                ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => new PuImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 

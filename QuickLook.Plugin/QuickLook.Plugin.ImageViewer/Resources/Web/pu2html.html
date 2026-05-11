@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PlantUML Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      overflow: hidden;
+      background: #fff;
+      font-family: sans-serif;
+    }
+    #container {
+      width: 100%; height: 100%;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+    }
+    #container.grabbing { cursor: grabbing; }
+    #diagram-wrap {
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: 0 0;
+    }
+    #diagram { display: block; }
+    #status {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 14px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #status[hidden] { display: none !important; }
+    #status.error   { background: rgba(180, 30, 30, 0.85); }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="diagram-wrap">
+      <img id="diagram" alt="" />
+    </div>
+  </div>
+  <div id="status">Waiting&#x2026;</div>
+
+  <script>
+    'use strict';
+
+    // -- PlantUML custom base64 ----------------------------------------------
+    const PU64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
+
+    function encode64(u8) {
+      let s = '';
+      for (let i = 0; i < u8.length; i += 3) {
+        const b0 = u8[i];
+        const b1 = i + 1 < u8.length ? u8[i + 1] : 0;
+        const b2 = i + 2 < u8.length ? u8[i + 2] : 0;
+        s += PU64[(b0 >> 2) & 0x3f]
+           + PU64[((b0 & 0x3) << 4) | ((b1 >> 4) & 0xf)]
+           + PU64[((b1 & 0xf) << 2) | ((b2 >> 6) & 0x3)]
+           + PU64[b2 & 0x3f];
+      }
+      return s;
+    }
+
+    async function encodePuml(text) {
+      const bytes = new TextEncoder().encode(text);
+      const cs = new CompressionStream('deflate-raw');
+      const w = cs.writable.getWriter();
+      w.write(bytes);
+      w.close();
+      const compressed = new Uint8Array(await new Response(cs.readable).arrayBuffer());
+      return encode64(compressed);
+    }
+
+    // -- DOM refs ------------------------------------------------------------
+    const container = document.getElementById('container');
+    const diagWrap  = document.getElementById('diagram-wrap');
+    const diagImg   = document.getElementById('diagram');
+    const statusEl  = document.getElementById('status');
+
+    // -- State ---------------------------------------------------------------
+    let scale = 1, tx = 0, ty = 0;
+
+    function applyTransform() {
+      diagWrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+
+    function setStatus(msg, isError = false) {
+      if (!msg) { statusEl.hidden = true; return; }
+      statusEl.hidden = false;
+      statusEl.textContent = msg;
+      statusEl.className = isError ? 'error' : '';
+    }
+
+    function fitToView() {
+      const iw = diagImg.naturalWidth, ih = diagImg.naturalHeight;
+      if (!iw || !ih) return;
+      const cw = container.clientWidth, ch = container.clientHeight;
+      scale = Math.min(cw / iw, ch / ih) * 0.95;
+      tx = (cw - iw * scale) / 2;
+      ty = (ch - ih * scale) / 2;
+      applyTransform();
+    }
+
+    // -- Render --------------------------------------------------------------
+    const SERVER = 'https://www.plantuml.com/plantuml/png/';
+
+    async function render(text) {
+      setStatus('Rendering\u2026');
+      try {
+        const encoded = await encodePuml(text);
+        diagImg.onload  = () => { setStatus(''); fitToView(); };
+        diagImg.onerror = () => setStatus('Render failed', true);
+        diagImg.src = SERVER + encoded;
+      } catch (e) {
+        setStatus(String(e), true);
+      }
+    }
+
+    // -- Pan & Zoom ----------------------------------------------------------
+    const ZOOM = 1.2;
+    let drag = false, lx = 0, ly = 0;
+
+    container.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      drag = true; lx = e.clientX; ly = e.clientY;
+      container.classList.add('grabbing');
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', e => {
+      if (!drag) return;
+      tx += e.clientX - lx; ty += e.clientY - ly;
+      lx = e.clientX; ly = e.clientY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      drag = false;
+      container.classList.remove('grabbing');
+    });
+    container.addEventListener('wheel', e => {
+      e.preventDefault();
+      const f = e.deltaY < 0 ? ZOOM : 1 / ZOOM;
+      const r = container.getBoundingClientRect();
+      const cx = e.clientX - r.left, cy = e.clientY - r.top;
+      const ns = Math.max(0.02, Math.min(50, scale * f));
+      const ratio = ns / scale;
+      tx = cx - (cx - tx) * ratio;
+      ty = cy - (cy - ty) * ratio;
+      scale = ns;
+      applyTransform();
+    }, { passive: false });
+    container.addEventListener('dblclick', fitToView);
+
+    // -- Keyboard shortcuts ---------------------------------------------------
+    window.addEventListener('keydown', e => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === '=' || e.key === '+') { e.preventDefault(); zoomCenter(ZOOM); }
+        if (e.key === '-')                  { e.preventDefault(); zoomCenter(1 / ZOOM); }
+        if (e.key === '0')                  { e.preventDefault(); fitToView(); }
+      }
+    });
+    function zoomCenter(f) {
+      const ns = Math.max(0.02, Math.min(50, scale * f));
+      const ratio = ns / scale;
+      const cx = container.clientWidth / 2, cy = container.clientHeight / 2;
+      tx = cx - (cx - tx) * ratio;
+      ty = cy - (cy - ty) * ratio;
+      scale = ns;
+      applyTransform();
+    }
+
+    // -- Plugin API ----------------------------------------------------------
+    window.__PU2HTML_RENDER = text => render(text);
+    window.addEventListener('message', e => {
+      if (e.data && e.data.type === 'pu-render') render(String(e.data.text || ''));
+    });
+  </script>
+</body>
+</html>

@@ -112,6 +112,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="System.Web" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
 
