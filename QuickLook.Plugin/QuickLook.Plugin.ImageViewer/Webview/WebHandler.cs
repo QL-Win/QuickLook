@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Webview.Graphviz;
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using QuickLook.Plugin.ImageViewer.Webview.Svga;
@@ -40,6 +41,7 @@ internal static class WebHandler
             ".svga" or ".lottie" => true,
             ".tgs" => TgsDetector.IsValidFile(path), // Check for TGS files
             ".json" => LottieDetector.IsVaildFile(path), // Check for Lottie files
+            ".gv" or ".dot" => true,
             _ => false,
         };
     }
@@ -49,7 +51,8 @@ internal static class WebHandler
         string ext = Path.GetExtension(path).ToLower();
 
         if (ext == ".svg" || ext == ".svga"
-         || ext == ".lottie" || ext == ".tgs" || ext == ".json")
+         || ext == ".lottie" || ext == ".tgs" || ext == ".json"
+         || ext == ".gv" || ext == ".dot")
         {
             if (ext == ".svg")
             {
@@ -66,6 +69,7 @@ internal static class WebHandler
                 ".svga" => new SvgaMetaProvider(path),
                 ".lottie" or ".json" => new LottieMetaProvider(path),
                 ".tgs" => new TgsMetaProvider(path),
+                ".gv" or ".dot" => new GvMetaProvider(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -89,7 +93,8 @@ internal static class WebHandler
 
         if (ext == ".svg" || ext == ".svga"
          || ext == ".lottie" || ext == ".json"
-         || ext == ".tgs")
+         || ext == ".tgs"
+         || ext == ".gv" || ext == ".dot")
         {
             if (ext == ".svg")
             {
@@ -106,6 +111,7 @@ internal static class WebHandler
                 ".svga" => new SvgaImagePanel(metaWeb),
                 ".lottie" or ".json" => new LottieImagePanel(),
                 ".tgs" => new TgsImagePanel(),
+                ".gv" or ".dot" => new GvImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 

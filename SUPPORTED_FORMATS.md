@@ -202,6 +202,7 @@ Update not completed yet...
 - `.x3f` (Sigma RAW image)
 - `.xcf` (GIMP image)
 - `.xbm`, `.xpm` (X11 bitmap/pixmap)
+- `.gv`, `.dot` (Graphviz)
 
 ### PDF files
 - `.pdf` (Portable Document Format)

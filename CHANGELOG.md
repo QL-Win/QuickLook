@@ -23,6 +23,7 @@
 - Add IDMan (Internet Download Manager) support instead of [QuickLook.Plugin.IDManViewer](https://github.com/emako/QuickLook.Plugin.IDManViewer)
 - Support search panel in CSV viewer [#1824](https://github.com/QL-Win/QuickLook/issues/1824)
 - Add ShellScriptDetector and register in FormatDetector
+- Add Graphviz (`.gv` and `.dot`) support for image viewer
 - Support localization for CSV viewer search panel
 - Add extension filter helper and integrate checks
 - Improve extension parsing and add balcklist for .insv [#1802](https://github.com/QL-Win/QuickLook/issues/1802)
