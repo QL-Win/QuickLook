@@ -128,6 +128,7 @@ Update not completed yet...
 - `.verilog` (Verilog source)
 - `.vhdl` (VHDL source)
 - `.visualsolution` (VisualSolution source)
+- `.vdproj` (Visual Studio Deployment Project)
 - `.volt` (Volt source)
 - `.vue` (Vue component)
 - `.x10` (X10 source)

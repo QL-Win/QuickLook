@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="VisualDeployProject" extensions=".vdproj">
+
+    <Digits name="Number" color="#B5CEA8" bold="false" italic="false"/>
+
+    <RuleSets>
+
+        <!-- Value content: type codes, booleans, GUIDs -->
+        <RuleSet name="ValueContent" ignorecase="false">
+            <Span name="GUID" bold="false" italic="false" color="#4EC9B0" stopateol="true">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+            <KeyWords name="Bool" bold="false" italic="false" color="#569CD6">
+                <Key word="TRUE"/>
+                <Key word="FALSE"/>
+            </KeyWords>
+        </RuleSet>
+
+        <!-- Main ruleset -->
+        <RuleSet ignorecase="false">
+
+            <!-- Property value (after = ) -->
+            <Span name="Value" bold="false" italic="false" color="#CE9178" stopateol="true" rule="ValueContent">
+                <Begin>= "</Begin>
+                <End>"</End>
+            </Span>
+
+            <!-- Property key or section name -->
+            <Span name="Key" bold="false" italic="false" color="#9CDCF0" stopateol="true">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+        </RuleSet>
+
+    </RuleSets>
+</SyntaxDefinition>
