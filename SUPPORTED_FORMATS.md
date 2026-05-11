@@ -134,6 +134,7 @@ Update not completed yet...
 - `.xc` (XC source)
 - `.xml` (Extensible Markup Language)
 - `.xtend` (Xtend source)
+- `.DS_Store` (macOS Finder metadata — parsed and rendered as text by DS_Store parser)
 
 - Most other plain text and script formats
 

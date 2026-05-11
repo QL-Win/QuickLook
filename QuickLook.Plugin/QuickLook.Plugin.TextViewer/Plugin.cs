@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
+using QuickLook.Plugin.TextViewer.Detectors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,6 +53,9 @@ public partial class Plugin : IViewer, IMoreMenu
             return false;
 
         if (WellKnownExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        if (FormatDetector.SupportedExtensions.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
             return true;
 
         // Read the first 16KB, check if we can get something

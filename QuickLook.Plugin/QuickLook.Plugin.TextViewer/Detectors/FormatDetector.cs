@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.Linq;
 
 namespace QuickLook.Plugin.TextViewer.Detectors;
@@ -22,6 +23,12 @@ namespace QuickLook.Plugin.TextViewer.Detectors;
 public class FormatDetector
 {
     public static FormatDetector Instance { get; } = new();
+
+    public static string[] SupportedExtensions
+        => [.. Instance.TextDetectors
+            .Where(detector => detector is ITransferFormatDetector)
+            .Select(detector => detector as ITransferFormatDetector)
+            .Select(detector => detector.RealExtension)];
 
     internal IFormatDetector[] TextDetectors =
     [
@@ -33,6 +40,7 @@ public class FormatDetector
         new DockerfileDetector(),
         new ShellScriptDetector(),
         new KrcDetector(),
+        new DSStoreDetector(),
     ];
 
     public static IFormatDetector Confuse(string path, string text)
@@ -40,8 +48,7 @@ public class FormatDetector
         if (string.IsNullOrWhiteSpace(text)) return null;
 
         return Instance.TextDetectors
-            .Where(detector => detector is IConfusedFormatDetector && detector.Detect(path, text))
-            .FirstOrDefault();
+            .FirstOrDefault(detector => detector is IConfusedFormatDetector && detector.Detect(path, text));
     }
 
     public static IFormatDetector Detect(string path, string text)
@@ -49,26 +56,24 @@ public class FormatDetector
         if (string.IsNullOrWhiteSpace(text)) return null;
 
         return Instance.TextDetectors
-            .Where(detector => detector is not IConfusedFormatDetector && detector.Detect(path, text))
-            .FirstOrDefault();
+            .FirstOrDefault(detector => detector is not IConfusedFormatDetector && detector.Detect(path, text));
     }
 
     public static bool Transfer(string path, out string text)
     {
-        ITransferFormatDetector detector = Instance.TextDetectors
+        IEnumerable<ITransferFormatDetector> detectors = Instance.TextDetectors
             .Where(detector => detector is ITransferFormatDetector)
-            .Select(detector => detector as ITransferFormatDetector)
-            .FirstOrDefault();
+            .Select(detector => detector as ITransferFormatDetector);
 
         text = null;
-        if (detector is null)
+        if (!detectors.Any())
         {
             return false;
         }
-        if (detector.Detect(path, null))
+        foreach (var detector in detectors)
         {
             text = detector.Transfer(path);
-            return true;
+            if (text is not null) return true;
         }
         return false;
     }
@@ -87,5 +92,7 @@ public interface IConfusedFormatDetector : IFormatDetector;
 
 public interface ITransferFormatDetector : IFormatDetector
 {
+    public string RealExtension { get; }
+
     public string Transfer(string path);
 }
