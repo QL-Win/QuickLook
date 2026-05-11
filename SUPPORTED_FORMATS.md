@@ -203,6 +203,7 @@ Update not completed yet...
 - `.xcf` (GIMP image)
 - `.xbm`, `.xpm` (X11 bitmap/pixmap)
 - `.gv`, `.dot` (Graphviz)
+- `.drawio`, `.dio` (draw.io)
 
 ### PDF files
 - `.pdf` (Portable Document Format)

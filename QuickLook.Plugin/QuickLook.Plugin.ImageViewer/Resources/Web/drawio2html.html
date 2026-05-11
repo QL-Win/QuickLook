@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Draw.io Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
+    #graph-container {
+      width: 100%; height: 100%;
+    }
+    /* Hide the diagrams.net toolbar for a clean preview */
+    .geDiagramContainer { border: none !important; }
+  </style>
+</head>
+<body>
+  <div id="graph-container"></div>
+
+  <script src="/js/viewer-static.min.js"></script>
+  <script>
+    'use strict';
+
+    var _pendingXml = null;
+    var _viewerReady = false;
+
+    function doRender(xml) {
+      var container = document.getElementById('graph-container');
+      container.innerHTML = '';
+
+      var div = document.createElement('div');
+      div.className = 'mxgraph';
+      div.setAttribute('style', 'max-width:100%;border:1px solid transparent;');
+      div.setAttribute('data-mxgraph', JSON.stringify({
+        xml: xml,
+        nav: true,
+        toolbar: null,
+        fit: 1,
+        page: 1,
+        resize: true
+      }));
+      container.appendChild(div);
+
+      if (window.GraphViewer && window.GraphViewer.processElements) {
+        window.GraphViewer.processElements();
+      }
+    }
+
+    window.__DRAWIO_RENDER = function(xml) {
+      if (_viewerReady) {
+        doRender(xml);
+      } else {
+        _pendingXml = xml;
+      }
+    };
+
+    // Wait for GraphViewer to be available, then process any pending render
+    (function waitForViewer() {
+      if (window.GraphViewer) {
+        _viewerReady = true;
+        if (_pendingXml !== null) {
+          doRender(_pendingXml);
+          _pendingXml = null;
+        }
+      } else {
+        setTimeout(waitForViewer, 20);
+      }
+    })();
+  </script>
+</body>
+</html>

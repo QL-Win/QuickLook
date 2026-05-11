@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Webview.Drawio;
 using QuickLook.Plugin.ImageViewer.Webview.Graphviz;
 using QuickLook.Plugin.ImageViewer.Webview.Lottie;
 using QuickLook.Plugin.ImageViewer.Webview.PlantUml;
@@ -44,6 +45,7 @@ internal static class WebHandler
             ".json" => LottieDetector.IsVaildFile(path), // Check for Lottie files
             ".gv" or ".dot" => true,
             ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => true,
+            ".drawio" or ".dio" => true,
             _ => false,
         };
     }
@@ -55,7 +57,8 @@ internal static class WebHandler
         if (ext == ".svg" || ext == ".svga"
          || ext == ".lottie" || ext == ".tgs" || ext == ".json"
          || ext == ".gv" || ext == ".dot"
-         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml")
+         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml"
+         || ext == ".drawio" || ext == ".dio")
         {
             if (ext == ".svg")
             {
@@ -74,6 +77,7 @@ internal static class WebHandler
                 ".tgs" => new TgsMetaProvider(path),
                 ".gv" or ".dot" => new GvMetaProvider(),
                 ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => new PuMetaProvider(),
+                ".drawio" or ".dio" => new DrawioMetaProvider(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
             var sizeSvg = metaWeb.GetSize();
@@ -99,7 +103,8 @@ internal static class WebHandler
          || ext == ".lottie" || ext == ".json"
          || ext == ".tgs"
          || ext == ".gv" || ext == ".dot"
-         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml")
+         || ext == ".pu" || ext == ".puml" || ext == ".plantuml" || ext == ".wsd" || ext == ".iuml"
+         || ext == ".drawio" || ext == ".dio")
         {
             if (ext == ".svg")
             {
@@ -118,6 +123,7 @@ internal static class WebHandler
                 ".tgs" => new TgsImagePanel(),
                 ".gv" or ".dot" => new GvImagePanel(),
                 ".pu" or ".puml" or ".plantuml" or ".wsd" or ".iuml" => new PuImagePanel(),
+                ".drawio" or ".dio" => new DrawioImagePanel(),
                 _ => throw new NotSupportedException($"Unsupported file type: {ext}")
             };
 
