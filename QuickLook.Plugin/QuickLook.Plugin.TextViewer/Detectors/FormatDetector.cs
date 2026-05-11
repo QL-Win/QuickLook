@@ -24,8 +24,8 @@ public class FormatDetector
 {
     public static FormatDetector Instance { get; } = new();
 
-    public static string[] SupportedExtensions
-        => [.. Instance.TextDetectors
+    public static string[] SupportedExtensions { get; } = [..
+        Instance.TextDetectors
             .Where(detector => detector is ITransferFormatDetector)
             .Select(detector => detector as ITransferFormatDetector)
             .Select(detector => detector.RealExtension)];
