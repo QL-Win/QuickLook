@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Newtonsoft.Json;
+using QuickLook.Common.Helpers;
+using QuickLook.Controls;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -22,14 +25,15 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
-using QuickLook.Common.Helpers;
-using QuickLook.Controls;
 
 namespace QuickLook.Helpers;
 
 internal class Updater
 {
+    // "silent" indicates whether this check was automatic/background.
+    // When "silent" is true, do not open or invoke UI that shows
+    // the full markdown release notes. Only show detailed release
+    // notes when the check is user-initiated (silent == false).
     public static void CheckForUpdates(bool silent = false)
     {
         if (App.IsUWP)
@@ -40,35 +44,39 @@ internal class Updater
             return;
         }
 
-        Task.Run(() =>
+        _ = Task.Run(() =>
         {
             try
             {
                 var json = DownloadJson("https://api.github.com/repos/QL-Win/QuickLook/releases/latest");
 
                 var nVersion = (string)json["tag_name"];
-                //nVersion = "9.2.1";
 
                 if (new Version(nVersion) <= Assembly.GetExecutingAssembly().GetName().Version)
                 {
                     if (!silent)
-                        Application.Current.Dispatcher.Invoke(
-                            () => TrayIconManager.ShowNotification(string.Empty,
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                            TrayIconManager.ShowNotification(string.Empty,
                                 TranslationHelper.Get("Update_NoUpdate")));
+                    }
                     return;
                 }
 
-                CollectAndShowReleaseNotes();
+                // Only collect and show the detailed markdown release notes
+                // when the update check is explicitly initiated by the user
+                // (i.e. not a silent/automatic background check).
+                if (!silent)
+                    CollectAndShowReleaseNotes();
 
-                Application.Current.Dispatcher.Invoke(
-                    () =>
-                    {
-                        TrayIconManager.ShowNotification(string.Empty,
-                            string.Format(TranslationHelper.Get("Update_Found"), nVersion),
-                            timeout: 20000,
-                            clickEvent:
-                            () => Process.Start("https://github.com/QL-Win/QuickLook/releases/latest"));
-                    });
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    TrayIconManager.ShowNotification(string.Empty,
+                        string.Format(TranslationHelper.Get("Update_Found"), nVersion),
+                        timeout: 20000,
+                        clickEvent: () =>
+                            Process.Start("https://github.com/QL-Win/QuickLook/releases/latest"));
+                });
             }
             catch (Exception e)
             {
