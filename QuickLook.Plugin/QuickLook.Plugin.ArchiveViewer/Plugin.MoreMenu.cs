@@ -62,7 +62,8 @@ public sealed partial class Plugin
         // Currently only supports for CFB and EIF files
         if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase)
             || _path.EndsWith(".eif", StringComparison.OrdinalIgnoreCase)
-            || _path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase))
+            || _path.EndsWith(".pak", StringComparison.OrdinalIgnoreCase)
+            || Path.GetFileName(_path).Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase))
         {
             yield return new MoreMenuItem()
             {
@@ -112,7 +113,15 @@ public sealed partial class Plugin
 
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
-            if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase))
+            if (Path.GetFileName(_path).Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase))
+            {
+                // Thumbs.db thumbnail extraction: strips private header + reconstructs bare-DCT JPEG
+                await Task.Run(() =>
+                {
+                    ThumbsDbExtractor.ExtractToDirectory(_path, dialog.FileName);
+                });
+            }
+            else if (_path.EndsWith(".cfb", StringComparison.OrdinalIgnoreCase))
             {
                 // Generic compound file extraction
                 await Task.Run(() =>
