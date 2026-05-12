@@ -1,263 +1,169 @@
 <?xml version="1.0"?>
-<!-- Shades of Red-Brown: #a31515, #cf4315, #ffb96e, #ffdc95 -->
-<!-- Shades of Bright-Blue: #0077dc #008fe4 #8dbbdc #8de8ff -->
-<SyntaxDefinition name="Ruby" extensions=".rb" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-  <Color name="Digits" foreground="#B5CEA8"/>
+<SyntaxDefinition name="Ruby" extensions=".rb">
 
-  <Color name="Variable" foreground="#FF6B6B" />
-  <Color name="Punctuation" foreground="#D4D4D4" />
+    <Digits name="Digits" bold="false" italic="false" color="#B5CEA8"/>
 
-  <Color name="Comment" foreground="#6A9955" />
-  <Color name="DocComment" foreground="#6A9955" />
-  <Color name="NestedComments"  foreground="#6A9955" />
-  <Color name="MultiLineComment" foreground="#6A9955" />
-  <Color name="LineComment" foreground="#6A9955" />
+    <RuleSets>
+        <RuleSet name="CommentMarkerSet" ignorecase="false">
+            <KeyWords name="TodoKeywords" color="#FF6B6B" bold="true" italic="false">
+                <Key word="TODO"/>
+                <Key word="FIXME"/>
+            </KeyWords>
+            <KeyWords name="HackKeywords" color="#FFCC02" bold="true" italic="false">
+                <Key word="HACK"/>
+                <Key word="UNDONE"/>
+            </KeyWords>
+        </RuleSet>
 
-  <Color name="Char" foreground="#CE9178" />
-  <Color name="String" foreground="#CE9178" />
+        <RuleSet name="CommentsSet" ignorecase="false">
+            <KeyWords name="TodoKeywords" color="#FF6B6B" bold="true" italic="false">
+                <Key word="TODO"/>
+                <Key word="FIXME"/>
+            </KeyWords>
+            <KeyWords name="HackKeywords" color="#FFCC02" bold="true" italic="false">
+                <Key word="HACK"/>
+                <Key word="UNDONE"/>
+            </KeyWords>
+        </RuleSet>
 
-  <Color name="MethodCall" foreground="#DCDCAA" fontWeight="bold" />
-  <Color name="FunctionDefinition" fontWeight="bold" foreground="#569CD6" />
-
-  <Color name="BuiltInStatements" fontWeight="bold" foreground="#4EC9B0" />
-  <Color name="ClassStatement" foreground="#569CD6" fontWeight="bold" />
-  <Color name="ExceptionHandlingStatements" fontWeight="bold" foreground="#C586C0" />
-
-  <Color name="Imports" fontWeight="bold" foreground="#C586C0" />
-  <Color name="IterationStatements" fontWeight="bold" foreground="#569CD6" />
-  <Color name="JumpStatements" foreground="#569CD6" />
-  <Color name="OperatorStatements" fontWeight="bold" foreground="#569CD6" />
-  <Color name="NullStatement" foreground="#FF6B6B" fontWeight="bold" />
-  <Color name="SelectionStatements" fontWeight="bold" foreground="#569CD6" />
-  <Color name="BooleanStatements" foreground="#569CD6" />
-  <Color name="DefinedStatement" foreground="#569CD6" />
-  <Color name="ClassSelfStatement" foreground="#569CD6" />
-  <Color name="ClassInheritanceStatement" foreground="#569CD6" />
-
-  <Color name="ImportStatement" foreground="#4EC9B0"/>
-
-  <Color name="CommentMarkerSetTodo"       foreground="#FF6B6B"     fontWeight="bold"/>
-  <Color name="CommentMarkerSetHackUndone" foreground="#FFCC02" fontWeight="bold"/>
-
-  <RuleSet name="CommentMarkerSet">
-    <Keywords color="CommentMarkerSetTodo">
-      <Word>TODO</Word>
-      <Word>FIXME</Word>
-    </Keywords>
-    <Keywords color="CommentMarkerSetHackUndone">
-      <Word>HACK</Word>
-      <Word>UNDONE</Word>
-    </Keywords>
-  </RuleSet>
-
-  <!-- Main RuleSet -->
-  <RuleSet ignoreCase="false">
-
-    <Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
-
-    <Rule color="Punctuation"><!-- removed &amp;-->
-      [?,.:;()\[\]{}+\-/%*&lt;&gt;^=~!]+
-    </Rule>
-
-    <Span color="Char" multiline="false">
-      <Begin>'</Begin>
-      <End>'</End>
-      <RuleSet>
-        <!-- escape with backslash -->
-        <Span begin="\\" end="." />
-      </RuleSet>
-    </Span>
-    <Span color="DocComment" ruleSet="CommentMarkerSet" multiline="true">
-      <Begin>"""</Begin>
-      <End>"""</End>
-    </Span>
-    <Span color="MultiLineComment" ruleSet="comments set" multiline="true">
-      <Begin>\=begin</Begin>
-      <End>\=end</End>
-    </Span>
-    <Span color="LineComment" ruleSet="CommentMarkerSet" multiline="false">
-      <Begin>\#</Begin>
-    </Span>
-    <Span color="String" multiline="false">
-      <Begin>"</Begin>
-      <End>"</End>
-      <RuleSet>
-        <!-- escape with backslash -->
-        <Span begin="\\" end="." />
-      </RuleSet>
-    </Span>
-
-    <Keywords color="BuiltInStatements">
-      <Word>abort</Word>
-      <Word>Array</Word>
-      <Word>at_exit</Word>
-      <Word>autoload</Word>
-      <Word>binding</Word>
-      <Word>callcc</Word>
-      <Word>caller</Word>
-      <Word>chomp</Word>
-      <Word>chop</Word>
-      <Word>eval</Word>
-      <Word>exec</Word>
-      <Word>exit</Word>
-      <Word>fail</Word>
-      <Word>Float</Word>
-      <Word>fork</Word>
-      <Word>format</Word>
-      <Word>gets</Word>
-      <Word>global_variables</Word>
-      <Word>gsub</Word>
-      <Word>Integer</Word>
-      <Word>lambda</Word>
-      <Word>proc</Word>
-      <Word>load</Word>
-      <Word>local_variables</Word>
-      <Word>loop</Word>
-      <Word>open</Word>
-      <Word>p</Word>
-      <Word>print</Word>
-      <Word>print</Word>
-      <Word>printf</Word>
-      <Word>putc</Word>
-      <Word>puts</Word>
-      <Word>rand</Word>
-      <Word>readline</Word>
-      <Word>scan</Word>
-      <Word>select</Word>
-      <Word>set_trace_func</Word>
-      <Word>sleep</Word>
-      <Word>split</Word>
-      <Word>sprintf</Word>
-      <Word>srand</Word>
-      <Word>String</Word>
-      <Word>syscall</Word>
-      <Word>system</Word>
-      <Word>sub</Word>
-      <Word>test</Word>
-      <Word>throw</Word>
-      <Word>trace_var</Word>
-      <Word>trap</Word>
-      <Word>untrace_var</Word>
-    </Keywords>
-
-    <Keywords color="ClassStatement">
-      <Word>class</Word>
-      <Word>module</Word>
-      <Word>public</Word>
-      <Word>protected</Word>
-      <Word>private</Word>
-    </Keywords>
-
-    <Keywords color="ExceptionHandlingStatements">
-      <Word>begin</Word>
-      <Word>rescue</Word>
-      <Word>ensure</Word>
-      <Word>raise</Word>
-      <Word>catch</Word>
-    </Keywords>
-
-    <Keywords color="FunctionDefinition">
-      <Word>def</Word>
-      <Word>end</Word>
-      <Word>undef</Word>
-    </Keywords>
-
-    <Keywords color="IterationStatements">
-      <Word>for</Word>
-      <Word>do</Word>
-      <Word>in</Word>
-      <Word>while</Word>
-      <Word>until</Word>
-    </Keywords>
-
-    <Keywords color="JumpStatements">
-      <Word>break</Word>
-      <Word>yield</Word>
-      <Word>redo</Word>
-      <Word>return</Word>
-      <Word>retry</Word>
-      <Word>next</Word>
-    </Keywords>
-
-    <Keywords color="OperatorStatements">
-      <Word>and</Word>
-      <Word>not</Word>
-      <Word>or</Word>
-    </Keywords>
-
-    <Keywords color="NullStatement">
-      <Word>nil</Word>
-    </Keywords>
-
-    <Keywords color="SelectionStatements">
-      <Word>elsif</Word>
-      <Word>else</Word>
-      <Word>if</Word>
-      <Word>then</Word>
-      <Word>case</Word>
-      <Word>unless</Word>
-    </Keywords>
-
-    <Keywords color="BooleanStatements">
-      <Word>true</Word>
-      <Word>false</Word>
-    </Keywords>
-
-    <Keywords color="DefinedStatement">
-      <Word>defined</Word>
-    </Keywords>
-
-    <Keywords color="ClassSelfStatement">
-      <Word>self</Word>
-    </Keywords>
-
-    <Keywords color="ClassInheritanceStatement">
-      <Word>super</Word>
-    </Keywords>
-
-    <Keywords color="Imports">
-      <Word>import</Word>
-      <Word>alias</Word>
-    </Keywords>
-
-    <Keywords color="ImportStatement">
-      <Word>include</Word>
-      <Word>require</Word>
-    </Keywords>
-
-    <Rule color="MethodCall">[\d\w_]+(?=(\s*\())</Rule>
-    <Rule color="Variable">@([\w]+)</Rule>
-    <Rule color="Variable">&amp;([\w]+)</Rule>
-  </RuleSet>
-  <!-- End of Main RuleSet-->
-
-  <RuleSet name="comments set">
-    <Keywords color="CommentMarkerSetTodo">
-      <Word>TODO</Word>
-      <Word>FIXME</Word>
-    </Keywords>
-    <Keywords color="CommentMarkerSetHackUndone">
-      <Word>HACK</Word>
-      <Word>UNDONE</Word>
-    </Keywords>
-    <!-- allows nested /**/ comments, coloring them Green/Teal alternately -->
-    <Span color="NestedComments" multiline="true">
-      <Begin>=begin</Begin>
-      <End>=end</End>
-      <RuleSet>
-        <Keywords color="CommentMarkerSetTodo">
-          <Word>TODO</Word>
-          <Word>FIXME</Word>
-        </Keywords>
-        <Keywords color="CommentMarkerSetHackUndone">
-          <Word>HACK</Word>
-          <Word>UNDONE</Word>
-        </Keywords>
-        <Span color="Comment" ruleSet="comments set" multiline="true">
-          <Begin>=begin</Begin>
-          <End>=end</End>
-        </Span>
-      </RuleSet>
-    </Span>
-  </RuleSet>
+        <RuleSet ignorecase="false">
+            <Span name="TripleQuoteComment" rule="CommentMarkerSet" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+            <Span name="MultiLineComment" rule="CommentsSet" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>\=begin</Begin>
+                <End>\=end</End>
+            </Span>
+            <Span name="LineComment" rule="CommentMarkerSet" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>\#</Begin>
+            </Span>
+            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <KeyWords name="BuiltInStatements" color="#4EC9B0" bold="false" italic="false">
+                <Key word="abort"/>
+                <Key word="Array"/>
+                <Key word="at_exit"/>
+                <Key word="autoload"/>
+                <Key word="binding"/>
+                <Key word="callcc"/>
+                <Key word="caller"/>
+                <Key word="chomp"/>
+                <Key word="chop"/>
+                <Key word="eval"/>
+                <Key word="exec"/>
+                <Key word="exit"/>
+                <Key word="fail"/>
+                <Key word="Float"/>
+                <Key word="fork"/>
+                <Key word="format"/>
+                <Key word="gets"/>
+                <Key word="global_variables"/>
+                <Key word="gsub"/>
+                <Key word="Integer"/>
+                <Key word="lambda"/>
+                <Key word="proc"/>
+                <Key word="load"/>
+                <Key word="local_variables"/>
+                <Key word="loop"/>
+                <Key word="open"/>
+                <Key word="p"/>
+                <Key word="print"/>
+                <Key word="printf"/>
+                <Key word="putc"/>
+                <Key word="puts"/>
+                <Key word="rand"/>
+                <Key word="readline"/>
+                <Key word="scan"/>
+                <Key word="select"/>
+                <Key word="set_trace_func"/>
+                <Key word="sleep"/>
+                <Key word="split"/>
+                <Key word="sprintf"/>
+                <Key word="srand"/>
+                <Key word="String"/>
+                <Key word="syscall"/>
+                <Key word="system"/>
+                <Key word="sub"/>
+                <Key word="test"/>
+                <Key word="throw"/>
+                <Key word="trace_var"/>
+                <Key word="trap"/>
+                <Key word="untrace_var"/>
+            </KeyWords>
+            <KeyWords name="ClassStatement" color="#569CD6" bold="false" italic="false">
+                <Key word="class"/>
+                <Key word="module"/>
+                <Key word="public"/>
+                <Key word="protected"/>
+                <Key word="private"/>
+            </KeyWords>
+            <KeyWords name="ExceptionHandling" color="#C586C0" bold="false" italic="false">
+                <Key word="begin"/>
+                <Key word="rescue"/>
+                <Key word="ensure"/>
+                <Key word="raise"/>
+                <Key word="catch"/>
+            </KeyWords>
+            <KeyWords name="FunctionDefinition" color="#569CD6" bold="false" italic="false">
+                <Key word="def"/>
+                <Key word="end"/>
+                <Key word="undef"/>
+            </KeyWords>
+            <KeyWords name="IterationStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="for"/>
+                <Key word="do"/>
+                <Key word="in"/>
+                <Key word="while"/>
+                <Key word="until"/>
+            </KeyWords>
+            <KeyWords name="JumpStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="break"/>
+                <Key word="yield"/>
+                <Key word="redo"/>
+                <Key word="return"/>
+                <Key word="retry"/>
+                <Key word="next"/>
+            </KeyWords>
+            <KeyWords name="OperatorStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="not"/>
+                <Key word="or"/>
+            </KeyWords>
+            <KeyWords name="NullStatement" color="#FF6B6B" bold="false" italic="false">
+                <Key word="nil"/>
+            </KeyWords>
+            <KeyWords name="SelectionStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="elsif"/>
+                <Key word="else"/>
+                <Key word="if"/>
+                <Key word="then"/>
+                <Key word="case"/>
+                <Key word="unless"/>
+            </KeyWords>
+            <KeyWords name="BooleanStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+            <KeyWords name="SpecialStatements" color="#569CD6" bold="false" italic="false">
+                <Key word="defined"/>
+                <Key word="self"/>
+                <Key word="super"/>
+            </KeyWords>
+            <KeyWords name="Imports" color="#C586C0" bold="false" italic="false">
+                <Key word="import"/>
+                <Key word="alias"/>
+            </KeyWords>
+            <KeyWords name="ImportStatement" color="#4EC9B0" bold="false" italic="false">
+                <Key word="include"/>
+                <Key word="require"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
 </SyntaxDefinition>
