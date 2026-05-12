@@ -1,130 +1,334 @@
-<?xml version="1.0"?>
-<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-    <Color name="Digits"                    foreground="#FFb5cea8" fontStyle="normal" fontWeight="normal" exampleText="3.14"/>
-    <Color name="Comment"                   foreground="#FF57A64A" exampleText="// comment"/>
-    <Color name="String"                    foreground="#FFD69D85" exampleText="var text = &quot;Hello, World!&quot;;" />
-    <Color name="Character"                 foreground="#FFD69D85" exampleText="var char = 'a';"/>
-    <Color name="Regex"                     foreground="#FF3a6a9b" exampleText="/abc/m"/>
-    <Color name="JavaScriptKeyWords"        foreground="#FFd8a0df" exampleText="return myVariable;"/>
-    <Color name="JavaScriptIntrinsics"      foreground="#FFAFAF00" exampleText="Math.random()"/>
-    <Color name="JavaScriptLiterals"        foreground="#FFd8a0df" exampleText="return false;"/>
-    <Color name="JavaScriptGlobalFunctions" foreground="#FFdcdcaa" exampleText="escape(myString);"/>
-    <RuleSet ignoreCase="false">
-        <Keywords color="JavaScriptKeyWords">
-            <Word>break</Word>
-            <Word>continue</Word>
-            <Word>delete</Word>
-            <Word>else</Word>
-            <Word>for</Word>
-            <Word>function</Word>
-            <Word>if</Word>
-            <Word>in</Word>
-            <Word>new</Word>
-            <Word>return</Word>
-            <Word>this</Word>
-            <Word>typeof</Word>
-            <Word>var</Word>
-            <Word>void</Word>
-            <Word>while</Word>
-            <Word>with</Word>
-            <Word>abstract</Word>
-            <Word>boolean</Word>
-            <Word>byte</Word>
-            <Word>case</Word>
-            <Word>catch</Word>
-            <Word>char</Word>
-            <Word>class</Word>
-            <Word>const</Word>
-            <Word>debugger</Word>
-            <Word>default</Word>
-            <Word>do</Word>
-            <Word>double</Word>
-            <Word>enum</Word>
-            <Word>export</Word>
-            <Word>extends</Word>
-            <Word>final</Word>
-            <Word>finally</Word>
-            <Word>float</Word>
-            <Word>goto</Word>
-            <Word>implements</Word>
-            <Word>import</Word>
-            <Word>instanceof</Word>
-            <Word>int</Word>
-            <Word>interface</Word>
-            <Word>long</Word>
-            <Word>native</Word>
-            <Word>package</Word>
-            <Word>private</Word>
-            <Word>protected</Word>
-            <Word>public</Word>
-            <Word>short</Word>
-            <Word>static</Word>
-            <Word>super</Word>
-            <Word>switch</Word>
-            <Word>synchronized</Word>
-            <Word>throw</Word>
-            <Word>throws</Word>
-            <Word>transient</Word>
-            <Word>try</Word>
-            <Word>volatile</Word>
-        </Keywords>
-        <Keywords color="JavaScriptIntrinsics">
-            <Word>Array</Word>
-            <Word>Boolean</Word>
-            <Word>Date</Word>
-            <Word>Function</Word>
-            <Word>Global</Word>
-            <Word>Math</Word>
-            <Word>Number</Word>
-            <Word>Object</Word>
-            <Word>RegExp</Word>
-            <Word>String</Word>
-        </Keywords>
-        <Keywords color="JavaScriptLiterals">
-            <Word>false</Word>
-            <Word>null</Word>
-            <Word>true</Word>
-            <Word>NaN</Word>
-            <Word>Infinity</Word>
-        </Keywords>
-        <Keywords color="JavaScriptGlobalFunctions">
-            <Word>eval</Word>
-            <Word>parseInt</Word>
-            <Word>parseFloat</Word>
-            <Word>escape</Word>
-            <Word>unescape</Word>
-            <Word>isNaN</Word>
-            <Word>isFinite</Word>
-        </Keywords>
-        <Span color="Comment">
-            <Begin>//</Begin>
-        </Span>
-        <Span color="Comment" multiline="true">
-            <Begin>/\*</Begin>
-            <End>\*/</End>
-        </Span>
-        <!--<Rule color="Regex">/.*/</Rule>-->
-        <Span color="Regex">
-            <Begin>/</Begin>
-            <End>/</End>
-            <RuleSet>
-                <Span begin="\\/" end="." />
-            </RuleSet>
-        </Span>
-        <Span color="String" multiline="true">
-            <Begin>"</Begin>
-            <End>"</End>
-            <RuleSet>
-                <Span begin="\\" end="." />
-            </RuleSet>
-        </Span>
-        <Span color="Character">
-            <Begin>'</Begin>
-            <End>'</End>
-            <RuleSet>
-                <Span begin="\\" end="." />
-            </RuleSet>
-        </Span>
-        <Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
-    </RuleSet>
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="JavaScript" extensions=".js;.jsx;.mjs;.cjs">
+
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#D4D4D4" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
+
+        <FoldLine color="#444444" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#2D2D2D"/>
+
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
+
+    <Digits name="Digits" color="#B5CEA8"/>
+
+    <RuleSets>
+        <RuleSet ignorecase="false">
+
+            <Delimiters>~!%^&amp;*{}[]()-+=/|;:,.?&gt;&lt;</Delimiters>
+
+            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+
+            <Span name="JSDoc" rule="JSDoc" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/**</Begin>
+                <End>*/</End>
+            </Span>
+
+            <Span name="BlockComment" stopateol="false" color="#6A9955" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+
+            <Span name="String" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="Char" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <Span name="TemplateLiteral" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+                <Begin>`</Begin>
+                <End>`</End>
+            </Span>
+
+            <Span name="Regex" stopateol="true" color="#D16969" bold="false" italic="false">
+                <Begin>/</Begin>
+                <End>/</End>
+            </Span>
+
+            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
+                <Key word="abstract"/>
+                <Key word="boolean"/>
+                <Key word="break"/>
+                <Key word="byte"/>
+                <Key word="case"/>
+                <Key word="catch"/>
+                <Key word="char"/>
+                <Key word="class"/>
+                <Key word="const"/>
+                <Key word="continue"/>
+                <Key word="debugger"/>
+                <Key word="default"/>
+                <Key word="delete"/>
+                <Key word="do"/>
+                <Key word="double"/>
+                <Key word="each"/>
+                <Key word="else"/>
+                <Key word="enum"/>
+                <Key word="escape"/>
+                <Key word="export"/>
+                <Key word="extends"/>
+                <Key word="false"/>
+                <Key word="final"/>
+                <Key word="finally"/>
+                <Key word="float"/>
+                <Key word="for"/>
+                <Key word="from"/>
+                <Key word="function"/>
+                <Key word="get"/>
+                <Key word="goto"/>
+                <Key word="if"/>
+                <Key word="implements"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="instanceof"/>
+                <Key word="int"/>
+                <Key word="interface"/>
+                <Key word="let"/>
+                <Key word="long"/>
+                <Key word="native"/>
+                <Key word="new"/>
+                <Key word="null"/>
+                <Key word="of"/>
+                <Key word="package"/>
+                <Key word="parseFloat"/>
+                <Key word="parseInt"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
+                <Key word="return"/>
+                <Key word="set"/>
+                <Key word="short"/>
+                <Key word="static"/>
+                <Key word="super"/>
+                <Key word="switch"/>
+                <Key word="synchronized"/>
+                <Key word="this"/>
+                <Key word="throw"/>
+                <Key word="throws"/>
+                <Key word="transient"/>
+                <Key word="true"/>
+                <Key word="try"/>
+                <Key word="typeof"/>
+                <Key word="unescape"/>
+                <Key word="var"/>
+                <Key word="void"/>
+                <Key word="volatile"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false" italic="false">
+                <Key word="Anchor"/>
+                <Key word="Applet"/>
+                <Key word="Area"/>
+                <Key word="Arguments"/>
+                <Key word="Array"/>
+                <Key word="Boolean"/>
+                <Key word="Button"/>
+                <Key word="Checkbox"/>
+                <Key word="Collection"/>
+                <Key word="Crypto"/>
+                <Key word="Date"/>
+                <Key word="Dictionary"/>
+                <Key word="Document"/>
+                <Key word="Drive"/>
+                <Key word="Drives"/>
+                <Key word="Element"/>
+                <Key word="Enumerator"/>
+                <Key word="Event"/>
+                <Key word="File"/>
+                <Key word="FileObject"/>
+                <Key word="FileSystemObject"/>
+                <Key word="FileUpload"/>
+                <Key word="Folder"/>
+                <Key word="Folders"/>
+                <Key word="Form"/>
+                <Key word="Frame"/>
+                <Key word="Function"/>
+                <Key word="Global"/>
+                <Key word="HTMLElement"/>
+                <Key word="Hidden"/>
+                <Key word="History"/>
+                <Key word="Image"/>
+                <Key word="Infinity"/>
+                <Key word="Input"/>
+                <Key word="JSObject"/>
+                <Key word="JavaArray"/>
+                <Key word="JavaClass"/>
+                <Key word="JavaObject"/>
+                <Key word="JavaPackage"/>
+                <Key word="Layer"/>
+                <Key word="Link"/>
+                <Key word="Location"/>
+                <Key word="Math"/>
+                <Key word="MimeType"/>
+                <Key word="NaN"/>
+                <Key word="Navigator"/>
+                <Key word="Number"/>
+                <Key word="Object"/>
+                <Key word="Option"/>
+                <Key word="Packages"/>
+                <Key word="Password"/>
+                <Key word="Plugin"/>
+                <Key word="PrivilegeManager"/>
+                <Key word="Radio"/>
+                <Key word="Random"/>
+                <Key word="RegExp"/>
+                <Key word="Reset"/>
+                <Key word="Screen"/>
+                <Key word="Select"/>
+                <Key word="String"/>
+                <Key word="Style"/>
+                <Key word="Submit"/>
+                <Key word="Text"/>
+                <Key word="Textarea"/>
+                <Key word="URL"/>
+                <Key word="VBArray"/>
+                <Key word="WScript"/>
+                <Key word="Window"/>
+                <Key word="XMLHttpRequest"/>
+                <Key word="eval"/>
+                <Key word="hasOwnProperty"/>
+                <Key word="isFinite"/>
+                <Key word="isNaN"/>
+                <Key word="isPrototypeOf"/>
+                <Key word="toElement"/>
+                <Key word="toGMTString"/>
+                <Key word="toLocaleString"/>
+                <Key word="toLowerCase"/>
+                <Key word="toString"/>
+                <Key word="toUTCString"/>
+                <Key word="toUpperCase"/>
+                <Key word="undefined"/>
+                <Key word="valueOf"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords3" color="#4EC9B0" bold="false" italic="false">
+                <Key word="Error"/>
+                <Key word="EvalError"/>
+                <Key word="InternalError"/>
+                <Key word="RangeError"/>
+                <Key word="ReferenceError"/>
+                <Key word="SyntaxError"/>
+                <Key word="TypeError"/>
+                <Key word="URIError"/>
+            </KeyWords>
+
+        </RuleSet>
+
+        <RuleSet name="JSDoc" ignorecase="false">
+            <Delimiters>~!%^*()+=|\#/{}[];"'&lt;&gt; , .?</Delimiters>
+
+            <KeyWords name="JSDocTags" color="#D7BA7D" bold="false" italic="false">
+                <Key word="@abstract"/>
+                <Key word="@access"/>
+                <Key word="@alias"/>
+                <Key word="@arg"/>
+                <Key word="@argument"/>
+                <Key word="@augments"/>
+                <Key word="@author"/>
+                <Key word="@borrows"/>
+                <Key word="@callback"/>
+                <Key word="@class"/>
+                <Key word="@classdesc"/>
+                <Key word="@const"/>
+                <Key word="@constant"/>
+                <Key word="@constructor"/>
+                <Key word="@constructs"/>
+                <Key word="@copyright"/>
+                <Key word="@default"/>
+                <Key word="@defaultvalue"/>
+                <Key word="@deprecated"/>
+                <Key word="@desc"/>
+                <Key word="@description"/>
+                <Key word="@emits"/>
+                <Key word="@enum"/>
+                <Key word="@event"/>
+                <Key word="@example"/>
+                <Key word="@exception"/>
+                <Key word="@exports"/>
+                <Key word="@extends"/>
+                <Key word="@external"/>
+                <Key word="@file"/>
+                <Key word="@fileoverview"/>
+                <Key word="@fires"/>
+                <Key word="@func"/>
+                <Key word="@function"/>
+                <Key word="@global"/>
+                <Key word="@grant"/>
+                <Key word="@host"/>
+                <Key word="@ignore"/>
+                <Key word="@implements"/>
+                <Key word="@include"/>
+                <Key word="@inheritdoc"/>
+                <Key word="@inner"/>
+                <Key word="@instance"/>
+                <Key word="@interface"/>
+                <Key word="@kind"/>
+                <Key word="@lends"/>
+                <Key word="@license"/>
+                <Key word="@listens"/>
+                <Key word="@member"/>
+                <Key word="@memberof"/>
+                <Key word="@method"/>
+                <Key word="@mixes"/>
+                <Key word="@mixin"/>
+                <Key word="@module"/>
+                <Key word="@name"/>
+                <Key word="@namespace"/>
+                <Key word="@override"/>
+                <Key word="@overview"/>
+                <Key word="@param"/>
+                <Key word="@private"/>
+                <Key word="@prop"/>
+                <Key word="@property"/>
+                <Key word="@protected"/>
+                <Key word="@public"/>
+                <Key word="@readonly"/>
+                <Key word="@require"/>
+                <Key word="@requires"/>
+                <Key word="@resource"/>
+                <Key word="@return"/>
+                <Key word="@returns"/>
+                <Key word="@run-at"/>
+                <Key word="@see"/>
+                <Key word="@since"/>
+                <Key word="@static"/>
+                <Key word="@summary"/>
+                <Key word="@this"/>
+                <Key word="@throws"/>
+                <Key word="@todo"/>
+                <Key word="@tutorial"/>
+                <Key word="@type"/>
+                <Key word="@typedef"/>
+                <Key word="@var"/>
+                <Key word="@variation"/>
+                <Key word="@version"/>
+                <Key word="@virtual"/>
+            </KeyWords>
+        </RuleSet>
+
+    </RuleSets>
 </SyntaxDefinition>
