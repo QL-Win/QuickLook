@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Helpers;
+using QuickLook.Common.NativeMethods;
 using QuickLook.Helpers;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ internal class KeystrokeDispatcher : IDisposable
     private static HashSet<Keys> _validKeys;
 
     private GlobalKeyboardHook _hook;
+    private nint _winEventHook;
+    private User32.WinEventProc _winEventProc; // keep reference to prevent GC
     private bool _isPreviewRequest;
     private bool _spaceIsDown;
     private long _spaceHoldTick;
@@ -42,6 +45,7 @@ internal class KeystrokeDispatcher : IDisposable
     protected KeystrokeDispatcher()
     {
         InstallKeyHook(KeyDownEventHandler, KeyUpEventHandler);
+        InstallForegroundWindowHook();
 
         _validKeys =
         [
@@ -55,6 +59,12 @@ internal class KeystrokeDispatcher : IDisposable
     {
         _hook?.Dispose();
         _hook = null;
+
+        if (_winEventHook != IntPtr.Zero)
+        {
+            User32.UnhookWinEvent(_winEventHook);
+            _winEventHook = IntPtr.Zero;
+        }
     }
 
     private void KeyDownEventHandler(object sender, KeyEventArgs e)
@@ -179,6 +189,28 @@ internal class KeystrokeDispatcher : IDisposable
 
         _hook.KeyDown += downHandler;
         _hook.KeyUp += upHandler;
+    }
+
+    private void InstallForegroundWindowHook()
+    {
+        // When the foreground window changes (e.g. via Alt+Tab), reset the invalid-key
+        // delay so the first Space press in the newly focused Explorer window works.
+        // https://github.com/QL-Win/QuickLook/issues/1939
+        _winEventProc = OnForegroundWindowChanged;
+        _winEventHook = User32.SetWinEventHook(
+            User32.EVENT_SYSTEM_FOREGROUND, User32.EVENT_SYSTEM_FOREGROUND,
+            IntPtr.Zero, _winEventProc,
+            0, 0, User32.WINEVENT_OUTOFCONTEXT);
+    }
+
+    private void OnForegroundWindowChanged(nint hWinEventHook, uint eventType, nint hwnd,
+        int idObject, int idChild, uint idEventThread, uint dwmsEventTime)
+    {
+        // A different window is now in the foreground. Any invalid key presses that happened
+        // before this switch (e.g. Alt+Tab keystrokes) belong to the previous context,
+        // so they must not suppress valid keys in the new window.
+        _lastInvalidKeyPressTick = 0L;
+        Debug.WriteLine($"Foreground window changed to {hwnd:X}, invalid-key delay cleared.");
     }
 
     internal static KeystrokeDispatcher GetInstance()

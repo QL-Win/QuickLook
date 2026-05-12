@@ -27,6 +27,9 @@ public static class User32
 {
     public delegate int KeyboardHookProc(int code, int wParam, ref KeyboardHookStruct lParam);
 
+    public delegate void WinEventProc(nint hWinEventHook, uint eventType, nint hwnd,
+        int idObject, int idChild, uint idEventThread, uint dwmsEventTime);
+
     [DllImport("user32.dll")]
     public static extern int MoveWindow(nint hWnd, int x, int y, int nWidth, int nHeight,
         [MarshalAs(UnmanagedType.Bool)] bool bRepaint);
@@ -97,6 +100,13 @@ public static class User32
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAYDEVICE lpDisplayDevice, uint dwFlags);
 
+    [DllImport("user32.dll")]
+    public static extern nint SetWinEventHook(uint eventMin, uint eventMax, nint hmodWinEventProc,
+        WinEventProc lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+    [DllImport("user32.dll")]
+    public static extern bool UnhookWinEvent(nint hWinEventHook);
+
     public enum MonitorDefaults
     {
         TONULL = 0,
@@ -114,10 +124,9 @@ public static class User32
         /// <summary>
         /// Logical pixels inch in Y
         /// </summary>
-        LOGPIXELSY = 90
+        LOGPIXELSY = 90,
     }
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public struct KeyboardHookStruct
     {
         public int vkCode;
@@ -168,9 +177,7 @@ public static class User32
         public string DeviceKey;
     }
 
-    // ReSharper disable InconsistentNaming
     public static readonly nint HWND_TOPMOST = -1;
-
     public static readonly nint HWND_NOTOPMOST = -2;
     public static readonly nint HWND_TOP = 0;
     public static readonly nint HWND_BOTTOM = 1;
@@ -196,6 +203,7 @@ public static class User32
     public const int WM_KEYUP = 0x101;
     public const int WM_SYSKEYDOWN = 0x104;
     public const int WM_SYSKEYUP = 0x105;
+
     public const int GWL_STYLE = -16;
     public const int GWL_EXSTYLE = -20;
     public const int WS_SYSMENU = 0x00080000;
@@ -206,5 +214,7 @@ public static class User32
     public const uint GA_PARENT = 1;
     public const uint GA_ROOT = 2;
     public const uint GA_ROOTOWNER = 3;
-    // ReSharper restore InconsistentNaming
+
+    public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+    public const uint WINEVENT_OUTOFCONTEXT = 0x0000;
 }
