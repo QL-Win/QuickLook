@@ -1,108 +1,206 @@
-<?xml version="1.0"?>
-<SyntaxDefinition name="Python" extensions=".py;.pyw;.pyx;.vpy" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+<?xml version="1.0" encoding="utf-8"?>
 
-    <Color name="Comment"       foreground="#FF57A64A" />
-    <Color name="String"        foreground="#FFD69D85" />
-    <Color name="MethodCall"    foreground="#FFdcdcaa" />
-    <Color name="NumberLiteral" foreground="#FFb5cea8" />
-    <Color name="Keywords"      foreground="#FF00A0FF" />
+<SyntaxDefinition name="Python" extensions=".py;.pyw;.pyx;.vpy">
 
-    <Color name="CommentMarkerSetTodo"        foreground="#FFFF0000" fontWeight="bold"/>
-    <Color name="CommentMarkerSetHackUndone"  foreground="#FF8B008B" fontWeight="bold"/>
+    <Environment>
+        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
+        <Selection color="#D4D4D4" bgcolor="#264F78"/>
+        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
+        <CaretMarker color="#AEAFAD"/>
+        <VRuler color="#333337"/>
 
-    <Property name="DocCommentMarker" value="///" />
+        <FoldLine color="#444444" bgcolor="#1E1E1E"/>
+        <FoldMarker color="#D4D4D4" bgcolor="#2D2D2D"/>
+        <SelectedFoldLine color="#D4D4D4" bgcolor="#2D2D2D"/>
 
-    <RuleSet name="CommentMarkerSet">
-        <Keywords fontWeight="bold" foreground="Red">
-            <Word>TODO</Word>
-            <Word>FIXME</Word>
-        </Keywords>
-        <Keywords fontWeight="bold" foreground="#E0E000">
-            <Word>HACK</Word>
-            <Word>UNDONE</Word>
-        </Keywords>
-    </RuleSet>
+        <EOLMarkers color="#404040"/>
+        <SpaceMarkers color="#404040"/>
+        <TabMarkers color="#404040"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
 
-    <RuleSet>
-        <Span color="Comment" ruleSet="CommentMarkerSet">
-            <Begin>\#</Begin>
-        </Span>
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
 
-        <Span color="String" multiline="true">
-            <Begin>'''</Begin>
-            <End>'''</End>
-        </Span>
-        <Span color="String" multiline="true">
-            <Begin>"""</Begin>
-            <End>"""</End>
-        </Span>
+    <Digits name="Digits" color="#B5CEA8"/>
 
-        <Span color="String">
-            <Begin>"</Begin>
-            <End>"</End>
-            <RuleSet>
-                <Span begin="\\" end="."/>
-            </RuleSet>
-        </Span>
-        <Span color="String">
-            <Begin>'</Begin>
-            <End>'</End>
-            <RuleSet>
-                <Span begin="\\" end="."/>
-            </RuleSet>
-        </Span>
+    <RuleSets>
+        <RuleSet ignorecase="false">
 
-        <Keywords color="Keywords">
-            <Word>and</Word>
-            <Word>as</Word>
-            <Word>assert</Word>
-            <Word>break</Word>
-            <Word>class</Word>
-            <Word>continue</Word>
-            <Word>def</Word>
-            <Word>del</Word>
-            <Word>elif</Word>
-            <Word>else</Word>
-            <Word>except</Word>
-            <Word>exec</Word>
-            <Word>False</Word>
-            <Word>finally</Word>
-            <Word>for</Word>
-            <Word>from</Word>
-            <Word>global</Word>
-            <Word>if</Word>
-            <Word>import</Word>
-            <Word>in</Word>
-            <Word>is</Word>
-            <Word>lambda</Word>
-            <Word>None</Word>
-            <Word>nonlocal</Word>
-            <Word>not</Word>
-            <Word>or</Word>
-            <Word>pass</Word>
-            <Word>print</Word>
-            <Word>raise</Word>
-            <Word>return</Word>
-            <Word>True</Word>
-            <Word>try</Word>
-            <Word>while</Word>
-            <Word>with</Word>
-            <Word>yield</Word>
-            <Word>async</Word>
-            <Word>await</Word>
-        </Keywords>
+            <Delimiters>@@^*()-+=\/[]{}"' ,:;.  </Delimiters>
 
-        <Rule color="MethodCall">
-            \b
-            [\d\w_]+  # an identifier
-            (?=\s*\() # followed by (
-        </Rule>
-        <Rule color="NumberLiteral">
-            \b0[xX][0-9a-fA-F]+  # hex number
-            (    \b\d+(\.[0-9]+)?   #number with optional floating point
-            |    \.[0-9]+           #or just starting with floating point
-            )
-            ([eE][+-]?[0-9]+)? # optional exponent
-        </Rule>
-    </RuleSet>
+            <Span name="DocComment1" stopateol="false" color="#CE9178" bold="false" italic="false">
+                <Begin>"""</Begin>
+                <End>"""</End>
+            </Span>
+
+            <Span name="DocComment2" stopateol="false" color="#CE9178" bold="false" italic="false">
+                <Begin>'''</Begin>
+                <End>'''</End>
+            </Span>
+
+            <Span name="LineComment" stopateol="true" color="#57A64A" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="String" color="#CE9178" stopateol="true" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="Char" color="#CE9178" stopateol="true" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <Span name="Decorator" stopateol="true" color="#DCDCAA" bold="false" italic="false">
+                <Begin>@@</Begin>
+            </Span>
+
+            <MarkFollowing color="#DCDCAA" bold="false" italic="false">def</MarkFollowing>
+            <MarkFollowing color="#4EC9B0" bold="false" italic="false">class</MarkFollowing>
+
+            <!-- Language keywords -->
+            <KeyWords name="Keywords1" color="#569CD6" bold="false">
+                <Key word="False"/>
+                <Key word="None"/>
+                <Key word="True"/>
+                <Key word="and"/>
+                <Key word="as"/>
+                <Key word="assert"/>
+                <Key word="async"/>
+                <Key word="await"/>
+                <Key word="break"/>
+                <Key word="class"/>
+                <Key word="continue"/>
+                <Key word="def"/>
+                <Key word="del"/>
+                <Key word="elif"/>
+                <Key word="else"/>
+                <Key word="except"/>
+                <Key word="exec"/>
+                <Key word="finally"/>
+                <Key word="for"/>
+                <Key word="from"/>
+                <Key word="global"/>
+                <Key word="if"/>
+                <Key word="import"/>
+                <Key word="in"/>
+                <Key word="is"/>
+                <Key word="lambda"/>
+                <Key word="nonlocal"/>
+                <Key word="not"/>
+                <Key word="or"/>
+                <Key word="pass"/>
+                <Key word="print"/>
+                <Key word="raise"/>
+                <Key word="return"/>
+                <Key word="try"/>
+                <Key word="while"/>
+                <Key word="with"/>
+                <Key word="yield"/>
+            </KeyWords>
+
+            <!-- Built-in types and functions -->
+            <KeyWords name="Keywords2" color="#4EC9B0" bold="false">
+                <Key word="basestring"/>
+                <Key word="bool"/>
+                <Key word="buffer"/>
+                <Key word="bytearray"/>
+                <Key word="bytes"/>
+                <Key word="classmethod"/>
+                <Key word="complex"/>
+                <Key word="dict"/>
+                <Key word="enumerate"/>
+                <Key word="file"/>
+                <Key word="float"/>
+                <Key word="frozenset"/>
+                <Key word="int"/>
+                <Key word="list"/>
+                <Key word="long"/>
+                <Key word="memoryview"/>
+                <Key word="object"/>
+                <Key word="property"/>
+                <Key word="repr"/>
+                <Key word="reversed"/>
+                <Key word="set"/>
+                <Key word="slice"/>
+                <Key word="staticmethod"/>
+                <Key word="str"/>
+                <Key word="super"/>
+                <Key word="tuple"/>
+                <Key word="type"/>
+                <Key word="unicode"/>
+                <Key word="xrange"/>
+            </KeyWords>
+
+            <!-- Dunder names -->
+            <KeyWords name="Keywords3" color="#D7BA7D" bold="false">
+                <Key word="__slots__"/>
+                <Key word="__package__"/>
+                <Key word="__name__"/>
+                <Key word="__import__"/>
+                <Key word="__doc__"/>
+                <Key word="__debug__"/>
+            </KeyWords>
+
+            <!-- Exception types -->
+            <KeyWords name="Keywords4" color="#4EC9B0" bold="false">
+                <Key word="ArithmeticError"/>
+                <Key word="AssertionError"/>
+                <Key word="AttributeError"/>
+                <Key word="BaseException"/>
+                <Key word="BufferError"/>
+                <Key word="BytesWarning"/>
+                <Key word="DeprecationWarning"/>
+                <Key word="EOFError"/>
+                <Key word="EnvironmentError"/>
+                <Key word="Exception"/>
+                <Key word="FloatingPointError"/>
+                <Key word="FutureWarning"/>
+                <Key word="GeneratorExit"/>
+                <Key word="IOError"/>
+                <Key word="ImportError"/>
+                <Key word="ImportWarning"/>
+                <Key word="IndentationError"/>
+                <Key word="IndexError"/>
+                <Key word="KeyError"/>
+                <Key word="KeyboardInterrupt"/>
+                <Key word="LookupError"/>
+                <Key word="MemoryError"/>
+                <Key word="NameError"/>
+                <Key word="NotImplemented"/>
+                <Key word="NotImplementedError"/>
+                <Key word="OSError"/>
+                <Key word="OverflowError"/>
+                <Key word="OverflowWarning"/>
+                <Key word="PendingDeprecationWarning"/>
+                <Key word="ReferenceError"/>
+                <Key word="RuntimeError"/>
+                <Key word="RuntimeWarning"/>
+                <Key word="StandardError"/>
+                <Key word="StopIteration"/>
+                <Key word="SyntaxError"/>
+                <Key word="SyntaxWarning"/>
+                <Key word="SystemError"/>
+                <Key word="SystemExit"/>
+                <Key word="TabError"/>
+                <Key word="TypeError"/>
+                <Key word="UnboundLocalError"/>
+                <Key word="UnicodeDecodeError"/>
+                <Key word="UnicodeEncodeError"/>
+                <Key word="UnicodeError"/>
+                <Key word="UnicodeTranslateError"/>
+                <Key word="UnicodeWarning"/>
+                <Key word="UserWarning"/>
+                <Key word="VMSError"/>
+                <Key word="ValueError"/>
+                <Key word="Warning"/>
+                <Key word="WindowsError"/>
+                <Key word="ZeroDivisionError"/>
+            </KeyWords>
+
+        </RuleSet>
+    </RuleSets>
 </SyntaxDefinition>
