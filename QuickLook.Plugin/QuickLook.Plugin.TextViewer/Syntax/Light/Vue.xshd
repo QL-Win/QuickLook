@@ -1,92 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SyntaxDefinition name="Vue" extensions=".vue;.nvue" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-    <Color name="Comment" foreground="#008000" />
-    <Color name="Tag" foreground="#800000" exampleText="div" />
-    <Color name="Attribute" foreground="#0000FF" exampleText="v-if" />
-    <Color name="String" foreground="#A31515" exampleText="&quot;text&quot;" />
-    <Color name="Directive" foreground="#B000B0" exampleText="v-for" />
-    <Color name="Keyword" foreground="#000080" exampleText="import" />
-    <Color name="Script" foreground="#333333" />
-    <Color name="Style" foreground="#0055A5" />
+<SyntaxDefinition name="Vue" extensions=".vue;.nvue">
+    <Properties>
+        <Property name="LineComment" value="//"/>
+        <Property name="BlockCommentBegin" value="/*"/>
+        <Property name="BlockCommentEnd" value="*/"/>
+    </Properties>
 
-    <RuleSet name="Html">
-        <Span color="Comment" begin="&lt;!--" end="--&gt;" />
-        <Span color="String" begin="&quot;" end="&quot;" />
-        <Span color="String" begin="&apos;" end="&apos;" />
+    <RuleSets>
+        <RuleSet name="TagInner" ignorecase="false">
+            <KeyWords name="TagNames" color="#800000" bold="false" italic="false">
+                <Key word="template"/>
+                <Key word="script"/>
+                <Key word="style"/>
+                <Key word="div"/>
+                <Key word="span"/>
+                <Key word="input"/>
+                <Key word="button"/>
+                <Key word="component"/>
+            </KeyWords>
+        </RuleSet>
 
-        <!-- Tags -->
-        <Span color="Tag" begin="&lt;" end="&gt;">
-            <RuleSet>
-                <Keywords color="Tag">
-                    <Word>template</Word>
-                    <Word>script</Word>
-                    <Word>style</Word>
-                    <Word>div</Word>
-                    <Word>span</Word>
-                    <Word>input</Word>
-                    <Word>button</Word>
-                    <Word>component</Word>
-                </Keywords>
-                <Keywords color="Attribute">
-                    <Word>v-if</Word>
-                    <Word>v-else</Word>
-                    <Word>v-else-if</Word>
-                    <Word>v-for</Word>
-                    <Word>v-bind</Word>
-                    <Word>:key</Word>
-                    <Word>:class</Word>
-                    <Word>:style</Word>
-                    <Word>v-model</Word>
-                    <Word>v-on</Word>
-                    <Word>@click</Word>
-                    <Word>@input</Word>
-                </Keywords>
-            </RuleSet>
-        </Span>
-    </RuleSet>
-
-    <RuleSet name="JavaScript">
-        <Span color="Comment" begin="//" end="\n" />
-        <Span color="Comment" begin="/\*" end="\*/" />
-        <Span color="String" begin="&quot;" end="&quot;" />
-        <Span color="String" begin="&apos;" end="&apos;" />
-        <Keywords color="Keyword">
-            <Word>import</Word>
-            <Word>export</Word>
-            <Word>default</Word>
-            <Word>return</Word>
-            <Word>const</Word>
-            <Word>let</Word>
-            <Word>var</Word>
-            <Word>if</Word>
-            <Word>else</Word>
-            <Word>for</Word>
-            <Word>while</Word>
-            <Word>function</Word>
-            <Word>async</Word>
-            <Word>await</Word>
-            <Word>new</Word>
-            <Word>this</Word>
-            <Word>super</Word>
-            <Word>true</Word>
-            <Word>false</Word>
-            <Word>null</Word>
-        </Keywords>
-    </RuleSet>
-
-    <RuleSet name="CSS">
-        <Span color="Comment" begin="/\*" end="\*/" />
-        <Span color="String" begin="&quot;" end="&quot;" />
-        <Span color="String" begin="&apos;" end="&apos;" />
-    </RuleSet>
-
-    <RuleSet name="MainRuleSet">
-        <Import ruleSet="Html" />
-        <Import ruleSet="JavaScript" />
-        <Import ruleSet="CSS" />
-    </RuleSet>
-
-    <RuleSet>
-        <Import ruleSet="MainRuleSet" />
-    </RuleSet>
+        <RuleSet ignorecase="false">
+            <Span name="HtmlComment" stopateol="false" color="#008000" bold="false" italic="false">
+                <Begin>&lt;!--</Begin>
+                <End>--&gt;</End>
+            </Span>
+            <Span name="Tag" rule="TagInner" stopateol="false" color="#0000FF" bold="false" italic="false">
+                <Begin>&lt;</Begin>
+                <End>&gt;</End>
+            </Span>
+            <Span name="LineComment" stopateol="true" color="#008000" bold="false" italic="false">
+                <Begin>//</Begin>
+            </Span>
+            <Span name="BlockComment" stopateol="false" color="#008000" bold="false" italic="false">
+                <Begin>/*</Begin>
+                <End>*/</End>
+            </Span>
+            <Span name="String" stopateol="true" color="#A31515" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+            <Span name="Char" stopateol="true" color="#A31515" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <KeyWords name="Keywords" color="#000080" bold="false" italic="false">
+                <Key word="import"/>
+                <Key word="export"/>
+                <Key word="default"/>
+                <Key word="return"/>
+                <Key word="const"/>
+                <Key word="let"/>
+                <Key word="var"/>
+                <Key word="if"/>
+                <Key word="else"/>
+                <Key word="for"/>
+                <Key word="while"/>
+                <Key word="function"/>
+                <Key word="async"/>
+                <Key word="await"/>
+                <Key word="new"/>
+                <Key word="this"/>
+                <Key word="super"/>
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="null"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
 </SyntaxDefinition>
