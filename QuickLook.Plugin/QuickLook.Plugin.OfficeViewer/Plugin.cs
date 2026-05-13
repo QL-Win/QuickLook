@@ -66,6 +66,9 @@ public sealed class Plugin : IViewer
         }
         else
         {
+            // Legacy: No more recovering registries for MS Office.
+            // TODO: Add a setting page to let users choose the fallback preview handler if the current one is not working.
+#if false
             // To restore the preview handler CLSID to MS Office
             // if running with administrative privileges
             if (ShellExRegister.IsRunAsAdmin())
@@ -90,6 +93,7 @@ public sealed class Plugin : IViewer
                     return true;
                 }
             }
+#endif
         }
 
         return false;
