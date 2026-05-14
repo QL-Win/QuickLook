@@ -20,6 +20,9 @@
 <a href="https://trendshift.io/repositories/3258">
   <img src="https://trendshift.io/api/badge/repositories/3258" alt="Trending" width="250" height="55"/>
 </a>
+<a href="https://hellogithub.com/repository/QL-Win/QuickLook" target="_blank">
+  <img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=ad5988da3e9a484f9fbf69dde5ff162f&claim_uid=pCb8AnYg1ZTSwUa" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" />
+</a>
 
 <br>
 
