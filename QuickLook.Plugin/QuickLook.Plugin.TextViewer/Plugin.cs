@@ -31,10 +31,10 @@ namespace QuickLook.Plugin.TextViewer;
 
 public partial class Plugin : IViewer, IMoreMenu
 {
-    private static readonly HashSet<string> WellKnownExtensions = new(
+    private static readonly HashSet<string> WellKnownExtensions =
     [
         ".txt", ".rtf",
-    ]);
+    ];
 
     private TextViewerPanel _tvp;
     private string _currentPath;
