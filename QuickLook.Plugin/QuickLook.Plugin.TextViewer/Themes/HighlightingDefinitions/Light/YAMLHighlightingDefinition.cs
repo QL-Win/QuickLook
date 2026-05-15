@@ -29,7 +29,7 @@ public class YAMLHighlightingDefinition : LightHighlightingDefinition
 {
     public override string Name => "YAML";
 
-    public override string Extension => ".yaml;.yml;.clang-format";
+    public override string Extension => ".yaml;.yml;.clang-format;.rviz";
 
     public override HighlightingRuleSet MainRuleSet => new()
     {
