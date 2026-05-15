@@ -28,7 +28,7 @@ public class FormatDetector
         Instance.TextDetectors
             .Where(detector => detector is ITransferFormatDetector)
             .Select(detector => detector as ITransferFormatDetector)
-            .Select(detector => detector.RealExtension)];
+            .Select(detector => detector.OriginalExtension)];
 
     internal IFormatDetector[] TextDetectors =
     [
@@ -91,7 +91,7 @@ public interface IConfusedFormatDetector : IFormatDetector;
 
 public interface ITransferFormatDetector : IFormatDetector
 {
-    public string RealExtension { get; }
+    public string OriginalExtension { get; }
 
     public string Transfer(string path);
 }

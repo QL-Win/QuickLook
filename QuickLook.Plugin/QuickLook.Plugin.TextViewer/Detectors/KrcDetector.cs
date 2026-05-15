@@ -27,13 +27,13 @@ public sealed class KrcDetector : ITransferFormatDetector
 
     public string Extension => ".ini"; // .krc is more like .ini than .lrc
 
-    public string RealExtension => ".krc";
+    public string OriginalExtension => ".krc";
 
     public bool Detect(string path, string text)
     {
         _ = text;
         if (string.IsNullOrEmpty(path)) return false;
-        return Path.GetExtension(path).Equals(RealExtension, StringComparison.OrdinalIgnoreCase);
+        return Path.GetExtension(path).Equals(OriginalExtension, StringComparison.OrdinalIgnoreCase);
     }
 
     public string Transfer(string path)
