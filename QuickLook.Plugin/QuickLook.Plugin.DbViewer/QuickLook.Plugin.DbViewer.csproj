@@ -77,7 +77,8 @@
 
     <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <!-- Not support to ARM64 -->
-        <Delete Files="$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll" Condition="Exists('$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll')" />
+		<Delete Files="$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll" Condition="Exists('$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll')" />
+        <RemoveDir Directories="$(OutputPath)\runtimes\win-arm\native" Condition="Exists('$(OutputPath)\runtimes\win-arm\native')" />
     </Target>
 
     <ItemGroup>
