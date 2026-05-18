@@ -147,6 +147,7 @@
         <Delete Files="$(OutputPath)\libHarfBuzzSharp.dylib" Condition="Exists('$(OutputPath)\libHarfBuzzSharp.dylib')" />
         <Delete Files="$(OutputPath)\libSkiaSharp.dylib" Condition="Exists('$(OutputPath)\libSkiaSharp.dylib')" />
         <Delete Files="$(OutputPath)\Magick.Native-Q8-arm64.dll" Condition="Exists('$(OutputPath)\Magick.Native-Q8-arm64.dll')" />
+        <Delete Files="$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll" Condition="Exists('$(OutputPath)\runtimes\win-arm\native\e_sqlite3.dll')" />
     </Target>
 
     <ItemGroup>
