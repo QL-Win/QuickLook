@@ -91,10 +91,6 @@
                 <End>\n</End>
             </Span>
             <Span name="Comment" bold="false" italic="false" color="#008000" stopateol="true">
-                <Begin>//</Begin>
-                <End>\n</End>
-            </Span>
-            <Span name="Comment" bold="false" italic="false" color="#008000" stopateol="true">
                 <Begin>#</Begin>
                 <End>\n</End>
             </Span>
