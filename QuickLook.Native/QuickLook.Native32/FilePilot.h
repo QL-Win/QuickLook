@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 // 
 // This file is part of QuickLook program.
 // 
@@ -17,28 +17,9 @@
 
 #pragma once
 
-#include "stdafx.h"
-
-class Shell32
+class FilePilot
 {
 public:
-    enum FocusedWindowType
-    {
-        INVALID,
-        DESKTOP,
-        EXPLORER,
-        DIALOG,
-        EVERYTHING,
-        DOPUS,
-        MULTICOMMANDER,
-        IDM,
-        FILEPILOT,
-    };
-
-    static FocusedWindowType GetFocusedWindowType();
-    static void GetCurrentSelection(PWCHAR buffer);
-
-private:
-    static void getSelectedFromDesktop(PWCHAR buffer);
-    static void getSelectedFromExplorer(PWCHAR buffer);
+    static bool MatchWindow(HWND hwnd);
+    static void GetSelected(PWCHAR buffer);
 };

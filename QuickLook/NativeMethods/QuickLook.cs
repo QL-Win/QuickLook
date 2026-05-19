@@ -153,5 +153,6 @@ internal static class QuickLook
         DOpus,
         MultiCommander,
         IDM,
+        FilePilot,
     }
 }

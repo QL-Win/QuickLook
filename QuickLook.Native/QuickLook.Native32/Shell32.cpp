@@ -24,6 +24,7 @@
 #include "DOpus.h"
 #include "MultiCommander.h"
 #include "IDMan.h"
+#include "FilePilot.h"
 
 using namespace std;
 
@@ -49,6 +50,10 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
      if (Everything::MatchClass(classBuffer))
     {
         return EVERYTHING;
+    }
+    if (FilePilot::MatchWindow(hwndfg))
+    {
+        return FILEPILOT;
     }
     if (wcscmp(classBuffer, L"WorkerW") == 0 || wcscmp(classBuffer, L"Progman") == 0)
     {
@@ -109,6 +114,9 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
         break;
     case IDM:
         IDMan::GetSelected(buffer);
+        break;
+    case FILEPILOT:
+        FilePilot::GetSelected(buffer);
         break;
     default:
         break;
