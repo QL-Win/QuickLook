@@ -55,13 +55,9 @@
 
         <StackPanel Grid.Row="3"
                     Margin="8"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-            <TextBlock x:Name="pageInfoTextBlock"
-                       Margin="0,0,12,0"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForeground}" />
             <local:Pagination x:Name="pagination"
                               CurrentPageChanged="Pagination_CurrentPageChanged"
                               PageSize="200"

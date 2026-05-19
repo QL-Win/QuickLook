@@ -137,7 +137,6 @@ public partial class DbViewerPanel : UserControl
 
         pagination.TotalCount = _totalCount;
         pagination.CurrentPage = 1;
-        pageInfoTextBlock.Text = $"{_totalCount} 行 / 每页 {DefaultPageSize} 行";
         LoadCurrentPage();
     }
 
@@ -157,7 +156,6 @@ public partial class DbViewerPanel : UserControl
         };
 
         dataGrid.ItemsSource = table.DefaultView;
-        pageInfoTextBlock.Text = $"{_totalCount} 行 / 每页 {DefaultPageSize} 行 / 第 {pagination.CurrentPage} 页，共 {pagination.PageCount} 页";
     }
 
     private SqliteConnection OpenSqliteConnection(string path)
