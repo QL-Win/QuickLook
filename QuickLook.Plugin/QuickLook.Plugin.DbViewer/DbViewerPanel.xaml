@@ -11,7 +11,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="DataGrid.xaml" />
                 <ResourceDictionary Source="Pagination.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
