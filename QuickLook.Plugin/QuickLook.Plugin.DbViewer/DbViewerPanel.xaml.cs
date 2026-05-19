@@ -161,7 +161,7 @@ public partial class DbViewerPanel : UserControl
         try
         {
             using var stream = File.OpenRead(path);
-            var header = new byte[16];
+            var header = new byte[59]; // need 32+27 bytes for LiteDB magic
             var count = stream.Read(header, 0, header.Length);
 
             if (count >= 16)
@@ -171,10 +171,11 @@ public partial class DbViewerPanel : UserControl
                     return DatabaseType.SQLite;
             }
 
-            if (count >= 6)
+            // LiteDB 5.x: magic string "** This is a LiteDB file **" at offset 32
+            if (count >= 59)
             {
-                var text6 = System.Text.Encoding.ASCII.GetString(header, 0, 6);
-                if (text6.Equals("LiteDB", StringComparison.OrdinalIgnoreCase))
+                var liteDbMagic = System.Text.Encoding.ASCII.GetString(header, 32, 27);
+                if (liteDbMagic == "** This is a LiteDB file **")
                     return DatabaseType.LiteDb;
             }
         }
