@@ -1,11 +1,13 @@
 using Microsoft.Data.Sqlite;
 using QuickLook.Common.Commands;
 using QuickLook.Common.Controls;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 
 namespace QuickLook.Plugin.DbViewer;
@@ -155,7 +157,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             new MoreMenuItem
             {
                 Icon = FontSymbols.SaveAs,
-                Header = "导出为 Excel",
+                Header = TranslationHelper.Get("MW_ExportToExcel", domain: Assembly.GetExecutingAssembly().GetName().Name),
                 Command = new RelayCommand(ExportToExcel),
                 IsVisible = true,
                 IsEnabled = true,

@@ -1,8 +1,8 @@
+using QuickLook.Common.Helpers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Wpf.Ui.Violeta.Resources.Localization;
 
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
@@ -97,19 +97,21 @@ public class Pagination : Control
             typeof(Pagination),
             new PropertyMetadata(false));
 
+    private const string Domain = "QuickLook.Plugin.DbViewer";
+
     public static readonly DependencyProperty QuickJumpPrefixTextProperty =
         DependencyProperty.Register(
             nameof(QuickJumpPrefixText),
             typeof(string),
             typeof(Pagination),
-            new PropertyMetadata(SH.PaginationQuickJumpPrefix));
+            new PropertyMetadata(TranslationHelper.Get("Pagination_GoTo", domain: Domain)));
 
     public static readonly DependencyProperty QuickJumpSuffixTextProperty =
         DependencyProperty.Register(
             nameof(QuickJumpSuffixText),
             typeof(string),
             typeof(Pagination),
-            new PropertyMetadata(SH.PaginationQuickJumpSuffix));
+            new PropertyMetadata(TranslationHelper.Get("Pagination_Page", domain: Domain)));
 
     public static readonly DependencyProperty ShowPageSizeSelectorProperty =
         DependencyProperty.Register(
@@ -220,12 +222,12 @@ public class Pagination : Control
     {
         if (ReadLocalValue(QuickJumpPrefixTextProperty) == DependencyProperty.UnsetValue)
         {
-            SetCurrentValue(QuickJumpPrefixTextProperty, SH.PaginationQuickJumpPrefix);
+            SetCurrentValue(QuickJumpPrefixTextProperty, TranslationHelper.Get("Pagination_GoTo", domain: Domain));
         }
 
         if (ReadLocalValue(QuickJumpSuffixTextProperty) == DependencyProperty.UnsetValue)
         {
-            SetCurrentValue(QuickJumpSuffixTextProperty, SH.PaginationQuickJumpSuffix);
+            SetCurrentValue(QuickJumpSuffixTextProperty, TranslationHelper.Get("Pagination_Page", domain: Domain));
         }
     }
 
