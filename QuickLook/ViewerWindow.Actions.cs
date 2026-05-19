@@ -271,13 +271,57 @@ public partial class ViewerWindow
         _path = string.Empty;
     }
 
+    internal void BeginLoading(string path, string statusText, string detailText, string glyph)
+    {
+        _path = path;
+
+        ContextObject.Reset();
+        ContextObject.Title = Path.GetFileName(path);
+        UpdateLoadingStatus(statusText, detailText, glyph);
+        ContextObject.IsBusy = true;
+
+        var newSize = _customWindowSize != Size.Empty
+            ? _customWindowSize
+            : new Size(560, 260);
+
+        if (_customWindowSize == Size.Empty)
+            _ignoreNextWindowSizeChange = true;
+
+        PositionWindow(newSize);
+
+        ShowLoadingWindow();
+    }
+
+    internal void UpdateLoadingStatus(string statusText, string detailText, string glyph)
+    {
+        ContextObject.BusyGlyph = glyph;
+        ContextObject.BusyText = statusText;
+        ContextObject.BusySubText = detailText;
+        ContextObject.IsBusy = true;
+    }
+
+    private void ShowLoadingWindow()
+    {
+        if (!IsVisible)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.BringToFront(Topmost);
+                if (SettingHelper.Get("FocusWindowOnOpen", false))
+                    Activate();
+            }), DispatcherPriority.Render);
+            if (!SettingHelper.Get("ShowWindowTransition", true, "QuickLook"))
+                this.ShowWithoutTransition();
+            else
+                Show();
+        }
+    }
+
     internal void BeginShow(IViewer matchedPlugin, string path,
         Action<string, ExceptionDispatchInfo> exceptionHandler)
     {
         _path = path;
         Plugin = matchedPlugin;
-
-        ContextObject.Reset();
 
         // Assign monitor color profile
         ContextObject.ColorProfileName = DisplayDeviceHelper.GetMonitorColorProfileFromWindow(this);
@@ -309,7 +353,10 @@ public partial class ViewerWindow
         SetOpenWithButtonAndPath();
 
         // Revert UI changes
-        ContextObject.IsBusy = true;
+        UpdateLoadingStatus(
+            TranslationHelper.Get("MW_GeneratingPreview", failsafe: "Generating preview..."),
+            TranslationHelper.Get("MW_GeneratingPreviewDetail", failsafe: "Rendering the first preview frame."),
+            "\xe8a5");
 
         var newHeight = ContextObject.PreferredSize.Height + BorderThickness.Top + BorderThickness.Bottom +
                         (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
