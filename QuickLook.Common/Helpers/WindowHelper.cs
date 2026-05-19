@@ -304,6 +304,16 @@ public static class WindowHelper
         Dwmapi.DwmSetWindowAttribute(hwnd, dwAttribute, ref val, Marshal.SizeOf(typeof(int)));
     }
 
+    public static void ShowWithoutTransition(this Window window)
+    {
+        var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
+        var disabled = 1;
+        Dwmapi.DwmSetWindowAttribute(hwnd, (uint)Dwmapi.WindowAttribute.TransitionsForceDisabled, ref disabled, Marshal.SizeOf(typeof(int)));
+        window.Show();
+        var enabled = 0;
+        Dwmapi.DwmSetWindowAttribute(hwnd, (uint)Dwmapi.WindowAttribute.TransitionsForceDisabled, ref enabled, Marshal.SizeOf(typeof(int)));
+    }
+
     public static void SetWindowCorner(Window window, Dwmapi.WindowCornerStyle style)
     {
         if (Environment.OSVersion.Version < new Version(10, 0, 22000))

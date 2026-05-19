@@ -332,7 +332,10 @@ public partial class ViewerWindow
                 if (SettingHelper.Get("FocusWindowOnOpen", false))
                     Activate();
             }), DispatcherPriority.Render);
-            Show();
+            if (!SettingHelper.Get("ShowWindowTransition", true, "QuickLook"))
+                this.ShowWithoutTransition();
+            else
+                Show();
         }
 
         if (_autoReload && File.Exists(path))

@@ -102,6 +102,13 @@ Example:
 - Example:
   - `<FocusWindowOnOpen>True</FocusWindowOnOpen>`
 
+### `<ShowWindowTransition>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Control the window show animation (transition) when the preview window appears. When set to `False`, uses `DWMWA_TRANSITIONS_FORCEDISABLED` to suppress the animation, then restores the default behavior immediately after the window is shown.
+- Example:
+  - `<ShowWindowTransition>False</ShowWindowTransition>` to disable the show animation.
+
 ### `<DisableAutoUpdateCheck>`
 - Default: `False`
 - Type: `Boolean`

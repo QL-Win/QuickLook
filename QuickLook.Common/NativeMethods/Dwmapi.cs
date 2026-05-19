@@ -32,6 +32,7 @@ public static class Dwmapi
 
     public enum WindowAttribute
     {
+        TransitionsForceDisabled = 3,
         UseImmersiveDarkModeOld = 19,
         UseImmersiveDarkMode = 20,
         WindowCornerPreference = 33,
