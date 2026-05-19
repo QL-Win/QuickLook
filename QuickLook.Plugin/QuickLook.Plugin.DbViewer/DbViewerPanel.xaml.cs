@@ -1,5 +1,6 @@
 using LiteDB;
 using Microsoft.Data.Sqlite;
+using Microsoft.Win32;
 using MiniExcelLibs;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Microsoft.Win32;
 
 namespace QuickLook.Plugin.DbViewer;
 
@@ -38,7 +37,7 @@ public partial class DbViewerPanel : UserControl
 
         if (_databaseType == DatabaseType.Unknown)
         {
-            statusTextBlock.Text = "无法识别的数据库格式。";
+            MessageBox.Show("无法识别的数据库格式");
             return;
         }
 
@@ -46,7 +45,7 @@ public partial class DbViewerPanel : UserControl
         {
             DatabaseType.SQLite => LoadSqliteNames(path),
             DatabaseType.LiteDb => LoadLiteDbNames(path),
-            _ => Array.Empty<string>(),
+            _ => [],
         };
 
         tableComboBox.ItemsSource = objects;
@@ -58,7 +57,7 @@ public partial class DbViewerPanel : UserControl
         }
         else
         {
-            statusTextBlock.Text = "数据库中没有可显示的表或集合。";
+            MessageBox.Show("数据库中没有可显示的表或集合");
         }
     }
 
@@ -67,12 +66,12 @@ public partial class DbViewerPanel : UserControl
         if (string.IsNullOrEmpty(_currentObjectName))
             return;
 
-        var dialog = new SaveFileDialog
+        var dialog = new SaveFileDialog()
         {
-            Filter = "Excel 工作簿 (*.xlsx)|*.xlsx",
+            Filter = "Excel (*.xlsx)|*.xlsx",
             DefaultExt = ".xlsx",
             FileName = Path.GetFileNameWithoutExtension(sourcePath) + "_" + _currentObjectName + ".xlsx",
-            Title = "导出为 Excel"
+            Title = "Excel"
         };
 
         if (dialog.ShowDialog() != true)
