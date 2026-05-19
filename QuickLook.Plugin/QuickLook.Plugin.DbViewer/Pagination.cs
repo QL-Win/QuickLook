@@ -4,7 +4,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Wpf.Ui.Violeta.Resources.Localization;
 
-namespace Wpf.Ui.Violeta.Controls;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+namespace QuickLook.Plugin.DbViewer;
 
 /// <summary>
 /// A pagination control that displays page navigation buttons.
@@ -451,3 +453,5 @@ public class Pagination : Control
             cmd.Execute(CommandParameter);
     }
 }
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.

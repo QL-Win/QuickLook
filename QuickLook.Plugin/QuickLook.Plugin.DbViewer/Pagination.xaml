@@ -1,7 +1,6 @@
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Wpf.Ui.Violeta.Controls">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:QuickLook.Plugin.DbViewer">
 
     <!--  PaginationButton  -->
     <Style x:Key="DefaultPaginationButtonStyle" TargetType="{x:Type local:PaginationButton}">
@@ -25,45 +24,40 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PaginationButton}">
-                    <Border
-                        x:Name="ContentBorder"
-                        MinWidth="{TemplateBinding MinWidth}"
-                        MinHeight="{TemplateBinding MinHeight}"
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource ControlCornerRadius}">
+                    <Border x:Name="ContentBorder"
+                            MinWidth="{TemplateBinding MinWidth}"
+                            MinHeight="{TemplateBinding MinHeight}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource ControlCornerRadius}">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <!--  Normal page number  -->
-                            <TextBlock
-                                x:Name="PageNumber"
-                                Foreground="{TemplateBinding Foreground}"
-                                Text="{Binding Page, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <TextBlock x:Name="PageNumber"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Text="{Binding Page, RelativeSource={RelativeSource TemplatedParent}}" />
                             <!--  Ellipsis shown when IsFastForward or IsFastBackward  -->
-                            <TextBlock
-                                x:Name="Ellipsis"
-                                FontFamily="{DynamicResource FluentSystemIcons}"
-                                FontSize="16"
-                                Foreground="{TemplateBinding Foreground}"
-                                Text="&#xE824;"
-                                Visibility="Collapsed" />
+                            <TextBlock x:Name="Ellipsis"
+                                       FontFamily="{DynamicResource FluentSystemIcons}"
+                                       FontSize="16"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Text="&#xE824;"
+                                       Visibility="Collapsed" />
                             <!--  Left double-arrow shown on hover when IsFastForward (go back 5 pages)  -->
-                            <TextBlock
-                                x:Name="LeftArrow"
-                                FontFamily="{DynamicResource FluentSystemIcons}"
-                                FontSize="16"
-                                Foreground="{TemplateBinding Foreground}"
-                                Text="&#xE32A;"
-                                Visibility="Collapsed" />
+                            <TextBlock x:Name="LeftArrow"
+                                       FontFamily="{DynamicResource FluentSystemIcons}"
+                                       FontSize="16"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Text="&#xE32A;"
+                                       Visibility="Collapsed" />
                             <!--  Right double-arrow shown on hover when IsFastBackward (go forward 5 pages)  -->
-                            <TextBlock
-                                x:Name="RightArrow"
-                                FontFamily="{DynamicResource FluentSystemIcons}"
-                                FontSize="16"
-                                Foreground="{TemplateBinding Foreground}"
-                                Text="&#xE32B;"
-                                Visibility="Collapsed" />
+                            <TextBlock x:Name="RightArrow"
+                                       FontFamily="{DynamicResource FluentSystemIcons}"
+                                       FontSize="16"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Text="&#xE32B;"
+                                       Visibility="Collapsed" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -155,79 +149,68 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Pagination}">
-                    <StackPanel
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        Orientation="Horizontal">
+                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                Orientation="Horizontal">
 
                         <!--  Previous button (chevron left icon)  -->
-                        <RepeatButton
-                            x:Name="PART_PreviousButton"
-                            Margin="0,0,4,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            FocusVisualStyle="{x:Null}"
-                            Focusable="False">
-                            <TextBlock
-                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
-                                FontSize="12"
-                                Text="&#xE76B;" />
+                        <RepeatButton x:Name="PART_PreviousButton"
+                                      Margin="0,0,4,0"
+                                      VerticalAlignment="Center"
+                                      Cursor="Hand"
+                                      FocusVisualStyle="{x:Null}"
+                                      Focusable="False">
+                            <TextBlock FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                       FontSize="12"
+                                       Text="&#xE76B;" />
                         </RepeatButton>
 
                         <!--  Page number buttons (populated from code-behind)  -->
-                        <StackPanel
-                            x:Name="PART_ButtonPanel"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal" />
+                        <StackPanel x:Name="PART_ButtonPanel"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal" />
 
                         <!--  Next button (chevron right icon)  -->
-                        <RepeatButton
-                            x:Name="PART_NextButton"
-                            Margin="4,0,0,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            FocusVisualStyle="{x:Null}"
-                            Focusable="False">
-                            <TextBlock
-                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
-                                FontSize="12"
-                                Text="&#xE76C;" />
+                        <RepeatButton x:Name="PART_NextButton"
+                                      Margin="4,0,0,0"
+                                      VerticalAlignment="Center"
+                                      Cursor="Hand"
+                                      FocusVisualStyle="{x:Null}"
+                                      Focusable="False">
+                            <TextBlock FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                       FontSize="12"
+                                       Text="&#xE76C;" />
                         </RepeatButton>
 
                         <!--  Quick jump (hidden by default, shown when ShowQuickJump=True)  -->
-                        <StackPanel
-                            x:Name="QuickJumpPanel"
-                            Margin="8,0,0,0"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal"
-                            Visibility="Collapsed">
-                            <TextBlock
-                                Margin="0,0,4,0"
-                                VerticalAlignment="Center"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{TemplateBinding QuickJumpPrefixText}" />
-                            <TextBox
-                                x:Name="PART_QuickJumpInput"
-                                MinWidth="40"
-                                MaxWidth="200"
-                                VerticalAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                TextAlignment="Center" />
-                            <TextBlock
-                                Margin="4,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{TemplateBinding QuickJumpSuffixText}" />
+                        <StackPanel x:Name="QuickJumpPanel"
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Visibility="Collapsed">
+                            <TextBlock Margin="0,0,4,0"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Text="{TemplateBinding QuickJumpPrefixText}" />
+                            <TextBox x:Name="PART_QuickJumpInput"
+                                     MinWidth="40"
+                                     MaxWidth="200"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     TextAlignment="Center" />
+                            <TextBlock Margin="4,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Text="{TemplateBinding QuickJumpSuffixText}" />
                         </StackPanel>
 
                         <!--  Page size selector (hidden by default, shown when ShowPageSizeSelector=True)  -->
-                        <ComboBox
-                            x:Name="PART_PageSizeSelector"
-                            Margin="8,0,0,0"
-                            VerticalAlignment="Center"
-                            ItemsSource="{TemplateBinding PageSizeOptions}"
-                            TextBlock.TextAlignment="Center"
-                            Visibility="Collapsed" />
+                        <ComboBox x:Name="PART_PageSizeSelector"
+                                  Margin="8,0,0,0"
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{TemplateBinding PageSizeOptions}"
+                                  TextBlock.TextAlignment="Center"
+                                  Visibility="Collapsed" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="ShowQuickJump" Value="True">
@@ -255,60 +238,52 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Pagination}">
-                    <StackPanel
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        Orientation="Horizontal">
+                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                Orientation="Horizontal">
 
                         <!--  Previous button  -->
-                        <RepeatButton
-                            x:Name="PART_PreviousButton"
-                            Margin="0,0,4,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            FocusVisualStyle="{x:Null}"
-                            Focusable="False">
-                            <TextBlock
-                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
-                                FontSize="12"
-                                Text="&#xE76B;" />
+                        <RepeatButton x:Name="PART_PreviousButton"
+                                      Margin="0,0,4,0"
+                                      VerticalAlignment="Center"
+                                      Cursor="Hand"
+                                      FocusVisualStyle="{x:Null}"
+                                      Focusable="False">
+                            <TextBlock FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                       FontSize="12"
+                                       Text="&#xE76B;" />
                         </RepeatButton>
 
                         <!--  Current page editable input  -->
-                        <TextBox
-                            x:Name="PART_QuickJumpInput"
-                            MinWidth="40"
-                            MaxWidth="200"
-                            VerticalAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            FocusVisualStyle="{x:Null}"
-                            TextAlignment="Center" />
+                        <TextBox x:Name="PART_QuickJumpInput"
+                                 MinWidth="40"
+                                 MaxWidth="200"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FocusVisualStyle="{x:Null}"
+                                 TextAlignment="Center" />
 
                         <!--  Separator  -->
-                        <TextBlock
-                            Margin="4,0"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="/" />
+                        <TextBlock Margin="4,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   Text="/" />
 
                         <!--  Total pages  -->
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{Binding PageCount, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   Text="{Binding PageCount, RelativeSource={RelativeSource TemplatedParent}}" />
 
                         <!--  Next button  -->
-                        <RepeatButton
-                            x:Name="PART_NextButton"
-                            Margin="4,0,0,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            FocusVisualStyle="{x:Null}"
-                            Focusable="False">
-                            <TextBlock
-                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
-                                FontSize="12"
-                                Text="&#xE76C;" />
+                        <RepeatButton x:Name="PART_NextButton"
+                                      Margin="4,0,0,0"
+                                      VerticalAlignment="Center"
+                                      Cursor="Hand"
+                                      FocusVisualStyle="{x:Null}"
+                                      Focusable="False">
+                            <TextBlock FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                       FontSize="12"
+                                       Text="&#xE76C;" />
                         </RepeatButton>
 
                     </StackPanel>
