@@ -34,6 +34,7 @@ internal class KeystrokeDispatcher : IDisposable
     private GlobalKeyboardHook _hook;
     private nint _winEventHook;
     private User32.WinEventProc _winEventProc; // keep reference to prevent GC
+    private bool _isFilePilotPreviewRequest;
     private bool _isPreviewRequest;
     private bool _spaceIsDown;
     private long _spaceHoldTick;
@@ -108,8 +109,11 @@ internal class KeystrokeDispatcher : IDisposable
         // check if the valid key is a preview request
         if (isKeyDown)
         {
-            _isPreviewRequest = NativeMethods.QuickLook.GetFocusedWindowType() !=
-                                NativeMethods.QuickLook.FocusedWindowType.Invalid;
+            var focusedWindowType = NativeMethods.QuickLook.GetFocusedWindowType();
+            _isFilePilotPreviewRequest = focusedWindowType == NativeMethods.QuickLook.FocusedWindowType.Invalid &&
+                                         FilePilotHelper.IsPreviewContext();
+            _isPreviewRequest = focusedWindowType != NativeMethods.QuickLook.FocusedWindowType.Invalid ||
+                                _isFilePilotPreviewRequest;
             _isPreviewRequest |= WindowHelper.IsForegroundWindowBelongToSelf();
         } // else (when isKeyDown is false), _isPreviewRequest retain its current state
 
@@ -126,12 +130,16 @@ internal class KeystrokeDispatcher : IDisposable
                 if (isKeyDown && e.KeyCode == Keys.Space)
                     _spaceIsDown = true;
             }
+
+            if (_isFilePilotPreviewRequest && e.KeyCode == Keys.Space)
+                e.Handled = true;
         }
 
         // when the key has been released, reset variables
         if (!isKeyDown)
         {
             _isPreviewRequest = false;
+            _isFilePilotPreviewRequest = false;
             _spaceIsDown = e.KeyCode != Keys.Space && _spaceIsDown;
         }
     }

@@ -49,7 +49,7 @@ public class ViewWindowManager : IDisposable
 
         // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
         var focus = NativeMethods.QuickLook.GetFocusedWindowType();
-        if (focus != NativeMethods.QuickLook.FocusedWindowType.Invalid)
+        if (focus != NativeMethods.QuickLook.FocusedWindowType.Invalid || FilePilotHelper.IsForegroundFilePilot())
         {
             StopFocusMonitor();
             _viewerWindow.Close();
@@ -76,7 +76,7 @@ public class ViewWindowManager : IDisposable
     public void TogglePreview(string path = null, string options = null)
     {
         if (string.IsNullOrEmpty(path))
-            path = NativeMethods.QuickLook.GetCurrentSelection();
+            path = GetCurrentSelection();
 
         if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
@@ -112,7 +112,7 @@ public class ViewWindowManager : IDisposable
             return;
 
         if (string.IsNullOrEmpty(path))
-            path = NativeMethods.QuickLook.GetCurrentSelection();
+            path = GetCurrentSelection();
 
         if (string.IsNullOrEmpty(path))
             return;
@@ -143,7 +143,7 @@ public class ViewWindowManager : IDisposable
     public void InvokePreview(string path = null)
     {
         if (string.IsNullOrEmpty(path))
-            path = NativeMethods.QuickLook.GetCurrentSelection();
+            path = GetCurrentSelection();
 
         if (string.IsNullOrEmpty(path))
             return;
@@ -221,6 +221,14 @@ public class ViewWindowManager : IDisposable
         _viewerWindow.UnloadPlugin();
 
         _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
+    }
+
+    private static string GetCurrentSelection()
+    {
+        var filePilotSelection = FilePilotHelper.GetCurrentSelection();
+        return string.IsNullOrEmpty(filePilotSelection)
+            ? NativeMethods.QuickLook.GetCurrentSelection()
+            : filePilotSelection;
     }
 
     private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
