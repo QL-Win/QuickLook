@@ -1,7 +1,9 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Wpf.Ui.Violeta.Controls">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Wpf.Ui.Violeta.Controls">
 
+    <!--  PaginationButton  -->
     <Style x:Key="DefaultPaginationButtonStyle" TargetType="{x:Type local:PaginationButton}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="MinWidth" Value="32" />
@@ -12,10 +14,10 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="Background" Value="#FFF0F0F0" />
-        <Setter Property="Foreground" Value="#FF1F1F1F" />
-        <Setter Property="BorderBrush" Value="#FFB0B0B0" />
+        <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+        <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -23,44 +25,59 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PaginationButton}">
-                    <Border x:Name="ContentBorder"
-                            MinWidth="{TemplateBinding MinWidth}"
-                            MinHeight="{TemplateBinding MinHeight}"
-                            Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4">
+                    <Border
+                        x:Name="ContentBorder"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MinHeight="{TemplateBinding MinHeight}"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{DynamicResource ControlCornerRadius}">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock x:Name="PageNumber"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Text="{Binding Page, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <TextBlock x:Name="Ellipsis"
-                                       FontSize="16"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Text="..."
-                                       Visibility="Collapsed" />
-                            <TextBlock x:Name="LeftArrow"
-                                       FontSize="16"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Text="‹"
-                                       Visibility="Collapsed" />
-                            <TextBlock x:Name="RightArrow"
-                                       FontSize="16"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Text="›"
-                                       Visibility="Collapsed" />
+                            <!--  Normal page number  -->
+                            <TextBlock
+                                x:Name="PageNumber"
+                                Foreground="{TemplateBinding Foreground}"
+                                Text="{Binding Page, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <!--  Ellipsis shown when IsFastForward or IsFastBackward  -->
+                            <TextBlock
+                                x:Name="Ellipsis"
+                                FontFamily="{DynamicResource FluentSystemIcons}"
+                                FontSize="16"
+                                Foreground="{TemplateBinding Foreground}"
+                                Text="&#xE824;"
+                                Visibility="Collapsed" />
+                            <!--  Left double-arrow shown on hover when IsFastForward (go back 5 pages)  -->
+                            <TextBlock
+                                x:Name="LeftArrow"
+                                FontFamily="{DynamicResource FluentSystemIcons}"
+                                FontSize="16"
+                                Foreground="{TemplateBinding Foreground}"
+                                Text="&#xE32A;"
+                                Visibility="Collapsed" />
+                            <!--  Right double-arrow shown on hover when IsFastBackward (go forward 5 pages)  -->
+                            <TextBlock
+                                x:Name="RightArrow"
+                                FontFamily="{DynamicResource FluentSystemIcons}"
+                                FontSize="16"
+                                Foreground="{TemplateBinding Foreground}"
+                                Text="&#xE32B;"
+                                Visibility="Collapsed" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <!--  IsFastForward: show ellipsis, hide page number  -->
                         <Trigger Property="IsFastForward" Value="True">
                             <Setter TargetName="PageNumber" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Ellipsis" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <!--  IsFastBackward: show ellipsis, hide page number  -->
                         <Trigger Property="IsFastBackward" Value="True">
                             <Setter TargetName="PageNumber" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Ellipsis" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <!--  IsFastForward + hover: replace ellipsis with left arrow  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsFastForward" Value="True" />
@@ -69,6 +86,7 @@
                             <Setter TargetName="Ellipsis" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="LeftArrow" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
+                        <!--  IsFastBackward + hover: replace ellipsis with right arrow  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsFastBackward" Value="True" />
@@ -77,25 +95,46 @@
                             <Setter TargetName="Ellipsis" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="RightArrow" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ContentBorder" Property="Background" Value="#FFD8D8D8" />
-                            <Setter TargetName="PageNumber" Property="Foreground" Value="#FF000000" />
-                            <Setter TargetName="Ellipsis" Property="Foreground" Value="#FF000000" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ContentBorder" Property="Background" Value="#FFB8B8B8" />
-                        </Trigger>
+                        <!--  Hover  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
+                            <Setter TargetName="PageNumber" Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+                            <Setter TargetName="Ellipsis" Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+                            <Setter TargetName="LeftArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+                            <Setter TargetName="RightArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+                        </MultiTrigger>
+                        <!--  Pressed  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
+                            <Setter TargetName="PageNumber" Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+                            <Setter TargetName="Ellipsis" Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+                            <Setter TargetName="LeftArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+                            <Setter TargetName="RightArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+                        </MultiTrigger>
+                        <!--  Disabled  -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentBorder" Property="Background" Value="#FFE8E8E8" />
-                            <Setter TargetName="PageNumber" Property="Foreground" Value="#FF7A7A7A" />
-                            <Setter TargetName="Ellipsis" Property="Foreground" Value="#FF7A7A7A" />
-                            <Setter TargetName="LeftArrow" Property="Foreground" Value="#FF7A7A7A" />
-                            <Setter TargetName="RightArrow" Property="Foreground" Value="#FF7A7A7A" />
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
+                            <Setter TargetName="PageNumber" Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+                            <Setter TargetName="Ellipsis" Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+                            <Setter TargetName="LeftArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+                            <Setter TargetName="RightArrow" Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
                         </Trigger>
+                        <!--  Selected (defined last to take precedence over hover state)  -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ContentBorder" Property="Background" Value="#FF3A8DFF" />
-                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="#FF2A6FE8" />
-                            <Setter TargetName="PageNumber" Property="Foreground" Value="#FFFFFFFF" />
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource AccentButtonBackground}" />
+                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{DynamicResource AccentControlElevationBorderBrush}" />
+                            <Setter TargetName="PageNumber" Property="Foreground" Value="{DynamicResource AccentButtonForeground}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -103,6 +142,9 @@
         </Setter>
     </Style>
 
+    <Style BasedOn="{StaticResource DefaultPaginationButtonStyle}" TargetType="{x:Type local:PaginationButton}" />
+
+    <!--  Pagination  -->
     <Style x:Key="DefaultPaginationStyle" TargetType="{x:Type local:Pagination}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -113,48 +155,162 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Pagination}">
-                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                Orientation="Horizontal">
-                        <RepeatButton x:Name="PART_PreviousButton"
-                                      Margin="0,0,4,0"
-                                      VerticalAlignment="Center"
-                                      Cursor="Hand"
-                                      FocusVisualStyle="{x:Null}"
-                                      Focusable="False">
-                            <TextBlock FontSize="12" Text="‹" />
+                    <StackPanel
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Orientation="Horizontal">
+
+                        <!--  Previous button (chevron left icon)  -->
+                        <RepeatButton
+                            x:Name="PART_PreviousButton"
+                            Margin="0,0,4,0"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False">
+                            <TextBlock
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                FontSize="12"
+                                Text="&#xE76B;" />
                         </RepeatButton>
-                        <StackPanel x:Name="PART_ButtonPanel"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal" />
-                        <RepeatButton x:Name="PART_NextButton"
-                                      Margin="4,0,0,0"
-                                      VerticalAlignment="Center"
-                                      Cursor="Hand"
-                                      FocusVisualStyle="{x:Null}"
-                                      Focusable="False">
-                            <TextBlock FontSize="12" Text="›" />
+
+                        <!--  Page number buttons (populated from code-behind)  -->
+                        <StackPanel
+                            x:Name="PART_ButtonPanel"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal" />
+
+                        <!--  Next button (chevron right icon)  -->
+                        <RepeatButton
+                            x:Name="PART_NextButton"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False">
+                            <TextBlock
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                FontSize="12"
+                                Text="&#xE76C;" />
                         </RepeatButton>
-                        <StackPanel x:Name="QuickJumpPanel"
-                                    Margin="8,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal"
-                                    Visibility="Collapsed">
-                            <TextBlock Margin="0,0,4,0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       Text="{TemplateBinding QuickJumpPrefixText}" />
-                            <TextBox x:Name="PART_QuickJumpInput"
-                                     MinWidth="40"
-                                     MaxWidth="200"
-                                     VerticalAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     TextAlignment="Center" />
-                            <TextBlock Margin="4,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       Text="{TemplateBinding QuickJumpSuffixText}" />
+
+                        <!--  Quick jump (hidden by default, shown when ShowQuickJump=True)  -->
+                        <StackPanel
+                            x:Name="QuickJumpPanel"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Visibility="Collapsed">
+                            <TextBlock
+                                Margin="0,0,4,0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{TemplateBinding QuickJumpPrefixText}" />
+                            <TextBox
+                                x:Name="PART_QuickJumpInput"
+                                MinWidth="40"
+                                MaxWidth="200"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                TextAlignment="Center" />
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{TemplateBinding QuickJumpSuffixText}" />
                         </StackPanel>
+
+                        <!--  Page size selector (hidden by default, shown when ShowPageSizeSelector=True)  -->
+                        <ComboBox
+                            x:Name="PART_PageSizeSelector"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            ItemsSource="{TemplateBinding PageSizeOptions}"
+                            TextBlock.TextAlignment="Center"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ShowQuickJump" Value="True">
+                            <Setter TargetName="QuickJumpPanel" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="ShowPageSizeSelector" Value="True">
+                            <Setter TargetName="PART_PageSizeSelector" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource DefaultPaginationStyle}" TargetType="{x:Type local:Pagination}" />
+
+    <!--  TinyPagination — compact variant: < CurrentPage / PageCount >  -->
+    <Style x:Key="DefaultTinyPaginationStyle" TargetType="{x:Type local:Pagination}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Pagination}">
+                    <StackPanel
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Orientation="Horizontal">
+
+                        <!--  Previous button  -->
+                        <RepeatButton
+                            x:Name="PART_PreviousButton"
+                            Margin="0,0,4,0"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False">
+                            <TextBlock
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                FontSize="12"
+                                Text="&#xE76B;" />
+                        </RepeatButton>
+
+                        <!--  Current page editable input  -->
+                        <TextBox
+                            x:Name="PART_QuickJumpInput"
+                            MinWidth="40"
+                            MaxWidth="200"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            FocusVisualStyle="{x:Null}"
+                            TextAlignment="Center" />
+
+                        <!--  Separator  -->
+                        <TextBlock
+                            Margin="4,0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="/" />
+
+                        <!--  Total pages  -->
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding PageCount, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                        <!--  Next button  -->
+                        <RepeatButton
+                            x:Name="PART_NextButton"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False">
+                            <TextBlock
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                FontSize="12"
+                                Text="&#xE76C;" />
+                        </RepeatButton>
+
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

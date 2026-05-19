@@ -14,24 +14,31 @@ namespace Wpf.Ui.Violeta.Controls;
 [TemplatePart(Name = PART_NextButton, Type = typeof(RepeatButton))]
 [TemplatePart(Name = PART_ButtonPanel, Type = typeof(StackPanel))]
 [TemplatePart(Name = PART_QuickJumpInput, Type = typeof(TextBox))]
+[TemplatePart(Name = PART_PageSizeSelector, Type = typeof(ComboBox))]
 public class Pagination : Control
 {
     public const string PART_PreviousButton = "PART_PreviousButton";
     public const string PART_NextButton = "PART_NextButton";
     public const string PART_ButtonPanel = "PART_ButtonPanel";
     public const string PART_QuickJumpInput = "PART_QuickJumpInput";
+    public const string PART_PageSizeSelector = "PART_PageSizeSelector";
 
+    // 7 internal page buttons (matches Ursa design)
     private readonly PaginationButton[] _buttons = new PaginationButton[7];
-    private StackPanel _buttonPanel;
-    private RepeatButton _previousButton;
-    private RepeatButton _nextButton;
-    private TextBox _quickJumpInput;
+
+    private StackPanel? _buttonPanel;
+    private RepeatButton? _previousButton;
+    private RepeatButton? _nextButton;
+    private TextBox? _quickJumpInput;
+    private ComboBox? _pageSizeSelector;
 
     static Pagination()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(Pagination),
             new FrameworkPropertyMetadata(typeof(Pagination)));
     }
+
+    // --- Routed Events ----------------------------------------------------------
 
     public static readonly RoutedEvent CurrentPageChangedEvent =
         EventManager.RegisterRoutedEvent(
@@ -40,18 +47,25 @@ public class Pagination : Control
             typeof(RoutedPropertyChangedEventHandler<int>),
             typeof(Pagination));
 
+    /// <summary>Raised when <see cref="CurrentPage"/> changes.</summary>
     public event RoutedPropertyChangedEventHandler<int> CurrentPageChanged
     {
         add => AddHandler(CurrentPageChangedEvent, value);
         remove => RemoveHandler(CurrentPageChangedEvent, value);
     }
 
+    // --- Dependency Properties ---------------------------------------------------
+
     public static readonly DependencyProperty CurrentPageProperty =
         DependencyProperty.Register(
             nameof(CurrentPage),
             typeof(int),
             typeof(Pagination),
-            new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnCurrentPageChanged, CoerceCurrentPage));
+            new FrameworkPropertyMetadata(
+                1,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                OnCurrentPageChanged,
+                CoerceCurrentPage));
 
     public static readonly DependencyProperty TotalCountProperty =
         DependencyProperty.Register(
@@ -95,6 +109,20 @@ public class Pagination : Control
             typeof(Pagination),
             new PropertyMetadata(SH.PaginationQuickJumpSuffix));
 
+    public static readonly DependencyProperty ShowPageSizeSelectorProperty =
+        DependencyProperty.Register(
+            nameof(ShowPageSizeSelector),
+            typeof(bool),
+            typeof(Pagination),
+            new PropertyMetadata(false));
+
+    public static readonly DependencyProperty PageSizeOptionsProperty =
+        DependencyProperty.Register(
+            nameof(PageSizeOptions),
+            typeof(int[]),
+            typeof(Pagination),
+            new PropertyMetadata(new int[] { 10, 20, 50, 100 }));
+
     public static readonly DependencyProperty CommandProperty =
         DependencyProperty.Register(
             nameof(Command),
@@ -109,55 +137,78 @@ public class Pagination : Control
             typeof(Pagination),
             new PropertyMetadata(null));
 
+    // --- Properties -------------------------------------------------------------
+
+    /// <summary>Current 1-based page index.</summary>
     public int CurrentPage
     {
         get => (int)GetValue(CurrentPageProperty);
         set => SetValue(CurrentPageProperty, value);
     }
 
+    /// <summary>Total number of items.</summary>
     public int TotalCount
     {
         get => (int)GetValue(TotalCountProperty);
         set => SetValue(TotalCountProperty, value);
     }
 
+    /// <summary>Number of items per page (default 10).</summary>
     public int PageSize
     {
         get => (int)GetValue(PageSizeProperty);
         set => SetValue(PageSizeProperty, value);
     }
 
+    /// <summary>Computed total number of pages.</summary>
     public int PageCount
     {
         get => (int)GetValue(PageCountProperty);
         private set => SetValue(PageCountProperty, value);
     }
 
+    /// <summary>Whether the quick-jump text box is shown.</summary>
     public bool ShowQuickJump
     {
         get => (bool)GetValue(ShowQuickJumpProperty);
         set => SetValue(ShowQuickJumpProperty, value);
     }
 
+    /// <summary>Localized quick-jump prefix text.</summary>
     public string QuickJumpPrefixText
     {
         get => (string)GetValue(QuickJumpPrefixTextProperty);
         set => SetValue(QuickJumpPrefixTextProperty, value);
     }
 
+    /// <summary>Localized quick-jump suffix text.</summary>
     public string QuickJumpSuffixText
     {
         get => (string)GetValue(QuickJumpSuffixTextProperty);
         set => SetValue(QuickJumpSuffixTextProperty, value);
     }
 
-    public ICommand Command
+    /// <summary>Whether the page-size selector ComboBox is shown.</summary>
+    public bool ShowPageSizeSelector
     {
-        get => (ICommand)GetValue(CommandProperty);
+        get => (bool)GetValue(ShowPageSizeSelectorProperty);
+        set => SetValue(ShowPageSizeSelectorProperty, value);
+    }
+
+    /// <summary>Options shown in the page-size selector (default 10/20/50/100).</summary>
+    public int[] PageSizeOptions
+    {
+        get => (int[])GetValue(PageSizeOptionsProperty);
+        set => SetValue(PageSizeOptionsProperty, value);
+    }
+
+    public ICommand? Command
+    {
+        get => (ICommand?)GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
 
-    public object CommandParameter
+    public object? CommandParameter
     {
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
@@ -175,6 +226,8 @@ public class Pagination : Control
             SetCurrentValue(QuickJumpSuffixTextProperty, SH.PaginationQuickJumpSuffix);
         }
     }
+
+    // --- Coerce / Change callbacks -----------------------------------------------
 
     private static object CoerceCurrentPage(DependencyObject d, object baseValue)
     {
@@ -202,10 +255,13 @@ public class Pagination : Control
         if (d is Pagination p) p.RecalcPageCount();
     }
 
+    // --- Template ---------------------------------------------------------------
+
     public override void OnApplyTemplate()
     {
         _previousButton?.Click -= OnPreviousButtonClick;
         _nextButton?.Click -= OnNextButtonClick;
+        _pageSizeSelector?.SelectionChanged -= OnPageSizeSelectorChanged;
         if (_quickJumpInput != null)
         {
             _quickJumpInput.KeyDown -= OnQuickJumpKeyDown;
@@ -218,29 +274,29 @@ public class Pagination : Control
         _nextButton = GetTemplateChild(PART_NextButton) as RepeatButton;
         _buttonPanel = GetTemplateChild(PART_ButtonPanel) as StackPanel;
         _quickJumpInput = GetTemplateChild(PART_QuickJumpInput) as TextBox;
+        _pageSizeSelector = GetTemplateChild(PART_PageSizeSelector) as ComboBox;
 
-        if (_previousButton != null)
-            _previousButton.Click += OnPreviousButtonClick;
-
-        if (_nextButton != null)
-            _nextButton.Click += OnNextButtonClick;
-
+        _previousButton?.Click += OnPreviousButtonClick;
+        _nextButton?.Click += OnNextButtonClick;
         if (_quickJumpInput != null)
         {
             _quickJumpInput.KeyDown += OnQuickJumpKeyDown;
             _quickJumpInput.LostFocus += OnQuickJumpLostFocus;
         }
+        _pageSizeSelector?.SelectionChanged += OnPageSizeSelectorChanged;
 
         InitializePanelButtons();
         RecalcPageCount();
+        // Coerce CurrentPage after PageCount is known
         CoerceValue(CurrentPageProperty);
         UpdateButtons();
     }
 
+    // --- Button initialization ---------------------------------------------------
+
     private void InitializePanelButtons()
     {
         if (_buttonPanel is null) return;
-
         _buttonPanel.Children.Clear();
 
         for (int i = 0; i < 7; i++)
@@ -251,6 +307,8 @@ public class Pagination : Control
             _buttons[i] = btn;
         }
     }
+
+    // --- UpdateButtons -----------------------------------------------------------
 
     private void UpdateButtons()
     {
@@ -289,25 +347,24 @@ public class Pagination : Control
                 _buttons[4].SetStatus(mid + 1, mid + 1 == currentPage, false, false);
 
                 if (mid > 4)
-                    _buttons[1].SetStatus(-1, false, true, false);
+                    _buttons[1].SetStatus(-1, false, true, false); // fast-forward left (…)
                 else
                     _buttons[1].SetStatus(mid - 2, mid - 2 == currentPage, false, false);
 
                 if (mid < pageCount - 3)
-                    _buttons[5].SetStatus(-1, false, false, true);
+                    _buttons[5].SetStatus(-1, false, false, true); // fast-backward right (…)
                 else
                     _buttons[5].SetStatus(mid + 2, mid + 2 == currentPage, false, false);
             }
-        }
+        } // end if (_buttonPanel != null && _buttons[0] != null)
 
-        if (_previousButton != null)
-            _previousButton.IsEnabled = currentPage > 1;
-
-        if (_nextButton != null)
-            _nextButton.IsEnabled = currentPage < pageCount;
-
+        _previousButton?.IsEnabled = currentPage > 1;
+        _nextButton?.IsEnabled = currentPage < pageCount;
         RefreshQuickJumpText();
+        SyncPageSizeSelector();
     }
+
+    // --- Page count recalculation ------------------------------------------------
 
     private void RecalcPageCount()
     {
@@ -319,6 +376,8 @@ public class Pagination : Control
         CoerceValue(CurrentPageProperty);
         UpdateButtons();
     }
+
+    // --- Event handlers ----------------------------------------------------------
 
     private void OnPreviousButtonClick(object sender, RoutedEventArgs e) => AddCurrentPage(-1);
 
@@ -345,6 +404,21 @@ public class Pagination : Control
 
     private void OnQuickJumpLostFocus(object sender, RoutedEventArgs e) => SyncQuickJump();
 
+    private void SyncPageSizeSelector()
+    {
+        if (_pageSizeSelector is null) return;
+        if (_pageSizeSelector.SelectedItem is int selected && selected == PageSize) return;
+        _pageSizeSelector.SelectedItem = PageSize;
+    }
+
+    private void OnPageSizeSelectorChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_pageSizeSelector?.SelectedItem is int newSize && newSize > 0)
+        {
+            PageSize = newSize;
+        }
+    }
+
     private void RefreshQuickJumpText()
     {
         if (_quickJumpInput is null) return;
@@ -361,12 +435,15 @@ public class Pagination : Control
         RefreshQuickJumpText();
     }
 
+    // --- Helpers -----------------------------------------------------------------
+
     private void AddCurrentPage(int delta)
     {
         CurrentPage = Clamp(CurrentPage + delta, 1, PageCount);
     }
 
-    private static int Clamp(int value, int min, int max) => value < min ? min : value > max ? max : value;
+    private static int Clamp(int value, int min, int max)
+        => value < min ? min : value > max ? max : value;
 
     private void InvokeCommand()
     {

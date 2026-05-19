@@ -64,6 +64,11 @@ public class PaginationButton : RepeatButton
         IsFastBackward = isFastBackward;
     }
 
+    internal void SetSelected(bool isSelected)
+    {
+        IsSelected = isSelected;
+    }
+
     static PaginationButton()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(PaginationButton),
