@@ -135,6 +135,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         GC.SuppressFinalize(this);
         _panel = null;
         _passwordControl = null;
+        // SQLite uses a connection pool; disposing a connection returns it to the pool
+        // but does not close the underlying file handle. Clear the pool to release the lock.
+        SqliteConnection.ClearAllPools();
     }
 
     internal static DatabaseType DetectDatabaseType(string path)
