@@ -16,6 +16,7 @@ public partial class DbViewerPanel : UserControl
 {
     private const int DefaultPageSize = 200;
     private string _path;
+    private string _sqlitePassword;
     private DatabaseType _databaseType;
     private string _currentObjectName;
     private int _totalCount;
@@ -29,10 +30,14 @@ public partial class DbViewerPanel : UserControl
         pagination.PageSize = DefaultPageSize;
     }
 
-    public void LoadDatabase(string path)
+    public void LoadDatabase(string path, string password = null)
     {
         _path = path;
-        _databaseType = DetectDatabaseType(path);
+        _sqlitePassword = password;
+        // When a password is supplied the caller already verified it is SQLite.
+        _databaseType = password != null
+            ? DatabaseType.SQLite
+            : Plugin.DetectDatabaseType(path);
         _hasLoadedData = false;
 
         if (_databaseType == DatabaseType.Unknown)
@@ -155,41 +160,19 @@ public partial class DbViewerPanel : UserControl
         pageInfoTextBlock.Text = $"{_totalCount} 行 / 每页 {DefaultPageSize} 行 / 第 {pagination.CurrentPage} 页，共 {pagination.PageCount} 页";
     }
 
-    private static DatabaseType DetectDatabaseType(string path)
+    private SqliteConnection OpenSqliteConnection(string path)
     {
-        try
-        {
-            using var stream = File.OpenRead(path);
-            var header = new byte[59]; // need 32+27 bytes for LiteDB magic
-            var count = stream.Read(header, 0, header.Length);
-
-            if (count >= 16)
-            {
-                var text = System.Text.Encoding.ASCII.GetString(header, 0, 16);
-                if (text.StartsWith("SQLite format 3", StringComparison.Ordinal))
-                    return DatabaseType.SQLite;
-            }
-
-            // LiteDB 5.x: magic string "** This is a LiteDB file **" at offset 32
-            if (count >= 59)
-            {
-                var liteDbMagic = System.Text.Encoding.ASCII.GetString(header, 32, 27);
-                if (liteDbMagic == "** This is a LiteDB file **")
-                    return DatabaseType.LiteDb;
-            }
-        }
-        catch
-        {
-        }
-
-        return DatabaseType.Unknown;
+        var csb = new SqliteConnectionStringBuilder { DataSource = path };
+        if (!string.IsNullOrEmpty(_sqlitePassword))
+            csb.Password = _sqlitePassword;
+        return new SqliteConnection(csb.ToString());
     }
 
-    private static string[] LoadSqliteNames(string path)
+    private string[] LoadSqliteNames(string path)
     {
         var items = new List<string>();
 
-        using var connection = new SqliteConnection($"Data Source={path}");
+        using var connection = OpenSqliteConnection(path);
         connection.Open();
 
         using var command = connection.CreateCommand();
@@ -201,18 +184,18 @@ public partial class DbViewerPanel : UserControl
             items.Add(reader.GetString(0));
         }
 
-        return items.ToArray();
+        return [.. items];
     }
 
     private static string[] LoadLiteDbNames(string path)
     {
         using var db = new LiteDatabase(path);
-        return db.GetCollectionNames().OrderBy(name => name).ToArray();
+        return [.. db.GetCollectionNames().OrderBy(name => name)];
     }
 
-    private static int GetSqliteRowCount(string path, string tableName)
+    private int GetSqliteRowCount(string path, string tableName)
     {
-        using var connection = new SqliteConnection($"Data Source={path}");
+        using var connection = OpenSqliteConnection(path);
         connection.Open();
 
         using var command = connection.CreateCommand();
@@ -224,12 +207,12 @@ public partial class DbViewerPanel : UserControl
     {
         using var db = new LiteDatabase(path);
         var collection = db.GetCollection(collectionName);
-        return (int)collection.Count();
+        return collection.Count();
     }
 
-    private static DataTable LoadSqlitePage(string path, string tableName, int page, int pageSize)
+    private DataTable LoadSqlitePage(string path, string tableName, int page, int pageSize)
     {
-        using var connection = new SqliteConnection($"Data Source={path}");
+        using var connection = OpenSqliteConnection(path);
         connection.Open();
 
         using var command = connection.CreateCommand();
@@ -250,9 +233,9 @@ public partial class DbViewerPanel : UserControl
         return ConvertBsonDocumentsToTable(docs);
     }
 
-    private static DataTable LoadSqliteTable(string path, string tableName)
+    private DataTable LoadSqliteTable(string path, string tableName)
     {
-        using var connection = new SqliteConnection($"Data Source={path}");
+        using var connection = OpenSqliteConnection(path);
         connection.Open();
 
         using var command = connection.CreateCommand();
@@ -310,12 +293,5 @@ public partial class DbViewerPanel : UserControl
             return string.Empty;
 
         return value.RawValue?.ToString() ?? value.ToString() ?? string.Empty;
-    }
-
-    private enum DatabaseType
-    {
-        Unknown,
-        SQLite,
-        LiteDb,
     }
 }

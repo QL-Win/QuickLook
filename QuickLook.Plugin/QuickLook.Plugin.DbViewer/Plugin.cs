@@ -1,3 +1,4 @@
+using Microsoft.Data.Sqlite;
 using QuickLook.Common.Commands;
 using QuickLook.Common.Controls;
 using QuickLook.Common.Plugin;
@@ -12,6 +13,7 @@ namespace QuickLook.Plugin.DbViewer;
 public sealed partial class Plugin : IViewer, IMoreMenu
 {
     private DbViewerPanel _panel;
+    private PasswordControl _passwordControl;
     private string _currentPath;
 
     public int Priority => 0;
@@ -20,6 +22,14 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
     public void Init()
     {
+        try
+        {
+            SQLitePCL.Batteries_V2.Init();
+        }
+        catch
+        {
+            // Provider may already be initialised by another component; proceed.
+        }
     }
 
     public bool CanHandle(string path)
@@ -45,12 +55,48 @@ public sealed partial class Plugin : IViewer, IMoreMenu
     public void View(string path, ContextObject context)
     {
         _currentPath = path;
-        _panel = new DbViewerPanel();
 
+        var dbType = DetectDatabaseType(path);
+
+        if (dbType == DatabaseType.EncryptedSQLite)
+        {
+            _passwordControl = new PasswordControl();
+            _passwordControl.PasswordRequested += password =>
+            {
+                // Verify the password
+                try
+                {
+                    var csb = new SqliteConnectionStringBuilder { DataSource = path, Password = password };
+                    using var conn = new SqliteConnection(csb.ToString());
+                    conn.Open();
+                    using var cmd = conn.CreateCommand();
+                    cmd.CommandText = "SELECT 1";
+                    cmd.ExecuteScalar();
+                }
+                catch
+                {
+                    return false;
+                }
+
+                // Password accepted — switch to the data panel
+                _panel = new DbViewerPanel();
+                context.ViewerContent = _panel;
+                context.Title = Path.GetFileName(path);
+                _panel.LoadDatabase(path, password);
+                context.IsBusy = false;
+                return true;
+            };
+
+            context.ViewerContent = _passwordControl;
+            context.Title = $"[ENCRYPTED] {Path.GetFileName(path)}";
+            context.IsBusy = false;
+            return;
+        }
+
+        _panel = new DbViewerPanel();
         context.ViewerContent = _panel;
         context.Title = Path.GetFileName(path);
         _panel.LoadDatabase(path);
-
         context.IsBusy = false;
     }
 
@@ -58,9 +104,10 @@ public sealed partial class Plugin : IViewer, IMoreMenu
     {
         GC.SuppressFinalize(this);
         _panel = null;
+        _passwordControl = null;
     }
 
-    private static DatabaseType DetectDatabaseType(string path)
+    internal static DatabaseType DetectDatabaseType(string path)
     {
         try
         {
@@ -87,6 +134,13 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         {
             // Ignore invalid file reads during detection.
         }
+
+        // Header-based detection failed.
+        // Encrypted SQLite files have no recognisable header; use the extension
+        // as a heuristic so we can show the password dialog.
+        var ext = Path.GetExtension(path).ToLowerInvariant();
+        if (ext is ".sqlite" or ".sqlite3" or ".db" or ".db3" or ".sdb")
+            return DatabaseType.EncryptedSQLite;
 
         return DatabaseType.Unknown;
     }
@@ -117,11 +171,12 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
         _panel.ExportCurrentTableToExcel(_currentPath);
     }
+}
 
-    private enum DatabaseType
-    {
-        Unknown,
-        SQLite,
-        LiteDb,
-    }
+internal enum DatabaseType
+{
+    Unknown,
+    SQLite,
+    EncryptedSQLite,
+    LiteDb,
 }
