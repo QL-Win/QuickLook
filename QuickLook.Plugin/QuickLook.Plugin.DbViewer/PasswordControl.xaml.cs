@@ -1,4 +1,6 @@
+using QuickLook.Common.Helpers;
 using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,6 +15,13 @@ public partial class PasswordControl : UserControl
     public PasswordControl()
     {
         InitializeComponent();
+
+        string domain = Assembly.GetExecutingAssembly().GetName().Name;
+        titleTextBlock.Text = TranslationHelper.Get("PW_Title", domain: domain);
+        hintTextBlock.Text = TranslationHelper.Get("Pw_Hint", domain: domain);
+        passwordErrorTextBlock.Text = TranslationHelper.Get("PW_Error", domain: domain);
+        openButton.Content = TranslationHelper.Get("BTN_Open", domain: domain);
+        cancelButton.Content = TranslationHelper.Get("BTN_Cancel", domain: domain);
 
         openButton.Click += OpenButton_Click;
         cancelButton.Click += CancelButton_Click;

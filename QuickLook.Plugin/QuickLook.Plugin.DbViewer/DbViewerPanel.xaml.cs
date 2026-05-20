@@ -2,11 +2,13 @@ using LiteDB;
 using Microsoft.Data.Sqlite;
 using Microsoft.Win32;
 using MiniExcelLibs;
+using QuickLook.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,6 +17,7 @@ namespace QuickLook.Plugin.DbViewer;
 public partial class DbViewerPanel : UserControl
 {
     private const int DefaultPageSize = 200;
+    private static readonly string Domain = Assembly.GetExecutingAssembly().GetName().Name;
     private string _path;
     private string _sqlitePassword;
     private DatabaseType _databaseType;
@@ -62,7 +65,7 @@ public partial class DbViewerPanel : UserControl
         }
         else
         {
-            MessageBox.Show("数据库中没有可显示的表或集合");
+            MessageBox.Show(TranslationHelper.Get("MSG_NoTables", domain: Domain));
         }
     }
 
@@ -93,16 +96,16 @@ public partial class DbViewerPanel : UserControl
 
             if (table is null)
             {
-                MessageBox.Show("无法导出数据。", "QuickLook", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(TranslationHelper.Get("MSG_ExportCannotExport", domain: Domain), "QuickLook", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             MiniExcel.SaveAs(dialog.FileName, table);
-            MessageBox.Show($"导出成功：{dialog.FileName}", "QuickLook", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(string.Format(TranslationHelper.Get("MSG_ExportSuccess", domain: Domain), dialog.FileName), "QuickLook", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"导出失败：{ex.Message}", "QuickLook", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(TranslationHelper.Get("MSG_ExportError", domain: Domain), ex.Message), "QuickLook", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -137,7 +140,6 @@ public partial class DbViewerPanel : UserControl
 
         pagination.TotalCount = _totalCount;
         pagination.CurrentPage = 1;
-        pageInfoTextBlock.Text = $"{_totalCount} 行 / 每页 {DefaultPageSize} 行";
         LoadCurrentPage();
     }
 
@@ -157,7 +159,6 @@ public partial class DbViewerPanel : UserControl
         };
 
         dataGrid.ItemsSource = table.DefaultView;
-        pageInfoTextBlock.Text = $"{_totalCount} 行 / 每页 {DefaultPageSize} 行 / 第 {pagination.CurrentPage} 页，共 {pagination.PageCount} 页";
     }
 
     private SqliteConnection OpenSqliteConnection(string path)

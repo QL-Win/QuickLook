@@ -210,7 +210,10 @@ internal class KeystrokeDispatcher : IDisposable
         // before this switch (e.g. Alt+Tab keystrokes) belong to the previous context,
         // so they must not suppress valid keys in the new window.
         _lastInvalidKeyPressTick = 0L;
+
+#if false // The problem of requiring two spaces has been solved -- comment the test code first.
         Debug.WriteLine($"Foreground window changed to {hwnd:X}, invalid-key delay cleared.");
+#endif
     }
 
     internal static KeystrokeDispatcher GetInstance()

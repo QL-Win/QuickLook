@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
-namespace Wpf.Ui.Violeta.Controls;
+namespace QuickLook.Plugin.DbViewer;
 
 /// <summary>
 /// A button used inside a <see cref="Pagination"/> control to represent a single page.

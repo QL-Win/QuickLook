@@ -4,7 +4,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.DbViewer"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:wpfui="clr-namespace:Wpf.Ui.Violeta.Controls"
              d:DesignHeight="700"
              d:DesignWidth="1000"
              mc:Ignorable="d">
@@ -56,14 +55,10 @@
 
         <StackPanel Grid.Row="3"
                     Margin="8"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-            <TextBlock x:Name="pageInfoTextBlock"
-                       Margin="0,0,12,0"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForeground}" />
-            <wpfui:Pagination x:Name="pagination"
+            <local:Pagination x:Name="pagination"
                               CurrentPageChanged="Pagination_CurrentPageChanged"
                               PageSize="200"
                               ShowQuickJump="True"

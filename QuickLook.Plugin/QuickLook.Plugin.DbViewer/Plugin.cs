@@ -1,11 +1,13 @@
 using Microsoft.Data.Sqlite;
 using QuickLook.Common.Commands;
 using QuickLook.Common.Controls;
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 
 namespace QuickLook.Plugin.DbViewer;
@@ -41,7 +43,15 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         if (extension is not ".sqlite" and not ".sqlite3" and not ".db" and not ".db3" and not ".sdb" and not ".litedb" and not ".lite")
             return false;
 
-        return DetectDatabaseType(path) != DatabaseType.Unknown;
+        try
+        {
+            return DetectDatabaseType(path) != DatabaseType.Unknown;
+        }
+        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+        {
+            // File is locked/inaccessible — report as handleable so View() can show the error.
+            return true;
+        }
     }
 
     public void Prepare(string path, ContextObject context)
@@ -56,7 +66,27 @@ public sealed partial class Plugin : IViewer, IMoreMenu
     {
         _currentPath = path;
 
-        var dbType = DetectDatabaseType(path);
+        DatabaseType dbType;
+        try
+        {
+            dbType = DetectDatabaseType(path);
+        }
+        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+        {
+            var errorBlock = new System.Windows.Controls.TextBlock
+            {
+                Text = ex.Message,
+                TextWrapping = System.Windows.TextWrapping.Wrap,
+                Margin = new System.Windows.Thickness(24),
+                Foreground = System.Windows.Media.Brushes.OrangeRed,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+            };
+            context.ViewerContent = errorBlock;
+            context.Title = Path.GetFileName(path);
+            context.IsBusy = false;
+            return;
+        }
 
         if (dbType == DatabaseType.EncryptedSQLite)
         {
@@ -105,6 +135,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         GC.SuppressFinalize(this);
         _panel = null;
         _passwordControl = null;
+        // SQLite uses a connection pool; disposing a connection returns it to the pool
+        // but does not close the underlying file handle. Clear the pool to release the lock.
+        SqliteConnection.ClearAllPools();
     }
 
     internal static DatabaseType DetectDatabaseType(string path)
@@ -130,9 +163,14 @@ public sealed partial class Plugin : IViewer, IMoreMenu
                     return DatabaseType.LiteDb;
             }
         }
+        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+        {
+            // File is locked or access denied — rethrow so callers can show a meaningful error.
+            throw;
+        }
         catch
         {
-            // Ignore invalid file reads during detection.
+            // Ignore other invalid file reads during detection.
         }
 
         // Header-based detection failed.
@@ -155,7 +193,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             new MoreMenuItem
             {
                 Icon = FontSymbols.SaveAs,
-                Header = "导出为 Excel",
+                Header = TranslationHelper.Get("MW_ExportToExcel", domain: Assembly.GetExecutingAssembly().GetName().Name),
                 Command = new RelayCommand(ExportToExcel),
                 IsVisible = true,
                 IsEnabled = true,
