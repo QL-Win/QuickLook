@@ -292,7 +292,7 @@ void IDMan::GetFilePath(PCWSTR name, PWCHAR buffer)
             RegCloseKey(hFolders);
         }
 
-        // Extension not in FoldersTree — use the default download folder
+        // Extension not in FoldersTree - use the default download folder
         if (defaultPath[0] != L'\0')
         {
             PathCombine(buffer, MAX_PATH_EX, { defaultPath, name });
