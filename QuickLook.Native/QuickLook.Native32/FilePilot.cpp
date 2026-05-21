@@ -26,6 +26,7 @@ namespace
     constexpr auto CLIPBOARD_TIMEOUT_MS = 250;
     constexpr auto CLIPBOARD_POLL_INTERVAL_MS = 5;
     constexpr auto MAX_CLASS_NAME_LENGTH = 256;
+    constexpr ULONG_PTR QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO = 0x514C4649;
 
     bool StartsWith(PCWSTR value, PCWSTR prefix)
     {
@@ -183,24 +184,30 @@ namespace
 
         inputs[0].type = INPUT_KEYBOARD;
         inputs[0].ki.wVk = VK_CONTROL;
+        inputs[0].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         inputs[1].type = INPUT_KEYBOARD;
         inputs[1].ki.wVk = VK_SHIFT;
+        inputs[1].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         inputs[2].type = INPUT_KEYBOARD;
         inputs[2].ki.wVk = L'C';
+        inputs[2].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         inputs[3].type = INPUT_KEYBOARD;
         inputs[3].ki.wVk = L'C';
         inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[3].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         inputs[4].type = INPUT_KEYBOARD;
         inputs[4].ki.wVk = VK_SHIFT;
         inputs[4].ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[4].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         inputs[5].type = INPUT_KEYBOARD;
         inputs[5].ki.wVk = VK_CONTROL;
         inputs[5].ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[5].ki.dwExtraInfo = QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO;
 
         SendInput(_countof(inputs), inputs, sizeof(INPUT));
     }

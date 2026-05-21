@@ -77,6 +77,9 @@ internal class GlobalKeyboardHook : IDisposable
         if (IsWindowsKeyPressed())
             return User32.CallNextHookEx(_hHook, code, wParam, ref lParam);
 
+        if (lParam.dwExtraInfo == User32.QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO)
+            return User32.CallNextHookEx(_hHook, code, wParam, ref lParam);
+
         var key = (Keys)lParam.vkCode;
         key = AddModifiers(key);
 
