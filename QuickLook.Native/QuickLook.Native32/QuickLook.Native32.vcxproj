@@ -217,6 +217,7 @@
     <ClInclude Include="DialogHook.h" />
     <ClInclude Include="DOpus.h" />
     <ClInclude Include="Everything.h" />
+    <ClInclude Include="FilePilot.h" />
     <ClInclude Include="HelperMethods.h" />
     <ClInclude Include="IDMan.h" />
     <ClInclude Include="MultiCommander.h" />
@@ -250,6 +251,7 @@
     </ClCompile>
     <ClCompile Include="DOpus.cpp" />
     <ClCompile Include="Everything.cpp" />
+    <ClCompile Include="FilePilot.cpp" />
     <ClCompile Include="HelperMethods.cpp" />
     <ClCompile Include="DllExport.cpp" />
     <ClCompile Include="IDMan.cpp" />
