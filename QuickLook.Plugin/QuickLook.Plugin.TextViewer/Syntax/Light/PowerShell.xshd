@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="PowerShell" extensions=".ps1;.psd1;.psm1">
+<SyntaxDefinition name="PowerShell" extensions=".ps1;.psd1;.psm1;.pssc;.psrc">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>

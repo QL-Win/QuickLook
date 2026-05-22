@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="NSIS" extensions=".nsi;.nsh">
+<SyntaxDefinition name="NSIS" extensions=".nsi;.nsh;.bnsi;.bnsh;.nlf">
     
     <Environment> 
         <Default color="#000000" bgcolor="#FFFFFF"/>

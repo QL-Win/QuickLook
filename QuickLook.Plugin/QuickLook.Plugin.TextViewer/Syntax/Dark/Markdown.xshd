@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SyntaxDefinition name="Markdown" extensions=".md;.markdown;.mdx;.mmd;.mkd;.mdwn;.mdown;.mdc;.qmd;.rmd;.rmarkdown;.apib;.mdtxt;.mdtext">
+<SyntaxDefinition name="Markdown" extensions=".md;.markdown;.mdx;.mmd;.mkd;.mdwn;.mdown;.mdc;.qmd;.rmd;.rmarkdown;.apib;.mdtxt;.mdtext;.workbook;.copilotmd;.jmd">
 
     <RuleSets>
         <RuleSet name="CSharpRef" reference="C#"/>

@@ -26,7 +26,7 @@ public class JSONLHighlightingDefinition : LightHighlightingDefinition
 {
     public override string Name => "JSONL";
 
-    public override string Extension => ".jsonl";
+    public override string Extension => ".jsonl;.ndjson";
 
     public override HighlightingRuleSet MainRuleSet => new();
 

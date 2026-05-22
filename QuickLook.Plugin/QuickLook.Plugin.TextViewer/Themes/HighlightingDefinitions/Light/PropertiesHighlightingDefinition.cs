@@ -28,7 +28,7 @@ public class PropertiesHighlightingDefinition : LightHighlightingDefinition
 {
     public override string Name => "Properties";
 
-    public override string Extension => ".properties";
+    public override string Extension => ".properties;.directory;.repo;.npmrc";
 
     public override HighlightingRuleSet MainRuleSet => new()
     {

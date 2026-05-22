@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Objective-C" extensions=".m">
+<SyntaxDefinition name="Objective-C" extensions=".m;.mm">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
