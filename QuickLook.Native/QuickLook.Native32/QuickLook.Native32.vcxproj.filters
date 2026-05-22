@@ -48,6 +48,9 @@
     <ClInclude Include="MultiCommander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IDMan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -81,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MultiCommander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IDMan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
