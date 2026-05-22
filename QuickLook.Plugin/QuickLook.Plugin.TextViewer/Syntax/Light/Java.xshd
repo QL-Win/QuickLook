@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Java" extensions=".java">
+<SyntaxDefinition name="Java" extensions=".java;.jav">
     
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
