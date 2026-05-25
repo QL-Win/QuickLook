@@ -203,7 +203,6 @@ public static class User32
     public const int WM_KEYUP = 0x101;
     public const int WM_SYSKEYDOWN = 0x104;
     public const int WM_SYSKEYUP = 0x105;
-    public const int QUICKLOOK_FILEPILOT_COPY_EXTRA_INFO = 0x514C4649;
 
     public const int GWL_STYLE = -16;
     public const int GWL_EXSTYLE = -20;
