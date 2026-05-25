@@ -28,6 +28,15 @@ internal class GlobalKeyboardHook : IDisposable
 {
     private static GlobalKeyboardHook _instance;
 
+    // Marker written to INPUT::dwExtraInfo for synthetic hotkeys replayed by QuickLook
+    // through SendInput when integrating with third-party file managers.
+    //
+    // The low-level keyboard hook checks this value and immediately forwards the event,
+    // so QuickLook does not treat its own replayed keystrokes as real user input.
+    // This prevents false invalid-key suppression and accidental preview state changes.
+    // 0x514C5452 == 'QLTR' (QuickLook Third-party Replay)
+    public const int QUICKLOOK_THIRD_PARTY_HOTKEY_REPLAY_EXTRA_INFO = 0x514C5452;
+
     private User32.KeyboardHookProc _callback;
     private nint _hHook = IntPtr.Zero;
 
@@ -75,6 +84,13 @@ internal class GlobalKeyboardHook : IDisposable
             return User32.CallNextHookEx(_hHook, code, wParam, ref lParam);
 
         if (IsWindowsKeyPressed())
+            return User32.CallNextHookEx(_hHook, code, wParam, ref lParam);
+
+        // QuickLook itself may replay third-party hotkeys through SendInput.
+        // These events are tagged in dwExtraInfo and must be forwarded without
+        // entering QuickLook's hotkey pipeline, otherwise they can pollute state
+        // (for example invalid-key timing windows) and cause false toggles.
+        if (lParam.dwExtraInfo == User32.QUICKLOOK_THIRD_PARTY_HOTKEY_REPLAY_EXTRA_INFO)
             return User32.CallNextHookEx(_hHook, code, wParam, ref lParam);
 
         var key = (Keys)lParam.vkCode;
