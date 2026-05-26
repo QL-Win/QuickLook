@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Scala" extensions=".scala">
+<SyntaxDefinition name="Scala" extensions=".scala;.sc">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
