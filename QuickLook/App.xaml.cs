@@ -133,7 +133,7 @@ public partial class App : Application
             {
                 var path = Path.GetFullPath(e.Args.First());
                 if (Directory.Exists(path) || File.Exists(path))
-                    PipeServerManager.SendMessage(PipeMessages.Toggle, path);
+                    PipeServerManager.PostMessage(PipeMessages.Toggle, path);
             }
             catch
             {
@@ -296,7 +296,7 @@ public partial class App : Application
                 var path = Path.GetFullPath(args.First());
                 if (Directory.Exists(path) || File.Exists(path))
                 {
-                    PipeServerManager.SendMessage(PipeMessages.Toggle, path, [.. args.Skip(1)]);
+                    PipeServerManager.PostMessage(PipeMessages.Toggle, path, [.. args.Skip(1)]);
                     return false;
                 }
             }

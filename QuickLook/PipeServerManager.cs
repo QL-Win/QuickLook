@@ -79,13 +79,13 @@ public class PipeServerManager : IDisposable
         GC.SuppressFinalize(this);
 
         if (_server != null)
-            SendMessage(PipeMessages.Quit);
+            PostMessage(PipeMessages.Quit);
         _server?.Dispose();
         _server = null;
     }
 
     [SuppressMessage("Style", "IDE0063:Use simple 'using' statement")]
-    public static void SendMessage(string pipeMessage, string path = null, string[] options = null)
+    public static void PostMessage(string pipeMessage, string path = null, string[] options = null)
     {
         path ??= string.Empty;
         options ??= [];
@@ -109,70 +109,84 @@ public class PipeServerManager : IDisposable
         }
     }
 
+    public static void SendMessage(string pipeMessage, string path = null, string[] options = null)
+    {
+        GetInstance().MessageReceived(pipeMessage, path, options);
+    }
+
     private bool MessageReceived(string msg)
     {
         var split = msg.Split('|');
         if (split.Length <= 1)
             return false;
 
+        var pipeMessage = split[0];
+        var path = split[1];
+        var options = split.Length >= 3 && !string.IsNullOrEmpty(split[2])
+            ? split[2].Split(',')
+            : null;
+
+        return MessageReceived(pipeMessage, path, options);
+    }
+
+    private bool MessageReceived(string pipeMessage, string path = null, string[] options = null)
+    {
         if (_lastOperation != null && _lastOperation.Status == DispatcherOperationStatus.Pending)
         {
             _lastOperation.Abort();
             Debug.WriteLine("Dispatcher task canceled");
         }
 
-        var pipeMessage = split[0];
-        var path = split[1];
-        var option = split.Length >= 3 ? split[2] : null;
+        var option = options?.Length > 0 ? string.Join(",", options) : null;
 
         switch (pipeMessage)
         {
             case PipeMessages.RunAndClose:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().RunAndClosePreview()),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Invoke:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().InvokePreview(path)),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Switch:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().SwitchPreview(path)),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Toggle:
                 _lastOperation = Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().TogglePreview(path, option)),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Forget:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().ForgetCurrentWindow()),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Close:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().ClosePreview()),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Fullscreen:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().ToggleFullscreen()),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Reload:
                 Application.Current.Dispatcher.BeginInvoke(
                     new Action(() => ViewWindowManager.GetInstance().ReloadPreview()),
-                    DispatcherPriority.ApplicationIdle);
+                    DispatcherPriority.Normal);
                 return false;
 
             case PipeMessages.Quit:

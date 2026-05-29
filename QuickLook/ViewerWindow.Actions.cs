@@ -356,6 +356,9 @@ public partial class ViewerWindow
         {
             try
             {
+                // Avoid main thread scheduling lag
+                if (Plugin is null) return;
+
                 Plugin.View(path, ContextObject);
 
                 // Initial the more menu

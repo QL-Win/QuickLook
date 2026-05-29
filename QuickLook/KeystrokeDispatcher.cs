@@ -177,7 +177,8 @@ internal class KeystrokeDispatcher : IDisposable
                     break;
 
                 case Keys.Space:
-                    PipeServerManager.SendMessage(PipeMessages.Toggle);
+                    if (SettingHelper.Get("AutoCloseHolding", true, "QuickLook"))
+                        PipeServerManager.SendMessage(PipeMessages.Toggle);
                     break;
             }
         }

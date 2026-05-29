@@ -74,6 +74,13 @@ Example:
 - Example:
   - `<ShowInTaskbar>True</ShowInTaskbar>`
 
+### `<AutoCloseHolding>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Automatically close the preview window when the Space key is released after being held. When `True` (default), releasing Space after a long-press (≥750 ms) closes the preview. When `False`, the preview stays open on Space key release.
+- Example:
+  - `<AutoCloseHolding>False</AutoCloseHolding>` to disable auto-close on Space release.
+
 ### `<CloseOnLostFocus>`
 - Default: `False`
 - Type: `Boolean`

@@ -111,8 +111,8 @@ internal class Updater
                 var changeLogPath = Path.GetTempFileName() + ".md";
                 File.WriteAllText(changeLogPath, notes);
 
-                PipeServerManager.SendMessage(PipeMessages.Invoke, changeLogPath);
-                PipeServerManager.SendMessage(PipeMessages.Forget);
+                PipeServerManager.PostMessage(PipeMessages.Invoke, changeLogPath);
+                PipeServerManager.PostMessage(PipeMessages.Forget);
             }
             catch (Exception e)
             {
