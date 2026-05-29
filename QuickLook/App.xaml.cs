@@ -333,7 +333,7 @@ public partial class App : Application
 
     private void RunListener(StartupEventArgs e)
     {
-        TrayIconManager.GetInstance();
+        TrayIconManager.Start();
         if (!e.Args.Contains("/autorun") && !IsUWP)
             TrayIconManager.ShowNotification(string.Empty, TranslationHelper.Get("APP_START"));
         if (e.Args.Contains("/first"))

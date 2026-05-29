@@ -183,4 +183,11 @@ internal partial class TrayIconManager : IDisposable
     {
         return _instance ??= new TrayIconManager();
     }
+
+    public static void Start()
+    {
+        using TrayIconWindow window = new();
+        window.Show(); // Speeds up the initialization of the tray ContextMenu
+        _ = GetInstance();
+    }
 }
