@@ -15,7 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace QuickLook.Plugin.BinaryViewer;
@@ -30,6 +33,9 @@ public partial class BinaryViewerPanel : UserControl
     public void LoadFile(string path)
     {
         _hexEditor.FileName = path;
+        _hexEditor.BarChartPanelVisibility = Visibility.Collapsed;
+        _hexEditor.EnableDarkMode = OSThemeHelper.AppsUseDarkTheme();
+        _hexEditor.Background = Brushes.Transparent;
 
         // The HexEditorViewModel intentionally skips RefreshVisibleLines() on construction
         // for startup performance. UpdateVisibleLines() is deferred at ApplicationIdle
