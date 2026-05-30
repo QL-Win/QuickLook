@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace QuickLook.Plugin.BinaryViewer;
 
@@ -29,10 +30,22 @@ public partial class BinaryViewerPanel : UserControl
     public void LoadFile(string path)
     {
         _hexEditor.FileName = path;
+
+        // The HexEditorViewModel intentionally skips RefreshVisibleLines() on construction
+        // for startup performance. UpdateVisibleLines() is deferred at ApplicationIdle
+        // priority inside HexEditor. We dispatch at ContextIdle (lower priority, runs after
+        // ApplicationIdle) to ensure VisibleLines is correctly computed before we force a
+        // RefreshView(), which actually populates the Lines collection and makes bytes visible
+        // without requiring the user to scroll first.
+        _hexEditor.Dispatcher.BeginInvoke(
+            () => _hexEditor.RefreshView(),
+            DispatcherPriority.ContextIdle);
     }
 
     public void Unload()
     {
-        _hexEditor.FileName = null;
+        // Close() properly releases the file stream and lock,
+        // whereas setting FileName = null does not free the handle.
+        _hexEditor.Close();
     }
 }
