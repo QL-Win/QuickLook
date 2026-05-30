@@ -94,7 +94,7 @@
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3967.48">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.34.1">
+        <PackageReference Include="Google.Protobuf" Version="3.35.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="System.Memory" Version="4.6.3">

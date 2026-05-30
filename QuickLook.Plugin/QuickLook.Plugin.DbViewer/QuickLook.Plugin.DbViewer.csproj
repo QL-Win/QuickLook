@@ -76,7 +76,7 @@
             which adds AES-256 encryption support. Plain databases are still compatible.
         -->
         <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.8" />
-        <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.10" />
+        <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
         <PackageReference Include="LiteDB" Version="5.0.21" />
         <PackageReference Include="MiniExcel" Version="1.44.1" />
     </ItemGroup>
