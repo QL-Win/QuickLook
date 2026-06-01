@@ -37,7 +37,7 @@ public sealed class Plugin : IViewer
 
     private static readonly string[] _extensions =
     [
-        ".axf", ".bin", ".elf", ".o", ".out", ".prx", ".puff", ".ko", ".mod", "so",
+        ".axf", ".bin", ".elf", ".o", ".out", ".prx", ".puff", ".ko", ".mod", ".so",
     ];
 
     private IInfoPanel _ip;
@@ -121,7 +121,7 @@ public sealed class Plugin : IViewer
         }
 
         // ELF
-        if (_extensions.Any(pathLower.EndsWith) || extension == string.Empty)
+        if (HasElfFileName(pathLower, extension))
         {
             using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var br = new BinaryReader(fs);
@@ -138,6 +138,25 @@ public sealed class Plugin : IViewer
         }
 
         return FileEnum.None;
+
+        static bool HasElfFileName(string pathLower, string extension)
+        {
+            return extension == string.Empty
+                || _extensions.Any(pathLower.EndsWith)
+                || IsVersionedSharedObject(pathLower);
+
+            static bool IsVersionedSharedObject(string pathLower)
+            {
+                const string marker = ".so.";
+                var markerIndex = pathLower.LastIndexOf(marker, StringComparison.Ordinal);
+
+                if (markerIndex < 0)
+                    return false;
+
+                var version = pathLower.Substring(markerIndex + marker.Length);
+                return version.Length > 0 && version.All(char.IsDigit);
+            }
+        }
     }
 
     private enum FileEnum
