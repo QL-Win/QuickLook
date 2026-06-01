@@ -91,6 +91,7 @@
 
     <ItemGroup>
         <PackageReference Include="ELFSharp" Version="2.17.3" />
+        <PackageReference Include="System.Memory" Version="4.6.3" />
     </ItemGroup>
 
     <ItemGroup>

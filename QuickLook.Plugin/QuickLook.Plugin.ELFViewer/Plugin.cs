@@ -138,23 +138,73 @@ public sealed class Plugin : IViewer
         }
 
         return FileEnum.None;
-
+        /// <summary>
+        /// Checks if the given file path represents a valid ELF file,
+        /// including standard Linux versioned shared libraries (e.g., .so, .so.0, .so.1.2.3).
+        /// Uses Span for high-performance, zero-allocation validation.
+        /// </summary>
+        /// <param name="pathLower">Lowercase full file path</param>
+        /// <param name="extension">File extension (may be empty)</param>
+        /// <returns>True if the file is a valid ELF or versioned shared library</returns>
         static bool HasElfFileName(string pathLower, string extension)
         {
+            // Valid ELF cases:
+            // 1. No file extension (raw ELF binary)
+            // 2. Matches one of the predefined ELF extensions
+            // 3. Is a valid Linux versioned shared object (.so.0, .so.1.2, .so.3.4.5)
             return extension == string.Empty
                 || _extensions.Any(pathLower.EndsWith)
                 || IsVersionedSharedObject(pathLower);
 
+            /// <summary>
+            /// Validates Linux versioned shared libraries using Span for zero-allocation, single-pass validation.
+            /// Supports standard formats: .so.0, .so.1.2, .so.3.4.5
+            /// </summary>
             static bool IsVersionedSharedObject(string pathLower)
             {
-                const string marker = ".so.";
-                var markerIndex = pathLower.LastIndexOf(marker, StringComparison.Ordinal);
+                const string Marker = ".so.";
+                int markerLength = Marker.Length;
 
+                // Find the last occurrence of ".so." to avoid invalid path matches
+                int markerIndex = pathLower.LastIndexOf(Marker, StringComparison.Ordinal);
                 if (markerIndex < 0)
                     return false;
 
-                var version = pathLower.Substring(markerIndex + marker.Length);
-                return version.Length > 0 && version.All(char.IsDigit);
+                // Calculate version segment start index and create span for zero-copy validation
+                int versionStart = markerIndex + markerLength;
+                ReadOnlySpan<char> fullPathSpan = pathLower.AsSpan();
+                ReadOnlySpan<char> versionSpan = fullPathSpan.Slice(versionStart);
+
+                // Empty version part is invalid (e.g., file ends with ".so.")
+                if (versionSpan.Length == 0)
+                    return false;
+
+                // First character cannot be a dot (avoids ".so..0")
+                if (versionSpan[0] == '.')
+                    return false;
+
+                bool lastCharWasDot = false;
+                foreach (char c in versionSpan)
+                {
+                    // Allow only digits and single dots; reject consecutive dots
+                    if (c == '.')
+                    {
+                        if (lastCharWasDot)
+                            return false; // Consecutive dots are invalid: ".so.1..2"
+
+                        lastCharWasDot = true;
+                        continue;
+                    }
+
+                    // Only digits are valid for version characters
+                    if (!char.IsDigit(c))
+                        return false;
+
+                    lastCharWasDot = false;
+                }
+
+                // Last character cannot be a dot (avoids ".so.1.")
+                return !lastCharWasDot;
             }
         }
     }
