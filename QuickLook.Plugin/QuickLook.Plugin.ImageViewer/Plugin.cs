@@ -37,7 +37,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         ".bay", ".bmp",
         ".cap", ".cr2", ".cr3", ".crw", ".cur", ".clip",
         ".dcr", ".dcs", ".dds", ".dng", ".drf", ".dcm", ".dicom",
-        ".eip", ".emf", ".erf", ".exr",
+        ".eip", ".emf", ".erf", ".exr", ".excalidraw",
         ".fff",
         ".gif",
         ".hdr", ".heic", ".heif",
