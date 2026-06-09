@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="PHP" extensions=".php;.php3;.php4;.php5;.hh">
+<SyntaxDefinition name="PHP" extensions=".php;.php3;.php4;.php5;.hh;.phtml;.ctp">
 
     <Environment> 
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
