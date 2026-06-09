@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding ="utf-8"?>
 
-<SyntaxDefinition name="Prolog" extensions=".pro;.prolog">
+<SyntaxDefinition name="Prolog" extensions=".pl;.pro;.prolog">
     
     <Environment> 
         <Default color="#FFD4D4D4" bgcolor="#FF1E1E1E"/>

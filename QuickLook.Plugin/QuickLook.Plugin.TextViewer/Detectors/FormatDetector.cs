@@ -33,6 +33,8 @@ public class FormatDetector
     internal IFormatDetector[] TextDetectors =
     [
         new CMakeListsDetector(),
+        new PrologDetector(),
+        new PerlDetector(),
         new XMLDetector(),
         new JSONDetector(),
         new MakefileDetector(),
