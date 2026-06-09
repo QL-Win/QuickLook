@@ -4,9 +4,19 @@
 
 ## 4.6.0
 
+- Add Excalidraw support to image viewer [#1955](https://github.com/QL-Win/QuickLook/issues/1955)
+- Add binary viewer plugin [#290](https://github.com/QL-Win/QuickLook/issues/290)
+- Add database viewer plugin for [LiteDB](https://github.com/litedb-org/LiteDB) v5, SQLite and encrypted SQLite support
+- Add FilePilot preview integration by @Andrey Semjonov [#1949](https://github.com/QL-Win/QuickLook/issues/1949)
 - Add configurable keyboard shortcuts to toggle TOC visibility for markdown viewer [#1934](https://github.com/QL-Win/QuickLook/issues/1934)
+- Add option to disable window show transitions `<ShowWindowTransition>False</ShowWindowTransition>`
 - Add `.winmd` to PE viewer supported extensions
+- Add HTTP (`.http` and `.rest`) syntax highlighting
+- Add `.pyi` extension to Python syntax highlighting
+- Add RViz `.rviz` in YAML highlighting extensions
+- Add COM wrappers and out-of-proc preview host [#1929](https://github.com/QL-Win/QuickLook/issues/1929)
 - Add `.vdproj` highlighting definitions support
+- Add versioned `.so` files support in ELF viewer
 - Prepare building for ARM64 [#1872](https://github.com/QL-Win/QuickLook/issues/1872) but NOT READY
 - Improve acrylic tint opacity and color values [#1912](https://github.com/QL-Win/QuickLook/issues/1912)
 - Add magic number checks to support image files without an extension [#1868](https://github.com/QL-Win/QuickLook/pull/1868)
@@ -14,9 +24,16 @@
 - Add auto-terminate QuickLook.exe before install/upgrade/uninstall
 - Add `.csv`, `.tsv` and `.psv` rainbow highlighters support
 - Add `.jsonc` extension to JSON syntax highlighters support
+- Add `.hxx` extension to C++ syntax definitions
+- Add `.sc` extension to Scala syntax definitions
+- Add `.csh`, `.fish`, `.nu` extensions to ShellScript syntax
+- Add `.es6` and `.pac` extensions to JS syntax
+- Add `.jav` extension to Java syntax
+- Add Clip Studio Paint file .clip support [#1937](https://github.com/QL-Win/QuickLook/issues/1937)
 - Add F5 shortcut key for Reload [#1922](https://github.com/QL-Win/QuickLook/issues/1922)
 - Add `FocusWindowOnOpen` option for window focus on open [#1695](https://github.com/QL-Win/QuickLook/issues/1695)
 - Improve markdown to support frontmatter (YAML Metadata) [#1920](https://github.com/QL-Win/QuickLook/issues/1920)
+- Improve tray initialization of ContextMenu
 - Add `.msp` installer support for app viewer
 - Add `.m3u` and `.m3u8` highlighting definitions support
 - Add ShellScript syntax extensions for `.bashrc`, `.bash_profile`, `.bash_login`, `.profile`, `.bash_logout`, `.zshrc`, `.zprofile`, `.zlogin`, `.zlogout`, `.dashrc`, `.kshrc`, `.mkshrc`, `.ashrc` and `.shrc`
@@ -32,6 +49,7 @@
 - Add NuGet (`.nupkg` and `.snupkg`) support for AppViewer
 - Add setting to auto-unblock Protected View [#1832](https://github.com/QL-Win/QuickLook/issues/1832)
 - Add built-in plugin support for `.chm`
+- Add PlantUML preview support for image viewer
 - Add `.pyz` to supported archive extensions
 - Add [ISON](https://github.com/ISON-format/ison) syntax definitions support for `.ison`
 - Add `.DS_Store` and `Thumbs.db` support for archive viewer
@@ -50,6 +68,7 @@
 - Fix fullscreen behavior for window dragging and window corners for Windows 11
 - Fix the busy decorator foreground color error in dark mode
 - Fix rendering lag caused by excessively long lines by truncating and sanitizing them in text viewer
+- Fix twice space after Alt+Tab to explorer window [#1939](https://github.com/QL-Win/QuickLook/issues/1939)
 
 ## 4.5.0
 
