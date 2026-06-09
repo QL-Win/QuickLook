@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SyntaxDefinition name="Perl" extensions=".pl;.pm;.pod;.t;.psgi">
+
+    <Environment>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
+
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
+
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
+    </Environment>
+
+    <Properties>
+        <Property name="LineComment" value="#"/>
+    </Properties>
+
+    <Digits name="Digits" color="#BF382A"/>
+
+    <RuleSets>
+        <RuleSet name="CommentMarkerSet" ignorecase="false">
+            <KeyWords name="TodoKeywords" color="Red" bold="true" italic="false">
+                <Key word="TODO"/>
+                <Key word="FIXME"/>
+            </KeyWords>
+            <KeyWords name="HackKeywords" color="#E0E000" bold="true" italic="false">
+                <Key word="HACK"/>
+                <Key word="UNDONE"/>
+            </KeyWords>
+        </RuleSet>
+
+        <RuleSet ignorecase="false">
+            <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,.?&amp;</Delimiters>
+
+            <Span name="POD" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=pod</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="PODHead" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=head</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="PODBlock" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=over</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="PODItem" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=item</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="PODBegin" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=begin</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="PODFor" rule="CommentMarkerSet" stopateol="false" color="Green" bold="false" italic="false">
+                <Begin>\=for</Begin>
+                <End>\=cut</End>
+            </Span>
+
+            <Span name="LineComment" rule="CommentMarkerSet" stopateol="true" color="Green" bold="false" italic="false">
+                <Begin>#</Begin>
+            </Span>
+
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>"</Begin>
+                <End>"</End>
+            </Span>
+
+            <Span name="Char" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+
+            <Span name="RegexMatch" stopateol="true" color="#811F3F" bold="false" italic="false">
+                <Begin>\bm/</Begin>
+                <End>/</End>
+            </Span>
+
+            <Span name="RegexSubst" stopateol="true" color="#811F3F" bold="false" italic="false">
+                <Begin>\bs/</Begin>
+                <End>/</End>
+            </Span>
+
+            <Span name="RegexQuote" stopateol="true" color="#811F3F" bold="false" italic="false">
+                <Begin>\bqr/</Begin>
+                <End>/</End>
+            </Span>
+
+            <Span name="RegexTrans" stopateol="true" color="#811F3F" bold="false" italic="false">
+                <Begin>\btr/</Begin>
+                <End>/</End>
+            </Span>
+
+            <Span name="RegexTransY" stopateol="true" color="#811F3F" bold="false" italic="false">
+                <Begin>\by/</Begin>
+                <End>/</End>
+            </Span>
+
+            <MarkFollowing color="MidnightBlue" bold="false" italic="false">sub</MarkFollowing>
+            <MarkFollowing color="Teal" bold="false" italic="false">package</MarkFollowing>
+
+            <KeyWords name="ControlFlow" color="Blue" bold="false" italic="false">
+                <Key word="if"/>
+                <Key word="elsif"/>
+                <Key word="else"/>
+                <Key word="unless"/>
+                <Key word="given"/>
+                <Key word="when"/>
+                <Key word="default"/>
+                <Key word="while"/>
+                <Key word="until"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+                <Key word="next"/>
+                <Key word="last"/>
+                <Key word="redo"/>
+                <Key word="continue"/>
+                <Key word="do"/>
+                <Key word="goto"/>
+                <Key word="return"/>
+                <Key word="break"/>
+                <Key word="caller"/>
+                <Key word="die"/>
+                <Key word="warn"/>
+                <Key word="eval"/>
+                <Key word="exit"/>
+            </KeyWords>
+
+            <KeyWords name="Declaration" color="Blue" bold="false" italic="false">
+                <Key word="sub"/>
+                <Key word="package"/>
+                <Key word="my"/>
+                <Key word="our"/>
+                <Key word="local"/>
+                <Key word="state"/>
+                <Key word="use"/>
+                <Key word="no"/>
+                <Key word="require"/>
+                <Key word="import"/>
+                <Key word="format"/>
+            </KeyWords>
+
+            <KeyWords name="Operators" color="DarkCyan" bold="false" italic="false">
+                <Key word="and"/>
+                <Key word="or"/>
+                <Key word="not"/>
+                <Key word="xor"/>
+                <Key word="eq"/>
+                <Key word="ne"/>
+                <Key word="lt"/>
+                <Key word="gt"/>
+                <Key word="le"/>
+                <Key word="ge"/>
+                <Key word="cmp"/>
+            </KeyWords>
+
+            <KeyWords name="SpecialVariables" color="Teal" bold="false" italic="false">
+                <Key word="__DATA__"/>
+                <Key word="__END__"/>
+                <Key word="__FILE__"/>
+                <Key word="__LINE__"/>
+                <Key word="__PACKAGE__"/>
+                <Key word="__SUB__"/>
+            </KeyWords>
+
+            <KeyWords name="QuotedConstructs" color="Purple" bold="false" italic="false">
+                <Key word="q"/>
+                <Key word="qq"/>
+                <Key word="qw"/>
+                <Key word="qr"/>
+                <Key word="qx"/>
+                <Key word="m"/>
+                <Key word="s"/>
+                <Key word="tr"/>
+                <Key word="y"/>
+            </KeyWords>
+
+            <KeyWords name="Boolean" color="DarkViolet" bold="false" italic="false">
+                <Key word="true"/>
+                <Key word="false"/>
+            </KeyWords>
+
+            <KeyWords name="Builtins" color="DarkViolet" bold="false" italic="false">
+                <Key word="print"/>
+                <Key word="say"/>
+                <Key word="printf"/>
+                <Key word="open"/>
+                <Key word="close"/>
+                <Key word="read"/>
+                <Key word="write"/>
+                <Key word="seek"/>
+                <Key word="tell"/>
+                <Key word="chomp"/>
+                <Key word="chop"/>
+                <Key word="split"/>
+                <Key word="join"/>
+                <Key word="index"/>
+                <Key word="rindex"/>
+                <Key word="substr"/>
+                <Key word="length"/>
+                <Key word="shift"/>
+                <Key word="pop"/>
+                <Key word="push"/>
+                <Key word="unshift"/>
+                <Key word="splice"/>
+                <Key word="keys"/>
+                <Key word="values"/>
+                <Key word="each"/>
+                <Key word="delete"/>
+                <Key word="exists"/>
+                <Key word="defined"/>
+                <Key word="undef"/>
+                <Key word="map"/>
+                <Key word="grep"/>
+                <Key word="sort"/>
+                <Key word="reverse"/>
+                <Key word="lc"/>
+                <Key word="uc"/>
+                <Key word="lcfirst"/>
+                <Key word="ucfirst"/>
+                <Key word="bless"/>
+                <Key word="ref"/>
+                <Key word="tie"/>
+                <Key word="untie"/>
+                <Key word="tied"/>
+                <Key word="scalar"/>
+                <Key word="prototype"/>
+                <Key word="abs"/>
+                <Key word="alarm"/>
+                <Key word="chdir"/>
+                <Key word="chmod"/>
+                <Key word="chown"/>
+                <Key word="exec"/>
+                <Key word="system"/>
+                <Key word="fork"/>
+                <Key word="wait"/>
+                <Key word="waitpid"/>
+                <Key word="kill"/>
+                <Key word="sleep"/>
+                <Key word="time"/>
+                <Key word="readline"/>
+                <Key word="readdir"/>
+                <Key word="opendir"/>
+                <Key word="closedir"/>
+                <Key word="stat"/>
+                <Key word="lstat"/>
+                <Key word="rename"/>
+                <Key word="unlink"/>
+                <Key word="link"/>
+                <Key word="symlink"/>
+                <Key word="readlink"/>
+                <Key word="mkdir"/>
+                <Key word="rmdir"/>
+                <Key word="truncate"/>
+                <Key word="pack"/>
+                <Key word="unpack"/>
+                <Key word="sprintf"/>
+                <Key word="atan2"/>
+                <Key word="cos"/>
+                <Key word="sin"/>
+                <Key word="exp"/>
+                <Key word="log"/>
+                <Key word="sqrt"/>
+                <Key word="rand"/>
+                <Key word="srand"/>
+                <Key word="hex"/>
+                <Key word="oct"/>
+                <Key word="caller"/>
+                <Key word="carp"/>
+                <Key word="croak"/>
+                <Key word="confess"/>
+                <Key word="cluck"/>
+            </KeyWords>
+        </RuleSet>
+    </RuleSets>
+</SyntaxDefinition>
