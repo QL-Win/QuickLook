@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="SQL" extensions=".sql">
+<SyntaxDefinition name="SQL" extensions=".sql;.dsql">
 
     <Environment> 
         <Default color="Black" bgcolor="#FFFFFF"/>
