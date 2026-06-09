@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Objective-C" extensions=".m">
+<SyntaxDefinition name="Objective-C++" extensions=".mm">
 
     <Environment> 
         <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
@@ -141,30 +141,44 @@
                 <Key word="bool"/>
                 <Key word="catch"/>
                 <Key word="char"/>
+                <Key word="char16_t"/>
+                <Key word="char32_t"/>
+                <Key word="class"/>
                 <Key word="const_cast"/>
+                <Key word="constexpr"/>
                 <Key word="delete"/>
                 <Key word="double"/>
                 <Key word="dynamic_cast"/>
                 <Key word="explicit"/>
                 <Key word="false"/>
+                <Key word="final"/>
                 <Key word="float"/>
                 <Key word="friend"/>
                 <Key word="id"/>
                 <Key word="inline"/>
                 <Key word="int"/>
+                <Key word="interface"/>
                 <Key word="long"/>
                 <Key word="mutable"/>
                 <Key word="namespace"/>
                 <Key word="new"/>
+                <Key word="noexcept"/>
+                <Key word="nullptr"/>
                 <Key word="operator"/>
+                <Key word="override"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
                 <Key word="reinterpret_cast"/>
                 <Key word="retval_t"/>
                 <Key word="short"/>
                 <Key word="signed"/>
+                <Key word="static_assert"/>
                 <Key word="static_cast"/>
                 <Key word="template"/>
                 <Key word="this"/>
                 <Key word="throw"/>
+                <Key word="thread_local"/>
                 <Key word="true"/>
                 <Key word="try"/>
                 <Key word="typeid"/>
@@ -201,6 +215,30 @@
                 <Key word="@synthesize"/>
                 <Key word="@throw"/>
                 <Key word="@try"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords4" color="#4EC9B0" bold="false">
+                <Key word="alignas"/>
+                <Key word="alignof"/>
+                <Key word="and"/>
+                <Key word="and_eq"/>
+                <Key word="asm"/>
+                <Key word="bitand"/>
+                <Key word="bitor"/>
+                <Key word="compl"/>
+                <Key word="decltype"/>
+                <Key word="dllexport"/>
+                <Key word="dllimport"/>
+                <Key word="export"/>
+                <Key word="not"/>
+                <Key word="not_eq"/>
+                <Key word="or"/>
+                <Key word="or_eq"/>
+                <Key word="sizeof"/>
+                <Key word="static_assert"/>
+                <Key word="thread_local"/>
+                <Key word="xor"/>
+                <Key word="xor_eq"/>
             </KeyWords>
         </RuleSet>
         

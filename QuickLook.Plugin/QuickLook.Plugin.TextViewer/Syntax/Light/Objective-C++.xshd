@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Objective-C" extensions=".m">
+<SyntaxDefinition name="Objective-C++" extensions=".mm">
 
     <Environment> 
-        <Default color="#D4D4D4" bgcolor="#1E1E1E"/>
-        <Selection color="#FFFFFF" bgcolor="#264F78"/>
-        <LineNumbers color="#858585" bgcolor="#1E1E1E"/>
-        <CaretMarker color="#2F2F2F"/>
-        <VRuler color="#404040"/>
+        <Default color="Black" bgcolor="#FFFFFF"/>
+        <Selection color="Black" bgcolor="#C3C3FF"/>
+        <LineNumbers color="Gray" bgcolor="#FFFFFF"/>
+        <CaretMarker color="#F0F0F1"/>
+        <VRuler color="#E0E0E5"/>
         
-        <FoldLine color="#5F5F5F" bgcolor="#1E1E1E"/>
-        <FoldMarker color="#D4D4D4" bgcolor="#1E1E1E"/>
-        <SelectedFoldLine color="#FFFFFF" bgcolor="#1E1E1E"/>
+        <FoldLine color="#A0A0A0" bgcolor="#FFFFFF"/>
+        <FoldMarker color="Black" bgcolor="#FFFFFF"/>
+        <SelectedFoldLine color="Black" bgcolor="#FFFFFF"/>
         
-        <EOLMarkers color="#404040"/>
-        <SpaceMarkers color="#505050"/>
-        <TabMarkers color="#505050"/>
-        <InvalidLines color="#505050"/>
+        <EOLMarkers color="#CACAD2"/>
+        <SpaceMarkers color="#B6B6C0"/>
+        <TabMarkers color="#B6B6C0"/>
+        <InvalidLines color="#B6B6C0"/>
     </Environment>
         
     <Properties>
@@ -25,49 +25,49 @@
         <Property name="BlockCommentEnd" value="*/"/>
     </Properties>
         
-    <Digits name="Digits" color="#B5CEA8"/>
+    <Digits name="Digits" color="#CC3A4A"/>
 
     <RuleSets>
         <RuleSet ignorecase="false">
                         
             <Delimiters>()[]{},:.`=;+-*/%~ &amp;|^&gt;&lt;</Delimiters>
             
-            <Span name="LineComment" stopateol="true" color="#6A9955" bold="false" italic="false">
+            <Span name="LineComment" stopateol="true" color="Green" bold="false" italic="false">
                 <Begin>//</Begin>
             </Span>
             
-            <Span name="BlockComment1" rule="Doxygen" stopateol="false" color="#6A9955" bold="false" italic="false">
+            <Span name="BlockComment1" rule="Doxygen" stopateol="false" color="Teal" bold="false" italic="false">
                 <Begin>/**</Begin>
                 <End>*/</End>
             </Span>
                         
-            <Span name="BlockComment2" stopateol="false" color="#6A9955" bold="false" italic="false">
+            <Span name="BlockComment2" stopateol="false" color="Green" bold="false" italic="false">
                 <Begin>/*</Begin>
                 <End>*/</End>
             </Span>
                         
-            <Span name="String" stopateol="true" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+            <Span name="String" stopateol="true" color="#808080" bold="false" italic="false" escapecharacter="\">
                 <Begin>"</Begin>
                 <End>"</End>
             </Span>
             
-            <Span name="MultiLineString" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter='"'>
+            <Span name="MultiLineString" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter='"'>
                 <Begin>@@"</Begin>
                 <End>"</End>
             </Span>
             
-            <Span name="Char" stopateol="false" color="#CE9178" bold="false" italic="false" escapecharacter="\">
+            <Span name="Char" stopateol="false" color="#808080" bold="false" italic="false" escapecharacter="\">
                 <Begin>'</Begin>
                 <End>'</End>
             </Span>
             
-            <Span name="Preprocessor" stopateol="true" color="#C586C0" bold="false" italic="false">
+            <Span name="Preprocessor" stopateol="true" color="Brown" bold="false" italic="false">
                 <Begin>#</Begin>
             </Span>
             
-            <MarkFollowing color="#D4D4D4" bold="false" italic="true">class</MarkFollowing>
+            <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
 
-            <KeyWords name="Keywords1" color="#569CD6" bold="false" italic="false">
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
                 <Key word="NULL"/>
                 <Key word="__asm"/>
                 <Key word="__based"/>
@@ -130,7 +130,7 @@
                 <Key word="while"/>
             </KeyWords>
                         
-            <KeyWords name="Keywords2" color="#4EC9B0" bold="false">
+            <KeyWords name="Keywords2" color="DarkViolet" bold="false">
                 <Key word="BOOL"/>
                 <Key word="Class"/>
                 <Key word="IBAction"/>
@@ -141,30 +141,44 @@
                 <Key word="bool"/>
                 <Key word="catch"/>
                 <Key word="char"/>
+                <Key word="char16_t"/>
+                <Key word="char32_t"/>
+                <Key word="class"/>
                 <Key word="const_cast"/>
+                <Key word="constexpr"/>
                 <Key word="delete"/>
                 <Key word="double"/>
                 <Key word="dynamic_cast"/>
                 <Key word="explicit"/>
                 <Key word="false"/>
+                <Key word="final"/>
                 <Key word="float"/>
                 <Key word="friend"/>
                 <Key word="id"/>
                 <Key word="inline"/>
                 <Key word="int"/>
+                <Key word="interface"/>
                 <Key word="long"/>
                 <Key word="mutable"/>
                 <Key word="namespace"/>
                 <Key word="new"/>
+                <Key word="noexcept"/>
+                <Key word="nullptr"/>
                 <Key word="operator"/>
+                <Key word="override"/>
+                <Key word="private"/>
+                <Key word="protected"/>
+                <Key word="public"/>
                 <Key word="reinterpret_cast"/>
                 <Key word="retval_t"/>
                 <Key word="short"/>
                 <Key word="signed"/>
+                <Key word="static_assert"/>
                 <Key word="static_cast"/>
                 <Key word="template"/>
                 <Key word="this"/>
                 <Key word="throw"/>
+                <Key word="thread_local"/>
                 <Key word="true"/>
                 <Key word="try"/>
                 <Key word="typeid"/>
@@ -176,7 +190,7 @@
                 <Key word="void"/>
             </KeyWords>
             
-            <KeyWords name="Keywords3" color="#C586C0" bold="false">
+            <KeyWords name="Keywords3" color="Sienna" bold="false">
                 <Key word="@autoreleasepool"/>
                 <Key word="@catch"/>
                 <Key word="@class"/>
@@ -201,6 +215,30 @@
                 <Key word="@synthesize"/>
                 <Key word="@throw"/>
                 <Key word="@try"/>
+            </KeyWords>
+
+            <KeyWords name="Keywords4" color="DarkViolet" bold="false">
+                <Key word="alignas"/>
+                <Key word="alignof"/>
+                <Key word="and"/>
+                <Key word="and_eq"/>
+                <Key word="asm"/>
+                <Key word="bitand"/>
+                <Key word="bitor"/>
+                <Key word="compl"/>
+                <Key word="decltype"/>
+                <Key word="dllexport"/>
+                <Key word="dllimport"/>
+                <Key word="export"/>
+                <Key word="not"/>
+                <Key word="not_eq"/>
+                <Key word="or"/>
+                <Key word="or_eq"/>
+                <Key word="sizeof"/>
+                <Key word="static_assert"/>
+                <Key word="thread_local"/>
+                <Key word="xor"/>
+                <Key word="xor_eq"/>
             </KeyWords>
         </RuleSet>
         

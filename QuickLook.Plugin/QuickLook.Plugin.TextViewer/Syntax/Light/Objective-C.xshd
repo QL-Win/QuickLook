@@ -67,7 +67,7 @@
             
             <MarkFollowing color="Black" bold="false" italic="true">class</MarkFollowing>
 
-            <KeyWords name="Keywords1" color="Blue" bold="false" italic ="false">
+            <KeyWords name="Keywords1" color="Blue" bold="false" italic="false">
                 <Key word="NULL"/>
                 <Key word="__asm"/>
                 <Key word="__based"/>
