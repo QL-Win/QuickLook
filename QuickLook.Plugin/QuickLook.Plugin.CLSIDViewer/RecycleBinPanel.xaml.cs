@@ -33,6 +33,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
@@ -193,16 +194,35 @@ internal static class RecycleBinHelper
         };
 
         int result = SHQueryRecycleBin(null, ref info);
-        string[] icons = GetIcons();
+
         ImageSource[] bitmapSources = [_emptyIcon, _fullIcon];
 
-        if (bitmapSources[0] is null || bitmapSources[1] is null)
+        if (Environment.OSVersion.Version.Major >= 10)
         {
-            bitmapSources[0] = ExtractIconBitmap(icons[0]);
-            bitmapSources[1] = ExtractIconBitmap(icons[1]);
+            if (bitmapSources[0] is null || bitmapSources[1] is null)
+            {
+                bitmapSources[0] = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.CLSIDViewer;component/Resources/recyclebinempty.png"));
+                bitmapSources[1] = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.CLSIDViewer;component/Resources/recyclebinfull.png"));
+
+                if (bitmapSources[0].CanFreeze) bitmapSources[0].Freeze();
+                if (bitmapSources[1].CanFreeze) bitmapSources[1].Freeze();
+            }
+        }
+        else
+        {
+            string[] icons = GetIcons();
+
+            if (icons.Length >= 2)
+            {
+                if (bitmapSources[0] is null || bitmapSources[1] is null)
+                {
+                    bitmapSources[0] = ExtractIconBitmap(icons[0]);
+                    bitmapSources[1] = ExtractIconBitmap(icons[1]);
+                }
+            }
         }
 
-        if (result == 0 && icons.Length >= 2) // S_OK (0)
+        if (result == 0) // S_OK (0)
         {
             var output = new RecycleBinInfo()
             {
