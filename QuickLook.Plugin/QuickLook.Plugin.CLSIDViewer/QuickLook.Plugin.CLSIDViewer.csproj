@@ -71,7 +71,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-		<Resource Include="Resources\*.png" />
+        <Resource Include="Resources\*.png" />
     </ItemGroup>
 
     <ItemGroup>

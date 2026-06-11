@@ -81,17 +81,19 @@
         <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.2.6">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+        <PackageReference Include="System.IO.Compression" Version="4.3.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="QuickLook.ImageGlass.WebP" Version="1.4.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.8">
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.13.1">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.14.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3967.48">
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4022.49">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Google.Protobuf" Version="3.35.0">

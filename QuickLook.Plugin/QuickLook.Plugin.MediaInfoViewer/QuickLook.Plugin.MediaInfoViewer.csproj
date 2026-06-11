@@ -86,7 +86,7 @@
 
     <ItemGroup>
         <Reference Include="System.ComponentModel.Composition" />
-        <PackageReference Include="MediaInfoDLL" Version="25.7.0" />
+        <PackageReference Include="MediaInfoDLL" Version="26.1.0" />
     </ItemGroup>
 
     <Target Name="ReduceReleasePackaging" AfterTargets="Build">

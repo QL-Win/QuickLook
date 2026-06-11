@@ -74,6 +74,9 @@
         <PackageReference Include="PureSharpCompress" Version="0.40.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="System.IO.Compression" Version="4.3.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="System.Memory" Version="4.6.3">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

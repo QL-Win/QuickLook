@@ -75,7 +75,7 @@
             SQLitePCLRaw.bundle_e_sqlcipher — replaces the default bundle with SQLCipher,
             which adds AES-256 encryption support. Plain databases are still compatible.
         -->
-        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.8" />
+        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
         <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
         <PackageReference Include="LiteDB" Version="5.0.21" />
         <PackageReference Include="MiniExcel" Version="1.44.1" />
@@ -93,9 +93,9 @@
     <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <!-- Not supported on ARM32 -->
         <Delete Files="$(OutputPath)runtimes\win-arm\native\e_sqlcipher.dll" Condition="Exists('$(OutputPath)runtimes\win-arm\native\e_sqlcipher.dll')" />
-		<RemoveDir Directories="$(OutputPath)runtimes\win-arm\native" Condition="Exists('$(OutputPath)runtimes\win-arm\native')" />
-		<!-- Not supported for the duplicated -->
-		<Delete Files="$(OutputPath)e_sqlcipher.dll" Condition="Exists('$(OutputPath)e_sqlcipher.dll')" />
+        <RemoveDir Directories="$(OutputPath)runtimes\win-arm\native" Condition="Exists('$(OutputPath)runtimes\win-arm\native')" />
+        <!-- Not supported for the duplicated -->
+        <Delete Files="$(OutputPath)e_sqlcipher.dll" Condition="Exists('$(OutputPath)e_sqlcipher.dll')" />
     </Target>
 
     <ItemGroup>
