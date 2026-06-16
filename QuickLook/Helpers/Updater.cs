@@ -96,7 +96,7 @@ internal class Updater
             {
                 var json = DownloadJson("https://api.github.com/repos/QL-Win/QuickLook/releases");
 
-                var notes = "# QuickLook has been updated!\r\n";
+                var notes = "# A new version of QuickLook is available!\r\n";
 
                 var count = 0;
                 foreach (var item in json)
