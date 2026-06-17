@@ -38,14 +38,12 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
     protected byte[] _homePage;
 
-    private object _objectForScripting;
-
     public object ObjectForScripting
     {
-        get => _objectForScripting;
+        get;
         set
         {
-            _objectForScripting = value;
+            field = value;
             _webView?.EnsureCoreWebView2Async()
                 .ContinueWith(_ =>
                     _webView?.Dispatcher.Invoke(() =>
