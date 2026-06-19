@@ -154,5 +154,6 @@ internal static class QuickLook
         MultiCommander,
         IDM,
         FilePilot,
+        DeskBox,
     }
 }

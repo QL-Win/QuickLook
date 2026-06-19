@@ -33,6 +33,7 @@ public:
         MULTICOMMANDER,
         IDM,
         FILEPILOT,
+        DESKBOX,
     };
 
     static FocusedWindowType GetFocusedWindowType();

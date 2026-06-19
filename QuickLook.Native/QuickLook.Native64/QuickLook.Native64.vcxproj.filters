@@ -13,5 +13,6 @@
     <ClCompile Include="..\QuickLook.Native32\DOpus.cpp" />
     <ClCompile Include="..\QuickLook.Native32\MultiCommander.cpp" />
     <ClCompile Include="..\QuickLook.Native32\IDMan.cpp" />
+    <ClCompile Include="..\QuickLook.Native32\DeskBox.cpp" />
   </ItemGroup>
 </Project>

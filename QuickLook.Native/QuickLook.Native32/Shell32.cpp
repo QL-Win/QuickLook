@@ -25,6 +25,7 @@
 #include "MultiCommander.h"
 #include "IDMan.h"
 #include "FilePilot.h"
+#include "DeskBox.h"
 
 using namespace std;
 
@@ -86,6 +87,10 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
             }
         }
     }
+    if (DeskBox::MatchWindow(hwndfg))
+    {
+        return DESKBOX;
+    }
 
     return INVALID;
 }
@@ -117,6 +122,9 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
         break;
     case FILEPILOT:
         FilePilot::GetSelected(buffer);
+        break;
+    case DESKBOX:
+        DeskBox::GetSelected(buffer);
         break;
     default:
         break;
