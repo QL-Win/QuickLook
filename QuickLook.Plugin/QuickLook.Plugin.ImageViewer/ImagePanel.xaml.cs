@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -107,6 +107,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
 
         ShowMeta();
         Theme = ContextObject.Theme;
+        CanvasTheme = (Themes)SettingHelper.Get("LastCanvasTheme", (int)Theme, "QuickLook.Plugin.ImageViewer");
     }
 
     public bool ZoomWithControlKey
@@ -136,6 +137,17 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         set
         {
             ContextObject.Theme = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private Themes _canvasTheme = Themes.Dark;
+    public Themes CanvasTheme
+    {
+        get => _canvasTheme;
+        set
+        {
+            _canvasTheme = value;
             OnPropertyChanged();
         }
     }
@@ -381,9 +393,9 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
 
     private void OnBackgroundColourOnClick(object sender, RoutedEventArgs e)
     {
-        Theme = Theme == Themes.Dark ? Themes.Light : Themes.Dark;
+        CanvasTheme = CanvasTheme == Themes.Dark ? Themes.Light : Themes.Dark;
 
-        SettingHelper.Set("LastTheme", (int)Theme, "QuickLook.Plugin.ImageViewer");
+        SettingHelper.Set("LastCanvasTheme", (int)CanvasTheme, "QuickLook.Plugin.ImageViewer");
     }
 
     private void ShowMeta()

@@ -227,8 +227,9 @@ public partial class App : Application
         // Therefore, the time-consuming initialization code can't be placed before `OnStartup`
         base.OnStartup(e);
 
-        // Set initial theme based on system settings
-        ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
+        // Set initial theme based on system or user settings
+        var appTheme = SettingHelper.Get("AppTheme", 0, "QuickLook");
+        SetTheme(appTheme);
 
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
@@ -345,5 +346,21 @@ public partial class App : Application
         ViewWindowManager.GetInstance();
         KeystrokeDispatcher.GetInstance();
         PipeServerManager.GetInstance();
+    }
+
+    public static void SetTheme(int theme)
+    {
+        switch (theme)
+        {
+            case 1:
+                ThemeManager.Apply(ApplicationTheme.Light);
+                break;
+            case 2:
+                ThemeManager.Apply(ApplicationTheme.Dark);
+                break;
+            default:
+                ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
+                break;
+        }
     }
 }
