@@ -107,7 +107,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
 
         ShowMeta();
         Theme = ContextObject.Theme;
-        CanvasTheme = (Themes)SettingHelper.Get("LastCanvasTheme", (int)Theme, "QuickLook.Plugin.ImageViewer");
+        CanvasTheme = (Themes)SettingHelper.Get(SettingHelper.KeyLastCanvasTheme, (int)Theme, "QuickLook.Plugin.ImageViewer");
     }
 
     public bool ZoomWithControlKey
@@ -395,7 +395,7 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     {
         CanvasTheme = CanvasTheme == Themes.Dark ? Themes.Light : Themes.Dark;
 
-        SettingHelper.Set("LastCanvasTheme", (int)CanvasTheme, "QuickLook.Plugin.ImageViewer");
+        SettingHelper.Set(SettingHelper.KeyLastCanvasTheme, (int)CanvasTheme, "QuickLook.Plugin.ImageViewer");
     }
 
     private void ShowMeta()

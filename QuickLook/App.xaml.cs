@@ -35,6 +35,13 @@ using Wpf.Ui.Violeta.Appearance;
 
 namespace QuickLook;
 
+public enum AppThemeMode
+{
+    Auto = 0,
+    Light = 1,
+    Dark = 2
+}
+
 public partial class App : Application
 {
     public static readonly string LocalDataPath = SettingHelper.LocalDataPath;
@@ -228,8 +235,8 @@ public partial class App : Application
         base.OnStartup(e);
 
         // Set initial theme based on system or user settings
-        var appTheme = SettingHelper.Get("AppTheme", 0, "QuickLook");
-        SetTheme(appTheme);
+        var appTheme = SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+        SetTheme((AppThemeMode)appTheme);
 
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
@@ -348,14 +355,14 @@ public partial class App : Application
         PipeServerManager.GetInstance();
     }
 
-    public static void SetTheme(int theme)
+    public static void SetTheme(AppThemeMode theme)
     {
         switch (theme)
         {
-            case 1:
+            case AppThemeMode.Light:
                 ThemeManager.Apply(ApplicationTheme.Light);
                 break;
-            case 2:
+            case AppThemeMode.Dark:
                 ThemeManager.Apply(ApplicationTheme.Dark);
                 break;
             default:

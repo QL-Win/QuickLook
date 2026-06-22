@@ -73,12 +73,12 @@ internal partial class TrayIconManager : IDisposable
                 },
                 _itemThemeCycle = new TrayMenuItem()
                 {
-                    Header = "Theme: Auto",
+                    Header = TranslationHelper.Get("Icon_ThemeAuto", failsafe: "Theme: Auto"),
                     Command = new RelayCommand(() =>
                     {
-                        var current = SettingHelper.Get("AppTheme", 0, "QuickLook");
-                        var next = (current + 1) % 3;
-                        SettingHelper.Set("AppTheme", next, "QuickLook");
+                        var current = SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+                        var next = (AppThemeMode)((current + 1) % 3);
+                        SettingHelper.Set(SettingHelper.KeyAppTheme, (int)next, "QuickLook");
                         App.SetTheme(next);
                     }),
                 },
@@ -121,8 +121,10 @@ internal partial class TrayIconManager : IDisposable
         {
             _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun();
             _itemCloseOnLostFocus.IsChecked = SettingHelper.Get("CloseOnLostFocus", false);
-            var theme = SettingHelper.Get("AppTheme", 0, "QuickLook");
-            _itemThemeCycle.Header = theme == 1 ? "Theme: Light" : theme == 2 ? "Theme: Dark" : "Theme: Auto";
+            var theme = (AppThemeMode)SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+            _itemThemeCycle.Header = theme == AppThemeMode.Light ? TranslationHelper.Get("Icon_ThemeLight", failsafe: "Theme: Light") :
+                                     theme == AppThemeMode.Dark ? TranslationHelper.Get("Icon_ThemeDark", failsafe: "Theme: Dark") :
+                                     TranslationHelper.Get("Icon_ThemeAuto", failsafe: "Theme: Auto");
         };
     }
 
