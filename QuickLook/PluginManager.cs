@@ -92,11 +92,12 @@ public sealed class PluginManager
             {
                 try
                 {
-                    (from t in Assembly.LoadFrom(lib).GetExportedTypes()
-                     where !t.IsInterface && !t.IsAbstract
-                     where typeof(IViewer).IsAssignableFrom(t)
-                     select t).ToList()
-                    .ForEach(type => LoadedPlugins.Add(type.CreateInstance<IViewer>()));
+                    Assembly.LoadFrom(lib)
+                        .GetExportedTypes()
+                        .Where(t => !t.IsInterface && !t.IsAbstract
+                            && typeof(IViewer).IsAssignableFrom(t))
+                        .ToArray()
+                        .ForEach(t => LoadedPlugins.Add(t.CreateInstance<IViewer>()));
                 }
                 // 0x80131515: ERROR_ASSEMBLY_FILE_BLOCKED - Windows blocked the assembly due to security policy
                 catch (FileLoadException ex) when (ex.HResult == unchecked((int)0x80131515) && SettingHelper.IsPortableVersion())
