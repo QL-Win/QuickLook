@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<SyntaxDefinition name="Json" extensions=".json;.jsonc">
+<SyntaxDefinition name="Json" extensions=".json;.jsonc;.jsonld">
 
     <Digits name="Number" color="#098658" bold="false" italic="false"/>
 
