@@ -94,7 +94,7 @@ public class ChmWebpagePanel : WebpagePanel
     {
         _path = path;
 
-        NavigateToUri(new Uri("http://quicklook/?plugin=1&chm=http://quicklook/.chm"));
+        NavigateToUri(new Uri("http://quicklook.invalid/?plugin=1&chm=http://quicklook.invalid/.chm"));
     }
 
     protected override void WebView_WebResourceRequested(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceRequestedEventArgs args)
