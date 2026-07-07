@@ -75,17 +75,22 @@ public class WebfontPanel : WebpagePanel
     public void PreviewFont(string path)
     {
         _pendingIconFontPath = null;
+        _fontStream = null;
         FallbackPath = Path.GetDirectoryName(path);
 
         var html = GenerateFontHtml(path);
         byte[] bytes = Encoding.UTF8.GetBytes(html);
         _homePage = bytes;
 
-        NavigateToUri(new Uri("file://quicklook/"));
+        if (_webView?.CoreWebView2 != null)
+            _webView.CoreWebView2.Reload();
+        else
+            NavigateToUri(new Uri("file://quicklook/"));
     }
 
     public void PreviewIconFont(string path)
     {
+        _fontStream = null;
         FallbackPath = Path.GetDirectoryName(path);
         _pendingIconFontPath = path;
         _homePage = _resources["/iconfont2html.html"];

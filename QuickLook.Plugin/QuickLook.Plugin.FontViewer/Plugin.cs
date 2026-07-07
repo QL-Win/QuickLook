@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using System;
@@ -28,8 +29,11 @@ namespace QuickLook.Plugin.FontViewer;
 
 public sealed partial class Plugin : IViewer, IMoreMenu
 {
+    private const string ConfigDomain = "QuickLook.Plugin.FontViewer";
+
     private WebfontPanel _panel;
     private string _currentPath;
+    private PreviewMode _previewMode = PreviewMode.Pangram;
 
     public int Priority => 0;
 
@@ -55,7 +59,8 @@ public sealed partial class Plugin : IViewer, IMoreMenu
     {
         _currentPath = path;
         _panel = new WebfontPanel();
-        _panel.PreviewFont(path);
+        _previewMode = (PreviewMode)SettingHelper.Get("LastPreviewMode", (int)PreviewMode.Pangram, ConfigDomain);
+        ApplyPreviewMode(path);
 
         context.ViewerContent = _panel;
         context.Title = Path.GetFileName(path);
@@ -65,6 +70,14 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             _ = _panel.WaitForFontSent();
             context.IsBusy = false;
         });
+    }
+
+    private void ApplyPreviewMode(string path)
+    {
+        if (_previewMode == PreviewMode.IconFont)
+            _panel.PreviewIconFont(path);
+        else
+            _panel.PreviewFont(path);
     }
 
     public void Cleanup()

@@ -252,6 +252,17 @@ These keys are also stored in `QuickLook.config`.
   - `<ToggleTocKey>Ctrl+Shift+L</ToggleTocKey>`
   - `<ToggleTocKey>Ctrl+Shift+T</ToggleTocKey>`
 
+## QuickLook.Plugin.FontViewer.config options
+
+### `<LastPreviewMode>`
+- Default: `0` (`Pangram`)
+- Type: `Integer`
+- Description: Remember the last preview mode used by the Font viewer.
+  - `0` = Pangram (default font specimen preview)
+  - `1` = IconFont (icon font glyph grid preview)
+- Example:
+  - `<LastPreviewMode>1</LastPreviewMode>`
+
 ## QuickLook.Plugin.TextViewer.config options
 
 ### `<UseFormatDetector>`

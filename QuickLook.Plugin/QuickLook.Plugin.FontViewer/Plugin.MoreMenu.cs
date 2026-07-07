@@ -27,15 +27,50 @@ namespace QuickLook.Plugin.FontViewer;
 
 public sealed partial class Plugin
 {
+    private MoreMenuItem _iconFontMenuItem;
+    private MoreMenuItem _pangramMenuItem;
+
     public IEnumerable<IMenuItem> GetMenuItems()
     {
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
 
-        yield return new MoreMenuItem()
+        _iconFontMenuItem ??= new MoreMenuItem()
         {
             Icon = FontSymbols.GridView,
             Header = TranslationHelper.Get("MW_ReopenAsIconFontPreview", translationFile),
-            Command = new RelayCommand(() => _panel?.PreviewIconFont(_currentPath)),
+            Command = new RelayCommand(() => SwitchPreviewMode(PreviewMode.IconFont)),
         };
+
+        _pangramMenuItem ??= new MoreMenuItem()
+        {
+            Icon = FontSymbols.Font,
+            Header = TranslationHelper.Get("MW_ReopenAsFontPreview", translationFile),
+            Command = new RelayCommand(() => SwitchPreviewMode(PreviewMode.Pangram)),
+        };
+
+        UpdateMenuVisibility();
+
+        yield return _iconFontMenuItem;
+        yield return _pangramMenuItem;
+    }
+
+    private void SwitchPreviewMode(PreviewMode mode)
+    {
+        if (_previewMode == mode)
+            return;
+
+        _previewMode = mode;
+        SettingHelper.Set("LastPreviewMode", (int)mode, ConfigDomain);
+        UpdateMenuVisibility();
+        ApplyPreviewMode(_currentPath);
+    }
+
+    private void UpdateMenuVisibility()
+    {
+        if (_iconFontMenuItem is null || _pangramMenuItem is null)
+            return;
+
+        _iconFontMenuItem.IsVisible = _previewMode != PreviewMode.IconFont;
+        _pangramMenuItem.IsVisible = _previewMode == PreviewMode.IconFont;
     }
 }

@@ -32,6 +32,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Shell;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
@@ -417,11 +418,29 @@ public partial class ViewerWindow
             {
                 MenuItem menuItem = new()
                 {
-                    Header = item.Header,
                     Icon = ResolveIcon(item.Icon),
-                    Visibility = item.IsVisible ? Visibility.Visible : Visibility.Collapsed,
                     Command = item.Command,
                 };
+
+                if (item is INotifyPropertyChanged)
+                {
+                    menuItem.SetBinding(MenuItem.HeaderProperty, new Binding(nameof(IMenuItem.Header))
+                    {
+                        Source = item,
+                        Mode = BindingMode.OneWay,
+                    });
+                    menuItem.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(IMenuItem.IsVisible))
+                    {
+                        Source = item,
+                        Mode = BindingMode.OneWay,
+                        Converter = new BooleanToVisibilityConverter(),
+                    });
+                }
+                else
+                {
+                    menuItem.Header = item.Header;
+                    menuItem.Visibility = item.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+                }
 
                 buttonMore.ContextMenu.Items.Insert(count++, menuItem);
             }
