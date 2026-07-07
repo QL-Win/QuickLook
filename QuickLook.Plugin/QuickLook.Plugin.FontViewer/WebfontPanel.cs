@@ -36,6 +36,7 @@ public class WebfontPanel : WebpagePanel
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
     protected byte[] _homePage;
     protected ObservableFileStream _fontStream = null;
+    private string _pendingIconFontPath;
 
     static WebfontPanel()
     {
@@ -73,6 +74,7 @@ public class WebfontPanel : WebpagePanel
 
     public void PreviewFont(string path)
     {
+        _pendingIconFontPath = null;
         FallbackPath = Path.GetDirectoryName(path);
 
         var html = GenerateFontHtml(path);
@@ -80,6 +82,32 @@ public class WebfontPanel : WebpagePanel
         _homePage = bytes;
 
         NavigateToUri(new Uri("file://quicklook/"));
+    }
+
+    public void PreviewIconFont(string path)
+    {
+        FallbackPath = Path.GetDirectoryName(path);
+        _pendingIconFontPath = path;
+        _homePage = _resources["/iconfont2html.html"];
+
+        if (_webView?.CoreWebView2 != null)
+            _webView.CoreWebView2.Reload();
+        else
+            NavigateToUri(new Uri("file://quicklook/"));
+    }
+
+    protected override void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+    {
+        base.WebView_NavigationCompleted(sender, e);
+
+        if (!e.IsSuccess || string.IsNullOrEmpty(_pendingIconFontPath) || _webView?.CoreWebView2 == null)
+            return;
+
+        var path = _pendingIconFontPath;
+        _pendingIconFontPath = null;
+
+        var script = BuildIconFontLoadScript(path);
+        _ = _webView.CoreWebView2.ExecuteScriptAsync(script);
     }
 
     protected string GenerateFontHtml(string path)
@@ -124,6 +152,82 @@ public class WebfontPanel : WebpagePanel
                    .Replace("{{pangram}}", pangram ?? "The quick brown fox jumps over the lazy dog. 0123456789");
 
         return html;
+    }
+
+    private static string BuildIconFontLoadScript(string path)
+    {
+        var fileName = Path.GetFileName(path);
+        var mimeType = GetFontMimeType(path);
+        var familyName = FreeTypeApi.GetFontFamilyName(path);
+        var cssText = TryReadCompanionCss(path);
+
+        var parts = new List<string>
+        {
+            $"fileName:{EscapeJsonString(fileName)}",
+            $"mimeType:{EscapeJsonString(mimeType)}",
+        };
+
+        if (cssText != null)
+            parts.Add($"cssText:{EscapeJsonString(cssText)}");
+
+        if (!string.IsNullOrEmpty(familyName))
+            parts.Add($"familyName:{EscapeJsonString(familyName)}");
+
+        var metaObject = string.Join(",", parts);
+
+        return $"(function(){{var meta={{{metaObject}}};function run(){{if(typeof window.__ICONFONT2HTML_LOAD!=='function'){{setTimeout(run,20);return;}}fetch('/'+encodeURI(meta.fileName)).then(function(r){{return r.arrayBuffer();}}).then(function(buf){{var bytes=new Uint8Array(buf);var chunk=8192;var binary='';for(var i=0;i<bytes.length;i+=chunk){{binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}}var payload={{fontBase64:btoa(binary),fileName:meta.fileName,mimeType:meta.mimeType}};if(meta.cssText)payload.cssText=meta.cssText;if(meta.familyName)payload.familyName=meta.familyName;window.__ICONFONT2HTML_LOAD(payload);}}).catch(function(err){{console.error(err);}});}}run();}})();";
+    }
+
+    private static string TryReadCompanionCss(string fontPath)
+    {
+        var cssPath = Path.ChangeExtension(fontPath, ".css");
+        if (File.Exists(cssPath))
+            return File.ReadAllText(cssPath, Encoding.UTF8);
+
+        var iconfontCss = Path.Combine(Path.GetDirectoryName(fontPath) ?? string.Empty, "iconfont.css");
+        if (File.Exists(iconfontCss))
+            return File.ReadAllText(iconfontCss, Encoding.UTF8);
+
+        return null;
+    }
+
+    private static string GetFontMimeType(string path)
+    {
+        return Path.GetExtension(path).ToLowerInvariant() switch
+        {
+            ".woff2" => "font/woff2",
+            ".woff" => "font/woff",
+            ".otf" => "font/otf",
+            ".ttf" => "font/ttf",
+            _ => "font/ttf",
+        };
+    }
+
+    private static string EscapeJsonString(string s)
+    {
+        var sb = new StringBuilder(s.Length + 2);
+        sb.Append('"');
+        foreach (char c in s)
+        {
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\b': sb.Append("\\b"); break;
+                case '\f': sb.Append("\\f"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < 0x20)
+                        sb.Append($"\\u{(int)c:x4}");
+                    else
+                        sb.Append(c);
+                    break;
+            }
+        }
+        sb.Append('"');
+        return sb.ToString();
     }
 
     protected override void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
