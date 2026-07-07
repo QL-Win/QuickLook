@@ -47,7 +47,7 @@ Example:
   - `None`
   - `Mica`
   - `Acrylic`
-  - `Acrylic10`
+  - `Acrylic10` (Recommended)
   - `Acrylic11`
   - `Tabbed`
 - Example:
