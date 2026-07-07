@@ -46,6 +46,20 @@
 - Support localization for CSV viewer search panel
 - Add extension filter helper and integrate checks
 - Improve extension parsing and add balcklist for .insv [#1802](https://github.com/QL-Win/QuickLook/issues/1802)
+- Add icon font preview mode to FontViewer
+- Add `.jsonld` to JSON syntax extensions
+- Use `.invalid` domain to speed up CHM page loading
+- Support DeskBox 3rd-party program
+- Improve update notification message [#1961](https://github.com/QL-Win/QuickLook/issues/1961)
+- Upgrade MSVC PlatformToolset to v145
+- Update dependencies and add System.IO.Compression
+- Add recycle bin images and use embedded icons on Win10+
+- Disambiguate `.pl` files with Prolog/Perl detectors
+- Add Perl syntax highlighting support
+- Add Objective-C++ syntax highlighting (Dark/Light)
+- Add `.phtml` and `.ctp` to PHP syntax extensions
+- Include `.ndjson` in JSONL highlighting extensions
+- Add `.dsql` extension to SQL syntax
 - Add NuGet (`.nupkg` and `.snupkg`) support for AppViewer
 - Add setting to auto-unblock Protected View [#1832](https://github.com/QL-Win/QuickLook/issues/1832)
 - Add built-in plugin support for `.chm`
@@ -69,6 +83,7 @@
 - Fix the busy decorator foreground color error in dark mode
 - Fix rendering lag caused by excessively long lines by truncating and sanitizing them in text viewer
 - Fix twice space after Alt+Tab to explorer window [#1939](https://github.com/QL-Win/QuickLook/issues/1939)
+- Fix FontViewer preview width sizing
 
 ## 4.5.0
 
