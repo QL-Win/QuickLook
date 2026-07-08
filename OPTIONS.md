@@ -109,6 +109,13 @@ Example:
 - Example:
   - `<FocusWindowOnOpen>True</FocusWindowOnOpen>`
 
+### `<AlwaysPin>`
+- Default: `False`
+- Type: `Boolean`
+- Description: Automatically pin the preview window when a file is opened, equivalent to passing the `/pin` option on the command line (e.g. `QuickLook.exe "path\to\file" /pin`).
+- Example:
+  - `<AlwaysPin>True</AlwaysPin>`
+
 ### `<ShowWindowTransition>`
 - Default: `True`
 - Type: `Boolean`

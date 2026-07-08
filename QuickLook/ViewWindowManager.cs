@@ -78,6 +78,8 @@ public class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             path = NativeMethods.QuickLook.GetCurrentSelection();
 
+        options = MergeAlwaysPinOption(options);
+
         if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
         else
@@ -122,9 +124,67 @@ public class ViewWindowManager : IDisposable
 
     public void InvokePreviewWithOption(string path = null, string options = null)
     {
-        InvokePreview(path);
+        TryBeginPreview(path);
 
-        if (string.IsNullOrWhiteSpace(options)) return;
+        ApplyPreviewOptions(options);
+    }
+
+    public void InvokePreview(string path = null)
+    {
+        if (!TryBeginPreview(path))
+            return;
+
+        ApplyPreviewOptions(null);
+    }
+
+    private bool TryBeginPreview(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            path = NativeMethods.QuickLook.GetCurrentSelection();
+
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        if (_viewerWindow.IsVisible && path == _invokedPath)
+            return false;
+
+        var isDirectory = Directory.Exists(path);
+        if (!isDirectory && !File.Exists(path))
+            if (!path.StartsWith("::")) // CLSID
+                return false;
+
+        // Check extension filtering before proceeding (skip for directories)
+        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+            return false;
+
+        _invokedPath = path;
+
+        RunFocusMonitor();
+
+        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+
+        BeginShowNewWindow(path, matchedPlugin);
+        return true;
+    }
+
+    private static string MergeAlwaysPinOption(string options)
+    {
+        if (!SettingHelper.Get("AlwaysPin", false, "QuickLook"))
+            return options;
+
+        if (string.IsNullOrWhiteSpace(options))
+            return "pin";
+
+        var cli = new CommandLineParser(options.Split(','));
+        return cli.Has("pin") ? options : options + ",pin";
+    }
+
+    private void ApplyPreviewOptions(string options)
+    {
+        options = MergeAlwaysPinOption(options);
+
+        if (string.IsNullOrWhiteSpace(options))
+            return;
 
         var cli = new CommandLineParser(options.Split(','));
 
@@ -138,35 +198,6 @@ public class ViewWindowManager : IDisposable
             _viewerWindow.Pinned = true;
             ForgetCurrentWindow();
         }
-    }
-
-    public void InvokePreview(string path = null)
-    {
-        if (string.IsNullOrEmpty(path))
-            path = NativeMethods.QuickLook.GetCurrentSelection();
-
-        if (string.IsNullOrEmpty(path))
-            return;
-
-        if (_viewerWindow.IsVisible && path == _invokedPath)
-            return;
-
-        var isDirectory = Directory.Exists(path);
-        if (!isDirectory && !File.Exists(path))
-            if (!path.StartsWith("::")) // CLSID
-                return;
-
-        // Check extension filtering before proceeding (skip for directories)
-        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
-            return;
-
-        _invokedPath = path;
-
-        RunFocusMonitor();
-
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
-
-        BeginShowNewWindow(path, matchedPlugin);
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
