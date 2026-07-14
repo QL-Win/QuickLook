@@ -70,7 +70,7 @@ jobs:
     
     - name: Update latest release
       # see https://github.com/pyTooling/Actions/tree/r6/releaser
-      uses: pyTooling/Actions/releaser@r6
+      uses: pyTooling/Actions/releaser@c58169077d7a6289af1885bb0711eb263a57727d # r6
       with:
         tag: latest
         rm: true
