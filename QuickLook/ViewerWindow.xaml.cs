@@ -83,7 +83,7 @@ public partial class ViewerWindow : Window
             Dispatcher.BeginInvoke(() =>
             {
                 if (IsVisible && !Pinned)
-                    ViewWindowManager.GetInstance().ClosePreview();
+                    Close();
             }, DispatcherPriority.ContextIdle);
         };
 
@@ -99,6 +99,7 @@ public partial class ViewerWindow : Window
             if (SettingHelper.Get("CloseOnLostFocus", false))
             {
                 Pinned = !Pinned;
+                ViewWindowManager.GetInstance().ForgetCurrentWindow();
                 return;
             }
 
@@ -113,10 +114,7 @@ public partial class ViewerWindow : Window
 
         buttonCloseWindow.Click += (_, _) =>
         {
-            if (Pinned)
-                Close();
-            else
-                ViewWindowManager.GetInstance().ClosePreview();
+            Close();
         };
 
         buttonOpen.Click += (_, _) =>
