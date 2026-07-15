@@ -175,7 +175,7 @@ public static class WindowHelper
 
         var hwnd = new WindowInteropHelper(window).EnsureHandleSafe();
 
-        if (!window.AllowsTransparency && HwndSource.FromHwnd(hwnd) is HwndSource hwndSource)
+        if (!window.AllowsTransparency && hwnd != IntPtr.Zero && HwndSource.FromHwnd(hwnd) is HwndSource hwndSource)
         {
             hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
         }
