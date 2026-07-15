@@ -100,6 +100,10 @@
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
+    <Project Path="QuickLook.Plugin/QuickLook.Plugin.PrefetchViewer/QuickLook.Plugin.PrefetchViewer.csproj">
+      <Platform Solution="*|ARM64" Project="ARM64" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
     <Project Path="QuickLook.Plugin/QuickLook.Plugin.TextViewer/QuickLook.Plugin.TextViewer.csproj">
       <Platform Solution="*|ARM64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
@@ -144,6 +148,7 @@
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PDFViewer/QuickLook.Plugin.PdfViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PEViewer/QuickLook.Plugin.PEViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PluginInstaller/QuickLook.Plugin.PluginInstaller.csproj" />
+    <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.PrefetchViewer/QuickLook.Plugin.PrefetchViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.TextViewer/QuickLook.Plugin.TextViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.ThumbnailViewer/QuickLook.Plugin.ThumbnailViewer.csproj" />
     <BuildDependency Project="QuickLook.Plugin/QuickLook.Plugin.VideoViewer/QuickLook.Plugin.VideoViewer.csproj" />

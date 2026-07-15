@@ -1,0 +1,151 @@
+<UserControl x:Class="QuickLook.Plugin.PrefetchViewer.PrefetchInfoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FontSize="14"
+             UseLayoutRounding="True">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="pfVersionTitle"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Prefetch Version" />
+            <TextBlock x:Name="pfVersion"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="fileHashTitle"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Hash" />
+            <TextBlock x:Name="fileHash"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="totalSizeTitle"
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Total Size" />
+            <TextBlock x:Name="totalSize"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="runCountTitle"
+                       Grid.Row="4"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Run Count" />
+            <TextBlock x:Name="runCount"
+                       Grid.Row="4"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="lastRunTitle"
+                       Grid.Row="5"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Last Run Times" />
+            <ItemsControl x:Name="lastRunList"
+                          Grid.Row="5"
+                          Grid.Column="1"
+                          Padding="3" />
+
+            <TextBlock x:Name="fileMetricsTitle"
+                       Grid.Row="6"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="File Metrics" />
+            <TextBlock x:Name="fileMetrics"
+                       Grid.Row="6"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="traceChainsTitle"
+                       Grid.Row="7"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Trace Chains" />
+            <TextBlock x:Name="traceChains"
+                       Grid.Row="7"
+                       Grid.Column="1"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="..." />
+
+            <TextBlock x:Name="volumeInfoTitle"
+                       Grid.Row="8"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Volume Information" />
+            <ItemsControl x:Name="volumeInfoList"
+                          Grid.Row="8"
+                          Grid.Column="1"
+                          Padding="3"
+                          Foreground="{DynamicResource WindowTextForegroundAlternative}" />
+
+            <TextBlock x:Name="referencedFilesTitle"
+                       Grid.Row="9"
+                       Grid.Column="0"
+                       Padding="3"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Text="Referenced Files" />
+            <ItemsControl x:Name="referencedFilesList"
+                          Grid.Row="9"
+                          Grid.Column="1"
+                          Foreground="{DynamicResource WindowTextForegroundAlternative}" />
+
+            <TextBlock x:Name="errorText"
+                       Grid.Row="10"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Padding="3"
+                       FontWeight="Bold"
+                       Foreground="#FF0000"
+                       Visibility="Collapsed" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>
