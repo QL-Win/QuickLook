@@ -7,6 +7,7 @@
 - Add Excalidraw support to image viewer [#1955](https://github.com/QL-Win/QuickLook/issues/1955)
 - Add binary viewer plugin [#290](https://github.com/QL-Win/QuickLook/issues/290)
 - Add database viewer plugin for [LiteDB](https://github.com/litedb-org/LiteDB) v5, SQLite and encrypted SQLite support
+- Add prefetch viewer plugin for `.pf` file support
 - Add FilePilot preview integration by @Andrey Semjonov [#1949](https://github.com/QL-Win/QuickLook/issues/1949)
 - Add configurable keyboard shortcuts to toggle TOC visibility for markdown viewer [#1934](https://github.com/QL-Win/QuickLook/issues/1934)
 - Add option to disable window show transitions `<ShowWindowTransition>False</ShowWindowTransition>`
