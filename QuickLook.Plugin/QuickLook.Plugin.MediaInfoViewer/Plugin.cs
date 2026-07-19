@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using MediaInfoLib;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
@@ -54,8 +53,8 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
 
     public void View(string path, ContextObject context)
     {
-        using MediaInfo lib = new MediaInfo()
-            .WithOpen(path);
+        using QuickLook.MediaInfo.MediaInfo lib = new();
+        lib.Open(path);
 
         _tvp = new TextViewerPanel(lib.Inform(), context);
         AssignHighlightingManager(_tvp, context);
@@ -80,8 +79,8 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
                     context.Title = $"{Path.GetFileName(path)}";
                 }
 
-                using MediaInfo lib = new MediaInfo()
-                    .WithOpen(path);
+                using QuickLook.MediaInfo.MediaInfo lib = new();
+                lib.Open(path);
                 _tvp!.Text = lib.Inform();
             }
         }

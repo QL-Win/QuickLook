@@ -86,13 +86,9 @@
 
     <ItemGroup>
         <Reference Include="System.ComponentModel.Composition" />
-        <PackageReference Include="MediaInfoDLL" Version="26.1.0" />
+        <!--<PackageReference Include="MediaInfoDLL" Version="26.1.0" />-->
+        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc1" />
     </ItemGroup>
-
-    <Target Name="ReduceReleasePackaging" AfterTargets="Build">
-        <!-- MediaInfoDLL will copy the MediaInfo.dll file according to the architecture, we do not use this usage so delete it manually -->
-        <Delete Files="$(OutputPath)\MediaInfo.dll" Condition="Exists('$(OutputPath)\MediaInfo.dll')" />
-    </Target>
 
     <ItemGroup>
         <None Update="Translations.config">

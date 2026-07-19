@@ -58,12 +58,11 @@
     <ItemGroup>
         <PackageReference Include="QuickLook.LAVFilters" Version="0.81.0" />
         <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.4" />
-        <PackageReference Include="MediaInfo.Wrapper" Version="26.1.0">
-            <Aliases>MediaInfoWrapper</Aliases>
-        </PackageReference>
-        <PackageReference Include="MediaInfoDLL" Version="26.1.0">
-            <Aliases>MediaInfoDLL</Aliases>
-        </PackageReference>
+        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc1" />
+        <PackageReference Include="QuickLook.MediaInfo.Native.win-x64" Version="26.1.0-rc1" />
+        <PackageReference Include="QuickLook.MediaInfo.Native.win-x86" Version="26.1.0-rc1" />
+        <PackageReference Include="System.Memory" Version="4.6.3" />
+        <!--<PackageReference Include="QuickLook.MediaInfo.Native.win-arm64" Version="26.1.0-rc1" />-->
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
@@ -80,11 +79,13 @@
             <Private>False</Private>
         </ProjectReference>
         <!--  Keep QuickLook reference here for glassLayer:GlassLayer testing  -->
-        <!--<ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
+        <!--
+        <ProjectReference Include="..\..\QuickLook\QuickLook.csproj">
             <Project>{8B4A9CE5-67B5-4A94-81CB-3771F688FDEB}</Project>
             <Name>QuickLook</Name>
             <Private>False</Private>
-        </ProjectReference>-->
+        </ProjectReference>
+        -->
     </ItemGroup>
 
     <ItemGroup>
@@ -208,34 +209,11 @@
             <DestinationFolder>$(OutDir)\LAVFilters-x86\</DestinationFolder>
             <Link>LAVFilters-x86\swscale-lav-9.dll</Link>
         </Content>
-        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\26.1.0\lib\netstandard2.0\x64\MediaInfo.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)MediaInfo-x64\</DestinationFolder>
-            <Link>MediaInfo-x64\MediaInfo.dll</Link>
-        </Content>
-        <Content Include="$(NuGetPackageRoot)\MediaInfoDLL\26.1.0\lib\netstandard2.0\x86\MediaInfo.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)MediaInfo-x86\</DestinationFolder>
-            <Link>MediaInfo-x86\MediaInfo.dll</Link>
-        </Content>
-        <!--<Content Include="$(NuGetPackageRoot)\MediaInfoDLL\26.1.0\lib\netstandard2.0\arm64\MediaInfo.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)MediaInfo-ARM64\</DestinationFolder>
-            <Link>MediaInfo-ARM64\MediaInfo.dll</Link>
-        </Content>-->
         <Content Include="LibVlc\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Resource Include="Resources\empty.png" />
     </ItemGroup>
-
-    <Target Name="ReduceReleasePackaging" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-        <Delete Files="$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib" Condition="Exists('$(OutputPath)\Melanchall_DryWetMidi_Native64.dylib')" />
-        <!-- Keep MediaInfoDLL.dll for MediaInfoViewer to read the translations -->
-        <Delete Files="$(OutputPath)\MediaInfoDLL.dll" Condition="Exists('$(OutputPath)\MediaInfoDLL.dll')" />
-        <!-- MediaInfoDLL will copy the MediaInfo.dll file according to the architecture, we do not use this usage so delete it manually -->
-        <Delete Files="$(OutputPath)\MediaInfo.dll" Condition="Exists('$(OutputPath)\MediaInfo.dll')" />
-    </Target>
 
     <ItemGroup>
         <None Include="Translations.config">

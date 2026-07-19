@@ -15,12 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-extern alias MediaInfoWrapper;
-
-using MediaInfoWrapper::MediaInfo;
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.MediaInfo.Core;
 using QuickLook.Plugin.VideoViewer.AudioTrack;
 using QuickLook.Plugin.VideoViewer.LyricTrack;
 using System;
@@ -294,7 +292,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
-    private void UpdateMeta(string path, MediaInfoLib info)
+    private void UpdateMeta(string path, QuickLook.MediaInfo.MediaInfo info)
     {
         if (HasVideo)
             return;
@@ -456,7 +454,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
-    public void LoadAndPlay(string path, MediaInfoLib info)
+    public void LoadAndPlay(string path, QuickLook.MediaInfo.MediaInfo info)
     {
         // Detect whether it is other playback formats
         if (!HasVideo)
