@@ -316,6 +316,10 @@ Update not completed yet...
 - `.efi` (Extensible Firmware Interface)
 - `.mz` (DOS executable)
 
+### Prefetch files
+
+- `.pf` (Prefetch file in Windows)
+
 ### Minidump files
 - `.dmp` (Windows minidump)
 - `.dump` (Dump file)
