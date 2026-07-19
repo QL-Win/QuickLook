@@ -32,6 +32,9 @@ public class ContextObject : INotifyPropertyChanged
     private bool _canResize = true;
     private bool _fullWindowDragging;
     private bool _isBusy;
+    private string _busyGlyph = string.Empty;
+    private string _busySubText = string.Empty;
+    private string _busyText = string.Empty;
     private string _title = string.Empty;
     private bool _titlebarAutoHide;
     private bool _titlebarBlurVisibility;
@@ -82,6 +85,45 @@ public class ContextObject : INotifyPropertyChanged
         set
         {
             _isBusy = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Get or set the icon shown with the busy status text.
+    /// </summary>
+    public string BusyGlyph
+    {
+        get => _busyGlyph;
+        set
+        {
+            _busyGlyph = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Get or set the status text shown with the busy indicator.
+    /// </summary>
+    public string BusyText
+    {
+        get => _busyText;
+        set
+        {
+            _busyText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Get or set the secondary status text shown with the busy indicator.
+    /// </summary>
+    public string BusySubText
+    {
+        get => _busySubText;
+        set
+        {
+            _busySubText = value;
             OnPropertyChanged();
         }
     }
@@ -243,6 +285,9 @@ public class ContextObject : INotifyPropertyChanged
         Title = string.Empty;
         // set to False to prevent showing loading icon
         IsBusy = false;
+        BusyGlyph = string.Empty;
+        BusyText = string.Empty;
+        BusySubText = string.Empty;
         PreferredSize = new Size();
         CanResize = true;
         FullWindowDragging = false;
