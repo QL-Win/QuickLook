@@ -9,6 +9,7 @@
 - Add database viewer plugin for [LiteDB](https://github.com/litedb-org/LiteDB) v5, SQLite and encrypted SQLite support
 - Add prefetch viewer plugin for `.pf` file support
 - Add FilePilot preview integration by @Andrey Semjonov [#1949](https://github.com/QL-Win/QuickLook/issues/1949)
+- Add AsciiDoc support to markdown viewer (`.adoc`, `.asciidoc`, `.asc`, `.ad`)
 - Add configurable keyboard shortcuts to toggle TOC visibility for markdown viewer [#1934](https://github.com/QL-Win/QuickLook/issues/1934)
 - Add option to disable window show transitions `<ShowWindowTransition>False</ShowWindowTransition>`
 - Add `.winmd` to PE viewer supported extensions

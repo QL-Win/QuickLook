@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.HtmlViewer;
 using System;
 using System.IO;
 using System.Linq;
@@ -25,13 +26,13 @@ namespace QuickLook.Plugin.MarkdownViewer;
 
 public sealed class Plugin : IViewer
 {
-    private MarkdownPanel _panel;
+    private WebpagePanel _panel;
 
     /// <summary>
     /// Markdown and Markdown-like extensions
     /// It is not guaranteed to support all formats perfectly
     /// </summary>
-    private static readonly string[] _extensions =
+    private static readonly string[] _markdownExtensions =
     [
         ".md", ".markdown", // The most common Markdown extensions
         ".mdx", // MDX (Markdown + JSX), used in React ecosystems
@@ -53,7 +54,11 @@ public sealed class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        return !Directory.Exists(path) && _extensions.Any(path.ToLower().EndsWith);
+        if (Directory.Exists(path))
+            return false;
+
+        return AsciiDocPanel.CanHandle(path)
+            || _markdownExtensions.Any(path.ToLower().EndsWith);
     }
 
     public void Prepare(string path, ContextObject context)
@@ -63,8 +68,18 @@ public sealed class Plugin : IViewer
 
     public void View(string path, ContextObject context)
     {
-        _panel = new MarkdownPanel();
-        _panel.PreviewMarkdown(path);
+        if (AsciiDocPanel.CanHandle(path))
+        {
+            var panel = new AsciiDocPanel();
+            panel.PreviewAsciiDoc(path);
+            _panel = panel;
+        }
+        else
+        {
+            var panel = new MarkdownPanel();
+            panel.PreviewMarkdown(path);
+            _panel = panel;
+        }
 
         context.ViewerContent = _panel;
         context.Title = Path.GetFileName(path);

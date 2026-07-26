@@ -243,6 +243,10 @@ Update not completed yet...
 - `.apib` (API Blueprint)
 - `.mdtxt`, `.mdtext` (Other Markdown variants)
 
+### AsciiDoc files
+- `.adoc`, `.asciidoc` (AsciiDoc)
+- `.asc`, `.ad` (AsciiDoc variants)
+
 ### CSV/TSV files
 - `.csv` (Comma-separated values)
 - `.tsv` (Tab-separated values)
