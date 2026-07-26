@@ -18,6 +18,7 @@
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
+using QuickLook.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,7 +54,7 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
 
     public void View(string path, ContextObject context)
     {
-        using QuickLook.MediaInfo.MediaInfo lib = new();
+        using MediaInfoNative lib = new();
         lib.Open(path);
 
         _tvp = new TextViewerPanel(lib.Inform(), context);
@@ -79,7 +80,7 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
                     context.Title = $"{Path.GetFileName(path)}";
                 }
 
-                using QuickLook.MediaInfo.MediaInfo lib = new();
+                using MediaInfoNative lib = new();
                 lib.Open(path);
                 _tvp!.Text = lib.Inform();
             }

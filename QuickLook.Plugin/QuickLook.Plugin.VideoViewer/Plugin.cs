@@ -27,7 +27,7 @@ namespace QuickLook.Plugin.VideoViewer;
 
 public sealed class Plugin : IViewer
 {
-    private static readonly QuickLook.MediaInfo.MediaInfo _mediaInfo;
+    private static readonly MediaInfoNative _mediaInfo;
 
     private ViewerPanel _vp;
 
@@ -37,7 +37,7 @@ public sealed class Plugin : IViewer
     {
         _mediaInfo = new(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            Environment.Is64BitProcess ? @"win-x64\" : @"win-x86\"));
+            Environment.Is64BitProcess ? @"runtimes\win-x64\native\" : @"runtimes\win-x86\native\"));
         _mediaInfo.Option("Cover_Data", "base64");
     }
 

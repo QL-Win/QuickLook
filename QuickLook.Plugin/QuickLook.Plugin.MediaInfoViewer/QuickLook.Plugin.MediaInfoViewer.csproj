@@ -86,8 +86,7 @@
 
     <ItemGroup>
         <Reference Include="System.ComponentModel.Composition" />
-        <!--<PackageReference Include="MediaInfoDLL" Version="26.1.0" />-->
-        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc1" />
+        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc2" />
     </ItemGroup>
 
     <ItemGroup>

@@ -58,11 +58,11 @@
     <ItemGroup>
         <PackageReference Include="QuickLook.LAVFilters" Version="0.81.0" />
         <PackageReference Include="QuickLook.WPFMediaKit" Version="2.3.4" />
-        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc1" />
-        <PackageReference Include="QuickLook.MediaInfo.Native.win-x64" Version="26.1.0-rc1" />
-        <PackageReference Include="QuickLook.MediaInfo.Native.win-x86" Version="26.1.0-rc1" />
+        <PackageReference Include="QuickLook.MediaInfo" Version="26.1.0-rc2" />
+        <PackageReference Include="QuickLook.MediaInfo.Native.win-x64" Version="26.1.0-rc2" />
+        <PackageReference Include="QuickLook.MediaInfo.Native.win-x86" Version="26.1.0-rc2" />
         <PackageReference Include="System.Memory" Version="4.6.3" />
-        <!--<PackageReference Include="QuickLook.MediaInfo.Native.win-arm64" Version="26.1.0-rc1" />-->
+        <!--<PackageReference Include="QuickLook.MediaInfo.Native.win-arm64" Version="26.1.0-rc2" />-->
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>

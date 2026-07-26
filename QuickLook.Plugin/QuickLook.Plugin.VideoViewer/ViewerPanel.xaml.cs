@@ -18,6 +18,7 @@
 using QuickLook.Common.Annotations;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.MediaInfo;
 using QuickLook.MediaInfo.Core;
 using QuickLook.Plugin.VideoViewer.AudioTrack;
 using QuickLook.Plugin.VideoViewer.LyricTrack;
@@ -292,7 +293,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
-    private void UpdateMeta(string path, QuickLook.MediaInfo.MediaInfo info)
+    private void UpdateMeta(string path, MediaInfoNative info)
     {
         if (HasVideo)
             return;
@@ -454,7 +455,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
-    public void LoadAndPlay(string path, QuickLook.MediaInfo.MediaInfo info)
+    public void LoadAndPlay(string path, MediaInfoNative info)
     {
         // Detect whether it is other playback formats
         if (!HasVideo)
