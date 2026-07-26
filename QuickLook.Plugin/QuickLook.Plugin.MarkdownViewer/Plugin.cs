@@ -58,6 +58,7 @@ public sealed class Plugin : IViewer
             return false;
 
         return AsciiDocPanel.CanHandle(path)
+            || IpynbPanel.CanHandle(path)
             || _markdownExtensions.Any(path.ToLower().EndsWith);
     }
 
@@ -72,6 +73,12 @@ public sealed class Plugin : IViewer
         {
             var panel = new AsciiDocPanel();
             panel.PreviewAsciiDoc(path);
+            _panel = panel;
+        }
+        else if (IpynbPanel.CanHandle(path))
+        {
+            var panel = new IpynbPanel();
+            panel.PreviewIpynb(path);
             _panel = panel;
         }
         else

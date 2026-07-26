@@ -247,6 +247,9 @@ Update not completed yet...
 - `.adoc`, `.asciidoc` (AsciiDoc)
 - `.asc`, `.ad` (AsciiDoc variants)
 
+### Jupyter Notebook files
+- `.ipynb` (Jupyter Notebook)
+
 ### CSV/TSV files
 - `.csv` (Comma-separated values)
 - `.tsv` (Tab-separated values)
