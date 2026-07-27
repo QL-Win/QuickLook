@@ -107,7 +107,7 @@ Update not completed yet...
 - `.purescript` (PureScript source)
 - `.qml` (QML source)
 - `.r` (R script)
-- `.restructuredtext` (reStructuredText)
+- `.rst`, `.restructuredtext` (reStructuredText)
 - `.rexx` (Rexx script)
 - `.ruby` (Ruby source)
 - `.rust` (Rust source)
@@ -249,6 +249,10 @@ Update not completed yet...
 
 ### Jupyter Notebook files
 - `.ipynb` (Jupyter Notebook)
+
+### reStructuredText files
+- `.rst` (reStructuredText)
+- `.restructuredtext` (reStructuredText, uncommon)
 
 ### CSV/TSV files
 - `.csv` (Comma-separated values)
