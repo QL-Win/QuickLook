@@ -37,7 +37,6 @@ public sealed class Plugin : IViewer
         ".md", ".markdown", // The most common Markdown extensions
         ".mdx", // MDX (Markdown + JSX), used in React ecosystems
         ".mmd", // MultiMarkdown (MMD), an extended version of Markdown or Mermaid diagram source file
-        ".mermaid", // Mermaid diagram source file [QuickLook will wrap it in Markdown before rendering it]
         ".mkd", ".mdwn", ".mdown", // Early Markdown variants, used by different parsers like Pandoc, Gitit, and Hakyll
         ".mdc", // A Markdown variant used by Cursor AI [Repeated format from ImageViewer]
         ".qmd", // Quarto Markdown, developed by RStudio for scientific computing and reproducible reports
@@ -59,6 +58,7 @@ public sealed class Plugin : IViewer
 
         return AsciiDocPanel.CanHandle(path)
             || IpynbPanel.CanHandle(path)
+            || MermaidPanel.CanHandle(path)
             || _markdownExtensions.Any(path.ToLower().EndsWith);
     }
 
@@ -79,6 +79,12 @@ public sealed class Plugin : IViewer
         {
             var panel = new IpynbPanel();
             panel.PreviewIpynb(path);
+            _panel = panel;
+        }
+        else if (MermaidPanel.CanHandle(path))
+        {
+            var panel = new MermaidPanel();
+            panel.PreviewMermaid(path);
             _panel = panel;
         }
         else
