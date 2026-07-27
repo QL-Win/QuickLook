@@ -4,6 +4,7 @@
 
 ## 4.6.0
 
+- Add Greenfish Icon Editor Pro document support (`.gfie`, `.gfi`) to image viewer
 - Add Excalidraw support to image viewer [#1955](https://github.com/QL-Win/QuickLook/issues/1955)
 - Add binary viewer plugin [#290](https://github.com/QL-Win/QuickLook/issues/290)
 - Add database viewer plugin for [LiteDB](https://github.com/litedb-org/LiteDB) v5, SQLite and encrypted SQLite support

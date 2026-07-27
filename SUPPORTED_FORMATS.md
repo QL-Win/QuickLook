@@ -156,6 +156,7 @@ Update not completed yet...
 - `.erf` (Epson RAW image)
 - `.exr` (OpenEXR image)
 - `.fff` (Imacon/Hasselblad RAW)
+- `.gfie`, `.gfi` (Greenfish Icon Editor Pro document)
 - `.gif` (Graphics Interchange Format)
 - `.hdr` (High Dynamic Range image)
 - `.heic`, `.heif` (High Efficiency Image Format)

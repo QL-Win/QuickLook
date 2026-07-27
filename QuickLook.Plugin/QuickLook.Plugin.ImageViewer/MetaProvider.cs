@@ -86,6 +86,13 @@ public partial class MetaProvider
                 return dicomSize;
         }
 
+        if (IsGfieFile(_path))
+        {
+            var gfieSize = TryGetGfieSize(_path);
+            if (!gfieSize.IsEmpty)
+                return gfieSize;
+        }
+
         // fallback
         try
         {

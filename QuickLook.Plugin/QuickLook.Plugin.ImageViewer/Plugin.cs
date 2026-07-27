@@ -39,7 +39,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         ".dcr", ".dcs", ".dds", ".dng", ".drf", ".dcm", ".dicom",
         ".eip", ".emf", ".erf", ".exr", ".excalidraw",
         ".fff",
-        ".gif",
+        ".gfie", ".gfi", ".gif",
         ".hdr", ".heic", ".heif",
         ".ico", ".icon", ".icns", ".iiq",
         ".jfif", ".jp2", ".jpeg", ".jpg", ".jxl", ".j2k", ".jpf", ".jpx", ".jpm", ".jxr",
@@ -96,6 +96,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".icns"],
                 typeof(IcnsProvider)));
+        AnimatedImage.AnimatedImage.Providers.Add(
+            new KeyValuePair<string[], Type>([".gfie", ".gfi"],
+                typeof(GfieProvider)));
         AnimatedImage.AnimatedImage.Providers.Add(
             new KeyValuePair<string[], Type>([".webp"],
                 typeof(WebPProvider)));
