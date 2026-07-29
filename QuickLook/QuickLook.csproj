@@ -109,7 +109,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Costura.Fody" Version="6.0.0" Condition=" '$(Configuration)' == 'Release'">
+        <PackageReference Include="Costura.Fody" Version="6.2.0" Condition=" '$(Configuration)' == 'Release'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -122,7 +122,7 @@
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="WPF-UI.Violeta" Version="4.3.0.1">
+        <PackageReference Include="WPF-UI.Violeta" Version="4.3.0.3">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Lib.Harmony" Version="2.4.2">

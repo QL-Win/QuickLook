@@ -90,7 +90,7 @@
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.10">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.15.0">
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.16.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44">
