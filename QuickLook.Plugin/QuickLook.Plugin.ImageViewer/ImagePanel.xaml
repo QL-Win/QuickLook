@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="QuickLook.Plugin.ImageViewer.ImagePanel"
+<UserControl x:Class="QuickLook.Plugin.ImageViewer.ImagePanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:animatedImage="clr-namespace:QuickLook.Plugin.ImageViewer.AnimatedImage"
@@ -24,7 +24,7 @@
             <Rectangle.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=Theme}" Value="{x:Static plugin:Themes.Dark}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=CanvasTheme}" Value="{x:Static plugin:Themes.Dark}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
                                     <ImageBrush AlignmentY="Top"
@@ -38,7 +38,7 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=Theme}" Value="{x:Static plugin:Themes.Light}">
+                        <DataTrigger Binding="{Binding ElementName=imagePanel, Path=CanvasTheme}" Value="{x:Static plugin:Themes.Light}">
                             <Setter Property="Rectangle.Fill">
                                 <Setter.Value>
                                     <ImageBrush AlignmentY="Top"
