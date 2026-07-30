@@ -61,8 +61,8 @@ public partial class Plugin : IViewer, IMoreMenu
         // Read the first 16KB, check if we can get something
         using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         const int bufferLength = 16 * 1024;
-        var buffer = new byte[bufferLength];
-        var size = s.Read(buffer, 0, bufferLength);
+        byte[] buffer = new byte[bufferLength];
+        int size = s.Read(buffer, 0, bufferLength);
 
         return IsText(buffer, size);
     }

@@ -19,6 +19,7 @@ using ImageMagick;
 using ImageMagick.Formats;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ internal class ImageMagickProvider : AnimationProvider
 
                 var transformed = RotateAndScaleThumbnail(img, orientation, fullSize);
 
-                Helper.DpiHack(transformed);
+                ImageHelper.DpiHack(transformed);
                 transformed.Freeze();
                 return transformed;
             }

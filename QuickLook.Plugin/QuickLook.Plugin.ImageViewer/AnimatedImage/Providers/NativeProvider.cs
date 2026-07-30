@@ -17,6 +17,7 @@
 
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -69,7 +70,7 @@ internal class NativeProvider : AnimationProvider
 
                 var rotated = ApplyTransformFromExif(scaled, orientation);
 
-                Helper.DpiHack(rotated);
+                ImageHelper.DpiHack(rotated);
                 rotated.Freeze();
 
                 return rotated;
@@ -121,7 +122,7 @@ internal class NativeProvider : AnimationProvider
 
                 var img2 = ApplyTransformFromExif(img, Meta.GetOrientation());
 
-                Helper.DpiHack(img2);
+                ImageHelper.DpiHack(img2);
                 img2.Freeze();
 
                 return img2;
@@ -171,39 +172,22 @@ internal class NativeProvider : AnimationProvider
 
     private static BitmapSource ApplyTransformFromExif(BitmapSource image, Orientation orientation)
     {
-        switch (orientation)
+        return orientation switch
         {
-            case Orientation.Undefined:
-            case Orientation.TopLeft:
-                return image;
-
-            case Orientation.TopRight:
-                return new TransformedBitmap(image, new ScaleTransform(-1, 1, 0, 0));
-
-            case Orientation.BottomRight:
-                return new TransformedBitmap(image, new RotateTransform(180));
-
-            case Orientation.BottomLeft:
-                return new TransformedBitmap(image, new ScaleTransform(1, 1, 0, 0));
-
-            case Orientation.LeftTop:
-                return new TransformedBitmap(
-                    new TransformedBitmap(image, new RotateTransform(90)),
-                    new ScaleTransform(-1, 1, 0, 0));
-
-            case Orientation.RightTop:
-                return new TransformedBitmap(image, new RotateTransform(90));
-
-            case Orientation.RightBottom:
-                return new TransformedBitmap(
-                    new TransformedBitmap(image, new RotateTransform(270)),
-                    new ScaleTransform(-1, 1, 0, 0));
-
-            case Orientation.LeftBottom:
-                return new TransformedBitmap(image, new RotateTransform(270));
-        }
-
-        return image;
+            Orientation.Undefined or Orientation.TopLeft => image,
+            Orientation.TopRight => new TransformedBitmap(image, new ScaleTransform(-1, 1, 0, 0)),
+            Orientation.BottomRight => new TransformedBitmap(image, new RotateTransform(180)),
+            Orientation.BottomLeft => new TransformedBitmap(image, new ScaleTransform(1, 1, 0, 0)),
+            Orientation.LeftTop => new TransformedBitmap(
+                new TransformedBitmap(image, new RotateTransform(90)),
+                new ScaleTransform(-1, 1, 0, 0)),
+            Orientation.RightTop => new TransformedBitmap(image, new RotateTransform(90)),
+            Orientation.RightBottom => new TransformedBitmap(
+                new TransformedBitmap(image, new RotateTransform(270)),
+                new ScaleTransform(-1, 1, 0, 0)),
+            Orientation.LeftBottom => new TransformedBitmap(image, new RotateTransform(270)),
+            _ => image,
+        };
     }
 
     public override void Dispose()

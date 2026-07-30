@@ -23,9 +23,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace QuickLook.Plugin.ImageViewer;
+namespace QuickLook.Plugin.ImageViewer.Helpers;
 
-internal static class Helper
+internal static class ImageHelper
 {
     public static BitmapSource InvertColors(this BitmapSource source)
     {

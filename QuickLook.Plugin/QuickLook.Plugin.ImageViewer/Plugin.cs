@@ -19,6 +19,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.ImageViewer.AnimatedImage.Providers;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using QuickLook.Plugin.ImageViewer.Webview;
 using System;
 using System.Collections.Generic;
@@ -128,6 +129,9 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
         if (Directory.Exists(path))
             return false;
+
+        if (AmbiguousExtensionHelper.IsAmbiguousExtension(path))
+            return AmbiguousExtensionHelper.GetRoute(path) == AmbiguousExtensionHelper.Route.Image;
 
         // Disabled due mishandling text file types e.g., "*.config".
         // Only check extension for well known image and animated image types.
@@ -257,7 +261,7 @@ public sealed partial class Plugin : IViewer, IMoreMenu
             ? $"{Path.GetFileName(path)}"
             : $"{size.Width}×{size.Height}: {Path.GetFileName(path)}";
 
-        _ip.ImageUriSource = Helper.FilePathToFileUrl(path);
+        _ip.ImageUriSource = ImageHelper.FilePathToFileUrl(path);
 
         // Load the custom cursor into the preview panel
         if (new[] { ".cur", ".ani" }.Any(ext => path.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))

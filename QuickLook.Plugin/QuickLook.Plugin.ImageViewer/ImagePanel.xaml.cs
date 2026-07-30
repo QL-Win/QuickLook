@@ -20,6 +20,7 @@ using QuickLook.Common.Annotations;
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using QuickLook.Plugin.ImageViewer.NativeMethods;
 using System;
 using System.ComponentModel;

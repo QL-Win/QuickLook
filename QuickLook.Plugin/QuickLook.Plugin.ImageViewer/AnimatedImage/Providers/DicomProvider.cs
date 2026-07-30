@@ -19,6 +19,7 @@ using FellowOakDicom;
 using FellowOakDicom.Imaging;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -98,7 +99,7 @@ internal sealed class DicomProvider : AnimationProvider
                         return null;
 
                     var scaled = ScaleToFit(image, renderSize);
-                    Helper.DpiHack(scaled);
+                    ImageHelper.DpiHack(scaled);
                     scaled.Freeze();
 
                     return scaled;
@@ -131,7 +132,7 @@ internal sealed class DicomProvider : AnimationProvider
                     if (image == null)
                         return null;
 
-                    Helper.DpiHack(image);
+                    ImageHelper.DpiHack(image);
                     image.Freeze();
 
                     return image;

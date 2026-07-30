@@ -133,7 +133,7 @@ public static class WindowHelper
     public static void SetNoactivate(this Window window)
     {
         var hwnd = new WindowInteropHelper(window).Handle;
-        User32.SetWindowLong(hwnd, User32.GWL_EXSTYLE,
+        _ = User32.SetWindowLong(hwnd, User32.GWL_EXSTYLE,
             User32.GetWindowLong(hwnd, User32.GWL_EXSTYLE) |
             User32.WS_EX_NOACTIVATE);
     }
@@ -141,7 +141,7 @@ public static class WindowHelper
     public static void RemoveWindowControls(this Window window)
     {
         var hwnd = new WindowInteropHelper(window).Handle;
-        User32.SetWindowLong(hwnd, User32.GWL_STYLE,
+        _ = User32.SetWindowLong(hwnd, User32.GWL_STYLE,
             User32.GetWindowLong(hwnd, User32.GWL_STYLE) &
             ~User32.WS_SYSMENU);
     }

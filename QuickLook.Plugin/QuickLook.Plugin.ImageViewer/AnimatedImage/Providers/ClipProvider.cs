@@ -18,6 +18,7 @@
 using Microsoft.Data.Sqlite;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ internal class ClipProvider : AnimationProvider
     private readonly string FOOTER_MARKER = "CHNKFoot";
 
     private string _tempSqlitePath;
-    private SqliteConnection _conn;
+    private readonly SqliteConnection _conn;
     private byte[] _imageData;
     private BitmapSource _frame;
 
@@ -125,7 +126,7 @@ internal class ClipProvider : AnimationProvider
                 img.StreamSource = ms;
                 img.EndInit();
 
-                Helper.DpiHack(img);
+                ImageHelper.DpiHack(img);
                 img.Freeze();
 
                 _frame = img;
@@ -158,7 +159,7 @@ internal class ClipProvider : AnimationProvider
                 img.StreamSource = ms;
                 img.EndInit();
 
-                Helper.DpiHack(img);
+                ImageHelper.DpiHack(img);
                 img.Freeze();
 
                 _frame = img;

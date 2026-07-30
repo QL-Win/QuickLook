@@ -18,6 +18,7 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -109,7 +110,7 @@ internal class GfieProvider : AnimationProvider
                     return null;
 
                 var frame = bmp.ToBitmapSource();
-                Helper.DpiHack(frame);
+                ImageHelper.DpiHack(frame);
                 frame.Freeze();
                 _staticFrame = frame;
                 return frame;
@@ -194,7 +195,7 @@ internal class GfieProvider : AnimationProvider
         var height = bitmap.Height;
         var writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
         CopyBitmapToWriteableBitmap(bitmap, writeableBitmap);
-        Helper.DpiHack(writeableBitmap);
+        ImageHelper.DpiHack(writeableBitmap);
         return writeableBitmap;
     }
 
