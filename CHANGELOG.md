@@ -4,6 +4,7 @@
 
 ## 4.6.0
 
+- Add `.resources` (.NET binary resources) support to TextViewer
 - Add Greenfish Icon Editor Pro document support (`.gfie`, `.gfi`) to image viewer
 - Add Excalidraw support to image viewer [#1955](https://github.com/QL-Win/QuickLook/issues/1955)
 - Add binary viewer plugin [#290](https://github.com/QL-Win/QuickLook/issues/290)

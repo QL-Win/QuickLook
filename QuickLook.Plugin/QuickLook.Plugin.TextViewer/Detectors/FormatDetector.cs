@@ -42,6 +42,7 @@ public class FormatDetector
         new DockerfileDetector(),
         new ShellScriptDetector(),
         new KrcDetector(),
+        new ResourcesDetector(),
     ];
 
     public static IFormatDetector Confuse(string path, string text)

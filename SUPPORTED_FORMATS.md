@@ -47,6 +47,7 @@ Update not completed yet...
 - `.gitignore`, `.gitattributes` (Git config)
 - `.registry` (Windows registry file)
 - `.resource` (Resource file)
+- `.resources` (.NET binary resources, previewed as properties)
 - `.hosts` (Hosts file)
 - `.boo` (Boo script)
 - `.ada` (Ada source)
