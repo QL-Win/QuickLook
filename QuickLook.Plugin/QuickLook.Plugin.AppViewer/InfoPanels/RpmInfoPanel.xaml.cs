@@ -20,6 +20,7 @@ using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Plugin.AppViewer.PackageParsers.Rpm;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -60,7 +61,13 @@ public partial class RpmInfoPanel : UserControl, IAppInfoPanel
 
         _ = Task.Run(() =>
         {
-            if (File.Exists(path))
+            if (!File.Exists(path))
+            {
+                Dispatcher.Invoke(() => _context.IsBusy = false);
+                return;
+            }
+
+            try
             {
                 var size = new FileInfo(path).Length;
                 RpmInfo rpmInfo = RpmParser.Parse(path);
@@ -70,26 +77,25 @@ public partial class RpmInfoPanel : UserControl, IAppInfoPanel
                 {
                     applicationName.Text = rpmInfo.Name;
                     version.Text = rpmInfo.Version;
-                    architectureName.Text = rpmInfo.Arch; // Not impl
+                    architectureName.Text = rpmInfo.Arch;
                     vendor.Text = rpmInfo.Vendor;
-                    type.Text = rpmInfo.Type; // Not impl
-                    terminal.Text = rpmInfo.Terminal; // Not impl
+                    type.Text = rpmInfo.Type;
+                    terminal.Text = rpmInfo.Terminal;
                     totalSize.Text = size.ToPrettySize(2);
                     modDate.Text = last.ToString(CultureInfo.CurrentCulture);
-                    permissions.ItemsSource = rpmInfo.Env; // Not impl
+                    permissions.ItemsSource = rpmInfo.Env;
 
-                    if (rpmInfo.HasIcon) // Not impl
-                    {
-                        image.Source = rpmInfo.Logo.ToBitmapSource();
-                    }
-                    else
-                    {
-                        imageBk.Background = new SolidColorBrush(OSThemeHelper.AppsUseDarkTheme() ? Colors.LightGray : Colors.White);
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/rpm.png"));
-                    }
-
-                    _context.IsBusy = false;
+                    imageBk.Background = new SolidColorBrush(OSThemeHelper.AppsUseDarkTheme() ? Colors.LightGray : Colors.White);
+                    image.Source = new BitmapImage(new Uri("pack://application:,,,/QuickLook.Plugin.AppViewer;component/Resources/rpm.png"));
                 });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            finally
+            {
+                Dispatcher.Invoke(() => _context.IsBusy = false);
             }
         });
     }
