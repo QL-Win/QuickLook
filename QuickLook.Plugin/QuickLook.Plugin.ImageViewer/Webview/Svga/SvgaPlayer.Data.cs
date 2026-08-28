@@ -157,6 +157,30 @@ public partial class SvgaPlayer
     }
 
     /// <summary>
+    /// Check if the data is JSON format (SVGA 1.x)
+    /// Handles UTF-8 BOM and leading whitespace
+    /// </summary>
+    private static bool IsJsonPayload(byte[] data)
+    {
+        int i = 0;
+        
+        // Skip UTF-8 BOM (EF BB BF)
+        if (data.Length >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF)
+        {
+            i = 3;
+        }
+        
+        // Skip leading whitespace
+        while (i < data.Length && (data[i] == ' ' || data[i] == '\t' || data[i] == '\r' || data[i] == '\n'))
+        {
+            i++;
+        }
+        
+        // Check if first non-whitespace byte is '{'
+        return i < data.Length && data[i] == '{';
+    }
+
+    /// <summary>
     /// Extract SVGA data from ZIP archive (SVGA 1.x format)
     /// SVGA 1.x stores JSON data in "movie.spec" file
     /// </summary>
@@ -176,8 +200,9 @@ public partial class SvgaPlayer
                 entryStream.CopyTo(memoryStream);
                 var data = memoryStream.ToArray();
                 
-                // Check if it's JSON (starts with '{') or protobuf
-                bool isJson = data.Length > 0 && data[0] == '{';
+                // Check if it's JSON or protobuf
+                // Skip UTF-8 BOM (EF BB BF) and leading whitespace
+                bool isJson = IsJsonPayload(data);
                 return (data, isJson);
             }
         }
@@ -191,7 +216,7 @@ public partial class SvgaPlayer
                 using var memoryStream = new MemoryStream();
                 entryStream.CopyTo(memoryStream);
                 var data = memoryStream.ToArray();
-                bool isJson = data.Length > 0 && data[0] == '{';
+                bool isJson = IsJsonPayload(data);
                 return (data, isJson);
             }
         }
