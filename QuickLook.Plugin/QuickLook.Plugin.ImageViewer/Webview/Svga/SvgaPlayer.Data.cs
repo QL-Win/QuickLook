@@ -16,9 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Com.Opensource.Svga;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Text.Json;
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Svga;
 
@@ -32,6 +35,11 @@ public partial class SvgaPlayer
     /// Original binary data of the SVGA file
     /// </summary>
     private byte[] _inflatedBytes;
+
+    /// <summary>
+    /// Whether the data is in JSON format (SVGA 1.x) or protobuf format (SVGA 2.x)
+    /// </summary>
+    private bool _isJsonFormat;
 
     /// <summary>
     /// SVGA configuration parameters.
@@ -132,32 +140,100 @@ public partial class SvgaPlayer
     }
 
     /// <summary>
+    /// Check if the stream is a ZIP archive (SVGA 1.x format)
+    /// ZIP files start with PK header (0x50, 0x4B)
+    /// </summary>
+    private static bool IsZipArchive(Stream stream)
+    {
+        var originalPosition = stream.Position;
+        stream.Seek(0, SeekOrigin.Begin);
+
+        var header = new byte[2];
+        var bytesRead = stream.Read(header, 0, 2);
+
+        stream.Seek(originalPosition, SeekOrigin.Begin);
+
+        return bytesRead == 2 && header[0] == 0x50 && header[1] == 0x4B; // PK
+    }
+
+    /// <summary>
+    /// Extract SVGA data from ZIP archive (SVGA 1.x format)
+    /// SVGA 1.x stores JSON data in "movie.spec" file
+    /// </summary>
+    private (byte[] data, bool isJson) ExtractFromZip(Stream svgaFileBuffer)
+    {
+        svgaFileBuffer.Seek(0, SeekOrigin.Begin);
+
+        using var archive = new ZipArchive(svgaFileBuffer, ZipArchiveMode.Read, leaveOpen: true);
+        
+        // SVGA 1.x stores the JSON data in "movie.spec"
+        foreach (var entry in archive.Entries)
+        {
+            if (entry.Name.Equals("movie.spec", StringComparison.OrdinalIgnoreCase))
+            {
+                using var entryStream = entry.Open();
+                using var memoryStream = new MemoryStream();
+                entryStream.CopyTo(memoryStream);
+                var data = memoryStream.ToArray();
+                
+                // Check if it's JSON (starts with '{') or protobuf
+                bool isJson = data.Length > 0 && data[0] == '{';
+                return (data, isJson);
+            }
+        }
+
+        // Fallback: try to find any .spec file
+        foreach (var entry in archive.Entries)
+        {
+            if (entry.Name.EndsWith(".spec", StringComparison.OrdinalIgnoreCase))
+            {
+                using var entryStream = entry.Open();
+                using var memoryStream = new MemoryStream();
+                entryStream.CopyTo(memoryStream);
+                var data = memoryStream.ToArray();
+                bool isJson = data.Length > 0 && data[0] == '{';
+                return (data, isJson);
+            }
+        }
+
+        throw new InvalidDataException("No valid SVGA data found in ZIP archive");
+    }
+
+    /// <summary>
     /// Inflate the SVGA file to get its original data
-    /// The SVGA file has been deflated, so the first step is to inflate it
+    /// Supports both SVGA 1.x (ZIP/JSON) and 2.x (zlib/protobuf) formats
     /// </summary>
     private void InflateSvgaFile(Stream svgaFileBuffer)
     {
-        byte[] inflatedBytes;
-
-        // The built-in DeflateStream in Microsoft .NET does not recognize the first two bytes of the file header. For SVGA, these two bytes are 78 9C, which is the default compression indicator for Deflate
-        // For more information, see https://stackoverflow.com/questions/17212964/net-zlib-inflate-with-net-4-5
-        // For Zlib file header, see https://stackoverflow.com/questions/9050260/what-does-a-zlib-header-look-like
-        svgaFileBuffer.Seek(2, SeekOrigin.Begin);
-
-        using (var deflatedStream = new DeflateStream(svgaFileBuffer, CompressionMode.Decompress))
+        if (IsZipArchive(svgaFileBuffer))
         {
-            using var stream = new MemoryStream();
-            deflatedStream.CopyTo(stream);
-            inflatedBytes = stream.ToArray();
+            // SVGA 1.x format: ZIP archive containing JSON data
+            var (data, isJson) = ExtractFromZip(svgaFileBuffer);
+            _inflatedBytes = data;
+            _isJsonFormat = isJson;
         }
+        else
+        {
+            // SVGA 2.x format: zlib compressed protobuf data
+            // The built-in DeflateStream in Microsoft .NET does not recognize the first two bytes of the file header. For SVGA, these two bytes are 78 9C, which is the default compression indicator for Deflate
+            // For more information, see https://stackoverflow.com/questions/17212964/net-zlib-inflate-with-net-4-5
+            // For Zlib file header, see https://stackoverflow.com/questions/9050260/what-does-a-zlib-header-look-like
+            svgaFileBuffer.Seek(2, SeekOrigin.Begin);
 
-        _inflatedBytes = inflatedBytes;
+            using (var deflatedStream = new DeflateStream(svgaFileBuffer, CompressionMode.Decompress))
+            {
+                using var stream = new MemoryStream();
+                deflatedStream.CopyTo(stream);
+                _inflatedBytes = stream.ToArray();
+            }
+            _isJsonFormat = false;
+        }
     }
 
     /// <summary>
     /// Get the SVGA MovieEntity from the inflated data
+    /// Supports both JSON (SVGA 1.x) and protobuf (SVGA 2.x) formats
     /// </summary>
-    /// <param name="inflatedBytes"></param>
     private void InitMovieEntity()
     {
         if (_inflatedBytes == null)
@@ -165,13 +241,66 @@ public partial class SvgaPlayer
             return;
         }
 
-        var moveEntity = MovieEntity.Parser.ParseFrom(_inflatedBytes);
-        _movieParams = moveEntity.Params;
-        _sprites = [.. moveEntity.Sprites];
-        TotalFrame = moveEntity.Params.Frames;
-        SpriteCount = _sprites.Count;
-        StageWidth = _movieParams.ViewBoxWidth;
-        StageHeight = _movieParams.ViewBoxHeight;
+        if (_isJsonFormat)
+        {
+            // SVGA 1.x: JSON format
+            InitMovieEntityFromJson();
+        }
+        else
+        {
+            // SVGA 2.x: Protobuf format
+            var moveEntity = MovieEntity.Parser.ParseFrom(_inflatedBytes);
+            _movieParams = moveEntity.Params;
+            _sprites = [.. moveEntity.Sprites];
+            TotalFrame = moveEntity.Params.Frames;
+            SpriteCount = _sprites.Count;
+            StageWidth = _movieParams.ViewBoxWidth;
+            StageHeight = _movieParams.ViewBoxHeight;
+        }
+    }
+
+    /// <summary>
+    /// Parse SVGA 1.x JSON format
+    /// </summary>
+    private void InitMovieEntityFromJson()
+    {
+        var json = System.Text.Encoding.UTF8.GetString(_inflatedBytes);
+        using var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
+
+        if (root.TryGetProperty("movie", out var movie))
+        {
+            if (movie.TryGetProperty("viewBox", out var viewBox))
+            {
+                StageWidth = viewBox.GetProperty("width").GetSingle();
+                StageHeight = viewBox.GetProperty("height").GetSingle();
+            }
+
+            if (movie.TryGetProperty("frames", out var frames))
+            {
+                TotalFrame = frames.GetInt32();
+            }
+
+            if (movie.TryGetProperty("fps", out var fps))
+            {
+                Fps = fps.GetInt32();
+            }
+        }
+
+        if (root.TryGetProperty("sprites", out var sprites))
+        {
+            SpriteCount = sprites.GetArrayLength();
+        }
+
+        // Create a minimal MovieParams for compatibility
+        _movieParams = new MovieParams
+        {
+            ViewBoxWidth = StageWidth,
+            ViewBoxHeight = StageHeight,
+            Frames = TotalFrame,
+            Fps = Fps
+        };
+        _sprites = new List<SpriteEntity>();
     }
 
     /// <summary>
