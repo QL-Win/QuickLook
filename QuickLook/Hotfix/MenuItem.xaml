@@ -1,0 +1,297 @@
+<!--
+    Local Hotfix (ported from Wpf.Ui.Violeta Hotfix/MenuItem.xaml):
+    Upstream omits VerticalAlignment on SubmenuItem Header; with IsCheckable the 20px
+    checkbox raises the row and text sits top-aligned. Center Header/InputGesture here.
+    Re-bind MenuItem styles so StaticResource picks up these templates (upstream Style
+    resolved template keys at parse time).
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Wpf.Ui.Controls;assembly=Wpf.Ui">
+
+    <!--  SubmenuItem (System.Windows.Controls.MenuItem)  -->
+    <ControlTemplate x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}" TargetType="{x:Type MenuItem}">
+        <Border
+            x:Name="Border"
+            Margin="4,1,4,1"
+            Background="Transparent"
+            CornerRadius="4">
+            <Grid Margin="8,6,8,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    x:Name="CheckBoxIconBorder"
+                    Grid.Column="0"
+                    Width="20"
+                    Height="20"
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource CheckBoxBackground}"
+                    BorderBrush="{DynamicResource CheckBoxBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        x:Name="CheckBoxIcon"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{DynamicResource FluentSystemIcons}"
+                        FontSize="16"
+                        Text=""
+                        TextAlignment="Center" />
+                </Border>
+
+                <ContentPresenter
+                    x:Name="Icon"
+                    Grid.Column="1"
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding Icon}"
+                    KeyboardNavigation.IsTabStop="False" />
+
+                <ContentPresenter
+                    x:Name="Header"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True"
+                    TextElement.Foreground="{TemplateBinding Foreground}" />
+
+                <TextBlock
+                    x:Name="InputGesture"
+                    Grid.Column="3"
+                    Margin="25,0,0,0"
+                    VerticalAlignment="Center"
+                    DockPanel.Dock="Right"
+                    FontSize="11"
+                    Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                    Text="{TemplateBinding InputGestureText}" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsPressed" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundSelected}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsPressed" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundPressed}" />
+                <Setter TargetName="Icon" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+                <Setter TargetName="Header" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+                <Setter TargetName="InputGesture" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+            </MultiTrigger>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundSelected}" />
+            </Trigger>
+            <Trigger Property="Icon" Value="{x:Null}">
+                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter TargetName="CheckBoxIconBorder" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="CheckBoxIcon" Property="Text" Value="&#xF294;" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource TextFillColorDisabled}" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="InputGestureText" Value="">
+                <Setter TargetName="InputGesture" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--
+        Re-bind default MenuItem style so StaticResource picks up overridden templates
+        (upstream Style resolved template keys at parse time).
+    -->
+    <Style x:Key="UiMenuItem" TargetType="{x:Type MenuItem}">
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style BasedOn="{StaticResource DefaultControlFocusVisualStyle}">
+                    <Setter Property="Control.Margin" Value="4,1" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="Role" Value="TopLevelHeader">
+                <Setter Property="Template" Value="{StaticResource {x:Static MenuItem.TopLevelHeaderTemplateKey}}" />
+                <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+            </Trigger>
+            <Trigger Property="Role" Value="TopLevelItem">
+                <Setter Property="Template" Value="{StaticResource {x:Static MenuItem.TopLevelItemTemplateKey}}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter Property="Template" Value="{StaticResource {x:Static MenuItem.SubmenuHeaderTemplateKey}}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuItem">
+                <Setter Property="Template" Value="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="{x:Type MenuItem}"
+        BasedOn="{StaticResource UiMenuItem}"
+        TargetType="{x:Type MenuItem}" />
+
+    <!--  SubmenuItem (Wpf.Ui.Controls.MenuItem)  -->
+    <ControlTemplate x:Key="WpfUiMenuItemSubmenuItemTemplateKey" TargetType="{x:Type controls:MenuItem}">
+        <Border
+            x:Name="Border"
+            Margin="4,1,4,1"
+            Background="{TemplateBinding Background}"
+            CornerRadius="4">
+            <Grid Margin="8,6,8,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    x:Name="CheckBoxIconBorder"
+                    Grid.Column="0"
+                    Width="20"
+                    Height="20"
+                    Margin="0"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource CheckBoxBackground}"
+                    BorderBrush="{DynamicResource CheckBoxBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        x:Name="CheckBoxIcon"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{DynamicResource FluentSystemIcons}"
+                        FontSize="16"
+                        Text=""
+                        TextAlignment="Center" />
+                </Border>
+
+                <ContentControl
+                    x:Name="Icon"
+                    Grid.Column="1"
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding Icon}"
+                    FontSize="16"
+                    KeyboardNavigation.IsTabStop="False" />
+
+                <ContentPresenter
+                    x:Name="Header"
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True"
+                    TextElement.Foreground="{TemplateBinding Foreground}" />
+
+                <TextBlock
+                    x:Name="InputGesture"
+                    Grid.Column="4"
+                    Margin="25,0,0,0"
+                    VerticalAlignment="Center"
+                    DockPanel.Dock="Right"
+                    FontSize="11"
+                    Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                    Text="{TemplateBinding InputGestureText}" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundSelected}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsPressed" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundSelected}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsPressed" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MenuBarItemBackgroundPressed}" />
+                <Setter TargetName="Icon" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+                <Setter TargetName="Header" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+                <Setter TargetName="InputGesture" Property="TextElement.Foreground" Value="{DynamicResource MenuBarItemTextForegroundPressed}" />
+            </MultiTrigger>
+            <Trigger Property="Icon" Value="{x:Null}">
+                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="Icon" Property="Margin" Value="0" />
+            </Trigger>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter TargetName="CheckBoxIconBorder" Property="Visibility" Value="Visible" />
+                <Setter TargetName="CheckBoxIconBorder" Property="Margin" Value="0,0,6,0" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="CheckBoxIcon" Property="Text" Value="&#xF294;" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource TextFillColorDisabled}" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="InputGestureText" Value="">
+                <Setter TargetName="InputGesture" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="WpfUiMenuItem" TargetType="{x:Type controls:MenuItem}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style BasedOn="{StaticResource DefaultControlFocusVisualStyle}">
+                    <Setter Property="Control.Margin" Value="4,1" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+        <Setter Property="Focusable" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="Role" Value="TopLevelHeader">
+                <Setter Property="Template" Value="{StaticResource WpfUiMenuItemTopLevelHeaderTemplateKey}" />
+                <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+            </Trigger>
+            <Trigger Property="Role" Value="TopLevelItem">
+                <Setter Property="Template" Value="{StaticResource WpfUiMenuItemTopLevelItemTemplateKey}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter Property="Template" Value="{StaticResource WpfUiMenuItemSubmenuHeaderTemplateKey}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuItem">
+                <Setter Property="Template" Value="{StaticResource WpfUiMenuItemSubmenuItemTemplateKey}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style BasedOn="{StaticResource WpfUiMenuItem}" TargetType="{x:Type controls:MenuItem}" />
+
+</ResourceDictionary>

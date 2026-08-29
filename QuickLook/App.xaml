@@ -12,6 +12,8 @@
                 <ui:ControlsDictionary />
                 <vio:ThemesDictionary />
                 <vio:ControlsDictionary />
+                <!--  MenuItem SubmenuItem Header vertical-center (IsCheckable rows); see Hotfix/MenuItem.xaml  -->
+                <ResourceDictionary Source="/QuickLook;component/Hotfix/MenuItem.xaml" />
                 <ResourceDictionary Source="/QuickLook.Common;component/Styles/ScrollBarStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!--  Even though Segoe MDL2 Assets is obsoleted, retain it here for compatibility with legacy plugins.  -->
