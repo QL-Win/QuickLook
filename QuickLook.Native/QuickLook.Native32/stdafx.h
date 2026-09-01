@@ -25,7 +25,9 @@
 
 
 // TODO: reference additional headers your program requires here
+#include<atlbase.h>
 #include<atlcomcli.h>
+#include<atlalloc.h>
 #include<Exdisp.h>
 #include<Shobjidl.h>
 #include<shlguid.h>
@@ -33,5 +35,6 @@
 #include<Shellapi.h>
 #include<Psapi.h>
 #include<AppModel.h>
+#include<propkey.h>
 
 #define MAX_PATH_EX 32767
