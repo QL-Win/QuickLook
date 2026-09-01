@@ -33,7 +33,10 @@ public class SvgaImagePanel(IWebMetaProvider metaWeb) : SvgImagePanel()
 
         ObjectForScripting ??= new ScriptHandler(path, _metaWeb);
 
-        _homePage = _resources["/svga2html.html"];
+        var homePageKey = SvgaDetector.Detect(path) == SvgaVersion.V1
+            ? "/svga2html_v1.html"
+            : "/svga2html.html";
+        _homePage = _resources[homePageKey];
         NavigateToUri(new Uri("file://quicklook/"));
     }
 }
