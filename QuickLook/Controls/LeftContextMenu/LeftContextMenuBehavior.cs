@@ -61,23 +61,46 @@ public sealed class LeftContextMenuBehavior : Behavior<FrameworkElement>
         {
             return;
         }
+
+        // Match Wpf.Ui.Violeta DropDownButton: open on MouseUp. With StaysOpen=false,
+        // clicking the trigger while open dismisses on MouseDown — suppress the matching
+        // MouseUp so we do not immediately reopen.
+        var suppressOpen = false;
+
         frameworkElement.PreviewMouseRightButtonUp += (_, e) => e.Handled = true;
         frameworkElement.MouseRightButtonUp += (_, e) => e.Handled = true;
         frameworkElement.PreviewMouseLeftButtonDown += (_, _) =>
         {
+            suppressOpen = frameworkElement.ContextMenu?.IsOpen == true;
+        };
+        frameworkElement.PreviewMouseLeftButtonUp += (_, e) =>
+        {
             ContextMenu contextMenu = frameworkElement.ContextMenu;
 
-            if (contextMenu != null)
+            if (contextMenu == null)
             {
-                if (contextMenu.PlacementTarget != frameworkElement)
-                {
-                    contextMenu.PlacementTarget = frameworkElement;
-                    contextMenu.PlacementRectangle = new Rect(placementOffset ?? new Point(), new Size(frameworkElement.ActualWidth, frameworkElement.ActualHeight));
-                    contextMenu.Placement = placement;
-                    contextMenu.StaysOpen = false;
-                }
-                contextMenu.IsOpen = !contextMenu.IsOpen;
+                return;
             }
+
+            if (suppressOpen)
+            {
+                suppressOpen = false;
+                return;
+            }
+
+            contextMenu.PlacementTarget = frameworkElement;
+            contextMenu.PlacementRectangle = new Rect(
+                placementOffset ?? new Point(),
+                new Size(frameworkElement.ActualWidth, frameworkElement.ActualHeight));
+            contextMenu.Placement = placement;
+            contextMenu.StaysOpen = false;
+
+            if (!contextMenu.IsOpen)
+            {
+                contextMenu.IsOpen = true;
+            }
+
+            e.Handled = true;
         };
     }
 

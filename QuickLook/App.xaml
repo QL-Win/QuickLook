@@ -12,6 +12,8 @@
                 <ui:ControlsDictionary />
                 <vio:ThemesDictionary />
                 <vio:ControlsDictionary />
+                <!--  Drop upstream UiContextMenu From=-90 slide that covers Placement=Bottom host  -->
+                <ResourceDictionary Source="/QuickLook;component/Hotfix/ContextMenu.xaml" />
                 <ResourceDictionary Source="/QuickLook.Common;component/Styles/ScrollBarStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!--  Even though Segoe MDL2 Assets is obsoleted, retain it here for compatibility with legacy plugins.  -->
