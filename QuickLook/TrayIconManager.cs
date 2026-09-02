@@ -38,6 +38,7 @@ internal partial class TrayIconManager : IDisposable
 
     private readonly TrayMenuItem _itemAutorun = null!;
     private readonly TrayMenuItem _itemCloseOnLostFocus = null!;
+    private readonly TrayMenuItem _itemThemeCycle = null!;
 
     private TrayIconManager()
     {
@@ -69,6 +70,17 @@ internal partial class TrayIconManager : IDisposable
                 {
                     Header = TranslationHelper.Get("Icon_OpenDataFolder"),
                     Command = new RelayCommand(() => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
+                },
+                _itemThemeCycle = new TrayMenuItem()
+                {
+                    Header = TranslationHelper.Get("Icon_ThemeAuto", failsafe: "Theme: Auto"),
+                    Command = new RelayCommand(() =>
+                    {
+                        var current = SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+                        var next = (AppThemeMode)((current + 1) % 3);
+                        SettingHelper.Set(SettingHelper.KeyAppTheme, (int)next, "QuickLook");
+                        App.SetTheme(next);
+                    }),
                 },
                 _itemAutorun = new TrayMenuItem()
                 {
@@ -109,6 +121,10 @@ internal partial class TrayIconManager : IDisposable
         {
             _itemAutorun.IsChecked = AutoStartupHelper.IsAutorun();
             _itemCloseOnLostFocus.IsChecked = SettingHelper.Get("CloseOnLostFocus", false);
+            var theme = (AppThemeMode)SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+            _itemThemeCycle.Header = theme == AppThemeMode.Light ? TranslationHelper.Get("Icon_ThemeLight", failsafe: "Theme: Light") :
+                                     theme == AppThemeMode.Dark ? TranslationHelper.Get("Icon_ThemeDark", failsafe: "Theme: Dark") :
+                                     TranslationHelper.Get("Icon_ThemeAuto", failsafe: "Theme: Auto");
         };
     }
 
