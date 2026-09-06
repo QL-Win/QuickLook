@@ -214,15 +214,40 @@ public partial class ViewerWindow : Window
         const int WM_NCHITTEST = 0x0084;
         const int WM_DPICHANGED = 0x02E0;
 
-        // Short-circuit WM_NCHITTEST with HTCLIENT. Verified to stop net462
-        // WindowChromeWorker._HandleNCHitTest from overflowing during cross-DPI dragging (the
-        // overflow is in WPF's own DPI math, so no condition on the window rect can reliably
-        // detect it). Dragging still works because the content panels use WM_NCLBUTTONDOWN(HT
-        // CAPTION) directly rather than relying on a hit test result.
+        // Implement the hit test ourselves instead of deferring to WindowChromeWorker.
+        // WindowChromeWorker._HandleNCHitTest (net462) overflows during cross-DPI dragging (its
+        // per-window DPI math goes out of sync with the HWND rect and can't be corrected from the
+        // outside). Reporting the resize border zones here keeps edge/corner resizing working while
+        // everything else is treated as client area. Title-bar dragging is handled by
+        // TitleArea_MouseLeftButtonDown, and caption buttons are WPF content, so neither needs a
+        // non-client hit-test result.
         if (msg == WM_NCHITTEST)
         {
+            // Mouse position (screen, physical pixels) is packed into lParam as signed 16-bit pairs.
+            int v = lParam.ToInt32();
+            int mx = (short)(v & 0xFFFF);
+            int my = (short)((v >> 16) & 0xFFFF);
+
+            QuickLook.Common.NativeMethods.User32.GetWindowRect(hwnd, out var r);
+
+            // Resize border zone (physical pixels). The WindowChrome resize border is 6 logical
+            // pixels; a fixed 8 physical-pixel zone covers it across common DPI scale factors.
+            const int border = 8;
+            bool left = mx < r.Left + border;
+            bool right = mx >= r.Right - border;
+            bool top = my < r.Top + border;
+            bool bottom = my >= r.Bottom - border;
+
             handled = true;
-            return new IntPtr(1); // HTCLIENT
+            if (top && left) return new IntPtr(13);      // HTTOPLEFT
+            if (top && right) return new IntPtr(14);     // HTTOPRIGHT
+            if (bottom && left) return new IntPtr(16);   // HTBOTTOMLEFT
+            if (bottom && right) return new IntPtr(17);  // HTBOTTOMRIGHT
+            if (left) return new IntPtr(10);             // HTLEFT
+            if (right) return new IntPtr(11);            // HTRIGHT
+            if (top) return new IntPtr(12);              // HTTOP
+            if (bottom) return new IntPtr(15);           // HTBOTTOM
+            return new IntPtr(1);                        // HTCLIENT
         }
 
         if (msg == WM_DPICHANGED && lParam != IntPtr.Zero)
