@@ -22,8 +22,10 @@ using QuickLook.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
@@ -45,6 +47,7 @@ public partial class ViewerWindow : Window
     private string _path = string.Empty;
     private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
+    private HwndSource _windowHwndSource;
 
     internal ViewerWindow()
     {
@@ -66,6 +69,11 @@ public partial class ViewerWindow : Window
         StateChanged += (_, _) => _ignoreNextWindowSizeChange = true;
 
         windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
+
+        // Window dragging is done by hand here (WM_NCLBUTTONDOWN + HT CAPTION) instead of relying on
+        // WindowChrome's hit test, because we answer WM_NCHITTEST with HTCLIENT to prevent a net462
+        // WindowChrome overflow when dragging across different-DPI monitors.
+        titleArea.MouseLeftButtonDown += TitleArea_MouseLeftButtonDown;
 
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
@@ -188,6 +196,48 @@ public partial class ViewerWindow : Window
         WindowHelper.RemoveWindowControls(this);
 
         ApplyWindowBackgroundEffects();
+
+        // Handle WM_DPICHANGED so dragging the window onto a monitor with a different DPI
+        // (e.g. a 4K secondary display on a per-monitor-DPI system) keeps the HWND geometry and
+        // WPF's view of it in sync. Without this, WindowChromeWorker._HandleNCHitTest (net462)
+        // reads a stale window rect during the drag and throws OverflowException.
+        var handle = new WindowInteropHelper(this).Handle;
+        if (handle != IntPtr.Zero && HwndSource.FromHwnd(handle) is HwndSource hwndSource)
+        {
+            _windowHwndSource = hwndSource;
+            hwndSource.AddHook(WndProc);
+        }
+    }
+
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        const int WM_NCHITTEST = 0x0084;
+        const int WM_DPICHANGED = 0x02E0;
+
+        // Short-circuit WM_NCHITTEST with HTCLIENT. Verified to stop net462
+        // WindowChromeWorker._HandleNCHitTest from overflowing during cross-DPI dragging (the
+        // overflow is in WPF's own DPI math, so no condition on the window rect can reliably
+        // detect it). Dragging still works because the content panels use WM_NCLBUTTONDOWN(HT
+        // CAPTION) directly rather than relying on a hit test result.
+        if (msg == WM_NCHITTEST)
+        {
+            handled = true;
+            return new IntPtr(1); // HTCLIENT
+        }
+
+        if (msg == WM_DPICHANGED && lParam != IntPtr.Zero)
+        {
+            var suggested = Marshal.PtrToStructure<QuickLook.Common.NativeMethods.User32.RECT>(lParam);
+            var width = Math.Max(suggested.Right - suggested.Left, 1);
+            var height = Math.Max(suggested.Bottom - suggested.Top, 1);
+
+            QuickLook.Common.NativeMethods.User32.MoveWindow(hwnd, suggested.Left, suggested.Top, width, height, true);
+
+            handled = true;
+            return IntPtr.Zero;
+        }
+
+        return IntPtr.Zero;
     }
 
     protected override void OnContentRendered(EventArgs e)
@@ -463,6 +513,34 @@ public partial class ViewerWindow : Window
         if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
             show.Begin();
     }
+
+    private void TitleArea_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed)
+            return;
+
+        // Do not allow dragging when window is borderless (e.g. fullscreen)
+        if (WindowStyle == WindowStyle.None)
+            return;
+
+        // Start the native move loop directly. Window.DragMove() depends on a hit-test result, but
+        // we answer WM_NCHITTEST with HTCLIENT (to avoid a WindowChrome overflow), so drag by hand.
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd == IntPtr.Zero)
+            return;
+
+        ReleaseCapture();
+        SendMessage(hwnd, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+    }
+
+    private const int WM_NCLBUTTONDOWN = 0x00A1;
+    private const int HTCAPTION = 0x0002;
+
+    [DllImport("user32.dll")]
+    private static extern bool ReleaseCapture();
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
     private void AutoHideCaptionContainer(object sender, EventArgs e)
     {

@@ -161,11 +161,26 @@ public partial class ViewerWindow
         if (WindowState == WindowState.Maximized)
             return;
 
-        size = new Size(Math.Max(MinWidth, size.Width), Math.Max(MinHeight, size.Height));
+        // Math.Max(MinWidth, NaN) keeps NaN, which then flows into the WPF window geometry and
+        // causes an OverflowException inside WindowChromeWorker.HandleNCHitTest (net462).
+        // Sanitize any NaN / non-finite / non-positive size before it reaches the window.
+        size = new Size(
+            FinitePositive(Math.Max(MinWidth, size.Width), MinWidth),
+            FinitePositive(Math.Max(MinHeight, size.Height), MinHeight));
 
         var newRect = IsLoaded ? ResizeAndCentreExistingWindow(size) : ResizeAndCentreNewWindow(size);
 
+        // MoveWindow clamps any non-finite / out-of-range coordinate and guarantees a sane
+        // physical window size, so the window can sit on a negative-coordinate monitor (e.g. a
+        // secondary display left of the primary) without being dragged to the primary screen.
         this.MoveWindow(newRect.Left, newRect.Top, newRect.Width, newRect.Height);
+    }
+
+    private static double FinitePositive(double value, double fallback)
+    {
+        if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
+            return fallback;
+        return value;
     }
 
     private Rect ResizeAndCentreExistingWindow(Size size)

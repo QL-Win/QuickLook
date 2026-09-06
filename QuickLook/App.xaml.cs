@@ -60,13 +60,21 @@ public partial class App : Application
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
         }
 
-        // Explicitly set to PerMonitor to avoid being overridden by the system
-        if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
+        // Per-Monitor V2 so a window dragged across monitors with different DPI gets WM_DPICHANGED
+        // and is rescaled automatically. This keeps WPF's per-window DPI in sync and prevents
+        // WindowChromeWorker._HandleNCHitTest from overflowing on a non-primary 4K display.
+        // Fall back to V1 (SetProcessDpiAwareness) on systems that don't support the context API.
+        if (Environment.OSVersion.Version >= new Version(10, 0, 15063) &&
+            SHCore.SetProcessDpiAwarenessContext(SHCore.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+        {
+            Debug.WriteLine("DPI Awareness context: Per-Monitor V2 applied");
+        }
+        else if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
         {
             Debug.WriteLine(
                 result == 0 ?
-                "DPI Awareness applied successfully" :
-                $"DPI Awareness manual setup failed. Error Code: {result}"
+                "DPI Awareness (V1) applied successfully" :
+                $"DPI Awareness (V1) manual setup failed. Error Code: {result}"
             );
         }
 
