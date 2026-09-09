@@ -529,11 +529,11 @@ public partial class ViewerWindow
         UnloadPlugin();
         busyDecorator.Dispose();
 
-        // Detach the WndProc hook so the HwndSource can be released cleanly.
-        if (_windowHwndSource != null && _windowHook != null)
-            _windowHwndSource.RemoveHook(_windowHook);
-        _windowHwndSource = null;
-        _windowHook = null;
+        // Do NOT remove the WndProc hook here. Removing it leaves a window that still exists (until
+        // base.OnClosing runs) but is no longer guarded, so a WM_NCHITTEST arriving in that instant
+        // (e.g. the mouse resting on the close button) falls through to WPF's WindowChromeWorker
+        // and can overflow. The HwndSource disposes and releases the hook chain when the window
+        // actually closes, so leaving it attached is safe.
 
         base.OnClosing(e);
 
