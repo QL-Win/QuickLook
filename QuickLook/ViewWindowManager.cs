@@ -22,6 +22,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace QuickLook;
 
@@ -29,7 +31,15 @@ public class ViewWindowManager : IDisposable
 {
     private static ViewWindowManager _instance;
 
+    private const int LoadingDelayMs = 150;
+    private const int SlowLoadingMs = 12000;
+    private const int TimeoutLoadingMs = 45000;
+
     private string _invokedPath = string.Empty;
+    private DispatcherTimer _loadingDelayTimer;
+    private DispatcherTimer _slowLoadingTimer;
+    private DispatcherTimer _timeoutLoadingTimer;
+    private int _previewRequestId;
     private ViewerWindow _viewerWindow;
 
     internal ViewWindowManager()
@@ -39,6 +49,7 @@ public class ViewWindowManager : IDisposable
 
     public void Dispose()
     {
+        StopLoadingTimers();
         StopFocusMonitor();
     }
 
@@ -47,10 +58,13 @@ public class ViewWindowManager : IDisposable
         if (!_viewerWindow.IsVisible)
             return;
 
+        _previewRequestId++;
+
         // if the current focus is in Desktop or explorer windows, just close the preview window and leave the task to System.
         var focus = NativeMethods.QuickLook.GetFocusedWindowType();
         if (focus != NativeMethods.QuickLook.FocusedWindowType.Invalid)
         {
+            StopLoadingTimers();
             StopFocusMonitor();
             _viewerWindow.Close();
             return;
@@ -60,6 +74,9 @@ public class ViewWindowManager : IDisposable
         if (!WindowHelper.IsForegroundWindowBelongToSelf())
             return;
 
+        _previewRequestId++;
+        StopLoadingTimers();
+
         StopFocusMonitor();
         _viewerWindow.RunAndClose();
     }
@@ -68,6 +85,9 @@ public class ViewWindowManager : IDisposable
     {
         if (!_viewerWindow.IsVisible)
             return;
+
+        _previewRequestId++;
+        StopLoadingTimers();
 
         StopFocusMonitor();
         _viewerWindow.Close();
@@ -99,6 +119,7 @@ public class ViewWindowManager : IDisposable
 
     internal void ForgetCurrentWindow()
     {
+        StopLoadingTimers();
         StopFocusMonitor();
 
         _viewerWindow.Pinned = true;
@@ -164,9 +185,9 @@ public class ViewWindowManager : IDisposable
 
         RunFocusMonitor();
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+        var requestId = ++_previewRequestId;
 
-        BeginShowNewWindow(path, matchedPlugin);
+        BeginPreviewRequest(path, requestId, () => PluginManager.GetInstance().FindMatch(path));
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
@@ -185,17 +206,14 @@ public class ViewWindowManager : IDisposable
         if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
             return;
 
+        _invokedPath = path;
+
         RunFocusMonitor();
 
-        var matchedPlugin = PluginManager.GetInstance().LoadedPlugins.Find(p =>
-        {
-            return p.GetType().Assembly.GetName().Name == plugin;
-        });
+        var requestId = ++_previewRequestId;
 
-        if (matchedPlugin != null)
-        {
-            BeginShowNewWindow(path, matchedPlugin);
-        }
+        BeginPreviewRequest(path, requestId, () => PluginManager.GetInstance().LoadedPlugins.Find(p =>
+            p.GetType().Assembly.GetName().Name == plugin));
     }
 
     public void ReloadPreview()
@@ -203,9 +221,10 @@ public class ViewWindowManager : IDisposable
         if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
             return;
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
+        var path = _invokedPath;
+        var requestId = ++_previewRequestId;
 
-        BeginShowNewWindow(_invokedPath, matchedPlugin);
+        BeginPreviewRequest(path, requestId, () => PluginManager.GetInstance().FindMatch(path), true);
     }
 
     public void ToggleFullscreen()
@@ -218,9 +237,176 @@ public class ViewWindowManager : IDisposable
 
     private void BeginShowNewWindow(string path, IViewer matchedPlugin)
     {
-        _viewerWindow.UnloadPlugin();
+        var requestId = ++_previewRequestId;
 
-        _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
+        BeginPreviewRequest(path, requestId, () => matchedPlugin, true);
+    }
+
+    private void BeginPreviewRequest(string path, int requestId, Func<IViewer> pluginFactory, bool showImmediately = false)
+    {
+        StopLoadingTimers();
+
+        var status = CreateLoadingStatus(path);
+        var shouldShowImmediately = showImmediately || _viewerWindow.IsVisible || status.ShowImmediately;
+
+        _viewerWindow.UnloadPlugin();
+        ScheduleLoadingStatus(path, requestId, status, shouldShowImmediately);
+        ScheduleLongRunningStatus(path, requestId, status);
+
+        Task.Run(pluginFactory).ContinueWith(task =>
+        {
+            _viewerWindow.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (!IsCurrentPreviewRequest(path, requestId))
+                    return;
+
+                StopLoadingDelay();
+
+                if (task.IsFaulted)
+                {
+                    var exception = task.Exception?.GetBaseException() ?? new InvalidOperationException("Failed to prepare preview.");
+                    CurrentPluginFailed(path, ExceptionDispatchInfo.Capture(exception));
+                    return;
+                }
+
+                var matchedPlugin = task.Result;
+                if (matchedPlugin == null)
+                    return;
+
+                _viewerWindow.UpdateLoadingStatus(
+                    TranslationHelper.Get("MW_OpeningPreview", failsafe: "Opening preview..."),
+                    TranslationHelper.Get("MW_OpeningPreviewDetail", failsafe: "Preparing the viewer."),
+                    "\xe8e5");
+                _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
+            }), DispatcherPriority.ContextIdle);
+        });
+    }
+
+    private bool IsCurrentPreviewRequest(string path, int requestId)
+    {
+        return requestId == _previewRequestId &&
+               string.Equals(path, _invokedPath, StringComparison.Ordinal);
+    }
+
+    private void ScheduleLoadingStatus(string path, int requestId, LoadingStatus status, bool showImmediately)
+    {
+        if (showImmediately)
+        {
+            ShowLoadingStatus(path, requestId, status);
+            return;
+        }
+
+        _loadingDelayTimer = new DispatcherTimer(DispatcherPriority.Background, _viewerWindow.Dispatcher)
+        {
+            Interval = TimeSpan.FromMilliseconds(LoadingDelayMs),
+        };
+        _loadingDelayTimer.Tick += (_, _) =>
+        {
+            StopLoadingDelay();
+            ShowLoadingStatus(path, requestId, status);
+        };
+        _loadingDelayTimer.Start();
+    }
+
+    private void ShowLoadingStatus(string path, int requestId, LoadingStatus status)
+    {
+        if (!IsCurrentPreviewRequest(path, requestId))
+            return;
+
+        _viewerWindow.BeginLoading(path, status.Text, status.DetailText, status.Glyph);
+    }
+
+    private void ScheduleLongRunningStatus(string path, int requestId, LoadingStatus initialStatus)
+    {
+        _slowLoadingTimer = new DispatcherTimer(DispatcherPriority.Background, _viewerWindow.Dispatcher)
+        {
+            Interval = TimeSpan.FromMilliseconds(SlowLoadingMs),
+        };
+        _slowLoadingTimer.Tick += (_, _) =>
+        {
+            StopTimer(ref _slowLoadingTimer);
+
+            if (!ShouldUpdateLongRunningStatus(path, requestId))
+                return;
+
+            _viewerWindow.UpdateLoadingStatus(
+                TranslationHelper.Get("MW_StillWaiting", failsafe: "Still waiting for the file..."),
+                initialStatus.IsCloud
+                    ? TranslationHelper.Get("MW_StillWaitingCloudDetail", failsafe: "The sync provider is still making it available.")
+                    : TranslationHelper.Get("MW_StillWaitingDetail", failsafe: "The selected viewer is still preparing the preview."),
+                initialStatus.IsCloud ? "\xebd3" : "\xe8a5");
+        };
+        _slowLoadingTimer.Start();
+
+        _timeoutLoadingTimer = new DispatcherTimer(DispatcherPriority.Background, _viewerWindow.Dispatcher)
+        {
+            Interval = TimeSpan.FromMilliseconds(TimeoutLoadingMs),
+        };
+        _timeoutLoadingTimer.Tick += (_, _) =>
+        {
+            StopTimer(ref _timeoutLoadingTimer);
+
+            if (!ShouldUpdateLongRunningStatus(path, requestId))
+                return;
+
+            _viewerWindow.UpdateLoadingStatus(
+                TranslationHelper.Get("MW_PreviewTakingLong", failsafe: "This is taking longer than expected."),
+                initialStatus.IsCloud
+                    ? TranslationHelper.Get("MW_PreviewTakingLongCloudDetail", failsafe: "Check your sync provider if the file does not finish downloading.")
+                    : TranslationHelper.Get("MW_PreviewTakingLongDetail", failsafe: "QuickLook is still working on this preview."),
+                "\xea84");
+        };
+        _timeoutLoadingTimer.Start();
+    }
+
+    private bool ShouldUpdateLongRunningStatus(string path, int requestId)
+    {
+        return IsCurrentPreviewRequest(path, requestId) &&
+               _viewerWindow.IsVisible &&
+               _viewerWindow.ContextObject.IsBusy;
+    }
+
+    private void StopLoadingTimers()
+    {
+        StopLoadingDelay();
+        StopTimer(ref _slowLoadingTimer);
+        StopTimer(ref _timeoutLoadingTimer);
+    }
+
+    private void StopLoadingDelay()
+    {
+        StopTimer(ref _loadingDelayTimer);
+    }
+
+    private static void StopTimer(ref DispatcherTimer timer)
+    {
+        timer?.Stop();
+        timer = null;
+    }
+
+    private static LoadingStatus CreateLoadingStatus(string path)
+    {
+        var cloudInfo = CloudFileHelper.GetInfo(path);
+        if (cloudInfo.IsPlaceholder)
+        {
+            var provider = string.IsNullOrWhiteSpace(cloudInfo.ProviderName)
+                ? TranslationHelper.Get("MW_CloudProvider", failsafe: "cloud")
+                : cloudInfo.ProviderName;
+
+            return new LoadingStatus(
+                string.Format(TranslationHelper.Get("MW_DownloadingFromProvider", failsafe: "Downloading from {0}..."), provider),
+                TranslationHelper.Get("MW_DownloadingFromProviderDetail", failsafe: "The file must be available locally before preview opens."),
+                "\xebd3",
+                true,
+                true);
+        }
+
+        return new LoadingStatus(
+            TranslationHelper.Get("MW_PreparingPreview", failsafe: "Preparing preview..."),
+            TranslationHelper.Get("MW_PreparingPreviewDetail", failsafe: "Selecting the best viewer."),
+            "\xe8a5",
+            false,
+            false);
     }
 
     private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)
@@ -258,6 +444,28 @@ public class ViewWindowManager : IDisposable
             StopFocusMonitor();
             InitNewViewerWindow();
         };
+    }
+
+    private sealed class LoadingStatus
+    {
+        internal LoadingStatus(string text, string detailText, string glyph, bool isCloud, bool showImmediately)
+        {
+            Text = text;
+            DetailText = detailText;
+            Glyph = glyph;
+            IsCloud = isCloud;
+            ShowImmediately = showImmediately;
+        }
+
+        internal string Text { get; }
+
+        internal string DetailText { get; }
+
+        internal string Glyph { get; }
+
+        internal bool IsCloud { get; }
+
+        internal bool ShowImmediately { get; }
     }
 
     public static ViewWindowManager GetInstance()
