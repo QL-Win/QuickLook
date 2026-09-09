@@ -20,7 +20,6 @@ using QuickLook.Helpers;
 using QuickLook.NativeMethods;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -58,16 +57,6 @@ public partial class App : Application
         if (processRenderMode == (int)RenderMode.SoftwareOnly)
         {
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
-        }
-
-        // Explicitly set to PerMonitor to avoid being overridden by the system
-        if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
-        {
-            Debug.WriteLine(
-                result == 0 ?
-                "DPI Awareness applied successfully" :
-                $"DPI Awareness manual setup failed. Error Code: {result}"
-            );
         }
 
         // Occurs when the resolution of an assembly fails
