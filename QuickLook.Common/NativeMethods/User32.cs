@@ -95,6 +95,12 @@ public static class User32
     public static extern nint MonitorFromWindow(nint hWnd, MonitorDefaults dwFlags);
 
     [DllImport("user32.dll")]
+    public static extern nint MonitorFromPoint(POINT pt, MonitorDefaults dwFlags);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetCursorPos(out POINT lpPoint);
+
+    [DllImport("user32.dll")]
     public extern static bool GetMonitorInfo(nint hMonitor, ref MONITORINFOEX lpmi);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -143,6 +149,13 @@ public static class User32
         public int Top;
         public int Right;
         public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        public int X;
+        public int Y;
     }
 
     [StructLayout(LayoutKind.Sequential)]

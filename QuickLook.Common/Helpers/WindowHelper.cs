@@ -44,7 +44,12 @@ public static class WindowHelper
 
     public static Rect GetCurrentDesktopRectInPixel()
     {
-        return GetDesktopRectFromWindowInPixel(User32.GetForegroundWindow());
+        // Use the cursor position to pick the monitor. The foreground window resolves to the
+        // desktop (Progman) when a file sits on the desktop, which always maps to the primary
+        // monitor; that would place the preview on the wrong screen.
+        var screen = Screen.FromPoint(System.Windows.Forms.Cursor.Position);
+        var area = screen.WorkingArea;
+        return new Rect(new Point(area.X, area.Y), new Size(area.Width, area.Height));
     }
 
     public static Rect GetDesktopRectFromWindowInPixel(Window window)
@@ -88,7 +93,35 @@ public static class WindowHelper
             out var pxWidth, out var pxHeight);
 
         // Use absolute location and relative size. WPF will scale the size to the target display
-        User32.MoveWindow(handle, (int)Math.Round(pxLeft), (int)Math.Round(pxTop), pxWidth, pxHeight, true);
+        //
+        // Guard against arithmetic overflow in WindowChromeWorker.HandleNCHitTest (net462).
+        // When the window is on a per-monitor DPI display the values here are physical pixels
+        // that may be NaN or outside the int32 range (e.g. a window straddling a negative-
+        // coordinate monitor). Feeding such a rect to User32/WPF lets the (int) casts inside
+        // Win32.MoveWindow and WindowChrome hit-testing throw OverflowException, so clamp them.
+        var x = ToInt32Clamped(pxLeft);
+        var y = ToInt32Clamped(pxTop);
+        // Keep the physical window rect strictly larger than the invisible resize border and
+        // caption. If it ever shrinks to zero/smaller, WindowChromeWorker._HandleNCHitTest
+        // (net462) computes a degenerate rect that throws OverflowException on WM_NCHITTEST.
+        var w = Math.Max(ToInt32Clamped(pxWidth), 24);
+        var h = Math.Max(ToInt32Clamped(pxHeight), 56);
+
+        User32.MoveWindow(handle, x, y, w, h, true);
+    }
+
+    private static int ToInt32Clamped(double value)
+    {
+        // Math.Round on NaN returns NaN; (int)NaN in a checked context throws OverflowException.
+        if (double.IsNaN(value))
+            return 0;
+
+        if (value <= int.MinValue)
+            return int.MinValue;
+        if (value >= int.MaxValue)
+            return int.MaxValue;
+
+        return (int)Math.Round(value);
     }
 
     public static Rect GetWindowRectInPixel(this Window window)
@@ -116,8 +149,8 @@ public static class WindowHelper
                 matrix = src.CompositionTarget.TransformToDevice;
             }
 
-        pixelX = (int)Math.Round(matrix.M11 * unitX);
-        pixelY = (int)Math.Round(matrix.M22 * unitY);
+        pixelX = ToInt32Clamped(matrix.M11 * unitX);
+        pixelY = ToInt32Clamped(matrix.M22 * unitY);
     }
 
     public static bool IsForegroundWindowBelongToSelf()

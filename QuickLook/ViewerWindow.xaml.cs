@@ -22,8 +22,10 @@ using QuickLook.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
@@ -45,6 +47,8 @@ public partial class ViewerWindow : Window
     private string _path = string.Empty;
     private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
+    private HwndSource _windowHwndSource;
+    private HwndSourceHook _windowHook;
 
     internal ViewerWindow()
     {
@@ -66,6 +70,11 @@ public partial class ViewerWindow : Window
         StateChanged += (_, _) => _ignoreNextWindowSizeChange = true;
 
         windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
+
+        // Window dragging is done by hand here (WM_NCLBUTTONDOWN + HT CAPTION) instead of relying on
+        // WindowChrome's hit test, because we answer WM_NCHITTEST with HTCLIENT to prevent a net462
+        // WindowChrome overflow when dragging across different-DPI monitors.
+        titleArea.MouseLeftButtonDown += TitleArea_MouseLeftButtonDown;
 
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
@@ -188,6 +197,91 @@ public partial class ViewerWindow : Window
         WindowHelper.RemoveWindowControls(this);
 
         ApplyWindowBackgroundEffects();
+
+        // Handle WM_NCHITTEST ourselves and WM_DPICHANGED during cross-DPI dragging. The hook is
+        // attached after WindowChrome's own hook (base.OnSourceInitialized) so it runs first in the
+        // LIFO hook chain; re-attach it here via AttachWndProcHook which also guards against a stale
+        // HwndSource after a display configuration change.
+        AttachWndProcHook();
+    }
+
+    private void AttachWndProcHook()
+    {
+        var source = PresentationSource.FromVisual(this) as HwndSource
+                     ?? HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+
+        if (source == null || source.IsDisposed)
+            return;
+
+        // Remove any previously attached hook (e.g. after the HwndSource was recreated) so the hook
+        // stays at the tail of the delegate chain and is therefore called first.
+        if (_windowHwndSource != null && _windowHook != null)
+            _windowHwndSource.RemoveHook(_windowHook);
+
+        _windowHwndSource = source;
+        _windowHook = WndProc;
+        source.AddHook(_windowHook);
+    }
+
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        const int WM_NCHITTEST = 0x0084;
+        const int WM_DPICHANGED = 0x02E0;
+        const int WM_DISPLAYCHANGE = 0x007E;
+
+        if (msg == WM_NCHITTEST)
+        {
+            // Mouse position (screen, physical pixels) is packed into lParam as two signed 16-bit
+            // halves. Decode them with plain int math and sign extension. Note: do NOT use
+            // lParam.ToInt32() here - on 64-bit, a negative screen coordinate (monitor above/left
+            // of the primary) makes Windows sign-extend lParam's high 32 bits, and IntPtr.ToInt32
+            // (conv.u8 then conv.ovf.i4) then overflows. ToInt64 + unchecked low-32-bit cast is safe.
+            int v = unchecked((int)lParam.ToInt64());
+            int lo = v & 0xFFFF;
+            int hi = (v >> 16) & 0xFFFF;
+            int mx = (lo & 0x8000) != 0 ? lo - 0x10000 : lo;
+            int my = (hi & 0x8000) != 0 ? hi - 0x10000 : hi;
+
+            QuickLook.Common.NativeMethods.User32.GetWindowRect(hwnd, out var r);
+
+            const int border = 8;
+            bool left = mx < r.Left + border;
+            bool right = mx >= r.Right - border;
+            bool top = my < r.Top + border;
+            bool bottom = my >= r.Bottom - border;
+
+            handled = true;
+            if (top && left) return new IntPtr(13);
+            if (top && right) return new IntPtr(14);
+            if (bottom && left) return new IntPtr(16);
+            if (bottom && right) return new IntPtr(17);
+            if (left) return new IntPtr(10);
+            if (right) return new IntPtr(11);
+            if (top) return new IntPtr(12);
+            if (bottom) return new IntPtr(15);
+            return new IntPtr(1);
+        }
+
+        if (msg == WM_DPICHANGED && lParam != IntPtr.Zero)
+        {
+            var suggested = Marshal.PtrToStructure<QuickLook.Common.NativeMethods.User32.RECT>(lParam);
+            var width = Math.Max(suggested.Right - suggested.Left, 1);
+            var height = Math.Max(suggested.Bottom - suggested.Top, 1);
+
+            QuickLook.Common.NativeMethods.User32.MoveWindow(hwnd, suggested.Left, suggested.Top, width, height, true);
+
+            handled = true;
+            return IntPtr.Zero;
+        }
+
+        // A display configuration change can recreate the HwndSource and drop (or reorder) hooks.
+        // Re-attach ours on the next dispatcher pass so WM_NCHITTEST keeps being short-circuited.
+        if (msg == WM_DISPLAYCHANGE)
+        {
+            Dispatcher.BeginInvoke(new Action(AttachWndProcHook), DispatcherPriority.Loaded);
+        }
+
+        return IntPtr.Zero;
     }
 
     protected override void OnContentRendered(EventArgs e)
@@ -463,6 +557,34 @@ public partial class ViewerWindow : Window
         if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
             show.Begin();
     }
+
+    private void TitleArea_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed)
+            return;
+
+        // Do not allow dragging when window is borderless (e.g. fullscreen)
+        if (WindowStyle == WindowStyle.None)
+            return;
+
+        // Start the native move loop directly. Window.DragMove() depends on a hit-test result, but
+        // we answer WM_NCHITTEST with HTCLIENT (to avoid a WindowChrome overflow), so drag by hand.
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd == IntPtr.Zero)
+            return;
+
+        ReleaseCapture();
+        SendMessage(hwnd, WM_NCLBUTTONDOWN, new IntPtr(HTCAPTION), IntPtr.Zero);
+    }
+
+    private const int WM_NCLBUTTONDOWN = 0x00A1;
+    private const int HTCAPTION = 0x0002;
+
+    [DllImport("user32.dll")]
+    private static extern bool ReleaseCapture();
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
     private void AutoHideCaptionContainer(object sender, EventArgs e)
     {

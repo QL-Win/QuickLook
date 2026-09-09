@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace QuickLook.NativeMethods;
@@ -30,4 +31,15 @@ internal static class SHCore
 
     [DllImport("shcore.dll")]
     public static extern uint SetProcessDpiAwareness(PROCESS_DPI_AWARENESS awareness);
+
+    /// <summary>
+    /// DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2. Unlike the V1 context (set via
+    /// SetProcessDpiAwareness), V2 makes Windows raise WM_DPICHANGED and rescale a window as it is
+    /// dragged across monitors with different DPI. This keeps WPF's per-window DPI in sync, which
+    /// prevents WindowChromeWorker._HandleNCHitTest from overflowing on a non-primary 4K display.
+    /// </summary>
+    public static readonly nint DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = new IntPtr(-4);
+
+    [DllImport("user32.dll")]
+    public static extern bool SetProcessDpiAwarenessContext(nint value);
 }

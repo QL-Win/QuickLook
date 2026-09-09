@@ -38,7 +38,46 @@ public static class DisplayDeviceHelper
 
     public static ScaleFactor GetCurrentScaleFactor()
     {
-        return GetScaleFactorFromWindow(GetForegroundWindow());
+        // Use the cursor position rather than the foreground window to determine the monitor. The
+        // foreground window is the desktop (Progman) when a file sits on the desktop, and that always
+        // resolves to the primary monitor, which would place the preview on the wrong screen.
+        GetCursorPos(out var pt);
+        return GetScaleFactorFromPoint(pt);
+    }
+
+    public static ScaleFactor GetScaleFactorFromPoint(POINT point)
+    {
+        var dpiX = DefaultDpi;
+        var dpiY = DefaultDpi;
+
+        try
+        {
+            if (Environment.OSVersion.Version > new Version(6, 2)) // Windows 8.1 = 6.3.9200
+            {
+                var hMonitor = MonitorFromPoint(point, MonitorDefaults.TONEAREST);
+                GetDpiForMonitor(hMonitor, MonitorDpiType.EFFECTIVE_DPI, out dpiX, out dpiY);
+            }
+            else
+            {
+                using var g = Graphics.FromHwnd(IntPtr.Zero);
+                var desktop = g.GetHdc();
+                try
+                {
+                    dpiX = GetDeviceCaps(desktop, DeviceCap.LOGPIXELSX);
+                    dpiY = GetDeviceCaps(desktop, DeviceCap.LOGPIXELSY);
+                }
+                finally
+                {
+                    g.ReleaseHdc(desktop);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ProcessHelper.WriteLog(e.ToString());
+        }
+
+        return new ScaleFactor { Horizontal = (float)dpiX / DefaultDpi, Vertical = (float)dpiY / DefaultDpi };
     }
 
     public static ScaleFactor GetScaleFactorFromWindow(nint hwnd)
