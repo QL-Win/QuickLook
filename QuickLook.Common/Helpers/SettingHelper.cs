@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -26,6 +26,9 @@ namespace QuickLook.Common.Helpers;
 
 public static class SettingHelper
 {
+    public const string KeyAppTheme = "AppTheme";
+    public const string KeyLastCanvasTheme = "LastCanvasTheme";
+
     public static readonly string LocalDataPath =
         IsPortableVersion()
             ? Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
