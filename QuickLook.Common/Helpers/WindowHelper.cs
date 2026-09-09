@@ -44,7 +44,12 @@ public static class WindowHelper
 
     public static Rect GetCurrentDesktopRectInPixel()
     {
-        return GetDesktopRectFromWindowInPixel(User32.GetForegroundWindow());
+        // Use the cursor position to pick the monitor. The foreground window resolves to the
+        // desktop (Progman) when a file sits on the desktop, which always maps to the primary
+        // monitor; that would place the preview on the wrong screen.
+        var screen = Screen.FromPoint(System.Windows.Forms.Cursor.Position);
+        var area = screen.WorkingArea;
+        return new Rect(new Point(area.X, area.Y), new Size(area.Width, area.Height));
     }
 
     public static Rect GetDesktopRectFromWindowInPixel(Window window)
