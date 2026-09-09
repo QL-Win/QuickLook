@@ -529,6 +529,12 @@ public partial class ViewerWindow
         UnloadPlugin();
         busyDecorator.Dispose();
 
+        // Detach the WndProc hook so the HwndSource can be released cleanly.
+        if (_windowHwndSource != null && _windowHook != null)
+            _windowHwndSource.RemoveHook(_windowHook);
+        _windowHwndSource = null;
+        _windowHook = null;
+
         base.OnClosing(e);
 
         ProcessHelper.PerformAggressiveGC();

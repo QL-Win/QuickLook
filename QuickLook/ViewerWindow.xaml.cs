@@ -48,6 +48,7 @@ public partial class ViewerWindow : Window
     private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
     private HwndSource _windowHwndSource;
+    private HwndSourceHook _windowHook;
 
     internal ViewerWindow()
     {
@@ -197,41 +198,52 @@ public partial class ViewerWindow : Window
 
         ApplyWindowBackgroundEffects();
 
-        // Handle WM_DPICHANGED so dragging the window onto a monitor with a different DPI
-        // (e.g. a 4K secondary display on a per-monitor-DPI system) keeps the HWND geometry and
-        // WPF's view of it in sync. Without this, WindowChromeWorker._HandleNCHitTest (net462)
-        // reads a stale window rect during the drag and throws OverflowException.
-        var handle = new WindowInteropHelper(this).Handle;
-        if (handle != IntPtr.Zero && HwndSource.FromHwnd(handle) is HwndSource hwndSource)
-        {
-            _windowHwndSource = hwndSource;
-            hwndSource.AddHook(WndProc);
-        }
+        // Handle WM_NCHITTEST ourselves and WM_DPICHANGED during cross-DPI dragging. The hook is
+        // attached after WindowChrome's own hook (base.OnSourceInitialized) so it runs first in the
+        // LIFO hook chain; re-attach it here via AttachWndProcHook which also guards against a stale
+        // HwndSource after a display configuration change.
+        AttachWndProcHook();
+    }
+
+    private void AttachWndProcHook()
+    {
+        var source = PresentationSource.FromVisual(this) as HwndSource
+                     ?? HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+
+        if (source == null || source.IsDisposed)
+            return;
+
+        // Remove any previously attached hook (e.g. after the HwndSource was recreated) so the hook
+        // stays at the tail of the delegate chain and is therefore called first.
+        if (_windowHwndSource != null && _windowHook != null)
+            _windowHwndSource.RemoveHook(_windowHook);
+
+        _windowHwndSource = source;
+        _windowHook = WndProc;
+        source.AddHook(_windowHook);
     }
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         const int WM_NCHITTEST = 0x0084;
         const int WM_DPICHANGED = 0x02E0;
+        const int WM_DISPLAYCHANGE = 0x007E;
 
-        // Implement the hit test ourselves instead of deferring to WindowChromeWorker.
-        // WindowChromeWorker._HandleNCHitTest (net462) overflows during cross-DPI dragging (its
-        // per-window DPI math goes out of sync with the HWND rect and can't be corrected from the
-        // outside). Reporting the resize border zones here keeps edge/corner resizing working while
-        // everything else is treated as client area. Title-bar dragging is handled by
-        // TitleArea_MouseLeftButtonDown, and caption buttons are WPF content, so neither needs a
-        // non-client hit-test result.
         if (msg == WM_NCHITTEST)
         {
-            // Mouse position (screen, physical pixels) is packed into lParam as signed 16-bit pairs.
-            int v = lParam.ToInt32();
-            int mx = (short)(v & 0xFFFF);
-            int my = (short)((v >> 16) & 0xFFFF);
+            // Mouse position (screen, physical pixels) is packed into lParam as two signed 16-bit
+            // halves. Decode them with plain int math and sign extension. Note: do NOT use
+            // lParam.ToInt32() here - on 64-bit, a negative screen coordinate (monitor above/left
+            // of the primary) makes Windows sign-extend lParam's high 32 bits, and IntPtr.ToInt32
+            // (conv.u8 then conv.ovf.i4) then overflows. ToInt64 + unchecked low-32-bit cast is safe.
+            int v = unchecked((int)lParam.ToInt64());
+            int lo = v & 0xFFFF;
+            int hi = (v >> 16) & 0xFFFF;
+            int mx = (lo & 0x8000) != 0 ? lo - 0x10000 : lo;
+            int my = (hi & 0x8000) != 0 ? hi - 0x10000 : hi;
 
             QuickLook.Common.NativeMethods.User32.GetWindowRect(hwnd, out var r);
 
-            // Resize border zone (physical pixels). The WindowChrome resize border is 6 logical
-            // pixels; a fixed 8 physical-pixel zone covers it across common DPI scale factors.
             const int border = 8;
             bool left = mx < r.Left + border;
             bool right = mx >= r.Right - border;
@@ -239,15 +251,15 @@ public partial class ViewerWindow : Window
             bool bottom = my >= r.Bottom - border;
 
             handled = true;
-            if (top && left) return new IntPtr(13);      // HTTOPLEFT
-            if (top && right) return new IntPtr(14);     // HTTOPRIGHT
-            if (bottom && left) return new IntPtr(16);   // HTBOTTOMLEFT
-            if (bottom && right) return new IntPtr(17);  // HTBOTTOMRIGHT
-            if (left) return new IntPtr(10);             // HTLEFT
-            if (right) return new IntPtr(11);            // HTRIGHT
-            if (top) return new IntPtr(12);              // HTTOP
-            if (bottom) return new IntPtr(15);           // HTBOTTOM
-            return new IntPtr(1);                        // HTCLIENT
+            if (top && left) return new IntPtr(13);
+            if (top && right) return new IntPtr(14);
+            if (bottom && left) return new IntPtr(16);
+            if (bottom && right) return new IntPtr(17);
+            if (left) return new IntPtr(10);
+            if (right) return new IntPtr(11);
+            if (top) return new IntPtr(12);
+            if (bottom) return new IntPtr(15);
+            return new IntPtr(1);
         }
 
         if (msg == WM_DPICHANGED && lParam != IntPtr.Zero)
@@ -260,6 +272,13 @@ public partial class ViewerWindow : Window
 
             handled = true;
             return IntPtr.Zero;
+        }
+
+        // A display configuration change can recreate the HwndSource and drop (or reorder) hooks.
+        // Re-attach ours on the next dispatcher pass so WM_NCHITTEST keeps being short-circuited.
+        if (msg == WM_DISPLAYCHANGE)
+        {
+            Dispatcher.BeginInvoke(new Action(AttachWndProcHook), DispatcherPriority.Loaded);
         }
 
         return IntPtr.Zero;
