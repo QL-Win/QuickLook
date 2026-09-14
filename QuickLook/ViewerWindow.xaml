@@ -239,10 +239,54 @@
         <Grid x:Name="busyIndicatorLayer"
               Visibility="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
               ZIndex="200">
-            <busyDecorator:BusyDecorator x:Name="busyDecorator"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         IsBusyIndicatorShowing="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy}" />
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        MaxWidth="360">
+                <busyDecorator:BusyDecorator x:Name="busyDecorator"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             IsBusyIndicatorShowing="{Binding ElementName=mainWindow, Path=ContextObject.IsBusy}" />
+                <StackPanel Margin="0,14,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock Margin="0,0,7,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                               FontSize="14"
+                               Foreground="{DynamicResource WindowTextForeground}"
+                               Opacity="0.82"
+                               Text="{Binding ElementName=mainWindow, Path=ContextObject.BusyGlyph}" />
+                    <TextBlock MaxWidth="320"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               Foreground="{DynamicResource WindowTextForeground}"
+                               FontWeight="SemiBold"
+                               Opacity="0.88"
+                               Text="{Binding ElementName=mainWindow, Path=ContextObject.BusyText}"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap" />
+                </StackPanel>
+                <TextBlock Margin="0,7,0,0"
+                           MaxWidth="340"
+                           HorizontalAlignment="Center"
+                           FontSize="12"
+                           Foreground="{DynamicResource WindowTextForeground}"
+                           Opacity="0.7"
+                           Text="{Binding ElementName=mainWindow, Path=ContextObject.Title}"
+                           TextAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+                <TextBlock Margin="0,5,0,0"
+                           MaxWidth="340"
+                           HorizontalAlignment="Center"
+                           FontSize="11"
+                           Foreground="{DynamicResource WindowTextForeground}"
+                           Opacity="0.56"
+                           Text="{Binding ElementName=mainWindow, Path=ContextObject.BusySubText}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
