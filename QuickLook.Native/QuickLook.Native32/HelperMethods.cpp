@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 // 
 // This file is part of QuickLook program.
 // 
@@ -33,6 +33,62 @@ void HelperMethods::GetSelectedInternal(CComPtr<IShellBrowser> psb, PWCHAR buffe
     return ObtainFirstItem(dao, buffer);
 }
 
+namespace
+{
+    void FormatVirtualItem(IShellItem* shellItem, PIDLIST_ABSOLUTE pidlFull, PCWSTR pszPath, PWCHAR buffer)
+    {
+        ATL::CComHeapPtr<WCHAR> name;
+        if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_NORMALDISPLAY, &name)) && name)
+        {
+            for (PWSTR p = name; *p; ++p)
+                if (*p == L'|') *p = L'_';
+        }
+
+        SFGAOF attribs = 0;
+        shellItem->GetAttributes(SFGAO_FOLDER, &attribs);
+        bool isFolder = (attribs & SFGAO_FOLDER) != 0;
+
+        LONGLONG size = -1LL;
+        ULONGLONG ft = 0;
+
+        CComQIPtr<IShellItem2> shellItem2(shellItem);
+        CComPtr<IPropertyStore> store;
+        if (shellItem2 && SUCCEEDED(shellItem2->GetPropertyStore(GPS_FASTPROPERTIESONLY, IID_PPV_ARGS(&store))))
+        {
+            if (!isFolder)
+            {
+                PROPVARIANT propSize = {};
+                if (SUCCEEDED(store->GetValue(PKEY_Size, &propSize)))
+                {
+                    if (propSize.vt == VT_UI8)
+                        size = (LONGLONG)propSize.uhVal.QuadPart;
+                }
+                PropVariantClear(&propSize);
+            }
+
+            PROPVARIANT propDate = {};
+            if (SUCCEEDED(store->GetValue(PKEY_DateModified, &propDate)))
+            {
+                if (propDate.vt == VT_FILETIME)
+                {
+                    ULARGE_INTEGER uli = { propDate.filetime.dwLowDateTime, propDate.filetime.dwHighDateTime };
+                    ft = uli.QuadPart;
+                }
+            }
+            PropVariantClear(&propDate);
+        }
+
+        SHFILEINFOW sfi = {};
+        int iconIndex = (pidlFull && SHGetFileInfoW((PCWSTR)pidlFull, 0, &sfi, sizeof(sfi), SHGFI_PIDL | SHGFI_SYSICONINDEX)) ? sfi.iIcon : -1;
+
+        if (FAILED(StringCchPrintfW(buffer, MAX_PATH_EX, L"::QL_VIRTUAL|%lld|%llu|%d|%s|%s",
+            size, ft, iconIndex, name ? (PCWSTR)name : L"", pszPath)))
+        {
+            buffer[0] = L'\0';
+        }
+    }
+}
+
 void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
 {
     if (!dao || !buffer)
@@ -61,12 +117,17 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
             WCHAR localBuffer[MAX_PATH] = { '\0' };
             if (DragQueryFileW(hDrop, 0, localBuffer, MAX_PATH) > 0)
             {
-                GetLongPathName(localBuffer, buffer, MAX_PATH_EX);
+                DWORD length = GetLongPathNameW(localBuffer, buffer, MAX_PATH_EX);
+                if (length == 0 || length >= MAX_PATH_EX)
+                {
+                    if (FAILED(StringCchCopyW(buffer, MAX_PATH_EX, localBuffer)))
+                        buffer[0] = L'\0';
+                }
                 ReleaseStgMedium(&medium);
                 return;
             }
-            ReleaseStgMedium(&medium);
         }
+        ReleaseStgMedium(&medium);
     }
 
     // If CF_HDROP fails, try CFSTR_SHELLIDLIST
@@ -78,8 +139,10 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
     if (SUCCEEDED(dao->GetData(&formatetc, &medium)))
     {
         CIDA* pida = (CIDA*)GlobalLock(medium.hGlobal);
-        if (!pida)
+        if (!pida || pida->cidl < 1)
         {
+            if (pida)
+                GlobalUnlock(medium.hGlobal);
             ReleaseStgMedium(&medium);
             return;
         }
@@ -97,11 +160,26 @@ void HelperMethods::ObtainFirstItem(CComPtr<IDataObject> dao, PWCHAR buffer)
         CComPtr<IShellItem> shellItem;
         if (SUCCEEDED(SHCreateItemFromIDList(pidlFull, IID_PPV_ARGS(&shellItem))))
         {
-            PWSTR pszPath = nullptr;
-            if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &pszPath)))
+            ATL::CComHeapPtr<WCHAR> filePath;
+            if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath)) && filePath)
             {
-                StringCchCopyW(buffer, MAX_PATH_EX, pszPath); // returns e.g., ::{645FF040-5081-101B-9F08-00AA002F954E}
-                CoTaskMemFree(pszPath);
+                if (FAILED(StringCchCopyW(buffer, MAX_PATH_EX, filePath)))
+                    buffer[0] = L'\0';
+            }
+            else
+            {
+                ATL::CComHeapPtr<WCHAR> parsingPath;
+                if (SUCCEEDED(shellItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &parsingPath)) && parsingPath)
+                {
+                    bool isPureClsid = wcslen(parsingPath) == 40 && parsingPath[0] == L':' && parsingPath[1] == L':' && parsingPath[2] == L'{' && parsingPath[39] == L'}';
+                    if (isPureClsid)
+                    {
+                        if (FAILED(StringCchCopyW(buffer, MAX_PATH_EX, parsingPath)))
+                            buffer[0] = L'\0';
+                    }
+                    else
+                        FormatVirtualItem(shellItem, pidlFull, parsingPath, buffer);
+                }
             }
         }
 
