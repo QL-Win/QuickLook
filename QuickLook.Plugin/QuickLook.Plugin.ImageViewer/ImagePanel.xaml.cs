@@ -88,6 +88,18 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         SizeChanged += ImagePanel_SizeChanged;
         viewPanelImage.DoZoomToFit += (sender, e) => DoZoomToFit();
         viewPanelImage.ImageLoaded += (sender, e) => ContextObject.IsBusy = false;
+        viewPanelImage.AnimationFailed += (sender, e) =>
+        {
+            ContextObject.ViewerContent = new TextBlock
+            {
+                Text = e?.ToString() ?? "Failed to load image.",
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(24),
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
+            ContextObject.IsBusy = false;
+        };
 
         viewPanel.PreviewMouseWheel += ViewPanel_PreviewMouseWheel;
         viewPanel.MouseLeftButtonDown += ViewPanel_MouseLeftButtonDown;

@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using ImageMagick;
-using ImageMagick.Formats;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using System;
@@ -90,23 +88,10 @@ internal class CursorProvider : ImageMagickProvider
     {
         return new Task<BitmapSource>(() =>
         {
-            var settings = new MagickReadSettings
-            {
-                BackgroundColor = MagickColors.None,
-                Defines = new DngReadDefines
-                {
-                    OutputColor = DngOutputColor.SRGB,
-                    UseCameraWhiteBalance = true,
-                    DisableAutoBrightness = false,
-                }
-            };
-
             try
             {
-                if (Path.LocalPath.ToLower().EndsWith(".ani"))
-                {
+                if (Path.LocalPath.EndsWith(".ani", StringComparison.OrdinalIgnoreCase))
                     return AnimatedCursor(Path.LocalPath);
-                }
 
                 return base.GetRenderedFrame();
             }
@@ -128,7 +113,7 @@ internal class CursorProvider : ImageMagickProvider
     {
         var aniCursor = AniCursorLoader.LoadAniCursor(path);
         var frames = aniCursor.ToArray();
-        var animatedImg = new AniCursor(frames, frames.Count());
+        var animatedImg = new AniCursor(frames, frames.Length);
 
         var writeableBitmap = Application.Current.Dispatcher.Invoke(() =>
         {
@@ -163,18 +148,54 @@ internal class CursorProvider : ImageMagickProvider
         return writeableBitmap;
     }
 
+    /// <summary>
+    /// Load a cursor without blocking the UI thread indefinitely.
+    /// <see cref="Cursor"/> construction can hang after certain Windows updates (e.g. KB5120998).
+    /// </summary>
     public static Cursor GetCursor(string path)
     {
+        Cursor result = null;
+        Exception error = null;
+
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                result = new Cursor(path);
+            }
+            catch (Exception e)
+            {
+                error = e;
+            }
+        })
+        {
+            IsBackground = true,
+            Name = "QuickLook.CursorLoader"
+        };
+
         try
         {
-            Cursor customCursor = new(path);
-            return customCursor;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+
+            if (!thread.Join(TimeSpan.FromSeconds(2)))
+            {
+                ProcessHelper.WriteLog(
+                    $"Timed out loading cursor '{path}'. " +
+                    "This may be caused by a Windows update affecting cursor handling (e.g. KB5120998).");
+                return null;
+            }
         }
         catch (Exception e)
         {
             ProcessHelper.WriteLog(e.ToString());
+            return null;
         }
-        return null;
+
+        if (error != null)
+            ProcessHelper.WriteLog(error.ToString());
+
+        return result;
     }
 }
 

@@ -47,6 +47,8 @@ public class AnimatedImage : Image, IDisposable
 
     public event EventHandler ImageLoaded;
 
+    public event EventHandler<Exception> AnimationFailed;
+
     public event EventHandler DoZoomToFit;
 
     private static AnimationProvider InitAnimationProvider(Uri path, MetaProvider meta, ContextObject contextObject)
@@ -102,6 +104,9 @@ public class AnimatedImage : Image, IDisposable
         if (obj is not AnimatedImage instance)
             return;
 
+        // New URI: stop any previous animation before starting a fresh load.
+        instance.BeginAnimation(AnimationFrameIndexProperty, null);
+
         instance._animation = InitAnimationProvider((Uri)ev.NewValue, instance.Meta, instance.ContextObject);
         ShowThumbnailAndStartAnimation(instance);
     }
@@ -115,6 +120,13 @@ public class AnimatedImage : Image, IDisposable
         {
             if (instance._disposing)
                 return;
+
+            if (_.IsFaulted)
+            {
+                // Thumbnail failed hard — still try full render; only surface error if that also fails.
+                instance.BeginAnimation(AnimationFrameIndexProperty, instance._animation?.Animator);
+                return;
+            }
 
             instance.Source = _.Result;
 
@@ -146,10 +158,28 @@ public class AnimatedImage : Image, IDisposable
 
             var firstLoad = instance.Source == null;
 
+            if (_.IsFaulted)
+            {
+                if (firstLoad)
+                {
+                    var error = _.Exception?.GetBaseException()
+                                ?? new Exception("Failed to load image.");
+                    instance.AnimationFailed?.Invoke(instance, error);
+                }
+                return;
+            }
+
             instance.Source = _.Result;
 
             if (firstLoad)
             {
+                if (_.Result == null)
+                {
+                    instance.AnimationFailed?.Invoke(instance,
+                        new Exception("Failed to load image: decoder returned no frame."));
+                    return;
+                }
+
                 instance.DoZoomToFit?.Invoke(instance, EventArgs.Empty);
                 instance.ImageLoaded?.Invoke(instance, EventArgs.Empty);
             }
