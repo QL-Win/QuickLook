@@ -94,7 +94,6 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
     private static string Inform(string path)
     {
         using MediaInfoNative lib = new();
-        lib.Open(path);
 
         if (CultureInfo.CurrentUICulture.Name.ToLowerInvariant() switch
             {
@@ -122,6 +121,7 @@ public sealed partial class Plugin : IViewer, IMoreMenuExtended
                 lib.Option("Language", csv);
         }
 
+        lib.Open(path);
         return lib.Inform();
     }
 
