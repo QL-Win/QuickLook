@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -134,7 +134,14 @@ public partial class ViewerWindow : Window
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
         buttonShare.Click += (_, _) => ShareHelper.Share(_path, this);
-        buttonOpenWith.Click += (_, _) => ShareHelper.Share(_path, this, true);
+        buttonOpenWith.Click += (_, _) =>
+        {
+            ShareHelper.Share(_path, this, true);
+            if (Pinned)
+                Close();
+            else
+                ViewWindowManager.GetInstance().ClosePreview();
+        };
 
         buttonReload.Visibility = SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
 
