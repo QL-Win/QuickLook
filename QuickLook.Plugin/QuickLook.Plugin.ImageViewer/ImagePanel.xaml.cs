@@ -428,7 +428,8 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
             textMetaContent.Inlines.Add(m.Item2);
             textMetaContent.Inlines.Add("\r\n");
         });
-        textMetaContent.Inlines.Remove(textMetaContent.Inlines.LastInline);
+        if (textMetaContent.Inlines.LastInline != null)
+            textMetaContent.Inlines.Remove(textMetaContent.Inlines.LastInline);
         if (!textMetaContent.Inlines.Any())
             MetaIconVisibility = Visibility.Collapsed;
     }
