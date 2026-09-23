@@ -23,8 +23,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Wpf.Ui.Violeta.Win32;
 using OSThemeHelper = QuickLook.Common.Helpers.OSThemeHelper;
@@ -70,7 +68,11 @@ internal partial class TrayIconManager : IDisposable
                 new TrayMenuItem()
                 {
                     Header = TranslationHelper.Get("Icon_OpenDataFolder"),
-                    Command = new RelayCommand(OpenDataFolder),
+                    Command = new RelayCommand(() => Process.Start(new ProcessStartInfo(SettingHelper.LocalDataPath)
+                    {
+                        UseShellExecute = true,
+                        Verb = "open",
+                    })),
                 },
                 _itemAutorun = new TrayMenuItem()
                 {
@@ -117,32 +119,6 @@ internal partial class TrayIconManager : IDisposable
     public void Dispose()
     {
         _icon.IsVisible = false;
-    }
-
-    private static void OpenDataFolder()
-    {
-        var shellType = Type.GetTypeFromProgID("Shell.Application");
-        if (shellType == null)
-            throw new InvalidOperationException("Shell.Application is unavailable.");
-
-        var shell = Activator.CreateInstance(shellType);
-        if (shell == null)
-            throw new InvalidOperationException("Unable to create Shell.Application.");
-
-        try
-        {
-            shellType.InvokeMember(
-                "Explore",
-                BindingFlags.InvokeMethod,
-                null,
-                shell,
-                [SettingHelper.LocalDataPath]);
-        }
-        finally
-        {
-            if (Marshal.IsComObject(shell))
-                Marshal.FinalReleaseComObject(shell);
-        }
     }
 
     public void Restart(string fileName = null, string dir = null, string args = null, int? exitCode = null, bool forced = false)
