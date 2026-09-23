@@ -212,6 +212,13 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
+                <Button x:Name="buttonSpeed"
+                        DockPanel.Dock="Left"
+                        Style="{StaticResource SpeedButtonStyle}"
+                        ToolTip="Playback Speed (+/- to change, 0 to reset)">
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{Binding PlaybackSpeed, ElementName=viewerPanel, StringFormat={}{0:0.##}x}" />
+                </Button>
                 <Button x:Name="buttonMute"
                         DockPanel.Dock="Right"
                         ToolTip="Volume">
