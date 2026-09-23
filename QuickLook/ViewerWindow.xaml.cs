@@ -29,6 +29,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shell;
 using System.Windows.Threading;
 using Wpf.Ui.Violeta.Controls;
+using Forms = System.Windows.Forms;
 using static QuickLook.Common.NativeMethods.Dwmapi;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
@@ -42,6 +43,8 @@ public partial class ViewerWindow : Window
 {
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
+    private readonly DispatcherTimer _toolbarCursorTimer = new() { Interval = TimeSpan.FromMilliseconds(50) };
+    private bool _toolbarAnimationRunning;
     private string _path = string.Empty;
     private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
@@ -66,6 +69,9 @@ public partial class ViewerWindow : Window
         StateChanged += (_, _) => _ignoreNextWindowSizeChange = true;
 
         windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
+        windowCaptionContainer.MouseLeave += HideWindowCaptionContainer;
+        _toolbarCursorTimer.Tick += UpdateToolbarVisibility;
+        _toolbarCursorTimer.Start();
 
         Topmost = SettingHelper.Get("Topmost", false);
         buttonTop.Tag = Topmost ? "Top" : "Auto";
@@ -458,25 +464,98 @@ public partial class ViewerWindow : Window
 
     private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
     {
-        var show = (Storyboard)windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
+        if (HideToolbar)
+            return;
 
-        if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
-            show.Begin();
+        ShowToolbar();
     }
 
     private void AutoHideCaptionContainer(object sender, EventArgs e)
     {
-        if (!ContextObject.TitlebarAutoHide)
+        _toolbarAnimationRunning = false;
+
+        if (!ContextObject.TitlebarAutoHide && !HideToolbar)
             return;
 
-        if (!ContextObject.TitlebarOverlap)
+        if (!ContextObject.TitlebarOverlap && !HideToolbar)
             return;
 
-        if (windowCaptionContainer.IsMouseOver)
+        if (windowCaptionContainer.IsMouseOver || IsPointerInToolbarKeepVisibleZone())
             return;
 
+        HideToolbarWithAnimation();
+    }
+
+    private void HideWindowCaptionContainer(object sender, MouseEventArgs e)
+    {
+        if (!HideToolbar || IsPointerInToolbarKeepVisibleZone())
+            return;
+
+        HideToolbarWithAnimation();
+    }
+
+    private void UpdateToolbarVisibility(object sender, EventArgs e)
+    {
+        if (!HideToolbar || !IsVisible || PresentationSource.FromVisual(windowFrameContainer) is null)
+            return;
+
+        if (IsPointerInToolbarRevealZone())
+            ShowToolbar();
+        else if (windowCaptionContainer.Opacity >= 0.99 && !IsPointerInToolbarKeepVisibleZone())
+            HideToolbarWithAnimation();
+    }
+
+    private void ShowToolbar()
+    {
+        if (_toolbarAnimationRunning || !HideToolbar && !ContextObject.TitlebarAutoHide || windowCaptionContainer.Opacity > 0.01)
+            return;
+
+        _toolbarAnimationRunning = true;
+        var show = (Storyboard)windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
+        show.Begin();
+    }
+
+    private void HideToolbarWithAnimation()
+    {
+        if (_toolbarAnimationRunning)
+            return;
+
+        _toolbarAnimationRunning = true;
         var hide = (Storyboard)windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
-
         hide.Begin();
+    }
+
+    private void FinishToolbarAnimation(object sender, EventArgs e)
+    {
+        _toolbarAnimationRunning = false;
+    }
+
+    private bool IsPointerInToolbarRevealZone()
+    {
+        return GetPointerY() <= GetToolbarRevealHeight();
+    }
+
+    private bool IsPointerInToolbarKeepVisibleZone()
+    {
+        return GetPointerY() <= GetToolbarKeepVisibleHeight();
+    }
+
+    private double GetPointerY()
+    {
+        if (!IsVisible || PresentationSource.FromVisual(windowFrameContainer) is null)
+            return double.PositiveInfinity;
+
+        var origin = windowFrameContainer.PointToScreen(new Point(0, 0));
+        return Forms.Cursor.Position.Y - origin.Y;
+    }
+
+    private double GetToolbarRevealHeight()
+    {
+        return ActualHeight * 0.35;
+    }
+
+    private double GetToolbarKeepVisibleHeight()
+    {
+        return ActualHeight * 0.45;
     }
 }

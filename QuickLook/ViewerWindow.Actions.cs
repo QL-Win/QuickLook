@@ -294,6 +294,8 @@ public partial class ViewerWindow
             return;
         }
 
+        HideToolbar = SettingHelper.Get("HideToolbar", false);
+
         if (ContextObject.IsBlocked)
         {
             ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
