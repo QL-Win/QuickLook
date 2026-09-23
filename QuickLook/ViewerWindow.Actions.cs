@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -45,7 +45,7 @@ public partial class ViewerWindow
 {
     internal void Run()
     {
-        if (string.IsNullOrEmpty(_path))
+        if (string.IsNullOrEmpty(_path) || NativeMethods.VirtualItemInfo.IsVirtual(_path))
             return;
 
         try
@@ -364,6 +364,7 @@ public partial class ViewerWindow
 
                 // Initial the more menu
                 ClearMoreMenuUnpin();
+                if (NativeMethods.VirtualItemInfo.IsVirtual(_path)) return;
                 foreach (var plugin in
                     PluginManager.GetInstance().LoadedPlugins
                         .GroupBy(x => x.ToString()).Select(g => g.First()) // DistinctBy plugin name
@@ -480,8 +481,16 @@ public partial class ViewerWindow
 
     private void SetOpenWithButtonAndPath()
     {
-        // Share icon
-        buttonShare.Visibility = ShareHelper.IsShareSupported(_path) ? Visibility.Visible : Visibility.Collapsed;
+        var isVirtual = NativeMethods.VirtualItemInfo.IsVirtual(_path);
+
+        buttonReload.Visibility = !isVirtual && SettingHelper.Get("ShowReload", false) ? Visibility.Visible : Visibility.Collapsed;
+        buttonMore.Visibility = !isVirtual ? Visibility.Visible : Visibility.Collapsed;
+        buttonOpen.Visibility = !isVirtual ? Visibility.Visible : Visibility.Collapsed;
+        buttonOpenWith.Visibility = !isVirtual ? Visibility.Visible : Visibility.Collapsed;
+        buttonShare.Visibility = !isVirtual && ShareHelper.IsShareSupported(_path) ? Visibility.Visible : Visibility.Collapsed;
+
+        if (isVirtual)
+            return;
 
         // Open icon
         if (Directory.Exists(_path))
