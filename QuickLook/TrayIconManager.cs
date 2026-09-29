@@ -68,7 +68,11 @@ internal partial class TrayIconManager : IDisposable
                 new TrayMenuItem()
                 {
                     Header = TranslationHelper.Get("Icon_OpenDataFolder"),
-                    Command = new RelayCommand(() => Process.Start("explorer.exe", SettingHelper.LocalDataPath)),
+                    Command = new RelayCommand(() => Process.Start(new ProcessStartInfo(SettingHelper.LocalDataPath)
+                    {
+                        UseShellExecute = true,
+                        Verb = "open",
+                    })),
                 },
                 _itemAutorun = new TrayMenuItem()
                 {
