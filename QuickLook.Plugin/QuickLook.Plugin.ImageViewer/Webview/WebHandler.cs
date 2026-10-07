@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -91,7 +91,9 @@ internal static class WebHandler
             else
                 context.PreferredSize = new Size(800, 600);
 
-            context.Theme = (Themes)SettingHelper.Get("LastTheme", 1, "QuickLook.Plugin.ImageViewer");
+            var defaultTheme = (int)(OSThemeHelper.AppsUseDarkTheme() ? Themes.Dark : Themes.Light);
+            var theme = (Themes)SettingHelper.Get("LastTheme", defaultTheme, "QuickLook.Plugin.ImageViewer");
+            context.Theme = theme == Themes.None ? (OSThemeHelper.AppsUseDarkTheme() ? Themes.Dark : Themes.Light) : theme;
             return true;
         }
 

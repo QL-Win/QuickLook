@@ -194,10 +194,10 @@ These keys are also stored in `QuickLook.config`.
   - `<RenderSvgWeb>False</RenderSvgWeb>`
 
 ### `<LastTheme>`
-- Default: `1` (`Dark`)
+- Default: `0` (`None` / follow system)
 - Type: `Integer`
-- Description: Remember the last theme used by the ImageViewer web preview.
-  - `0` = None
+- Description: Remember the last theme used by the ImageViewer web preview. If not set or set to `0`, follows the system dark/light theme.
+  - `0` = None (Follow system theme)
   - `1` = Dark
   - `2` = Light
 - Example:

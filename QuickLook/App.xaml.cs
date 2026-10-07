@@ -228,10 +228,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         // Set initial theme based on system settings
-        ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
-
-        // Initialize MessageBox patching
-        MessageBoxPatcher.Initialize();
+        EnsureThemeAndMessageBoxPatcher();
 
         CheckUpdate();
 
@@ -307,10 +304,17 @@ public partial class App : Application
         }
 
         // Second instance: duplicate
+        EnsureThemeAndMessageBoxPatcher();
         MessageBox.Show(TranslationHelper.Get("APP_SECOND_TEXT"), TranslationHelper.Get("APP_SECOND"),
             MessageBoxButton.OK, MessageBoxImage.Information);
 
         return false;
+    }
+
+    private static void EnsureThemeAndMessageBoxPatcher()
+    {
+        ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
+        MessageBoxPatcher.Initialize();
     }
 
     private void CheckUpdate()
