@@ -102,6 +102,7 @@
                     Margin="0,0,8,0"
                     Content="&#xE8C8;"
                     Style="{StaticResource CaptionButtonStyle}"
+                    ToolTip="{Binding CopyTooltip, ElementName=imagePanel}"
                     Visibility="{Binding ElementName=imagePanel, Path=CopyIconVisibility}" />
             <Button x:Name="buttonSaveAs"
                     Width="24"
@@ -127,41 +128,24 @@
                     Margin="0,0,8,0"
                     Content="&#xE946;"
                     Style="{StaticResource CaptionButtonStyle}"
-                    Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}" />
+                    ToolTipService.InitialShowDelay="0"
+                    Visibility="{Binding ElementName=imagePanel, Path=MetaIconVisibility}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock x:Name="textMetaContent"
+                                   FontSize="11"
+                                   Foreground="{DynamicResource WindowTextForeground}" />
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
             <Button x:Name="buttonBackgroundColour"
                     Width="24"
                     Height="24"
                     Margin="0,0,8,0"
                     Content="&#xEF1F;"
                     Style="{StaticResource CaptionButtonStyle}"
+                    ToolTip="{Binding BackgroundTooltip, ElementName=imagePanel}"
                     Visibility="{Binding ElementName=imagePanel, Path=BackgroundVisibility}" />
         </StackPanel>
-        <TextBlock x:Name="textMeta"
-                   Margin="0,40,8,0"
-                   Padding="5,5,5,5"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Top"
-                   Background="{DynamicResource CaptionBackground}"
-                   FontSize="11"
-                   Foreground="{DynamicResource WindowTextForeground}"
-                   IsHitTestVisible="False">
-            <TextBlock.Inlines>
-                <Run FontWeight="SemiBold">Camera maker</Run>
-                <Run>:&#160;</Run>
-                <Run>SONY</Run>
-            </TextBlock.Inlines>
-            <TextBlock.Style>
-                <Style>
-                    <Style.Setters>
-                        <Setter Property="TextBlock.Visibility" Value="Collapsed" />
-                    </Style.Setters>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=buttonMeta, Path=IsMouseOver}" Value="True">
-                            <Setter Property="TextBlock.Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
     </Grid>
 </UserControl>
