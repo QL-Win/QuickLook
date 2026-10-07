@@ -27,7 +27,7 @@ internal unsafe static class FreeTypeApi
 {
     static FreeTypeApi()
     {
-        FreeTypeDllMap.LoadNativeLibrary();
+        FreeTypeNative.Load();
     }
 
     public static string GetFontFamilyName(string path)

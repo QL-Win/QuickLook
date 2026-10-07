@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -23,12 +23,12 @@ using System.Runtime.InteropServices;
 namespace QuickLook.Plugin.FontViewer;
 
 /// <summary>
-/// To implement a similar architecture detection logic in .NET Framework
-/// https://github.com/ryancheung/FreeTypeSharp/blob/main/FreeTypeSharp/FT.DllMap.cs
+/// Load freetype.dll from the plugin runtimes folder on .NET Framework.
+/// Similar to https://github.com/ryancheung/FreeTypeSharp/blob/main/FreeTypeSharp/FT.DllMap.cs
 /// </summary>
-internal static class FreeTypeDllMap
+internal static class FreeTypeNative
 {
-    public static void LoadNativeLibrary()
+    public static void Load()
     {
         _ = ImportResolver();
     }

@@ -37,6 +37,8 @@ public partial class HelixPanel
         {
             if (importerType == ImporterType.Extended)
             {
+                AssimpNative.Load();
+
                 var context = new AssimpContext();
                 var scene = context.ImportFile(_path, PostProcessSteps.Triangulate);
 

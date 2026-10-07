@@ -83,6 +83,7 @@
 - Add `.gitconfig` to INI syntax extensions
 - Add Graphviz (`.dot` and `.gv`) syntax definitions
 - Improve JSON syntax highlighting color
+- Fix HelixViewer loading `assimp.dll` from plugin runtimes instead of AppBaseDirectory [#2016](https://github.com/QL-Win/QuickLook/issues/2016) [#1741](https://github.com/QL-Win/QuickLook/issues/1741)
 - Fix oftentimes doesn't trigger [#1903](https://github.com/QL-Win/QuickLook/issues/1903) [#1483](https://github.com/QL-Win/QuickLook/issues/1483)
 - Fix CSV auto-scroll bug on large files with virtualization enabled
 - Fix fullscreen behavior for window dragging and window corners for Windows 11
