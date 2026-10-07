@@ -56,6 +56,17 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private bool _wasPlaying;
     private bool _shouldLoop;
     private bool _useHardwareAcceleration;
+    private double _playbackSpeed = 1.0d;
+
+    // Preset playback speeds cycled through by the speed button and the +/- hotkeys.
+    private static readonly double[] SpeedPresets = [0.25d, 0.5d, 0.75d, 1.0d, 1.25d, 1.5d, 1.75d, 2.0d];
+
+    // Seek step sizes (in 100ns ticks, same unit as MediaPosition/MediaDuration) used by the
+    // timeline hotkeys: Shift+Left/Right for a short seek, Ctrl+Left/Right for a long seek.
+    // Plain arrow keys are intentionally left untouched: QuickLook's global hotkey dispatcher
+    // already uses them to switch between files in Explorer.
+    private static readonly long ShortSeekTicks = TimeSpan.FromSeconds(5).Ticks;
+    private static readonly long LongSeekTicks = TimeSpan.FromSeconds(30).Ticks;
 
     public ViewerPanel(ContextObject context)
     {
@@ -88,12 +99,19 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         buttonPlayPause.ToolTip = TranslationHelper.Get("BTN_PlayPause", translationFile, failsafe: "Play/Pause");
         buttonLoop.ToolTip = TranslationHelper.Get("BTN_Loop", translationFile, failsafe: "Loop");
         buttonHardwareAcceleration.ToolTip = TranslationHelper.Get("BTN_HardwareAcceleration", translationFile, failsafe: "Hardware/Software Decoding");
+        buttonSpeed.ToolTip = TranslationHelper.Get("BTN_Speed", translationFile, failsafe: "Playback Speed (+/- to change, 0 to reset)");
         buttonMute.ToolTip = TranslationHelper.Get("BTN_Volume", translationFile, failsafe: "Volume");
         buttonTime.ToolTip = TranslationHelper.Get("BTN_Time", translationFile, failsafe: "Time Elapsed/Remaining");
 
         buttonPlayPause.Click += TogglePlayPause;
         buttonLoop.Click += ToggleShouldLoop;
         buttonHardwareAcceleration.Click += ToggleHardwareAcceleration;
+        buttonSpeed.Click += (_, _) => CycleSpeed(1);
+        buttonSpeed.MouseRightButtonUp += (_, e) =>
+        {
+            PlaybackSpeed = 1.0d;
+            e.Handled = true;
+        };
         buttonTime.Click += (_, _) => buttonTime.Tag = (string)buttonTime.Tag == "Time" ? "Length" : "Time";
         buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
         volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
@@ -109,6 +127,14 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         };
 
         PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
+
+        // Keyboard hotkeys for seeking the timeline and changing playback speed.
+        // Keep keyboard focus on the panel itself: every child control in this panel
+        // (buttons, sliders) is Focusable="False" by design, so focus otherwise stays
+        // on the host window and PreviewKeyDown here would not fire on it.
+        Focusable = true;
+        Loaded += (_, _) => Focus();
+        PreviewKeyDown += ViewerPanel_PreviewKeyDown;
     }
 
     private partial void LoadAndInsertGlassLayer();
@@ -157,6 +183,27 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
+    /// <summary>
+    /// The current playback speed multiplier (1.0 = normal speed). Backed by the
+    /// underlying <see cref="mediaElement"/>'s DirectShow SpeedRatio (IMediaSeeking.SetRate).
+    /// </summary>
+    public double PlaybackSpeed
+    {
+        get => _playbackSpeed;
+        set
+        {
+            var clamped = Math.Max(SpeedPresets[0], Math.Min(SpeedPresets[SpeedPresets.Length - 1], value));
+            if (Math.Abs(clamped - _playbackSpeed) < 0.0001d) return;
+
+            _playbackSpeed = clamped;
+
+            if (mediaElement != null)
+                mediaElement.SpeedRatio = _playbackSpeed;
+
+            OnPropertyChanged();
+        }
+    }
+
     public BitmapSource CoverArt
     {
         get => _coverArt;
@@ -175,6 +222,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         SettingHelper.Set("VolumeDouble", LinearVolume, "QuickLook.Plugin.VideoViewer");
         SettingHelper.Set("ShouldLoop", ShouldLoop, "QuickLook.Plugin.VideoViewer");
         SettingHelper.Set("UseHardwareAcceleration", UseHardwareAcceleration, "QuickLook.Plugin.VideoViewer");
+        SettingHelper.Set("PlaybackSpeed", PlaybackSpeed, "QuickLook.Plugin.VideoViewer");
 
         try
         {
@@ -200,6 +248,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void Panel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        // Make sure the panel (not the window) owns keyboard focus, so that the
+        // seek/speed hotkeys keep working after the user interacts with the mouse.
+        Focus();
+
         if (e.LeftButton == MouseButtonState.Pressed)
         {
             var wnd = Window.GetWindow(this);
@@ -209,6 +261,118 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
             wnd?.DragMove();
         }
+    }
+
+    /// <summary>
+    /// Handles keyboard shortcuts for timeline seeking and playback speed.
+    ///
+    /// Plain Left/Right/Up/Down are deliberately NOT used here: QuickLook's global
+    /// low-level keyboard hook (see QuickLook.KeystrokeDispatcher) already reuses those
+    /// keys system-wide to switch between files in Explorer, and it never marks the
+    /// keystroke as handled, so it would still reach this handler too. Using modifier
+    /// combinations avoids fighting over the same keys:
+    ///   Shift+Left / Shift+Right  - seek 5 seconds backward/forward
+    ///   Ctrl+Left  / Ctrl+Right   - seek 30 seconds backward/forward
+    ///   Home / End                - jump to the start/end of the media
+    ///   +/-  (OemPlus/OemMinus)   - increase/decrease playback speed
+    ///   0    (D0/NumPad0)         - reset playback speed to 1.0x
+    /// </summary>
+    private void ViewerPanel_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (mediaElement?.Source == null)
+            return;
+
+        var modifiers = Keyboard.Modifiers;
+
+        switch (e.Key)
+        {
+            case Key.Left when modifiers == ModifierKeys.Shift:
+                Seek(-ShortSeekTicks);
+                e.Handled = true;
+                break;
+
+            case Key.Right when modifiers == ModifierKeys.Shift:
+                Seek(ShortSeekTicks);
+                e.Handled = true;
+                break;
+
+            case Key.Left when modifiers == ModifierKeys.Control:
+                Seek(-LongSeekTicks);
+                e.Handled = true;
+                break;
+
+            case Key.Right when modifiers == ModifierKeys.Control:
+                Seek(LongSeekTicks);
+                e.Handled = true;
+                break;
+
+            case Key.Home when modifiers == ModifierKeys.None:
+                SeekTo(0L);
+                e.Handled = true;
+                break;
+
+            case Key.End when modifiers == ModifierKeys.None:
+                SeekTo(mediaElement.MediaDuration);
+                e.Handled = true;
+                break;
+
+            case Key.OemPlus or Key.Add when modifiers == ModifierKeys.None:
+                CycleSpeed(1);
+                e.Handled = true;
+                break;
+
+            case Key.OemMinus or Key.Subtract when modifiers == ModifierKeys.None:
+                CycleSpeed(-1);
+                e.Handled = true;
+                break;
+
+            case Key.D0 or Key.NumPad0 when modifiers == ModifierKeys.None:
+                PlaybackSpeed = 1.0d;
+                e.Handled = true;
+                break;
+        }
+    }
+
+    /// <summary>Seeks the timeline by a relative amount of 100ns ticks (same unit as MediaPosition).</summary>
+    private void Seek(long deltaTicks)
+    {
+        if (mediaElement == null)
+            return;
+
+        SeekTo(mediaElement.MediaPosition + deltaTicks);
+    }
+
+    /// <summary>Seeks the timeline to an absolute position, clamped to the media's duration.</summary>
+    private void SeekTo(long positionTicks)
+    {
+        if (mediaElement == null)
+            return;
+
+        var duration = mediaElement.MediaDuration;
+        var clamped = duration > 0
+            ? Math.Max(0L, Math.Min(duration, positionTicks))
+            : Math.Max(0L, positionTicks);
+
+        mediaElement.MediaPosition = clamped;
+    }
+
+    /// <summary>Moves the playback speed to the next/previous preset in <see cref="SpeedPresets"/>.</summary>
+    private void CycleSpeed(int direction)
+    {
+        var index = 3; // default: land on 1.0x if the current speed isn't an exact preset match
+        var smallestDelta = double.MaxValue;
+        for (var i = 0; i < SpeedPresets.Length; i++)
+        {
+            var delta = Math.Abs(SpeedPresets[i] - PlaybackSpeed);
+            if (delta < smallestDelta)
+            {
+                smallestDelta = delta;
+                index = i;
+            }
+        }
+
+        index = Math.Max(0, Math.Min(SpeedPresets.Length - 1, index + direction));
+        PlaybackSpeed = SpeedPresets[index];
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -483,6 +647,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         mediaElement.Source = new Uri(path);
         // old plugin use an int-typed "Volume" config key ranged from 0 to 100. Let's use a new one here.
         LinearVolume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
+        PlaybackSpeed = SettingHelper.Get("PlaybackSpeed", 1d, "QuickLook.Plugin.VideoViewer");
 
         mediaElement.Play();
     }
