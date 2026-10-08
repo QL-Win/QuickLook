@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -81,7 +81,7 @@ public class ViewWindowManager : IDisposable
         if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
         else
-            if (_viewerWindow.IsVisible && (string.IsNullOrEmpty(path) || path == _invokedPath))
+            if (_viewerWindow.IsVisible && (string.IsNullOrEmpty(path) || NativeMethods.VirtualItemInfo.IsSameItem(path, _invokedPath)))
                 ClosePreview();
             else
                 InvokePreview(path);
@@ -140,24 +140,27 @@ public class ViewWindowManager : IDisposable
         }
     }
 
+    private static bool IsPureClsid(string path) =>
+        path?.StartsWith("::{", StringComparison.Ordinal) == true &&
+        Guid.TryParseExact(path.Substring(2), "B", out _);
+
+    private static bool IsPhysicalPathPreviewable(string path) =>
+        Directory.Exists(path) || (File.Exists(path) && ExtensionFilterHelper.IsExtensionAllowed(path));
+
+    private static bool IsPathPreviewable(string path) =>
+        NativeMethods.VirtualItemInfo.IsVirtual(path) ||
+        IsPureClsid(path) ||
+        IsPhysicalPathPreviewable(path);
+
     public void InvokePreview(string path = null)
     {
         if (string.IsNullOrEmpty(path))
             path = NativeMethods.QuickLook.GetCurrentSelection();
 
-        if (string.IsNullOrEmpty(path))
+        if (!IsPathPreviewable(path))
             return;
 
-        if (_viewerWindow.IsVisible && path == _invokedPath)
-            return;
-
-        var isDirectory = Directory.Exists(path);
-        if (!isDirectory && !File.Exists(path))
-            if (!path.StartsWith("::")) // CLSID
-                return;
-
-        // Check extension filtering before proceeding (skip for directories)
-        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+        if (_viewerWindow.IsVisible && NativeMethods.VirtualItemInfo.IsSameItem(path, _invokedPath))
             return;
 
         _invokedPath = path;
@@ -174,16 +177,10 @@ public class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             path = _invokedPath;
 
-        if (string.IsNullOrEmpty(path))
+        if (!IsPhysicalPathPreviewable(path))
             return;
 
-        var isDirectory = Directory.Exists(path);
-        if (!isDirectory && !File.Exists(path))
-            return;
-
-        // Check extension filtering before proceeding (skip for directories)
-        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
-            return;
+        _invokedPath = path;
 
         RunFocusMonitor();
 
@@ -200,7 +197,8 @@ public class ViewWindowManager : IDisposable
 
     public void ReloadPreview()
     {
-        if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
+        if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath)
+            || NativeMethods.VirtualItemInfo.IsVirtual(_invokedPath))
             return;
 
         var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
@@ -229,17 +227,24 @@ public class ViewWindowManager : IDisposable
 
         _viewerWindow.Close();
 
-        TrayIconManager.ShowNotification($"Failed to preview {Path.GetFileName(path)}",
+        var name = NativeMethods.VirtualItemInfo.TryParse(path, out var vInfo)
+            ? vInfo.EffectiveName
+            : (path?.StartsWith("::") == true ? path : (path != null ? Path.GetFileName(path) : string.Empty));
+
+        TrayIconManager.ShowNotification($"Failed to preview {name}",
             "Consider reporting this incident to QuickLook’s author.", true);
 
         Debug.WriteLine(e.SourceException.ToString());
-
         ProcessHelper.WriteLog(e.SourceException.ToString());
 
-        if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
-            BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
-        else
-            e.Throw();
+        if (plugin == typeof(Plugin.InfoPanel.Plugin))
+        {
+            if (!NativeMethods.VirtualItemInfo.IsVirtual(path))
+                e.Throw();
+            return;
+        }
+
+        BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
     }
 
     private void InitNewViewerWindow()

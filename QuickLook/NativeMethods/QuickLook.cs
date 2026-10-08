@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -24,6 +25,61 @@ using System.Text;
 using System.Threading;
 
 namespace QuickLook.NativeMethods;
+
+internal readonly struct VirtualItemInfo
+{
+    public const string Prefix = "::QL_VIRTUAL|";
+    private const long MaxFileTime = 2650467743999999999L; // DateTime.MaxValue.ToFileTime()
+
+    public string DisplayName { get; }
+    public long? FileSize { get; }
+    public DateTime? DateModified { get; }
+    public int IconIndex { get; }
+    public string ParsingName { get; }
+
+    public string EffectiveName => string.IsNullOrEmpty(DisplayName) ? ParsingName : DisplayName;
+
+    public static bool IsVirtual(string path) =>
+        !string.IsNullOrEmpty(path) && path.StartsWith(Prefix, StringComparison.Ordinal);
+
+    public static bool TryParse(string path, out VirtualItemInfo info)
+    {
+        info = default;
+        if (!IsVirtual(path))
+            return false;
+
+        var parts = path.Substring(Prefix.Length).Split(new[] { '|' }, 5);
+        if (parts.Length < 5)
+            return false;
+
+        var fileSize = long.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var size) && size >= 0 ? (long?)size : null;
+        _ = long.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var fileTime);
+        var iconIndex = int.TryParse(parts[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var idx) ? idx : -1;
+
+        DateTime? dt = (fileTime > 0 && fileTime <= MaxFileTime)
+            ? DateTime.FromFileTime(fileTime) : null;
+
+        info = new VirtualItemInfo(parts[3], fileSize, dt, iconIndex, parts[4]);
+        return true;
+    }
+
+    public static bool IsSameItem(string left, string right)
+    {
+        if (TryParse(left, out var a) && TryParse(right, out var b))
+            return string.Equals(a.ParsingName, b.ParsingName, StringComparison.Ordinal);
+
+        return string.Equals(left, right, StringComparison.Ordinal);
+    }
+
+    private VirtualItemInfo(string displayName, long? fileSize, DateTime? dateModified, int iconIndex, string parsingName)
+    {
+        DisplayName = displayName;
+        FileSize = fileSize;
+        DateModified = dateModified;
+        IconIndex = iconIndex;
+        ParsingName = parsingName;
+    }
+}
 
 internal static class QuickLook
 {
@@ -120,13 +176,15 @@ internal static class QuickLook
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start();
         thread.Join();
-        if (sb.Length > 2 && sb[0] == '"' && sb[sb.Length - 1] == '"')
-        {
-            // We got a quoted string which breaks ResolveShortcut
-            sb.Remove(sb.Length - 1, 1); // remove last "
-            sb.Remove(0, 1);             // remove first "
-        }
-        return ResolveShortcut(sb?.ToString() ?? string.Empty);
+
+        var raw = sb.ToString();
+        if (VirtualItemInfo.IsVirtual(raw))
+            return raw;
+
+        if (raw.Length >= 2 && raw.StartsWith("\"") && raw.EndsWith("\""))
+            raw = raw.Substring(1, raw.Length - 2);
+
+        return ResolveShortcut(raw);
     }
 
     private static string ResolveShortcut(string path)
