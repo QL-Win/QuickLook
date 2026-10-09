@@ -111,7 +111,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
 
         Focusable = true;
-        Loaded += (_, _) => Focus();
         PreviewKeyDown += ViewerPanel_PreviewKeyDown;
     }
 
@@ -209,8 +208,8 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         if (e.LeftButton == MouseButtonState.Pressed)
         {
             var wnd = Window.GetWindow(this);
-            // Do not allow dragging when window is borderless (e.g. fullscreen)
-            if (wnd?.WindowStyle == WindowStyle.None)
+            // Do not allow dragging when window is borderless (e.g. fullscreen) or maximized
+            if (wnd?.WindowStyle == WindowStyle.None || wnd?.WindowState == WindowState.Maximized)
             {
                 TogglePlayPause(this, EventArgs.Empty);
                 return;
@@ -221,7 +220,14 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
                 var startLeft = wnd.Left;
                 var startTop = wnd.Top;
 
-                wnd.DragMove();
+                try
+                {
+                    wnd.DragMove();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Ignore exception if mouse state changed unexpectedly during drag
+                }
 
                 // If the window was not moved, treat this interaction as a click to toggle play/pause
                 if (Math.Abs(wnd.Left - startLeft) < 2 && Math.Abs(wnd.Top - startTop) < 2)
@@ -234,25 +240,32 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void ViewerPanel_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (Keyboard.Modifiers != ModifierKeys.None)
+            return;
+
         switch (e.Key)
         {
             case Key.Left:
                 Seek(-TimeSpan.FromSeconds(5).Ticks);
+                ShowViedoControlContainer(null, null);
                 e.Handled = true;
                 break;
 
             case Key.Right:
                 Seek(TimeSpan.FromSeconds(5).Ticks);
+                ShowViedoControlContainer(null, null);
                 e.Handled = true;
                 break;
 
             case Key.Up:
                 ChangeVolume(0.05d);
+                ShowViedoControlContainer(null, null);
                 e.Handled = true;
                 break;
 
             case Key.Down:
                 ChangeVolume(-0.05d);
+                ShowViedoControlContainer(null, null);
                 e.Handled = true;
                 break;
         }
@@ -260,7 +273,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void Seek(long deltaTicks)
     {
-        if (mediaElement == null)
+        if (mediaElement == null || mediaElement.MediaDuration <= 0)
             return;
 
         var target = Math.Max(0, Math.Min(mediaElement.MediaDuration, mediaElement.MediaPosition + deltaTicks));
@@ -458,11 +471,17 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void ChangeVolume(double delta)
     {
+        if (mediaElement == null)
+            return;
+
         LinearVolume = Math.Max(0d, Math.Min(1d, LinearVolume + delta));
     }
 
     private void TogglePlayPause(object sender, EventArgs e)
     {
+        if (mediaElement == null)
+            return;
+
         if (mediaElement.IsPlaying)
             mediaElement.Pause();
         else
