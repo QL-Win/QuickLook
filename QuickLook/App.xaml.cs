@@ -70,6 +70,18 @@ public partial class App : Application
             );
         }
 
+#if DEBUG
+        if (SHCore.GetProcessDpiAwareness(0, out SHCore.PROCESS_DPI_AWARENESS awareness) == 0)
+            Debug.WriteLine($"Process DPI awareness: {awareness} ({(int)awareness})");
+        else
+            Debug.WriteLine("GetProcessDpiAwareness failed");
+
+        if (User32.GetProcessDpiAwarenessContext(out User32.DPI_AWARENESS_CONTEXT dpiContext))
+            Debug.WriteLine($"Process DPI awareness context: {dpiContext} ({(int)dpiContext})");
+        else
+            Debug.WriteLine("GetProcessDpiAwarenessContext failed");
+#endif
+
         // Occurs when the resolution of an assembly fails
         AppDomain.CurrentDomain.AssemblyResolve += (_, e) =>
         {

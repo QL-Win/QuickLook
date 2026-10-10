@@ -72,4 +72,61 @@ internal static class User32
         IDTRYAGAIN = 10,
         IDCONTINUE = 11
     }
+
+    public enum DPI_AWARENESS_CONTEXT
+    {
+        DPI_AWARENESS_CONTEXT_UNAWARE = -1,
+        DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = -2,
+        DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = -3,
+        DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4,
+        DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5,
+    }
+
+    /// <summary>
+    /// Requires Windows 10 version 1703 (build 15063) or later for
+    /// <see cref="DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2"/>.
+    /// Call this before any windows are created.
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern bool SetProcessDpiAwarenessContext(nint dpiContext);
+
+    [DllImport("user32.dll")]
+    public static extern nint GetThreadDpiAwarenessContext();
+
+    [DllImport("user32.dll")]
+    public static extern bool AreDpiAwarenessContextsEqual(nint dpiContextA, nint dpiContextB);
+
+    /// <summary>
+    /// Gets the current thread DPI awareness context.
+    /// Requires Windows 10 version 1607 (build 14393) or later.
+    /// <see cref="DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2"/> is only reported on Windows 10 version 1703 or later.
+    /// </summary>
+    public static bool GetProcessDpiAwarenessContext(out DPI_AWARENESS_CONTEXT dpiContext)
+    {
+        dpiContext = default;
+
+        nint context = GetThreadDpiAwarenessContext();
+        if (context == 0)
+            return false;
+
+        DPI_AWARENESS_CONTEXT[] known =
+        [
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE,
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED,
+        ];
+
+        foreach (DPI_AWARENESS_CONTEXT candidate in known)
+        {
+            if (AreDpiAwarenessContextsEqual(context, (nint)candidate))
+            {
+                dpiContext = candidate;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

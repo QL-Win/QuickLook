@@ -30,4 +30,11 @@ internal static class SHCore
 
     [DllImport("shcore.dll")]
     public static extern uint SetProcessDpiAwareness(PROCESS_DPI_AWARENESS awareness);
+
+    /// <summary>
+    /// Gets the DPI awareness of a process. Pass <c>0</c> for the current process.
+    /// Requires Windows 8.1 or later.
+    /// </summary>
+    [DllImport("shcore.dll")]
+    public static extern uint GetProcessDpiAwareness(nint hprocess, out PROCESS_DPI_AWARENESS value);
 }
