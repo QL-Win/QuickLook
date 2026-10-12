@@ -60,16 +60,6 @@ public partial class App : Application
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
         }
 
-        // Explicitly set to PerMonitor to avoid being overridden by the system
-        if (SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE) is uint result)
-        {
-            Debug.WriteLine(
-                result == 0 ?
-                "DPI Awareness applied successfully" :
-                $"DPI Awareness manual setup failed. Error Code: {result}"
-            );
-        }
-
 #if DEBUG
         if (SHCore.GetProcessDpiAwareness(0, out SHCore.PROCESS_DPI_AWARENESS awareness) == 0)
             Debug.WriteLine($"Process DPI awareness: {awareness} ({(int)awareness})");
