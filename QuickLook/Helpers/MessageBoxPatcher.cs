@@ -1,4 +1,4 @@
-﻿// Copyright © 2024 KamilDev
+// Copyright © 2024 KamilDev
 //
 // This file is part of QuickLook program.
 //
@@ -30,12 +30,18 @@ namespace QuickLook.Helpers;
 public static class MessageBoxPatcher
 {
     private static readonly Harmony Harmony = new("com.quicklook.messagebox.patch");
+    private static bool _isInitialized;
 
     /// <summary>
     /// Initializes the MessageBox patch by applying Harmony patches to the MessageBox.Show method overloads.
     /// </summary>
     public static void Initialize()
     {
+        if (_isInitialized)
+            return;
+
+        _isInitialized = true;
+
         try
         {
             Type originalType = typeof(WindowsMessageBox);
