@@ -70,7 +70,7 @@ internal static class User32
         IDYES = 6,
         IDNO = 7,
         IDTRYAGAIN = 10,
-        IDCONTINUE = 11
+        IDCONTINUE = 11,
     }
 
     public enum DPI_AWARENESS_CONTEXT

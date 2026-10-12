@@ -91,6 +91,7 @@
 - Fix rendering lag caused by excessively long lines by truncating and sanitizing them in text viewer
 - Fix twice space after Alt+Tab to explorer window [#1939](https://github.com/QL-Win/QuickLook/issues/1939)
 - Fix FontViewer preview width sizing
+- Fix Per-Monitor DPI awareness and support Per-Monitor V2 [#1988](https://github.com/QL-Win/QuickLook/pull/1988)
 
 ## 4.5.0
 
