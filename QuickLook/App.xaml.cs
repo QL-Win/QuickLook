@@ -61,7 +61,17 @@ public partial class App : Application
         }
 
         // SMTC
-        AppUserModel.Register("QuickLook", "QuickLook");
+        if (!IsUWP)
+        {
+            try
+            {
+                AppUserModel.Register("QuickLook", "QuickLook");
+            }
+            catch (Exception e)
+            {
+                ProcessHelper.WriteLog(e.ToString());
+            }
+        }
 
 #if DEBUG
         if (SHCore.GetProcessDpiAwareness(0, out SHCore.PROCESS_DPI_AWARENESS awareness) == 0)
