@@ -60,6 +60,9 @@ public partial class App : Application
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
         }
 
+        // SMTC
+        AppUserModel.Register("QuickLook", "QuickLook");
+
 #if DEBUG
         if (SHCore.GetProcessDpiAwareness(0, out SHCore.PROCESS_DPI_AWARENESS awareness) == 0)
             Debug.WriteLine($"Process DPI awareness: {awareness} ({(int)awareness})");
