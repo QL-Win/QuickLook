@@ -29,12 +29,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-      <DebugSymbols>true</DebugSymbols>
-      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
-      <DebugType>full</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-      <ErrorReport>prompt</ErrorReport>
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -47,12 +47,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
-      <DefineConstants>TRACE</DefineConstants>
-      <Optimize>true</Optimize>
-      <DebugType>pdbonly</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-      <ErrorReport>prompt</ErrorReport>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.VideoViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <ItemGroup>
@@ -61,8 +61,8 @@
         <PackageReference Include="QuickLook.MediaInfo" Version="26.5.0" />
         <PackageReference Include="QuickLook.MediaInfo.Native.win-x64" Version="26.5.0" />
         <PackageReference Include="QuickLook.MediaInfo.Native.win-x86" Version="26.5.0" />
-        <PackageReference Include="System.Memory" Version="4.6.3" />
         <!--<PackageReference Include="QuickLook.MediaInfo.Native.win-arm64" Version="26.5.0" />-->
+        <PackageReference Include="System.Memory" Version="4.6.3" />
         <Reference Include="WindowsBase" />
         <Reference Include="DirectShowLib-2005, Version=2.1.0.26626, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>

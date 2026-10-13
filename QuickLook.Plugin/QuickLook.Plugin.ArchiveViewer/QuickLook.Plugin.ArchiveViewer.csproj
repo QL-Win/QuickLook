@@ -45,11 +45,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-      <DebugSymbols>true</DebugSymbols>
-      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
-      <DebugType>full</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
@@ -61,11 +61,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
-      <DefineConstants>TRACE</DefineConstants>
-      <Optimize>true</Optimize>
-      <DebugType>pdbonly</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.ArchiveViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
     <ItemGroup>
@@ -89,9 +89,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Translations.config">
+        <None Update="Translations.config">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        </None>
     </ItemGroup>
 
 </Project>

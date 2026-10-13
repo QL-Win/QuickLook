@@ -46,12 +46,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-      <DebugSymbols>true</DebugSymbols>
-      <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
-      <DebugType>full</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-      <ErrorReport>prompt</ErrorReport>
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>..\..\Build\Debug\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
@@ -64,12 +64,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-      <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
-      <DefineConstants>TRACE</DefineConstants>
-      <Optimize>true</Optimize>
-      <DebugType>pdbonly</DebugType>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-      <ErrorReport>prompt</ErrorReport>
+        <OutputPath>..\..\Build\Release\QuickLook.Plugin\QuickLook.Plugin.HtmlViewer\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <ItemGroup>

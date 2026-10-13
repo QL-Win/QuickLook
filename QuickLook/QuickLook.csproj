@@ -48,12 +48,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-      <OutputPath>..\Build\Debug\</OutputPath>
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
-      <DebugSymbols>true</DebugSymbols>
-      <DebugType>full</DebugType>
-      <Prefer32Bit>false</Prefer32Bit>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <OutputPath>..\Build\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -75,12 +75,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-      <OutputPath>..\Build\Release\</OutputPath>
-      <DefineConstants>TRACE</DefineConstants>
-      <Optimize>true</Optimize>
-      <DebugType>pdbonly</DebugType>
-      <Prefer32Bit>false</Prefer32Bit>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <OutputPath>..\Build\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <Prefer32Bit>false</Prefer32Bit>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
