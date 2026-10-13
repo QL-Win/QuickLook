@@ -7,6 +7,7 @@
 
 # QuickLook
 
+[![Featured on AppWK](https://appwk.cn/badges/featured-dark.svg)](https://appwk.cn/apps/quicklook)
 <div align="center">
 
 <h3>
