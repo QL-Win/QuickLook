@@ -54,17 +54,19 @@ public partial class App : Application
 
     static App()
     {
+        // Set the process render mode based on the user setting
         var processRenderMode = SettingHelper.Get("ProcessRenderMode", failsafe: (int)RenderMode.Default, "QuickLook");
         if (processRenderMode == (int)RenderMode.SoftwareOnly)
         {
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
         }
 
-        // SMTC
+        // Support for System Media Transport Controls (SMTC)
         if (!IsUWP)
         {
             try
             {
+                // Register an AppUserModelID so the media flyout identifies QuickLook
                 AppUserModel.Register("QuickLook", "QuickLook");
             }
             catch (Exception e)
@@ -74,6 +76,7 @@ public partial class App : Application
         }
 
 #if DEBUG
+        // Debug DPI awareness for the process
         if (SHCore.GetProcessDpiAwareness(0, out SHCore.PROCESS_DPI_AWARENESS awareness) == 0)
             Debug.WriteLine($"Process DPI awareness: {awareness} ({(int)awareness})");
         else
