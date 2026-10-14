@@ -16,42 +16,85 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using PdfiumViewer;
 
 namespace QuickLook.Plugin.PDFViewer;
 
 public class PdfDocumentWrapper : IDisposable
 {
+    private readonly string _path;
+    private readonly string _password;
+    private SizeF[] _pageSizes;
+    private bool _disposed;
+
+    public PdfDocumentWrapper(string path, string password = null)
+    {
+        _path = path;
+        _password = password;
+        PdfDocument = PdfDocument.Load(path, password);
+        _pageSizes = PdfDocument.PageSizes.ToArray();
+        PageCount = PdfDocument.PageCount;
+    }
+
     public PdfDocumentWrapper(Stream stream, string password = null)
     {
+        _password = password;
         PdfStream = new MemoryStream((int)stream.Length);
         stream.CopyTo(PdfStream);
+        PdfStream.Position = 0;
 
         PdfDocument = PdfDocument.Load(PdfStream, password);
+        _pageSizes = PdfDocument.PageSizes.ToArray();
+        PageCount = PdfDocument.PageCount;
     }
 
     public PdfDocument PdfDocument { get; private set; }
 
     public MemoryStream PdfStream { get; private set; }
 
+    public int PageCount { get; private set; }
+
+    public SizeF GetPageSize(int page) => _pageSizes[page];
+
     public void Dispose()
     {
-        PdfDocument.Dispose();
-        PdfDocument = null;
-        PdfStream.Dispose();
-        PdfStream = null;
+        lock (PdfPageExtension.RenderLock)
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            PdfDocument?.Dispose();
+            PdfDocument = null;
+            PdfStream?.Dispose();
+            PdfStream = null;
+        }
     }
 
     public void Refresh()
     {
-        var oldD = PdfDocument;
+        lock (PdfPageExtension.RenderLock)
+        {
+            if (_disposed)
+                return;
 
-        PdfStream.Position = 0;
-        var newObj = new PdfDocumentWrapper(PdfStream);
-        PdfDocument = newObj.PdfDocument;
-        PdfStream = newObj.PdfStream;
+            if (PdfStream != null)
+                PdfStream.Position = 0;
 
-        oldD.Dispose();
+            var newDocument = _path != null
+                ? PdfDocument.Load(_path, _password)
+                : PdfDocument.Load(PdfStream, _password);
+            var newPageSizes = newDocument.PageSizes.ToArray();
+            var oldDocument = PdfDocument;
+
+            PdfDocument = newDocument;
+            PageCount = newDocument.PageCount;
+            _pageSizes = newPageSizes;
+
+            oldDocument.Dispose();
+        }
     }
 }

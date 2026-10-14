@@ -31,7 +31,8 @@ public sealed class Plugin : IViewer
 
     private ViewerPanel _vp;
 
-    public int Priority => -3;
+    // Let cheap text, archive, and model-format checks run before probing files with MediaInfo.
+    public int Priority => -9;
 
     static Plugin()
     {
@@ -52,7 +53,10 @@ public sealed class Plugin : IViewer
 
     public bool CanHandle(string path)
     {
-        if (!Directory.Exists(path))
+        if (Directory.Exists(path))
+            return false;
+
+        if (File.Exists(path))
         {
             try
             {

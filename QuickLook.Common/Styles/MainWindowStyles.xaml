@@ -15,7 +15,7 @@
     <SolidColorBrush x:Key="CaptionCloseButtonHoverForeground" Color="#E5EFEFEF" />
     <SolidColorBrush x:Key="CaptionCloseButtonHoverBackground" Color="#FFE81123" />
     <SolidColorBrush x:Key="CaptionCloseButtonPressBackground" Color="#FFB5394B" />
-    <SolidColorBrush x:Key="CaptionBackground" Color="#BBDADADA" />
+    <SolidColorBrush x:Key="CaptionBackground" Color="#FFDADADA" />
 
     <Style x:Key="CaptionButtonBaseStyle" TargetType="Button">
         <Setter Property="Focusable" Value="False" />

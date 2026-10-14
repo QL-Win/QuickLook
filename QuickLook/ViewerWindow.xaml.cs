@@ -40,8 +40,17 @@ namespace QuickLook;
 
 public partial class ViewerWindow : Window
 {
+    private const double TitlebarRevealBandPercentage = 0.33;
+    private const double TitlebarRevealMovementThreshold = 10;
+
+    private readonly DispatcherTimer _titlebarAutoHideTimer = new(DispatcherPriority.Normal)
+    {
+        Interval = TimeSpan.FromSeconds(1),
+    };
     private Size _customWindowSize = Size.Empty;
     private bool _ignoreNextWindowSizeChange;
+    private bool _trackingTitlebarRevealMovement;
+    private Point _titlebarRevealStart;
     private string _path = string.Empty;
     private FileSystemWatcher _autoReloadWatcher;
     private readonly bool _autoReload;
@@ -54,6 +63,10 @@ public partial class ViewerWindow : Window
         ContextObject.PropertyChanged += ContextObject_PropertyChanged;
 
         InitializeComponent();
+
+        _titlebarAutoHideTimer.Tick += AutoHideCaptionContainer;
+        Closed += (_, _) => _titlebarAutoHideTimer.Stop();
+        MouseLeave += HideCaptionContainerOnMouseLeave;
 
         _autoReload = SettingHelper.Get("AutoReload", false);
 
@@ -458,25 +471,80 @@ public partial class ViewerWindow : Window
 
     private void ShowWindowCaptionContainer(object sender, MouseEventArgs e)
     {
-        var show = (Storyboard)windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
+        if (!ContextObject.TitlebarAutoHide || !ContextObject.TitlebarOverlap)
+        {
+            _titlebarAutoHideTimer.Stop();
+            _trackingTitlebarRevealMovement = false;
+            return;
+        }
 
-        if (windowCaptionContainer.Opacity == 0 || windowCaptionContainer.Opacity == 1)
-            show.Begin();
+        if (windowCaptionContainer.Opacity > 0)
+        {
+            _trackingTitlebarRevealMovement = false;
+            if (windowCaptionContainer.Opacity < 1)
+            {
+                var showAnimation = (Storyboard)windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
+                showAnimation.Begin();
+            }
+
+            _titlebarAutoHideTimer.Stop();
+            _titlebarAutoHideTimer.Start();
+            return;
+        }
+
+        var pointerPosition = e.GetPosition(windowFrameContainer);
+        if (pointerPosition.Y > windowFrameContainer.ActualHeight * TitlebarRevealBandPercentage)
+        {
+            _trackingTitlebarRevealMovement = false;
+            return;
+        }
+
+        if (windowCaptionContainer.Opacity != 0)
+        {
+            _trackingTitlebarRevealMovement = false;
+            return;
+        }
+
+        if (!_trackingTitlebarRevealMovement)
+        {
+            _titlebarRevealStart = pointerPosition;
+            _trackingTitlebarRevealMovement = true;
+            return;
+        }
+
+        var horizontalMovement = pointerPosition.X - _titlebarRevealStart.X;
+        var verticalMovement = pointerPosition.Y - _titlebarRevealStart.Y;
+        if ((horizontalMovement * horizontalMovement) + (verticalMovement * verticalMovement)
+            < TitlebarRevealMovementThreshold * TitlebarRevealMovementThreshold)
+            return;
+
+        _trackingTitlebarRevealMovement = false;
+        var show = (Storyboard)windowCaptionContainer.FindResource("ShowCaptionContainerStoryboard");
+        show.Begin();
+        _titlebarAutoHideTimer.Stop();
+        _titlebarAutoHideTimer.Start();
     }
 
     private void AutoHideCaptionContainer(object sender, EventArgs e)
     {
+        _titlebarAutoHideTimer.Stop();
+
         if (!ContextObject.TitlebarAutoHide)
             return;
 
         if (!ContextObject.TitlebarOverlap)
             return;
 
-        if (windowCaptionContainer.IsMouseOver)
+        if (windowCaptionContainer.Opacity <= 0)
             return;
 
         var hide = (Storyboard)windowCaptionContainer.FindResource("HideCaptionContainerStoryboard");
 
         hide.Begin();
+    }
+
+    private void HideCaptionContainerOnMouseLeave(object sender, MouseEventArgs e)
+    {
+        AutoHideCaptionContainer(sender, e);
     }
 }
