@@ -46,7 +46,7 @@ internal class FocusMonitor
                     continue;
 
                 var path = NativeMethods.QuickLook.GetCurrentSelection();
-                if (IsRunning && last != path)
+                if (IsRunning && !NativeMethods.VirtualItemInfo.IsSameItem(last, path))
                 {
                     last = path;
                     PipeServerManager.SendMessage(PipeMessages.Switch, path);

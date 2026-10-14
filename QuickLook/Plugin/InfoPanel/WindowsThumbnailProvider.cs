@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.InfoPanel;
 
@@ -39,6 +40,24 @@ internal enum ThumbnailOptions
 internal static class WindowsThumbnailProvider
 {
     private const string IShellItem2Guid = "7E9FB0D3-919F-4307-AB2E-9B1860310C93";
+    private const int ShilJumbo = 0x4;
+    private const int IldTransparent = 0x00000001;
+    private static readonly Guid IidImageList = new("46EB5926-582E-4017-9FDF-E8998DAA0950");
+
+    [ComImport, Guid("46EB5926-582E-4017-9FDF-E8998DAA0950"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    private interface IImageList
+    {
+        [PreserveSig] int _0(); [PreserveSig] int _1(); [PreserveSig] int _2(); [PreserveSig] int _3();
+        [PreserveSig] int _4(); [PreserveSig] int _5(); [PreserveSig] int _6();
+        [PreserveSig] int GetIcon(int i, int flags, out IntPtr picon);
+    }
+
+    [DllImport("shell32.dll", PreserveSig = true)]
+    private static extern int SHGetImageList(int imageList, ref Guid iid, out IImageList result);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool DestroyIcon(IntPtr icon);
 
     [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern int SHCreateItemFromParsingName(
@@ -51,6 +70,32 @@ internal static class WindowsThumbnailProvider
     [DllImport("gdi32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool DeleteObject(nint hObject);
+
+    internal static BitmapSource GetJumboIcon(int iconIndex)
+    {
+        if (iconIndex < 0)
+            return null;
+
+        IImageList imageList = null;
+        IntPtr icon = IntPtr.Zero;
+        try
+        {
+            var iid = IidImageList;
+            if (SHGetImageList(ShilJumbo, ref iid, out imageList) >= 0 && imageList?.GetIcon(iconIndex, IldTransparent, out icon) >= 0 && icon != IntPtr.Zero)
+            {
+                var source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(icon, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                source.Freeze();
+                return source;
+            }
+        }
+        finally
+        {
+            if (icon != IntPtr.Zero) DestroyIcon(icon);
+            if (imageList != null && Marshal.IsComObject(imageList)) Marshal.ReleaseComObject(imageList);
+        }
+
+        return null;
+    }
 
     public static Bitmap GetThumbnail(string fileName, int width, int height, ThumbnailOptions options)
     {

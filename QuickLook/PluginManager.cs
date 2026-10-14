@@ -54,6 +54,9 @@ public sealed class PluginManager
         if (string.IsNullOrEmpty(path))
             return null;
 
+        if (NativeMethods.VirtualItemInfo.IsVirtual(path))
+            return DefaultPlugin.GetType().CreateInstance<IViewer>();
+
         var matched = GetInstance()
             .LoadedPlugins.FirstOrDefault(plugin =>
             {
