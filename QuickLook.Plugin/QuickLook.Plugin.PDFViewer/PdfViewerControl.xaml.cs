@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using PdfiumViewer;
-using QuickLook.Common.ExtensionMethods;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,8 +22,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace QuickLook.Plugin.PDFViewer;
 
@@ -33,6 +33,7 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
 {
     private int _changePageDeltaSum;
     private bool _initPage = true;
+    private int _renderRequestId;
     private double _maxZoomFactor = double.NaN;
     private double _minZoomFactor = double.NaN;
 
@@ -52,9 +53,9 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         pagePanel.ImageScrolled += NavigatePage;
     }
 
-    public ObservableCollection<int> PageThumbnails { get; set; } = [];
+    public ObservableCollection<int> PageThumbnails { get; private set; } = [];
 
-    public int TotalPages => PdfDocumentWrapper.PdfDocument.PageCount;
+    public int TotalPages => PdfDocumentWrapper.PageCount;
 
     public int CurrentPage
     {
@@ -81,6 +82,7 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
             pagePanel.ImageScrolled -= NavigatePage;
         }
 
+        _renderRequestId++;
         _pdfLoaded = false;
         PdfDocumentWrapper?.Dispose();
         PdfDocumentWrapper = null;
@@ -142,33 +144,37 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         }
     }
 
-    private void ReRenderCurrentPage()
+    private async void ReRenderCurrentPage()
     {
         if (!_pdfLoaded)
             return;
 
-        if (CurrentPage < 0 || CurrentPage >= TotalPages)
+        var page = CurrentPage;
+        var document = PdfDocumentWrapper;
+        if (document == null || page < 0 || page >= TotalPages)
             return;
 
-        Debug.WriteLine($"Re-rendering page {CurrentPage}");
+        Debug.WriteLine($"Re-rendering page {page}");
 
         var pos = pagePanel.GetScrollPosition();
+        var requestId = ++_renderRequestId;
 
         double factor;
+        var pageSize = document.GetPageSize(page);
 
         // First time showing. Set thresholds here.
         if (double.IsNaN(_minZoomFactor) || double.IsNaN(_maxZoomFactor))
         {
-            factor = Math.Min(pagePanel.ActualHeight / PdfDocumentWrapper.PdfDocument.PageSizes[CurrentPage].Height,
-                pagePanel.ActualWidth / PdfDocumentWrapper.PdfDocument.PageSizes[CurrentPage].Width);
+            factor = Math.Min(pagePanel.ActualHeight / pageSize.Height,
+                pagePanel.ActualWidth / pageSize.Width);
             _viewRenderFactor = factor;
             _minZoomFactor = 0.1 * factor;
             _maxZoomFactor = 5 * factor;
         }
         else if (pagePanel.ZoomToFit)
         {
-            factor = Math.Min(pagePanel.ActualHeight / PdfDocumentWrapper.PdfDocument.PageSizes[CurrentPage].Height,
-                pagePanel.ActualWidth / PdfDocumentWrapper.PdfDocument.PageSizes[CurrentPage].Width);
+            factor = Math.Min(pagePanel.ActualHeight / pageSize.Height,
+                pagePanel.ActualWidth / pageSize.Width);
         }
         else
         {
@@ -179,7 +185,19 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
             pagePanel.MaxZoomFactor = _maxZoomFactor / factor;
         }
 
-        var image = PdfDocumentWrapper.Render(CurrentPage, factor);
+        BitmapSource image;
+        try
+        {
+            image = await Task.Run(() => document.Render(page, factor));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to render PDF page {page}: {ex}");
+            return;
+        }
+
+        if (!_pdfLoaded || requestId != _renderRequestId || !ReferenceEquals(document, PdfDocumentWrapper))
+            return;
 
         pagePanel.Source = image;
         pagePanel.ResetZoom();
@@ -187,8 +205,6 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         _viewRenderFactor = factor;
 
         pagePanel.SetScrollPosition(pos);
-
-        Dispatcher.Delay(500, t => GC.Collect());
     }
 
     private void UpdatePageViewWhenSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -210,56 +226,64 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
         }
     }
 
-    public static Size GetDesiredControlSizeByFirstPage(string path, string password = null)
+    public static Size GetDesiredControlSizeByFirstPage(PdfDocumentWrapper document)
     {
-        Size size;
-
-        using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        var size = new Size(0, 0);
+        for (var page = 0; page < Math.Min(5, document.PageCount); page++)
         {
-            using (var tempHandle = PdfDocument.Load(s, password))
-            {
-                size = new Size(0, 0);
-                tempHandle.PageSizes.Take(5).ForEach(p =>
-                {
-                    size.Width = Math.Max(size.Width, p.Width);
-                    size.Height = Math.Max(size.Height, p.Height);
-                });
-
-                if (tempHandle.PageCount > 1)
-                    size.Width += /*listThumbnails.ActualWidth*/ 150;
-            }
+            var pageSize = document.GetPageSize(page);
+            size.Width = Math.Max(size.Width, pageSize.Width);
+            size.Height = Math.Max(size.Height, pageSize.Height);
         }
+
+        if (document.PageCount > 1)
+            size.Width += 150;
 
         return new Size(size.Width * 3, size.Height * 3);
     }
 
     public void LoadPdf(string path, string password = null)
     {
-        var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        PdfDocumentWrapper = new PdfDocumentWrapper(stream, password);
-        _pdfLoaded = true;
+        LoadPdf(new PdfDocumentWrapper(path, password));
+    }
 
-        if (PdfDocumentWrapper.PdfDocument.PageCount < 2)
+    public void LoadPdf(PdfDocumentWrapper document)
+    {
+        var previousDocument = PdfDocumentWrapper;
+        _pdfLoaded = false;
+        _renderRequestId++;
+        listThumbnails.SelectedIndex = -1;
+        if (previousDocument != null && !ReferenceEquals(previousDocument, document))
+            previousDocument.Dispose();
+
+        PdfDocumentWrapper = document;
+        _pdfLoaded = true;
+        _initPage = true;
+        _minZoomFactor = double.NaN;
+        _maxZoomFactor = double.NaN;
+        _viewRenderFactor = double.NaN;
+
+        if (PdfDocumentWrapper.PageCount < 2)
             listThumbnails.Visibility = Visibility.Collapsed;
+        else
+            listThumbnails.Visibility = Visibility.Visible;
 
         BeginLoadThumbnails();
+
+        if (PdfDocumentWrapper.PageCount > 0)
+            listThumbnails.SelectedIndex = 0;
     }
 
     public void LoadPdf(MemoryStream stream)
     {
         stream.Position = 0;
-        PdfDocumentWrapper = new PdfDocumentWrapper(stream);
-        _pdfLoaded = true;
-
-        if (PdfDocumentWrapper.PdfDocument.PageCount < 2)
-            listThumbnails.Visibility = Visibility.Collapsed;
-
-        BeginLoadThumbnails();
+        LoadPdf(new PdfDocumentWrapper(stream));
     }
 
     private void BeginLoadThumbnails()
     {
-        Enumerable.Range(0, PdfDocumentWrapper.PdfDocument.PageCount).ForEach(PageThumbnails.Add);
+        PageThumbnails = new ObservableCollection<int>(Enumerable.Range(0, PdfDocumentWrapper.PageCount));
+        OnPropertyChanged(nameof(PageThumbnails));
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

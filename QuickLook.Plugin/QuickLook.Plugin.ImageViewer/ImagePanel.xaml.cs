@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,6 +67,9 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
     private Visibility _reverseColorVisibility = Visibility.Collapsed;
     private Visibility _metaIconVisibility = Visibility.Visible;
 
+    public string CopyTooltip { get; } = GetTranslation("IV_Copy");
+    public string BackgroundTooltip { get; } = GetTranslation("IV_Background");
+
     public ImagePanel()
     {
         InitializeComponent();
@@ -77,11 +81,6 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         buttonSaveAs.Click += OnSaveAsOnClick;
 
         buttonReverseColor.Click += OnReverseColorOnClick;
-
-        buttonMeta.Click += (sender, e) =>
-            textMeta.Visibility = textMeta.Visibility == Visibility.Collapsed
-                ? Visibility.Visible
-                : Visibility.Collapsed;
 
         buttonBackgroundColour.Click += OnBackgroundColourOnClick;
 
@@ -109,6 +108,15 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
         viewPanel.ManipulationInertiaStarting += ViewPanel_ManipulationInertiaStarting;
         viewPanel.ManipulationStarting += ViewPanel_ManipulationStarting;
         viewPanel.ManipulationDelta += ViewPanel_ManipulationDelta;
+    }
+
+    private static string GetTranslation(string key)
+    {
+        var translationFile = Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            "Translations.config");
+
+        return TranslationHelper.Get(key, translationFile);
     }
 
     internal ImagePanel(ContextObject context, MetaProvider meta) : this()
@@ -401,19 +409,28 @@ public partial class ImagePanel : UserControl, INotifyPropertyChanged, IDisposab
 
     private void ShowMeta()
     {
-        textMeta.Inlines.Clear();
-        Meta.GetExif().Values.ForEach(m =>
+        textMetaContent.Inlines.Clear();
+        Meta.GetExif()
+            .OrderBy(item => item.Key switch
+            {
+                "_.Size.Width" => 0,
+                "_.Size.Height" => 1,
+                _ => 2,
+            })
+            .Select(item => item.Value)
+            .ForEach(m =>
         {
             if (string.IsNullOrWhiteSpace(m.Item1) || string.IsNullOrWhiteSpace(m.Item2))
                 return;
 
-            textMeta.Inlines.Add(new Run(m.Item1) { FontWeight = FontWeights.SemiBold });
-            textMeta.Inlines.Add(": ");
-            textMeta.Inlines.Add(m.Item2);
-            textMeta.Inlines.Add("\r\n");
+            textMetaContent.Inlines.Add(new Run(m.Item1) { FontWeight = FontWeights.SemiBold });
+            textMetaContent.Inlines.Add(": ");
+            textMetaContent.Inlines.Add(m.Item2);
+            textMetaContent.Inlines.Add("\r\n");
         });
-        textMeta.Inlines.Remove(textMeta.Inlines.LastInline);
-        if (!textMeta.Inlines.Any())
+        if (textMetaContent.Inlines.LastInline != null)
+            textMetaContent.Inlines.Remove(textMetaContent.Inlines.LastInline);
+        if (!textMetaContent.Inlines.Any())
             MetaIconVisibility = Visibility.Collapsed;
     }
 
