@@ -44,6 +44,20 @@ public partial class ViewerWindow : INotifyPropertyChanged
     private Rect _preFullscreenBounds;
     private double _preFullscreenCaptionHeight;
     private Thickness _preFullscreenResizeBorderThickness;
+    private bool _hideToolbar;
+
+    public bool HideToolbar
+    {
+        get => _hideToolbar;
+        private set
+        {
+            if (value == _hideToolbar)
+                return;
+
+            _hideToolbar = value;
+            OnPropertyChanged();
+        }
+    }
 
     public bool Pinned
     {
