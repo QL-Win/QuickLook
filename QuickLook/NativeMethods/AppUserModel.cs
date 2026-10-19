@@ -225,7 +225,7 @@ internal static class AppUserModel
             };
         }
 
-        public string ReadString()
+        public readonly string ReadString()
         {
             if (VariantType != VtLpWstr || Value == IntPtr.Zero)
                 return null;
