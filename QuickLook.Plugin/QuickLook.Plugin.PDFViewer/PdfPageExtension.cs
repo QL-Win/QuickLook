@@ -27,11 +27,11 @@ namespace QuickLook.Plugin.PDFViewer;
 internal static class PdfPageExtension
 {
     private static int _renderCount;
-    private static readonly object LockObj = new();
+    internal static readonly object RenderLock = new();
 
     public static BitmapSource RenderThumbnail(this PdfDocumentWrapper doc, int page)
     {
-        lock (LockObj)
+        lock (RenderLock)
         {
             if (_renderCount++ == 50)
             {
@@ -40,7 +40,7 @@ internal static class PdfPageExtension
             }
         }
 
-        var size = doc.PdfDocument.PageSizes[page];
+        var size = doc.GetPageSize(page);
         var factorX = 60d / size.Width;
         var factorY = 120d / size.Height;
 
@@ -55,9 +55,9 @@ internal static class PdfPageExtension
 
         Bitmap bitmap;
 
-        lock (LockObj)
+        lock (RenderLock)
         {
-            var size = doc.PdfDocument.PageSizes[page];
+            var size = doc.GetPageSize(page);
             var realWidth = (int)Math.Round(size.Width * scale.Horizontal * factor);
             var realHeight = (int)Math.Round(size.Height * scale.Vertical * factor);
 

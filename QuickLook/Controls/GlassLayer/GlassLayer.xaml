@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <local:ElementCoordinateConverter x:Key="ElementCoordinateConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="{Binding ElementName=glassLayer, Path=Background}">
         <Rectangle Panel.ZIndex="100" Visibility="{Binding ElementName=glassLayer, Path=NoiseVisibility}">
             <Rectangle.Fill>
                 <ImageBrush x:Name="noiseBrush"
@@ -26,7 +26,7 @@
         </Rectangle>
         <Rectangle Panel.ZIndex="50"
                    Fill="{Binding ElementName=glassLayer, Path=OverlayColor}"
-                   Opacity="0.7"
+                   Opacity="1"
                    Visibility="{Binding ElementName=glassLayer, Path=ColorOverlayVisibility}" />
         <Grid Panel.ZIndex="0" Visibility="{Binding ElementName=glassLayer, Path=GlassVisibility}">
             <Grid.Effect>
