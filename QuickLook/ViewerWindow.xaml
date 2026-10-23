@@ -61,6 +61,9 @@
                             <DataTrigger Binding="{Binding ContextObject.TitlebarAutoHide, ElementName=mainWindow}" Value="True">
                                 <Setter Property="Opacity" Value="0" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding HideToolbar, ElementName=mainWindow}" Value="True">
+                                <Setter Property="Opacity" Value="0" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
@@ -71,12 +74,11 @@
                                          To="1"
                                          Duration="0:0:0.05" />
                     </Storyboard>
-                    <Storyboard x:Key="HideCaptionContainerStoryboard">
+                    <Storyboard x:Key="HideCaptionContainerStoryboard" Completed="FinishToolbarAnimation">
                         <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}" Storyboard.TargetProperty="Opacity">
                             <DoubleAnimationUsingKeyFrames.KeyFrames>
                                 <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                <LinearDoubleKeyFrame KeyTime="0:0:1" Value="1" />
-                                <LinearDoubleKeyFrame KeyTime="0:0:1.05" Value="0" />
+                                <LinearDoubleKeyFrame KeyTime="0:0:0.15" Value="0" />
                             </DoubleAnimationUsingKeyFrames.KeyFrames>
                         </DoubleAnimationUsingKeyFrames>
                     </Storyboard>
@@ -229,7 +231,18 @@
             <DockPanel x:Name="containerPanel" ZIndex="80">
                 <Grid Height="{StaticResource MainWindowCaptionHeight}"
                       DockPanel.Dock="Top"
-                      Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                      Visibility="{Binding ContextObject.TitlebarOverlap, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HideToolbar, ElementName=mainWindow}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource HiddenToolbarBackground}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
                 <ContentControl x:Name="container"
                                 Content="{Binding ContextObject.ViewerContent, ElementName=mainWindow}"
                                 Foreground="{DynamicResource WindowTextForeground}"
