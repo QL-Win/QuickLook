@@ -133,6 +133,8 @@ public partial class ViewerWindow : Window
         buttonWindowStatus.Click += (_, _) =>
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
+        buttonMinimizeWindow.Click += (_, _) => WindowState = WindowState.Minimized;
+
         buttonShare.Click += (_, _) => ShareHelper.Share(_path, this);
         buttonOpenWith.Click += (_, _) => ShareHelper.Share(_path, this, true);
 
@@ -162,6 +164,9 @@ public partial class ViewerWindow : Window
         };
 
         // Set UI translations
+        buttonMinimizeWindow.ToolTip = TranslationHelper.Get("MW_Minimize");
+        System.Windows.Automation.AutomationProperties.SetName(buttonMinimizeWindow,
+            TranslationHelper.Get("MW_Minimize"));
         buttonTop.ToolTip = TranslationHelper.Get("MW_StayTop");
         buttonPin.ToolTip = TranslationHelper.Get("MW_PreventClosing");
         buttonOpenWith.ToolTip = TranslationHelper.Get("MW_OpenWithMenu");
