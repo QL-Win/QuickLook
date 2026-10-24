@@ -456,6 +456,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
+    /// <summary>
+    /// Loads media for playback and applies video rotation from its metadata.
+    /// </summary>
     public void LoadAndPlay(string path, MediaInfoNative info)
     {
         // Detect whether it is other playback formats

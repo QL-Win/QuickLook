@@ -84,6 +84,9 @@ public sealed class Plugin : IViewer
         return false;
     }
 
+    /// <summary>
+    /// Configures the preview window, accounting for video dimensions and rotation.
+    /// </summary>
     public void Prepare(string path, ContextObject context)
     {
         string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
