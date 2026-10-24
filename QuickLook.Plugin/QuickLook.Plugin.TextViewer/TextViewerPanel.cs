@@ -131,6 +131,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public void ToggleLineNumbers()
     {
+        if (_disposed) return;
         ShowLineNumbers = !ShowLineNumbers;
         UpdateTextPadding();
         // AvalonEdit recreates the separator when numbers are enabled again.

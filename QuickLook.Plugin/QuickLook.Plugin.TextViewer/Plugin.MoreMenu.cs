@@ -57,6 +57,7 @@ public sealed partial class Plugin
                 Icon = checkMark,
                 Command = new RelayCommand(() =>
                 {
+                    if (!ReferenceEquals(_tvp, viewer)) return;
                     viewer.ToggleLineNumbers();
                     checkMark.Visibility = viewer.ShowLineNumbers ? Visibility.Visible : Visibility.Hidden;
                 }),
