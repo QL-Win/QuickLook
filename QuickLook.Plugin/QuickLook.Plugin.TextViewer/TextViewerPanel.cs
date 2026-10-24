@@ -72,7 +72,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public TextViewerPanel()
     {
-        ShowLineNumbers = true;
+        ShowLineNumbers = SettingHelper.Get("ShowLineNumbers", true, "QuickLook.Plugin.TextViewer");
+        UpdateTextPadding();
         WordWrap = true;
         IsReadOnly = true;
 
@@ -89,10 +90,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         // The default LineNumberMargin in AvalonEdit often contains a thin Line element
         // used as a visual separator between line numbers and the text.
         // If found, set its Stroke to Transparent to hide the separator visually.
-        TextArea.LeftMargins
-            .OfType<System.Windows.Shapes.Line>()
-            .FirstOrDefault()
-            ?.Stroke = Brushes.Transparent;
+        TextArea.LeftMargins.OfType<System.Windows.Shapes.Line>().FirstOrDefault()?.Stroke = Brushes.Transparent;
 
         ContextMenu = new ContextMenu();
         // Add "Copy" menu item.
@@ -129,6 +127,20 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
         // Install the search panel (Ctrl+F style search UI).
         SearchPanel.Install(this);
+    }
+
+    public void ToggleLineNumbers()
+    {
+        ShowLineNumbers = !ShowLineNumbers;
+        UpdateTextPadding();
+        // AvalonEdit recreates the separator when numbers are enabled again.
+        TextArea.LeftMargins.OfType<System.Windows.Shapes.Line>().FirstOrDefault()?.Stroke = Brushes.Transparent;
+        SettingHelper.Set("ShowLineNumbers", ShowLineNumbers, "QuickLook.Plugin.TextViewer");
+    }
+
+    private void UpdateTextPadding()
+    {
+        Padding = new Thickness(ShowLineNumbers ? 0 : 6, 0, 0, 0);
     }
 
     public void Dispose()

@@ -265,6 +265,13 @@ These keys are also stored in `QuickLook.config`.
 
 ## QuickLook.Plugin.TextViewer.config options
 
+### `<ShowLineNumbers>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Show line numbers in text previews. Toggle **Show line numbers** in the **…** menu when previewing a TXT file; the choice is saved for subsequent previews and application restarts.
+- Example:
+  - `<ShowLineNumbers>False</ShowLineNumbers>` to hide line numbers.
+
 ### `<UseFormatDetector>`
 - Default: `True`
 - Type: `Boolean`
