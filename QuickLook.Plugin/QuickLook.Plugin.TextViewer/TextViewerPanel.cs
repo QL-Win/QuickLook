@@ -50,7 +50,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
     internal void BeautifyJson()
     {
         if (!CanBeautifyJson) return;
-        if (!JsonBeautifier.TryFormat(_jsonSource, out var formatted))
+        if (!JsonBeautifier.TryFormat(_jsonSource, out var formatted) || TruncateLongLinesInText(ref formatted))
         {
             string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
             MessageBox.Show(Window.GetWindow(this),
@@ -62,7 +62,6 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
         // Replace only the read-only preview, never the file on disk. Keep the complete
         // source: the normal text preview may already have truncated long lines.
-        TruncateLongLinesInText(ref formatted);
         Document = new TextDocument(formatted);
         ScrollToHome();
     }
