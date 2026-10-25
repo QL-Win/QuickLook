@@ -69,10 +69,15 @@ public partial class CsvViewerPanel : UserControl
         searchPanel.SetMatchCount(0, 0);
         searchPanel.Visibility = Visibility.Collapsed;
 
-        var encoding = CharsetDetector.DetectFromFile(path).Detected?.Encoding ??
-                       Encoding.Default;
+        var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-        using var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), encoding);
+        // Detect from a sample: only the first rows are shown, and scanning a whole large file
+        // here blocks the UI thread (and switching to the next file) for seconds on slow disks.
+        var encoding = CharsetDetector.DetectFromStream(stream, 1024 * 1024).Detected?.Encoding ??
+                       Encoding.Default;
+        stream.Position = 0;
+
+        using var sr = new StreamReader(stream, encoding);
 
         // Use fixed delimiters for known extensions to avoid mis-detection on small samples.
         var extension = Path.GetExtension(path);
