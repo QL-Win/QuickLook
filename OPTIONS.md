@@ -77,9 +77,16 @@ Example:
 ### `<AutoCloseHolding>`
 - Default: `True`
 - Type: `Boolean`
-- Description: Automatically close the preview window when the Space key is released after being held. When `True` (default), releasing Space after a long-press (≥750 ms) closes the preview. When `False`, the preview stays open on Space key release.
+- Description: Automatically close the preview window when the Space key is released after being held. When `True` (default), releasing Space after a long-press (it auto-repeats, or ≥750 ms) closes the preview. When `False`, the preview stays open on Space key release.
 - Example:
   - `<AutoCloseHolding>False</AutoCloseHolding>` to disable auto-close on Space release.
+
+### `<DoubleSpaceToEdit>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Double-tap Space (two presses within 300 ms) to close the preview and open the selected file with the program associated with its "edit" verb, or with its default program when it has none. When `False`, a second Space toggles the preview like any other press.
+- Example:
+  - `<DoubleSpaceToEdit>False</DoubleSpaceToEdit>` to disable double-tap Space to edit.
 
 ### `<CloseOnLostFocus>`
 - Default: `False`
