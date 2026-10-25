@@ -43,6 +43,19 @@ namespace QuickLook.Plugin.TextViewer;
 public partial class TextViewerPanel : TextEditor, IDisposable
 {
     private bool _disposed;
+    private string _path;
+    private ContextObject _context;
+    private string _title;
+    private bool _hasBom;
+    private bool _isDirty;
+    private int _escapeLeftEditorTick; // Environment.TickCount of the Escape that left the editor, 0 if none
+    private bool _isDarkHighlighting;
+
+    /// <summary>
+    /// Background presets for the dark theme, from lightest to darkest, cycled from the More menu. An empty value keeps the
+    /// window backdrop (transparent); any other "#AARRGGBB" value can also be set in the config file.
+    /// </summary>
+    public static readonly string[] BackgroundPresets = ["#30FFFFFF", "#18FFFFFF", "", "#B4141414", "#E60C0C0C", "#FF000000"];
 
     /// <summary>Maximum number of characters allowed on a single line before it is truncated.</summary>
     private const int MAX_LINE_LENGTH = 10000;
@@ -95,11 +108,24 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             ?.Stroke = Brushes.Transparent;
 
         ContextMenu = new ContextMenu();
+        // Add "Cut" and "Paste" menu items, only shown while editing.
+        ContextMenu.Items.Add(new MenuItem
+        {
+            Header = TranslationHelper.Get("Editor_Cut", domain: Assembly.GetExecutingAssembly().GetName().Name),
+            Command = ApplicationCommands.Cut,
+            Tag = "EditOnly",
+        });
         // Add "Copy" menu item.
         ContextMenu.Items.Add(new MenuItem
         {
             Header = TranslationHelper.Get("Editor_Copy", domain: Assembly.GetExecutingAssembly().GetName().Name),
             Command = ApplicationCommands.Copy
+        });
+        ContextMenu.Items.Add(new MenuItem
+        {
+            Header = TranslationHelper.Get("Editor_Paste", domain: Assembly.GetExecutingAssembly().GetName().Name),
+            Command = ApplicationCommands.Paste,
+            Tag = "EditOnly",
         });
         // Add "Select All" menu item.
         ContextMenu.Items.Add(new MenuItem
@@ -113,6 +139,12 @@ public partial class TextViewerPanel : TextEditor, IDisposable
         ManipulationStarting += Viewer_ManipulationStarting;
         ManipulationDelta += Viewer_ManipulationDelta;
         KeyDown += Viewer_KeyDown;
+        PreviewKeyDown += Viewer_PreviewKeyDown;
+        ContextMenuOpening += (_, _) =>
+        {
+            foreach (var item in ContextMenu.Items.OfType<MenuItem>().Where(i => i.Tag is "EditOnly"))
+                item.Visibility = IsReadOnly ? Visibility.Collapsed : Visibility.Visible;
+        };
 
         PreviewMouseWheel += Viewer_MouseWheel;
 
@@ -134,6 +166,147 @@ public partial class TextViewerPanel : TextEditor, IDisposable
     public void Dispose()
     {
         _disposed = true;
+    }
+
+    public static string BackgroundColor
+    {
+        get => SettingHelper.Get("BackgroundColor", string.Empty, "QuickLook.Plugin.TextViewer");
+        set => SettingHelper.Set("BackgroundColor", value ?? string.Empty, "QuickLook.Plugin.TextViewer");
+    }
+
+    /// <summary>
+    /// Applies the configured background. The custom color only applies to the dark theme,
+    /// since the light syntax colors are unreadable on a dark background.
+    /// </summary>
+    public void ApplyBackground()
+    {
+        if (_isDarkHighlighting)
+        {
+            Background = TryParseColor(BackgroundColor, out var color)
+                ? new SolidColorBrush(color)
+                : Brushes.Transparent;
+        }
+        else
+        {
+            // if os dark mode, but not AllowDarkTheme, make background light
+            Background = OSThemeHelper.AppsUseDarkTheme()
+                ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
+                : Brushes.Transparent;
+        }
+    }
+
+    private static bool TryParseColor(string value, out Color color)
+    {
+        color = default;
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        try
+        {
+            color = (Color)ColorConverter.ConvertFromString(value.Trim());
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// False when the shown text differs from the file (truncated or converted), so saving it would lose data.
+    /// </summary>
+    public bool CanEdit { get; private set; }
+
+    /// <summary>
+    /// Read by QuickLook (by name) to keep Space from closing the preview while edits are unsaved.
+    /// </summary>
+    public bool HasUnsavedChanges => _isDirty && !IsReadOnly;
+
+    /// <summary>
+    /// Called by QuickLook (by name) when Escape is released: true when that Escape only left the editor,
+    /// so it must not also close the preview.
+    /// </summary>
+    public bool ConsumeEscape()
+    {
+        // only the release of that same Escape counts: a later one closes the preview as usual
+        var handled = _escapeLeftEditorTick != 0 && Environment.TickCount - _escapeLeftEditorTick < 2000;
+        _escapeLeftEditorTick = 0;
+        return handled;
+    }
+
+    // Escape in the text leaves the editor (hides the caret) instead of closing the preview; the next
+    // Escape, or Space, then acts on the preview again.
+    private void Viewer_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Escape || !TextArea.IsKeyboardFocused)
+            return;
+
+        e.Handled = true;
+        _escapeLeftEditorTick = Environment.TickCount | 1;
+
+        var window = Window.GetWindow(this);
+        if (window != null)
+        {
+            // the window is a focus scope: focusing it would hand the focus straight back to the text
+            FocusManager.SetFocusedElement(window, null);
+            Keyboard.Focus(window);
+        }
+        else
+        {
+            Keyboard.ClearFocus();
+        }
+    }
+
+    /// <summary>
+    /// Writes the text back to the file, keeping its original encoding and byte order mark.
+    /// </summary>
+    public void Save()
+    {
+        if (!CanEdit || IsReadOnly || !_isDirty)
+            return;
+
+        try
+        {
+            var bytes = Encoding.GetBytes(Text);
+            using (var fs = new FileStream(_path, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                if (_hasBom)
+                {
+                    var preamble = Encoding.GetPreamble();
+                    fs.Write(preamble, 0, preamble.Length);
+                }
+                fs.Write(bytes, 0, bytes.Length);
+            }
+
+            _isDirty = false;
+            UpdateTitle();
+        }
+        catch (Exception e)
+        {
+            ProcessHelper.WriteLog(e.ToString());
+            MessageBox.Show(e.Message, "QuickLook", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    /// <summary>
+    /// Asks whether to save unsaved edits before the preview is closed or replaced.
+    /// </summary>
+    public void PromptSaveIfDirty()
+    {
+        if (!_isDirty || IsReadOnly)
+            return;
+
+        var result = MessageBox.Show(
+            TranslationHelper.Get("MW_SaveChangesPrompt", domain: Assembly.GetExecutingAssembly().GetName().Name),
+            "QuickLook", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result == MessageBoxResult.Yes)
+            Save();
+    }
+
+    private void UpdateTitle()
+    {
+        if (_context != null)
+            _context.Title = _isDirty ? $"{_title} *" : _title;
     }
 
     private void Viewer_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
@@ -167,6 +340,13 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     private void Viewer_KeyDown(object sender, KeyEventArgs e)
     {
+        if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+        {
+            e.Handled = true;
+            Save();
+            return;
+        }
+
         // Support keyboard shortcuts for RTL and LTR text direction
         if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
         {
@@ -317,17 +497,22 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public void LoadFileAsync(string path, ContextObject context)
     {
+        _path = path;
+        _context = context;
+
         _ = Task.Run(() =>
         {
+            bool transferred = false;
             const int maxLength = 5 * 1024 * 1024;
             const int maxHighlightingLength = (int)(0.5d * 1024 * 1024);
             var buffer = new MemoryStream();
             bool fileTooLong = false;
 
             // Read file to memory stream
-            if (FormatDetector.Transfer(path, out string transferred))
+            if (FormatDetector.Transfer(path, out string transferredText))
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(transferred);
+                transferred = true;
+                byte[] bytes = Encoding.UTF8.GetBytes(transferredText);
                 buffer.Write(bytes, 0, bytes.Length);
             }
             else
@@ -356,6 +541,12 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
             var encoding = EncodingDetector.DetectFromBytes(bufferCopy);
             var text = encoding.GetString(bufferCopy);
+            var preamble = encoding.GetPreamble();
+            var hasBom = preamble.Length > 0 && bufferCopy.Take(preamble.Length).SequenceEqual(preamble);
+
+            // GetString keeps the BOM as U+FEFF; drop it so it is not written twice on save
+            if (hasBom && text.Length > 0 && text[0] == '\uFEFF')
+                text = text.Substring(1);
 
             // Truncate overly long lines to prevent crashes and lag
             bool hasLongLines = TruncateLongLinesInText(ref text);
@@ -372,10 +563,23 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 var highlighting = HighlightingThemeManager.GetHighlightingByExtensionOrDetector(path, extension, text);
 
                 Encoding = encoding;
+                _hasBom = hasBom;
+                _title = context.Title;
+                CanEdit = !transferred && !fileTooLong && !hasLongLines;
+                doc.TextChanged += (_, _) =>
+                {
+                    if (_isDirty || IsReadOnly)
+                        return;
+                    _isDirty = true;
+                    UpdateTitle();
+                };
                 SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
                     ? null
                     : highlighting.SyntaxHighlighting;
                 Document = doc;
+
+                // editable right away, unless saving would lose data (truncated or converted text)
+                IsReadOnly = !CanEdit;
 
                 if (SyntaxHighlighting is ICustomHighlightingDefinition custom)
                 {
@@ -392,18 +596,10 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     TextArea.TextView.LineTransformers.Add(new TruncatedLineDecolorizer(this));
                 }
 
+                _isDarkHighlighting = highlighting.IsDark;
+                ApplyBackground();
                 if (highlighting.IsDark)
-                {
-                    Background = Brushes.Transparent;
                     SetResourceReference(ForegroundProperty, "WindowTextForeground");
-                }
-                else
-                {
-                    // if os dark mode, but not AllowDarkTheme, make background light
-                    Background = OSThemeHelper.AppsUseDarkTheme()
-                        ? new SolidColorBrush(Color.FromArgb(175, 255, 255, 255))
-                        : Brushes.Transparent;
-                }
 
                 // Support automatic RTL for text files
                 if (extension.Equals(".txt", StringComparison.OrdinalIgnoreCase))
