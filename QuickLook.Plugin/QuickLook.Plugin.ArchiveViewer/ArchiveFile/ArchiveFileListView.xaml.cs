@@ -17,7 +17,9 @@
 
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
@@ -26,6 +28,24 @@ public partial class ArchiveFileListView : UserControl, IDisposable
     public ArchiveFileListView()
     {
         InitializeComponent();
+
+        treeView.MouseDoubleClick += TreeView_MouseDoubleClick;
+    }
+
+    /// <summary>
+    /// Raised when the user asks to preview a file inside the archive
+    /// </summary>
+    public event Action<ArchiveFileEntry> PreviewRequested;
+
+    private void TreeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        // only react to double-clicks on an item, not on the scrollbar or empty space
+        var item = (e.OriginalSource as DependencyObject)?.FindAncestor<TreeViewItem>();
+        if (item?.DataContext is not ArchiveFileEntry entry || entry.IsFolder)
+            return;
+
+        e.Handled = true;
+        PreviewRequested?.Invoke(entry);
     }
 
     public void Dispose()

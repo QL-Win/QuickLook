@@ -39,6 +39,11 @@ public class ArchiveFileEntry : IComparable<ArchiveFileEntry>
     public SortedList<ArchiveFileEntry, bool> Children { get; set; } = [];
 
     public string Name { get; set; }
+
+    /// <summary>
+    /// Full path of the entry inside the archive, used to extract it for preview
+    /// </summary>
+    public string Key { get; set; }
     public bool Encrypted { get; set; }
     public bool IsFolder { get; set; }
     public ulong Size { get; set; }
