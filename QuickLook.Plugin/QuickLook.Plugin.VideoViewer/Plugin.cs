@@ -19,15 +19,38 @@ using QuickLook.Common.Plugin;
 using QuickLook.MediaInfo;
 using QuickLook.MediaInfo.Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace QuickLook.Plugin.VideoViewer;
 
 public sealed class Plugin : IViewer
 {
+    /// <summary>
+    /// Extensions opened directly with a full MediaInfo parse. Anything else is probed first,
+    /// so media with unusual extensions still works while arbitrary binaries stay cheap.
+    /// </summary>
+    private static readonly HashSet<string> WellKnownExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".3g2", ".3gp", ".asf", ".avi", ".flv", ".m2ts", ".m4v", ".mkv", ".mov", ".mp4", ".mpeg", ".mpg",
+        ".mts", ".ogv", ".rm", ".rmvb", ".ts", ".vob", ".webm", ".wmv",
+        ".aac", ".ac3", ".aif", ".aiff", ".amr", ".ape", ".dts", ".flac", ".m4a", ".mka", ".mp3", ".oga",
+        ".ogg", ".opus", ".wav", ".wma", ".wv",
+    };
+
+    /// <summary>Upper bound of bytes read when probing a file with an unknown extension.</summary>
+    private const long MaxProbeBytes = 4 * 1024 * 1024;
+
     private static readonly MediaInfoNative _mediaInfo;
+
+    /// <summary>
+    /// Separate handle for <see cref="ProbeIsMedia"/>: calling Open() on a handle previously
+    /// used in buffer mode crashes MediaInfo with an access violation.
+    /// </summary>
+    private static readonly MediaInfoNative _probeMediaInfo;
 
     private ViewerPanel _vp;
 
@@ -35,10 +58,18 @@ public sealed class Plugin : IViewer
 
     static Plugin()
     {
-        _mediaInfo = new(Path.Combine(
+        var nativePath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            Environment.Is64BitProcess ? @"runtimes\win-x64\native\" : @"runtimes\win-x86\native\"));
+            Environment.Is64BitProcess ? @"runtimes\win-x64\native\" : @"runtimes\win-x86\native\");
+
+        _mediaInfo = new(nativePath);
         _mediaInfo.Option("Cover_Data", "base64");
+        // Only header fields (format, size, rotation, tags, cover) are used. The default parse
+        // speed also samples the stream, reading tens of MB per file and stalling on slow disks.
+        _mediaInfo.Option("ParseSpeed", "0");
+
+        _probeMediaInfo = new(nativePath);
+        _probeMediaInfo.Option("ParseSpeed", "0");
     }
 
     public void Init()
@@ -56,6 +87,12 @@ public sealed class Plugin : IViewer
         {
             try
             {
+                // MediaInfo.Open() on an arbitrary binary can read the whole file several times
+                // (sync-word scanning for headerless formats like MPEG-TS or raw MP3), which freezes
+                // the UI on large files. Probe unknown extensions with a bounded read first.
+                if (!WellKnownExtensions.Contains(Path.GetExtension(path)) && !ProbeIsMedia(path))
+                    return false;
+
                 _mediaInfo.Open(path);
                 string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
                 string audioCodec = _mediaInfo.Get(StreamKind.Audio, 0, "Format");
@@ -81,6 +118,48 @@ public sealed class Plugin : IViewer
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Feeds MediaInfo through its buffer API, honoring its seek requests but reading at most
+    /// <see cref="MaxProbeBytes"/>, so non-media files are rejected without scanning them entirely.
+    /// </summary>
+    private static bool ProbeIsMedia(string path)
+    {
+        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        var buffer = new byte[64 * 1024];
+        var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+        try
+        {
+            long total = 0;
+            _probeMediaInfo.OpenBufferInit(fs.Length, 0);
+            while (total < MaxProbeBytes)
+            {
+                int read = fs.Read(buffer, 0, (int)Math.Min(buffer.Length, MaxProbeBytes - total));
+                if (read <= 0)
+                    break;
+                total += read;
+
+                // Bit 3 (0x08): MediaInfo has finished parsing
+                if ((_probeMediaInfo.OpenBufferContinue(handle.AddrOfPinnedObject(), (IntPtr)read) & 0x08) != 0)
+                    break;
+
+                long goTo = _probeMediaInfo.OpenBufferContinueGoToGet();
+                if (goTo != -1)
+                {
+                    fs.Seek(goTo, SeekOrigin.Begin);
+                    _probeMediaInfo.OpenBufferInit(fs.Length, fs.Position);
+                }
+            }
+            _probeMediaInfo.OpenBufferFinalize();
+        }
+        finally
+        {
+            handle.Free();
+        }
+
+        return !string.IsNullOrWhiteSpace(_probeMediaInfo.Get(StreamKind.Video, 0, "Format"))
+            || !string.IsNullOrWhiteSpace(_probeMediaInfo.Get(StreamKind.Audio, 0, "Format"));
     }
 
     public void Prepare(string path, ContextObject context)
