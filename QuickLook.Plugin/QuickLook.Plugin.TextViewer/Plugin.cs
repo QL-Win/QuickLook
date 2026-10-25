@@ -69,7 +69,7 @@ public partial class Plugin : IViewer, IMoreMenu
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = new Size { Width = 800, Height = 600 };
+        context.PreferredSize = new Size { Width = 800, Height = Math.Min(900, SystemParameters.WorkArea.Height * 0.85) };
     }
 
     public void View(string path, ContextObject context)
@@ -100,6 +100,7 @@ public partial class Plugin : IViewer, IMoreMenu
 
     public void Cleanup()
     {
+        _tvp?.PromptSaveIfDirty();
         _tvp?.Dispose();
         _tvp = null;
     }
