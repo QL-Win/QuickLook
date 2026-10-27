@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -44,8 +45,17 @@ public static class ProcessHelper
         {
             uint len = 0;
             var r = Kernel32.GetCurrentPackageFullName(ref len, null);
+            if (r != ErrorInsufficientBuffer || len == 0)
+                return false;
 
-            return r == ErrorInsufficientBuffer;
+            var name = new StringBuilder((int)len);
+            r = Kernel32.GetCurrentPackageFullName(ref len, name);
+            if (r != 0)
+                return false;
+
+            // The shell sparse package also gives this process an identity.
+            // Store behavior applies only to the Store package.
+            return name.ToString().StartsWith("21090PaddyXu.QuickLook_", StringComparison.Ordinal);
         }
         catch (EntryPointNotFoundException)
         {
