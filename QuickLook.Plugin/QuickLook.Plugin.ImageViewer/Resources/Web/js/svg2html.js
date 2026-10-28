@@ -10,8 +10,8 @@
  *
  * Features:
  * - Fit SVG to window with no upscaling
- * - Mouse wheel zoom in/out (with smooth animation)
- * - Double-click to fit SVG to window
+ * - Mouse wheel zoom in/out anywhere in the container (with smooth animation)
+ * - Double-click anywhere in the container to fit SVG to window
  * - Mouse drag to pan (only when SVG is larger than the container)
  * - Pan is limited to visible overflow area
  * - Handles SVGs with or without width/height/viewBox attributes
@@ -31,6 +31,7 @@ class SvgViewer {
         this.viewBoxWidth = null;
         this.viewBoxHeight = null;
         this.svgElement = null;
+        this.container = document.getElementById('svgContainer');
         this.wrapper = document.getElementById('svgWrapper');
         this.transitionEnabled = false;
 
@@ -92,9 +93,9 @@ class SvgViewer {
     computeBaseScale() {
         if (!this.viewBoxWidth || !this.viewBoxHeight) return 1;
 
-        const wrapperRect = document.getElementById('svgContainer').getBoundingClientRect();
-        const scaleX = wrapperRect.width / this.viewBoxWidth;
-        const scaleY = wrapperRect.height / this.viewBoxHeight;
+        const containerRect = this.container.getBoundingClientRect();
+        const scaleX = containerRect.width / this.viewBoxWidth;
+        const scaleY = containerRect.height / this.viewBoxHeight;
 
         return Math.min(scaleX, scaleY, 1); // Never upscale by default
     }
@@ -104,8 +105,7 @@ class SvgViewer {
      */
     updateTransform() {
         // Calculate actual SVG display size
-        const container = document.getElementById('svgContainer');
-        const containerRect = container.getBoundingClientRect();
+        const containerRect = this.container.getBoundingClientRect();
         const svgWidth = this.viewBoxWidth * this.scale;
         const svgHeight = this.viewBoxHeight * this.scale;
 
@@ -166,8 +166,8 @@ class SvgViewer {
             e.preventDefault();
         });
 
-        // Zoom with mouse wheel
-        this.wrapper.addEventListener("wheel", (e) => {
+        // Zoom with mouse wheel anywhere in the container (not only over the SVG)
+        this.container.addEventListener("wheel", (e) => {
             this.enableTransition();
             e.preventDefault();
             if (e.deltaY < 0) {
@@ -182,20 +182,19 @@ class SvgViewer {
             this.updateTransform();
         }, { passive: false });
 
-        // Double click to fit
-        this.wrapper.addEventListener('dblclick', () => {
+        // Double click to fit anywhere in the container
+        this.container.addEventListener('dblclick', () => {
             this.enableTransition();
             this.fitToWindow();
         });
 
         // Start pan on mouse down
-        this.wrapper.addEventListener('mousedown', (e) => {
+        this.container.addEventListener('mousedown', (e) => {
             // Only left mouse button
             if (e.button !== 0) return;
 
             // Only allow pan if SVG is larger than container
-            const container = document.getElementById('svgContainer');
-            const containerRect = container.getBoundingClientRect();
+            const containerRect = this.container.getBoundingClientRect();
             const svgWidth = this.viewBoxWidth * this.scale;
             const svgHeight = this.viewBoxHeight * this.scale;
 
@@ -211,8 +210,7 @@ class SvgViewer {
         window.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
 
-            const container = document.getElementById('svgContainer');
-            const containerRect = container.getBoundingClientRect();
+            const containerRect = this.container.getBoundingClientRect();
             const svgWidth = this.viewBoxWidth * this.scale;
             const svgHeight = this.viewBoxHeight * this.scale;
 
