@@ -19,6 +19,7 @@ using QuickLook.Common.Plugin;
 using QuickLook.MediaInfo;
 using QuickLook.MediaInfo.Core;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -83,6 +84,9 @@ public sealed class Plugin : IViewer
         return false;
     }
 
+    /// <summary>
+    /// Configures the preview window, accounting for video dimensions and rotation.
+    /// </summary>
     public void Prepare(string path, ContextObject context)
     {
         string videoCodec = _mediaInfo.Get(StreamKind.Video, 0, "Format");
@@ -90,11 +94,8 @@ public sealed class Plugin : IViewer
         {
             int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Width"), out var width);
             int.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Height"), out var height);
-            double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
-
-            // Correct rotation: on some machine the value "90" becomes "90000" by some reason
-            if (rotation > 360)
-                rotation /= 1e3;
+            // Parse "90.000" as 90 in every culture, avoiding 90000 (de-DE) or 0 (ru-RU).
+            double.TryParse(_mediaInfo.Get(StreamKind.Video, 0, "Rotation"), NumberStyles.Float, CultureInfo.InvariantCulture, out var rotation);
 
             var windowSize = new Size
             {
