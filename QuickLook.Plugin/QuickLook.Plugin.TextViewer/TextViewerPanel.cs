@@ -43,6 +43,28 @@ namespace QuickLook.Plugin.TextViewer;
 public partial class TextViewerPanel : TextEditor, IDisposable
 {
     private bool _disposed;
+    private string _jsonSource;
+    internal event Action JsonSourceLoaded;
+    internal bool CanBeautifyJson => !_disposed && _jsonSource is not null;
+
+    internal void BeautifyJson()
+    {
+        if (!CanBeautifyJson) return;
+        if (!JsonBeautifier.TryFormat(_jsonSource, out var formatted) || TruncateLongLinesInText(ref formatted))
+        {
+            string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
+            MessageBox.Show(Window.GetWindow(this),
+                TranslationHelper.Get("MW_BeautifyJsonInvalid", translationFile),
+                TranslationHelper.Get("MW_BeautifyJson", translationFile),
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        // Replace only the read-only preview, never the file on disk. Keep the complete
+        // source: the normal text preview may already have truncated long lines.
+        Document = new TextDocument(formatted);
+        ScrollToHome();
+    }
 
     /// <summary>Maximum number of characters allowed on a single line before it is truncated.</summary>
     private const int MAX_LINE_LENGTH = 10000;
@@ -134,6 +156,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
     public void Dispose()
     {
         _disposed = true;
+        _jsonSource = null;
+        JsonSourceLoaded = null;
     }
 
     private void Viewer_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
@@ -356,6 +380,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
             var encoding = EncodingDetector.DetectFromBytes(bufferCopy);
             var text = encoding.GetString(bufferCopy);
+            string jsonSource = !fileTooLong && path.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ? text : null;
 
             // Truncate overly long lines to prevent crashes and lag
             bool hasLongLines = TruncateLongLinesInText(ref text);
@@ -368,6 +393,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
             Dispatcher.BeginInvoke(() =>
             {
+                if (_disposed) return;
                 var extension = Path.GetExtension(path);
                 var highlighting = HighlightingThemeManager.GetHighlightingByExtensionOrDetector(path, extension, text);
 
@@ -420,6 +446,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 }
 
                 context.IsBusy = false;
+                _jsonSource = jsonSource;
+                JsonSourceLoaded?.Invoke();
             }, DispatcherPriority.Render);
         });
     }
