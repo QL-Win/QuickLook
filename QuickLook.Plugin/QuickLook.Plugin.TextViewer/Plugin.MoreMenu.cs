@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace QuickLook.Plugin.TextViewer;
 
@@ -40,6 +42,26 @@ public sealed partial class Plugin
         }
         catch (Exception)
         {
+        }
+
+        if (extension == ".txt" && _tvp is { } viewer)
+        {
+            var checkMark = new TextBlock
+            {
+                Text = "✓",
+                Visibility = viewer.ShowLineNumbers ? Visibility.Visible : Visibility.Hidden,
+            };
+            yield return new MoreMenuItem
+            {
+                Header = TranslationHelper.Get("Editor_ShowLineNumbers", translationFile),
+                Icon = checkMark,
+                Command = new RelayCommand(() =>
+                {
+                    if (!ReferenceEquals(_tvp, viewer)) return;
+                    viewer.ToggleLineNumbers();
+                    checkMark.Visibility = viewer.ShowLineNumbers ? Visibility.Visible : Visibility.Hidden;
+                }),
+            };
         }
 
         var reopen = extension switch
