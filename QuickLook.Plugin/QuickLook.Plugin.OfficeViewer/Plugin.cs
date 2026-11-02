@@ -60,41 +60,47 @@ public sealed class Plugin : IViewer
         if (!checkPreviewHandler)
             return true;
 
-        if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(previewHandler.ToString("B"))))
-        {
+        // Office suites such as WPS Office are 32-bit applications and register their preview
+        // handlers only in the 32-bit registry view. QuickLook is a 64-bit process and cannot
+        // use such a registration, so mirror it into the 64-bit registry view for the current
+        // user. An existing mirror is refreshed when the source registration changes, therefore
+        // this must run before the plain registration check below. See also:
+        // PreviewHandlerRegistration.
+        var fixPreviewHandlerRegistration = SettingHelper.Get("FixPreviewHandlerRegistration", true, "QuickLook.Plugin.OfficeViewer");
+        if (fixPreviewHandlerRegistration && PreviewHandlerRegistration.EnsureRegisteredForCurrentView(previewHandler))
             return true;
-        }
-        else
-        {
-            // Legacy: No more recovering registries for MS Office.
-            // TODO: Add a setting page to let users choose the fallback preview handler if the current one is not working.
+
+        if (PreviewHandlerRegistration.IsRegisteredForCurrentView(previewHandler))
+            return true;
+
+        // Legacy: No more recovering registries for MS Office.
+        // TODO: Add a setting page to let users choose the fallback preview handler if the current one is not working.
 #if false
-            // To restore the preview handler CLSID to MS Office
-            // if running with administrative privileges
-            if (ShellExRegister.IsRunAsAdmin())
+        // To restore the preview handler CLSID to MS Office
+        // if running with administrative privileges
+        if (ShellExRegister.IsRunAsAdmin())
+        {
+            var fileExtension = Path.GetExtension(path);
+            var fallbackHandler = fileExtension switch
             {
-                var fileExtension = Path.GetExtension(path);
-                var fallbackHandler = fileExtension switch
-                {
-                    ".doc" or ".docx" or ".docm" or ".odt" => CLSIDRegister.MicrosoftWord,
-                    ".xls" or ".xlsx" or ".xlsm" or ".xlsb" or ".ods" => CLSIDRegister.MicrosoftExcel,
-                    ".ppt" or ".pptx" or ".odp" => CLSIDRegister.MicrosoftPowerPoint,
-                    ".vsd" or ".vsdx" => CLSIDRegister.MicrosoftVisio,
-                    _ => null,
-                };
+                ".doc" or ".docx" or ".docm" or ".odt" => CLSIDRegister.MicrosoftWord,
+                ".xls" or ".xlsx" or ".xlsm" or ".xlsb" or ".ods" => CLSIDRegister.MicrosoftExcel,
+                ".ppt" or ".pptx" or ".odp" => CLSIDRegister.MicrosoftPowerPoint,
+                ".vsd" or ".vsdx" => CLSIDRegister.MicrosoftVisio,
+                _ => null,
+            };
 
-                if (fallbackHandler == null)
-                    return false;
+            if (fallbackHandler == null)
+                return false;
 
-                if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(fallbackHandler)))
-                {
-                    // Admin requested
-                    ShellExRegister.SetPreviewHandlerGUID(fileExtension, new Guid(fallbackHandler));
-                    return true;
-                }
+            if (!string.IsNullOrWhiteSpace(CLSIDRegister.GetName(fallbackHandler)))
+            {
+                // Admin requested
+                ShellExRegister.SetPreviewHandlerGUID(fileExtension, new Guid(fallbackHandler));
+                return true;
             }
-#endif
         }
+#endif
 
         return false;
     }
