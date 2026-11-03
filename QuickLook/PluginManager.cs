@@ -18,13 +18,18 @@
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
+using QuickLook.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using UnblockZoneIdentifier;
 
 namespace QuickLook;
@@ -35,9 +40,13 @@ public sealed class PluginManager
 
     private PluginManager()
     {
+        var sw = Stopwatch.StartNew();
         LoadPlugins(App.UserPluginPath);
         LoadPlugins(Path.Combine(App.AppPath, @"QuickLook.Plugin\"));
+        var loadMs = sw.ElapsedMilliseconds;
+        sw.Restart();
         InitLoadedPlugins();
+        KeyboardLog.Write($"Startup: plugins loaded in {loadMs} ms, initialized in {sw.ElapsedMilliseconds} ms");
     }
 
     internal IViewer DefaultPlugin { get; } = new Plugin.InfoPanel.Plugin();
@@ -79,6 +88,104 @@ public sealed class PluginManager
         return (matched ?? DefaultPlugin).GetType().CreateInstance<IViewer>();
     }
 
+    /// <summary>
+    /// Pays the first-use costs (JIT, static constructors, dependent assemblies) at startup instead of
+    /// on the first preview. Each plugin's CanHandle runs once on the UI thread at idle priority, one plugin
+    /// per dispatcher operation so a key press is never held up; then every plugin assembly is compiled
+    /// ahead on a low-priority background thread, which also covers Prepare and View.
+    /// </summary>
+    internal void WarmUp()
+    {
+        var sw = Stopwatch.StartNew();
+        var probe = Path.Combine(Path.GetTempPath(), "QuickLook.WarmUp.nonexistent.txt");
+
+        foreach (var plugin in LoadedPlugins)
+        {
+            Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                try
+                {
+                    plugin.CanHandle(probe);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }, DispatcherPriority.ApplicationIdle);
+        }
+
+        Application.Current.Dispatcher.BeginInvoke(() =>
+        {
+            KeyboardLog.Write($"Startup: CanHandle warm-up done in {sw.ElapsedMilliseconds} ms");
+
+            var assemblies = LoadedPlugins.Select(p => p.GetType().Assembly).Distinct().ToArray();
+            new Thread(() => PrepareAssemblies(assemblies))
+            {
+                IsBackground = true,
+                Name = "QuickLook.WarmUp",
+                Priority = ThreadPriority.Lowest,
+            }.Start();
+        }, DispatcherPriority.ApplicationIdle);
+    }
+
+    private static void PrepareAssemblies(Assembly[] assemblies)
+    {
+        var sw = Stopwatch.StartNew();
+        var count = 0;
+
+        foreach (var assembly in assemblies)
+        {
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                types = [.. e.Types.Where(t => t != null)];
+            }
+
+            foreach (var type in types)
+            {
+                if (type.IsGenericTypeDefinition || type.IsInterface)
+                    continue;
+
+                const BindingFlags flags = BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static
+                    | BindingFlags.Public | BindingFlags.NonPublic;
+
+                MethodBase[] methods;
+                try
+                {
+                    methods = [.. type.GetMethods(flags), .. type.GetConstructors(flags)];
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (var method in methods)
+                {
+                    if (method.IsAbstract || method.ContainsGenericParameters
+                        || (method.MethodImplementationFlags & MethodImplAttributes.InternalCall) != 0
+                        || method.GetMethodBody() == null)
+                        continue;
+
+                    try
+                    {
+                        RuntimeHelpers.PrepareMethod(method.MethodHandle);
+                        count++;
+                    }
+                    catch
+                    {
+                        // a missing optional dependency, etc.: that method is simply compiled on first use
+                    }
+                }
+            }
+        }
+
+        KeyboardLog.Write($"Startup: precompiled {count} plugin methods in {sw.ElapsedMilliseconds} ms");
+    }
+
     private void LoadPlugins(string folder)
     {
         if (!Directory.Exists(folder))
@@ -90,6 +197,7 @@ public sealed class PluginManager
             .ToList()
             .ForEach(lib =>
             {
+                var sw = Stopwatch.StartNew();
                 try
                 {
                     Assembly.LoadFrom(lib)
@@ -110,6 +218,7 @@ public sealed class PluginManager
                     ProcessHelper.WriteLog($"Failed to load plugin {Path.GetFileName(lib)}: {ex}");
                     failedPlugins.Add((Path.GetFileName(lib), ex));
                 }
+                KeyboardLog.WriteIfSlow($"startup load {Path.GetFileNameWithoutExtension(lib)}", sw.ElapsedMilliseconds);
             });
 
         LoadedPlugins = [.. LoadedPlugins.OrderByDescending(i => i.Priority)];
@@ -132,6 +241,7 @@ public sealed class PluginManager
     {
         LoadedPlugins.ForEach(i =>
         {
+            var sw = Stopwatch.StartNew();
             try
             {
                 i.Init();
@@ -140,6 +250,7 @@ public sealed class PluginManager
             {
                 ProcessHelper.WriteLog(e.ToString());
             }
+            KeyboardLog.WriteIfSlow($"startup init {i.GetType().Namespace}", sw.ElapsedMilliseconds);
         });
     }
 

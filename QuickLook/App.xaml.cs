@@ -54,6 +54,17 @@ public partial class App : Application
 
     static App()
     {
+        // Compile what the previous run used at startup on spare cores, in parallel with the startup itself
+        try
+        {
+            System.Runtime.ProfileOptimization.SetProfileRoot(SettingHelper.LocalDataPath);
+            System.Runtime.ProfileOptimization.StartProfile("QuickLook.Startup.jitprofile");
+        }
+        catch
+        {
+            // data folder not writable yet: EnsureFolderWritable reports it
+        }
+
         // Set the process render mode based on the user setting
         var processRenderMode = SettingHelper.Get("ProcessRenderMode", failsafe: (int)RenderMode.Default, "QuickLook");
         if (processRenderMode == (int)RenderMode.SoftwareOnly)
@@ -359,9 +370,15 @@ public partial class App : Application
 
         NativeMethods.QuickLook.Init();
 
+        var sw = Stopwatch.StartNew();
         PluginManager.GetInstance();
+        var pluginsMs = sw.ElapsedMilliseconds;
+        sw.Restart();
         ViewWindowManager.GetInstance();
+        KeyboardLog.Write($"Startup: plugins {pluginsMs} ms, viewer window {sw.ElapsedMilliseconds} ms, since process start {(DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMilliseconds:F0} ms");
         KeystrokeDispatcher.GetInstance();
         PipeServerManager.GetInstance();
+
+        PluginManager.GetInstance().WarmUp();
     }
 }
