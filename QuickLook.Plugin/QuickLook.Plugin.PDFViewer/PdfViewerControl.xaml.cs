@@ -212,31 +212,36 @@ public partial class PdfViewerControl : UserControl, INotifyPropertyChanged, IDi
 
     public static Size GetDesiredControlSizeByFirstPage(string path, string password = null)
     {
-        Size size;
+        using var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var tempHandle = PdfDocument.Load(s, password);
 
-        using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        return GetDesiredControlSize(tempHandle);
+    }
+
+    public static Size GetDesiredControlSize(PdfDocument document)
+    {
+        var size = new Size(0, 0);
+        document.PageSizes.Take(5).ForEach(p =>
         {
-            using (var tempHandle = PdfDocument.Load(s, password))
-            {
-                size = new Size(0, 0);
-                tempHandle.PageSizes.Take(5).ForEach(p =>
-                {
-                    size.Width = Math.Max(size.Width, p.Width);
-                    size.Height = Math.Max(size.Height, p.Height);
-                });
+            size.Width = Math.Max(size.Width, p.Width);
+            size.Height = Math.Max(size.Height, p.Height);
+        });
 
-                if (tempHandle.PageCount > 1)
-                    size.Width += /*listThumbnails.ActualWidth*/ 150;
-            }
-        }
+        if (document.PageCount > 1)
+            size.Width += /*listThumbnails.ActualWidth*/ 150;
 
         return new Size(size.Width * 3, size.Height * 3);
     }
 
     public void LoadPdf(string path, string password = null)
     {
-        var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        PdfDocumentWrapper = new PdfDocumentWrapper(stream, password);
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        LoadPdf(new PdfDocumentWrapper(stream, password));
+    }
+
+    public void LoadPdf(PdfDocumentWrapper document)
+    {
+        PdfDocumentWrapper = document;
         _pdfLoaded = true;
 
         if (PdfDocumentWrapper.PdfDocument.PageCount < 2)

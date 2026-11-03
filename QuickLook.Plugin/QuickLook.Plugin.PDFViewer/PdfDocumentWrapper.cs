@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using PdfiumViewer;
 
 namespace QuickLook.Plugin.PDFViewer;
@@ -24,11 +25,35 @@ namespace QuickLook.Plugin.PDFViewer;
 public class PdfDocumentWrapper : IDisposable
 {
     public PdfDocumentWrapper(Stream stream, string password = null)
+        : this(stream, password, CancellationToken.None)
     {
-        PdfStream = new MemoryStream((int)stream.Length);
-        stream.CopyTo(PdfStream);
+    }
 
-        PdfDocument = PdfDocument.Load(PdfStream, password);
+    /// <summary>
+    /// Copies the document into memory in chunks so a pending load can be abandoned
+    /// (e.g. when the user moves to another file) without reading the rest of the file.
+    /// </summary>
+    public PdfDocumentWrapper(Stream stream, string password, CancellationToken cancellationToken)
+    {
+        PdfStream = new MemoryStream(stream.Length <= int.MaxValue ? (int)stream.Length : 0);
+        try
+        {
+            var buffer = new byte[1024 * 1024];
+            int read;
+            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                PdfStream.Write(buffer, 0, read);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            PdfDocument = PdfDocument.Load(PdfStream, password);
+        }
+        catch
+        {
+            PdfStream.Dispose();
+            throw;
+        }
     }
 
     public PdfDocument PdfDocument { get; private set; }
