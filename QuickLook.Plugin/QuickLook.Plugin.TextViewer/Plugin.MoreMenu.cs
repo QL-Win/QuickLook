@@ -74,5 +74,48 @@ public sealed partial class Plugin
 
         if (reopen is not null)
             yield return reopen;
+
+        if (_tvp is not null)
+        {
+            yield return new MoreMenuItem()
+            {
+                Icon = FontSymbols.Save,
+                Header = TranslationHelper.Get("MW_SaveText", translationFile),
+                Command = new RelayCommand(() => _tvp?.Save()),
+            };
+
+            var background = new MoreMenuItem()
+            {
+                Icon = FontSymbols.Color,
+                Header = GetBackgroundHeader(translationFile),
+            };
+            background.Command = new RelayCommand(() =>
+            {
+                // Cycle through the presets; a custom value from the config file restarts at the lightest one
+                var presets = TextViewerPanel.BackgroundPresets;
+                var index = Array.FindIndex(presets, p => p.Equals(TextViewerPanel.BackgroundColor, StringComparison.OrdinalIgnoreCase));
+                TextViewerPanel.BackgroundColor = presets[(index + 1) % presets.Length];
+                _tvp?.ApplyBackground();
+                background.Header = GetBackgroundHeader(translationFile);
+            });
+            yield return background;
+        }
+    }
+
+    private static string GetBackgroundHeader(string translationFile)
+    {
+        var index = Array.FindIndex(TextViewerPanel.BackgroundPresets,
+            p => p.Equals(TextViewerPanel.BackgroundColor, StringComparison.OrdinalIgnoreCase));
+        var name = index switch
+        {
+            0 => TranslationHelper.Get("MW_BackgroundLight", translationFile),
+            1 => TranslationHelper.Get("MW_BackgroundMedium", translationFile),
+            2 => TranslationHelper.Get("MW_BackgroundDefault", translationFile),
+            3 => TranslationHelper.Get("MW_BackgroundDark", translationFile),
+            4 => TranslationHelper.Get("MW_BackgroundDarker", translationFile),
+            5 => TranslationHelper.Get("MW_BackgroundBlack", translationFile),
+            _ => TextViewerPanel.BackgroundColor,
+        };
+        return $"{TranslationHelper.Get("MW_Background", translationFile)}: {name}";
     }
 }

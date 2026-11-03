@@ -293,6 +293,13 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<FontSize>13</FontSize>`
 
+### `<BackgroundColor>`
+- Default: empty (the default background)
+- Type: `String`
+- Description: Custom background color of the text viewer. The value is parsed by WPF `ColorConverter` (`#AARRGGBB` is accepted, so it can be translucent). It only applies to the dark theme. The "Background" entry in the More menu cycles through six presets and stores the chosen value here.
+- Example:
+  - `<BackgroundColor>#B4141414</BackgroundColor>`
+
 ## Notes
 
 - All option names are case-sensitive and stored as XML element names under `<Settings>`.
