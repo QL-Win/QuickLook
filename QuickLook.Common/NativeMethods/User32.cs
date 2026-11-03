@@ -49,6 +49,9 @@ public static class User32
     public static extern int CallNextHookEx(nint idHook, int nCode, int wParam, ref KeyboardHookStruct lParam);
 
     [DllImport("user32.dll")]
+    public static extern short GetAsyncKeyState(int vKey);
+
+    [DllImport("user32.dll")]
     public static extern nint SetWindowLong(nint hWnd, int nIndex, int dwNewLong);
 
     [DllImport("user32.dll")]
