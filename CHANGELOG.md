@@ -4,6 +4,10 @@
 
 ## 4.6.0
 
+- Add `Alt+L` shortcut to toggle line numbers in text viewer, with preference persistence [#932](https://github.com/QL-Win/QuickLook/issues/932)
+- Add persist `WordWrap` preference when toggling with `Alt+Z`
+- Add light and dark application icons [#1154](https://github.com/QL-Win/QuickLook/issues/1154)
+- Add an AppUserModelID so the media flyout identifies QuickLook [#2023](https://github.com/QL-Win/QuickLook/issues/2023)
 - Add `.resources` (.NET binary resources) support to TextViewer
 - Add Greenfish Icon Editor Pro document support (`.gfie`, `.gfi`) to image viewer
 - Add Excalidraw support to image viewer [#1955](https://github.com/QL-Win/QuickLook/issues/1955)
@@ -83,6 +87,7 @@
 - Add `.gitconfig` to INI syntax extensions
 - Add Graphviz (`.dot` and `.gv`) syntax definitions
 - Improve JSON syntax highlighting color
+- Remove text selection outline in text viewer
 - Fix HelixViewer loading `assimp.dll` from plugin runtimes instead of AppBaseDirectory [#2016](https://github.com/QL-Win/QuickLook/issues/2016) [#1741](https://github.com/QL-Win/QuickLook/issues/1741)
 - Fix oftentimes doesn't trigger [#1903](https://github.com/QL-Win/QuickLook/issues/1903) [#1483](https://github.com/QL-Win/QuickLook/issues/1483)
 - Fix CSV auto-scroll bug on large files with virtualization enabled
@@ -92,6 +97,9 @@
 - Fix twice space after Alt+Tab to explorer window [#1939](https://github.com/QL-Win/QuickLook/issues/1939)
 - Fix FontViewer preview width sizing
 - Fix Per-Monitor DPI awareness and support Per-Monitor V2 [#1988](https://github.com/QL-Win/QuickLook/pull/1988)
+- Fix MSI icon in Programs and Features [#2036](https://github.com/QL-Win/QuickLook/pull/2036)
+- Fix SVG zoom when the cursor is outside the image
+- Fix culture-dependent video rotation parsing [#2032](https://github.com/QL-Win/QuickLook/pull/2032)
 
 ## 4.5.0
 
