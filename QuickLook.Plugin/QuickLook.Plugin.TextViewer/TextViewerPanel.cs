@@ -94,6 +94,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             .FirstOrDefault()
             ?.Stroke = Brushes.Transparent;
 
+        // Keep the selection fill from the default style, but drop its outline.
+        TextArea.SelectionBorder = null;
+
         ContextMenu = new ContextMenu();
         // Add "Copy" menu item.
         ContextMenu.Items.Add(new MenuItem
