@@ -58,10 +58,19 @@ public partial class InfoPanel : UserControl
             Dispatcher.BeginInvoke(new Action(() => image.Source = source));
         });
 
-        var name = Path.GetFileName(path);
+        var name = PathHelper.GetFileName(path);
         filename.Text = string.IsNullOrEmpty(name) ? path : name;
 
-        var last = File.GetLastWriteTime(path);
+        DateTime last;
+        try
+        {
+            last = File.GetLastWriteTime(path);
+        }
+        catch (ArgumentException)
+        {
+            last = DateTime.MinValue;
+        }
+
         modDate.Text = string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
             last.ToString(CultureInfo.CurrentCulture));
 
@@ -69,53 +78,60 @@ public partial class InfoPanel : UserControl
 
         _ = Task.Run(() =>
         {
-            if (File.Exists(path))
+            try
             {
-                var size = new FileInfo(path).Length;
-
-                Dispatcher.Invoke(() => { totalSize.Text = size.ToPrettySize(2); });
-            }
-            else if (Path.GetPathRoot(path) == path) // is this a drive?
-            {
-                FileHelper.GetDriveSpace(path, out var totalSpace, out var totalFreeSpace);
-
-                Dispatcher.Invoke(() =>
+                if (File.Exists(path))
                 {
-                    totalSize.Text =
-                        string.Format(TranslationHelper.Get("InfoPanel_DriveSize"),
-                            totalSpace.ToPrettySize(2),
-                            totalFreeSpace.ToPrettySize(2));
-                });
-            }
-            else if (Directory.Exists(path))
-            {
-                FileHelper.CountFolder(path, ref _stop,
-                    out var totalDirsL, out var totalFilesL, out var totalSizeL);
+                    var size = new FileInfo(path).Length;
 
-                if (!Stop)
+                    Dispatcher.Invoke(() => { totalSize.Text = size.ToPrettySize(2); });
+                }
+                else if (PathHelper.GetPathRoot(path) == path) // is this a drive?
+                {
+                    FileHelper.GetDriveSpace(path, out var totalSpace, out var totalFreeSpace);
+
                     Dispatcher.Invoke(() =>
                     {
-                        string t;
-                        var folders = totalDirsL == 0
-                            ? string.Empty
-                            : string.Format(TranslationHelper.Get(
-                                totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
-                        var files = totalFilesL == 0
-                            ? string.Empty
-                            : string.Format(TranslationHelper.Get(
-                                totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
-
-                        if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
-                            t = string.Format(
-                                TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
-                        else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
-                            t = string.Empty;
-                        else
-                            t = $"({folders}{files})";
-
                         totalSize.Text =
-                            $"{totalSizeL.ToPrettySize(2)} {t}";
+                            string.Format(TranslationHelper.Get("InfoPanel_DriveSize"),
+                                totalSpace.ToPrettySize(2),
+                                totalFreeSpace.ToPrettySize(2));
                     });
+                }
+                else if (Directory.Exists(path))
+                {
+                    FileHelper.CountFolder(path, ref _stop,
+                        out var totalDirsL, out var totalFilesL, out var totalSizeL);
+
+                    if (!Stop)
+                        Dispatcher.Invoke(() =>
+                        {
+                            string t;
+                            var folders = totalDirsL == 0
+                                ? string.Empty
+                                : string.Format(TranslationHelper.Get(
+                                    totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
+                            var files = totalFilesL == 0
+                                ? string.Empty
+                                : string.Format(TranslationHelper.Get(
+                                    totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
+
+                            if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
+                                t = string.Format(
+                                    TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
+                            else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
+                                t = string.Empty;
+                            else
+                                t = $"({folders}{files})";
+
+                            totalSize.Text =
+                                $"{totalSizeL.ToPrettySize(2)} {t}";
+                        });
+                }
+            }
+            catch (ArgumentException)
+            {
+                // The info card stays usable even when the path cannot be inspected.
             }
         });
     }

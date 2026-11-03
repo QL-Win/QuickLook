@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -133,14 +134,23 @@ internal static class QuickLook
     {
         if (string.IsNullOrEmpty(path)) return path;
 
-        if (Path.GetExtension(path).ToLower() != ".lnk") return path;
+        if (!PathHelper.IsShortcut(path)) return path;
 
-        var link = new ShellLink();
-        ((IPersistFile)link).Load(path, 0);
-        var sb = new StringBuilder(MaxPath);
-        ((IShellLinkW)link).GetPath(sb, sb.Capacity, out _, 0);
+        try
+        {
+            var link = new ShellLink();
+            ((IPersistFile)link).Load(path, 0);
+            var sb = new StringBuilder(MaxPath);
+            ((IShellLinkW)link).GetPath(sb, sb.Capacity, out _, 0);
 
-        return sb.Length == 0 ? path : sb.ToString();
+            return sb.Length == 0 ? path : sb.ToString();
+        }
+        catch (Exception e)
+        {
+            // An unreadable shortcut must not break the whole preview.
+            Debug.WriteLine(e);
+            return path;
+        }
     }
 
     internal enum FocusedWindowType
