@@ -29,6 +29,17 @@
   <ItemGroup>
     <ClCompile Include="..\QuickLook.Native32\DialogHook.cpp" />
     <ClCompile Include="..\QuickLook.Native32\DllExport.cpp" />
+    <ClCompile Include="..\QuickLook.Native32\ContextMenuExports.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\QuickLook.Native32\ExplorerCommand.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\QuickLook.Native32\SignPackage.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile Include="..\QuickLook.Native32\QuickLook.ContextMenu.rc" />
     <ClCompile Include="..\QuickLook.Native32\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">false</CompileAsManaged>
@@ -233,6 +244,11 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <ModuleDefinitionFile>$(ProjectDir)..\QuickLook.Native32\QuickLook.ContextMenu.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
