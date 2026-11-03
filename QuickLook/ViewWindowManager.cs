@@ -164,7 +164,18 @@ public class ViewWindowManager : IDisposable
 
         RunFocusMonitor();
 
+        // Stop the previous preview's background work (file reads, folder counting...) before
+        // matching the new path, so it doesn't keep competing for the disk while plugins probe it.
+        var sw = Stopwatch.StartNew();
+        _viewerWindow.UnloadPlugin();
+        var unloadMs = sw.ElapsedMilliseconds;
+
+        sw.Restart();
         var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+
+        var fileType = isDirectory ? "<dir>" : Path.GetExtension(path);
+        KeyboardLog.WriteIfSlow("unload", unloadMs);
+        KeyboardLog.WriteIfSlow($"match ({fileType} -> {matchedPlugin.GetType().Namespace})", sw.ElapsedMilliseconds);
 
         BeginShowNewWindow(path, matchedPlugin);
     }
