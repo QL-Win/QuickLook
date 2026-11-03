@@ -95,8 +95,20 @@ Shell32::FocusedWindowType Shell32::GetFocusedWindowType()
     return INVALID;
 }
 
+namespace
+{
+    struct ScopedComInit
+    {
+        HRESULT hr;
+        ScopedComInit() : hr(CoInitialize(nullptr)) {}
+        ~ScopedComInit() { if (SUCCEEDED(hr)) CoUninitialize(); }
+    };
+}
+
 void Shell32::GetCurrentSelection(PWCHAR buffer)
 {
+    ScopedComInit com;
+
     switch (GetFocusedWindowType())
     {
     case DESKTOP:
@@ -133,8 +145,6 @@ void Shell32::GetCurrentSelection(PWCHAR buffer)
 
 void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 {
-    CoInitialize(nullptr);
-
     CComPtr<IShellWindows> psw;
     if (FAILED(psw.CoCreateInstance(CLSID_ShellWindows)))
         return;
@@ -181,8 +191,6 @@ void Shell32::getSelectedFromExplorer(PWCHAR buffer)
 
 void Shell32::getSelectedFromDesktop(PWCHAR buffer)
 {
-    CoInitialize(nullptr);
-
     CComPtr<IShellWindows> psw;
     CComPtr<IWebBrowserApp> pwba;
 
