@@ -74,6 +74,13 @@ Example:
 - Example:
   - `<ShowInTaskbar>True</ShowInTaskbar>`
 
+### `<HideToolbar>`
+- Default: `False`
+- Type: `Boolean`
+- Description: Automatically hide the preview window's toolbar after the pointer leaves it.
+- Example:
+  - `<HideToolbar>True</HideToolbar>`
+
 ### `<AutoCloseHolding>`
 - Default: `True`
 - Type: `Boolean`

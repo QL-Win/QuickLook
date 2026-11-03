@@ -65,18 +65,17 @@
                     </Style>
                 </Grid.Style>
                 <Grid.Resources>
-                    <Storyboard x:Key="ShowCaptionContainerStoryboard" Completed="AutoHideCaptionContainer">
+                    <Storyboard x:Key="ShowCaptionContainerStoryboard">
                         <DoubleAnimation Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}"
                                          Storyboard.TargetProperty="Opacity"
                                          To="1"
-                                         Duration="0:0:0.05" />
+                                         Duration="0:0:0.015" />
                     </Storyboard>
                     <Storyboard x:Key="HideCaptionContainerStoryboard">
                         <DoubleAnimationUsingKeyFrames Storyboard.Target="{Binding Source={x:Reference windowCaptionContainer}}" Storyboard.TargetProperty="Opacity">
                             <DoubleAnimationUsingKeyFrames.KeyFrames>
                                 <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                <LinearDoubleKeyFrame KeyTime="0:0:1" Value="1" />
-                                <LinearDoubleKeyFrame KeyTime="0:0:1.05" Value="0" />
+                                <LinearDoubleKeyFrame KeyTime="0:0:0.015" Value="0" />
                             </DoubleAnimationUsingKeyFrames.KeyFrames>
                         </DoubleAnimationUsingKeyFrames>
                     </Storyboard>
@@ -84,6 +83,7 @@
                 <glassLayer:GlassLayer BlurredElement="{Binding ElementName=containerPanel}"
                                        ColorOverlayVisibility="{Binding ContextObject.TitlebarColourVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        GlassVisibility="{Binding ContextObject.TitlebarBlurVisibility, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       Background="{DynamicResource CaptionBackground}"
                                        NoiseVisibility="Visible"
                                        OverlayColor="{DynamicResource CaptionBackground}" />
                 <DockPanel>

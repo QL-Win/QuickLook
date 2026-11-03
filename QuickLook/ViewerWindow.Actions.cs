@@ -294,6 +294,12 @@ public partial class ViewerWindow
             return;
         }
 
+        if (SettingHelper.Get("HideToolbar", false))
+        {
+            ContextObject.TitlebarAutoHide = true;
+            ContextObject.TitlebarOverlap = true;
+        }
+
         if (ContextObject.IsBlocked)
         {
             ContextObject.ViewerContent = new System.Windows.Controls.TextBlock
@@ -391,6 +397,42 @@ public partial class ViewerWindow
                 exceptionHandler(path, ExceptionDispatchInfo.Capture(e));
             }
         }, DispatcherPriority.Input);
+    }
+
+    internal void BeginLoading(string path)
+    {
+        _path = path;
+        ContextObject.Reset();
+        ContextObject.Title = Path.GetFileName(path);
+        ContextObject.PreferredSize = new Size(800, 600);
+        ContextObject.IsBusy = true;
+
+        if (SettingHelper.Get("HideToolbar", false))
+        {
+            ContextObject.TitlebarAutoHide = true;
+            ContextObject.TitlebarOverlap = true;
+        }
+
+        var newHeight = ContextObject.PreferredSize.Height + BorderThickness.Top + BorderThickness.Bottom +
+                        (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
+        var newWidth = ContextObject.PreferredSize.Width + BorderThickness.Left + BorderThickness.Right;
+        var newSize = _customWindowSize == Size.Empty
+            ? new Size(newWidth, newHeight)
+            : _customWindowSize;
+
+        if (_customWindowSize == Size.Empty)
+            _ignoreNextWindowSizeChange = true;
+
+        PositionWindow(newSize);
+
+        if (IsVisible)
+            return;
+
+        Dispatcher.BeginInvoke(new Action(() => this.BringToFront(Topmost)), DispatcherPriority.Render);
+        if (!SettingHelper.Get("ShowWindowTransition", true, "QuickLook"))
+            this.ShowWithoutTransition();
+        else
+            Show();
     }
 
     private void ClearMoreMenuUnpin()
