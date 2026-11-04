@@ -81,7 +81,14 @@ internal static class PreviewHandlerRegistration
     {
         var source = ReadRegistration(clsid, RegistryView.Registry32);
         if (source == null)
+        {
+            // A handler that was uninstalled leaves a stale mirror behind. Remove it, but only
+            // when the 32-bit key is confirmed absent: a failed read is not proof of absence.
+            if (IsAbsentFrom32BitView(clsid))
+                RemoveMirror(clsid);
+
             return false;
+        }
 
         if (!source.IsLocalServer)
         {
@@ -123,9 +130,13 @@ internal static class PreviewHandlerRegistration
             var registration = new HandlerRegistration
             {
                 DisplayName = clsidKey.GetValue(string.Empty) as string,
-                InprocHandler32 = clsidKey.OpenSubKey(InprocHandler32Key)?.GetValue(string.Empty) as string,
-                InprocServer32 = clsidKey.OpenSubKey(InprocServer32Key)?.GetValue(string.Empty) as string,
             };
+
+            using (var inprocHandler32 = clsidKey.OpenSubKey(InprocHandler32Key))
+                registration.InprocHandler32 = inprocHandler32?.GetValue(string.Empty) as string;
+
+            using (var inprocServer32 = clsidKey.OpenSubKey(InprocServer32Key))
+                registration.InprocServer32 = inprocServer32?.GetValue(string.Empty) as string;
 
             using var localServer32 = clsidKey.OpenSubKey(LocalServer32Key);
             if (localServer32 != null)
@@ -170,6 +181,47 @@ internal static class PreviewHandlerRegistration
     }
 
     /// <summary>
+    /// Determines whether the CLSID key is confirmed to be missing from the 32-bit registry view.
+    /// </summary>
+    /// <param name="clsid">The CLSID of the preview handler.</param>
+    /// <returns><see langword="true"/> only when the key was successfully opened and does not exist.</returns>
+    private static bool IsAbsentFrom32BitView(Guid clsid)
+    {
+        try
+        {
+            using var classes = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32);
+            using var clsidKey = classes.OpenSubKey($@"{ClassesRootPath}\{clsid:B}");
+            return clsidKey == null;
+        }
+        catch (Exception e)
+        {
+            // Treat an inspection error as "unknown", never as proof that the source is gone.
+            Debug.WriteLine("Error checking preview handler registration: " + e);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Removes the current-user 64-bit registration, but only when QuickLook created it.
+    /// </summary>
+    /// <param name="clsid">The CLSID of the preview handler.</param>
+    private static void RemoveMirror(Guid clsid)
+    {
+        if (!IsMirror(clsid))
+            return;
+
+        try
+        {
+            using var currentUser = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64);
+            currentUser.DeleteSubKeyTree($@"Software\Classes\{ClassesRootPath}\{clsid:B}", false);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("Error removing stale preview handler mirror: " + e);
+        }
+    }
+
+    /// <summary>
     /// Writes the per-user 64-bit mirror of a 32-bit out-of-process preview handler registration.
     /// </summary>
     /// <param name="clsid">The CLSID of the preview handler.</param>
@@ -189,7 +241,8 @@ internal static class PreviewHandlerRegistration
         try
         {
             using var currentUser = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64);
-            createdNew = currentUser.OpenSubKey(keyPath) == null;
+            using (var existing = currentUser.OpenSubKey(keyPath))
+                createdNew = existing == null;
 
             using var clsid64 = currentUser.CreateSubKey(keyPath);
             if (clsid64 == null)
@@ -197,6 +250,10 @@ internal static class PreviewHandlerRegistration
 
             if (replaceExisting)
             {
+                // Mark the mirror incomplete until the refreshed values are written, so an
+                // interrupted refresh is repaired instead of being treated as registered.
+                clsid64.SetValue(string.Empty, string.Empty);
+
                 // Drop stale values of a previous mirror before copying the current source.
                 clsid64.DeleteSubKeyTree(LocalServer32Key, false);
                 clsid64.DeleteSubKeyTree(InprocHandler32Key, false);
@@ -262,8 +319,13 @@ internal static class PreviewHandlerRegistration
         /// <summary>Gets the <c>LocalServer32</c> values, including named values.</summary>
         public Dictionary<string, string> LocalServerValues { get; } = new(StringComparer.OrdinalIgnoreCase);
 
-        /// <summary>Gets a value indicating whether an out-of-process server is registered.</summary>
-        public bool IsLocalServer => LocalServerValues.Count > 0;
+        /// <summary>
+        /// Gets a value indicating whether an executable for an out-of-process server is registered,
+        /// either as the default command line or through the named <c>ServerExecutable</c> value.
+        /// </summary>
+        public bool IsLocalServer =>
+            (LocalServerValues.TryGetValue(string.Empty, out var command) && !string.IsNullOrWhiteSpace(command))
+            || (LocalServerValues.TryGetValue("ServerExecutable", out var executable) && !string.IsNullOrWhiteSpace(executable));
 
         /// <summary>Gets a value indicating whether an in-process server is registered.</summary>
         public bool HasInprocServer => !string.IsNullOrWhiteSpace(InprocServer32);

@@ -186,6 +186,49 @@ public sealed class PreviewHandlerRegistrationTests : IDisposable
     }
 
     [Fact]
+    public void EnsureRegisteredForCurrentView_RemovesMirrorWhen32BitSourceIsGone()
+    {
+        Create32BitRegistration("WPS 文字 预览器", @"C:\Program Files (x86)\Kingsoft\WPS Office\wps.exe");
+        Assert.True(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+
+        DeleteKey(32);
+
+        Assert.False(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+        Assert.Null(OpenMirror());
+    }
+
+    [Fact]
+    public void EnsureRegisteredForCurrentView_RejectsLocalServer32WithoutACommand()
+    {
+        using (var source = Create32BitRegistration("Previewer without a command", null))
+        {
+            source.CreateSubKey(LocalServer32Key)?.SetValue("ThreadingModel", "Both");
+        }
+
+        Assert.False(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+        Assert.Null(OpenMirror());
+    }
+
+    [Fact]
+    public void EnsureRegisteredForCurrentView_AcceptsServerExecutableWithoutADefaultCommand()
+    {
+        using (var source = Create32BitRegistration("WPS 表格 预览器", null))
+        {
+            source.CreateSubKey(LocalServer32Key)?.SetValue("ServerExecutable", @"C:\Program Files (x86)\Kingsoft\WPS Office\et.exe");
+        }
+
+        Assert.True(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+
+        using var mirror = OpenMirror();
+        Assert.NotNull(mirror);
+        using var localServer = mirror.OpenSubKey(LocalServer32Key);
+        Assert.NotNull(localServer);
+        Assert.Equal(
+            @"C:\Program Files (x86)\Kingsoft\WPS Office\et.exe",
+            localServer.GetValue("ServerExecutable") as string);
+    }
+
+    [Fact]
     public void IsRegisteredForCurrentView_RequiresDisplayNameAndActivation()
     {
         using (var current = OpenKey64(writable: true))
