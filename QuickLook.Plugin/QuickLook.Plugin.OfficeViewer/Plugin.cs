@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -56,18 +56,20 @@ public sealed class Plugin : IViewer
         if (previewHandler == Guid.Empty)
             return false;
 
-        var checkPreviewHandler = SettingHelper.Get("CheckPreviewHandler", true, "QuickLook.Plugin.OfficeViewer");
-        if (!checkPreviewHandler)
-            return true;
-
         // Office suites such as WPS Office are 32-bit applications and register their preview
         // handlers only in the 32-bit registry view. QuickLook is a 64-bit process and cannot
         // use such a registration, so mirror it into the 64-bit registry view for the current
         // user. An existing mirror is refreshed when the source registration changes, therefore
-        // this must run before the plain registration check below. See also:
+        // this must run before the plain registration check below. It also runs when
+        // CheckPreviewHandler is disabled: that setting skips the availability check, it does not
+        // opt out of making an otherwise unusable handler work. See also:
         // PreviewHandlerRegistration.
         var fixPreviewHandlerRegistration = SettingHelper.Get("FixPreviewHandlerRegistration", true, "QuickLook.Plugin.OfficeViewer");
         if (fixPreviewHandlerRegistration && PreviewHandlerRegistration.EnsureRegisteredForCurrentView(previewHandler))
+            return true;
+
+        var checkPreviewHandler = SettingHelper.Get("CheckPreviewHandler", true, "QuickLook.Plugin.OfficeViewer");
+        if (!checkPreviewHandler)
             return true;
 
         if (PreviewHandlerRegistration.IsRegisteredForCurrentView(previewHandler))

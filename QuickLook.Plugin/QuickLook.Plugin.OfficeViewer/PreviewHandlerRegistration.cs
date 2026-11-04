@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -130,10 +130,14 @@ internal static class PreviewHandlerRegistration
             using var localServer32 = clsidKey.OpenSubKey(LocalServer32Key);
             if (localServer32 != null)
             {
-                // Copy every value, including named values such as ServerExecutable, instead of
-                // only the default command line.
+                // Copy every string value, including named values such as ServerExecutable, instead
+                // of only the default command line. Non-string values are skipped: they cannot be
+                // written back as a command line and would abort the whole mirror.
                 foreach (var name in localServer32.GetValueNames())
-                    registration.LocalServerValues[name] = localServer32.GetValue(name) as string;
+                {
+                    if (localServer32.GetValue(name) is string value)
+                        registration.LocalServerValues[name] = value;
+                }
             }
 
             return registration;
@@ -174,6 +178,11 @@ internal static class PreviewHandlerRegistration
     /// <returns><see langword="true"/> when the mirrored registration is complete afterwards.</returns>
     private static bool WriteMirror(Guid clsid, HandlerRegistration source, bool replaceExisting)
     {
+        // Without a display name the mirror would never be considered registered, and writing a
+        // null default value would fail halfway through. Refuse instead of leaving a partial key.
+        if (source == null || string.IsNullOrWhiteSpace(source.DisplayName))
+            return false;
+
         var keyPath = $@"Software\Classes\{ClassesRootPath}\{clsid:B}";
         var createdNew = false;
 
