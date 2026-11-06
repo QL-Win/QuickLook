@@ -173,7 +173,8 @@ public class WebpagePanel : UserControl
 
     protected virtual void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
     {
-        _webView.DefaultBackgroundColor = Color.White; // Reset to white after page load to match expected default behavior
+        if (_webView != null)
+            _webView.DefaultBackgroundColor = Color.White; // Reset to white after page load to match expected default behavior
     }
 
     protected virtual void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
@@ -181,6 +182,22 @@ public class WebpagePanel : UserControl
         if (!e.IsSuccess)
         {
             ProcessHelper.WriteLog($"WebView2 initialization failed: {e.InitializationException}");
+
+            // Remove the half-initialized control from the visual tree before
+            // its window procedure can receive messages with a null COM
+            // interface, then dispose it and show the fallback action.
+            Content = null;
+            _webView.CoreWebView2InitializationCompleted -= WebView_CoreWebView2InitializationCompleted;
+            try
+            {
+                _webView.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to dispose WebView2: {ex.Message}");
+            }
+            _webView = null;
+            Content = CreateDownloadButton();
             return;
         }
 
