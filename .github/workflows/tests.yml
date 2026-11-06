@@ -1,0 +1,29 @@
+# Runs the automated tests. The build workflow only compiles the application, so the tests live in
+# their own project (tests/QuickLook.Tests) and are executed here.
+
+name: tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Run tests
+      run: dotnet test tests/QuickLook.Tests/QuickLook.Tests.csproj -c Release --logger "console;verbosity=normal"

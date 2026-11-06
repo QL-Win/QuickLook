@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>disable</Nullable>
+        <IsPackable>false</IsPackable>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <RootNamespace>QuickLook.Tests</RootNamespace>
+        <AssemblyName>QuickLook.Tests</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!--
+            The OfficeViewer plugin targets .NET Framework 4.6.2, which a .NET 8 test project cannot
+            reference directly. Compile the single source file under test into the test assembly
+            instead; it only depends on Microsoft.Win32, so no other plugin code is needed.
+        -->
+        <Compile Include="..\..\QuickLook.Plugin\QuickLook.Plugin.OfficeViewer\PreviewHandlerRegistration.cs">
+            <Link>PreviewHandlerRegistration.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="xunit" Version="2.9.2" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    </ItemGroup>
+
+</Project>
