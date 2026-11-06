@@ -54,10 +54,7 @@ public class WebpagePanel : UserControl
     {
         _webView = new WebView2
         {
-            CreationProperties = new CoreWebView2CreationProperties
-            {
-                UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
-            },
+            CreationProperties = CreateCreationProperties(),
 
             // Prevent white flash in dark mode
             DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White,
@@ -66,6 +63,14 @@ public class WebpagePanel : UserControl
         _webView.NavigationCompleted += WebView_NavigationCompleted;
         _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
         Content = _webView;
+    }
+
+    protected static CoreWebView2CreationProperties CreateCreationProperties()
+    {
+        return new CoreWebView2CreationProperties
+        {
+            UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
+        };
     }
 
     public void NavigateToFile(string path)
@@ -173,11 +178,23 @@ public class WebpagePanel : UserControl
 
     protected virtual void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
     {
-        if (e.IsSuccess)
+        if (!e.IsSuccess)
         {
-            _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
-            _webView.CoreWebView2.WebResourceRequested += WebView_WebResourceRequested;
+            ProcessHelper.WriteLog($"WebView2 initialization failed: {e.InitializationException}");
+            return;
         }
+
+        _webView.CoreWebView2.Profile.PreferredColorScheme = OSThemeHelper.AppsUseDarkTheme()
+            ? CoreWebView2PreferredColorScheme.Dark
+            : CoreWebView2PreferredColorScheme.Light;
+        _webView.CoreWebView2.ProcessFailed += WebView_ProcessFailed;
+        _webView.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All);
+        _webView.CoreWebView2.WebResourceRequested += WebView_WebResourceRequested;
+    }
+
+    protected virtual void WebView_ProcessFailed(object sender, CoreWebView2ProcessFailedEventArgs e)
+    {
+        ProcessHelper.WriteLog($"WebView2 process failed: {e.ProcessFailedKind}; reason: {e.Reason}; exit code: {e.ExitCode}");
     }
 
     protected virtual void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
