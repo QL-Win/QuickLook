@@ -18,6 +18,8 @@
 using Microsoft.Win32;
 using QuickLook.Plugin.OfficeViewer;
 using System;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using Xunit;
 
 namespace QuickLook.Tests;
@@ -195,6 +197,76 @@ public sealed class PreviewHandlerRegistrationTests : IDisposable
 
         Assert.False(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
         Assert.Null(OpenMirror());
+    }
+
+    [Fact]
+    public void EnsureRegisteredForCurrentView_RemovesMirrorWhen32BitSourceIsNoLongerALocalServer()
+    {
+        Create32BitRegistration("WPS 文字 预览器", @"C:\Program Files (x86)\Kingsoft\WPS Office\wps.exe");
+        Assert.True(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+
+        // The same CLSID is now registered as a 32-bit in-process handler only.
+        using (var source = OpenKey32(writable: true))
+        {
+            source.DeleteSubKeyTree(LocalServer32Key, false);
+            source.CreateSubKey(InprocServer32Key)?.SetValue(string.Empty, @"C:\fake\preview32.dll");
+        }
+
+        Assert.False(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+        Assert.Null(OpenMirror());
+    }
+
+    [Fact]
+    public void EnsureRegisteredForCurrentView_KeepsMirrorWhenLocalServer32CannotBeRead()
+    {
+        Create32BitRegistration("WPS 文字 预览器", @"C:\Program Files (x86)\Kingsoft\WPS Office\wps.exe");
+        Assert.True(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+
+        using var source = OpenKey32(writable: true);
+        using var localServer32 = source.OpenSubKey(
+            LocalServer32Key,
+            RegistryKeyPermissionCheck.ReadWriteSubTree,
+            RegistryRights.ChangePermissions | RegistryRights.ReadPermissions);
+        Assert.NotNull(localServer32);
+
+        var denyRule = new RegistryAccessRule(
+            WindowsIdentity.GetCurrent().User,
+            RegistryRights.ReadKey,
+            AccessControlType.Deny);
+
+        var deniedSecurity = localServer32.GetAccessControl();
+        deniedSecurity.AddAccessRule(denyRule);
+
+        try
+        {
+            localServer32.SetAccessControl(deniedSecurity);
+
+            // Sanity check: the subkey must really be unreadable now, otherwise the test proves nothing.
+            var denied = false;
+            try
+            {
+                using var probe = source.OpenSubKey(LocalServer32Key);
+                denied = probe == null;
+            }
+            catch (Exception)
+            {
+                denied = true;
+            }
+
+            Assert.True(denied, "the LocalServer32 subkey is still readable, so the test cannot prove the invariant");
+
+            // A failed read is not proof that the source is gone, so the mirror must survive.
+            Assert.False(PreviewHandlerRegistration.EnsureRegisteredForCurrentView(_clsid));
+            Assert.NotNull(OpenMirror());
+        }
+        finally
+        {
+            // Passing the originally captured security descriptor back does not remove the deny
+            // ACE (the descriptor is auto-inherited), so remove the rule explicitly.
+            var cleanup = localServer32.GetAccessControl();
+            cleanup.RemoveAccessRuleAll(denyRule);
+            localServer32.SetAccessControl(cleanup);
+        }
     }
 
     [Fact]

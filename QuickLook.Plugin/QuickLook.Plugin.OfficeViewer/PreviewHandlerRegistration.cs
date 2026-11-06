@@ -19,6 +19,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace QuickLook.Plugin.OfficeViewer;
 
@@ -92,6 +93,13 @@ internal static class PreviewHandlerRegistration
 
         if (!source.IsLocalServer)
         {
+            // The mirror only copies LocalServer32 activation, so a mirror left over from a
+            // previous registration must not keep a preview alive with an obsolete command.
+            // A failed read is not evidence that the registration changed, so keep the mirror
+            // in that case; the next successful read decides.
+            if (!source.LocalServerReadFailed)
+                RemoveMirror(clsid);
+
             // A 32-bit in-process handler cannot be hosted by a 64-bit process, and pointing a
             // 64-bit InprocServer32 entry at a 32-bit DLL would only break activation.
             if (source.HasInprocServer)
@@ -138,7 +146,7 @@ internal static class PreviewHandlerRegistration
             using (var inprocServer32 = clsidKey.OpenSubKey(InprocServer32Key))
                 registration.InprocServer32 = inprocServer32?.GetValue(string.Empty) as string;
 
-            using var localServer32 = clsidKey.OpenSubKey(LocalServer32Key);
+            using var localServer32 = TryOpenLocalServer32(clsidKey, registration);
             if (localServer32 != null)
             {
                 // Copy every string value, including named values such as ServerExecutable, instead
@@ -157,6 +165,55 @@ internal static class PreviewHandlerRegistration
         {
             Debug.WriteLine("Error reading preview handler registration: " + e);
             return null;
+        }
+    }
+
+    /// <summary>
+    /// Opens the <c>LocalServer32</c> subkey, distinguishing "not registered" from "cannot be read".
+    /// </summary>
+    /// <param name="clsidKey">The CLSID key whose subkey is opened.</param>
+    /// <param name="registration">The registration that receives the read failure flag.</param>
+    /// <returns>The opened subkey, or <see langword="null"/> when it does not exist or cannot be read.</returns>
+    private static RegistryKey TryOpenLocalServer32(RegistryKey clsidKey, HandlerRegistration registration)
+    {
+        var exists = LocalServer32Exists(clsidKey);
+
+        try
+        {
+            var localServer32 = clsidKey.OpenSubKey(LocalServer32Key);
+            if (localServer32 == null && exists)
+                registration.LocalServerReadFailed = true;
+
+            return localServer32;
+        }
+        catch (Exception e)
+        {
+            // A registration whose LocalServer32 cannot be read must not be treated as if the
+            // handler had no out-of-process server: a valid mirror would be removed.
+            Debug.WriteLine("Error reading LocalServer32 subkey: " + e);
+            registration.LocalServerReadFailed = true;
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether the CLSID key has a <c>LocalServer32</c> subkey, without reading its values.
+    /// </summary>
+    /// <param name="clsidKey">The CLSID key to inspect.</param>
+    /// <returns><see langword="true"/> when the subkey is listed or its presence cannot be determined.</returns>
+    private static bool LocalServer32Exists(RegistryKey clsidKey)
+    {
+        try
+        {
+            return clsidKey.GetSubKeyNames()
+                .Any(name => string.Equals(name, LocalServer32Key, StringComparison.OrdinalIgnoreCase));
+        }
+        catch (Exception e)
+        {
+            // If the names cannot be enumerated, assume the subkey exists so that a read failure
+            // never removes a mirror.
+            Debug.WriteLine("Error enumerating preview handler subkeys: " + e);
+            return true;
         }
     }
 
@@ -248,6 +305,11 @@ internal static class PreviewHandlerRegistration
             if (clsid64 == null)
                 return false;
 
+            // Record ownership before any child write, so an interrupted new mirror is repaired
+            // on the next attempt instead of being mistaken for a user-owned registration.
+            if (createdNew)
+                clsid64.SetValue(MirrorMarkerValue, "1");
+
             if (replaceExisting)
             {
                 // Mark the mirror incomplete until the refreshed values are written, so an
@@ -318,6 +380,12 @@ internal static class PreviewHandlerRegistration
 
         /// <summary>Gets the <c>LocalServer32</c> values, including named values.</summary>
         public Dictionary<string, string> LocalServerValues { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Gets or sets a value indicating that the <c>LocalServer32</c> subkey exists but its
+        /// values could not be read, so the absence of a local server must not be assumed.
+        /// </summary>
+        public bool LocalServerReadFailed { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether an executable for an out-of-process server is registered,
