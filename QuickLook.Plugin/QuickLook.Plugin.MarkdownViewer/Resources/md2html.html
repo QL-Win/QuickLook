@@ -224,7 +224,7 @@
           quotes: "“”‘’",
           highlight: function (str, lang) {
             if (lang === 'mermaid') {
-              return '<div class="mermaid">' + str + '</div>';
+              return '<div class="mermaid">' + md.utils.escapeHtml(str) + '</div>';
             }
             if (lang && hljs.getLanguage(lang)) {
               try {
