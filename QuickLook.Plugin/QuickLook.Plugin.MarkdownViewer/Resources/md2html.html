@@ -224,7 +224,9 @@
           quotes: "“”‘’",
           highlight: function (str, lang) {
             if (lang === 'mermaid') {
-              return '<div class="mermaid">' + str + '</div>';
+              // Only "<" can start markup (e.g. "<<interface>>"), so escape just that;
+              // other entities are left untouched to keep existing diagrams unaffected.
+              return '<div class="mermaid">' + str.replace(/</g, '&lt;') + '</div>';
             }
             if (lang && hljs.getLanguage(lang)) {
               try {
