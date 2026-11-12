@@ -166,7 +166,15 @@ bool HelperMethods::IsUWP()
         return false;
 
     UINT32 pn = 0;
-    return pGCPFN(&pn, nullptr) == ERROR_INSUFFICIENT_BUFFER;
+    if (pGCPFN(&pn, nullptr) != ERROR_INSUFFICIENT_BUFFER || pn == 0 || pn > 1024)
+        return false;
+
+    WCHAR name[1024];
+    if (pGCPFN(&pn, name) != ERROR_SUCCESS)
+        return false;
+
+    // Sparse shell identity stays a normal desktop app. Only the Store package is UWP.
+    return _wcsnicmp(name, L"21090PaddyXu.QuickLook_", 24) == 0;
 }
 
 HWND HelperMethods::GetFocusedControl()
