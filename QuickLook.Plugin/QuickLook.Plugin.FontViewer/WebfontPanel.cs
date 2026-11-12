@@ -18,7 +18,6 @@
 using Microsoft.Web.WebView2.Core;
 using QuickLook.Common.Helpers;
 using QuickLook.Plugin.HtmlViewer;
-using QuickLook.Typography.OpenFont;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -117,7 +116,7 @@ public class WebfontPanel : WebpagePanel
 
     protected string GenerateFontHtml(string path)
     {
-        string fontFamilyName = FreeTypeApi.GetFontFamilyName(path);
+        string fontFamilyName = OpenFontSupport.GetFontFamilyName(path);
         var html = ReadString("/font2html.html");
 
         // src: url('xxx.eot');
@@ -129,7 +128,7 @@ public class WebfontPanel : WebpagePanel
         var fileExt = Path.GetExtension(fileName);
 
         string cssUrl = $"src: url('{fileName}')"
-            + fileExt switch
+            + fileExt.ToLowerInvariant() switch
             {
                 ".eot" => " format('embedded-opentype');",
                 ".woff" => " format('woff');",
@@ -140,12 +139,7 @@ public class WebfontPanel : WebpagePanel
             };
 
         if (string.IsNullOrEmpty(fontFamilyName))
-        {
-            if (fileExt.ToLower().Equals(".woff2"))
-            {
-                fontFamilyName = Woff2.GetFontInfo(path)?.Name;
-            }
-        }
+            fontFamilyName = Path.GetFileNameWithoutExtension(fileName);
 
         // https://en.wikipedia.org/wiki/Pangram
         string translationFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Translations.config");
@@ -153,7 +147,7 @@ public class WebfontPanel : WebpagePanel
 
         html = html.Replace("--font-family;", $"font-family: '{fontFamilyName}';")
                    .Replace("--font-url;", cssUrl)
-                   .Replace("{{h1}}", fontFamilyName ?? fileName)
+                   .Replace("{{h1}}", fontFamilyName)
                    .Replace("{{pangram}}", pangram ?? "The quick brown fox jumps over the lazy dog. 0123456789");
 
         return html;
@@ -163,8 +157,20 @@ public class WebfontPanel : WebpagePanel
     {
         var fileName = Path.GetFileName(path);
         var mimeType = GetFontMimeType(path);
-        var familyName = FreeTypeApi.GetFontFamilyName(path);
+        var familyName = OpenFontSupport.GetFontFamilyName(path);
         var cssText = TryReadCompanionCss(path);
+        string iconsJson = null;
+
+        // opentype.js does not support WOFF2; supply glyph metadata from Typography
+        if (Path.GetExtension(path).Equals(".woff2", StringComparison.OrdinalIgnoreCase) &&
+            IconFontGlyphExtractor.TryExtract(path, out var extractedFamily, out iconsJson))
+        {
+            if (string.IsNullOrEmpty(familyName))
+                familyName = extractedFamily;
+        }
+
+        if (string.IsNullOrEmpty(familyName))
+            familyName = Path.GetFileNameWithoutExtension(fileName);
 
         var parts = new List<string>
         {
@@ -178,9 +184,12 @@ public class WebfontPanel : WebpagePanel
         if (!string.IsNullOrEmpty(familyName))
             parts.Add($"familyName:{EscapeJsonString(familyName)}");
 
+        if (!string.IsNullOrEmpty(iconsJson))
+            parts.Add($"icons:{iconsJson}");
+
         var metaObject = string.Join(",", parts);
 
-        return $"(function(){{var meta={{{metaObject}}};function run(){{if(typeof window.__ICONFONT2HTML_LOAD!=='function'){{setTimeout(run,20);return;}}fetch('/'+encodeURI(meta.fileName)).then(function(r){{return r.arrayBuffer();}}).then(function(buf){{var bytes=new Uint8Array(buf);var chunk=8192;var binary='';for(var i=0;i<bytes.length;i+=chunk){{binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}}var payload={{fontBase64:btoa(binary),fileName:meta.fileName,mimeType:meta.mimeType}};if(meta.cssText)payload.cssText=meta.cssText;if(meta.familyName)payload.familyName=meta.familyName;window.__ICONFONT2HTML_LOAD(payload);}}).catch(function(err){{console.error(err);}});}}run();}})();";
+        return $"(function(){{var meta={{{metaObject}}};function run(){{if(typeof window.__ICONFONT_LOAD!=='function'){{setTimeout(run,20);return;}}fetch('/'+encodeURI(meta.fileName)).then(function(r){{return r.arrayBuffer();}}).then(function(buf){{var bytes=new Uint8Array(buf);var chunk=8192;var binary='';for(var i=0;i<bytes.length;i+=chunk){{binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}}var payload={{fontBase64:btoa(binary),fileName:meta.fileName,mimeType:meta.mimeType}};if(meta.cssText)payload.cssText=meta.cssText;if(meta.familyName)payload.familyName=meta.familyName;if(meta.icons)payload.icons=meta.icons;window.__ICONFONT_LOAD(payload);}}).catch(function(err){{console.error(err);}});}}run();}})();";
     }
 
     private static string TryReadCompanionCss(string fontPath)
@@ -266,7 +275,7 @@ public class WebfontPanel : WebpagePanel
                     {
                         var fileStream = new ObservableFileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                         var response = _webView.CoreWebView2.Environment.CreateWebResourceResponse(
-                            fileStream, 200, "OK", MimeTypes.GetContentType());
+                            fileStream, 200, "OK", MimeTypes.GetContentType(Path.GetExtension(localPath)));
                         args.Response = response;
                         _fontStream = fileStream; // Only the font request will set this
                     }

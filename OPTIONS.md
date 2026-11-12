@@ -265,6 +265,20 @@ These keys are also stored in `QuickLook.config`.
 
 ## QuickLook.Plugin.TextViewer.config options
 
+### `<ShowLineNumbers>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Show line numbers in text previews. Toggle with `Alt+L` while previewing; the choice is saved for subsequent previews and application restarts.
+- Example:
+  - `<ShowLineNumbers>False</ShowLineNumbers>` to hide line numbers.
+
+### `<WordWrap>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Wrap long lines in text previews. Toggle with `Alt+Z` while previewing; the choice is saved for subsequent previews and application restarts.
+- Example:
+  - `<WordWrap>False</WordWrap>` to disable word wrap.
+
 ### `<UseFormatDetector>`
 - Default: `True`
 - Type: `Boolean`

@@ -72,8 +72,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public TextViewerPanel()
     {
-        ShowLineNumbers = true;
-        WordWrap = true;
+        ShowLineNumbers = SettingHelper.Get("ShowLineNumbers", true, "QuickLook.Plugin.TextViewer");
+        Padding = new Thickness(ShowLineNumbers ? 0 : 6, 0, 0, 0);
+        WordWrap = SettingHelper.Get("WordWrap", true, "QuickLook.Plugin.TextViewer");
         IsReadOnly = true;
 
         // Enable manipulation events (touch gestures like pan/scroll).
@@ -93,6 +94,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             .OfType<System.Windows.Shapes.Line>()
             .FirstOrDefault()
             ?.Stroke = Brushes.Transparent;
+
+        // Keep the selection fill from the default style, but drop its outline.
+        TextArea.SelectionBorder = null;
 
         ContextMenu = new ContextMenu();
         // Add "Copy" menu item.
@@ -182,6 +186,15 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             if (Keyboard.IsKeyDown(Key.Z))
             {
                 WordWrap = !WordWrap;
+                SettingHelper.Set("WordWrap", WordWrap, "QuickLook.Plugin.TextViewer");
+            }
+            else if (Keyboard.IsKeyDown(Key.L))
+            {
+                ShowLineNumbers = !ShowLineNumbers;
+                Padding = new Thickness(ShowLineNumbers ? 0 : 6, 0, 0, 0);
+                // AvalonEdit recreates the separator when numbers are enabled again.
+                TextArea.LeftMargins.OfType<System.Windows.Shapes.Line>().FirstOrDefault()?.Stroke = Brushes.Transparent;
+                SettingHelper.Set("ShowLineNumbers", ShowLineNumbers, "QuickLook.Plugin.TextViewer");
             }
         }
     }

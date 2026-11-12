@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -199,8 +200,18 @@ public static class Plist
 
     private static object ReadXml(XmlDocument xml)
     {
-        XmlNode rootNode = xml.DocumentElement.ChildNodes[0];
+        XmlNode rootNode = GetElementChildren(xml.DocumentElement).FirstOrDefault();
+        if (rootNode == null)
+        {
+            throw new ApplicationException("Plist root node is missing");
+        }
+
         return Parse(rootNode);
+    }
+
+    private static IEnumerable<XmlNode> GetElementChildren(XmlNode node)
+    {
+        return node.ChildNodes.Cast<XmlNode>().Where(child => child.NodeType == XmlNodeType.Element);
     }
 
     private static object ReadBinary(byte[] data)
@@ -229,7 +240,7 @@ public static class Plist
 
     private static Dictionary<string, object> ParseDictionary(XmlNode node)
     {
-        XmlNodeList children = node.ChildNodes;
+        List<XmlNode> children = [.. GetElementChildren(node)];
         if (children.Count % 2 != 0)
         {
             throw new DataMisalignedException("Dictionary elements must have an even number of child nodes");
@@ -264,7 +275,7 @@ public static class Plist
     {
         List<object> array = [];
 
-        foreach (XmlNode child in node.ChildNodes)
+        foreach (XmlNode child in GetElementChildren(node))
         {
             object result = Parse(child);
             if (result != null)

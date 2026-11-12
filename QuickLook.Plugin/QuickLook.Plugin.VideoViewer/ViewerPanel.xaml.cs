@@ -25,6 +25,7 @@ using QuickLook.Plugin.VideoViewer.LyricTrack;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -455,6 +456,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         }
     }
 
+    /// <summary>
+    /// Loads media for playback and applies video rotation from its metadata.
+    /// </summary>
     public void LoadAndPlay(string path, MediaInfoNative info)
     {
         // Detect whether it is other playback formats
@@ -473,10 +477,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         UpdateMeta(path, info);
 
         // detect rotation
-        _ = double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), out var rotation);
-        // Correct rotation: on some machine the value "90" becomes "90000" by some reason
-        if (rotation > 360d)
-            rotation /= 1e3;
+        _ = double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), NumberStyles.Float, CultureInfo.InvariantCulture, out var rotation);
         if (Math.Abs(rotation) > 0.1d)
             mediaElement.LayoutTransform = new RotateTransform(rotation, 0.5d, 0.5d);
 
