@@ -284,7 +284,7 @@
       }
     </style>
 
-    <textarea id="text-input" style="display: none">{{content}}</textarea>
+    <script id="text-input" type="text/plain">{{contentBase64}}</script>
 
     <button
       id="raw-toggle"
@@ -382,9 +382,13 @@
         return content;
       }
 
-      // Read raw content; strip UTF-8 BOM (U+FEFF) if the file was encoded with one
-      let rawContent = document.getElementById("text-input").value;
-      if (rawContent.charCodeAt(0) === 0xFEFF) rawContent = rawContent.slice(1);
+      // Decode the base64 payload so the source view keeps the original text exactly.
+      // TextDecoder removes a UTF-8 BOM (U+FEFF) when one was present.
+      const contentBase64 = document.getElementById("text-input").textContent.trim();
+      const contentBytes = Uint8Array.from(atob(contentBase64), (c) =>
+        c.charCodeAt(0)
+      );
+      let rawContent = new TextDecoder("utf-8").decode(contentBytes);
 
       document.getElementById("preview").innerHTML = md.render(
         processFrontmatter(rawContent)
@@ -395,9 +399,21 @@
       const rawSourceView = document.getElementById("raw-source");
       let isSourceView = false;
       let isRawSourceLoaded = false;
+      let savedRenderedScroll = 0;
+      let savedSourceScroll = 0;
+      let hasSavedSourceScroll = false;
 
       function setSourceView(enabled, preserveScroll) {
-        const scrollTop = window.scrollY;
+        if (preserveScroll) {
+          // Remember each view's position so a shorter view cannot overwrite it
+          if (isSourceView) {
+            savedSourceScroll = window.scrollY;
+            hasSavedSourceScroll = true;
+          } else {
+            savedRenderedScroll = window.scrollY;
+          }
+        }
+
         isSourceView = enabled;
 
         // Populate the raw view lazily to keep the initial page light
@@ -416,13 +432,17 @@
         rawToggleButton.setAttribute("aria-label", label);
 
         if (preserveScroll) {
+          const targetScrollTop = enabled
+            ? (hasSavedSourceScroll ? savedSourceScroll : savedRenderedScroll)
+            : savedRenderedScroll;
+
           // Keep the reading position when the layout changes
           requestAnimationFrame(function () {
             const maxScrollTop = Math.max(
               0,
               document.documentElement.scrollHeight - window.innerHeight
             );
-            window.scrollTo(0, Math.min(scrollTop, maxScrollTop));
+            window.scrollTo(0, Math.min(targetScrollTop, maxScrollTop));
           });
         }
       }
