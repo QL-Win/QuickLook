@@ -49,14 +49,22 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     private readonly ContextObject _context;
     private BitmapSource _coverArt;
     private DispatcherTimer _lyricTimer;
+    private DispatcherTimer _positionTimer;
     private LrcLine[] _lyricLines;
     private MidiPlayer _midiPlayer;
+    private AudioFilePlayer _audioPlayer;
 
     private bool _hasVideo;
     private bool _isPlaying;
     private bool _wasPlaying;
     private bool _shouldLoop;
     private bool _useHardwareAcceleration;
+    private bool _isSeeking;
+    private bool _updatingPosition;
+    private bool _audioPlayerStarting;
+    private bool _audioOnly;
+    private long _mediaPosition;
+    private long _mediaDuration;
 
     public ViewerPanel(ContextObject context)
     {
@@ -99,14 +107,20 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         buttonMute.Click += (_, _) => volumeSliderLayer.Visibility = Visibility.Visible;
         volumeSliderLayer.MouseDown += (_, _) => volumeSliderLayer.Visibility = Visibility.Collapsed;
 
+        _positionTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+        _positionTimer.Tick += (_, _) => UpdatePlaybackState();
+        _positionTimer.Start();
+
         sliderProgress.PreviewMouseDown += (_, e) =>
         {
-            _wasPlaying = mediaElement.IsPlaying;
-            mediaElement.Pause();
+            _isSeeking = true;
+            _wasPlaying = IsPlaying;
+            PausePlayback();
         };
         sliderProgress.PreviewMouseUp += (_, _) =>
         {
-            if (_wasPlaying) mediaElement.Play();
+            _isSeeking = false;
+            if (_wasPlaying) ResumePlayback();
         };
 
         PreviewMouseWheel += (_, e) => ChangeVolume(e.Delta / 120d * 0.04d);
@@ -143,6 +157,35 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         {
             if (value == _shouldLoop) return;
             _shouldLoop = value;
+            if (_audioPlayer != null)
+                _audioPlayer.Loop = value;
+            else if (value)
+                TryStartAudioPlayer();
+            OnPropertyChanged();
+        }
+    }
+
+    public long MediaPosition
+    {
+        get => _mediaPosition;
+        set
+        {
+            if (value == _mediaPosition) return;
+            _mediaPosition = value;
+            OnPropertyChanged();
+
+            if (!_updatingPosition)
+                Seek(value);
+        }
+    }
+
+    public long MediaDuration
+    {
+        get => _mediaDuration;
+        private set
+        {
+            if (value == _mediaDuration) return;
+            _mediaDuration = value;
             OnPropertyChanged();
         }
     }
@@ -176,6 +219,11 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         SettingHelper.Set("VolumeDouble", LinearVolume, "QuickLook.Plugin.VideoViewer");
         SettingHelper.Set("ShouldLoop", ShouldLoop, "QuickLook.Plugin.VideoViewer");
         SettingHelper.Set("UseHardwareAcceleration", UseHardwareAcceleration, "QuickLook.Plugin.VideoViewer");
+
+        _positionTimer?.Stop();
+        _positionTimer = null;
+        _audioPlayer?.Dispose();
+        _audioPlayer = null;
 
         try
         {
@@ -220,6 +268,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             return;
 
         HasVideo = mediaElement.HasVideo;
+        SetMediaDuration(mediaElement.MediaDuration);
 
         _context.IsBusy = false;
     }
@@ -240,10 +289,11 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void MediaEnded(object sender, RoutedEventArgs e)
     {
-        if (mediaElement == null)
+        if (mediaElement == null || _audioPlayer != null || _audioPlayerStarting)
             return;
 
         mediaElement.MediaPosition = 0L;
+        SetMediaPosition(0L);
         if (ShouldLoop)
         {
             IsPlaying = true;
@@ -280,6 +330,9 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void PlayerStateChanged(PlayerState oldState, PlayerState newState)
     {
+        if (_audioPlayer != null)
+            return;
+
         switch (newState)
         {
             case PlayerState.Playing:
@@ -291,6 +344,146 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             case PlayerState.Closed:
                 IsPlaying = false;
                 break;
+        }
+    }
+
+    private void UpdatePlaybackState()
+    {
+        if (_isSeeking)
+            return;
+
+        if (_audioPlayer != null)
+        {
+            SetMediaPosition(_audioPlayer.PositionTicks);
+            SetMediaDuration(_audioPlayer.DurationTicks);
+            IsPlaying = _audioPlayer.IsPlaying;
+        }
+        else if (mediaElement != null)
+        {
+            SetMediaPosition(mediaElement.MediaPosition);
+            SetMediaDuration(mediaElement.MediaDuration);
+        }
+    }
+
+    private void SetMediaPosition(long value)
+    {
+        if (value == _mediaPosition)
+            return;
+
+        _updatingPosition = true;
+        MediaPosition = value;
+        _updatingPosition = false;
+    }
+
+    private void SetMediaDuration(long value)
+    {
+        if (value > 0)
+            MediaDuration = value;
+    }
+
+    private void Seek(long position)
+    {
+        if (_audioPlayer != null)
+            _audioPlayer.Seek(position);
+        else if (mediaElement?.Source != null)
+            mediaElement.MediaPosition = position;
+    }
+
+    private void PausePlayback()
+    {
+        if (_audioPlayer != null)
+            _audioPlayer.Pause();
+        else
+            mediaElement.Pause();
+    }
+
+    private void ResumePlayback()
+    {
+        if (_audioPlayer != null)
+            _audioPlayer.Play();
+        else
+            mediaElement.Play();
+    }
+
+    private void AudioPlaybackEnded(object sender, EventArgs e)
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            if (_audioPlayer == null)
+                return;
+
+            SetMediaPosition(0L);
+            IsPlaying = false;
+        }));
+    }
+
+    private void TryStartAudioPlayer()
+    {
+        if (!_audioOnly || _audioPlayer != null || _midiPlayer != null || HasVideo || mediaElement?.Source == null)
+            return;
+
+        _audioPlayerStarting = true;
+        bool wasPlaying = false;
+        long position = 0L;
+
+        try
+        {
+            position = mediaElement.MediaDuration > 0 ? mediaElement.MediaPosition : _mediaPosition;
+            wasPlaying = mediaElement.IsPlaying;
+
+            mediaElement.Stop();
+
+            double volume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
+            var audioPlayer = AudioFilePlayer.TryCreate(mediaElement.Source.LocalPath, true, volume);
+
+            if (audioPlayer == null)
+            {
+                mediaElement.MediaPosition = position;
+                if (wasPlaying)
+                    mediaElement.Play();
+                else
+                    mediaElement.Pause();
+                return;
+            }
+
+            _audioPlayer = audioPlayer;
+            _audioPlayer.PlaybackEnded += AudioPlaybackEnded;
+            _audioPlayer.Seek(position);
+            SetMediaDuration(_audioPlayer.DurationTicks);
+            SetMediaPosition(position);
+
+            if (wasPlaying)
+            {
+                var startTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+                startTimer.Tick += (_, _) =>
+                {
+                    startTimer.Stop();
+
+                    if (_audioPlayer != audioPlayer)
+                        return;
+
+                    audioPlayer.Seek(position);
+                    audioPlayer.Play();
+                    IsPlaying = true;
+                };
+                startTimer.Start();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            _audioPlayer?.Dispose();
+            _audioPlayer = null;
+            mediaElement.MediaPosition = position;
+
+            if (wasPlaying)
+                mediaElement.Play();
+            else
+                mediaElement.Pause();
+        }
+        finally
+        {
+            _audioPlayerStarting = false;
         }
     }
 
@@ -372,7 +565,7 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
             {
                 if (_lyricLines != null && _lyricLines.Length != 0)
                 {
-                    var lyric = LrcHelper.GetNearestLrc(_lyricLines, new TimeSpan(mediaElement.MediaPosition));
+                    var lyric = LrcHelper.GetNearestLrc(_lyricLines, new TimeSpan(MediaPosition));
                     metaLyric.Text = lyric?.LrcText?.Trim();
                 }
                 else
@@ -393,10 +586,14 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     public double LinearVolume
     {
-        get => mediaElement.Volume;
+        get => _audioPlayer?.Volume ?? mediaElement?.Volume ?? 0d;
         set
         {
-            mediaElement.Volume = value;
+            if (_audioPlayer != null)
+                _audioPlayer.Volume = value;
+            else if (mediaElement != null)
+                mediaElement.Volume = value;
+
             OnPropertyChanged();
         }
     }
@@ -408,10 +605,21 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
 
     private void TogglePlayPause(object sender, EventArgs e)
     {
-        if (mediaElement.IsPlaying)
+        if (_audioPlayer != null)
+        {
+            if (_audioPlayer.IsPlaying)
+                _audioPlayer.Pause();
+            else
+                _audioPlayer.Play();
+        }
+        else if (mediaElement.IsPlaying)
+        {
             mediaElement.Pause();
+        }
         else
+        {
             mediaElement.Play();
+        }
     }
 
     private void ToggleShouldLoop(object sender, EventArgs e)
@@ -461,20 +669,43 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
     /// </summary>
     public void LoadAndPlay(string path, MediaInfoNative info)
     {
-        // Detect whether it is other playback formats
-        if (!HasVideo)
-        {
-            string audioCodec = info?.Get(StreamKind.Audio, 0, "Format");
+        bool hasVideo = !string.IsNullOrWhiteSpace(info?.Get(StreamKind.Video, 0, "Format"));
+        string audioCodec = info?.Get(StreamKind.Audio, 0, "Format");
+        bool hasAudio = !string.IsNullOrWhiteSpace(audioCodec);
+        _audioOnly = false;
 
+        // Detect whether it is other playback formats
+        if (!hasVideo)
+        {
             if (audioCodec?.Equals("MIDI", StringComparison.OrdinalIgnoreCase) ?? false)
             {
                 _midiPlayer = new MidiPlayer(this, _context);
                 _midiPlayer.LoadAndPlay(path);
                 return; // Midi player will handle the playback at all
             }
+
+            _audioOnly = hasAudio;
         }
 
         UpdateMeta(path, info);
+
+        if (_audioOnly && ShouldLoop)
+        {
+            double volume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
+            var audioPlayer = AudioFilePlayer.TryCreate(path, ShouldLoop, volume);
+
+            if (audioPlayer != null)
+            {
+                _audioPlayer = audioPlayer;
+                _audioPlayer.PlaybackEnded += AudioPlaybackEnded;
+                SetMediaDuration(_audioPlayer.DurationTicks);
+                SetMediaPosition(0L);
+                IsPlaying = true;
+                _context.IsBusy = false;
+                _audioPlayer.Play();
+                return;
+            }
+        }
 
         // detect rotation
         _ = double.TryParse(info?.Get(StreamKind.Video, 0, "Rotation"), NumberStyles.Float, CultureInfo.InvariantCulture, out var rotation);
