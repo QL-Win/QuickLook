@@ -395,6 +395,47 @@ public partial class ViewerWindow
         }, DispatcherPriority.Input);
     }
 
+    /// <summary>
+    /// Shows the window in a loading state before the plugin for <paramref name="path"/> is known,
+    /// so slow plugin matching does not leave the user without feedback.
+    /// </summary>
+    internal void BeginLoading(string path)
+    {
+        _path = path;
+        ContextObject.Reset();
+        ContextObject.Title = Path.GetFileName(path);
+        ContextObject.PreferredSize = new Size(800, 600);
+        ContextObject.IsBusy = true;
+
+        HideToolbar = SettingHelper.Get("HideToolbar", false);
+
+        var newHeight = ContextObject.PreferredSize.Height + BorderThickness.Top + BorderThickness.Bottom +
+                        (ContextObject.TitlebarOverlap ? 0 : windowCaptionContainer.Height);
+        var newWidth = ContextObject.PreferredSize.Width + BorderThickness.Left + BorderThickness.Right;
+        var newSize = _customWindowSize == Size.Empty
+            ? new Size(newWidth, newHeight)
+            : _customWindowSize;
+
+        if (_customWindowSize == Size.Empty)
+            _ignoreNextWindowSizeChange = true;
+
+        PositionWindow(newSize);
+
+        if (IsVisible)
+            return;
+
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            this.BringToFront(Topmost);
+            if (SettingHelper.Get("FocusWindowOnOpen", false))
+                Activate();
+        }), DispatcherPriority.Render);
+        if (!SettingHelper.Get("ShowWindowTransition", true, "QuickLook"))
+            this.ShowWithoutTransition();
+        else
+            Show();
+    }
+
     private void ClearMoreMenuUnpin()
     {
         var toRemove = buttonMore.ContextMenu.Items
