@@ -105,6 +105,11 @@
                             </Style>
                         </Button.Style>
                     </Button>
+                    <Button x:Name="buttonMinimizeWindow"
+                            Content="&#xE921;"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource CaptionButtonStyle}"
+                            Visibility="{Binding ShowInTaskbar, ElementName=mainWindow, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Button x:Name="buttonShare"
                             Content="&#xE72D;"
                             DockPanel.Dock="Right"
