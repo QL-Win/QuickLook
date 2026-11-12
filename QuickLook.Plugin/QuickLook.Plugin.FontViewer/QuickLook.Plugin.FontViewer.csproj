@@ -14,7 +14,6 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
         <ProjectGuid>{CE40160D-5E3C-4A41-9BDA-C4F414C174EB}</ProjectGuid>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <Platforms>AnyCPU;x64;ARM64</Platforms>
     </PropertyGroup>
@@ -72,25 +71,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.1.0\runtimes\win-x64\native\freetype.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)win-x64\</DestinationFolder>
-            <Link>runtimes\win-x64\freetype.dll</Link>
-        </Content>
-        <Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.1.0\runtimes\win-x86\native\freetype.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)win-x86\</DestinationFolder>
-            <Link>runtimes\win-x86\freetype.dll</Link>
-        </Content>
-        <!--<Content Include="$(NuGetPackageRoot)\FreeTypeSharp\3.1.0\runtimes\win-arm64\native\freetype.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <DestinationFolder>$(OutDir)win-arm64\</DestinationFolder>
-            <Link>runtimes\win-arm64\freetype.dll</Link>
-        </Content>-->
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="FreeTypeSharp" Version="3.1.0" />
         <PackageReference Include="QuickLook.Typography.OpenFont" Version="1.0.1" />
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44">
             <PrivateAssets>all</PrivateAssets>
