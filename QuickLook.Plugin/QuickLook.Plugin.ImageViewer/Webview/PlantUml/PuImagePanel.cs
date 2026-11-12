@@ -52,7 +52,7 @@ public class PuImagePanel : SvgImagePanel
                 string deniedMsg = TranslationHelper.Get("PU_OnlineDeniedMessage", translationFile, failsafe:
                     "Network access was denied. PlantUML preview requires an internet connection.");
                 NavigateToHtml(
-                    $"<html><body style='font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#555'>" +
+                    $"<html><body style='font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#555;background:#fff'>" +
                     $"<p style='max-width:400px;text-align:center'>{HttpUtility.HtmlEncode(deniedMsg)}</p></body></html>");
                 return;
             }
