@@ -33,6 +33,7 @@ public sealed class Plugin : IViewer
     private string _path;
     private PdfViewerControl _pdfControl;
     private PasswordControl _passwordControl;
+    private PdfDocumentWrapper _preparedDocument;
 
     public int Priority => -1;
 
@@ -59,16 +60,22 @@ public sealed class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
+        _preparedDocument?.Dispose();
+        _preparedDocument = null;
         _context = context;
         _path = path;
 
         try
         {
-            var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path);
+            _preparedDocument = new PdfDocumentWrapper(path);
+            var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(_preparedDocument);
             context.SetPreferredSizeFit(desiredSize, 0.9);
         }
         catch (PdfException ex) when (ex.Message == "Password required or incorrect password")
         {
+            _preparedDocument?.Dispose();
+            _preparedDocument = null;
+
             // Fallback to a size to request the password
             context.PreferredSize = new Size { Width = 800, Height = 600 };
         }
@@ -85,7 +92,9 @@ public sealed class Plugin : IViewer
         {
             try
             {
-                _pdfControl.LoadPdf(path);
+                var document = _preparedDocument;
+                _preparedDocument = null;
+                _pdfControl.LoadPdf(document ?? new PdfDocumentWrapper(path));
 
                 context.Title = $"1 / {_pdfControl.TotalPages}: {Path.GetFileName(path)}";
 
@@ -100,7 +109,8 @@ public sealed class Plugin : IViewer
                 {
                     try
                     {
-                        var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(path, password);
+                        var document = new PdfDocumentWrapper(path, password);
+                        var desiredSize = PdfViewerControl.GetDesiredControlSizeByFirstPage(document);
                         context.SetPreferredSizeFit(desiredSize, 0.9); // Actually it is no longer effective here
                         context.ViewerContent = _pdfControl;
 
@@ -120,7 +130,7 @@ public sealed class Plugin : IViewer
                         }
 
                         context.IsBusy = true;
-                        _pdfControl.LoadPdf(path, password);
+                        _pdfControl.LoadPdf(document);
 
                         context.Title = $"1 / {_pdfControl.TotalPages}: {Path.GetFileName(path)}";
 
@@ -157,6 +167,9 @@ public sealed class Plugin : IViewer
 
         _pdfControl?.Dispose();
         _pdfControl = null;
+
+        _preparedDocument?.Dispose();
+        _preparedDocument = null;
 
         _context = null;
     }
