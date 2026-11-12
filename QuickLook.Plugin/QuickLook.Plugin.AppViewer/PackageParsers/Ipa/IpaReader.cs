@@ -187,7 +187,7 @@ public class IpaReader
                         if (fileName.StartsWith(IconName))
                         {
                             using var s = new BinaryReader(zip.GetInputStream(entry));
-                            Icon = s.ReadBytes((int)entry.Size);
+                            Icon = CgbiPng.ConvertToStandardPng(s.ReadBytes((int)entry.Size));
                             break;
                         }
                     }
