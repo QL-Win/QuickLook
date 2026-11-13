@@ -67,6 +67,13 @@ public sealed class PathHelperTests
     }
 
     [TestMethod]
+    public void GetLastWriteTimeReturnsNullForMissingPath()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
+        Assert.IsNull(PathHelper.GetLastWriteTime(path));
+    }
+
+    [TestMethod]
     public void GetLastWriteTimeReturnsValueForExistingFile()
     {
         var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".tmp");

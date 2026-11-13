@@ -100,7 +100,14 @@ public static class PathHelper
     {
         try
         {
-            return File.GetLastWriteTime(path);
+            var last = File.GetLastWriteTime(path);
+            if (last.Year == 1601)
+            {
+                // File.GetLastWriteTime returns the 1601 sentinel for missing or unreadable paths.
+                return null;
+            }
+
+            return last;
         }
         catch (Exception e) when (e is ArgumentException ||
                                   e is UnauthorizedAccessException ||
