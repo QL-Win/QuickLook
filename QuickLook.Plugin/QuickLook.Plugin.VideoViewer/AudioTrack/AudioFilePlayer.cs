@@ -29,6 +29,8 @@ internal sealed class AudioFilePlayer : IDisposable
     private readonly WaveOutEvent _output;
     private readonly long _durationTicks;
     private volatile bool _suppressEnded;
+    private bool _stopPending;
+    private bool _restartPending;
     private bool _disposed;
 
     private AudioFilePlayer(string path, bool loop, double volume)
@@ -40,13 +42,13 @@ internal sealed class AudioFilePlayer : IDisposable
         {
             DesiredLatency = 100,
             NumberOfBuffers = 3,
-            Volume = (float)Math.Max(0d, Math.Min(1d, volume)),
         };
         _output.PlaybackStopped += OnPlaybackStopped;
 
         try
         {
             _output.Init(_provider);
+            _output.Volume = (float)Math.Max(0d, Math.Min(1d, volume));
         }
         catch
         {
@@ -108,6 +110,12 @@ internal sealed class AudioFilePlayer : IDisposable
         {
             if (_durationTicks > 0 && _reader.CurrentTime >= _reader.TotalTime)
                 _reader.CurrentTime = TimeSpan.Zero;
+
+            if (_stopPending)
+            {
+                _restartPending = true;
+                return;
+            }
         }
 
         _output.Play();
@@ -115,8 +123,15 @@ internal sealed class AudioFilePlayer : IDisposable
 
     public void Pause()
     {
-        if (!_disposed)
-            _output.Pause();
+        if (_disposed)
+            return;
+
+        lock (_sync)
+        {
+            _restartPending = false;
+        }
+
+        _output.Pause();
     }
 
     public void Seek(long ticks)
@@ -124,20 +139,39 @@ internal sealed class AudioFilePlayer : IDisposable
         if (_disposed)
             return;
 
-        bool wasPlaying = IsPlaying;
-        if (wasPlaying)
+        PlaybackState state = _output.PlaybackState;
+        if (state == PlaybackState.Playing)
         {
-            _suppressEnded = true;
+            lock (_sync)
+            {
+                _reader.CurrentTime = TimeSpan.FromTicks(Math.Max(0L, Math.Min(ticks, _durationTicks)));
+                _suppressEnded = true;
+                _stopPending = true;
+                _restartPending = true;
+            }
+
             _output.Stop();
+            return;
+        }
+
+        if (state == PlaybackState.Paused)
+        {
+            lock (_sync)
+            {
+                _reader.CurrentTime = TimeSpan.FromTicks(Math.Max(0L, Math.Min(ticks, _durationTicks)));
+                _suppressEnded = true;
+                _stopPending = true;
+                _restartPending = false;
+            }
+
+            _output.Stop();
+            return;
         }
 
         lock (_sync)
         {
             _reader.CurrentTime = TimeSpan.FromTicks(Math.Max(0L, Math.Min(ticks, _durationTicks)));
         }
-
-        if (wasPlaying)
-            _output.Play();
     }
 
     public void Dispose()
@@ -161,11 +195,28 @@ internal sealed class AudioFilePlayer : IDisposable
         if (_disposed)
             return;
 
-        if (_suppressEnded)
+        bool suppress;
+        bool restart;
+
+        lock (_sync)
         {
+            suppress = _suppressEnded;
+            restart = _restartPending;
             _suppressEnded = false;
+            _stopPending = false;
+            _restartPending = false;
+        }
+
+        // The playback worker has exited by the time this event is raised, so the
+        // restart no longer races the old worker over the same buffers.
+        if (restart)
+        {
+            _output.Play();
             return;
         }
+
+        if (suppress)
+            return;
 
         if (_provider.Loop)
             return;

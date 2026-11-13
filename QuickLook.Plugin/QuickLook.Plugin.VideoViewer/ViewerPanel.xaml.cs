@@ -430,10 +430,10 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
         {
             position = mediaElement.MediaDuration > 0 ? mediaElement.MediaPosition : _mediaPosition;
             wasPlaying = mediaElement.IsPlaying;
+            double volume = Math.Max(0d, Math.Min(1d, mediaElement.Volume));
 
             mediaElement.Stop();
 
-            double volume = Math.Max(0d, Math.Min(1d, SettingHelper.Get("VolumeDouble", 1d, "QuickLook.Plugin.VideoViewer")));
             var audioPlayer = AudioFilePlayer.TryCreate(mediaElement.Source.LocalPath, true, volume);
 
             if (audioPlayer == null)
@@ -462,7 +462,6 @@ public partial class ViewerPanel : UserControl, IDisposable, INotifyPropertyChan
                     if (_audioPlayer != audioPlayer)
                         return;
 
-                    audioPlayer.Seek(position);
                     audioPlayer.Play();
                     IsPlaying = true;
                 };
