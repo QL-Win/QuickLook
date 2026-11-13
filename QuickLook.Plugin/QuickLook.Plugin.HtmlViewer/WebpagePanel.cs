@@ -273,7 +273,7 @@ public class WebpagePanel : UserControl
         }
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         _webView?.Dispose();
         _webView = null;
