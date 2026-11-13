@@ -22,6 +22,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 
 namespace QuickLook;
 
@@ -30,6 +31,8 @@ public class ViewWindowManager : IDisposable
     private static ViewWindowManager _instance;
 
     private string _invokedPath = string.Empty;
+    private string _previewPath = string.Empty;
+    private string _materializedTempFile;
     private ViewerWindow _viewerWindow;
 
     internal ViewWindowManager()
@@ -151,22 +154,113 @@ public class ViewWindowManager : IDisposable
         if (_viewerWindow.IsVisible && path == _invokedPath)
             return;
 
+        var previewPath = path;
+        var useDefaultPlugin = false;
+        IViewer matchedPlugin = null;
+
         var isDirectory = Directory.Exists(path);
+
         if (!isDirectory && !File.Exists(path))
-            if (!path.StartsWith("::")) // CLSID
+        {
+            if (!path.StartsWith("::", StringComparison.Ordinal)) // CLSID
                 return;
 
-        // Check extension filtering before proceeding (skip for directories)
-        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+            // Shell parsing names of MTP items do not contain the file name (the last segment is an item
+            // id). A folder is shown by the info panel: its size is computed from shell metadata and
+            // nothing is copied. Files are copied to a temporary file so that the regular plugins (image,
+            // video, archive, text, ...) can preview them exactly like before.
+            var hasShellMetadata = ShellItemHelper.TryGetShellItemMetadata(path,
+                out _, out var shellItemIsFolder, out _, out _, out _);
+
+            if (hasShellMetadata && shellItemIsFolder)
+            {
+                previewPath = path;
+                useDefaultPlugin = true;
+            }
+            else
+            {
+                var materializedPath = ShellItemHelper.TryMaterialize(path);
+
+                if (!string.IsNullOrEmpty(materializedPath))
+                {
+                    // Extension filter settings must also protect previews coming from a device.
+                    if (!ExtensionFilterHelper.IsExtensionAllowed(materializedPath))
+                    {
+                        ShellItemHelper.TryDeleteTempFile(materializedPath);
+                        return;
+                    }
+
+                    // Some plugins (video, media info, ...) inspect the content instead of the extension,
+                    // so the plugin match can only be decided on a real local file. When no plugin can
+                    // preview it, the info panel shows the original shell item (real name/date/size);
+                    // the temporary copy is then dropped so nothing unnecessary is kept on disk.
+                    var matchedForCopy = PluginManager.GetInstance().FindMatch(materializedPath);
+
+                    if (matchedForCopy is Plugin.InfoPanel.Plugin)
+                    {
+                        ShellItemHelper.TryDeleteTempFile(materializedPath);
+                        previewPath = path;
+                        useDefaultPlugin = true;
+                    }
+                    else
+                    {
+                        matchedPlugin = matchedForCopy;
+                        previewPath = materializedPath;
+
+                        // Delete the temporary copy when the preview window closes (or after a grace
+                        // period when another preview replaces this one, see below).
+                        _materializedTempFile = previewPath;
+                        _viewerWindow.Closed += (sender, e) =>
+                        {
+                            var tempFileToDelete = _materializedTempFile;
+                            _materializedTempFile = null;
+
+                            if (!string.IsNullOrEmpty(tempFileToDelete))
+                            {
+                                _ = Task.Delay(TimeSpan.FromSeconds(5))
+                                    .ContinueWith(_ => ShellItemHelper.TryDeleteTempFile(tempFileToDelete), TaskScheduler.Default);
+                            }
+                        };
+                    }
+                }
+                else
+                {
+                    // Exact "::{GUID}" namespace roots (Recycle Bin, This PC, ...) are handled by CLSIDViewer.
+                    // Any other shell-only item that could not be copied (too large, access denied, ...) must
+                    // never be handed to a file based plugin: it cannot open such a path.
+                    previewPath = path;
+                    useDefaultPlugin = !ShellItemHelper.IsExactClsidPath(path);
+                }
+            }
+        }
+        else if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+        {
+            // Check extension filtering before proceeding (skip for directories)
             return;
+        }
+
+        // A new preview replaces the previous one: drop the temporary copy of the replaced shell item.
+        // The previous plugin may still be finishing an asynchronous load of that file (image decoding,
+        // archive listing, ...), therefore remove it after a grace period instead of immediately.
+        var previousTempFile = _materializedTempFile;
+
+        if (!string.IsNullOrEmpty(previousTempFile))
+        {
+            _materializedTempFile = null;
+            _ = Task.Delay(TimeSpan.FromSeconds(20))
+                .ContinueWith(_ => ShellItemHelper.TryDeleteTempFile(previousTempFile), TaskScheduler.Default);
+        }
 
         _invokedPath = path;
+        _previewPath = previewPath;
 
         RunFocusMonitor();
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+        matchedPlugin ??= useDefaultPlugin
+            ? PluginManager.GetInstance().DefaultPlugin
+            : PluginManager.GetInstance().FindMatch(previewPath);
 
-        BeginShowNewWindow(path, matchedPlugin);
+        BeginShowNewWindow(previewPath, matchedPlugin);
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
@@ -203,9 +297,16 @@ public class ViewWindowManager : IDisposable
         if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
             return;
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
+        // For shell-only items the preview is shown from a materialized temporary file; prefer it while
+        // it still exists and fall back to the original path otherwise.
+        var previewPath = _previewPath;
 
-        BeginShowNewWindow(_invokedPath, matchedPlugin);
+        if (string.IsNullOrEmpty(previewPath) || (!File.Exists(previewPath) && !Directory.Exists(previewPath)))
+            previewPath = _invokedPath;
+
+        var matchedPlugin = PluginManager.GetInstance().FindMatch(previewPath);
+
+        BeginShowNewWindow(previewPath, matchedPlugin);
     }
 
     public void ToggleFullscreen()

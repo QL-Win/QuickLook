@@ -17,6 +17,7 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Helpers;
 using System;
 using System.Globalization;
 using System.IO;
@@ -27,6 +28,8 @@ namespace QuickLook.Plugin.InfoPanel;
 
 public partial class InfoPanel : UserControl
 {
+    private const string UnknownValue = "—";
+
     private bool _stop;
 
     public InfoPanel()
@@ -42,81 +45,355 @@ public partial class InfoPanel : UserControl
 
     public void DisplayInfo(string path)
     {
+        // DisplayInfo is called for *any* path Explorer hands over, including shell parsing names of
+        // MTP device items that System.IO rejects with "Illegal characters in path". This method must
+        // never throw, otherwise the whole preview fails; fall back to the shell property system instead.
+        try
+        {
+            DisplayThumbnail(path);
+
+            filename.Text = GetSafeDisplayName(path);
+
+            var lastModified = GetSafeLastModified(path);
+            modDate.Text = string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
+                lastModified?.ToString(CultureInfo.CurrentCulture) ?? UnknownValue);
+
+            Stop = false;
+
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    UpdateSizeText(path);
+                }
+                catch (Exception e)
+                {
+                    WriteLog(e);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            WriteLog(e);
+        }
+    }
+
+    private void DisplayThumbnail(string path)
+    {
         _ = Task.Run(() =>
         {
-            var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
+            try
+            {
+                var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
 
-            var icon =
-                WindowsThumbnailProvider.GetThumbnail(path,
-                    (int)(128 * scale.Horizontal),
-                    (int)(128 * scale.Vertical),
-                    ThumbnailOptions.ScaleUp);
+                var icon =
+                    WindowsThumbnailProvider.GetThumbnail(path,
+                        (int)(128 * scale.Horizontal),
+                        (int)(128 * scale.Vertical),
+                        ThumbnailOptions.ScaleUp);
 
-            var source = icon?.ToBitmapSource();
-            icon?.Dispose();
+                var source = icon?.ToBitmapSource();
+                icon?.Dispose();
 
-            Dispatcher.BeginInvoke(new Action(() => image.Source = source));
+                Dispatcher.BeginInvoke(new Action(() => image.Source = source));
+            }
+            catch (Exception e)
+            {
+                WriteLog(e);
+            }
         });
+    }
 
-        var name = Path.GetFileName(path);
-        filename.Text = string.IsNullOrEmpty(name) ? path : name;
+    private void UpdateSizeText(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return;
 
-        var last = File.GetLastWriteTime(path);
-        modDate.Text = string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
-            last.ToString(CultureInfo.CurrentCulture));
+        long? fileSize = null;
 
-        Stop = false;
-
-        _ = Task.Run(() =>
+        try
         {
             if (File.Exists(path))
             {
-                var size = new FileInfo(path).Length;
-
-                Dispatcher.Invoke(() => { totalSize.Text = size.ToPrettySize(2); });
-            }
-            else if (Path.GetPathRoot(path) == path) // is this a drive?
-            {
-                FileHelper.GetDriveSpace(path, out var totalSpace, out var totalFreeSpace);
-
-                Dispatcher.Invoke(() =>
+                try
                 {
-                    totalSize.Text =
-                        string.Format(TranslationHelper.Get("InfoPanel_DriveSize"),
-                            totalSpace.ToPrettySize(2),
-                            totalFreeSpace.ToPrettySize(2));
-                });
+                    fileSize = new FileInfo(path).Length;
+                }
+                catch (Exception)
+                {
+                    // ignored, fall back to the shell property system below
+                }
             }
-            else if (Directory.Exists(path))
+        }
+        catch (Exception)
+        {
+            // System.IO rejects shell parsing names; keep fileSize null
+        }
+
+        if (fileSize.HasValue)
+        {
+            var size = fileSize.Value;
+
+            RunOnUiThread(() => { totalSize.Text = size.ToPrettySize(2); });
+            return;
+        }
+
+        var isDriveRoot = false;
+
+        try
+        {
+            isDriveRoot = string.Equals(Path.GetPathRoot(path), path, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            // not a Win32 path
+        }
+
+        if (isDriveRoot) // is this a drive?
+        {
+            FileHelper.GetDriveSpace(path, out var totalSpace, out var totalFreeSpace);
+
+            RunOnUiThread(() =>
             {
-                FileHelper.CountFolder(path, ref _stop,
-                    out var totalDirsL, out var totalFilesL, out var totalSizeL);
+                totalSize.Text =
+                    string.Format(TranslationHelper.Get("InfoPanel_DriveSize"),
+                        totalSpace.ToPrettySize(2),
+                        totalFreeSpace.ToPrettySize(2));
+            });
 
-                if (!Stop)
-                    Dispatcher.Invoke(() =>
-                    {
-                        string t;
-                        var folders = totalDirsL == 0
-                            ? string.Empty
-                            : string.Format(TranslationHelper.Get(
-                                totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
-                        var files = totalFilesL == 0
-                            ? string.Empty
-                            : string.Format(TranslationHelper.Get(
-                                totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
+            return;
+        }
 
-                        if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
-                            t = string.Format(
-                                TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
-                        else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
-                            t = string.Empty;
-                        else
-                            t = $"({folders}{files})";
+        if (Directory.Exists(path))
+        {
+            FileHelper.CountFolder(path, ref _stop,
+                out var totalDirsL, out var totalFilesL, out var totalSizeL);
 
-                        totalSize.Text =
-                            $"{totalSizeL.ToPrettySize(2)} {t}";
-                    });
+            if (!Stop)
+                RunOnUiThread(() =>
+                {
+                    string t;
+                    var folders = totalDirsL == 0
+                        ? string.Empty
+                        : string.Format(TranslationHelper.Get(
+                            totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
+                    var files = totalFilesL == 0
+                        ? string.Empty
+                        : string.Format(TranslationHelper.Get(
+                            totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
+
+                    if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
+                        t = string.Format(
+                            TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
+                    else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
+                        t = string.Empty;
+                    else
+                        t = $"({folders}{files})";
+
+                    totalSize.Text =
+                        $"{totalSizeL.ToPrettySize(2)} {t}";
+                });
+
+            return;
+        }
+
+        // Shell-only item (file on an MTP device, item inside a zip folder, ...). The basic metadata is
+        // read from the shell namespace, so nothing has to be copied to the local disk.
+        if (ShellItemHelper.TryGetShellItemMetadata(path,
+                out _, out var shellOnlyIsFolder, out var shellOnlySize, out _, out var shellOnlyType))
+        {
+            if (shellOnlyIsFolder)
+            {
+                // A folder is never copied; its size is computed from the shell metadata in the background
+                // (this method already runs on a worker thread), so the name/date show up immediately.
+                RunOnUiThread(() => { totalSize.Text = TranslationHelper.Get("InfoPanel_CalculatingSize", failsafe: "Calculating size…"); });
+
+                if (ShellItemHelper.TryGetShellFolderSize(path, () => Stop,
+                        out var folderSize, out var folderFiles, out var folderDirs,
+                        (sizeSoFar, filesSoFar, dirsSoFar) =>
+                        {
+                            if (!Stop)
+                            {
+                                RunOnUiThread(() => { totalSize.Text =
+                                    $"{TranslationHelper.Get("InfoPanel_CalculatingSize", failsafe: "Calculating size…")} " +
+                                    $"{sizeSoFar.ToPrettySize(1)} ({filesSoFar} files so far)"; });
+                            }
+                        }))
+                {
+                    if (!Stop)
+                        RunOnUiThread(() => { totalSize.Text = FormatFolderSizeText(folderSize, folderDirs, folderFiles); });
+                }
+
+                return;
             }
-        });
+
+            if (shellOnlySize > 0)
+            {
+                RunOnUiThread(() => { totalSize.Text = shellOnlySize.ToPrettySize(2); });
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(shellOnlyType))
+                RunOnUiThread(() => { totalSize.Text = shellOnlyType; });
+
+            return;
+        }
+
+        // A shell folder whose namespace walk failed (for example a folder inside a zip archive): at
+        // least report its type instead of leaving the default "Calculating size..." forever.
+        try
+        {
+            if (ShellItemInfo.TryGetIsFolder(path, out var parsedIsFolder) && parsedIsFolder)
+            {
+                var parsedFolderType = ShellItemInfo.TryGetTypeText(path, out var parsedType) && !string.IsNullOrEmpty(parsedType)
+                    ? parsedType
+                    : "File folder";
+
+                RunOnUiThread(() => { totalSize.Text = parsedFolderType; });
+                return;
+            }
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (ShellItemInfo.TryGetSize(path, out var shellSize))
+        {
+            RunOnUiThread(() => { totalSize.Text = shellSize.ToPrettySize(2); });
+            return;
+        }
+
+        if (ShellItemInfo.TryGetTypeText(path, out var typeText) && !string.IsNullOrEmpty(typeText))
+            RunOnUiThread(() => { totalSize.Text = typeText; });
+    }
+
+    /// <summary>
+    ///     Formats a folder size the same way the local folder branch of <see cref="UpdateSizeText" /> does.
+    /// </summary>
+    private static string FormatFolderSizeText(long totalSizeL, int totalDirsL, int totalFilesL)
+    {
+        var folders = totalDirsL == 0
+            ? string.Empty
+            : string.Format(TranslationHelper.Get(totalDirsL == 1 ? "InfoPanel_Folder" : "InfoPanel_Folders"), totalDirsL);
+        var files = totalFilesL == 0
+            ? string.Empty
+            : string.Format(TranslationHelper.Get(totalFilesL == 1 ? "InfoPanel_File" : "InfoPanel_Files"), totalFilesL);
+
+        string t;
+
+        if (!string.IsNullOrEmpty(folders) && !string.IsNullOrEmpty(files))
+            t = string.Format(TranslationHelper.Get("InfoPanel_FolderAndFile"), folders, files);
+        else if (string.IsNullOrEmpty(folders) && string.IsNullOrEmpty(files))
+            t = string.Empty;
+        else
+            t = $"({folders}{files})";
+
+        return $"{totalSizeL.ToPrettySize(2)} {t}";
+    }
+
+    internal static string GetSafeDisplayName(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return string.Empty;
+
+        var isShellOnly = false;
+
+        try
+        {
+            isShellOnly = !File.Exists(path) && !Directory.Exists(path);
+        }
+        catch (Exception)
+        {
+            isShellOnly = true;
+        }
+
+        if (isShellOnly)
+        {
+            // Shell parsing names cannot be passed to System.IO and their last segment is an internal
+            // item id, not a name. Ask the shell namespace for the real display name first.
+            if (ShellItemHelper.TryGetShellItemMetadata(path, out var shellOnlyName, out _, out _, out _, out _)
+             && !string.IsNullOrEmpty(shellOnlyName))
+            {
+                return shellOnlyName;
+            }
+
+            if (ShellItemInfo.TryGetDisplayName(path, out var parsedShellName) && !string.IsNullOrEmpty(parsedShellName))
+                return parsedShellName;
+
+            return path;
+        }
+
+        if (ShellItemInfo.TryGetDisplayName(path, out var shellName) && !string.IsNullOrEmpty(shellName))
+            return shellName;
+
+        try
+        {
+            var name = Path.GetFileName(path);
+
+            if (!string.IsNullOrEmpty(name))
+                return name;
+        }
+        catch (Exception)
+        {
+            // Illegal characters in path: give up and show the raw path.
+        }
+
+        return path;
+    }
+
+    private static DateTime? GetSafeLastModified(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return null;
+
+        try
+        {
+            var lastWriteTime = File.GetLastWriteTime(path);
+
+            // 1601-01-01 means "file not found" for System.IO.
+            if (lastWriteTime.Year > 1601)
+                return lastWriteTime;
+        }
+        catch (Exception)
+        {
+            // Illegal characters in path: use the shell property below.
+        }
+
+        if (ShellItemInfo.TryGetDateModified(path, out var shellModified))
+            return shellModified;
+
+        // MTP/portable device items: SHCreateItemFromParsingName cannot read them, walk the shell namespace.
+        if (ShellItemHelper.TryGetShellItemMetadata(path, out _, out _, out _, out var shellOnlyModified, out _)
+         && shellOnlyModified.HasValue)
+        {
+            return shellOnlyModified;
+        }
+
+        return null;
+    }
+
+    private void RunOnUiThread(Action action)
+    {
+        try
+        {
+            Dispatcher.Invoke(action);
+        }
+        catch (Exception)
+        {
+            // The preview window is gone.
+        }
+    }
+
+    private static void WriteLog(Exception e)
+    {
+        try
+        {
+            ProcessHelper.WriteLog(e.ToString());
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }

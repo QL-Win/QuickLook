@@ -54,20 +54,46 @@ internal static class WindowsThumbnailProvider
 
     public static Bitmap GetThumbnail(string fileName, int width, int height, ThumbnailOptions options)
     {
-        var hBitmap = GetHBitmap(Path.GetFullPath(fileName), width, height, options);
-
-        if (hBitmap == IntPtr.Zero)
+        // This method is called from a background task with any path Explorer can hand over.
+        // Path.GetFullPath throws ArgumentException ("Illegal characters in path") for shell parsing
+        // names of MTP device items, so fall back to the raw string: SHCreateItemFromParsingName
+        // understands those parsing names and can still produce a thumbnail.
+        if (string.IsNullOrEmpty(fileName))
             return null;
+
+        var hBitmap = IntPtr.Zero;
 
         try
         {
+            string parseName;
+
+            try
+            {
+                parseName = Path.GetFullPath(fileName);
+            }
+            catch (Exception)
+            {
+                parseName = fileName;
+            }
+
+            hBitmap = GetHBitmap(parseName, width, height, options);
+
+            if (hBitmap == IntPtr.Zero)
+                return null;
+
             // return a System.Drawing.Bitmap from the hBitmap
             return GetBitmapFromHBitmap(hBitmap);
         }
+        catch (Exception)
+        {
+            // Never let a thumbnail failure break the info panel.
+            return null;
+        }
         finally
         {
-            // delete HBitmap to avoid memory leaks
-            DeleteObject(hBitmap);
+            if (hBitmap != IntPtr.Zero)
+                // delete HBitmap to avoid memory leaks
+                DeleteObject(hBitmap);
         }
     }
 
@@ -117,24 +143,45 @@ internal static class WindowsThumbnailProvider
 
     private static nint GetHBitmap(string fileName, int width, int height, ThumbnailOptions options)
     {
-        var shellItem2Guid = new Guid(IShellItem2Guid);
-        var retCode =
-            SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out var nativeShellItem);
+        IShellItem nativeShellItem = null;
 
-        if (retCode != 0)
-            return IntPtr.Zero;
-
-        var nativeSize = new NativeSize
+        try
         {
-            Width = width,
-            Height = height
-        };
+            var shellItem2Guid = new Guid(IShellItem2Guid);
+            var retCode =
+                SHCreateItemFromParsingName(fileName, IntPtr.Zero, ref shellItem2Guid, out nativeShellItem);
 
-        var hr = ((IShellItemImageFactory)nativeShellItem).GetImage(nativeSize, options, out var hBitmap);
+            if (retCode != 0 || nativeShellItem == null)
+                return IntPtr.Zero;
 
-        Marshal.ReleaseComObject(nativeShellItem);
+            var nativeSize = new NativeSize
+            {
+                Width = width,
+                Height = height
+            };
 
-        return hr == HResult.Ok ? hBitmap : IntPtr.Zero;
+            var hr = ((IShellItemImageFactory)nativeShellItem).GetImage(nativeSize, options, out var hBitmap);
+
+            return hr == HResult.Ok ? hBitmap : IntPtr.Zero;
+        }
+        catch (Exception)
+        {
+            return IntPtr.Zero;
+        }
+        finally
+        {
+            if (nativeShellItem != null)
+            {
+                try
+                {
+                    Marshal.ReleaseComObject(nativeShellItem);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
     }
 
     [ComImport]
