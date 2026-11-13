@@ -29,6 +29,7 @@ namespace QuickLook;
 internal sealed class PreparingPreview : IViewer
 {
     private InfoPanel _panel;
+    private ContextObject _context;
 
     public int Priority => int.MinValue;
 
@@ -43,8 +44,9 @@ internal sealed class PreparingPreview : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
+        _context = context;
         context.PreferredSize = new Size { Width = 453, Height = 172 };
-        context.Title = InfoPanel.GetSafeDisplayName(path);
+        context.Title = "Preparing preview…";
         context.TitlebarOverlap = false;
         context.TitlebarBlurVisibility = false;
         context.TitlebarColourVisibility = false;
@@ -56,9 +58,21 @@ internal sealed class PreparingPreview : IViewer
     {
         _panel = new InfoPanel();
         context.ViewerContent = _panel;
-        _panel.DisplayInfo(path);
         _panel.SetStatusText("Preparing preview…");
         context.IsBusy = true;
+    }
+
+    /// <summary>Updates the display name once the background resolution knows it.</summary>
+    public void SetDisplayName(string name)
+    {
+        _panel?.SetDisplayName(name);
+    }
+
+    /// <summary>Updates the window title once the background resolution knows it.</summary>
+    public void SetTitle(string title)
+    {
+        if (_context != null)
+            _context.Title = title;
     }
 
     public void SetStatus(string text)
@@ -68,6 +82,8 @@ internal sealed class PreparingPreview : IViewer
 
     public void Cleanup()
     {
+        _context = null;
+
         if (_panel == null)
             return;
 

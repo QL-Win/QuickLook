@@ -55,6 +55,17 @@ public partial class InfoPanel : UserControl
         RunOnUiThread(() => { totalSize.Text = text; });
     }
 
+    /// <summary>
+    ///     Shows a display name without running the full metadata resolution. Used by the placeholder
+    ///     preview while a shell item is being copied.
+    /// </summary>
+    public void SetDisplayName(string name)
+    {
+        var text = string.IsNullOrEmpty(name) ? UnknownValue : name;
+
+        RunOnUiThread(() => { filename.Text = text; });
+    }
+
     public void DisplayInfo(string path)
     {
         // DisplayInfo is called for *any* path Explorer hands over, including shell parsing names of

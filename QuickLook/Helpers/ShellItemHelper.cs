@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -51,6 +52,15 @@ public static class ShellItemHelper
     private static readonly object SyncRoot = new object();
     private static readonly HashSet<string> ActiveTempFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private static bool _staleCleanupDone;
+
+    // Metadata of a shell item is requested several times per preview (routing, placeholder title,
+    // info panel); walking an MTP namespace for every request is slow. This short lived cache keeps the
+    // UI thread responsive by reusing the result of the background resolution.
+    private static readonly Dictionary<string, CachedShellMetadata> MetadataCache =
+        new Dictionary<string, CachedShellMetadata>(StringComparer.OrdinalIgnoreCase);
+
+    private static readonly object MetadataCacheLock = new object();
+    private static readonly TimeSpan MetadataCacheLifetime = TimeSpan.FromSeconds(5);
 
     private static readonly HashSet<string> ReservedFileNames = new HashSet<string>(
         new[]
@@ -344,6 +354,9 @@ public static class ShellItemHelper
         modified = null;
         typeText = null;
 
+        if (TryGetCachedMetadata(path, out name, out isFolder, out size, out modified, out typeText))
+            return true;
+
         dynamic item;
         dynamic parentFolder;
 
@@ -369,6 +382,7 @@ public static class ShellItemHelper
                     modified = parsed;
                 }
 
+                CacheMetadata(path, name, isFolder, size, modified, typeText);
                 return !string.IsNullOrEmpty(name);
             }
             finally
@@ -380,6 +394,81 @@ public static class ShellItemHelper
         catch (Exception)
         {
             return false;
+        }
+    }
+
+    private sealed class CachedShellMetadata
+    {
+        public string Name;
+        public bool IsFolder;
+        public long Size;
+        public DateTime? Modified;
+        public string TypeText;
+        public DateTime CreatedUtc;
+    }
+
+    private static bool TryGetCachedMetadata(string path, out string name, out bool isFolder,
+        out long size, out DateTime? modified, out string typeText)
+    {
+        name = null;
+        isFolder = false;
+        size = -1;
+        modified = null;
+        typeText = null;
+
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        lock (MetadataCacheLock)
+        {
+            if (!MetadataCache.TryGetValue(path, out var cached))
+                return false;
+
+            if (DateTime.UtcNow - cached.CreatedUtc > MetadataCacheLifetime)
+            {
+                MetadataCache.Remove(path);
+                return false;
+            }
+
+            name = cached.Name;
+            isFolder = cached.IsFolder;
+            size = cached.Size;
+            modified = cached.Modified;
+            typeText = cached.TypeText;
+            return true;
+        }
+    }
+
+    private static void CacheMetadata(string path, string name, bool isFolder, long size,
+        DateTime? modified, string typeText)
+    {
+        if (string.IsNullOrEmpty(path))
+            return;
+
+        lock (MetadataCacheLock)
+        {
+            if (MetadataCache.Count > 64)
+            {
+                var now = DateTime.UtcNow;
+
+                foreach (var key in MetadataCache
+                             .Where(pair => now - pair.Value.CreatedUtc > MetadataCacheLifetime)
+                             .Select(pair => pair.Key)
+                             .ToList())
+                {
+                    MetadataCache.Remove(key);
+                }
+            }
+
+            MetadataCache[path] = new CachedShellMetadata
+            {
+                Name = name,
+                IsFolder = isFolder,
+                Size = size,
+                Modified = modified,
+                TypeText = typeText,
+                CreatedUtc = DateTime.UtcNow
+            };
         }
     }
 

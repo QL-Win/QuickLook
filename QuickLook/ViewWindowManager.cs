@@ -165,36 +165,23 @@ public class ViewWindowManager : IDisposable
 
         if (!isDirectory && !File.Exists(path))
         {
-            // Shell-only item (file on an MTP device, item inside a zip folder, ...). Shell parsing names
-            // are not file system paths, so metadata is resolved first: folders and oversized items are
-            // never copied, files are prepared on a background worker.
-            var hasMetadata = ShellItemHelper.TryGetShellItemMetadata(path,
-                out _, out var shellItemIsFolder, out var shellItemSize, out _, out _);
+            if (ShellItemHelper.IsExactClsidPath(path))
+            {
+                // Recycle Bin / This PC / ... are handled by CLSIDViewer.
+                ShowPreview(path, path, useDefaultPlugin: false);
+                return;
+            }
 
-            if (!hasMetadata && !path.StartsWith("::", StringComparison.Ordinal))
+            if (!path.StartsWith("::", StringComparison.Ordinal)
+             && !ShellItemHelper.TryGetShellItemMetadata(path, out _, out _, out _, out _, out _))
             {
                 // An unresolvable plain path (neither a file, a folder nor a shell namespace name): ignore
                 // it instead of opening the info panel for something that does not exist.
                 return;
             }
 
-            if (hasMetadata && shellItemIsFolder)
-            {
-                // Folders are never copied: the info panel shows the real name/date and computes the size
-                // from shell metadata.
-                ShowPreview(path, path, useDefaultPlugin: true);
-                return;
-            }
-
-            if (shellItemSize > ShellItemHelper.MaxMaterializedSize)
-            {
-                // Too large to copy to a temporary file: show the shell metadata only.
-                ShowPreview(path, path, useDefaultPlugin: true);
-                return;
-            }
-
-            // Show the info panel immediately and copy the file on a cancellable background worker. This
-            // keeps the UI responsive for large files and lets a newer preview supersede this one.
+            // Show the placeholder window immediately. The worker resolves the metadata and copies the
+            // item in the background, so even a multi-gigabyte device file never blocks the UI thread.
             ShowPreparingPreview(path);
             return;
         }
@@ -261,6 +248,20 @@ public class ViewWindowManager : IDisposable
 
             try
             {
+                var hasMetadata = ShellItemHelper.TryGetShellItemMetadata(shellPath,
+                    out var displayName, out var isFolder, out var knownSize, out _, out _);
+
+                if (hasMetadata && !string.IsNullOrEmpty(displayName))
+                    UpdatePreparingInfo(requestId, displayName);
+
+                if (hasMetadata && (isFolder || knownSize > ShellItemHelper.MaxMaterializedSize))
+                {
+                    // Nothing is copied for a folder or an oversized item: the info panel shows the shell
+                    // metadata (name, date, type, computed folder size) instead.
+                    PostCompletion(requestId, shellPath, null);
+                    return;
+                }
+
                 tempFile = ShellItemHelper.TryMaterialize(shellPath, token,
                     (copied, expected) => ReportCopyProgress(requestId, copied, expected));
             }
@@ -281,24 +282,7 @@ public class ViewWindowManager : IDisposable
                 return;
             }
 
-            var dispatcher = Application.Current?.Dispatcher;
-
-            if (dispatcher == null)
-                return;
-
-            dispatcher.BeginInvoke(new Action(() =>
-            {
-                if (requestId != Interlocked.Read(ref _previewRequestId) || !_viewerWindow.IsVisible)
-                {
-                    // A newer preview was requested (or the window was closed) while this copy was running.
-                    if (!string.IsNullOrEmpty(tempFile))
-                        ScheduleTempFileCleanup(tempFile);
-
-                    return;
-                }
-
-                CompleteMaterialization(shellPath, tempFile);
-            }));
+            PostCompletion(requestId, shellPath, tempFile);
         })
         {
             IsBackground = true,
@@ -374,6 +358,57 @@ public class ViewWindowManager : IDisposable
             {
                 preparing.SetStatus(status);
             }
+        }));
+    }
+
+    /// <summary>
+    ///     Applies the result of the background preparation on the UI thread, but only when this request is
+    ///     still the latest one and the window is still open.
+    /// </summary>
+    private void PostCompletion(long requestId, string shellPath, string tempFile)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+
+        if (dispatcher == null)
+            return;
+
+        dispatcher.BeginInvoke(new Action(() =>
+        {
+            if (requestId != Interlocked.Read(ref _previewRequestId) || !_viewerWindow.IsVisible)
+            {
+                // A newer preview was requested (or the window was closed) while this copy was running.
+                if (!string.IsNullOrEmpty(tempFile))
+                    ScheduleTempFileCleanup(tempFile);
+
+                return;
+            }
+
+            CompleteMaterialization(shellPath, tempFile);
+        }));
+    }
+
+    /// <summary>
+    ///     Updates the placeholder title/name once the background resolution knows the shell display name.
+    /// </summary>
+    private void UpdatePreparingInfo(long requestId, string displayName)
+    {
+        if (requestId != Interlocked.Read(ref _previewRequestId))
+            return;
+
+        var dispatcher = Application.Current?.Dispatcher;
+
+        dispatcher?.BeginInvoke(new Action(() =>
+        {
+            if (requestId != Interlocked.Read(ref _previewRequestId))
+                return;
+
+            var preparing = _preparingPreview;
+
+            if (preparing == null)
+                return;
+
+            preparing.SetTitle(displayName);
+            preparing.SetDisplayName(displayName);
         }));
     }
 
