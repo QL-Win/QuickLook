@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Keyboard = System.Windows.Input.Keyboard;
+using TextBoxBase = System.Windows.Controls.Primitives.TextBoxBase;
 
 namespace QuickLook;
 
@@ -79,6 +81,18 @@ internal class KeystrokeDispatcher : IDisposable
 
     private void CallViewWindowManagerInvokeRoutine(KeyEventArgs e, bool isKeyDown)
     {
+        // Let editable controls handle their own input, including search-panel shortcuts.
+        // A low-level hook runs before WPF routed key events, so e.Handled in a viewer
+        // cannot prevent global preview actions here. Do not consume the input itself.
+        if (WindowHelper.IsForegroundWindowBelongToSelf() && Keyboard.FocusedElement is TextBoxBase { IsReadOnly: false })
+        {
+            _isPreviewRequest = false;
+            _spaceIsDown = false;
+            _spaceHoldTick = 0L;
+            _lastInvalidKeyPressTick = 0L;
+            return;
+        }
+
         // skip invalid keys, but record the timestamp
         if (!_validKeys.Contains(e.KeyCode))
         {
