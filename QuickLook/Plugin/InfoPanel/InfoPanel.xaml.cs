@@ -61,18 +61,11 @@ public partial class InfoPanel : UserControl
         var name = PathHelper.GetFileName(path);
         filename.Text = string.IsNullOrEmpty(name) ? path : name;
 
-        DateTime last;
-        try
-        {
-            last = File.GetLastWriteTime(path);
-        }
-        catch (ArgumentException)
-        {
-            last = DateTime.MinValue;
-        }
-
-        modDate.Text = string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
-            last.ToString(CultureInfo.CurrentCulture));
+        var last = PathHelper.GetLastWriteTime(path);
+        modDate.Text = last.HasValue
+            ? string.Format(TranslationHelper.Get("InfoPanel_LastModified"),
+                last.Value.ToString(CultureInfo.CurrentCulture))
+            : string.Empty;
 
         Stop = false;
 

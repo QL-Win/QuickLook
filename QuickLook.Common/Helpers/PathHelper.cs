@@ -96,6 +96,22 @@ public static class PathHelper
         }
     }
 
+    public static DateTime? GetLastWriteTime(string path)
+    {
+        try
+        {
+            return File.GetLastWriteTime(path);
+        }
+        catch (Exception e) when (e is ArgumentException ||
+                                  e is UnauthorizedAccessException ||
+                                  e is IOException ||
+                                  e is NotSupportedException)
+        {
+            // An unusable path must not hide the rest of the info card.
+            return null;
+        }
+    }
+
     public static bool IsShortcut(string path)
     {
         return GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase);

@@ -17,6 +17,8 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QuickLook.Common.Helpers;
+using System;
+using System.IO;
 
 namespace QuickLook.Tests;
 
@@ -47,6 +49,37 @@ public sealed class PathHelperTests
     public void GetExtensionDoesNotThrowOnMalformedUncPaths(string path)
     {
         Assert.AreEqual(".png", PathHelper.GetExtension(path));
+    }
+
+    [TestMethod]
+    [DataRow(@"\\server\share\bad""name.png")]
+    [DataRow(@"""\\server\share\file.png""")]
+    [DataRow("")]
+    public void GetLastWriteTimeReturnsNullForMalformedPaths(string path)
+    {
+        Assert.IsNull(PathHelper.GetLastWriteTime(path));
+    }
+
+    [TestMethod]
+    public void GetLastWriteTimeReturnsNullForUnsupportedPathFormat()
+    {
+        Assert.IsNull(PathHelper.GetLastWriteTime(@"C::\file.png"));
+    }
+
+    [TestMethod]
+    public void GetLastWriteTimeReturnsValueForExistingFile()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".tmp");
+        File.WriteAllText(path, string.Empty);
+
+        try
+        {
+            Assert.IsTrue(PathHelper.GetLastWriteTime(path).HasValue);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
     }
 
     [TestMethod]
