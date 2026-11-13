@@ -42,6 +42,24 @@ public partial class InfoPanel : UserControl
 
     public void DisplayInfo(string path)
     {
+        image.Source = null;
+
+        if (NativeMethods.VirtualItemInfo.TryParse(path, out var vInfo))
+        {
+            filename.Text = vInfo.EffectiveName;
+
+            modDate.Text = vInfo.DateModified is { } date
+                ? string.Format(TranslationHelper.Get("InfoPanel_LastModified"), date.ToString(CultureInfo.CurrentCulture))
+                : string.Empty;
+
+            totalSize.Text = vInfo.FileSize is long size ? size.ToPrettySize(2) : string.Empty;
+
+            var icon = WindowsThumbnailProvider.GetJumboIcon(vInfo.IconIndex);
+            image.Source = icon;
+            image.Opacity = icon != null ? 1 : 0;
+            return;
+        }
+
         _ = Task.Run(() =>
         {
             var scale = DisplayDeviceHelper.GetCurrentScaleFactor();
