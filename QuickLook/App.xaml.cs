@@ -133,6 +133,27 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // Hidden background mode: empty the Recycle Bin in a detached process, so the
+        // deletion keeps running after the viewer window is closed, after another file
+        // gets previewed, or after Space is pressed again.
+        // It must be handled before any instance check, tray icon or window creation.
+        if (e.Args.Any(arg => string.Equals(arg, "--empty-recycle-bin", StringComparison.OrdinalIgnoreCase)))
+        {
+            bool emptied = RecycleBinCleaner.EmptyRecycleBin(out int hresult);
+
+            try
+            {
+                ProcessHelper.WriteLog($"[RecycleBinCleaner] empty result={emptied} hresult=0x{hresult:X8}");
+            }
+            catch
+            {
+                // Logging must never change the helper's outcome.
+            }
+
+            Environment.Exit(emptied ? 0 : 1);
+            return;
+        }
+
         if (!EnsureOSVersion()
          || !EnsureFirstInstance(e.Args)
          || !EnsureFolderWritable(SettingHelper.LocalDataPath))
