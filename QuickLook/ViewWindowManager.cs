@@ -270,8 +270,8 @@ public class ViewWindowManager : IDisposable
                 Debug.WriteLine(ex);
             }
 
-            if (_materializeCts == cancellation)
-                _materializeCts = null;
+            // Only detach this worker's source: a newer worker may already own the field.
+            Interlocked.CompareExchange(ref _materializeCts, null, cancellation);
 
             if (token.IsCancellationRequested)
             {
@@ -482,8 +482,6 @@ public class ViewWindowManager : IDisposable
         if (string.IsNullOrEmpty(path))
             return;
 
-        CancelPendingMaterialization();
-
         var isDirectory = Directory.Exists(path);
         if (!isDirectory && !File.Exists(path))
             return;
@@ -501,6 +499,8 @@ public class ViewWindowManager : IDisposable
 
         if (matchedPlugin != null)
         {
+            // Only replace the pending preparation once a valid plugin preview is ready to be shown.
+            CancelPendingMaterialization();
             BeginShowNewWindow(path, matchedPlugin);
         }
     }

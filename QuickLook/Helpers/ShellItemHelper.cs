@@ -136,6 +136,14 @@ public static class ShellItemHelper
             var hasMetadata = TryGetShellItemMetadata(path,
                 out _, out var isFolder, out var knownSize, out _, out _);
 
+            // Prefer the exact byte size from the property system (PKEY_Size). The Explorer column used by
+            // TryGetShellItemMetadata is a rounded, localized display value; only the exact value can be
+            // used to detect a completed copy.
+            var exactSizeKnown = ShellItemInfo.TryGetSize(path, out var exactSize) && exactSize > 0;
+
+            if (exactSizeKnown)
+                knownSize = exactSize;
+
             if (hasMetadata && isFolder)
                 return null;
 
@@ -158,7 +166,7 @@ public static class ShellItemHelper
             // 2) Portable devices (MTP phones) cannot be resolved from their parsing name on every Windows
             //    build, but the shell namespace below "This PC" knows them. Walk the namespace along the
             //    path segments, then copy the matching item. This is the main path for phone files.
-            materialized = TryMaterializeViaShellNamespace(path, knownSize, cancellationToken, progress);
+            materialized = TryMaterializeViaShellNamespace(path, knownSize, exactSizeKnown, cancellationToken, progress);
 
             if (!string.IsNullOrEmpty(materialized))
                 return materialized;
@@ -167,7 +175,7 @@ public static class ShellItemHelper
                 return null;
 
             // 3) Last fallback: the item is the current Explorer selection; ask the shell to copy it.
-            return TryMaterializeViaExplorerSelection(path, knownSize, cancellationToken, progress);
+            return TryMaterializeViaExplorerSelection(path, knownSize, exactSizeKnown, cancellationToken, progress);
         }
         catch (Exception)
         {
@@ -181,7 +189,7 @@ public static class ShellItemHelper
     ///     then copied to a temporary file. Returns null when the walk or the copy fails.
     /// </summary>
     private static string TryMaterializeViaShellNamespace(string path, long expectedSize,
-        CancellationToken cancellationToken, Action<long, long> progress)
+        bool expectedSizeIsExact, CancellationToken cancellationToken, Action<long, long> progress)
     {
         var tempDirectory = null as string;
 
@@ -203,7 +211,10 @@ public static class ShellItemHelper
                 // Enforce the size limit inside every copy strategy, including items whose metadata was
                 // not available before this namespace walk.
                 if (expectedSize <= 0)
+                {
                     expectedSize = ParseHumanSize((string)GetDetailsString(parentFolder, targetItem, 2));
+                    expectedSizeIsExact = false;
+                }
 
                 if (expectedSize > MaxMaterializedSize)
                     return null;
@@ -240,8 +251,8 @@ public static class ShellItemHelper
 
                 string destinationFile;
 
-                if (!WaitForCopyToFinish(tempDirectory, expectedSize, cancellationToken, progress,
-                        out destinationFile))
+                if (!WaitForCopyToFinish(tempDirectory, expectedSize, expectedSizeIsExact, cancellationToken,
+                        progress, out destinationFile))
                 {
                     // The shell copy may still be writing this folder: delete it once the transfer stops
                     // instead of blocking the worker until the device is idle.
@@ -867,7 +878,7 @@ public static class ShellItemHelper
     ///     exposes the selected FolderItem and the shell can copy it into a temporary file.
     /// </summary>
     private static string TryMaterializeViaExplorerSelection(string path, long expectedSize,
-        CancellationToken cancellationToken, Action<long, long> progress)
+        bool expectedSizeIsExact, CancellationToken cancellationToken, Action<long, long> progress)
     {
         var tempDirectory = null as string;
 
@@ -941,7 +952,10 @@ public static class ShellItemHelper
                 return null;
 
             if (expectedSize <= 0)
+            {
                 expectedSize = ParseHumanSize(sourceSizeText);
+                expectedSizeIsExact = false;
+            }
 
             if (expectedSize > MaxMaterializedSize)
                 return null;
@@ -972,8 +986,8 @@ public static class ShellItemHelper
 
             var destinationFile = Path.Combine(tempDirectory, safeName);
 
-            if (!WaitForCopyToFinish(tempDirectory, expectedSize, cancellationToken, progress,
-                    out destinationFile))
+            if (!WaitForCopyToFinish(tempDirectory, expectedSize, expectedSizeIsExact, cancellationToken,
+                    progress, out destinationFile))
             {
                 ScheduleTempDirectoryCleanup(tempDirectory);
                 return null;
@@ -997,7 +1011,7 @@ public static class ShellItemHelper
     ///     Shell copy operations (Folder.CopyHere) are asynchronous; wait until the copied file exists and
     ///     its size stops growing. Bounded so a stuck device copy can never hang the viewer forever.
     /// </summary>
-    private static bool WaitForCopyToFinish(string directory, long expectedSize,
+    private static bool WaitForCopyToFinish(string directory, long expectedSize, bool expectedSizeIsExact,
         CancellationToken cancellationToken, Action<long, long> progress, out string resultFile)
     {
         resultFile = null;
@@ -1060,7 +1074,9 @@ public static class ShellItemHelper
                     {
                         stableSamples++;
 
-                        if (stableSamples >= 2) // ~500 ms: let the shell flush the last block
+                        // With the exact PKEY_Size a short flush window is enough; for the rounded display
+                        // value wait longer so a still-growing transfer is not accepted as complete.
+                        if (stableSamples >= (expectedSizeIsExact ? 2 : 8))
                             return true;
                     }
                     else
@@ -1136,7 +1152,11 @@ public static class ShellItemHelper
                             if (emptySamples >= 8) // no copy ever started; remove the empty directory
                             {
                                 TryDeleteDirectory(tempDirectory);
-                                return;
+
+                                if (!Directory.Exists(tempDirectory))
+                                    return;
+
+                                emptySamples = 0;
                             }
                         }
                         else if (size > 0 && size == lastSize)
@@ -1146,7 +1166,11 @@ public static class ShellItemHelper
                             if (stableSamples >= 8) // ~2 s without progress: the transfer is over
                             {
                                 TryDeleteDirectory(tempDirectory);
-                                return;
+
+                                if (!Directory.Exists(tempDirectory))
+                                    return;
+
+                                stableSamples = 0;
                             }
                         }
                         else
@@ -1158,7 +1182,14 @@ public static class ShellItemHelper
                     }
                     catch (Exception)
                     {
-                        return;
+                        // The shell may still hold the directory; retry until the cleanup deadline.
+                        TryDeleteDirectory(tempDirectory);
+
+                        if (!Directory.Exists(tempDirectory))
+                            return;
+
+                        Thread.Sleep(250);
+                        continue;
                     }
 
                     Thread.Sleep(250);

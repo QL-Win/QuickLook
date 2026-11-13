@@ -59,7 +59,10 @@ internal sealed class PreparingPreview : IViewer
         _panel = new InfoPanel();
         context.ViewerContent = _panel;
         _panel.SetStatusText("Preparing preview…");
-        context.IsBusy = true;
+
+        // The placeholder panel is the content itself; a busy overlay would hide it while the transfer
+        // runs. The progress is reported through the panel status text instead.
+        context.IsBusy = false;
     }
 
     /// <summary>Updates the display name once the background resolution knows it.</summary>
