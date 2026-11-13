@@ -1,4 +1,4 @@
-﻿// Copyright © 2017-2026 QL-Win Contributors
+// Copyright © 2017-2026 QL-Win Contributors
 //
 // This file is part of QuickLook program.
 //
@@ -18,7 +18,9 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.Plugin;
 using QuickLook.Plugin.HtmlViewer;
+using QuickLook.Plugin.ImageViewer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,6 +39,10 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
     protected const string _resourcePrefix = "QuickLook.Plugin.ImageViewer.Resources.";
     protected internal static readonly Dictionary<string, byte[]> _resources = [];
     protected byte[] _homePage;
+    private string _path;
+    private ImagePanel _fallbackPanel;
+
+    public ContextObject ContextObject { get; set; }
 
     public object ObjectForScripting
     {
@@ -62,10 +68,7 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
     {
         _webView = new WebView2()
         {
-            CreationProperties = new CoreWebView2CreationProperties
-            {
-                UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
-            },
+            CreationProperties = CreateCreationProperties(),
             DefaultBackgroundColor = Color.Transparent,
         };
         _webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
@@ -95,12 +98,51 @@ public class SvgImagePanel : WebpagePanel, IWebImagePanel
 
     public virtual void Preview(string path)
     {
+        _path = path;
         FallbackPath = Path.GetDirectoryName(path);
 
         ObjectForScripting ??= new ScriptHandler(path);
 
         _homePage = _resources["/svg2html.html"];
         NavigateToUri(new Uri("file://quicklook/"));
+    }
+
+    protected override void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+    {
+        base.WebView_CoreWebView2InitializationCompleted(sender, e);
+
+        if (!e.IsSuccess)
+            ShowImageMagickFallback();
+    }
+
+    private void ShowImageMagickFallback()
+    {
+        if (_fallbackPanel != null || string.IsNullOrEmpty(_path) || ContextObject == null)
+            return;
+
+        try
+        {
+            var panel = new ImagePanel(ContextObject, new MetaProvider(_path))
+            {
+                ImageUriSource = ImageHelper.FilePathToFileUrl(_path)
+            };
+
+            _fallbackPanel = panel;
+            Content = panel;
+            ContextObject.IsBusy = false;
+            ProcessHelper.WriteLog($"Fell back to ImageMagick for the SVG preview: {_path}");
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog($"Failed to render the SVG with ImageMagick: {ex}");
+        }
+    }
+
+    public override void Dispose()
+    {
+        _fallbackPanel?.Dispose();
+        _fallbackPanel = null;
+        base.Dispose();
     }
 
     protected override void WebView_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
