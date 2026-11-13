@@ -104,8 +104,28 @@ public static class RecycleBinCleaner
 
             if (!ownsMutex)
             {
-                // Another helper is already emptying the Recycle Bin.
-                return true;
+                // Another helper is already emptying the Recycle Bin. Wait for that operation to finish
+                // so this process does not report completion while the deletion is still running (the
+                // panel refreshes when this helper exits).
+                try
+                {
+                    ownsMutex = mutex.WaitOne(TimeSpan.FromMinutes(10));
+                }
+                catch (AbandonedMutexException)
+                {
+                    // The other helper terminated while emptying, so the operation is over.
+                    ownsMutex = true;
+                }
+
+                if (!ownsMutex)
+                {
+                    // The deletion is still running after the grace period: report a failure instead of
+                    // claiming that the Recycle Bin is empty.
+                    hresult = unchecked((int)0x80004005); // E_FAIL
+                    return false;
+                }
+
+                return TryGetRecycleBinInfo(out _, out var remainingItems) && remainingItems == 0;
             }
 
             // SHEmptyRecycleBin returns E_UNEXPECTED (0x8000FFFF) when the Recycle Bin is

@@ -1,0 +1,77 @@
+// Copyright © 2017-2026 QL-Win Contributors
+//
+// This file is part of QuickLook program.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using QuickLook.Common.Plugin;
+using QuickLook.Plugin.InfoPanel;
+using System.Windows;
+
+namespace QuickLook;
+
+/// <summary>
+///     Placeholder preview shown immediately while a shell-only item (for example a large file on an
+///     MTP phone) is copied to a temporary file. The copy runs on a background worker, so the UI stays
+///     responsive: pressing Space on another file or closing the window cancels the pending copy.
+/// </summary>
+internal sealed class PreparingPreview : IViewer
+{
+    private InfoPanel _panel;
+
+    public int Priority => int.MinValue;
+
+    public void Init()
+    {
+    }
+
+    public bool CanHandle(string sample)
+    {
+        return false;
+    }
+
+    public void Prepare(string path, ContextObject context)
+    {
+        context.PreferredSize = new Size { Width = 453, Height = 172 };
+        context.Title = InfoPanel.GetSafeDisplayName(path);
+        context.TitlebarOverlap = false;
+        context.TitlebarBlurVisibility = false;
+        context.TitlebarColourVisibility = false;
+        context.CanResize = false;
+        context.FullWindowDragging = true;
+    }
+
+    public void View(string path, ContextObject context)
+    {
+        _panel = new InfoPanel();
+        context.ViewerContent = _panel;
+        _panel.DisplayInfo(path);
+        _panel.SetStatusText("Preparing preview…");
+        context.IsBusy = true;
+    }
+
+    public void SetStatus(string text)
+    {
+        _panel?.SetStatusText(text);
+    }
+
+    public void Cleanup()
+    {
+        if (_panel == null)
+            return;
+
+        _panel.Stop = true;
+        _panel = null;
+    }
+}

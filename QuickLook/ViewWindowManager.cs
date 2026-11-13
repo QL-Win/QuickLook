@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
@@ -22,7 +23,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace QuickLook;
 
@@ -33,6 +36,9 @@ public class ViewWindowManager : IDisposable
     private string _invokedPath = string.Empty;
     private string _previewPath = string.Empty;
     private string _materializedTempFile;
+    private PreparingPreview _preparingPreview;
+    private CancellationTokenSource _materializeCts;
+    private long _previewRequestId;
     private ViewerWindow _viewerWindow;
 
     internal ViewWindowManager()
@@ -42,6 +48,7 @@ public class ViewWindowManager : IDisposable
 
     public void Dispose()
     {
+        CancelPendingMaterialization();
         StopFocusMonitor();
     }
 
@@ -154,113 +161,282 @@ public class ViewWindowManager : IDisposable
         if (_viewerWindow.IsVisible && path == _invokedPath)
             return;
 
-        var previewPath = path;
-        var useDefaultPlugin = false;
-        IViewer matchedPlugin = null;
-
         var isDirectory = Directory.Exists(path);
 
         if (!isDirectory && !File.Exists(path))
         {
-            if (!path.StartsWith("::", StringComparison.Ordinal)) // CLSID
+            // Shell-only item (file on an MTP device, item inside a zip folder, ...). Shell parsing names
+            // are not file system paths, so metadata is resolved first: folders and oversized items are
+            // never copied, files are prepared on a background worker.
+            var hasMetadata = ShellItemHelper.TryGetShellItemMetadata(path,
+                out _, out var shellItemIsFolder, out var shellItemSize, out _, out _);
+
+            if (!hasMetadata && !path.StartsWith("::", StringComparison.Ordinal))
+            {
+                // An unresolvable plain path (neither a file, a folder nor a shell namespace name): ignore
+                // it instead of opening the info panel for something that does not exist.
                 return;
-
-            // Shell parsing names of MTP items do not contain the file name (the last segment is an item
-            // id). A folder is shown by the info panel: its size is computed from shell metadata and
-            // nothing is copied. Files are copied to a temporary file so that the regular plugins (image,
-            // video, archive, text, ...) can preview them exactly like before.
-            var hasShellMetadata = ShellItemHelper.TryGetShellItemMetadata(path,
-                out _, out var shellItemIsFolder, out _, out _, out _);
-
-            if (hasShellMetadata && shellItemIsFolder)
-            {
-                previewPath = path;
-                useDefaultPlugin = true;
             }
-            else
+
+            if (hasMetadata && shellItemIsFolder)
             {
-                var materializedPath = ShellItemHelper.TryMaterialize(path);
-
-                if (!string.IsNullOrEmpty(materializedPath))
-                {
-                    // Extension filter settings must also protect previews coming from a device.
-                    if (!ExtensionFilterHelper.IsExtensionAllowed(materializedPath))
-                    {
-                        ShellItemHelper.TryDeleteTempFile(materializedPath);
-                        return;
-                    }
-
-                    // Some plugins (video, media info, ...) inspect the content instead of the extension,
-                    // so the plugin match can only be decided on a real local file. When no plugin can
-                    // preview it, the info panel shows the original shell item (real name/date/size);
-                    // the temporary copy is then dropped so nothing unnecessary is kept on disk.
-                    var matchedForCopy = PluginManager.GetInstance().FindMatch(materializedPath);
-
-                    if (matchedForCopy is Plugin.InfoPanel.Plugin)
-                    {
-                        ShellItemHelper.TryDeleteTempFile(materializedPath);
-                        previewPath = path;
-                        useDefaultPlugin = true;
-                    }
-                    else
-                    {
-                        matchedPlugin = matchedForCopy;
-                        previewPath = materializedPath;
-
-                        // Delete the temporary copy when the preview window closes (or after a grace
-                        // period when another preview replaces this one, see below).
-                        _materializedTempFile = previewPath;
-                        _viewerWindow.Closed += (sender, e) =>
-                        {
-                            var tempFileToDelete = _materializedTempFile;
-                            _materializedTempFile = null;
-
-                            if (!string.IsNullOrEmpty(tempFileToDelete))
-                            {
-                                _ = Task.Delay(TimeSpan.FromSeconds(5))
-                                    .ContinueWith(_ => ShellItemHelper.TryDeleteTempFile(tempFileToDelete), TaskScheduler.Default);
-                            }
-                        };
-                    }
-                }
-                else
-                {
-                    // Exact "::{GUID}" namespace roots (Recycle Bin, This PC, ...) are handled by CLSIDViewer.
-                    // Any other shell-only item that could not be copied (too large, access denied, ...) must
-                    // never be handed to a file based plugin: it cannot open such a path.
-                    previewPath = path;
-                    useDefaultPlugin = !ShellItemHelper.IsExactClsidPath(path);
-                }
+                // Folders are never copied: the info panel shows the real name/date and computes the size
+                // from shell metadata.
+                ShowPreview(path, path, useDefaultPlugin: true);
+                return;
             }
-        }
-        else if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
-        {
-            // Check extension filtering before proceeding (skip for directories)
+
+            if (shellItemSize > ShellItemHelper.MaxMaterializedSize)
+            {
+                // Too large to copy to a temporary file: show the shell metadata only.
+                ShowPreview(path, path, useDefaultPlugin: true);
+                return;
+            }
+
+            // Show the info panel immediately and copy the file on a cancellable background worker. This
+            // keeps the UI responsive for large files and lets a newer preview supersede this one.
+            ShowPreparingPreview(path);
             return;
         }
 
-        // A new preview replaces the previous one: drop the temporary copy of the replaced shell item.
-        // The previous plugin may still be finishing an asynchronous load of that file (image decoding,
-        // archive listing, ...), therefore remove it after a grace period instead of immediately.
-        var previousTempFile = _materializedTempFile;
+        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+            return;
 
-        if (!string.IsNullOrEmpty(previousTempFile))
-        {
-            _materializedTempFile = null;
-            _ = Task.Delay(TimeSpan.FromSeconds(20))
-                .ContinueWith(_ => ShellItemHelper.TryDeleteTempFile(previousTempFile), TaskScheduler.Default);
-        }
+        ShowPreview(path, path, useDefaultPlugin: false);
+    }
 
-        _invokedPath = path;
+    /// <summary>
+    ///     Shows a preview that needs no shell copy (a local file/folder, an info panel item, ...).
+    /// </summary>
+    private void ShowPreview(string invokedPath, string previewPath, bool useDefaultPlugin)
+    {
+        CancelPendingMaterialization();
+        ReleasePreviousMaterializedFile();
+
+        _invokedPath = invokedPath;
         _previewPath = previewPath;
+        _preparingPreview = null;
 
         RunFocusMonitor();
 
-        matchedPlugin ??= useDefaultPlugin
-            ? PluginManager.GetInstance().DefaultPlugin
+        var matchedPlugin = useDefaultPlugin
+            ? CreateDefaultPluginInstance()
             : PluginManager.GetInstance().FindMatch(previewPath);
 
         BeginShowNewWindow(previewPath, matchedPlugin);
+    }
+
+    /// <summary>
+    ///     Shows the info panel immediately and copies the shell item on a background STA worker. The
+    ///     copy result replaces the placeholder only when this request is still the latest one.
+    /// </summary>
+    private void ShowPreparingPreview(string shellPath)
+    {
+        CancelPendingMaterialization();
+        ReleasePreviousMaterializedFile();
+
+        var preparing = new PreparingPreview();
+
+        _preparingPreview = preparing;
+        _invokedPath = shellPath;
+        _previewPath = shellPath;
+
+        RunFocusMonitor();
+        BeginShowNewWindow(shellPath, preparing);
+
+        var requestId = Interlocked.Increment(ref _previewRequestId);
+        StartMaterialization(shellPath, requestId);
+    }
+
+    private void StartMaterialization(string shellPath, long requestId)
+    {
+        var cancellation = new CancellationTokenSource();
+        _materializeCts = cancellation;
+
+        var token = cancellation.Token;
+
+        var worker = new Thread(() =>
+        {
+            string tempFile = null;
+
+            try
+            {
+                tempFile = ShellItemHelper.TryMaterialize(shellPath, token,
+                    (copied, expected) => ReportCopyProgress(requestId, copied, expected));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            if (_materializeCts == cancellation)
+                _materializeCts = null;
+
+            if (token.IsCancellationRequested)
+            {
+                // Superseded or cancelled: the partial copy is discarded.
+                if (!string.IsNullOrEmpty(tempFile))
+                    ScheduleTempFileCleanup(tempFile);
+
+                return;
+            }
+
+            var dispatcher = Application.Current?.Dispatcher;
+
+            if (dispatcher == null)
+                return;
+
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (requestId != Interlocked.Read(ref _previewRequestId) || !_viewerWindow.IsVisible)
+                {
+                    // A newer preview was requested (or the window was closed) while this copy was running.
+                    if (!string.IsNullOrEmpty(tempFile))
+                        ScheduleTempFileCleanup(tempFile);
+
+                    return;
+                }
+
+                CompleteMaterialization(shellPath, tempFile);
+            }));
+        })
+        {
+            IsBackground = true,
+            Name = "QuickLook shell item copy"
+        };
+
+        // Shell.Application and IFileOperation expect an STA thread.
+        worker.SetApartmentState(ApartmentState.STA);
+        worker.Start();
+    }
+
+    private void CompleteMaterialization(string invokedPath, string tempFile)
+    {
+        if (string.IsNullOrEmpty(tempFile) || !File.Exists(tempFile))
+        {
+            // The copy failed (timeout, device disconnected, ...). Never hand a partial file to a plugin:
+            // show the shell metadata instead.
+            ShowPreview(invokedPath, invokedPath, useDefaultPlugin: true);
+            return;
+        }
+
+        if (!ExtensionFilterHelper.IsExtensionAllowed(tempFile))
+        {
+            ShellItemHelper.TryDeleteTempFile(tempFile);
+            ShowPreview(invokedPath, invokedPath, useDefaultPlugin: true);
+            return;
+        }
+
+        var matchedPlugin = PluginManager.GetInstance().FindMatch(tempFile);
+
+        if (matchedPlugin is Plugin.InfoPanel.Plugin)
+        {
+            // No plugin can preview this file; the info panel shows the real shell metadata, so the
+            // temporary copy is not needed at all.
+            ShellItemHelper.TryDeleteTempFile(tempFile);
+            ShowPreview(invokedPath, invokedPath, useDefaultPlugin: true);
+            return;
+        }
+
+        ReleasePreviousMaterializedFile();
+
+        _invokedPath = invokedPath;
+        _previewPath = tempFile;
+        _materializedTempFile = tempFile;
+        _preparingPreview = null;
+
+        RunFocusMonitor();
+
+        BeginShowNewWindow(tempFile, matchedPlugin);
+    }
+
+    private void ReportCopyProgress(long requestId, long copiedBytes, long expectedBytes)
+    {
+        if (requestId != Interlocked.Read(ref _previewRequestId))
+            return;
+
+        var preparing = _preparingPreview;
+
+        if (preparing == null)
+            return;
+
+        var status = expectedBytes > 0
+            ? $"Preparing preview… {copiedBytes.ToPrettySize(2)} of {expectedBytes.ToPrettySize(2)}"
+            : $"Preparing preview… {copiedBytes.ToPrettySize(2)}";
+
+        var dispatcher = Application.Current?.Dispatcher;
+
+        dispatcher?.BeginInvoke(new Action(() =>
+        {
+            if (requestId == Interlocked.Read(ref _previewRequestId)
+             && _preparingPreview == preparing
+             && _viewerWindow.IsVisible)
+            {
+                preparing.SetStatus(status);
+            }
+        }));
+    }
+
+    /// <summary>
+    ///     Cancels the shell item copy that is currently running, if any. The copy itself cannot always be
+    ///     aborted inside the shell, but its result is discarded and the temporary file is cleaned up.
+    /// </summary>
+    private void CancelPendingMaterialization()
+    {
+        // Invalidate any completion that is already queued on the dispatcher.
+        Interlocked.Increment(ref _previewRequestId);
+
+        var cancellation = _materializeCts;
+
+        if (cancellation == null)
+            return;
+
+        _materializeCts = null;
+
+        try
+        {
+            cancellation.Cancel();
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        cancellation.Dispose();
+    }
+
+    /// <summary>
+    ///     Drops the temporary copy owned by the preview that is being replaced. The previous plugin may
+    ///     still be reading that file asynchronously, so removal is deferred.
+    /// </summary>
+    private void ReleasePreviousMaterializedFile()
+    {
+        var previousTempFile = _materializedTempFile;
+        _materializedTempFile = null;
+
+        if (!string.IsNullOrEmpty(previousTempFile))
+            ScheduleTempFileCleanup(previousTempFile);
+    }
+
+    private static void ScheduleTempFileCleanup(string tempFile)
+    {
+        if (string.IsNullOrEmpty(tempFile))
+            return;
+
+        _ = Task.Delay(TimeSpan.FromSeconds(20))
+            .ContinueWith(_ => ShellItemHelper.TryDeleteTempFile(tempFile), TaskScheduler.Default);
+    }
+
+    /// <summary>
+    ///     Creates a fresh instance of the default plugin for every preview. Reusing the single instance
+    ///     stored in <see cref="PluginManager.DefaultPlugin" /> would let a closing pinned window stop the
+    ///     info panel of a newer preview.
+    /// </summary>
+    private static IViewer CreateDefaultPluginInstance()
+    {
+        var defaultPlugin = PluginManager.GetInstance().DefaultPlugin;
+
+        return defaultPlugin.GetType().CreateInstance<IViewer>();
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
@@ -270,6 +446,8 @@ public class ViewWindowManager : IDisposable
 
         if (string.IsNullOrEmpty(path))
             return;
+
+        CancelPendingMaterialization();
 
         var isDirectory = Directory.Exists(path);
         if (!isDirectory && !File.Exists(path))
@@ -296,6 +474,8 @@ public class ViewWindowManager : IDisposable
     {
         if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
             return;
+
+        CancelPendingMaterialization();
 
         // For shell-only items the preview is shown from a materialized temporary file; prefer it while
         // it still exists and fall back to the original path otherwise.
@@ -338,7 +518,7 @@ public class ViewWindowManager : IDisposable
         ProcessHelper.WriteLog(e.SourceException.ToString());
 
         if (plugin != PluginManager.GetInstance().DefaultPlugin.GetType())
-            BeginShowNewWindow(path, PluginManager.GetInstance().DefaultPlugin);
+            BeginShowNewWindow(path, CreateDefaultPluginInstance());
         else
             e.Throw();
     }
@@ -356,6 +536,8 @@ public class ViewWindowManager : IDisposable
             // which sets Pinned=true AND replaces _viewerWindow with a new instance.
             if (w.Pinned && _viewerWindow != w)
                 return;
+            CancelPendingMaterialization();
+            _preparingPreview = null;
             StopFocusMonitor();
             InitNewViewerWindow();
         };

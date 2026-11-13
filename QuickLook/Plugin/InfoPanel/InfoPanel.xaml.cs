@@ -31,6 +31,7 @@ public partial class InfoPanel : UserControl
     private const string UnknownValue = "—";
 
     private bool _stop;
+    private bool _statusOverride;
 
     public InfoPanel()
     {
@@ -41,6 +42,17 @@ public partial class InfoPanel : UserControl
     {
         set => _stop = value;
         get => _stop;
+    }
+
+    /// <summary>
+    ///     Shows a custom status line instead of the size. Used while a shell item is copied to a
+    ///     temporary file; the normal metadata updates are suppressed until this panel is replaced.
+    /// </summary>
+    public void SetStatusText(string text)
+    {
+        _statusOverride = true;
+
+        RunOnUiThread(() => { totalSize.Text = text; });
     }
 
     public void DisplayInfo(string path)
@@ -106,7 +118,7 @@ public partial class InfoPanel : UserControl
 
     private void UpdateSizeText(string path)
     {
-        if (string.IsNullOrEmpty(path))
+        if (string.IsNullOrEmpty(path) || _statusOverride)
             return;
 
         long? fileSize = null;
@@ -222,6 +234,16 @@ public partial class InfoPanel : UserControl
                 {
                     if (!Stop)
                         RunOnUiThread(() => { totalSize.Text = FormatFolderSizeText(folderSize, folderDirs, folderFiles); });
+                }
+                else if (!Stop)
+                {
+                    // The enumeration failed (device unplugged, access denied, safety limit, ...): do not
+                    // leave "Calculating size…" behind and do not present a partial total as final size.
+                    var unavailable = string.IsNullOrEmpty(shellOnlyType)
+                        ? TranslationHelper.Get("InfoPanel_SizeUnavailable", failsafe: "Size unavailable")
+                        : shellOnlyType;
+
+                    RunOnUiThread(() => { totalSize.Text = unavailable; });
                 }
 
                 return;

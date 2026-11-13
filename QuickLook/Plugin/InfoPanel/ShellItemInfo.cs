@@ -244,7 +244,12 @@ public static class ShellItemInfo
 
         try
         {
-            if (item.GetAttributes(SFGAO_FOLDER | SFGAO_STREAM, out var attributes) != 0)
+            // GetAttributes returns S_FALSE (1) when the returned attributes do not match the requested
+            // mask exactly; only a negative HRESULT is a real failure. Rejecting S_FALSE would report
+            // every folder as "not a folder".
+            var hr = item.GetAttributes(SFGAO_FOLDER | SFGAO_STREAM, out var attributes);
+
+            if (hr < 0)
                 return false;
 
             isFolder = (attributes & SFGAO_FOLDER) != 0 && (attributes & SFGAO_STREAM) == 0;
@@ -355,6 +360,9 @@ public static class ShellItemInfo
         int GetPropertyStore(uint flags, ref Guid riid, out IntPtr ppv);
 
         [PreserveSig]
+        int GetPropertyStoreWithCreateObject(uint flags, IntPtr punkCreateObject, ref Guid riid, out IntPtr ppv);
+
+        [PreserveSig]
         int GetPropertyStoreForKeys(IntPtr rgKeys, uint cKeys, uint flags, ref Guid riid, out IntPtr ppv);
 
         [PreserveSig]
@@ -386,8 +394,5 @@ public static class ShellItemInfo
 
         [PreserveSig]
         int GetBool(ref PROPERTYKEY key, out int pf);
-
-        [PreserveSig]
-        int GetIcon(ref PROPERTYKEY key, uint flags, out IntPtr phicon);
     }
 }

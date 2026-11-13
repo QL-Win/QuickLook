@@ -96,30 +96,73 @@ public static class ShellItemHelper
     /// </summary>
     public static string TryMaterialize(string path)
     {
-        if (!IsShellOnly(path))
+        return TryMaterialize(path, CancellationToken.None, null);
+    }
+
+    /// <summary>
+    ///     Cancellable, progress-aware version of <see cref="TryMaterialize(string)" />.
+    /// </summary>
+    /// <param name="path">Shell parsing name of the item.</param>
+    /// <param name="cancellationToken">Aborts the wait for the copy and discards the temporary file.</param>
+    /// <param name="progress">
+    ///     Receives the number of copied bytes and the expected size (0 when unknown) while a shell copy
+    ///     is running. Called from the worker thread.
+    /// </param>
+    /// <remarks>
+    ///     The copy itself is performed synchronously on the calling thread, therefore callers must not
+    ///     call this method from the UI thread.
+    /// </remarks>
+    public static string TryMaterialize(string path, CancellationToken cancellationToken,
+        Action<long, long> progress)
+    {
+        try
+        {
+            if (!IsShellOnly(path) || IsExactClsidPath(path))
+                return null;
+
+            // Policy checks before choosing a copy strategy. Returning null here means "do not copy this
+            // item at all", so the caller must not try another strategy: a folder or an oversized item is
+            // a deliberate rejection, not a resolution failure.
+            var hasMetadata = TryGetShellItemMetadata(path,
+                out _, out var isFolder, out var knownSize, out _, out _);
+
+            if (hasMetadata && isFolder)
+                return null;
+
+            if (knownSize > MaxMaterializedSize)
+                return null;
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            // 1) Preferred: ask the shell item directly to copy itself (works for items inside zip folders and
+            //    for shell namespaces that SHCreateItemFromParsingName can resolve).
+            var materialized = TryMaterializeViaShellItem(path, cancellationToken, progress);
+
+            if (!string.IsNullOrEmpty(materialized))
+                return materialized;
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            // 2) Portable devices (MTP phones) cannot be resolved from their parsing name on every Windows
+            //    build, but the shell namespace below "This PC" knows them. Walk the namespace along the
+            //    path segments, then copy the matching item. This is the main path for phone files.
+            materialized = TryMaterializeViaShellNamespace(path, knownSize, cancellationToken, progress);
+
+            if (!string.IsNullOrEmpty(materialized))
+                return materialized;
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            // 3) Last fallback: the item is the current Explorer selection; ask the shell to copy it.
+            return TryMaterializeViaExplorerSelection(path, knownSize, cancellationToken, progress);
+        }
+        catch (Exception)
+        {
             return null;
-
-        // Recycle Bin / This PC / ... are only addressed by an exact "::{GUID}" and are handled by CLSIDViewer.
-        if (IsExactClsidPath(path))
-            return null;
-
-        // 1) Preferred: ask the shell item directly to copy itself (works for items inside zip folders and
-        //    for shell namespaces that SHCreateItemFromParsingName can resolve).
-        var materialized = TryMaterializeViaShellItem(path);
-
-        if (!string.IsNullOrEmpty(materialized))
-            return materialized;
-
-        // 2) Portable devices (MTP phones) cannot be resolved from their parsing name on every Windows
-        //    build, but the shell namespace below "This PC" knows them. Walk the namespace along the
-        //    path segments, then copy the matching item. This is the main path for phone files.
-        materialized = TryMaterializeViaShellNamespace(path);
-
-        if (!string.IsNullOrEmpty(materialized))
-            return materialized;
-
-        // 3) Last fallback: the item is the current Explorer selection; ask the shell to copy it.
-        return TryMaterializeViaExplorerSelection(path);
+        }
     }
 
     /// <summary>
@@ -127,7 +170,8 @@ public static class ShellItemHelper
     ///     located by walking the "This PC" shell namespace along the segments of its absolute parsing name,
     ///     then copied to a temporary file. Returns null when the walk or the copy fails.
     /// </summary>
-    private static string TryMaterializeViaShellNamespace(string path)
+    private static string TryMaterializeViaShellNamespace(string path, long expectedSize,
+        CancellationToken cancellationToken, Action<long, long> progress)
     {
         var tempDirectory = null as string;
 
@@ -144,6 +188,17 @@ public static class ShellItemHelper
                 // A folder must never be copied to a temporary place: the whole content would be
                 // transferred just to show a preview. Folders are handled by the info panel instead.
                 if ((bool)targetItem.IsFolder)
+                    return null;
+
+                // Enforce the size limit inside every copy strategy, including items whose metadata was
+                // not available before this namespace walk.
+                if (expectedSize <= 0)
+                    expectedSize = ParseHumanSize((string)GetDetailsString(parentFolder, targetItem, 2));
+
+                if (expectedSize > MaxMaterializedSize)
+                    return null;
+
+                if (cancellationToken.IsCancellationRequested)
                     return null;
 
                 var safeName = MakeSafeFileName((string)targetItem.Name);
@@ -175,9 +230,12 @@ public static class ShellItemHelper
 
                 string destinationFile;
 
-                if (!WaitForCopyToFinish(tempDirectory, out destinationFile))
+                if (!WaitForCopyToFinish(tempDirectory, expectedSize, cancellationToken, progress,
+                        out destinationFile))
                 {
-                    TryDeleteDirectory(tempDirectory);
+                    // The shell copy may still be writing this folder: delete it once the transfer stops
+                    // instead of blocking the worker until the device is idle.
+                    ScheduleTempDirectoryCleanup(tempDirectory);
                     return null;
                 }
 
@@ -195,7 +253,7 @@ public static class ShellItemHelper
         catch (Exception)
         {
             if (!string.IsNullOrEmpty(tempDirectory))
-                TryDeleteDirectory(tempDirectory);
+                ScheduleTempDirectoryCleanup(tempDirectory);
 
             return null;
         }
@@ -401,8 +459,14 @@ public static class ShellItemHelper
 
                         dynamic subFolder = child.GetFolder;
 
-                        if (subFolder != null)
-                            CountShellFolder(subFolder, shouldCancel, progress, depth + 1, ref totalSize, ref fileCount, ref folderCount);
+                        if (subFolder != null
+                         && !CountShellFolder(subFolder, shouldCancel, progress, depth + 1,
+                                ref totalSize, ref fileCount, ref folderCount))
+                        {
+                            // The child enumeration failed or was cancelled: propagate an incomplete
+                            // result so callers do not present the partial total as a final size.
+                            return false;
+                        }
                     }
                     else
                     {
@@ -477,14 +541,11 @@ public static class ShellItemHelper
             if (!match.Success)
                 return -1;
 
-            var numberText = match.Groups[1].Value.Trim().Replace(",", string.Empty);
+            var numberText = match.Groups[1].Value.Trim();
             var unit = match.Groups[2].Value.ToUpperInvariant();
 
-            if (!double.TryParse(numberText, NumberStyles.Float, CultureInfo.InvariantCulture, out var value)
-             && !double.TryParse(numberText, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
-            {
+            if (!TryParseLocalizedNumber(numberText, out var value))
                 return -1;
-            }
 
             var exponent = unit.StartsWith("K") ? 1
                 : unit.StartsWith("M") ? 2
@@ -503,6 +564,41 @@ public static class ShellItemHelper
         {
             return -1;
         }
+    }
+
+    /// <summary>
+    ///     Parses a number rendered by an Explorer column while preserving the decimal separator of the
+    ///     current culture ("4,09 KB" must stay 4.09 and never become 409). Falls back to the other
+    ///     common separators only when the culture-based parse fails.
+    /// </summary>
+    private static bool TryParseLocalizedNumber(string text, out double value)
+    {
+        value = 0;
+
+        if (string.IsNullOrWhiteSpace(text))
+            return false;
+
+        const NumberStyles styles = NumberStyles.Float | NumberStyles.AllowThousands;
+
+        if (double.TryParse(text, styles, CultureInfo.CurrentCulture, out value))
+            return true;
+
+        var numberFormat = CultureInfo.CurrentCulture.NumberFormat;
+        var groupsRemoved = text.Replace(numberFormat.NumberGroupSeparator, string.Empty);
+
+        if (double.TryParse(groupsRemoved, styles, CultureInfo.CurrentCulture, out value))
+            return true;
+
+        // The column may use a decimal separator that differs from the current culture. Try both
+        // interpretations, but only when they are unambiguous.
+        var dotAsDecimal = groupsRemoved.Replace(",", string.Empty);
+
+        if (double.TryParse(dotAsDecimal, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            return true;
+
+        var commaAsDecimal = groupsRemoved.Replace(".", string.Empty).Replace(',', '.');
+
+        return double.TryParse(commaAsDecimal, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
     }
 
     private static dynamic FindPrefixItem(dynamic folder, string path)
@@ -589,16 +685,23 @@ public static class ShellItemHelper
         return null;
     }
 
-    private static string TryMaterializeViaShellItem(string path)
+    private static string TryMaterializeViaShellItem(string path, CancellationToken cancellationToken,
+        Action<long, long> progress)
     {
         var tempDirectory = null as string;
 
         try
         {
-            if (ShellItemInfo.TryGetIsFolder(path, out var isFolder) && isFolder)
+            // Only copy items that the shell positively classifies as a file/stream. When the
+            // classification fails the item must not reach IFileOperation: it may be a folder, and copying
+            // a folder would transfer its whole content.
+            if (!ShellItemInfo.TryGetIsFolder(path, out var isFolder) || isFolder)
                 return null;
 
             if (ShellItemInfo.TryGetSize(path, out var size) && size > MaxMaterializedSize)
+                return null;
+
+            if (cancellationToken.IsCancellationRequested)
                 return null;
 
             CleanupStaleTempFilesOnce();
@@ -626,9 +729,17 @@ public static class ShellItemHelper
 
             var destinationFile = Path.Combine(tempDirectory, safeName);
 
+            // IFileOperation reports completion synchronously, but it cannot be aborted: check the
+            // cancellation before and after the copy and discard the temporary file when superseded.
             if (!CopyShellItem(path, tempDirectory, safeName))
             {
                 TryDeleteDirectory(tempDirectory);
+                return null;
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                ScheduleTempDirectoryCleanup(tempDirectory);
                 return null;
             }
 
@@ -654,12 +765,11 @@ public static class ShellItemHelper
         catch (Exception)
         {
             if (!string.IsNullOrEmpty(tempDirectory))
-                TryDeleteDirectory(tempDirectory);
+                ScheduleTempDirectoryCleanup(tempDirectory);
 
             return null;
         }
     }
-
 
     /// <summary>
     ///     Fallback for shell items whose parsing name cannot be resolved by SHCreateItemFromParsingName
@@ -667,12 +777,16 @@ public static class ShellItemHelper
     ///     current Explorer selection - which is exactly the QuickLook preview flow - Shell.Application
     ///     exposes the selected FolderItem and the shell can copy it into a temporary file.
     /// </summary>
-    private static string TryMaterializeViaExplorerSelection(string path)
+    private static string TryMaterializeViaExplorerSelection(string path, long expectedSize,
+        CancellationToken cancellationToken, Action<long, long> progress)
     {
         var tempDirectory = null as string;
 
         try
         {
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
             var shellType = Type.GetTypeFromProgID("Shell.Application");
 
             if (shellType == null)
@@ -681,6 +795,7 @@ public static class ShellItemHelper
             dynamic shell = Activator.CreateInstance(shellType);
             dynamic windows = shell.Windows();
             dynamic sourceItem = null;
+            string sourceSizeText = null;
 
             var windowCount = (int)windows.Count;
 
@@ -705,6 +820,16 @@ public static class ShellItemHelper
                         if (string.Equals(candidatePath, path, StringComparison.OrdinalIgnoreCase))
                         {
                             sourceItem = candidate;
+
+                            try
+                            {
+                                sourceSizeText = (string)document.Folder.GetDetailsOf(candidate, 2);
+                            }
+                            catch (Exception)
+                            {
+                                sourceSizeText = null;
+                            }
+
                             break;
                         }
                     }
@@ -724,6 +849,15 @@ public static class ShellItemHelper
 
             // A folder must never be copied: it would recursively transfer all of its content.
             if ((bool)sourceItem.IsFolder)
+                return null;
+
+            if (expectedSize <= 0)
+                expectedSize = ParseHumanSize(sourceSizeText);
+
+            if (expectedSize > MaxMaterializedSize)
+                return null;
+
+            if (cancellationToken.IsCancellationRequested)
                 return null;
 
             string safeName = MakeSafeFileName((string)sourceItem.Name);
@@ -749,9 +883,10 @@ public static class ShellItemHelper
 
             var destinationFile = Path.Combine(tempDirectory, safeName);
 
-            if (!WaitForCopyToFinish(tempDirectory, out destinationFile))
+            if (!WaitForCopyToFinish(tempDirectory, expectedSize, cancellationToken, progress,
+                    out destinationFile))
             {
-                TryDeleteDirectory(tempDirectory);
+                ScheduleTempDirectoryCleanup(tempDirectory);
                 return null;
             }
 
@@ -763,7 +898,7 @@ public static class ShellItemHelper
         catch (Exception)
         {
             if (!string.IsNullOrEmpty(tempDirectory))
-                TryDeleteDirectory(tempDirectory);
+                ScheduleTempDirectoryCleanup(tempDirectory);
 
             return null;
         }
@@ -773,17 +908,24 @@ public static class ShellItemHelper
     ///     Shell copy operations (Folder.CopyHere) are asynchronous; wait until the copied file exists and
     ///     its size stops growing. Bounded so a stuck device copy can never hang the viewer forever.
     /// </summary>
-    private static bool WaitForCopyToFinish(string directory, out string resultFile)
+    private static bool WaitForCopyToFinish(string directory, long expectedSize,
+        CancellationToken cancellationToken, Action<long, long> progress, out string resultFile)
     {
         resultFile = null;
 
-        var timeout = TimeSpan.FromSeconds(30);
+        // Folder.CopyHere does not report completion. When the shell knows the item size, wait until the
+        // destination reaches that size; otherwise fall back to a stable-size heuristic. In both cases a
+        // timeout is a failure: a partial file must never be handed to a preview plugin.
+        var timeout = expectedSize > 0 ? TimeSpan.FromMinutes(15) : TimeSpan.FromSeconds(30);
         var stopwatch = Stopwatch.StartNew();
         long lastSize = -1;
         var stableSamples = 0;
 
         while (stopwatch.Elapsed < timeout)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return false;
+
             string[] files;
 
             try
@@ -809,15 +951,40 @@ public static class ShellItemHelper
                     size = 0;
                 }
 
-                if (size > 0 && size == lastSize)
+                if (progress != null)
+                {
+                    try
+                    {
+                        progress(size, expectedSize);
+                    }
+                    catch (Exception)
+                    {
+                        // Progress reporting must never break the copy.
+                    }
+                }
+
+                resultFile = candidate;
+
+                if (expectedSize > 0)
+                {
+                    if (size >= expectedSize)
+                    {
+                        stableSamples++;
+
+                        if (stableSamples >= 2) // ~500 ms: let the shell flush the last block
+                            return true;
+                    }
+                    else
+                    {
+                        stableSamples = 0;
+                    }
+                }
+                else if (size > 0 && size == lastSize)
                 {
                     stableSamples++;
 
-                    if (stableSamples >= 3) // ~750 ms of a stable size
-                    {
-                        resultFile = candidate;
+                    if (stableSamples >= 8) // ~2 s without any progress
                         return true;
-                    }
                 }
                 else
                 {
@@ -825,13 +992,99 @@ public static class ShellItemHelper
                 }
 
                 lastSize = size;
-                resultFile = candidate;
             }
 
             Thread.Sleep(250);
         }
 
-        return !string.IsNullOrEmpty(resultFile) && File.Exists(resultFile);
+        // The copy did not finish in time; never report the (possibly partial) destination as success.
+        resultFile = null;
+        return false;
+    }
+
+    /// <summary>
+    ///     Deletes a temporary directory after a shell copy into it has stopped writing. Folder.CopyHere
+    ///     runs asynchronously, so a cancelled or failed copy may still be using the directory; deleting it
+    ///     immediately would either fail or make the shell recreate files. Runs on a background thread.
+    /// </summary>
+    private static void ScheduleTempDirectoryCleanup(string tempDirectory)
+    {
+        if (string.IsNullOrEmpty(tempDirectory) || !IsUnderTempRoot(tempDirectory))
+            return;
+
+        try
+        {
+            var thread = new Thread(() =>
+            {
+                var deadline = DateTime.UtcNow.AddMinutes(10);
+                long lastSize = -1;
+                var stableSamples = 0;
+                var emptySamples = 0;
+
+                while (DateTime.UtcNow < deadline)
+                {
+                    try
+                    {
+                        var files = Directory.GetFiles(tempDirectory);
+                        long size = 0;
+
+                        if (files.Length > 0)
+                        {
+                            try
+                            {
+                                size = new FileInfo(files[0]).Length;
+                            }
+                            catch (Exception)
+                            {
+                                size = 0;
+                            }
+                        }
+
+                        if (files.Length == 0)
+                        {
+                            emptySamples++;
+
+                            if (emptySamples >= 8) // no copy ever started; remove the empty directory
+                            {
+                                TryDeleteDirectory(tempDirectory);
+                                return;
+                            }
+                        }
+                        else if (size > 0 && size == lastSize)
+                        {
+                            stableSamples++;
+
+                            if (stableSamples >= 8) // ~2 s without progress: the transfer is over
+                            {
+                                TryDeleteDirectory(tempDirectory);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            stableSamples = 0;
+                        }
+
+                        lastSize = size;
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+
+                    Thread.Sleep(250);
+                }
+
+                TryDeleteDirectory(tempDirectory);
+            })
+            { IsBackground = true, Name = "QuickLook shell item cleanup" };
+
+            thread.Start();
+        }
+        catch (Exception)
+        {
+            // Best effort only.
+        }
     }
 
     /// <summary>
