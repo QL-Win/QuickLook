@@ -69,104 +69,23 @@ public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
         });
     }
 
-    private Task OnEmptyRecycleBinAsync()
+    private async Task OnEmptyRecycleBinAsync()
     {
-        var domain = Assembly.GetExecutingAssembly().GetName().Name;
-
         var result = MessageBox.Show(
-            string.Format(TranslationHelper.Get("ConfirmDeleteText", domain: domain), _info.TotalCount),
-            TranslationHelper.Get("RecycleBinButton", domain: domain),
+            string.Format(TranslationHelper.Get("ConfirmDeleteText", domain: Assembly.GetExecutingAssembly().GetName().Name), _info.TotalCount),
+            TranslationHelper.Get("RecycleBinButton", domain: Assembly.GetExecutingAssembly().GetName().Name),
             MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-        if (result != MessageBoxResult.Yes)
-            return Task.CompletedTask;
-
-        // The emptying itself runs in a detached QuickLook.exe helper process, so it keeps
-        // running even when this viewer window is closed or another file gets previewed.
-        // This panel only reflects the state; it must never wait for the deletion itself.
-        emptyButton.IsEnabled = false;
-        totalSizeAndCount.Text = TranslationHelper.Get(
-            "RecycleBinEmptyingText",
-            domain: domain,
-            failsafe: "Emptying the Recycle Bin in the background...");
-
-        Process helperProcess;
-        try
+        if (result == MessageBoxResult.Yes)
         {
-            helperProcess = Process.Start(new ProcessStartInfo
+            await Task.Run(() =>
             {
-                FileName = Process.GetCurrentProcess().MainModule.FileName,
-                Arguments = "--empty-recycle-bin",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                if (RecycleBinHelper.EmptyRecycleBin())
+                {
+                    UpdateState();
+                }
             });
-
-            if (helperProcess == null)
-                throw new InvalidOperationException("The helper process could not be started.");
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-
-            MessageBox.Show(
-                "QuickLook could not start the background process to empty the Recycle Bin."
-                + Environment.NewLine + Environment.NewLine + ex.Message,
-                TranslationHelper.Get("RecycleBinButton", domain: domain),
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            emptyButton.IsEnabled = true;
-            UpdateState();
-            return Task.CompletedTask;
-        }
-
-        // Never block the UI thread. Waiting is only used to refresh the panel once the
-        // helper is done; the window (and this plugin instance) may be gone by then.
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                helperProcess.WaitForExit();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                try
-                {
-                    helperProcess.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            }
-
-            try
-            {
-                Dispatcher?.BeginInvoke(new Action(() =>
-                {
-                    try
-                    {
-                        UpdateState();
-                        emptyButton.IsEnabled = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
-                }));
-            }
-            catch (Exception ex)
-            {
-                // The viewer window may have been closed while the helper was running.
-                Debug.WriteLine(ex);
-            }
-        });
-
-        return Task.CompletedTask;
     }
 
     private void UpdateState()
@@ -250,11 +169,22 @@ internal static class RecycleBinHelper
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SHQueryRecycleBin(string pszRootPath, ref SHQUERYRBINFO pSHQueryRBInfo);
 
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern int SHEmptyRecycleBin(nint hwnd, string pszRootPath, RecycleFlags dwFlags);
+
     [DllImport("shell32.dll", CharSet = CharSet.Auto)]
     private static extern int ExtractIconEx(string lpszFile, int nIconIndex, nint[] phiconLarge, nint[] phiconSmall, int nIcons);
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool DestroyIcon(nint hIcon);
+
+    [Flags]
+    public enum RecycleFlags : uint
+    {
+        SHERB_NOCONFIRMATION = 0x00000001,
+        SHERB_NOPROGRESSUI = 0x00000002,
+        SHERB_NOSOUND = 0x00000004,
+    }
 
     public static RecycleBinInfo GetRecycleBinInfo()
     {
@@ -305,6 +235,13 @@ internal static class RecycleBinHelper
             return output;
         }
         return default;
+    }
+
+    public static bool EmptyRecycleBin(RecycleFlags flags = RecycleFlags.SHERB_NOSOUND | RecycleFlags.SHERB_NOCONFIRMATION | RecycleFlags.SHERB_NOPROGRESSUI)
+    {
+        int result = SHEmptyRecycleBin(IntPtr.Zero, null, flags);
+
+        return result == 0; // S_OK (0)
     }
 
     private static string[] GetIcons()
