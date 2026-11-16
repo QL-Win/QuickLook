@@ -37,11 +37,12 @@ using System.Windows.Threading;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
-public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
+public partial class RecycleBinPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
     private readonly ContextObject _context;
     private RecycleBinHelper.RecycleBinInfo _info;
     private ICommand _emptyRecycleBinCommand;
+    private volatile bool _disposed;
 
     // ICommand must be used so that the button can be automatically disabled
     public ICommand EmptyRecycleBinCommand =>
@@ -65,44 +66,61 @@ public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
         _ = Task.Run(() =>
         {
             UpdateState();
-            _context.IsBusy = false;
+
+            if (!_disposed)
+                _context.IsBusy = false;
         });
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _disposed = true;
     }
 
     private async Task OnEmptyRecycleBinAsync()
     {
+        if (_disposed || _info is null) return;
+
         var result = MessageBox.Show(
             string.Format(TranslationHelper.Get("ConfirmDeleteText", domain: Assembly.GetExecutingAssembly().GetName().Name), _info.TotalCount),
             TranslationHelper.Get("RecycleBinButton", domain: Assembly.GetExecutingAssembly().GetName().Name),
             MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-        if (result == MessageBoxResult.Yes)
+        if (_disposed || result != MessageBoxResult.Yes) return;
+
+        await Task.Run(() =>
         {
-            await Task.Run(() =>
+            if (RecycleBinHelper.EmptyRecycleBin())
             {
-                if (RecycleBinHelper.EmptyRecycleBin())
-                {
-                    UpdateState();
-                }
-            });
-        }
+                UpdateState();
+            }
+        });
     }
 
     private void UpdateState()
     {
-        _info = RecycleBinHelper.GetRecycleBinInfo();
+        if (_disposed) return;
+
+        var info = RecycleBinHelper.GetRecycleBinInfo();
+
+        if (_disposed || info is null) return;
+
+        _info = info;
 
         Dispatcher.BeginInvoke(() =>
         {
-            image.Source = _info.HasTrash ? _info.FullIcon : _info.EmptyIcon;
+            if (_disposed) return;
 
-            if (_info.HasTrash)
+            image.Source = info.HasTrash ? info.FullIcon : info.EmptyIcon;
+
+            if (info.HasTrash)
             {
                 totalSizeAndCount.Text = string.Format(
                     TranslationHelper.Get("RecycleBinSizeText",
                         domain: Assembly.GetExecutingAssembly().GetName().Name),
-                    _info.TotalSizeString,
-                    _info.TotalCount
+                    info.TotalSizeString,
+                    info.TotalCount
                 );
             }
             else
@@ -110,7 +128,7 @@ public partial class RecycleBinPanel : UserControl, INotifyPropertyChanged
                 totalSizeAndCount.Text = TranslationHelper.Get("RecycleBinEmptyText",
                     domain: Assembly.GetExecutingAssembly().GetName().Name);
             }
-            emptyButton.Visibility = _info.HasTrash ? Visibility.Visible : Visibility.Collapsed;
+            emptyButton.Visibility = info.HasTrash ? Visibility.Visible : Visibility.Collapsed;
         });
     }
 

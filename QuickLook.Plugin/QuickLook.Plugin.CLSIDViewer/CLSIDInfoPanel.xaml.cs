@@ -16,17 +16,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using QuickLook.Common.Plugin;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace QuickLook.Plugin.CLSIDViewer;
 
-public partial class CLSIDInfoPanel : UserControl
+public partial class CLSIDInfoPanel : UserControl, IDisposable
 {
     public CLSIDInfoPanel()
     {
         DataContext = this;
         InitializeComponent();
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        (Content as IDisposable)?.Dispose();
     }
 
     public void DisplayInfo(string path, ContextObject context)

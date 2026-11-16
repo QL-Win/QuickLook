@@ -68,6 +68,7 @@ public sealed class Plugin : IViewer
     {
         GC.SuppressFinalize(this);
 
+        _ip?.Dispose();
         _ip = null;
     }
 }

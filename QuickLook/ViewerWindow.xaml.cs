@@ -17,6 +17,7 @@
 
 using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
+using QuickLook.Common.NativeMethods;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
 using System;
@@ -24,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
@@ -82,7 +84,7 @@ public partial class ViewerWindow : Window
             // (e.g. MoveWindow, BringToFront) complete before the window is closed.
             Dispatcher.BeginInvoke(() =>
             {
-                if (IsVisible && !Pinned)
+                if (IsVisible && !Pinned && !IsForegroundOwnedBySelf())
                     Close();
             }, DispatcherPriority.ContextIdle);
         };
@@ -438,6 +440,24 @@ public partial class ViewerWindow : Window
         return Enum.TryParse(option, true, out SystembackdropType parsed)
             ? parsed
             : SystembackdropType.Auto;
+    }
+
+    /// <summary>
+    /// Whether the foreground window is this window or a dialog owned by it (e.g. MessageBox, SaveFileDialog).
+    /// </summary>
+    private bool IsForegroundOwnedBySelf()
+    {
+        var self = new WindowInteropHelper(this).Handle;
+        if (self == IntPtr.Zero)
+            return false;
+
+        for (var hwnd = User32.GetForegroundWindow(); hwnd != IntPtr.Zero; hwnd = User32.GetWindow(hwnd, User32.GW_OWNER))
+        {
+            if (hwnd == self)
+                return true;
+        }
+
+        return false;
     }
 
     private void SaveWindowSizeOnSizeChanged(object sender, SizeChangedEventArgs e)

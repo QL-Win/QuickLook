@@ -61,6 +61,9 @@ public static class User32
     public static extern nint GetForegroundWindow();
 
     [DllImport("user32.dll")]
+    public static extern nint GetWindow(nint hWnd, uint uCmd);
+
+    [DllImport("user32.dll")]
     public static extern nint GetDesktopWindow();
 
     [DllImport("user32.dll")]
@@ -214,6 +217,8 @@ public static class User32
     public const uint GA_PARENT = 1;
     public const uint GA_ROOT = 2;
     public const uint GA_ROOTOWNER = 3;
+
+    public const uint GW_OWNER = 4;
 
     public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
     public const uint WINEVENT_OUTOFCONTEXT = 0x0000;
