@@ -377,6 +377,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             var encoding = EncodingDetector.DetectFromBytes(bufferCopy);
             var text = encoding.GetString(bufferCopy);
 
+            // .env masking needs the full lines: truncation can cut off a closing quote.
+            var fullText = text;
+
             // Truncate overly long lines to prevent crashes and lag
             bool hasLongLines = TruncateLongLinesInText(ref text);
 
@@ -396,8 +399,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     ? null
                     : highlighting.SyntaxHighlighting;
 
-                // .env masking; installed before the document is shown.
-                InstallDeveloperFeatures(path, text);
+                // .env masking; installed before the document is shown (uses the text before truncation).
+                InstallDeveloperFeatures(path, fullText);
 
                 Document = doc;
 

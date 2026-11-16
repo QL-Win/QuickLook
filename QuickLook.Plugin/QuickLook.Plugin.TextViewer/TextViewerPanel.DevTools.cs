@@ -54,14 +54,14 @@ public partial class TextViewerPanel
     }
 
     /// <summary>
-    /// Installs the mask generator. Called before the document is assigned to the editor,
+    /// Installs the mask generator. <paramref name="fullText"/> is the decoded text before long lines are truncated. Called before the document is assigned to the editor,
     /// so a secret is never drawn unmasked, not even for a single frame.
     /// </summary>
-    private void InstallDeveloperFeatures(string path, string text)
+    private void InstallDeveloperFeatures(string path, string fullText)
     {
         if (_envMaskAvailable)
         {
-            _envMask = new EnvMaskGenerator(text) { IsMasked = !_envRevealed };
+            _envMask = new EnvMaskGenerator(fullText) { IsMasked = !_envRevealed };
             TextArea.TextView.ElementGenerators.Add(_envMask);
         }
     }

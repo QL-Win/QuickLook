@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using QuickLook.Common.Helpers;
 using System;
@@ -29,28 +30,40 @@ namespace QuickLook.Plugin.TextViewer.Generators;
 /// The document itself is not modified, and the mask has a constant width so it does not reveal
 /// how long a value is.
 /// </summary>
+/// <remarks>
+/// The generator must be built from the decoded text BEFORE over-long lines are truncated.
+/// Truncation can cut off the closing quote of a value, and a value whose end is not visible
+/// cannot be masked reliably. Masked ranges are stored as (line, column) instead of offsets:
+/// truncation only shortens the end of lines and keeps every line break, so line and column
+/// stay valid, and a range is clipped to the real line length when it is drawn.
+/// </remarks>
 internal sealed class EnvMaskGenerator : VisualLineElementGenerator
 {
     private const string Mask = "********";
 
     private static readonly char[] LineBreaks = ['\r', '\n'];
 
-    // Sorted, non-overlapping [start, end) document ranges. Every range lies on a single line,
-    // so a quoted value that spans several lines becomes one range per line.
-    private readonly int[] _starts;
-    private readonly int[] _ends;
+    // One entry per masked line, sorted by line number. A line has at most one masked range, and a
+    // quoted value that spans several lines becomes one range per line.
+    // Line numbers are 1-based like DocumentLine.LineNumber, columns are 0-based [start, end).
+    private readonly int[] _lines;
+    private readonly int[] _startColumns;
+    private readonly int[] _endColumns;
 
     /// <summary>When false the real values are shown.</summary>
     public bool IsMasked { get; set; } = true;
 
-    /// <param name="text">The exact text that is shown in the editor (offsets must match the document).</param>
+    /// <param name="text">The decoded file text, before any line truncation.</param>
     public EnvMaskGenerator(string text)
     {
+        var lines = new List<int>();
         var starts = new List<int>();
         var ends = new List<int>();
-        FindValueRanges(text ?? string.Empty, starts, ends);
-        _starts = starts.ToArray();
-        _ends = ends.ToArray();
+        FindValueRanges(text ?? string.Empty, lines, starts, ends);
+
+        _lines = lines.ToArray();
+        _startColumns = starts.ToArray();
+        _endColumns = ends.ToArray();
     }
 
     /// <summary>
@@ -80,56 +93,64 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
 
     public override int GetFirstInterestedOffset(int startOffset)
     {
-        if (!IsMasked)
+        if (!IsMasked || _lines.Length == 0)
             return -1;
 
-        int index = FirstRangeEndingAfter(startOffset);
-        if (index < 0)
-            return -1;
+        // A visual line normally is one document line, but can be several when lines are folded.
+        int limit = CurrentContext.VisualLine.LastDocumentLine.EndOffset;
 
-        int offset = Math.Max(_starts[index], startOffset);
+        for (DocumentLine line = CurrentContext.Document.GetLineByOffset(startOffset);
+             line != null && line.Offset <= limit;
+             line = line.NextLine)
+        {
+            if (TryGetRange(line, out int start, out int end) && end > startOffset)
+                return Math.Max(start, startOffset);
+        }
 
-        // Only react to ranges on the line that is being built.
-        return offset < CurrentContext.VisualLine.LastDocumentLine.EndOffset ? offset : -1;
+        return -1;
     }
 
     public override VisualLineElement ConstructElement(int offset)
     {
-        int index = FirstRangeEndingAfter(offset);
-        if (index < 0 || _starts[index] > offset)
+        DocumentLine line = CurrentContext.Document.GetLineByOffset(offset);
+
+        if (!TryGetRange(line, out int start, out int end) || offset < start || offset >= end)
             return null;
 
-        return new FormattedTextElement(Mask, _ends[index] - offset);
+        return new FormattedTextElement(Mask, end - offset);
     }
 
-    /// <summary>Index of the first range whose end lies after <paramref name="offset"/>, or -1.</summary>
-    private int FirstRangeEndingAfter(int offset)
+    /// <summary>
+    /// Document offsets of the masked range on a line, clipped to the text that is really there
+    /// (a truncated line is shorter than the line the range was found on).
+    /// </summary>
+    private bool TryGetRange(DocumentLine line, out int start, out int end)
     {
-        int low = 0;
-        int high = _ends.Length;
+        start = end = 0;
 
-        while (low < high)
-        {
-            int mid = (low + high) >> 1;
-            if (_ends[mid] > offset)
-                high = mid;
-            else
-                low = mid + 1;
-        }
+        int index = Array.BinarySearch(_lines, line.LineNumber);
+        if (index < 0)
+            return false;
 
-        return low < _ends.Length ? low : -1;
+        start = line.Offset + _startColumns[index];
+        end = line.Offset + Math.Min(_endColumns[index], line.Length);
+        return end > start;
     }
 
-    private static void FindValueRanges(string text, List<int> starts, List<int> ends)
+    private static void FindValueRanges(string text, List<int> lines, List<int> starts, List<int> ends)
     {
         int position = 0;
+        int lineNumber = 1;
 
         while (position < text.Length)
         {
             int lineEnd = IndexOfLineBreak(text, position);
             int nextLine = SkipLineBreak(text, lineEnd);
 
-            int p = SkipBlanks(text, position, lineEnd);
+            // A UTF-8 BOM is decoded to U+FEFF. It stays part of the text (so columns match the
+            // document) but is not part of the first key.
+            int p = position == 0 && text[0] == '\uFEFF' ? 1 : position;
+            p = SkipBlanks(text, p, lineEnd);
 
             // Blank lines and comments have nothing to mask.
             if (p < lineEnd && text[p] != '#')
@@ -147,92 +168,144 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
                     if (p < lineEnd && text[p] == '=')
                     {
                         int valueStart = SkipBlanks(text, p + 1, lineEnd);
-                        nextLine = AddValueRanges(text, valueStart, lineEnd, nextLine, starts, ends);
+
+                        // KEY= (empty value): nothing to hide.
+                        if (valueStart < lineEnd)
+                        {
+                            int valueEnd = ScanValue(text, valueStart);
+                            AddRanges(text, valueStart, valueEnd, lineNumber, position, lines, starts, ends);
+
+                            // Resume after the line that holds the end of the value.
+                            nextLine = SkipLineBreak(text, IndexOfLineBreak(text, valueEnd));
+                        }
                     }
                 }
             }
 
+            lineNumber += CountLineBreaks(text, position, nextLine);
             position = nextLine;
         }
     }
 
     /// <summary>
-    /// Records the range(s) of one value and returns the offset where parsing should continue.
+    /// Returns the end (exclusive) of the value that starts at <paramref name="start"/>.
+    /// A value is a sequence of quoted and unquoted segments, like a shell word (see "Quoting" in
+    /// the POSIX Shell Command Language): <c>"prefix"secret</c> is one value, and a backslash
+    /// escapes the next character, so an escaped space does not end the value or start a comment.
+    /// It ends at the end of the line, or at unescaped whitespace followed by '#' (a comment).
+    /// To be safe, anything that may belong to the value is masked.
     /// </summary>
-    private static int AddValueRanges(string text, int valueStart, int lineEnd, int nextLine,
-        List<int> starts, List<int> ends)
+    private static int ScanValue(string text, int start)
     {
-        // KEY= (empty value): nothing to hide.
-        if (valueStart >= lineEnd)
-            return nextLine;
+        int i = start;
+        int end = start;
 
-        char first = text[valueStart];
+        // True at the start of the value and right after a closing quote.
+        bool afterQuote = true;
 
-        if (first == '"' || first == '\'' || first == '`')
+        while (i < text.Length)
         {
-            int close = FindClosingQuote(text, valueStart + 1, first);
+            char c = text[i];
 
-            if (close >= 0)
-            {
-                // The quoted value may span several lines (private keys, certificates...).
-                AddRange(text, valueStart, close + 1, starts, ends);
-
-                // Resume after the line that holds the closing quote.
-                return SkipLineBreak(text, IndexOfLineBreak(text, close));
-            }
-
-            // No closing quote anywhere: hide the rest of this line, keep parsing the next one.
-            AddRange(text, valueStart, TrimEnd(text, valueStart, lineEnd), starts, ends);
-            return nextLine;
-        }
-
-        // Unquoted value: ends at the line end or at an inline comment (whitespace followed by '#').
-        int end = lineEnd;
-        for (int i = valueStart + 1; i < lineEnd; i++)
-        {
-            if (text[i] == '#' && (text[i - 1] == ' ' || text[i - 1] == '\t'))
-            {
-                end = i;
+            if (c == '\r' || c == '\n')
                 break;
+
+            if (c == '"' || c == '\'' || c == '`')
+            {
+                // A quote that opens the value or follows another quoted segment may continue over
+                // several lines (private keys, certificates...). In the middle of an unquoted word
+                // it has to close on the same line, so a lone apostrophe (O'Brien) is just a character.
+                int limit = afterQuote ? text.Length : IndexOfLineBreak(text, i);
+                int close = FindClosingQuote(text, i + 1, c, limit);
+
+                if (close >= 0)
+                {
+                    i = close + 1;
+                    end = i;
+                    afterQuote = true;
+                    continue;
+                }
+
+                // Never closed: hide the rest of this line.
+                if (afterQuote)
+                    return IndexOfLineBreak(text, i);
+
+                i++;
+                end = i;
+                continue;
+            }
+
+            afterQuote = false;
+
+            if (c == '\\')
+            {
+                // The escaped character (even a space) belongs to the value.
+                i += i + 1 < text.Length && text[i + 1] != '\r' && text[i + 1] != '\n' ? 2 : 1;
+                end = i;
+            }
+            else if (c == ' ' || c == '\t')
+            {
+                int next = SkipBlanks(text, i, text.Length);
+
+                // Unescaped whitespace followed by '#' starts a comment.
+                if (next < text.Length && text[next] == '#')
+                    break;
+
+                // Whitespace inside the value; it only counts when more of the value follows.
+                i = next;
+            }
+            else
+            {
+                i++;
+                end = i;
             }
         }
 
-        end = TrimEnd(text, valueStart, end);
-        if (end > valueStart)
-            AddRange(text, valueStart, end, starts, ends);
-
-        return nextLine;
+        return end;
     }
 
-    /// <summary>Adds [start, end) split at line breaks, so that no range crosses a line.</summary>
-    private static void AddRange(string text, int start, int end, List<int> starts, List<int> ends)
+    /// <summary>
+    /// Records [start, end) split at line breaks, so that no range crosses a line.
+    /// <paramref name="lineNumber"/> and <paramref name="lineStart"/> belong to the line that holds <paramref name="start"/>.
+    /// </summary>
+    private static void AddRanges(string text, int start, int end, int lineNumber, int lineStart,
+        List<int> lines, List<int> starts, List<int> ends)
     {
-        int segmentStart = start;
+        int segment = start;
 
         for (int i = start; i < end; i++)
         {
-            if (text[i] != '\r' && text[i] != '\n')
+            char c = text[i];
+            if (c != '\r' && c != '\n')
                 continue;
 
-            if (i > segmentStart)
+            if (i > segment)
             {
-                starts.Add(segmentStart);
-                ends.Add(i);
+                lines.Add(lineNumber);
+                starts.Add(segment - lineStart);
+                ends.Add(i - lineStart);
             }
 
-            segmentStart = i + 1;
+            if (c == '\r' && i + 1 < end && text[i + 1] == '\n')
+                i++;
+
+            lineNumber++;
+            lineStart = i + 1;
+            segment = lineStart;
         }
 
-        if (end > segmentStart)
+        if (end > segment)
         {
-            starts.Add(segmentStart);
-            ends.Add(end);
+            lines.Add(lineNumber);
+            starts.Add(segment - lineStart);
+            ends.Add(end - lineStart);
         }
     }
 
-    private static int FindClosingQuote(string text, int from, char quote)
+    /// <summary>Index of the closing quote before <paramref name="limit"/>, or -1.</summary>
+    private static int FindClosingQuote(string text, int from, char quote, int limit)
     {
-        for (int i = from; i < text.Length; i++)
+        for (int i = from; i < limit; i++)
         {
             // Double quoted values may contain \" escapes.
             if (quote == '"' && text[i] == '\\')
@@ -246,6 +319,29 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
         }
 
         return -1;
+    }
+
+    /// <summary>Number of line breaks in [from, to); "\r\n" counts once, like in the editor.</summary>
+    private static int CountLineBreaks(string text, int from, int to)
+    {
+        int count = 0;
+
+        for (int i = from; i < to; i++)
+        {
+            if (text[i] == '\r')
+            {
+                if (i + 1 < to && text[i + 1] == '\n')
+                    i++;
+
+                count++;
+            }
+            else if (text[i] == '\n')
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     private static int IndexOfLineBreak(string text, int from)
@@ -286,14 +382,6 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
         }
 
         return p;
-    }
-
-    private static int TrimEnd(string text, int start, int end)
-    {
-        while (end > start && (text[end - 1] == ' ' || text[end - 1] == '\t'))
-            end--;
-
-        return end;
     }
 
     private static bool IsKeyChar(char c)
