@@ -204,6 +204,12 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
         // True at the start of the value and right after a closing quote.
         bool afterQuote = true;
 
+        // End of the line that holds the scan position, and the start of the next assignment after
+        // it. Both are found on first use and reused while the scan stays on that line, so a line
+        // with many quotes is not rescanned for each of them.
+        int lineEnd = -1;
+        int nextAssignment = -1;
+
         while (i < text.Length)
         {
             char c = text[i];
@@ -217,7 +223,22 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
                 // also after an unquoted prefix: TOKEN=prefix"first\nsecret". In the middle of a
                 // word, though, a quote is usually just a character (NAME=O'Brien), so it must not
                 // pair with a quote that belongs to the next assignment: the search stops there.
-                int limit = afterQuote ? text.Length : IndexOfNextAssignment(text, i);
+                int limit = text.Length;
+
+                if (!afterQuote)
+                {
+                    if (i > lineEnd)
+                    {
+                        lineEnd = IndexOfLineBreak(text, i);
+                        nextAssignment = -1;
+                    }
+
+                    if (nextAssignment < 0)
+                        nextAssignment = IndexOfNextAssignment(text, lineEnd);
+
+                    limit = nextAssignment;
+                }
+
                 int close = FindClosingQuote(text, i + 1, c, limit);
 
                 if (close >= 0)
@@ -310,10 +331,10 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
         }
     }
 
-    /// <summary>Start of the first line after the one holding <paramref name="from"/> that begins a KEY=value assignment, or the end of the text.</summary>
-    private static int IndexOfNextAssignment(string text, int from)
+    /// <summary>Start of the first line after the line that ends at <paramref name="currentLineEnd"/> and begins a KEY=value assignment, or the end of the text.</summary>
+    private static int IndexOfNextAssignment(string text, int currentLineEnd)
     {
-        int position = SkipLineBreak(text, IndexOfLineBreak(text, from));
+        int position = SkipLineBreak(text, currentLineEnd);
 
         while (position < text.Length)
         {
