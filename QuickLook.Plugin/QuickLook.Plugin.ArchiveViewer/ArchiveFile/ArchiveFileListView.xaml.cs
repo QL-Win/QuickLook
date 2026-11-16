@@ -23,6 +23,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
@@ -40,6 +42,7 @@ public partial class ArchiveFileListView : UserControl, IDisposable
     public ArchiveFileListView()
     {
         InitializeComponent();
+        fileList.ExpansionRequested = SetExpanded;
     }
 
     // Exposed to the ListBox via ElementName binding (no ambient DataContext required).
@@ -51,6 +54,8 @@ public partial class ArchiveFileListView : UserControl, IDisposable
             return;
 
         _disposed = true;
+        fileList.ExpansionRequested = null;
+        fileList.ResetAutomationPeers();
         _rowCache.Clear();
         _rows.ReplaceAll([]);
         IconManager.ClearCache();
@@ -64,6 +69,7 @@ public partial class ArchiveFileListView : UserControl, IDisposable
 
         _rowCache.Clear();
         var entries = context as IEnumerable<ArchiveFileEntry>;
+        fileList.ResetAutomationPeers();
         if (entries == null)
         {
             _rows.ReplaceAll([]);
@@ -116,14 +122,25 @@ public partial class ArchiveFileListView : UserControl, IDisposable
 
     private void ToggleFolder(object sender, RoutedEventArgs e)
     {
-        if (_disposed || !(sender is Button button) || !(button.DataContext is ArchiveFileRow row)
-            || !row.HasChildren)
+        if (!(sender is Button button) || !(button.DataContext is ArchiveFileRow row))
+            return;
+
+        SetExpanded(row, !row.IsExpanded);
+        SelectRow(row, true);
+    }
+
+    private void SetExpanded(ArchiveFileRow row, bool expanded)
+    {
+        if (_disposed || !row.HasChildren || row.IsExpanded == expanded)
             return;
 
         var index = _rows.IndexOf(row);
         if (index < 0)
             return;
 
+        // Reset invalidates ListBox selection. Preserve it unless collapsing its ancestor.
+        var selected = fileList.SelectedItem as ArchiveFileRow;
+        var restoreFocus = fileList.IsKeyboardFocusWithin;
         if (row.IsExpanded)
         {
             // All descendants occupy a contiguous range in the flattened view.
@@ -132,6 +149,8 @@ public partial class ArchiveFileListView : UserControl, IDisposable
                 end++;
 
             row.IsExpanded = false;
+            if (selected != null && _rows.IndexOf(selected) > index && _rows.IndexOf(selected) < end)
+                selected = row;
             _rows.RemoveRange(index + 1, end - index - 1);
         }
         else
@@ -143,7 +162,104 @@ public partial class ArchiveFileListView : UserControl, IDisposable
 
         // A Reset avoids thousands of change notifications; keep the clicked row
         // reachable if the virtualizing panel rebuilt its realized item containers.
+        SelectRow(selected ?? row, restoreFocus);
+        fileList.RaiseExpansionChanged(row, !expanded);
+    }
+
+    private void SelectRow(ArchiveFileRow row, bool restoreFocus = false)
+    {
+        fileList.SelectedItem = row;
         fileList.ScrollIntoView(row);
+        // A recycled container can disappear during Reset. Restore focus only if
+        // the user was already navigating here; automation must not steal focus.
+        if (restoreFocus || fileList.IsKeyboardFocusWithin)
+        {
+            fileList.UpdateLayout();
+            (fileList.ItemContainerGenerator.ContainerFromItem(row) as ListBoxItem)?.Focus();
+        }
+    }
+
+    private void SynchronizeHeaders(object sender, ScrollChangedEventArgs e)
+    {
+        if (e.HorizontalChange != 0)
+            columnHeaders.ScrollToHorizontalOffset(e.HorizontalOffset);
+    }
+
+    private void ToggleRowByDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (_disposed || e.ChangedButton != MouseButton.Left)
+            return;
+
+        var source = e.OriginalSource as DependencyObject;
+        while (source != null && source != fileList)
+        {
+            // The expander already handles each click; do not toggle a third time.
+            if (source is Button)
+                return;
+            if (source is ListBoxItem item && item.Content is ArchiveFileRow row)
+            {
+                SetExpanded(row, !row.IsExpanded);
+                SelectRow(row, true);
+                e.Handled = true;
+                return;
+            }
+
+            source = source is FrameworkContentElement content ? content.Parent :
+                source is Visual ? VisualTreeHelper.GetParent(source) : LogicalTreeHelper.GetParent(source);
+        }
+    }
+
+    private void NavigateTree(object sender, KeyEventArgs e)
+    {
+        if (_disposed || Keyboard.Modifiers != ModifierKeys.None || _rows.Count == 0)
+            return;
+
+        var key = e.Key;
+        if (FlowDirection == FlowDirection.RightToLeft)
+        {
+            if (key == Key.Left) key = Key.Right;
+            else if (key == Key.Right) key = Key.Left;
+        }
+
+        var row = fileList.SelectedItem as ArchiveFileRow;
+        var index = row == null ? -1 : _rows.IndexOf(row);
+        switch (key)
+        {
+            case Key.Down:
+                SelectRow(_rows[Math.Min(index + 1, _rows.Count - 1)]);
+                break;
+            case Key.Up:
+                SelectRow(_rows[Math.Max(index - 1, 0)]);
+                break;
+            case Key.Home:
+                SelectRow(_rows[0]);
+                break;
+            case Key.End:
+                SelectRow(_rows[_rows.Count - 1]);
+                break;
+            case Key.Right:
+            case Key.Add:
+                if (row == null) SelectRow(_rows[0]);
+                else if (!row.IsExpanded) SetExpanded(row, true);
+                else if (key == Key.Right && index + 1 < _rows.Count && _rows[index + 1].Depth > row.Depth)
+                    SelectRow(_rows[index + 1]);
+                break;
+            case Key.Left:
+            case Key.Subtract:
+                if (row == null) SelectRow(_rows[0]);
+                else if (row.IsExpanded) SetExpanded(row, false);
+                else if (key == Key.Left)
+                    for (var i = index - 1; i >= 0; i--)
+                        if (_rows[i].Depth < row.Depth)
+                        {
+                            SelectRow(_rows[i]);
+                            break;
+                        }
+                break;
+            default:
+                return;
+        }
+        e.Handled = true;
     }
 }
 

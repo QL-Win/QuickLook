@@ -30,10 +30,14 @@ jobs:
       with:
         submodules: recursive
         fetch-depth: 0
-        ref: master
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v3
+
+    - name: Set up .NET SDK for archive regression tests
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -44,6 +48,14 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:BuildInParallel=true /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Test archive view interaction and virtualization
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: pwsh
+      run: |
+        $solutionDir = (Get-Location).Path + '\'
+        dotnet run --project ./Tests/ArchiveViewer.Regression/ArchiveViewer.Regression.csproj --configuration Release -p:Platform=AnyCPU -p:SolutionDir=$solutionDir
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     # upload msi and zip artifacts so the publish job below can download and then update latest release via Linux
     - uses: actions/upload-artifact@v6
