@@ -196,6 +196,11 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 TextArea.LeftMargins.OfType<System.Windows.Shapes.Line>().FirstOrDefault()?.Stroke = Brushes.Transparent;
                 SettingHelper.Set("ShowLineNumbers", ShowLineNumbers, "QuickLook.Plugin.TextViewer");
             }
+            else if (Keyboard.IsKeyDown(Key.M))
+            {
+                // Hide / reveal the values of an .env file (no effect on other files).
+                ToggleEnvMask();
+            }
         }
     }
 
@@ -330,6 +335,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public void LoadFileAsync(string path, ContextObject context)
     {
+        PrepareDeveloperFeatures(path);
+
         _ = Task.Run(() =>
         {
             const int maxLength = 5 * 1024 * 1024;
@@ -370,6 +377,9 @@ public partial class TextViewerPanel : TextEditor, IDisposable
             var encoding = EncodingDetector.DetectFromBytes(bufferCopy);
             var text = encoding.GetString(bufferCopy);
 
+            // .env masking needs the full lines: truncation can cut off a closing quote.
+            var fullText = text;
+
             // Truncate overly long lines to prevent crashes and lag
             bool hasLongLines = TruncateLongLinesInText(ref text);
 
@@ -388,6 +398,10 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
                     ? null
                     : highlighting.SyntaxHighlighting;
+
+                // .env masking; installed before the document is shown (uses the text before truncation).
+                InstallDeveloperFeatures(path, fullText);
+
                 Document = doc;
 
                 if (SyntaxHighlighting is ICustomHighlightingDefinition custom)

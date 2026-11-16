@@ -93,7 +93,9 @@ public partial class Plugin : IViewer, IMoreMenu
         {
             _tvp = new TextViewerPanel();
             _tvp.LoadFileAsync(path, context);
-            context.ViewerContent = _tvp;
+
+            // For .env files this adds an eye button (show / hide values) in the top right corner.
+            context.ViewerContent = _tvp.WrapWithEnvToggle();
         }
         context.Title = Path.GetFileName(path);
     }
