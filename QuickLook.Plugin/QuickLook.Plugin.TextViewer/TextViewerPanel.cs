@@ -196,6 +196,11 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 TextArea.LeftMargins.OfType<System.Windows.Shapes.Line>().FirstOrDefault()?.Stroke = Brushes.Transparent;
                 SettingHelper.Set("ShowLineNumbers", ShowLineNumbers, "QuickLook.Plugin.TextViewer");
             }
+            else if (Keyboard.IsKeyDown(Key.M))
+            {
+                // Hide / reveal the values of an .env file (no effect on other files).
+                ToggleEnvMask();
+            }
         }
     }
 
@@ -330,6 +335,8 @@ public partial class TextViewerPanel : TextEditor, IDisposable
 
     public void LoadFileAsync(string path, ContextObject context)
     {
+        PrepareDeveloperFeatures(path);
+
         _ = Task.Run(() =>
         {
             const int maxLength = 5 * 1024 * 1024;
@@ -388,6 +395,10 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                 SyntaxHighlighting = bufferCopy.Length > maxHighlightingLength
                     ? null
                     : highlighting.SyntaxHighlighting;
+
+                // Color swatches and .env masking; installed before the document is shown.
+                InstallDeveloperFeatures(path, text);
+
                 Document = doc;
 
                 if (SyntaxHighlighting is ICustomHighlightingDefinition custom)
