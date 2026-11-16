@@ -191,7 +191,8 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
     /// Returns the end (exclusive) of the value that starts at <paramref name="start"/>.
     /// A value is a sequence of quoted and unquoted segments, like a shell word (see "Quoting" in
     /// the POSIX Shell Command Language): <c>"prefix"secret</c> is one value, and a backslash
-    /// escapes the next character, so an escaped space does not end the value or start a comment.
+    /// escapes the next character, so an escaped space does not end the value or start a comment, and
+    /// an escaped line break continues the value on the next line.
     /// It ends at the end of the line, or at unescaped whitespace followed by '#' (a comment).
     /// To be safe, anything that may belong to the value is masked.
     /// </summary>
@@ -212,11 +213,10 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
 
             if (c == '"' || c == '\'' || c == '`')
             {
-                // A quote that opens the value or follows another quoted segment may continue over
-                // several lines (private keys, certificates...). In the middle of an unquoted word
-                // it has to close on the same line, so a lone apostrophe (O'Brien) is just a character.
-                int limit = afterQuote ? text.Length : IndexOfLineBreak(text, i);
-                int close = FindClosingQuote(text, i + 1, c, limit);
+                // A quoted segment may continue over several lines (private keys, certificates...),
+                // also after an unquoted prefix: TOKEN=prefix"first\nsecret". A quote that never
+                // closes (O'Brien) is just a character.
+                int close = FindClosingQuote(text, i + 1, c, text.Length);
 
                 if (close >= 0)
                 {
@@ -226,7 +226,8 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
                     continue;
                 }
 
-                // Never closed: hide the rest of this line.
+                // Never closed. At the start of a value hide the rest of the line, otherwise
+                // treat the quote as an ordinary character.
                 if (afterQuote)
                     return IndexOfLineBreak(text, i);
 
@@ -240,7 +241,12 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
             if (c == '\\')
             {
                 // The escaped character (even a space) belongs to the value.
-                i += i + 1 < text.Length && text[i + 1] != '\r' && text[i + 1] != '\n' ? 2 : 1;
+                // A backslash before a line break continues the value on the next line.
+                if (i + 1 < text.Length && text[i + 1] == '\r' && i + 2 < text.Length && text[i + 2] == '\n')
+                    i += 3;
+                else
+                    i += i + 1 < text.Length ? 2 : 1;
+
                 end = i;
             }
             else if (c == ' ' || c == '\t')
