@@ -96,9 +96,13 @@ public class MarkdownPanel : WebpagePanel
 
         var tocShortcut = SettingHelper.Get("ToggleTocKey", "Ctrl+Shift+L", "QuickLook.Plugin.MarkdownViewer");
 
-        var html = template.Replace("{{content}}", content)
-                           .Replace("{{rtl}}", isRtl ? "rtl" : "ltr")
-                           .Replace("{{tocShortcut}}", tocShortcut);
+        // Base64 keeps the source intact through HTML parsing (entities, newlines,
+        // and literal closing textarea tags would otherwise be altered or truncated)
+        var contentBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(content));
+
+        var html = template.Replace("{{rtl}}", isRtl ? "rtl" : "ltr")
+                           .Replace("{{tocShortcut}}", tocShortcut)
+                           .Replace("{{contentBase64}}", contentBase64);
 
         return html;
     }
