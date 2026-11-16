@@ -214,9 +214,11 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
             if (c == '"' || c == '\'' || c == '`')
             {
                 // A quoted segment may continue over several lines (private keys, certificates...),
-                // also after an unquoted prefix: TOKEN=prefix"first\nsecret". A quote that never
-                // closes (O'Brien) is just a character.
-                int close = FindClosingQuote(text, i + 1, c, text.Length);
+                // also after an unquoted prefix: TOKEN=prefix"first\nsecret". In the middle of a
+                // word, though, a quote is usually just a character (NAME=O'Brien), so it must not
+                // pair with a quote that belongs to the next assignment: the search stops there.
+                int limit = afterQuote ? text.Length : IndexOfNextAssignment(text, i);
+                int close = FindClosingQuote(text, i + 1, c, limit);
 
                 if (close >= 0)
                 {
@@ -306,6 +308,39 @@ internal sealed class EnvMaskGenerator : VisualLineElementGenerator
             starts.Add(segment - lineStart);
             ends.Add(end - lineStart);
         }
+    }
+
+    /// <summary>Start of the first line after the one holding <paramref name="from"/> that begins a KEY=value assignment, or the end of the text.</summary>
+    private static int IndexOfNextAssignment(string text, int from)
+    {
+        int position = SkipLineBreak(text, IndexOfLineBreak(text, from));
+
+        while (position < text.Length)
+        {
+            int lineEnd = IndexOfLineBreak(text, position);
+            int p = SkipBlanks(text, position, lineEnd);
+
+            if (p < lineEnd && text[p] != '#')
+            {
+                p = SkipExport(text, p, lineEnd);
+
+                int keyStart = p;
+                while (p < lineEnd && IsKeyChar(text[p]))
+                    p++;
+
+                if (p > keyStart)
+                {
+                    p = SkipBlanks(text, p, lineEnd);
+
+                    if (p < lineEnd && text[p] == '=')
+                        return position;
+                }
+            }
+
+            position = SkipLineBreak(text, lineEnd);
+        }
+
+        return text.Length;
     }
 
     /// <summary>Index of the closing quote before <paramref name="limit"/>, or -1.</summary>
