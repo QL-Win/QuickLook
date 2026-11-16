@@ -396,7 +396,7 @@ public partial class TextViewerPanel : TextEditor, IDisposable
                     ? null
                     : highlighting.SyntaxHighlighting;
 
-                // Color swatches and .env masking; installed before the document is shown.
+                // .env masking; installed before the document is shown.
                 InstallDeveloperFeatures(path, text);
 
                 Document = doc;
