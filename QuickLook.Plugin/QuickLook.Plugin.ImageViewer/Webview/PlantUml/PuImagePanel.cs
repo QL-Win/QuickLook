@@ -17,7 +17,6 @@
 
 using Microsoft.Web.WebView2.Core;
 using QuickLook.Common.Helpers;
-using QuickLook.Plugin.HtmlViewer;
 using QuickLook.Plugin.ImageViewer.Webview.Svg;
 using System;
 using System.IO;
@@ -31,30 +30,6 @@ namespace QuickLook.Plugin.ImageViewer.Webview.PlantUml;
 public class PuImagePanel : SvgImagePanel
 {
     private string _puContent;
-
-    public PuImagePanel()
-    {
-        if (OSThemeHelper.AppsUseDarkTheme())
-        {
-            // Invoke using reflection: WebView2.CreationProperties.AdditionalBrowserArguments
-            // This approach allows the library to avoid direct dependency on WebView2
-            if (typeof(WebpagePanel).GetField("_webView", BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo fieldInfo)
-            {
-                object webView2 = fieldInfo.GetValue(this);
-
-                if (webView2?.GetType().GetProperty("CreationProperties", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo creationPropertiesProperty)
-                {
-                    object creationProperties = creationPropertiesProperty.GetValue(webView2);
-
-                    if (creationProperties?.GetType().GetProperty("AdditionalBrowserArguments", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo additionalBrowserArgumentsProperty)
-                    {
-                        string additionalBrowserArguments = (additionalBrowserArgumentsProperty.GetValue(creationProperties) as string) ?? string.Empty;
-                        additionalBrowserArgumentsProperty.SetValue(creationProperties, additionalBrowserArguments + "--enable-features=WebContentsForceDark");
-                    }
-                }
-            }
-        }
-    }
 
     public override void Preview(string path)
     {
@@ -77,7 +52,7 @@ public class PuImagePanel : SvgImagePanel
                 string deniedMsg = TranslationHelper.Get("PU_OnlineDeniedMessage", translationFile, failsafe:
                     "Network access was denied. PlantUML preview requires an internet connection.");
                 NavigateToHtml(
-                    $"<html><body style='font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#555'>" +
+                    $"<html><body style='font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#555;background:#fff'>" +
                     $"<p style='max-width:400px;text-align:center'>{HttpUtility.HtmlEncode(deniedMsg)}</p></body></html>");
                 return;
             }

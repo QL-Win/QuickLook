@@ -42,14 +42,6 @@ public class WebfontPanel : WebpagePanel
         InitializeResources();
     }
 
-    public WebfontPanel()
-    {
-        if (OSThemeHelper.AppsUseDarkTheme())
-        {
-            _webView.CreationProperties.AdditionalBrowserArguments = "--enable-features=WebContentsForceDark";
-        }
-    }
-
     protected static void InitializeResources()
     {
         if (_resources.Any()) return;
