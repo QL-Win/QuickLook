@@ -21,7 +21,7 @@
         </Grid.Resources>
 
         <!-- Fixed column widths avoid a shared-size measurement pass across the entire archive. -->
-        <Grid Grid.Row="0" Margin="2,0,2,4">
+        <Grid Grid.Row="0" Margin="0,0,0,4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="{x:Static SystemParameters.VerticalScrollBarWidth}" />

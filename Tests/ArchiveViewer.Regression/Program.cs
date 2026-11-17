@@ -323,8 +323,16 @@ internal static class Program
                     else scroll.ScrollToLeftEnd();
                     view.UpdateLayout();
 
+                    if (width >= 800)
+                        Check(scroll.ScrollableWidth < 4, "Long filename unexpectedly widened the viewport");
+                    else
+                        Check(scroll.ScrollableWidth > 0, "Narrow viewport did not enable horizontal scrolling");
                     var row = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
                     Check(row != null, "Long filename row is no longer realized");
+                    var headerGrid = (Grid)view.FindName("headerColumns");
+                    var rowGrid = Visuals<Grid>(row).First(g => g.ColumnDefinitions.Count == 3);
+                    Check(Math.Abs(headerGrid.ActualWidth - rowGrid.ActualWidth) <= 1,
+                        "Header and row have different measured widths");
                     var labels = Visuals<TextBlock>(row).ToList();
                     var headers = Visuals<TextBlock>(header).ToList();
                     foreach (var column in new[] { 1, 2 })
