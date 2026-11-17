@@ -1,11 +1,15 @@
 using QuickLook.Plugin.ArchiveViewer.ArchiveFile;
+using QuickLook.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Xml;
 using System.Linq;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
@@ -32,6 +36,8 @@ internal static class Program
         Run("10000 children are batched and virtualized", LargeExpansion);
         Run("Headers follow horizontal scrolling at narrow widths", NarrowLayout);
         Run("Header columns align with row columns", ColumnAlignment);
+        Run("Long filename columns stay aligned across widths and scrolling", LongNameColumnAlignment);
+        Run("Accessibility strings are localized in every plugin language", LocalizedAutomationLabels);
         Run("Rows grow for larger fonts", LargeFonts);
         Run("Empty, multiple roots and disposed views", Lifecycle);
         Run("Actual ZIP parser: empty, files, multi-root and nested", ArchiveFixtures);
@@ -293,6 +299,87 @@ internal static class Program
             var headerX = header.TransformToAncestor(view).Transform(new Point()).X;
             var rowX = value.TransformToAncestor(view).Transform(new Point()).X;
             Check(Math.Abs(headerX - rowX) <= 1, $"Size column misaligned: header={headerX}, row={rowX}");
+        }
+    }
+
+
+    private static void LongNameColumnAlignment()
+    {
+        var name = new string('x', 800) + ".json";
+        using (var view = View(new ArchiveFileEntry(name, false)
+               { Size = 12345, ModifiedDate = new DateTime(2026, 11, 16) }))
+        {
+            var list = List(view);
+            var header = (ScrollViewer)view.FindName("columnHeaders");
+            var scroll = Visuals<ScrollViewer>(list).First();
+            foreach (var width in new[] { 800d, 350d })
+            {
+                view.Measure(new Size(width, 320));
+                view.Arrange(new Rect(0, 0, width, 320));
+                view.UpdateLayout();
+                foreach (var scrollToEnd in new[] { false, true })
+                {
+                    if (scrollToEnd) scroll.ScrollToRightEnd();
+                    else scroll.ScrollToLeftEnd();
+                    view.UpdateLayout();
+
+                    var row = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                    Check(row != null, "Long filename row is no longer realized");
+                    var labels = Visuals<TextBlock>(row).ToList();
+                    var headers = Visuals<TextBlock>(header).ToList();
+                    foreach (var column in new[] { 1, 2 })
+                    {
+                        var label = labels.First(t => Grid.GetColumn(t) == column);
+                        var caption = headers.First(t => Grid.GetColumn(t) == column);
+                        var actual = label.TransformToAncestor(view).Transform(new Point()).X;
+                        var expected = caption.TransformToAncestor(view).Transform(new Point()).X;
+                        Check(Math.Abs(actual - expected) <= 2.5,
+                            $"Column {column} misaligned at width={width}, rightEnd={scrollToEnd}: header={expected}, row={actual}");
+                    }
+                    Check(Math.Abs(scroll.HorizontalOffset - header.HorizontalOffset) < 1,
+                        "Header and data scroll offsets differ for a long filename");
+                }
+            }
+        }
+    }
+
+    private static void LocalizedAutomationLabels()
+    {
+        var file = Path.Combine(Path.GetDirectoryName(typeof(ArchiveFileListView).Assembly.Location), "Translations.config");
+        var doc = new XmlDocument();
+        doc.Load(file);
+        var count = 0;
+        foreach (XmlNode locale in doc.DocumentElement.ChildNodes)
+        {
+            if (locale.NodeType != XmlNodeType.Element) continue;
+            count++;
+            foreach (var id in new[] { "AV_ArchiveContents", "AV_ExpandOrCollapseFolder", "AV_LevelFormat" })
+            {
+                var entry = locale.SelectSingleNode(id);
+                Check(entry != null && !string.IsNullOrWhiteSpace(entry.InnerText),
+                    $"Missing {id} for {locale.Name}");
+                if (id == "AV_LevelFormat")
+                    Check(entry.InnerText.Contains("{0}"), $"Level format missing placeholder for {locale.Name}");
+            }
+        }
+        Check(count >= 25, "Unexpectedly few locale definitions");
+
+        var chinese = CultureInfo.GetCultureInfo("zh-CN");
+        Check(TranslationHelper.Get("AV_ArchiveContents", file, chinese) == "压缩包内容",
+            "Chinese accessibility label was not loaded");
+        using (var view = View(Tree()))
+        {
+            var list = List(view);
+            Check(AutomationProperties.GetName(list) == ArchiveFileStrings.ArchiveContents,
+                "Archive list automation name does not use translations");
+            var folder = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(1);
+            var expander = Visuals<Button>(folder).First();
+            Check(AutomationProperties.GetHelpText(expander) == ArchiveFileStrings.ExpandOrCollapseFolder,
+                "Folder expand button help text is not localized");
+            var peer = UIElementAutomationPeer.CreatePeerForElement(list);
+            var folderPeer = peer.GetChildren().First(p => p.GetName() == "folder");
+            Check(folderPeer.GetHelpText() == string.Format(CultureInfo.CurrentUICulture,
+                ArchiveFileStrings.LevelFormat, 2), "Folder level automation text is not localized");
         }
     }
 

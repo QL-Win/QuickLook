@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -57,7 +58,8 @@ public sealed class ArchiveFileListBox : ListBox
 
         protected override string GetNameCore() => Row.Entry.Name;
 
-        protected override string GetHelpTextCore() => $"Level {Row.Depth + 1}";
+        protected override string GetHelpTextCore() =>
+            string.Format(CultureInfo.CurrentUICulture, ArchiveFileStrings.LevelFormat, Row.Depth + 1);
 
         public override object GetPattern(PatternInterface patternInterface) =>
             patternInterface == PatternInterface.ExpandCollapse && Row.HasChildren

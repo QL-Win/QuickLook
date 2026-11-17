@@ -30,7 +30,7 @@
                           HorizontalScrollBarVisibility="Hidden"
                           VerticalScrollBarVisibility="Disabled"
                           Focusable="False">
-                <Grid MinWidth="500">
+                <Grid x:Name="headerColumns" MinWidth="500">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="200" />
                         <ColumnDefinition Width="135" />
@@ -59,7 +59,7 @@
                  PreviewKeyDown="NavigateTree"
                  MouseDoubleClick="ToggleRowByDoubleClick"
                  ScrollViewer.ScrollChanged="SynchronizeHeaders"
-                 AutomationProperties.Name="Archive contents"
+                 AutomationProperties.Name="{x:Static local:ArchiveFileStrings.ArchiveContents}"
                  ScrollViewer.CanContentScroll="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -82,7 +82,8 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:ArchiveFileRow}">
-                    <Grid MinHeight="24" MinWidth="500">
+                    <!-- Keep the row at the measured header width; long filenames must not expand its star column. -->
+                    <Grid MinHeight="24" MinWidth="500" Width="{Binding ActualWidth, ElementName=headerColumns}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" MinWidth="200" />
                             <ColumnDefinition Width="135" />
@@ -102,7 +103,7 @@
                                     Focusable="False"
                                     IsTabStop="False"
                                     AutomationProperties.Name="{Binding Entry.Name}"
-                                    AutomationProperties.HelpText="Expand or collapse folder"
+                                    AutomationProperties.HelpText="{x:Static local:ArchiveFileStrings.ExpandOrCollapseFolder}"
                                     FontSize="13"
                                     Padding="0"
                                     Content="{Binding ExpansionGlyph}"
