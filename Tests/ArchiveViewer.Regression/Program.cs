@@ -37,6 +37,7 @@ internal static class Program
         Run("Headers follow horizontal scrolling at narrow widths", NarrowLayout);
         Run("Header columns align with row columns", ColumnAlignment);
         Run("Long filename columns stay aligned across widths and scrolling", LongNameColumnAlignment);
+        Run("Deeply nested folders keep controls visible across window widths", DeepIndentLayout);
         Run("Accessibility strings are localized in every plugin language", LocalizedAutomationLabels);
         Run("Rows grow for larger fonts", LargeFonts);
         Run("Empty, multiple roots and disposed views", Lifecycle);
@@ -302,6 +303,72 @@ internal static class Program
         }
     }
 
+
+    private static void DeepIndentLayout()
+    {
+        var root = new ArchiveFileEntry("root", true);
+        var parent = root;
+        for (var depth = 1; depth <= 24; depth++)
+            parent = new ArchiveFileEntry($"level_{depth:D2}", true, parent);
+        new ArchiveFileEntry("deep-leaf.txt", false, parent);
+
+        using (var view = View(root))
+        {
+            var list = List(view);
+            // Expand the complete chain through the same keyboard path as the UI.
+            for (var depth = 1; depth <= 24; depth++)
+            {
+                var folder = view.Rows.Last();
+                Check(folder.Depth == depth && folder.HasChildren,
+                    $"Deep tree missing a folder at depth {depth}");
+                list.SelectedItem = folder;
+                Key(list, System.Windows.Input.Key.Right);
+                Check(folder.IsExpanded, $"Cannot expand folder at depth {depth}");
+            }
+            Check(view.Rows.Count == 26, "Deep tree did not expose all rows");
+
+            var deepest = view.Rows[24];
+            Check(deepest.Depth == 24, "Wrong deep folder selected");
+            foreach (var width in new[] { 350d, 800d, 350d })
+            {
+                view.Measure(new Size(width, 320));
+                view.Arrange(new Rect(0, 0, width, 320));
+                view.UpdateLayout();
+                list.ScrollIntoView(deepest);
+                view.UpdateLayout();
+                var scroll = Visuals<ScrollViewer>(list).First();
+                scroll.ScrollToLeftEnd();
+                view.UpdateLayout();
+
+                var item = (ListBoxItem)list.ItemContainerGenerator.ContainerFromItem(deepest);
+                Check(item != null, "Deep folder row was not realized");
+                var nameGrid = Visuals<Grid>(item).First(g => g.ColumnDefinitions.Count == 4);
+                var indent = Visuals<Border>(nameGrid).First(b => Grid.GetColumn(b) == 0);
+                var expander = Visuals<Button>(nameGrid).First(b => Grid.GetColumn(b) == 1);
+                var icon = Visuals<Image>(nameGrid).First(i => Grid.GetColumn(i) == 2);
+                var name = Visuals<TextBlock>(nameGrid).First(b => Grid.GetColumn(b) == 3);
+                var indentationLimit = Math.Max(0, nameGrid.ActualWidth - 102);
+                Check(indent.ActualWidth <= indentationLimit + 1,
+                    $"Indent overflow at width {width}: {indent.ActualWidth} > {indentationLimit}");
+                Check(expander.ActualWidth >= 19 && icon.ActualWidth >= 15,
+                    $"Expander or icon hidden at width {width}");
+                Check(name.ActualWidth >= 63,
+                    $"Deep folder name clipped at width {width}: {name.ActualWidth}");
+                foreach (var element in new FrameworkElement[] { expander, icon, name })
+                {
+                    var x = element.TransformToAncestor(nameGrid).Transform(new Point()).X;
+                    Check(x >= -1 && x + element.ActualWidth <= nameGrid.ActualWidth + 1,
+                        $"Deep folder control outside name column at width {width}: {x}");
+                    if (width == 350)
+                    {
+                        var windowX = element.TransformToAncestor(view).Transform(new Point()).X;
+                        Check(windowX >= -1 && windowX + element.ActualWidth <= width + 1,
+                            $"Deep folder control outside visible viewport at width {width}: {windowX}");
+                    }
+                }
+            }
+        }
+    }
 
     private static void LongNameColumnAlignment()
     {

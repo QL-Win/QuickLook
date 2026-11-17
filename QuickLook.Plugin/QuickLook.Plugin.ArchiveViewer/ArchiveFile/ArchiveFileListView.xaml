@@ -18,6 +18,7 @@
             <local:SizePrettyPrintConverter x:Key="SizePrettyPrintConverter" />
             <local:DatePrintConverter x:Key="DatePrintConverter" />
             <local:FileExtToIconConverter x:Key="FileExtToIconConverter" />
+            <local:AvailableIndentWidthConverter x:Key="AvailableIndentWidthConverter" />
         </Grid.Resources>
 
         <!-- Fixed column widths avoid a shared-size measurement pass across the entire archive. -->
@@ -91,14 +92,16 @@
                             <ColumnDefinition Width="135" />
                             <ColumnDefinition Width="165" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" ClipToBounds="True">
+                        <Grid x:Name="nameColumns" Grid.Column="0" ClipToBounds="True">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="20" />
                                 <ColumnDefinition Width="18" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Width="{Binding IndentWidth}" />
+                            <!-- Reserve room for the expander, icon and a readable filename even in deep trees. -->
+                            <Border Grid.Column="0" Width="{Binding IndentWidth}"
+                                    MaxWidth="{Binding ActualWidth, ElementName=nameColumns, Converter={StaticResource AvailableIndentWidthConverter}}" />
                             <Button Grid.Column="1"
                                     Background="Transparent"
                                     BorderThickness="0"
