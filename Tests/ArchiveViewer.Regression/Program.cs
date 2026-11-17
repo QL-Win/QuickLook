@@ -330,6 +330,12 @@ internal static class Program
                     var row = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
                     Check(row != null, "Long filename row is no longer realized");
                     var headerGrid = (Grid)view.FindName("headerColumns");
+                    if (width >= 800)
+                        Check(headerGrid.ActualWidth >= width - 25,
+                            "Header columns did not stretch to the available viewport width");
+                    else
+                        Check(headerGrid.ActualWidth >= 500,
+                            "Header columns became narrower than the minimum width");
                     var rowGrid = Visuals<Grid>(row).First(g => g.ColumnDefinitions.Count == 3);
                     Check(Math.Abs(headerGrid.ActualWidth - rowGrid.ActualWidth) <= 1,
                         "Header and row have different measured widths");
