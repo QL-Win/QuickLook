@@ -242,6 +242,13 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<AlwaysUnblockProtectedView>True</AlwaysUnblockProtectedView>`
 
+### `<FixPreviewHandlerRegistration>`
+- Default: `True`
+- Type: `Boolean`
+- Description: When `True`, a preview handler that is only registered in the 32-bit registry view (for example by WPS Office, which is a 32-bit application) is mirrored into the 64-bit registry view for the current user, so that QuickLook can resolve and activate it. Only out-of-process handlers registered through `LocalServer32` are mirrored; a 32-bit in-process handler (`InprocServer32`) cannot be loaded by a 64-bit process and is left untouched. Only `HKEY_CURRENT_USER\Software\Classes\CLSID` is written, no elevation is required, mirrored values are refreshed when the source registration changes, and deleting the mirrored keys reverts the change.
+- Example:
+  - `<FixPreviewHandlerRegistration>False</FixPreviewHandlerRegistration>`
+
 ## QuickLook.Plugin.MarkdownViewer.config options
 
 ### `<ToggleTocKey>`
