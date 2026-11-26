@@ -36,7 +36,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
-using WinForms = System.Windows.Forms;
 using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace QuickLook;
@@ -119,8 +118,7 @@ public partial class ViewerWindow
             }
 
             // Get the screen bounds where the window is currently located
-            var screen = WinForms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
-            var screenBounds = screen.Bounds;
+            var screenBounds = WindowHelper.GetMonitorBoundsFromWindowInPixel(new WindowInteropHelper(this).Handle);
 
             // Get DPI scale factor for proper coordinate conversion
             // scale.Horizontal and scale.Vertical contain the DPI scaling ratios (e.g., 1.5 for 150%)

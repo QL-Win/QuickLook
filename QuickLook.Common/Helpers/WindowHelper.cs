@@ -21,7 +21,6 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -54,13 +53,55 @@ public static class WindowHelper
 
     public static Rect GetDesktopRectFromWindowInPixel(nint hwnd)
     {
-        var screen = Screen.FromHandle(hwnd).WorkingArea;
-
-        var area = new Rect(new Point(screen.X, screen.Y),
-            new Size(screen.Width, screen.Height));
-
-        return area;
+        return GetMonitorRectFromWindowInPixel(hwnd, workingArea: true);
     }
+
+    public static Rect GetMonitorBoundsFromWindowInPixel(nint hwnd)
+    {
+        return GetMonitorRectFromWindowInPixel(hwnd, workingArea: false);
+    }
+
+    private static Rect GetMonitorRectFromWindowInPixel(nint hwnd, bool workingArea)
+    {
+        // WinForms Screen.FromHandle subscribes to SystemEvents and never unsubscribes,
+        // which crashes DefWindowProc during shutdown (0xC0020001).
+        var hMonitor = User32.MonitorFromWindow(hwnd, User32.MonitorDefaults.TONEAREST);
+        var info = new User32.MONITORINFOEX
+        {
+            cbSize = (uint)Marshal.SizeOf(typeof(User32.MONITORINFOEX))
+        };
+
+        if (hMonitor != IntPtr.Zero && User32.GetMonitorInfo(hMonitor, ref info))
+        {
+            var rect = workingArea ? info.rcWork : info.rcMonitor;
+            return new Rect(rect.Left, rect.Top,
+                Math.Max(0, rect.Right - rect.Left),
+                Math.Max(0, rect.Bottom - rect.Top));
+        }
+
+        if (workingArea)
+        {
+            var work = new User32.RECT();
+            if (SystemParametersInfo(SPI_GETWORKAREA, 0, ref work, 0))
+            {
+                return new Rect(work.Left, work.Top,
+                    Math.Max(0, work.Right - work.Left),
+                    Math.Max(0, work.Bottom - work.Top));
+            }
+        }
+
+        return new Rect(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+    }
+
+    private const uint SPI_GETWORKAREA = 0x0030;
+    private const int SM_CXSCREEN = 0;
+    private const int SM_CYSCREEN = 1;
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref User32.RECT pvParam, uint fWinIni);
+
+    [DllImport("user32.dll")]
+    private static extern int GetSystemMetrics(int nIndex);
 
     public static void BringToFront(this Window window, bool keep)
     {

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Win32;
 using QuickLook.Common.Helpers;
 using QuickLook.Helpers;
 using QuickLook.NativeMethods;
@@ -50,6 +51,7 @@ public partial class App : Application
     public static readonly bool IsPortable = SettingHelper.IsPortableVersion();
 
     private bool _cleanExit = true;
+    private bool _sessionCleanupDone;
     private Mutex _isRunning;
 
     static App()
@@ -248,6 +250,11 @@ public partial class App : Application
         // Set initial theme based on system settings
         ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
 
+        // Tear down SystemEvents before Windows kills the process on shutdown.
+        // https://github.com/QL-Win/QuickLook/issues/1782
+        // https://github.com/QL-Win/QuickLook/issues/2079
+        SessionEnding += OnSessionEnding;
+
         // Initialize MessageBox patching
         MessageBoxPatcher.Initialize();
 
@@ -256,8 +263,19 @@ public partial class App : Application
         CheckAndRegisterPluginIcon();
     }
 
+    private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
+    {
+        ReleaseSystemEventHooks();
+
+        // Leave the message loop before Windows tears COM down and DefWindowProc
+        // throws 0xC0020001 from SystemEvents.WindowProc.
+        Shutdown();
+    }
+
     protected override void OnExit(ExitEventArgs e)
     {
+        ReleaseSystemEventHooks();
+
         base.OnExit(e);
 
         if (!_cleanExit)
@@ -269,6 +287,47 @@ public partial class App : Application
         TrayIconManager.GetInstance().Dispose();
         KeystrokeDispatcher.GetInstance().Dispose();
         ViewWindowManager.GetInstance().Dispose();
+    }
+
+    /// <summary>
+    /// Drop <see cref="SystemEvents"/> subscriptions and destroy its broadcast window
+    /// while COM is still alive. Safe to call more than once.
+    /// </summary>
+    private void ReleaseSystemEventHooks()
+    {
+        if (_sessionCleanupDone)
+            return;
+
+        _sessionCleanupDone = true;
+
+        try
+        {
+            UxTheme.ApplyPreferredAppMode(isTracked: false);
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog(ex.ToString());
+        }
+
+        try
+        {
+            ThemeManager.TrackSystemThemeChanges(false);
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog(ex.ToString());
+        }
+
+        try
+        {
+            typeof(SystemEvents)
+                .GetMethod("Shutdown", BindingFlags.NonPublic | BindingFlags.Static, null, Type.EmptyTypes, null)
+                ?.Invoke(null, null);
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog(ex.ToString());
+        }
     }
 
     private bool EnsureOSVersion()
