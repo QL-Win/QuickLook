@@ -132,7 +132,12 @@ public sealed partial class Plugin : IViewer, IMoreMenu
 
     public void View(string path, ContextObject context)
     {
-        if (Path.GetFileName(path).Equals(".DS_Store", StringComparison.OrdinalIgnoreCase))
+        if (!File.Exists(path))
+        {
+            // a folder inside an archive ("C:\dir\file.zip\docs"), sent by QuickLook for Explorer views that list archive contents
+            _panel = new ArchiveInfoPanel(path);
+        }
+        else if (Path.GetFileName(path).Equals(".DS_Store", StringComparison.OrdinalIgnoreCase))
         {
             _panel = new DSStoreInfoPanel(path);
         }

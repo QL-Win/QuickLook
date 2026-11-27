@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.ExtensionMethods;
 using QuickLook.Common.Helpers;
 using QuickLook.Common.Plugin;
 using QuickLook.Helpers;
@@ -30,6 +31,11 @@ public class ViewWindowManager : IDisposable
     private static ViewWindowManager _instance;
 
     private string _invokedPath = string.Empty;
+
+    /// <summary>
+    /// The path the plugin shows: <see cref="_invokedPath"/>, or its temporary copy for an archive entry.
+    /// </summary>
+    private string _previewPath = string.Empty;
     private ViewerWindow _viewerWindow;
 
     internal ViewWindowManager()
@@ -151,28 +157,49 @@ public class ViewWindowManager : IDisposable
         if (_viewerWindow.IsVisible && path == _invokedPath)
             return;
 
+        // A file inside an archive shown as a folder (e.g. "C:\dir\file.zip\inner.txt") is previewed
+        // from a temporary copy; _invokedPath keeps the original path so toggling still closes it.
+        var previewPath = path;
+        IViewer archiveFolderViewer = null;
         var isDirectory = Directory.Exists(path);
-        if (!isDirectory && !File.Exists(path))
-            if (!path.StartsWith("::")) // CLSID
+        if (!isDirectory && !File.Exists(path) && !path.StartsWith("::")) // CLSID
+        {
+            var sw0 = Stopwatch.StartNew();
+            previewPath = ArchiveEntryHelper.TryExtract(path);
+            KeyboardLog.WriteIfSlow("extract archive entry", sw0.ElapsedMilliseconds);
+
+            // A folder inside an archive: the archive viewer lists it straight from the archive.
+            if (previewPath == null && ArchiveEntryHelper.IsArchiveFolder(path))
+            {
+                archiveFolderViewer = PluginManager.GetInstance().LoadedPlugins
+                    .Find(p => p.GetType().Assembly.GetName().Name == "QuickLook.Plugin.ArchiveViewer")
+                    ?.GetType().CreateInstance<IViewer>();
+                previewPath = archiveFolderViewer != null ? path : null;
+                isDirectory = true;
+            }
+
+            if (previewPath == null)
                 return;
+        }
 
         // Check extension filtering before proceeding (skip for directories)
-        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(path))
+        if (!isDirectory && !ExtensionFilterHelper.IsExtensionAllowed(previewPath))
             return;
 
         _invokedPath = path;
+        _previewPath = previewPath;
 
         RunFocusMonitor();
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
+        var matchedPlugin = archiveFolderViewer ?? PluginManager.GetInstance().FindMatch(previewPath);
 
-        BeginShowNewWindow(path, matchedPlugin);
+        BeginShowNewWindow(previewPath, matchedPlugin);
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
     {
         if (string.IsNullOrEmpty(path))
-            path = _invokedPath;
+            path = _previewPath;
 
         if (string.IsNullOrEmpty(path))
             return;
@@ -203,9 +230,9 @@ public class ViewWindowManager : IDisposable
         if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
             return;
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
+        var matchedPlugin = PluginManager.GetInstance().FindMatch(_previewPath);
 
-        BeginShowNewWindow(_invokedPath, matchedPlugin);
+        BeginShowNewWindow(_previewPath, matchedPlugin);
     }
 
     public void ToggleFullscreen()

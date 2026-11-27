@@ -30,6 +30,14 @@ public static class Extensions
             action(item);
     }
 
+    public static T FindAncestor<T>(this DependencyObject element) where T : DependencyObject
+    {
+        while (element != null && element is not T)
+            element = element is Visual ? VisualTreeHelper.GetParent(element) : LogicalTreeHelper.GetParent(element);
+
+        return element as T;
+    }
+
     public static T GetDescendantByType<T>(this Visual element) where T : class
     {
         if (element == null)

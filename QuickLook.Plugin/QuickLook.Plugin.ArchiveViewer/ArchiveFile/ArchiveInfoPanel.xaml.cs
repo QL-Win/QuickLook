@@ -34,8 +34,21 @@ namespace QuickLook.Plugin.ArchiveViewer.ArchiveFile;
 
 public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
 {
+    // ReaderFactory is slow... so limit its usage
+    private static readonly string[] _useReader = [".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"];
+
+    private static readonly string _previewRoot = Path.Combine(Path.GetTempPath(), "QuickLook", "ArchivePreview");
+
     private readonly Dictionary<string, ArchiveFileEntry> _fileEntries = [];
+    private readonly string _path;
+
+    /// <summary>
+    /// Folder inside the archive to show ("docs\sub"), or empty for the whole archive
+    /// </summary>
+    private readonly string _innerFolder = string.Empty;
+
     private bool _disposed;
+    private bool _extracting;
     private double _loadPercent;
     private ulong _totalZippedSize;
     private string _type;
@@ -46,6 +59,16 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
 
         // design-time only
         Resources.MergedDictionaries.Clear();
+
+        // a folder inside an archive comes as "C:\dir\file.zip\docs\sub": show the archive from that folder
+        if (!File.Exists(path) && SplitArchivePath(path) is { } split)
+        {
+            path = split.Archive;
+            _innerFolder = split.InnerFolder;
+        }
+
+        _path = path;
+        fileListView.PreviewRequested += BeginPreviewEntry;
 
         BeginLoadArchive(path);
     }
@@ -92,10 +115,18 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
                 return;
             }
 
+            // the shown root: the whole archive, or the folder inside it that was asked for
+            var rootKey = FindEntryKey(_innerFolder);
+            if (rootKey == null)
+            {
+                Dispatcher.Invoke(() => { lblLoading.Content = $"Folder not found in the archive: {_innerFolder}"; });
+                return;
+            }
+
             var folders = -1; // do not count root node
             var files = 0;
             ulong sizeU = 0L;
-            _fileEntries.ForEach(e =>
+            _fileEntries.Where(e => IsUnder(e.Key, rootKey)).ForEach(e =>
             {
                 if (e.Value.IsFolder)
                     folders++;
@@ -120,9 +151,10 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
                 if (_disposed)
                     return;
 
-                fileListView.SetDataContext(_fileEntries[string.Empty].Children.Keys);
-                archiveCount.Content =
-                    $"{_type} archive{t}";
+                fileListView.SetDataContext(_fileEntries[rootKey].Children.Keys);
+                archiveCount.Content = string.IsNullOrEmpty(rootKey)
+                    ? $"{_type} archive{t}"
+                    : $"Folder in {_type} archive {Path.GetFileName(_path)}{t}";
                 archiveSizeC.Content =
                     $"Compressed size {((long)_totalZippedSize).ToPrettySize(2)}";
                 archiveSizeU.Content = $"Uncompressed size {((long)sizeU).ToPrettySize(2)}";
@@ -136,10 +168,7 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
     {
         using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
 
-        // ReaderFactory is slow... so limit its usage
-        string[] useReader = [".tar.gz", ".tgz", ".tar.bz2", ".tar.lz", ".tar.xz"];
-
-        if (useReader.Any(path.ToLower().EndsWith))
+        if (UseReader(path))
         {
             var reader = ReaderFactory.Open(fileStream, new ChardetReaderOptions());
 
@@ -197,11 +226,174 @@ public partial class ArchiveInfoPanel : UserControl, IDisposable, INotifyPropert
 
             _fileEntries.Add(file, new ArchiveFileEntry(Path.GetFileName(entry.Key), false, parent)
             {
+                Key = entry.Key,
                 Encrypted = entry.IsEncrypted,
                 Size = (ulong)entry.Size,
                 ModifiedDate = entry.LastModifiedTime ?? new DateTime()
             });
         }
+    }
+
+    private static bool UseReader(string path)
+    {
+        return _useReader.Any(path.ToLower().EndsWith);
+    }
+
+    /// <summary>
+    /// Extracts the entry to a temporary folder and previews it in QuickLook
+    /// </summary>
+    private void BeginPreviewEntry(ArchiveFileEntry entry)
+    {
+        if (_extracting || entry.Encrypted || string.IsNullOrEmpty(entry.Key))
+            return;
+
+        _extracting = true;
+        lblLoading.Content = $"Extracting {entry.Name} ...";
+        LoadPercent = 0d;
+
+        Task.Run(() =>
+        {
+            string target = null;
+            try
+            {
+                target = ExtractEntry(entry);
+            }
+            catch (Exception e)
+            {
+                ProcessHelper.WriteLog(e.ToString());
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                _extracting = false;
+                LoadPercent = 100d;
+
+                if (_disposed || target == null)
+                    return;
+
+                PluginHelper.InvokePreview(target);
+            });
+        });
+    }
+
+    private string ExtractEntry(ArchiveFileEntry entry)
+    {
+        CleanupPreviewFolders();
+
+        var dir = Path.Combine(_previewRoot, Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        var target = Path.Combine(dir, entry.Name);
+
+        using var fileStream = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+
+        if (UseReader(_path))
+        {
+            var reader = ReaderFactory.Open(fileStream, new ChardetReaderOptions());
+
+            while (reader.MoveToNextEntry())
+            {
+                if (_disposed)
+                    return null;
+                if (reader.Entry.Key != entry.Key)
+                    continue;
+
+                using var source = reader.OpenEntryStream();
+                WriteEntry(source, target, (ulong)reader.Entry.Size);
+                return target;
+            }
+        }
+        else
+        {
+            using var archive = ArchiveFactory.Open(fileStream, new ChardetReaderOptions());
+
+            var archiveEntry = archive.Entries.FirstOrDefault(e => e.Key == entry.Key);
+            if (archiveEntry != null)
+            {
+                using var source = archiveEntry.OpenEntryStream();
+                WriteEntry(source, target, (ulong)archiveEntry.Size);
+                return target;
+            }
+        }
+
+        return null;
+    }
+
+    private void WriteEntry(Stream source, string target, ulong size)
+    {
+        using var output = new FileStream(target, FileMode.Create, FileAccess.Write, FileShare.Read);
+
+        var buffer = new byte[81920];
+        ulong written = 0;
+        int read;
+        while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            if (_disposed)
+                throw new OperationCanceledException();
+
+            output.Write(buffer, 0, read);
+            written += (ulong)read;
+            if (size > 0)
+                LoadPercent = Math.Min(99d, 100d * written / size);
+        }
+    }
+
+    /// <summary>
+    /// Removes files extracted by previous previews. Files still in use (e.g. by a pinned window) are kept.
+    /// </summary>
+    private static void CleanupPreviewFolders()
+    {
+        if (!Directory.Exists(_previewRoot))
+            return;
+
+        foreach (var dir in Directory.GetDirectories(_previewRoot))
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch
+            {
+                // still in use
+            }
+        }
+    }
+
+    /// <summary>
+    /// Splits "C:\dir\file.zip\docs\sub" into the archive file and the folder inside it ("docs\sub").
+    /// </summary>
+    internal static (string Archive, string InnerFolder)? SplitArchivePath(string path)
+    {
+        for (var parent = Path.GetDirectoryName(path); !string.IsNullOrEmpty(parent); parent = Path.GetDirectoryName(parent))
+        {
+            if (File.Exists(parent))
+                return (parent, path.Substring(parent.Length).Trim('\\'));
+            if (Directory.Exists(parent))
+                return null;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// The key of the folder entry named <paramref name="folder"/>, matched ignoring case (the shell may
+    /// show names differently), or null when the archive has no such folder.
+    /// </summary>
+    private string FindEntryKey(string folder)
+    {
+        if (string.IsNullOrEmpty(folder))
+            return string.Empty;
+        if (_fileEntries.TryGetValue(folder, out var exact) && exact.IsFolder)
+            return folder;
+
+        return _fileEntries.FirstOrDefault(e => e.Value.IsFolder
+            && string.Equals(e.Key, folder, StringComparison.OrdinalIgnoreCase)).Key;
+    }
+
+    private static bool IsUnder(string key, string rootKey)
+    {
+        return string.IsNullOrEmpty(rootKey)
+            || key == rootKey
+            || key.StartsWith(rootKey + "\\", StringComparison.Ordinal);
     }
 
     private string GetDirectoryName(string path)
