@@ -251,7 +251,10 @@ public partial class ViewerWindow
 
         try
         {
+            var cleanupWatch = Stopwatch.StartNew();
             Plugin?.Cleanup();
+            if (Plugin != null)
+                KeyboardLog.WriteIfSlow($"cleanup ({Plugin.GetType().Namespace})", cleanupWatch.ElapsedMilliseconds);
         }
         catch (Exception e)
         {
@@ -282,9 +285,11 @@ public partial class ViewerWindow
         ContextObject.ColorProfileName = DisplayDeviceHelper.GetMonitorColorProfileFromWindow(this);
 
         // Get window size before showing it
+        var prepareWatch = Stopwatch.StartNew();
         try
         {
             Plugin.Prepare(path, ContextObject);
+            KeyboardLog.WriteIfSlow($"prepare ({Plugin.GetType().Namespace})", prepareWatch.ElapsedMilliseconds);
         }
         catch (Exception e)
         {
@@ -358,7 +363,9 @@ public partial class ViewerWindow
                 // Avoid main thread scheduling lag
                 if (Plugin is null) return;
 
+                var viewWatch = Stopwatch.StartNew();
                 Plugin.View(path, ContextObject);
+                KeyboardLog.WriteIfSlow($"view ({Plugin.GetType().Namespace})", viewWatch.ElapsedMilliseconds);
 
                 // Initial the more menu
                 ClearMoreMenuUnpin();
