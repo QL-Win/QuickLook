@@ -178,7 +178,7 @@ HWND HelperMethods::GetFocusedControl()
 
     auto* hwnd = GetFocus();
 
-     AttachThreadInput(GetCurrentThreadId(), tid, FALSE);
+    AttachThreadInput(GetCurrentThreadId(), tid, FALSE);
 
     return hwnd;
 }
