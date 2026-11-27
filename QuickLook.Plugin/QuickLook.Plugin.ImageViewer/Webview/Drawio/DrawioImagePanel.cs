@@ -23,8 +23,6 @@ using System.Text;
 
 #if false // The current draw.io rendering is not suitable for force dark mode
 using QuickLook.Common.Helpers;
-using QuickLook.Plugin.HtmlViewer;
-using System.Reflection;
 #endif
 
 namespace QuickLook.Plugin.ImageViewer.Webview.Drawio;
@@ -33,31 +31,9 @@ public class DrawioImagePanel : SvgImagePanel
 {
     private string _drawioContent;
 
-    public DrawioImagePanel()
-    {
 #if false // The current draw.io rendering is not suitable for force dark mode
-        if (OSThemeHelper.AppsUseDarkTheme())
-        {
-            // Invoke using reflection: WebView2.CreationProperties.AdditionalBrowserArguments
-            // This approach allows the library to avoid direct dependency on WebView2
-            if (typeof(WebpagePanel).GetField("_webView", BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo fieldInfo)
-            {
-                object webView2 = fieldInfo.GetValue(this);
-
-                if (webView2?.GetType().GetProperty("CreationProperties", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo creationPropertiesProperty)
-                {
-                    object creationProperties = creationPropertiesProperty.GetValue(webView2);
-
-                    if (creationProperties?.GetType().GetProperty("AdditionalBrowserArguments", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo additionalBrowserArgumentsProperty)
-                    {
-                        string additionalBrowserArguments = (additionalBrowserArgumentsProperty.GetValue(creationProperties) as string) ?? string.Empty;
-                        additionalBrowserArgumentsProperty.SetValue(creationProperties, additionalBrowserArguments + "--enable-features=WebContentsForceDark");
-                    }
-                }
-            }
-        }
+    protected override bool UseWebViewForceDark => OSThemeHelper.AppsUseDarkTheme();
 #endif
-    }
 
     public override void Preview(string path)
     {

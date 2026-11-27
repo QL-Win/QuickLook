@@ -42,28 +42,9 @@ public class ChmWebpagePanel : WebpagePanel
     public ChmWebpagePanel()
     {
         _homePage = ReadResource("/chm2html.html") ?? [];
-
-        if (OSThemeHelper.AppsUseDarkTheme())
-        {
-            // Invoke using reflection: WebView2.CreationProperties.AdditionalBrowserArguments
-            // This approach allows the library to avoid direct dependency on WebView2
-            if (typeof(WebpagePanel).GetField("_webView", BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo fieldInfo)
-            {
-                object webView2 = fieldInfo.GetValue(this);
-
-                if (webView2?.GetType().GetProperty("CreationProperties", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo creationPropertiesProperty)
-                {
-                    object creationProperties = creationPropertiesProperty.GetValue(webView2);
-
-                    if (creationProperties?.GetType().GetProperty("AdditionalBrowserArguments", BindingFlags.Public | BindingFlags.Instance) is PropertyInfo additionalBrowserArgumentsProperty)
-                    {
-                        string additionalBrowserArguments = (additionalBrowserArgumentsProperty.GetValue(creationProperties) as string) ?? string.Empty;
-                        additionalBrowserArgumentsProperty.SetValue(creationProperties, additionalBrowserArguments + " --enable-features=WebContentsForceDark");
-                    }
-                }
-            }
-        }
     }
+
+    protected override bool UseWebViewForceDark => OSThemeHelper.AppsUseDarkTheme();
 
     private static void InitializeResources()
     {

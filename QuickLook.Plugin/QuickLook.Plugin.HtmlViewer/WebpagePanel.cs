@@ -50,14 +50,33 @@ public class WebpagePanel : UserControl
             InitializeComponent();
     }
 
+    /// <summary>
+    /// Whether the WebView2 is created with <c>--enable-features=WebContentsForceDark</c>.
+    /// Browser arguments must match per user data folder, so such panels use a separate folder.
+    /// Read from the base constructor; overrides must not depend on derived instance state.
+    /// </summary>
+    protected virtual bool UseWebViewForceDark => false;
+
+    protected static CoreWebView2CreationProperties CreateCreationProperties(bool forceDark)
+    {
+        var properties = new CoreWebView2CreationProperties
+        {
+            UserDataFolder = Path.Combine(
+                SettingHelper.LocalDataPath,
+                forceDark ? @"WebView2_Data_ForceDark\" : @"WebView2_Data\"),
+        };
+
+        if (forceDark)
+            properties.AdditionalBrowserArguments = "--enable-features=WebContentsForceDark";
+
+        return properties;
+    }
+
     protected virtual void InitializeComponent()
     {
         _webView = new WebView2
         {
-            CreationProperties = new CoreWebView2CreationProperties
-            {
-                UserDataFolder = Path.Combine(SettingHelper.LocalDataPath, @"WebView2_Data\"),
-            },
+            CreationProperties = CreateCreationProperties(UseWebViewForceDark),
 
             // Prevent white flash in dark mode
             DefaultBackgroundColor = OSThemeHelper.AppsUseDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.White,
