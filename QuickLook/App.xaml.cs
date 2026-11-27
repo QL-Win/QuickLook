@@ -36,6 +36,13 @@ using Wpf.Ui.Violeta.Appearance;
 
 namespace QuickLook;
 
+public enum AppThemeMode
+{
+    Auto = 0,
+    Light = 1,
+    Dark = 2
+}
+
 public partial class App : Application
 {
     public static readonly string LocalDataPath = SettingHelper.LocalDataPath;
@@ -247,8 +254,9 @@ public partial class App : Application
         // Therefore, the time-consuming initialization code can't be placed before `OnStartup`
         base.OnStartup(e);
 
-        // Set initial theme based on system settings
-        ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
+        // Set initial theme based on system or user settings
+        var appTheme = SettingHelper.Get(SettingHelper.KeyAppTheme, (int)AppThemeMode.Auto, "QuickLook");
+        SetTheme((AppThemeMode)appTheme);
 
         // Tear down SystemEvents before Windows kills the process on shutdown.
         // https://github.com/QL-Win/QuickLook/issues/1782
@@ -422,5 +430,21 @@ public partial class App : Application
         ViewWindowManager.GetInstance();
         KeystrokeDispatcher.GetInstance();
         PipeServerManager.GetInstance();
+    }
+
+    public static void SetTheme(AppThemeMode theme)
+    {
+        switch (theme)
+        {
+            case AppThemeMode.Light:
+                ThemeManager.Apply(ApplicationTheme.Light);
+                break;
+            case AppThemeMode.Dark:
+                ThemeManager.Apply(ApplicationTheme.Dark);
+                break;
+            default:
+                ThemeManager.Apply(OSThemeHelper.AppsUseDarkTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light);
+                break;
+        }
     }
 }
