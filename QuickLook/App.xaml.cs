@@ -53,6 +53,7 @@ public partial class App : Application
     private bool _cleanExit = true;
     private bool _sessionCleanupDone;
     private Mutex _isRunning;
+    private ExplorerTooltipSuppressor _tooltipSuppressor;
 
     static App()
     {
@@ -286,6 +287,7 @@ public partial class App : Application
         PipeServerManager.GetInstance().Dispose();
         TrayIconManager.GetInstance().Dispose();
         KeystrokeDispatcher.GetInstance().Dispose();
+        _tooltipSuppressor?.Dispose();
         ViewWindowManager.GetInstance().Dispose();
     }
 
@@ -421,6 +423,7 @@ public partial class App : Application
         PluginManager.GetInstance();
         ViewWindowManager.GetInstance();
         KeystrokeDispatcher.GetInstance();
+        _tooltipSuppressor = new ExplorerTooltipSuppressor();
         PipeServerManager.GetInstance();
     }
 }
