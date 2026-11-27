@@ -22,6 +22,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace QuickLook;
 
@@ -31,6 +34,8 @@ public class ViewWindowManager : IDisposable
 
     private string _invokedPath = string.Empty;
     private ViewerWindow _viewerWindow;
+    private readonly SemaphoreSlim _pluginMatchLock = new(1, 1);
+    private int _previewRequestId;
 
     internal ViewWindowManager()
     {
@@ -66,6 +71,8 @@ public class ViewWindowManager : IDisposable
 
     public void ClosePreview()
     {
+        _previewRequestId++;
+
         if (!_viewerWindow.IsVisible)
             return;
 
@@ -163,10 +170,7 @@ public class ViewWindowManager : IDisposable
         _invokedPath = path;
 
         RunFocusMonitor();
-
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(path);
-
-        BeginShowNewWindow(path, matchedPlugin);
+        BeginPreviewRequest(path);
     }
 
     public void InvokePluginPreview(string plugin, string path = null)
@@ -194,6 +198,7 @@ public class ViewWindowManager : IDisposable
 
         if (matchedPlugin != null)
         {
+            _previewRequestId++;
             BeginShowNewWindow(path, matchedPlugin);
         }
     }
@@ -203,9 +208,7 @@ public class ViewWindowManager : IDisposable
         if (!_viewerWindow.IsVisible || string.IsNullOrEmpty(_invokedPath))
             return;
 
-        var matchedPlugin = PluginManager.GetInstance().FindMatch(_invokedPath);
-
-        BeginShowNewWindow(_invokedPath, matchedPlugin);
+        BeginPreviewRequest(_invokedPath);
     }
 
     public void ToggleFullscreen()
@@ -221,6 +224,49 @@ public class ViewWindowManager : IDisposable
         _viewerWindow.UnloadPlugin();
 
         _viewerWindow.BeginShow(matchedPlugin, path, CurrentPluginFailed);
+    }
+
+    private void BeginPreviewRequest(string path)
+    {
+        var requestId = ++_previewRequestId;
+
+        _viewerWindow.UnloadPlugin();
+        _viewerWindow.BeginLoading(path);
+
+        _ = FindPluginAndShowAsync(path, requestId);
+    }
+
+    private async Task FindPluginAndShowAsync(string path, int requestId)
+    {
+        await _pluginMatchLock.WaitAsync();
+
+        try
+        {
+            if (requestId != _previewRequestId)
+                return;
+
+            var matchedPlugin = await Task.Run(() => PluginManager.GetInstance().FindMatch(path));
+
+            if (requestId != _previewRequestId || !_viewerWindow.IsVisible)
+                return;
+
+            // Let WPF draw the loading window before a plugin runs its preparation step.
+            await _viewerWindow.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+
+            if (requestId != _previewRequestId || !_viewerWindow.IsVisible)
+                return;
+
+            BeginShowNewWindow(path, matchedPlugin);
+        }
+        catch (Exception e)
+        {
+            if (requestId == _previewRequestId && _viewerWindow.IsVisible)
+                CurrentPluginFailed(path, ExceptionDispatchInfo.Capture(e));
+        }
+        finally
+        {
+            _pluginMatchLock.Release();
+        }
     }
 
     private void CurrentPluginFailed(string path, ExceptionDispatchInfo e)

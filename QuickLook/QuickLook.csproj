@@ -140,6 +140,9 @@
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="System.Resources.Extensions" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
