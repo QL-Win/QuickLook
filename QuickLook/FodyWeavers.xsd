@@ -27,6 +27,16 @@
                   <xs:documentation>A list of runtime assembly names to include from the default action of "embed all Copy Local references", delimited with line breaks.</xs:documentation>
                 </xs:annotation>
               </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="ExcludeRuntimes" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>A list of runtimes to exclude from the default action of "embed all Copy Local references", delimited with line breaks</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="IncludeRuntimes" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>A list of runtimes names to include from the default action of "embed all Copy Local references", delimited with line breaks.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
               <xs:element minOccurs="0" maxOccurs="1" name="Unmanaged32Assemblies" type="xs:string">
                 <xs:annotation>
                   <xs:documentation>Obsolete, use UnmanagedWinX86Assemblies instead</xs:documentation>
