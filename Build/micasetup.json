@@ -33,6 +33,7 @@
   "IsUseRegistryPreferX86": null,
   "IsAllowFullFolderSecurity": true,
   "IsAllowFirewall": true,
+  "IsAllowElevationFallback": false,
   "IsRefreshExplorer": true,
   "IsInstallCertificate": false,
   "IsEnableUninstallDelayUntilReboot": true,
@@ -42,5 +43,16 @@
   "UnpackingPassword": null,
   "MessageOfPage1": null,
   "MessageOfPage2": null,
-  "MessageOfPage3": null
+  "MessageOfPage3": null,
+  "CloseApplications": [
+    {
+      "Target": "QuickLook.exe",
+      "Description": "QuickLook",
+      "WindowTitle": null,
+      "CloseMessage": true,
+      "RebootPrompt": false,
+      "TerminateProcess": true,
+      "Timeout": 5
+    }
+  ]
 }
