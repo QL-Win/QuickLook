@@ -39,7 +39,9 @@ public sealed class Plugin : IViewer
     {
         context.PreferredSize = new Size { Width = 453, Height = 172 };
 
-        context.Title = string.Empty;
+        // The window keeps the title of the previous preview when this stays empty, so use the real
+        // shell display name (works for MTP items too).
+        context.Title = InfoPanel.GetSafeDisplayName(path);
         context.TitlebarOverlap = false;
         context.TitlebarBlurVisibility = false;
         context.TitlebarColourVisibility = false;

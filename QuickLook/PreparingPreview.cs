@@ -1,0 +1,96 @@
+// Copyright © 2017-2026 QL-Win Contributors
+//
+// This file is part of QuickLook program.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+using QuickLook.Common.Plugin;
+using QuickLook.Plugin.InfoPanel;
+using System.Windows;
+
+namespace QuickLook;
+
+/// <summary>
+///     Placeholder preview shown immediately while a shell-only item (for example a large file on an
+///     MTP phone) is copied to a temporary file. The copy runs on a background worker, so the UI stays
+///     responsive: pressing Space on another file or closing the window cancels the pending copy.
+/// </summary>
+internal sealed class PreparingPreview : IViewer
+{
+    private InfoPanel _panel;
+    private ContextObject _context;
+
+    public int Priority => int.MinValue;
+
+    public void Init()
+    {
+    }
+
+    public bool CanHandle(string sample)
+    {
+        return false;
+    }
+
+    public void Prepare(string path, ContextObject context)
+    {
+        _context = context;
+        context.PreferredSize = new Size { Width = 453, Height = 172 };
+        context.Title = "Preparing preview…";
+        context.TitlebarOverlap = false;
+        context.TitlebarBlurVisibility = false;
+        context.TitlebarColourVisibility = false;
+        context.CanResize = false;
+        context.FullWindowDragging = true;
+    }
+
+    public void View(string path, ContextObject context)
+    {
+        _panel = new InfoPanel();
+        context.ViewerContent = _panel;
+        _panel.SetStatusText("Preparing preview…");
+
+        // The placeholder panel is the content itself; a busy overlay would hide it while the transfer
+        // runs. The progress is reported through the panel status text instead.
+        context.IsBusy = false;
+    }
+
+    /// <summary>Updates the display name once the background resolution knows it.</summary>
+    public void SetDisplayName(string name)
+    {
+        _panel?.SetDisplayName(name);
+    }
+
+    /// <summary>Updates the window title once the background resolution knows it.</summary>
+    public void SetTitle(string title)
+    {
+        if (_context != null)
+            _context.Title = title;
+    }
+
+    public void SetStatus(string text)
+    {
+        _panel?.SetStatusText(text);
+    }
+
+    public void Cleanup()
+    {
+        _context = null;
+
+        if (_panel == null)
+            return;
+
+        _panel.Stop = true;
+        _panel = null;
+    }
+}
