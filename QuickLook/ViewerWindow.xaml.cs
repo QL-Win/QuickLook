@@ -69,8 +69,10 @@ public partial class ViewerWindow : Window
 
         windowFrameContainer.PreviewMouseMove += ShowWindowCaptionContainer;
 
-        Topmost = SettingHelper.Get("Topmost", false);
-        buttonTop.Tag = Topmost ? "Top" : "Auto";
+        // The preview window is always on top; the toggle button is hidden.
+        Topmost = true;
+        buttonTop.Tag = "Top";
+        buttonTop.Visibility = Visibility.Collapsed;
 
         ShowInTaskbar = SettingHelper.Get("ShowInTaskbar", false);
 
@@ -87,13 +89,6 @@ public partial class ViewerWindow : Window
                 if (IsVisible && !Pinned && !IsForegroundOwnedBySelf())
                     Close();
             }, DispatcherPriority.ContextIdle);
-        };
-
-        buttonTop.Click += (_, _) =>
-        {
-            Topmost = !Topmost;
-            SettingHelper.Set("Topmost", Topmost);
-            buttonTop.Tag = Topmost ? "Top" : "Auto";
         };
 
         buttonPin.Click += (_, _) =>

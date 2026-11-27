@@ -60,13 +60,6 @@ Example:
 - Example:
   - `<WindowBackgroundColor>#FFC0CB</WindowBackgroundColor>`
 
-### `<Topmost>`
-- Default: `False`
-- Type: `Boolean`
-- Description: Keep the preview window on top of other windows.
-- Example:
-  - `<Topmost>True</Topmost>`
-
 ### `<ShowInTaskbar>`
 - Default: `False`
 - Type: `Boolean`
