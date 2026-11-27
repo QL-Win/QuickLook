@@ -64,6 +64,70 @@ public class ViewWindowManager : IDisposable
         _viewerWindow.RunAndClose();
     }
 
+    /// <summary>
+    /// True while the preview holds edits that are not saved yet. A plugin's view reports them through a
+    /// public bool HasUnsavedChanges property (plugins don't share an interface for it).
+    /// </summary>
+    internal bool HasUnsavedChanges()
+    {
+        if (!_viewerWindow.IsVisible)
+            return false;
+
+        var content = _viewerWindow.ContextObject?.ViewerContent;
+        return content?.GetType().GetProperty("HasUnsavedChanges")?.GetValue(content) is true;
+    }
+
+    /// <summary>
+    /// True when the last Escape only took the keyboard focus out of the preview's editor (the view
+    /// reports it through a public bool ConsumeEscape() method), so it must not also close the preview.
+    /// </summary>
+    internal bool ConsumeEscape()
+    {
+        if (!_viewerWindow.IsVisible)
+            return false;
+
+        var content = _viewerWindow.ContextObject?.ViewerContent;
+        return content?.GetType().GetMethod("ConsumeEscape", Type.EmptyTypes)?.Invoke(content, null) is true;
+    }
+
+    /// <summary>
+    /// Closes the preview and opens the selected file with the program associated with its "edit" verb,
+    /// or with its default program when it has none.
+    /// </summary>
+    public void EditAndClosePreview(string path = null)
+    {
+        if (string.IsNullOrEmpty(path))
+            path = NativeMethods.QuickLook.GetCurrentSelection();
+        if (string.IsNullOrEmpty(path))
+            path = _invokedPath;
+
+        ClosePreview();
+
+        if (string.IsNullOrEmpty(path) || Directory.Exists(path) || path.StartsWith("::"))
+            return;
+
+        KeyboardLog.Write($"Edit: opening the selection ({Path.GetExtension(path)})");
+
+        foreach (var verb in new[] { "edit", null })
+        {
+            try
+            {
+                using var _ = Process.Start(new ProcessStartInfo(path)
+                {
+                    Verb = verb,
+                    UseShellExecute = true,
+                    WorkingDirectory = Path.GetDirectoryName(path),
+                });
+                return;
+            }
+            catch (Exception e)
+            {
+                // no "edit" verb registered for this type: fall back to the default program
+                KeyboardLog.Write($"Edit: verb '{verb ?? "default"}' failed: {e.Message}");
+            }
+        }
+    }
+
     public void ClosePreview()
     {
         if (!_viewerWindow.IsVisible)
@@ -77,6 +141,10 @@ public class ViewWindowManager : IDisposable
     {
         if (string.IsNullOrEmpty(path))
             path = NativeMethods.QuickLook.GetCurrentSelection();
+
+        KeyboardLog.Write(string.IsNullOrEmpty(path)
+            ? $"Toggle: no selection returned (visible={_viewerWindow.IsVisible})"
+            : $"Toggle: selection received (visible={_viewerWindow.IsVisible}, same={path == _invokedPath})");
 
         if (!string.IsNullOrEmpty(options))
             InvokePreviewWithOption(path, options);
