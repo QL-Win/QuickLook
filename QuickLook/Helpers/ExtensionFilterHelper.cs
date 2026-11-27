@@ -147,7 +147,7 @@ public static class ExtensionFilterHelper
         if (string.IsNullOrEmpty(path))
             return true;
 
-        var extension = Path.GetExtension(path);
+        var extension = PathHelper.GetExtension(path);
 
         // Files without extensions are always allowed (includes directories)
         if (string.IsNullOrEmpty(extension))
