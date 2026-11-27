@@ -279,6 +279,13 @@ These keys are also stored in `QuickLook.config`.
 - Example:
   - `<WordWrap>False</WordWrap>` to disable word wrap.
 
+### `<MaskEnvValues>`
+- Default: `True`
+- Type: `Boolean`
+- Description: Mask the values of `.env` files (`.env`, `.env.*`, `.envrc` and `*.env`) as `********` in text previews, so secrets are not exposed during screen shares. Click the eye button or press `Alt+M` while previewing to show or hide the values; masking is always on when a file is opened.
+- Example:
+  - `<MaskEnvValues>False</MaskEnvValues>` to always show `.env` values.
+
 ### `<UseFormatDetector>`
 - Default: `True`
 - Type: `Boolean`
