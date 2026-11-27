@@ -105,7 +105,7 @@
                            Padding="3"
                            FontSize="14"
                            Foreground="{DynamicResource WindowTextForeground}"
-                           Text="{Binding ElementName=mediaElement, Path=MediaDuration, Converter={StaticResource TimeTickToShortStringConverter}}"
+                           Text="{Binding ElementName=viewerPanel, Path=MediaDuration, Converter={StaticResource TimeTickToShortStringConverter}}"
                            TextTrimming="CharacterEllipsis" />
                 <TextBlock x:Name="metaLyric"
                            Grid.Row="6"
@@ -236,10 +236,10 @@
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Time">
-                                        <Setter Property="Text" Value="{Binding ElementName=mediaElement, Path=MediaPosition, Converter={StaticResource TimeTickToShortStringConverter}}" />
+                                        <Setter Property="Text" Value="{Binding ElementName=viewerPanel, Path=MediaPosition, Converter={StaticResource TimeTickToShortStringConverter}}" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding ElementName=buttonTime, Path=Tag}" Value="Length">
-                                        <Setter Property="Text" Value="{Binding ElementName=mediaElement, Path=MediaDuration, Converter={StaticResource TimeTickToShortStringConverter}}" />
+                                        <Setter Property="Text" Value="{Binding ElementName=viewerPanel, Path=MediaDuration, Converter={StaticResource TimeTickToShortStringConverter}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -249,10 +249,10 @@
                 <Slider x:Name="sliderProgress"
                         Delay="1"
                         LargeChange="1"
-                        Maximum="{Binding ElementName=mediaElement, Path=MediaDuration}"
+                        Maximum="{Binding ElementName=viewerPanel, Path=MediaDuration}"
                         SmallChange="1"
                         Style="{StaticResource PositionSliderStyle}"
-                        Value="{Binding MediaPosition, ElementName=mediaElement}" />
+                        Value="{Binding MediaPosition, ElementName=viewerPanel}" />
             </DockPanel>
         </Grid>
         <Grid x:Name="volumeSliderLayer"
