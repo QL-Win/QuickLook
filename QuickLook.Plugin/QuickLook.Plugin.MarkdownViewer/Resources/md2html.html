@@ -207,14 +207,121 @@
         border: 1px solid var(--borderColor-default);
         color: var(--fgColor-default);
       }
+
+      /* Raw source toggle */
+      #raw-toggle {
+        position: fixed;
+        top: 8px;
+        right: 12px;
+        z-index: 10000;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+
+        border: 1px solid var(--borderColor-default);
+        border-radius: 6px;
+        background: var(--bgColor-muted);
+        color: var(--fgColor-default);
+        cursor: pointer;
+        opacity: 0.75;
+        transition: opacity 0.15s ease, background-color 0.15s ease;
+      }
+
+      #raw-toggle:hover {
+        opacity: 1;
+        background: var(--bgColor-neutral-muted);
+      }
+
+      #raw-toggle:focus-visible {
+        outline: 2px solid var(--fgColor-accent);
+        outline-offset: 2px;
+      }
+
+      #raw-toggle .icon-rendered {
+        display: none;
+      }
+
+      body.source-mode #raw-toggle .icon-source {
+        display: none;
+      }
+
+      body.source-mode #raw-toggle .icon-rendered {
+        display: block;
+      }
+
+      html[dir="rtl"] #raw-toggle {
+        right: auto;
+        left: 12px;
+      }
+
+      #raw-source {
+        display: none;
+        margin: 0 auto;
+        padding: 2.5rem 1rem 1rem;
+        box-sizing: border-box;
+
+        background-color: var(--bgColor-default);
+        color: var(--fgColor-default);
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        tab-size: 4;
+      }
+
+      body.source-mode .container {
+        display: none;
+      }
+
+      body.source-mode #raw-source {
+        display: block;
+      }
     </style>
 
-    <textarea id="text-input" style="display: none">{{content}}</textarea>
+    <script id="text-input" type="text/plain">{{contentBase64}}</script>
+
+    <button
+      id="raw-toggle"
+      type="button"
+      title="Show raw Markdown source"
+      aria-label="Show raw Markdown source"
+      aria-pressed="false"
+      aria-keyshortcuts="Control+Shift+M"
+    >
+      <svg
+        class="icon-source"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M4.72 3.22a.75.75 0 0 1 1.06 1.06L2.06 8l3.72 3.72a.75.75 0 1 1-1.06 1.06L.47 8.53a.75.75 0 0 1 0-1.06Zm6.56 0a.75.75 0 1 0-1.06 1.06L13.94 8l-3.72 3.72a.75.75 0 1 0 1.06 1.06l4.25-4.25a.75.75 0 0 0 0-1.06Z" />
+      </svg>
+      <svg
+        class="icon-rendered"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.831.88 9.577.43 8.899a1.62 1.62 0 0 1 0-1.798c.45-.678 1.367-1.932 2.637-3.023C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z" />
+      </svg>
+    </button>
 
     <div class="container">
       <div id="toc" class="toc"></div>
       <div id="preview" class="container-lg"></div>
     </div>
+
+    <pre id="raw-source" class="container-lg"></pre>
 
     <script>
       var md = window
@@ -275,13 +382,79 @@
         return content;
       }
 
-      // Read raw content; strip UTF-8 BOM (U+FEFF) if the file was encoded with one
-      let rawContent = document.getElementById("text-input").value;
-      if (rawContent.charCodeAt(0) === 0xFEFF) rawContent = rawContent.slice(1);
+      // Decode the base64 payload so the source view keeps the original text exactly.
+      // TextDecoder removes a UTF-8 BOM (U+FEFF) when one was present.
+      const contentBase64 = document.getElementById("text-input").textContent.trim();
+      const contentBytes = Uint8Array.from(atob(contentBase64), (c) =>
+        c.charCodeAt(0)
+      );
+      let rawContent = new TextDecoder("utf-8").decode(contentBytes);
 
       document.getElementById("preview").innerHTML = md.render(
         processFrontmatter(rawContent)
       );
+
+      // == Toggle between rendered Markdown and raw source ==
+      const rawToggleButton = document.getElementById("raw-toggle");
+      const rawSourceView = document.getElementById("raw-source");
+      let isSourceView = false;
+      let isRawSourceLoaded = false;
+      let savedRenderedScroll = 0;
+      let savedSourceScroll = 0;
+      let hasSavedSourceScroll = false;
+
+      function setSourceView(enabled, preserveScroll) {
+        if (preserveScroll) {
+          // Remember each view's position so a shorter view cannot overwrite it
+          if (isSourceView) {
+            savedSourceScroll = window.scrollY;
+            hasSavedSourceScroll = true;
+          } else {
+            savedRenderedScroll = window.scrollY;
+          }
+        }
+
+        isSourceView = enabled;
+
+        // Populate the raw view lazily to keep the initial page light
+        if (enabled && !isRawSourceLoaded) {
+          rawSourceView.textContent = rawContent;
+          isRawSourceLoaded = true;
+        }
+
+        document.body.classList.toggle("source-mode", enabled);
+        rawToggleButton.setAttribute("aria-pressed", enabled ? "true" : "false");
+
+        const label = enabled
+          ? "Show rendered Markdown"
+          : "Show raw Markdown source";
+        rawToggleButton.title = label;
+        rawToggleButton.setAttribute("aria-label", label);
+
+        if (preserveScroll) {
+          const targetScrollTop = enabled
+            ? (hasSavedSourceScroll ? savedSourceScroll : savedRenderedScroll)
+            : savedRenderedScroll;
+
+          // Keep the reading position when the layout changes
+          requestAnimationFrame(function () {
+            const maxScrollTop = Math.max(
+              0,
+              document.documentElement.scrollHeight - window.innerHeight
+            );
+            window.scrollTo(0, Math.min(targetScrollTop, maxScrollTop));
+          });
+        }
+      }
+
+      function toggleSourceView() {
+        setSourceView(!isSourceView, true);
+      }
+
+      // Expose the toggle so it can be invoked from the host application (C#)
+      window.toggleSourceView = toggleSourceView;
+
+      rawToggleButton.addEventListener("click", toggleSourceView);
 
       // Initialize Mermaid after markdown rendering
       if (window.mermaid) {
@@ -549,6 +722,13 @@
           // Toggle TOC with configurable shortcut (default: Ctrl+Shift+L, matching Typora)
           if (matchesShortcut(e, TOC_TOGGLE_SHORTCUT)) {
             toggleToc();
+            e.preventDefault();
+            return;
+          }
+
+          // Toggle rendered/raw source view
+          if (matchesShortcut(e, "Ctrl+Shift+M")) {
+            toggleSourceView();
             e.preventDefault();
             return;
           }
