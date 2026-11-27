@@ -3,6 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Transfonter demo</title>
+    <script>
+        (function () {
+            var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.dataset.theme = d ? 'dark' : 'light';
+        })();
+    </script>
     <style>
         @font-face {
             --font-family;
@@ -60,13 +66,47 @@
             border-collapse: collapse;
             border-spacing: 0;
         }
+        /* Theme tokens — same pattern as iconfont (QuickLook.WebPlugins) */
+        :root {
+            color-scheme: light dark;
+            --bg: #f1f1f1;
+            --surface: #ffffff;
+            --text: #000000;
+            --text-muted: #999999;
+            --heading-bg: #444444;
+            --heading-text: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #1a1a1e;
+            --surface: #252529;
+            --text: #e8e8ed;
+            --text-muted: #9898a6;
+            --heading-bg: #2a2a30;
+            --heading-text: #e8e8ed;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #1a1a1e;
+                --surface: #252529;
+                --text: #e8e8ed;
+                --text-muted: #9898a6;
+                --heading-bg: #2a2a30;
+                --heading-text: #e8e8ed;
+            }
+        }
+
+        :root[data-theme="light"] { color-scheme: light; }
+        :root[data-theme="dark"] { color-scheme: dark; }
+
         /* common styles */
         body {
-            background: #f1f1f1;
-            color: #000;
+            background: var(--bg);
+            color: var(--text);
         }
         .page {
-            background: #fff;
+            background: var(--surface);
             width: 100%;
             height: 100%;
             margin: 0 auto;
@@ -79,9 +119,9 @@
         }
         h1 {
             position: relative;
-            background: #444;
+            background: var(--heading-bg);
             font-size: 32px;
-            color: #fff;
+            color: var(--heading-text);
             padding: 10px 20px;
             margin: 0 0 10px 0;
         }
@@ -129,7 +169,7 @@
             font-size: 10px;
             font-weight: normal;
             font-style: normal;
-            color: #999;
+            color: var(--text-muted);
             padding-right: 6px;
         }
         /* fonts demo styles */
