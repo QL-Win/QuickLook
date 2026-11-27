@@ -4,6 +4,10 @@
 
 ## 4.6.0
 
+- Add dark theme to font previews instead of force-dark [#2055](https://github.com/QL-Win/QuickLook/issues/2055)
+- Add WOFF2 icon font preview support
+- Add SVGA 1.x (ZIP/JSON) format support [#1994](https://github.com/QL-Win/QuickLook/pull/1994)
+- Add dedicated Mermaid panel for markdown viewer
 - Add `Alt+L` shortcut to toggle line numbers in text viewer, with preference persistence [#932](https://github.com/QL-Win/QuickLook/issues/932)
 - Add persist `WordWrap` preference when toggling with `Alt+Z`
 - Add light and dark application icons [#1154](https://github.com/QL-Win/QuickLook/issues/1154)
@@ -19,6 +23,7 @@
 - Add Jupyter Notebook support to markdown viewer (`.ipynb`)
 - Add reStructuredText support to markdown viewer (`.rst`, `.restructuredtext`)
 - Add configurable keyboard shortcuts to toggle TOC visibility for markdown viewer [#1934](https://github.com/QL-Win/QuickLook/issues/1934)
+- Remember font preview mode selection
 - Add option to disable window show transitions `<ShowWindowTransition>False</ShowWindowTransition>`
 - Add `.winmd` to PE viewer supported extensions
 - Add HTTP (`.http` and `.rest`) syntax highlighting
@@ -60,6 +65,9 @@
 - Add `.jsonld` to JSON syntax extensions
 - Use `.invalid` domain to speed up CHM page loading
 - Support DeskBox 3rd-party program
+- Improve MediaInfo viewer layout and locale [#1992](https://github.com/QL-Win/QuickLook/issues/1992)
+- Improve Open Data Folder launch performance [#2009](https://github.com/QL-Win/QuickLook/pull/2009)
+- Update Japanese translations [#2007](https://github.com/QL-Win/QuickLook/pull/2007)
 - Improve update notification message [#1961](https://github.com/QL-Win/QuickLook/issues/1961)
 - Upgrade MSVC PlatformToolset to v145
 - Update dependencies and add System.IO.Compression
@@ -100,6 +108,16 @@
 - Fix MSI icon in Programs and Features [#2036](https://github.com/QL-Win/QuickLook/pull/2036)
 - Fix SVG zoom when the cursor is outside the image
 - Fix culture-dependent video rotation parsing [#2032](https://github.com/QL-Win/QuickLook/pull/2032)
+- Fix WebView2 panels becoming permanently unavailable [#2055](https://github.com/QL-Win/QuickLook/issues/2055)
+- Fix unhandled SystemEvents crash on Windows shutdown [#2079](https://github.com/QL-Win/QuickLook/issues/2079)
+- Fix preview closing when owned dialogs are open and dispose CLSID panels [#2069](https://github.com/QL-Win/QuickLook/issues/2069)
+- Fix IPA icon colors and Info.plist parsing [#2014](https://github.com/QL-Win/QuickLook/issues/2014) [#2064](https://github.com/QL-Win/QuickLook/issues/2064)
+- Fix cursor files (`.cur`/`.ani`) preview after KB5120998
+- Fix GIF heartbeat crash on dispose race
+- Fix context menu rendering and reopen behavior
+- Fix RPM info panel stuck in a busy state [#1977](https://github.com/QL-Win/QuickLook/issues/1977)
+- Fix viewer close handling for pinned windows
+- Route ambiguous `.mdc` files by content
 
 ## 4.5.0
 
