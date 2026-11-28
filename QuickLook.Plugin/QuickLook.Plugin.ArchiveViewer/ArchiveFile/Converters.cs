@@ -56,6 +56,28 @@ public sealed class Percent100ToVisibilityCollapsedConverter : DependencyObject,
     }
 }
 
+/// <summary>
+/// Caps folder indentation to the current name-column width. Keep room for the
+/// 20-pixel expander, 18-pixel icon, and at least 64 pixels of filename text.
+/// </summary>
+public sealed class AvailableIndentWidthConverter : IValueConverter
+{
+    private const double ReservedWidth = 20.0 + 18.0 + 64.0;
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is not double width || double.IsNaN(width) || double.IsInfinity(width))
+            return 0.0;
+
+        return Math.Max(0.0, width - ReservedWidth);
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 public sealed class LevelToIndentConverter : DependencyObject, IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
