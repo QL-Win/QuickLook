@@ -1,0 +1,2 @@
+﻿cd ../
+git clean -xdf
