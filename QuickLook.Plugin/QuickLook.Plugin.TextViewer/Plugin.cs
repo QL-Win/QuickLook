@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using QuickLook.Common.Commands;
 using QuickLook.Common.Plugin;
 using QuickLook.Common.Plugin.MoreMenu;
 using QuickLook.Plugin.TextViewer.Detectors;
@@ -38,6 +39,7 @@ public partial class Plugin : IViewer, IMoreMenu
 
     private TextViewerPanel _tvp;
     private string _currentPath;
+    private RelayCommand _beautifyJsonCommand;
 
     public int Priority => -5;
 
@@ -92,6 +94,8 @@ public partial class Plugin : IViewer, IMoreMenu
         else
         {
             _tvp = new TextViewerPanel();
+            _beautifyJsonCommand = new RelayCommand(_tvp.BeautifyJson, () => _tvp?.CanBeautifyJson == true);
+            _tvp.JsonSourceLoaded += () => _beautifyJsonCommand?.RaiseCanExecuteChanged();
             _tvp.LoadFileAsync(path, context);
             context.ViewerContent = _tvp;
         }
@@ -102,6 +106,7 @@ public partial class Plugin : IViewer, IMoreMenu
     {
         _tvp?.Dispose();
         _tvp = null;
+        _beautifyJsonCommand = null;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

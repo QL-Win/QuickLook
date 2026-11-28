@@ -74,5 +74,13 @@ public sealed partial class Plugin
 
         if (reopen is not null)
             yield return reopen;
+
+        if (extension == ".json" && _beautifyJsonCommand is not null)
+            yield return new MoreMenuItem
+            {
+                Icon = FontSymbols.Code,
+                Header = TranslationHelper.Get("MW_BeautifyJson", translationFile),
+                Command = _beautifyJsonCommand,
+            };
     }
 }
