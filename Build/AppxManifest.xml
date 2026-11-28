@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" 
+         xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
          xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" 
+         xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+         xmlns:desktop5="http://schemas.microsoft.com/appx/manifest/desktop/windows10/5"
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" 
-         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         IgnorableNamespaces="com desktop4 desktop5">
   <!-- Invalid package identity name: QL-Win.QuickLook (expected: 21090PaddyXu.QuickLook) -->
   <!-- Invalid package family name: QL-Win.QuickLook_wgqddy12gm212 (expected: 21090PaddyXu.QuickLook_egxr34yet59cg) -->
   <!-- Invalid package publisher name: CN=F4F538EC-55CB-41B8-9531-25CC140D0339 (expected: CN=CE36AF3D-FF94-43EB-9908-7EC8FD1D29FB) -->
@@ -36,6 +40,26 @@
                            EntryPoint="Windows.FullTrustApplication">
           <desktop:StartupTask TaskId="QuickLookTask" Enabled="true" DisplayName="QuickLook" />
         </desktop:Extension>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="QuickLook">
+              <com:Class Id="A7C3E4B1-5D28-4F6A-9B30-8E1F2A4C6D70" Path="Package\QuickLook.Native64.dll" ThreadingModel="STA" />
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
+        <desktop4:Extension Category="windows.fileExplorerContextMenus">
+          <desktop4:FileExplorerContextMenus>
+            <desktop5:ItemType Type="*">
+              <desktop5:Verb Id="QuickLookFile" Clsid="A7C3E4B1-5D28-4F6A-9B30-8E1F2A4C6D70" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type="Directory">
+              <desktop5:Verb Id="QuickLookDirectory" Clsid="A7C3E4B1-5D28-4F6A-9B30-8E1F2A4C6D70" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type="Directory\Background">
+              <desktop5:Verb Id="QuickLookBackground" Clsid="A7C3E4B1-5D28-4F6A-9B30-8E1F2A4C6D70" />
+            </desktop5:ItemType>
+          </desktop4:FileExplorerContextMenus>
+        </desktop4:Extension>
       </Extensions>
       <uap:VisualElements DisplayName="QuickLook" 
                           Description="Bring macOS &#8220;Quick Look&#8221; feature to Windows" 

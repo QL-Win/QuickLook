@@ -136,6 +136,7 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         if (!EnsureOSVersion()
+         || !EnsureContextMenuRegistration(e.Args)
          || !EnsureFirstInstance(e.Args)
          || !EnsureFolderWritable(SettingHelper.LocalDataPath))
         {
@@ -261,6 +262,7 @@ public partial class App : Application
         CheckUpdate();
 
         CheckAndRegisterPluginIcon();
+        ContextMenuRegistration.EnsureRegistered();
     }
 
     private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
@@ -336,6 +338,23 @@ public partial class App : Application
             return true;
 
         MessageBox.Show("This application does not run on Windows 10 S.");
+
+        return false;
+    }
+
+    private bool EnsureContextMenuRegistration(string[] args)
+    {
+        if (!args.Any(arg => string.Equals(arg, "/register-context-menu", StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        try
+        {
+            ContextMenuRegistration.RegisterSynchronously();
+        }
+        catch (Exception ex)
+        {
+            ProcessHelper.WriteLog(ex.ToString());
+        }
 
         return false;
     }

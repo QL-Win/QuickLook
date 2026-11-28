@@ -255,6 +255,17 @@
     <ClCompile Include="FilePilot.cpp" />
     <ClCompile Include="HelperMethods.cpp" />
     <ClCompile Include="DllExport.cpp" />
+    <ClCompile Include="ContextMenuExports.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ExplorerCommand.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="SignPackage.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile Include="QuickLook.ContextMenu.rc" />
     <ClCompile Include="IDMan.cpp" />
     <ClCompile Include="MultiCommander.cpp" />
     <ClCompile Include="Shell32.cpp" />
@@ -269,6 +280,11 @@
     </ClCompile>
     <ClCompile Include="WoW64HookHelper.cpp" />
   </ItemGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <ModuleDefinitionFile>QuickLook.ContextMenu.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
